@@ -5,9 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start-login": "webpack-dev-server --mode development --env.development --config ./config/webpack.login.js --open --hot",
-    "start": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --open --hot",
+    "start-mohassel": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --open --hot",
+    "build": "npm run build-login && npm run build-mohassel",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
-    "build": "webpack --mode production --env.production --config ./config/webpack.mohassel.js"
+    "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
