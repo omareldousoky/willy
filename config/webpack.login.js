@@ -14,7 +14,7 @@ module.exports = (env) => {
             }
         },
         output: {
-            path: path.join(__dirname, '../build/login-build'),
+            path: path.join(__dirname, '../build/login'),
             filename: 'build.js'
         },
         module: {

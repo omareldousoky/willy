@@ -14,7 +14,7 @@ module.exports = (env) => {
             }
         },
         output: {
-            path: path.join(__dirname, '../build/mohassel-build'),
+            path: path.join(__dirname, '../build/mohassel'),
             filename: 'build.js'
         },
         module: {
