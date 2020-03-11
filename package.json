@@ -8,7 +8,6 @@
     "start": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --open --hot",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
     "build": "webpack --mode production --env.production --config ./config/webpack.mohassel.js"
-    
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

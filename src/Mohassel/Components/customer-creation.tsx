@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { nationalIdValidation } from '../Services/nationalIdValidation';
 
-interface Props { };
+interface Props { 
+    gender: string;
+
+};
 interface State {
-    nationalIdNumber: string,
-    birthDate: string,
-    country: string,
-    gender: string
+    nationalIdNumber: string;
+    birthDate: string;
+    country: string;
+    gender: string;
 }
 
 class CustomerCreation extends Component<Props, State>{
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             nationalIdNumber: '29105310101678',
