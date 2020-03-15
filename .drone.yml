@@ -107,6 +107,60 @@ depends_on:
   - unit-test
 
 ---
+
+
+
+kind: pipeline
+name: kubernetes
+
+steps:
+- name: deploy
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: default
+    deployment: fe-login
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
+    container: fe-login
+    tag: "${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - dev
+    event:
+      - push
+
+- name: deploy
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: default
+    deployment: fe-mohassel
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
+    container: fe-mohassel
+    tag: "${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - dev
+    event:
+      - push
+
+depends_on:
+  - unit-test
+  - PushToEcr
+
+---
 kind: pipeline
 name: Endnotify
 
@@ -140,3 +194,4 @@ steps:
 depends_on:
   - unit-test
   - PushToEcr
+  - kubernetes
