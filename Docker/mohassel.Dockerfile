@@ -1,4 +1,4 @@
-FROM node:10-alpine as builder
+FROM node:12.16.1-alpine as builder
 COPY package*.json  ./
 RUN npm i 
 COPY . .

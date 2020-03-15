@@ -33,7 +33,7 @@ name: unit-test
 
 steps:
 - name: build
-  image: node:latest
+  image: node:12.16.1-alpine
   commands:
   - npm i 
   - npm run build
