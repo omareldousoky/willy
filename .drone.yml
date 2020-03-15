@@ -1,0 +1,140 @@
+kind: pipeline
+name: notify-pipeline-start
+
+steps:
+- name: notify-start
+  image: plugins/slack
+  settings:
+    channel: drone-notifications
+    webhook:
+        from_secret: slack_webhook_url
+    template: >
+      {{#if build.pull }}
+        *Build started*: {{ repo.owner }}/{{ repo.name }} - <https://github.com/{{ repo.owner }}/{{ repo.name }}/pull/{{ build.pull }}|Pull Request #{{ build.pull }}>
+      {{else}}
+        *Build started: {{ repo.owner }}/{{ repo.name }} - Build #{{ build.number }}* (type: `{{ build.event }}`)
+      {{/if}}
+      Commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ truncate build.commit 8 }}>
+      Branch: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commits/{{ build.branch }}|{{ build.branch }}>
+      Author: {{ build.author }}
+      <{{ build.link }}|Visit build page ↗>
+  when:
+    branch:
+    - master
+    - dev
+    - staging
+    event:
+      - push
+
+---
+
+kind: pipeline
+name: unit-test
+
+steps:
+- name: build
+  image: node:latest
+  commands:
+  - npm i 
+  - npm build
+
+
+- name: code-analysis
+  image: aosapps/drone-sonar-plugin
+  settings:
+      sonar_host: https://sonarqube.halan.io
+      sonar_token:
+        from_secret: sonar_token
+
+
+trigger:
+  branch:
+  - master
+  - dev
+  - staging
+
+
+---
+kind: pipeline
+name: PushToEcr
+
+steps:
+- name: publish-login
+  image: plugins/ecr
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/login.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/login
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    region: us-east-1
+    tags:
+      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    event:
+      - push
+
+- name: publish-mohassel
+  image: plugins/ecr
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/mohassel.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/mohassel
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    region: us-east-1
+    tags:
+      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    event:
+      - push
+
+---
+
+
+---
+kind: pipeline
+name: Endnotify
+
+steps:
+- name: notify-end
+  image: plugins/slack
+  settings:
+    channel: drone-notifications
+    webhook:
+        from_secret: slack_webhook_url
+    template: >
+      {{#if build.pull }}
+        *{{#success build.status}}✔{{ else }}✘{{/success}} {{ uppercasefirst build.status }}*: {{ repo.owner }}/{{ repo.name }} - <https://github.com/{{ repo.owner }}/{{ repo.name }}/pull/{{ build.pull }}|Pull Request #{{ build.pull }}>
+      {{else}}
+        *{{#success build.status}}✔{{ else }}✘{{/success}} {{ uppercasefirst build.status }}: {{ repo.owner }}/{{ repo.name }} - Build #{{ build.number }}* (type: `{{ build.event }}`)
+      {{/if}}
+      Commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ truncate build.commit 8 }}>
+      Branch: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commits/{{ build.branch }}|{{ build.branch }}>
+      Author: {{ build.author }}
+      Duration: {{ since build.created }}
+      <{{ build.link }}|Visit build page ↗>
+  when:
+    branch:
+    - master
+    - dev
+    - staging
+    event:
+      - push
+depends_on:
+  - unit-test
+  - PushToEcr
