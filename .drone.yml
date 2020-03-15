@@ -123,7 +123,7 @@ steps:
       from_secret: kubernetes_token
     KUBERNETES_CERT:
       from_secret: kubernetes_cert
-    namespace: default
+    namespace: ${DRONE_BRANCH}
     deployment: fe-login
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
     container: fe-login
@@ -144,7 +144,7 @@ steps:
       from_secret: kubernetes_token
     KUBERNETES_CERT:
       from_secret: kubernetes_cert
-    namespace: default
+    namespace: ${DRONE_BRANCH}
     deployment: fe-mohassel
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
     container: fe-mohassel
