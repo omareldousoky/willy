@@ -1,6 +1,29 @@
-export const nationalIdValidation = (nationalIdNumber: string, birthDate: string, country: string, gender: string): boolean => {
-    const birthDateTrimmed = birthDate.split('-').join('').substring(2);
-    const nationalIdNumberTrimmed = nationalIdNumber.substring(1,7);
-    const genderNumber = nationalIdNumber[13];
-    return birthDateTrimmed === nationalIdNumberTrimmed;
+export const getBirthdateFromNationalId = (nationalIdNumber: string): string => {
+    const nationalIdNumberTrimmed = nationalIdNumber.substring(0, 7);
+    const firstDigitsYear = getCentury(nationalIdNumberTrimmed[0]);
+    const year = firstDigitsYear + nationalIdNumberTrimmed.substring(1, 3);
+    const month = nationalIdNumberTrimmed.substring(3, 5);
+    const day = nationalIdNumberTrimmed.substring(5, 7);
+    const birthDate = `${year}-${month}-${day}`;
+    return birthDate;
+}
+export const getGenderFromNationalId = (nationalIdNumber: string): string => {
+    const genderNumber = nationalIdNumber[12];
+    if (Number(genderNumber) % 2 === 0) return 'female'
+    else return 'male'
+}
+
+function getCentury(birthCentury: string): string {
+    switch (birthCentury) {
+        case '2':
+            return '19';
+        case '3':
+            return '20';
+        case '4':
+            return '21';
+        case '5':
+            return '22';
+        default:
+            return '';
+    }
 }

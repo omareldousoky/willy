@@ -1,12 +1,9 @@
 import * as React from 'react';
-import SharedComponent from '../Shared/test';
+import CustomerCreation from './Components/CustomerCreation/customer-creation';
 
 const App = () => {
     return (
-        <>
-            <SharedComponent></SharedComponent>
-            <h1>hi mohassel</h1>
-        </>
+        <CustomerCreation/>
     )
 };
 

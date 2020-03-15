@@ -1,0 +1,47 @@
+export const step1 = {
+    customerName: '',
+    nationalId: '',
+    birthDate: '',
+    gender: '',
+    nationalIdIssueDate: '',
+    customerAddressLatLong: {},
+    customerHomeAddress: '',
+    homePostalCode: '',
+    homePhoneNumber: '',
+    mobilePhoneNumber: '',
+    faxNumber: '',
+    emailAddress: '',
+    customerWebsite: '',
+};
+
+export const step2 = {
+    businessName: '',
+    businessAddressLatLong: {},
+    businessAddress: '',
+    governorate: '',
+    district: '',
+    village: '',
+    ruralUrban: '',
+    businessPostalCode: '',
+    businessPhoneNumber: '',
+    businessSector: '',
+    businessActivity: '',
+    businessSpeciality: '',
+    businessLicenseNumber: '',
+    businessLicenseIssuePlace: '',
+    businessLicenseIssueDate: '',
+    commercialRegisterNumber: '',
+    industryRegisterNumber: '',
+    taxCardNumber: '',
+};
+
+export const step3 = {
+    geographicalDistribution: '',
+    representative: '',
+    applicationDate: '',
+    permanentEmployeeCount: '',
+    partTimeEmployeeCount: '',
+    accountNumber: '',
+    accountBranch: '',
+    comments: '',
+};
