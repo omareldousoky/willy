@@ -114,7 +114,7 @@ kind: pipeline
 name: kubernetes
 
 steps:
-- name: deploy
+- name: deploy-login
   image: quay.io/honestbee/drone-kubernetes
   settings:
     KUBERNETES_SERVER:
@@ -135,7 +135,7 @@ steps:
     event:
       - push
 
-- name: deploy
+- name: deploy-mohassel
   image: quay.io/honestbee/drone-kubernetes
   settings:
     KUBERNETES_SERVER:
