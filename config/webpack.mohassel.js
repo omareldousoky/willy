@@ -34,6 +34,9 @@ module.exports = (env) => {
                 },
             ]
         },
+        devServer: {
+            historyApiFallback: true,
+        },
         plugins: [
             new HtmlWebpackPlugin({
                 template: './src/Mohassel/index.html'
