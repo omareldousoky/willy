@@ -3,7 +3,9 @@ import CustomerCreation from './Components/CustomerCreation/customer-creation';
 
 const App = () => {
     return (
+        <div style={{direction: 'rtl'}}>
         <CustomerCreation/>
+        </div>
     )
 };
 
