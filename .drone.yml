@@ -23,6 +23,7 @@ steps:
     - master
     - dev
     - staging
+    - test
     event:
       - push
 
@@ -52,6 +53,7 @@ trigger:
   - master
   - dev
   - staging
+  - test
 
 
 ---
@@ -78,6 +80,7 @@ steps:
     - dev
     - master
     - staging
+    - test
     event:
       - push
 
@@ -100,6 +103,7 @@ steps:
     - dev
     - master
     - staging
+    - test
     event:
       - push
 
@@ -132,6 +136,8 @@ steps:
   when:
     branch:
     - dev
+    - test
+    - staging
     event:
       - push
 
@@ -153,6 +159,8 @@ steps:
   when:
     branch:
     - dev
+    - test
+    - staging
     event:
       - push
 
@@ -187,6 +195,7 @@ steps:
     - master
     - dev
     - staging
+    - test
     event:
       - push
 
