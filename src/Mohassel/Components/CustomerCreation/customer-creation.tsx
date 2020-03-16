@@ -38,11 +38,11 @@ class CustomerCreation extends Component<Props, State>{
     } else {
       this.setState({step3: values})
       let objToSubmit = {
-        customerInfo: {...step1},
-        customerBusiness: {...step2},
+        customerInfo: {...this.state.step1},
+        customerBusiness: {...this.state.step2},
         customerExtraDetails: values
       };
-      console.log(objToSubmit, this.state)
+      console.log(objToSubmit);
     }
   }
   previousStep(): void {
