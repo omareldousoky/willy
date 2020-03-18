@@ -1,10 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-module.exports = (env) => {
-
+module.exports = () => {
+    const env = dotenv.config().parsed;
+    const envKeys = Object.keys(env).reduce((prev, next) => {
+        prev[`process.env.${next}`] = JSON.stringify(env[next]);
+        return prev;
+    }, {});
     return {
         entry: './src/Login/index.tsx',
         resolve: {
@@ -31,12 +36,14 @@ module.exports = (env) => {
             ]
         },
         plugins: [
+            new webpack.DefinePlugin(envKeys),
             new HtmlWebpackPlugin({
                 template: './src/Login/index.html'
             }),
-            new webpack.DefinePlugin({
-                'process.env.development': !!(env && !env.production),}),
-            new ForkTsCheckerWebpackPlugin({eslint: true})
+            // new webpack.DefinePlugin({
+            //     'process.env.development': !!(env && !env.production),
+            // }),
+            new ForkTsCheckerWebpackPlugin({ eslint: true })
         ]
     }
 };

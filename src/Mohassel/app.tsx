@@ -11,7 +11,7 @@ const App = () => {
         <BrowserRouter>
             <div style={{ direction: 'rtl' }}>
                 <Switch>
-                    <Route exact path="/" component={} />
+                    {/* <Route exact path="/" component={} /> */}
                     <Route path="/new-user" component={CustomerCreation} />
                     <Route path="/new-formula" component={FormulaCreation} />
                     <Route path="/test-formula" component={FormulaTest} />
