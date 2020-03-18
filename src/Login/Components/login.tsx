@@ -28,7 +28,7 @@ class Login extends React.PureComponent<Props, State> {
       password: this.state.password
     }
     axios({
-      url: 'http://api.dev.halan.io/auth/login',
+      url: `${process.env.REACT_APP_BASE_URL}/auth/login`,
       method: "post",
       data: data
 
@@ -39,8 +39,6 @@ class Login extends React.PureComponent<Props, State> {
     }, err => {
       console.log('OnError', err)
     })
-    // this.setCookie(this.state.password)
-    // console.log(decodeURIComponent(document.cookie))
   }
   getCookie(cname: string) {
     const name = cname + "=";
@@ -58,7 +56,6 @@ class Login extends React.PureComponent<Props, State> {
   }
   setCookie(cvalue: string) {
     console.log('Here', cvalue)
-    // domain=.halan.io; Add this later before path to lock domain 
     document.cookie = "token=" + cvalue + ";path=/;";
   }
   render() {

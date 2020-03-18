@@ -9,27 +9,10 @@ function errorResponseHandler(error: any) {
     // if has response show the error
     switch (error.response.status) {
         case 400:
-            break;
         case 401:
-            break;
         case 402:
             localStorage.clear();
             window.location.reload()
-            break;
-        case 403:
-            break;
-        case 404:
-            break;
-        case 405:
-            localStorage.clear();
-            window.location.reload()
-            break;
-        case 406:
-            localStorage.clear();
-            window.location.reload()
-            break;
-        case 409:
-            break;
         default:
             break;
     }
