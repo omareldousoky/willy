@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Map from './map';
 import * as local from '../../../Shared/Assets/ar.json';
 
 export const StepTwoForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
+    const [businessAddressLatLong, setLocation] = useState({ lat: 0, long: 0 });
+    const [mapState, openCloseMap] = useState(false);
     return (
         <Form onSubmit={handleSubmit}>
+            <Map show={mapState}
+                handleClose={() => openCloseMap(false)}
+                save={(businessAddressLatLong: { lat: number, long: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
+                location={businessAddressLatLong}
+            />
             <Form.Group as={Row} controlId="businessName">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessName}</Form.Label>
                 <Col sm={6}>
@@ -28,7 +36,7 @@ export const StepTwoForm = (props: any) => {
             </Form.Group>
             <Form.Group as={Row} controlId="businessAddress">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessAddress}</Form.Label>
-                <Col sm={6}>
+                <Col sm={5}>
                     <Form.Control
                         type="text"
                         name="businessAddress"
@@ -41,6 +49,9 @@ export const StepTwoForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.businessAddress}
                     </Form.Control.Feedback>
+                </Col>
+                <Col sm={1}>
+                    <Button onClick={() => openCloseMap(true)}>setLcation</Button>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="governorate">

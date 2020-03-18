@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 export const step1: any = {
     customerName: '',
     nationalId: '',
+    nationalIdChecker: false,
     birthDate: '',
     gender: '',
     nationalIdIssueDate: '',
@@ -50,7 +51,11 @@ export const step3 = {
 
 export const customerCreationValidationStepOne = Yup.object().shape({
     customerName: Yup.string().trim().max(100, "Can't be more than 100 characters").required('required!'),
-    nationalId: Yup.number().required().min(10000000000000).max(99999999999999),
+    nationalId: Yup.number().when('nationalIdChecker', {
+        is: true,
+        then: Yup.number().test('error', 'wowowow', ()=>  false),
+        otherwise: Yup.number().required().min(10000000000000).max(99999999999999)
+    }),
     nationalIdIssueDate: Yup.string().test(
         "Max Date", "Select a past date",
         (value: any) => { return value ? new Date(value).valueOf() <= new Date().setHours(0, 0, 0, 0) : true }
