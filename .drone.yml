@@ -72,6 +72,8 @@ steps:
     repo: fintech/${DRONE_REPO_NAME}/login
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     region: us-east-1
+    build_args:
+      - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -94,6 +96,8 @@ steps:
     dockerfile: Docker/mohassel.Dockerfile
     repo: fintech/${DRONE_REPO_NAME}/mohassel
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args:
+      - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
