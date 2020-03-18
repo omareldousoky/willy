@@ -6,6 +6,7 @@ import FormulaTest from './Components/LoanCreation/loanFormulaTest';
 
 
 const App = () => {
+    // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
     return (
         <BrowserRouter>
             <div style={{ direction: 'rtl' }}>

@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
+import Map from './map';
 import * as local from '../../../Shared/Assets/ar.json';
+import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 
 export const StepOneForm = (props: any) => {
-  const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
+  const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
+  const [customerAddressLatLong, setLocation] = useState({ lat: 0, long: 0 });
+  const [mapState, openCloseMap] = useState(false);
   return (
     <Form onSubmit={handleSubmit}>
+      {mapState && <Map show={mapState}
+        handleClose={() => openCloseMap(false)}
+        save={(customerAddressLatLong: { lat: number, long: number }) => { setLocation(customerAddressLatLong); setFieldValue('customerAddressLatLong', customerAddressLatLong); openCloseMap(false) }}
+        location={customerAddressLatLong}
+        header="عنوان العميل علي الخريطة"
+      />}
       <Form.Group as={Row} controlId="customerName">
         <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.name}</Form.Label>
         <Col sm={6}>
@@ -36,13 +46,16 @@ export const StepOneForm = (props: any) => {
             data-qc="nationalId"
             value={values.nationalId}
             onBlur={handleBlur}
-            onChange={(e: any) => {
+            onChange={async (e: any) => {
               const { name, value } = e.currentTarget;
+              setFieldValue(name, value);
               if (value.length === 14) {
+                // const res = await checkNationalIdDuplicates(value);
+                // setFieldValue('nationalIdChecker', false);
+                console.log(getBirthdateFromNationalId(value))
                 setFieldValue('birthDate', getBirthdateFromNationalId(value));
                 setFieldValue('gender', getGenderFromNationalId(value));
               }
-              setFieldValue(name, value);
             }}
             isInvalid={errors.nationalId && touched.nationalId}
             maxLength={14}
@@ -102,7 +115,7 @@ export const StepOneForm = (props: any) => {
       </Form.Group>
       <Form.Group as={Row} controlId="customerHomeAddress">
         <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.customerHomeAddress}</Form.Label>
-        <Col sm={6}>
+        <Col sm={5}>
           <Form.Control
             type="text"
             name="customerHomeAddress"
@@ -114,6 +127,9 @@ export const StepOneForm = (props: any) => {
           <Form.Control.Feedback type="invalid">
             {errors.customerHomeAddress}
           </Form.Control.Feedback>
+        </Col>
+        <Col sm={1}>
+          <Button onClick={() => openCloseMap(true)}>setLcation</Button>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="homePostalCode">

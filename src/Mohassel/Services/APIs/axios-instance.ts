@@ -1,6 +1,6 @@
 import axiosLib from 'axios';
 
-function errorResponseHandler(error) {
+function errorResponseHandler(error: any) {
 
     // check for errorHandle config
     if (error.config.hasOwnProperty('errorHandle') || error.config.errorHandle === false) {
@@ -36,7 +36,7 @@ function errorResponseHandler(error) {
     throw error;
 }
 var instance = axiosLib.create({
-    headers: { 'Authorization': `Bearer ${collectSessionData && collectSessionData().token}` }, "Content-Type": "application/json",
+    headers: { 'Authorization': `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzFlMTIxODc4OGVjYzBlYzk2YmY4OSIsImJyYW5jaCI6IjVlNjY0YWJiZDBlNmM3YzJlZDA3OWFlNiIsImV4cCI6MTU4NDUyNzEwOTAwMH0.h24I6WUUgiZQUZZ9tJS7n6UHoMHekx_lN8MW-FACz4GlPJARxwknwSHLJOD-5caaLrgcGYr87aA2ikYUDCKBKw` }
 })
 // apply interceptor on response
 instance.interceptors.response.use(
