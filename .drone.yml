@@ -74,6 +74,8 @@ steps:
     region: us-east-1
     build_args:
       - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_MOHASSEL_URL=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=login.${DRONE_BRANCH}.halan.io
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -98,6 +100,8 @@ steps:
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     build_args:
       - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_MOHASSEL_URL=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=login.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
