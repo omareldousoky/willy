@@ -27,16 +27,19 @@ class Login extends React.PureComponent<Props,State> {
             username: this.state.name,
             password: this.state.password
         }
-        // axios({
-        //     url: 'http://823b0e98.ngrok.io/auth/login',
-        //     method: "post",
-        //     data: data
+        // window.location.href="http://localhost:8081/new-user"
 
-        // }).then( succ => {
-        //     console.log('OnSuccess', succ)
-        // }, err => {
-        //     console.log('OnError', err)
-        // })
+        axios({
+            url: 'http://api.dev.halan.io/auth/login',
+            method: "post",
+            data: data
+
+        }).then( succ => {
+            console.log('OnSuccess', succ)
+        }, err => {
+          window.location.href="http://localhost:8081/new-user"
+            console.log('OnError', err)
+        })
         this.setCookie(this.state.password)
         // console.log(decodeURIComponent(document.cookie))
     }
