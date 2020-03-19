@@ -25,6 +25,9 @@ export const StepThreeForm = (props: any) => {
                         <option value="geographicalDistribution1">geographicalDistribution1</option>
                         <option value="geographicalDistribution2">geographicalDistribution2</option>
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.geographicalDistribution}
+                    </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="representative">
@@ -43,6 +46,9 @@ export const StepThreeForm = (props: any) => {
                         <option value="representative1">representative1</option>
                         <option value="representative2">representative2</option>
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.representative}
+                    </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="applicationDate">
@@ -51,12 +57,15 @@ export const StepThreeForm = (props: any) => {
                     <Form.Control
                         type="date"
                         name="applicationDate"
-                        data-qc="applicationDate"
+                        data-qc=""
                         value={values.applicationDate}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.applicationDate && touched.applicationDate}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.applicationDate}
+                    </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="permanentEmployeeCount">
@@ -157,8 +166,8 @@ export const StepThreeForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={previousStep}>{local.previous}</Button>
-            <Button type="submit">{local.submit}</Button>
+            <Button style={{ float: 'right' }} onClick={previousStep} data-qc="previous">{local.previous}</Button>
+            <Button type="submit" data-qc="submit">{local.submit}</Button>
         </Form>
     )
 }
