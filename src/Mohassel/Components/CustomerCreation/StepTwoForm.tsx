@@ -16,6 +16,7 @@ export const StepTwoForm = (props: any) => {
                 handleClose={() => openCloseMap(false)}
                 save={(businessAddressLatLong: { lat: number, long: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
                 location={businessAddressLatLong}
+                header={local.customerWorkAddressLocationTitle}
             />
             <Form.Group as={Row} controlId="businessName">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessName}</Form.Label>
@@ -346,8 +347,8 @@ export const StepTwoForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={previousStep}>{local.previous}</Button>
-            <Button type="submit">{local.next}</Button>
+            <Button style={{ float: 'right' }} onClick={previousStep} data-qc="previous">{local.previous}</Button>
+            <Button type="submit" data-qc="next">{local.next}</Button>
         </Form>
     )
 }

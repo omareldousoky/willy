@@ -71,5 +71,19 @@
     "pushHolidays":"تخطى العطلات لليوم",
     "inAdvanceFees":"نسبه المصاريف المقدمه",
     "inAdvanceFrom":"",
-    "inAdvanceType":"طريقه إستخدام النسبه المقدمه"
+    "inAdvanceType":"طريقه إستخدام النسبه المقدمه",
+    "duplicateNationalIdMessage": "رقم البطاقة موجود بالفعل لعميل اخر",
+    "customerHomeAddressLocationTitle": "عنوان منزل العميل علي الخريطة",
+    "customerWorkAddressLocationTitle": "عنوان عمل العميل علي الخريطة",
+    "required": "مطلوب",
+    "maxLength100": "لا يمكن ان يكون اكثر من 100",
+    "maxLength10": "لا يمكن ان يكون اكثر من 10",
+    "maxLength11": "لا يمكن ان يكون اكثر من 10",
+    "maxLength5": "لا يمكن ان يكون اكثر من 5",
+    "nationalIdLengthShouldBe14":"رقم البطاقة يجب ان يكون 14 رقم",
+    "dateShouldBeBeforeToday": "التاريخ يجب ان يكون في الماضي",
+    "save": "حفظ",
+    "cancel": "الغاء",
+    "customerCreated": "تم انشاء العميل",
+    "customerCreationError": "حصل خطا في انشاء العميل"
 }    

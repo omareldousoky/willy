@@ -11,15 +11,15 @@ function errorResponseHandler(error: any) {
         case 400:
         case 401:
         case 402:
-            localStorage.clear();
-            window.location.reload()
+            // localStorage.clear();
+            // window.location.reload()
         default:
             break;
     }
     throw error;
 }
 var instance = axiosLib.create({
-    headers: { 'Authorization': `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzFlMTIxODc4OGVjYzBlYzk2YmY4OSIsImJyYW5jaCI6IjVlNjY0YWJiZDBlNmM3YzJlZDA3OWFlNiIsImV4cCI6MTU4NDUyNzEwOTAwMH0.h24I6WUUgiZQUZZ9tJS7n6UHoMHekx_lN8MW-FACz4GlPJARxwknwSHLJOD-5caaLrgcGYr87aA2ikYUDCKBKw` }
+    headers: { 'Authorization': `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzFlMTIxODc4OGVjYzBlYzk2YmY4OSIsImJyYW5jaCI6IjVlNjY0YWJiZDBlNmM3YzJlZDA3OWFlNiIsImV4cCI6MTU4NDY2MTE2MTAwMH0.XL7cL5wZlLzl_JPIgzQkysLUo5ksPmo3lyogW9fK3dRxJeYTV2nOmskQyn7LOgwrFbmFfhbxoOlx_Xw_WspUpA` }
 })
 // apply interceptor on response
 instance.interceptors.response.use(

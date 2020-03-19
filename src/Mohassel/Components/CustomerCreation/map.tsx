@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import * as local from '../../../Shared/Assets/ar.json';
 
 
 const mapStyles = {
@@ -43,18 +44,15 @@ export class MapContainer extends Component<Props, State> {
         }
     }
     componentDidMount() {
-        console.log("hi")
         var options = { componentRestrictions: { country: 'eg' } };
         /*global google*/ // To disable any eslint 'google not defined' errors
         let autocomplete = new window.google.maps.places.Autocomplete(
             document.getElementById('autocomplete'),
             options,
         );
-        console.log(autocomplete);
 
         // Fire Event when a suggested name is selected
         autocomplete.addListener('place_changed', () => {
-            console.log("ho");
             this.handlePlaceSelect(autocomplete)
         });
     }
@@ -72,6 +70,14 @@ export class MapContainer extends Component<Props, State> {
         const { latLng } = coord;
         const lat = latLng.lat();
         const lng = latLng.lng();
+        var geocoder = new google.maps.Geocoder;
+        geocoder.geocode({ 'location': latLng }, function (results: any, status: string) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    document.getElementById('autocomplete').value = results[0].formatted_address;
+                }
+            }
+        })
         this.setState({
             lat,
             lng,
@@ -83,16 +89,16 @@ export class MapContainer extends Component<Props, State> {
                 <Modal.Header>
                     <Modal.Title>{this.props.header}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body style={{ height: 500, padding: '0px 0px 20px 0px' }}>
-                    <div className="form-group" style={{ display: 'block', width: '90%', margin: '20px 20px 0px 20px' }}>
-                        <input type="text" id="autocomplete" style={{ width: '100%' }} placeholder="ادخل العنوان"/>
+                <Modal.Body style={{ minHeight: 500, padding: '0px 0px 20px 0px' }}>
+                    <div className="form-group" style={{ display: 'block', margin: '20px 20px 0px 20px' }}>
+                        <input type="text" id="autocomplete" style={{ width: '100%' }} placeholder="ادخل العنوان" />
                         <label htmlFor="input" className="control-label"></label><i className="bar"></i>
                     </div>
                     <Map
                         className="map"
                         google={this.props.google}
                         zoom={12}
-                        style={mapStyles}
+                        // style={mapStyles}
                         initialCenter={{ lat: this.state.mapCenterLat, lng: this.state.mapCenterLng }}
                         center={{ lat: this.state.mapCenterLat, lng: this.state.mapCenterLng }}
                         onClick={this.handleClick}
@@ -101,8 +107,8 @@ export class MapContainer extends Component<Props, State> {
                     </Map>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.props.handleClose}>Close</Button>
-                    <Button variant="primary" onClick={() => this.props.save({ lat: this.state.lat, lng: this.state.lng })}>Save</Button>
+                    <Button variant="secondary" onClick={this.props.handleClose}>{local.cancel}</Button>
+                    <Button variant="primary" onClick={() => this.props.save({ lat: this.state.lat, lng: this.state.lng })}>{local.save}</Button>
                 </Modal.Footer>
             </Modal>
         );
@@ -110,5 +116,5 @@ export class MapContainer extends Component<Props, State> {
 }
 
 export default GoogleApiWrapper({
-    apiKey: 'AIzaSyCN0Bs-4cEeYX8S0SloJridmD5jgy93DHY'
+    apiKey: process.env.REACT_APP_GOOGLE_MAP_KEY
 })(MapContainer);

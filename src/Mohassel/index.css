@@ -17,6 +17,18 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   z-index: 1100;
 }
 
-.map{
-  height: 50%;
+.map {
+  margin: 20px;
+  position: relative;
+  max-width: 95%;
+  max-height: 400px;
+}
+
+.central-loader-fullscreen {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 100px;
+  height: 100px;
+  z-index: 99999;
 }
