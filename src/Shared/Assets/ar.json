@@ -104,5 +104,19 @@
     "loanImpactPrincipal": "سداد القسط يؤثر فى الاصل أولا",
     "loanImpactPrincipal2": "سداد القسط يؤثر فى المصاريف أولا",
     "mustEnterGuarantor":"يجب إدخال الضامن ",
-    "guarantorGuaranteesMultiple": "الضامن يضمن اكثر من عميل"
-}
+    "guarantorGuaranteesMultiple": "الضامن يضمن اكثر من عميل",
+    "duplicateNationalIdMessage": "رقم البطاقة موجود بالفعل لعميل اخر",
+    "customerHomeAddressLocationTitle": "عنوان منزل العميل علي الخريطة",
+    "customerWorkAddressLocationTitle": "عنوان عمل العميل علي الخريطة",
+    "required": "مطلوب",
+    "maxLength100": "لا يمكن ان يكون اكثر من 100",
+    "maxLength10": "لا يمكن ان يكون اكثر من 10",
+    "maxLength11": "لا يمكن ان يكون اكثر من 10",
+    "maxLength5": "لا يمكن ان يكون اكثر من 5",
+    "nationalIdLengthShouldBe14":"رقم البطاقة يجب ان يكون 14 رقم",
+    "dateShouldBeBeforeToday": "التاريخ يجب ان يكون في الماضي",
+    "save": "حفظ",
+    "cancel": "الغاء",
+    "customerCreated": "تم انشاء العميل",
+    "customerCreationError": "حصل خطا في انشاء العميل"
+}    

@@ -1,15 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const config = require('./config');
 
 module.exports = () => {
-    const env = dotenv.config().parsed;
-    const envKeys = Object.keys(env).reduce((prev, next) => {
-        prev[`process.env.${next}`] = JSON.stringify(env[next]);
-        return prev;
-    }, {});
     return {
         entry: './src/Mohassel/index.tsx',
         resolve: {
@@ -43,12 +38,15 @@ module.exports = () => {
             historyApiFallback: true,
         },
         plugins: [
-            new webpack.DefinePlugin(envKeys),
             new HtmlWebpackPlugin({
                 template: './src/Mohassel/index.html'
             }),
-            // new webpack.DefinePlugin({
-            //     'process.env.development': !!(env && !env.production),}),
+            new webpack.DefinePlugin({
+                'process.env': {
+                    REACT_APP_BASE_URL: JSON.stringify(config.REACT_APP_BASE_URL),
+                    REACT_APP_MOHASSEL_URL: JSON.stringify(config.REACT_APP_MOHASSEL_URL),
+                    REACT_APP_GOOGLE_MAP_KEY: JSON.stringify(config.REACT_APP_GOOGLE_MAP_KEY)
+                },}),
             new ForkTsCheckerWebpackPlugin({eslint: true})
         ]
     }

@@ -17,7 +17,6 @@ class FormulaCreation extends Component<Props, State>{
     }
     submit= (values: object): void => {
         let obj = values
-        console.log('Hereeee',obj)
     }
     render() {
         return (

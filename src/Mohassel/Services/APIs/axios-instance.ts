@@ -25,21 +25,36 @@ function errorResponseHandler(error: any) {
         case 400:
         case 401:
         case 402:
-            localStorage.clear();
-            window.location.reload()
+            // localStorage.clear();
+            // window.location.reload()
         default:
             break;
     }
     throw error;
 }
+console.log(getCookie('token'))
 var instance = axiosLib.create({
-    headers: { 'Authorization': `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzFlMTIxODc4OGVjYzBlYzk2YmY4OSIsImJyYW5jaCI6IjVlNjY0YWJiZDBlNmM3YzJlZDA3OWFlNiIsImV4cCI6MTU4NDUyNzEwOTAwMH0.h24I6WUUgiZQUZZ9tJS7n6UHoMHekx_lN8MW-FACz4GlPJARxwknwSHLJOD-5caaLrgcGYr87aA2ikYUDCKBKw` }
+    headers: { 'Authorization': `Bearer ${getCookie('token')}` }
 })
 // apply interceptor on response
 instance.interceptors.response.use(
     response => response,
     errorResponseHandler
 );
+
+function getCookie(cookie: string) {
+    let allCookies = document.cookie.split(';');
+    for (var i = 0; i < allCookies.length; i++) {
+      var name = allCookies[i].split('=')[0].toLowerCase().trim();
+      var value = allCookies[i].split('=')[1].toLowerCase().trim();
+      if (name === cookie) {
+        return value;
+      } else if (value === cookie) {
+        return name;
+      }
+    }
+    return "";
+  };
 
 export default instance;
 
