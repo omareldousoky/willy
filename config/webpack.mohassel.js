@@ -2,9 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const config = require('./config');
 
-module.exports = (env) => {
-
+module.exports = () => {
     return {
         entry: './src/Mohassel/index.tsx',
         resolve: {
@@ -27,15 +27,26 @@ module.exports = (env) => {
                         transpileOnly: true
                     },
                     exclude: /dist/,
-                }
+                },
+                {
+                    test: /\.css$/i,
+                    use: ['style-loader', 'css-loader'],
+                },
             ]
+        },
+        devServer: {
+            historyApiFallback: true,
         },
         plugins: [
             new HtmlWebpackPlugin({
                 template: './src/Mohassel/index.html'
             }),
             new webpack.DefinePlugin({
-                'process.env.development': !!(env && !env.production),}),
+                'process.env': {
+                    REACT_APP_BASE_URL: JSON.stringify(config.REACT_APP_BASE_URL),
+                    REACT_APP_MOHASSEL_URL: JSON.stringify(config.REACT_APP_MOHASSEL_URL),
+                    REACT_APP_GOOGLE_MAP_KEY: JSON.stringify(config.REACT_APP_GOOGLE_MAP_KEY)
+                },}),
             new ForkTsCheckerWebpackPlugin({eslint: true})
         ]
     }

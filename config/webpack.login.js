@@ -2,9 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const config = require('./config');
 
-module.exports = (env) => {
-
+module.exports = () => {
     return {
         entry: './src/Login/index.tsx',
         resolve: {
@@ -35,8 +35,11 @@ module.exports = (env) => {
                 template: './src/Login/index.html'
             }),
             new webpack.DefinePlugin({
-                'process.env.development': !!(env && !env.production),}),
-            new ForkTsCheckerWebpackPlugin({eslint: true})
+                'process.env': {
+                    REACT_APP_BASE_URL: JSON.stringify(config.REACT_APP_BASE_URL),
+                    REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
+                },}),
+            new ForkTsCheckerWebpackPlugin({ eslint: true })
         ]
     }
 };
