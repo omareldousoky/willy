@@ -1,0 +1,34 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    direction: rtl !important;
+}
+  
+code {
+font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+  
+.pac-container.pac-logo.hdpi, .pac-container.pac-logo {
+  z-index: 1100;
+}
+
+.map {
+  margin: 20px;
+  position: relative;
+  max-width: 95%;
+  max-height: 400px;
+}
+
+.central-loader-fullscreen {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 100px;
+  height: 100px;
+  z-index: 99999;
+}

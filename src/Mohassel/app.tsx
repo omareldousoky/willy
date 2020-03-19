@@ -1,12 +1,25 @@
 import * as React from 'react';
-import SharedComponent from '../Shared/test';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import CustomerCreation from './Components/CustomerCreation/customer-creation';
+import FormulaCreation from './Components/LoanCreation/loanFormulaCreation';
+import FormulaTest from './Components/LoanCreation/loanFormulaTest';
+import NavBar from './Components/NavBar/navBar';
+import {Landing} from './Components/Landing/landing';
 
 const App = () => {
+    // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
     return (
-        <>
-            <SharedComponent></SharedComponent>
-            <h1>hi mohassel</h1>
-        </>
+        <BrowserRouter>
+            <div style={{ direction: 'rtl' }}>
+                <NavBar/>
+                <Switch>
+                    <Route exact path="/" component={Landing} />
+                    <Route path="/new-user" component={CustomerCreation} />
+                    <Route path="/new-formula" component={FormulaCreation} />
+                    <Route path="/test-formula" component={FormulaTest} />
+                </Switch>
+            </div>
+        </BrowserRouter>
     )
 };
 
