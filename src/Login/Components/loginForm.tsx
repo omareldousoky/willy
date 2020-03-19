@@ -7,7 +7,6 @@ import * as local from '../../Shared/Assets/ar.json';
 
 export const LoginForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
-    console.log(values,errors)
     return (
         <Form style={{justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column'}} onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="username">
