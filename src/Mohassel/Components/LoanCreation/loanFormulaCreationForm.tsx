@@ -184,7 +184,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                                     setFieldValue('equalInstallments', true)
                                 }
                             }}
-                            isInvalid={errors.equalInstallments && touched.rounding}
+                            isInvalid={errors.equalInstallments && touched.equalInstallments}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.equalInstallments}
