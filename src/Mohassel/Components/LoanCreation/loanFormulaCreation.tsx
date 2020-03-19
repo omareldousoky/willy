@@ -5,7 +5,7 @@ import { loanFormula, loanFormulaCreationValidation } from './loanCreationInitia
 import { LoanFormulaCreationForm } from './loanFormulaCreationForm';
 interface Props { };
 interface State {
-    formula: any,
+    formula: {};
 }
 
 class FormulaCreation extends Component<Props, State>{

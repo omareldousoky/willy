@@ -8,7 +8,6 @@ interface Props {
 }
 class NavBar extends Component <Props> {
     render() {
-        console.log(process.env.REACT_APP_LOGIN_URL)
         return (
             <Navbar bg="light" expand="lg">
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />

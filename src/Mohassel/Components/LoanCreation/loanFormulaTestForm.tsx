@@ -7,7 +7,6 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const LoanFormulaTestForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
-    console.log(values,errors)
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="principal">

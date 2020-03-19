@@ -1,4 +1,7 @@
 {
+    "username":"إسم المستخدم",
+    "password":"كلمة المرور",
+    "login":"دخول",
     "customerType":"نوع العميل",
     "name":"الاسم",
     "gender":"النوع",

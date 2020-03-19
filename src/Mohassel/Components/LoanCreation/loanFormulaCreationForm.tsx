@@ -7,7 +7,6 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const LoanFormulaCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
-    console.log(errors)
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="loanCalculationFormulaName">
@@ -152,8 +151,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.roundWhat && touched.roundWhat}
-                            disabled={!values.rounding}
-                        >
+                            disabled={!values.rounding}>
                             <option value="1">تقريب الأصل فقط</option>
                             <option value="2">تقريب المصاريف فقط</option>
                             <option value="3">تقريب الأصل و المصاريف</option>
@@ -178,14 +176,11 @@ export const LoanFormulaCreationForm = (props: any) => {
                             checked={values.equalInstallments}
                             onBlur={handleBlur}
                             disabled={!values.rounding}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                                 const val = e.currentTarget.value;
-                                console.log(val)
                                 if (val === true) {
-                                    console.log('False')
                                     setFieldValue('equalInstallments', false)
                                 } else {
-                                    console.log('True')
                                     setFieldValue('equalInstallments', true)
                                 }
                             }}
@@ -207,14 +202,11 @@ export const LoanFormulaCreationForm = (props: any) => {
                             checked={(!values.equalInstallments)}
                             onBlur={handleBlur}
                             disabled={!values.rounding}
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                                 const val = e.currentTarget.value;
-                                console.log(val)
                                 if (val === false) {
-                                    console.log('True')
                                     setFieldValue('equalInstallments', true)
                                 } else {
-                                    console.log('False')
                                     setFieldValue('equalInstallments', false)
                                 }
                             }}
