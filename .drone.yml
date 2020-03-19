@@ -63,6 +63,9 @@ name: PushToEcr
 steps:
 - name: publish-login
   image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
   settings:
     access_key:
       from_secret: aws_access_key_id
@@ -76,6 +79,7 @@ steps:
       - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
       - REACT_APP_MOHASSEL_URL=mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_GOOGLE_MAP_KEY=${REACT_APP_GOOGLE_MAP_KEY}
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -90,6 +94,9 @@ steps:
 
 - name: publish-mohassel
   image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
   settings:
     access_key:
       from_secret: aws_access_key_id
@@ -102,6 +109,7 @@ steps:
       - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
       - REACT_APP_MOHASSEL_URL=mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_GOOGLE_MAP_KEY=${REACT_APP_GOOGLE_MAP_KEY}
     region: us-east-1
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
