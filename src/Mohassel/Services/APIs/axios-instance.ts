@@ -1,19 +1,5 @@
 import axiosLib from 'axios';
 
-// function getCookie(cname: string) {
-//     const name = cname + "=";
-//     const ca = document.cookie.split(';');
-//     for (let i = 0; i < ca.length; i++) {
-//       let c = ca[i];
-//       while (c.charAt(0) == ' ') {
-//         c = c.substring(1);
-//       }
-//       if (c.indexOf(name) == 0) {
-//         return c.substring(name.length, c.length);
-//       }
-//     }
-//     return "";
-//   }
 function errorResponseHandler(error: any) {
 
     // check for errorHandle config
@@ -32,8 +18,22 @@ function errorResponseHandler(error: any) {
     }
     throw error;
 }
-console.log(getCookie('token'))
-var instance = axiosLib.create({
+function getCookie(cookie: string) {
+  if(document.cookie){
+    const allCookies = document.cookie.split(';');
+  for (let i = 0; i < allCookies.length; i++) {
+    const name = allCookies[i].split('=')[0].toLowerCase().trim();
+    const value = allCookies[i].split('=')[1].toLowerCase().trim();
+    if (name === cookie) {
+      return value;
+    } else if (value === cookie) {
+      return name;
+    }}
+  }
+  return "";
+};
+
+const instance = axiosLib.create({
     headers: { 'Authorization': `Bearer ${getCookie('token')}` }
 })
 // apply interceptor on response
@@ -42,19 +42,7 @@ instance.interceptors.response.use(
     errorResponseHandler
 );
 
-function getCookie(cookie: string) {
-    let allCookies = document.cookie.split(';');
-    for (var i = 0; i < allCookies.length; i++) {
-      var name = allCookies[i].split('=')[0].toLowerCase().trim();
-      var value = allCookies[i].split('=')[1].toLowerCase().trim();
-      if (name === cookie) {
-        return value;
-      } else if (value === cookie) {
-        return name;
-      }
-    }
-    return "";
-  };
+
 
 export default instance;
 

@@ -1,16 +1,26 @@
 import * as Yup from 'yup';
 const date = new Date();
-
-export const loanFormula: any = {
+export interface Formula {
+    loanCalculationFormulaName: string;
+    interestType: string;
+    installmentType: string;
+    gracePeriodFees: boolean;
+    rounding: boolean;
+    roundDirection: string;
+    roundTo: string;
+    roundWhat: string;
+    equalInstallments: boolean;
+}
+export const loanFormula: Formula = {
     loanCalculationFormulaName: '',
-    interestType: '1',
-    installmentType: '0',
+    interestType: 'flat',
+    installmentType: 'up',
     gracePeriodFees: false,
     rounding: true,
-    roundDirection: false,
-    roundTo: '1.000',
-    roundWhat: '1',
-    equalInstallments: false
+    roundDirection: 'up',
+    roundTo: '1',
+    roundWhat: 'principal',
+    equalInstallments: true
 }
 export const loanFormulaTest: any = {
     principal: 1,
@@ -36,7 +46,7 @@ export const loanFormulaCreationValidation = Yup.object().shape({
     installmentType: Yup.string().required('required!'),
     gracePeriodFees: Yup.boolean(),
     rounding: Yup.boolean(),
-    roundDirection: Yup.boolean(),
+    roundDirection: Yup.string(),
     roundTo: Yup.string().required('required!'),
     roundWhat: Yup.string().required('required!'),
     equalInstallments: Yup.boolean()

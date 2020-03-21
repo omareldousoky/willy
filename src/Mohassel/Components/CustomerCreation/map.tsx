@@ -13,24 +13,24 @@ const mapStyles = {
     height: '400px'
 };
 interface Props {
-    show: any;
+    show: boolean;
     handleClose: any;
-    save: any,
-    location: { lat: number, lng: number },
-    google: any,
-    header: string
+    save: any;
+    location: { lat: number; lng: number };
+    google: any;
+    header: string;
 }
 interface State {
-    lat: number,
-    lng: number,
-    mapCenterLat: number,
-    mapCenterLng: number,
-    address: string,
-    query: string,
+    lat: number;
+    lng: number;
+    mapCenterLat: number;
+    mapCenterLng: number;
+    address: string;
+    query: string;
 }
 
 export class MapContainer extends Component<Props, State> {
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             lat: 0,
@@ -44,10 +44,11 @@ export class MapContainer extends Component<Props, State> {
         }
     }
     componentDidMount() {
-        var options = { componentRestrictions: { country: 'eg' } };
+        const options = { componentRestrictions: { country: 'eg' } };
+        const input = document.getElementById('autocomplete') as HTMLInputElement;
         /*global google*/ // To disable any eslint 'google not defined' errors
-        let autocomplete = new window.google.maps.places.Autocomplete(
-            document.getElementById('autocomplete'),
+        const autocomplete = new window.google.maps.places.Autocomplete(
+            input,
             options,
         );
 
@@ -57,8 +58,8 @@ export class MapContainer extends Component<Props, State> {
         });
     }
     handlePlaceSelect(autocomplete: any) {
-        let lat = autocomplete.getPlace().geometry.location.lat();
-        let lng = autocomplete.getPlace().geometry.location.lng();
+        const lat = autocomplete.getPlace().geometry.location.lat();
+        const lng = autocomplete.getPlace().geometry.location.lng();
         this.setState({
             lat,
             lng,
@@ -70,11 +71,12 @@ export class MapContainer extends Component<Props, State> {
         const { latLng } = coord;
         const lat = latLng.lat();
         const lng = latLng.lng();
-        var geocoder = new google.maps.Geocoder;
+        const geocoder = new google.maps.Geocoder;
+        const input = document.getElementById('autocomplete') as HTMLInputElement;
         geocoder.geocode({ 'location': latLng }, function (results: any, status: string) {
             if (status === 'OK') {
                 if (results[0]) {
-                    document.getElementById('autocomplete').value = results[0].formatted_address;
+                    input.value = results[0].formatted_address;
                 }
             }
         })

@@ -14,7 +14,7 @@ export const StepTwoForm = (props: any) => {
         <Form onSubmit={handleSubmit}>
             <Map show={mapState}
                 handleClose={() => openCloseMap(false)}
-                save={(businessAddressLatLong: { lat: number, long: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
+                save={(businessAddressLatLong: { lat: number; long: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
                 location={businessAddressLatLong}
                 header={local.customerWorkAddressLocationTitle}
             />
