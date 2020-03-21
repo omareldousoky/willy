@@ -17,14 +17,14 @@ interface CustomerInfo {
   birthDate: number;
   nationalIdIssueDate: number;
   homePostalCode: number;
-  customerAddressLatLong: string
+  customerAddressLatLong: string;
   customerAddressLatLongNumber: {
     lat: number;
     lng: number;
   };
 }
 interface CustomerBusiness {
-  businessAddressLatLong: string,
+  businessAddressLatLong: string;
   businessAddressLatLongNumber: {
     lat: number;
     lng: number;
@@ -38,9 +38,9 @@ interface CustomerExtraDetails {
   partTimeEmployeeCount: any;
 }
 interface Customer {
-  customerInfo: CustomerInfo
-  customerBusiness: CustomerBusiness
-  customerExtraDetails: CustomerExtraDetails
+  customerInfo: CustomerInfo;
+  customerBusiness: CustomerBusiness;
+  customerExtraDetails: CustomerExtraDetails;
 }
 interface Props {
   history: Array<string>;
@@ -52,45 +52,45 @@ interface State {
     birthDate: number;
     nationalIdIssueDate: number;
     homePostalCode: number;
-    customerAddressLatLong: string,
+    customerAddressLatLong: string;
     customerAddressLatLongNumber: {
       lat: number;
       lng: number;
     };
   };
   step2: {
-    businessAddressLatLong: string,
+    businessAddressLatLong: string;
     businessAddressLatLongNumber: {
       lat: number;
       lng: number;
     };
-    businessName: string,
-    businessAddress: string,
-    governorate: string,
-    district: string,
-    village: string,
-    ruralUrban: string,
-    businessPostalCode: string,
-    businessPhoneNumber: string,
-    businessSector: string,
-    businessActivity: string,
-    businessSpeciality: string,
-    businessLicenseNumber: string,
-    businessLicenseIssuePlace: string,
-    businessLicenseIssueDate: string,
-    commercialRegisterNumber: string,
-    industryRegisterNumber: string,
-    taxCardNumber: string,
+    businessName: string;
+    businessAddress: string;
+    governorate: string;
+    district: string;
+    village: string;
+    ruralUrban: string;
+    businessPostalCode: string;
+    businessPhoneNumber: string;
+    businessSector: string;
+    businessActivity: string;
+    businessSpeciality: string;
+    businessLicenseNumber: string;
+    businessLicenseIssuePlace: string;
+    businessLicenseIssueDate: string;
+    commercialRegisterNumber: string;
+    industryRegisterNumber: string;
+    taxCardNumber: string;
   };
   step3: {
-    geographicalDistribution: string,
-    representative: string,
+    geographicalDistribution: string;
+    representative: string;
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
-    accountNumber: string,
-    accountBranch: string,
-    comments: string,
+    accountNumber: string;
+    accountBranch: string;
+    comments: string;
   };
   loading: boolean;
 }
