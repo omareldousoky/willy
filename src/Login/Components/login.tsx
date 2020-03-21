@@ -4,12 +4,15 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { LoginForm } from './loginForm';
 import {loginCred, loginCredValidation} from './loginState'
-
+interface User {
+  username: string;
+  password: string;
+}
 interface Props {
-
+  title: string;
 }
 interface State {
-  credentials: {};
+  credentials: User;
 }
 class Login extends React.PureComponent<Props, State> {
   constructor(props: Props) {
@@ -23,7 +26,7 @@ class Login extends React.PureComponent<Props, State> {
     const { name, value } = e.currentTarget;
     this.setState({ [name]: value } as any)
   }
-  submit = (values: object): void => {
+  submit = (values: User): void => {
     const data = {
       username: values.username,
       password: values.password

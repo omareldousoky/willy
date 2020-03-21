@@ -13,21 +13,45 @@ import { StepThreeForm } from './StepThreeForm';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 
-
-interface Props { 
-  history: Array<string>
+interface Customer {
+  customerInfo: {
+    birthDate: number;
+    nationalIdIssueDate: number;
+    homePostalCode: number;
+    customerAddressLatLong: {
+      lat: string;
+      long: string;
+    };
+  };
+  customerBusiness: {
+    businessAddressLatLong: {
+      lat: string;
+      long: string;
+    };
+    businessAddressLatLongString: string;
+    businessPostalCode: number;
+    businessLicenseIssueDate: number;
+  };
+  customerExtraDetails: {
+    applicationDate: number;
+    permanentEmployeeCount: number;
+    partTimeEmployeeCount: number;
+  };
+}
+interface Props {
+  history: Array<string>;
 };
 interface State {
-  step: number,
-  submitObj: object,
-  step1: any,
-  step2: any,
-  step3: any,
-  loading: boolean,
+  step: number;
+  submitObj: object;
+  step1: {};
+  step2: {};
+  step3: {};
+  loading: boolean;
 }
 
 class CustomerCreation extends Component<Props, State>{
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       step: 1,
@@ -46,21 +70,20 @@ class CustomerCreation extends Component<Props, State>{
       } as any);
     } else {
       this.setState({ step3: values, loading: true })
-      let objToSubmit = {
-        customerInfo: { ...this.state.step1 },
-        customerBusiness: { ...this.state.step2 },
+      const objToSubmit = {
+        customerInfo: this.state.step1 ,
+        customerBusiness: this.state.step2 ,
         customerExtraDetails: values
       };
       this.createCustomer(objToSubmit);
     }
   }
-
-  async createCustomer(obj: object) {
+  async createCustomer(obj: Customer) {
     obj.customerInfo.birthDate = new Date(obj.customerInfo.birthDate).valueOf();
     obj.customerInfo.nationalIdIssueDate = new Date(obj.customerInfo.nationalIdIssueDate).valueOf();
     obj.customerInfo.homePostalCode = Number(obj.customerInfo.homePostalCode);
-    Object.keys(obj.customerInfo.customerAddressLatLong).length === 0 ? obj.customerInfo.customerAddressLatLong = "" : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLong.lat},${obj.customerInfo.customerAddressLatLong.lng}`;
-    Object.keys(obj.customerBusiness.businessAddressLatLong).length === 0 ? obj.customerBusiness.businessAddressLatLong = "" : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLong.lat},${obj.customerBusiness.businessAddressLatLong.lng}`;
+    Object.keys(obj.customerInfo.customerAddressLatLong).length === 0 ? obj.customerInfo.customerAddressLatLong = { lat:"", long:''} : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLong.lat},${obj.customerInfo.customerAddressLatLong.lng}`;
+    Object.keys(obj.customerBusiness.businessAddressLatLong).length === 0 ? obj.customerBusiness.businessAddressLatLong = { lat:"", long:''} : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLong.lat},${obj.customerBusiness.businessAddressLatLong.lng}`;
     obj.customerBusiness.businessPostalCode = Number(obj.customerBusiness.businessPostalCode);
     obj.customerBusiness.businessLicenseIssueDate = new Date(obj.customerBusiness.businessLicenseIssueDate).valueOf();
     obj.customerExtraDetails.applicationDate = new Date(obj.customerExtraDetails.applicationDate).valueOf();
@@ -142,7 +165,7 @@ class CustomerCreation extends Component<Props, State>{
   }
   render() {
     return (
-      <>
+      <div>
         {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
           <Container>
             <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }}>
@@ -156,7 +179,7 @@ class CustomerCreation extends Component<Props, State>{
             {this.renderSteps()}
           </Container>
         }
-      </>
+      </div>
     )
   }
 }

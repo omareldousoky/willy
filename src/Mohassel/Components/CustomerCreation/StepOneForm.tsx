@@ -18,7 +18,7 @@ export const StepOneForm = (props: any) => {
     <Form onSubmit={handleSubmit}>
       {mapState && <Map show={mapState}
         handleClose={() => openCloseMap(false)}
-        save={(customerAddressLatLong: { lat: number, long: number }) => { setLocation(customerAddressLatLong); setFieldValue('customerAddressLatLong', customerAddressLatLong); openCloseMap(false) }}
+        save={(customerAddressLatLong: { lat: number; long: number }) => { setLocation(customerAddressLatLong); setFieldValue('customerAddressLatLong', customerAddressLatLong); openCloseMap(false) }}
         location={customerAddressLatLong}
         header={local.customerHomeAddressLocationTitle}
       />}

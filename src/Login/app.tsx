@@ -3,7 +3,7 @@ import Login from './Components/login';
 
 const App = () => {
     return (
-        <Login />
+        <Login title='' />
     )
 };
 

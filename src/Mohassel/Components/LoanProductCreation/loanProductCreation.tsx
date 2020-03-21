@@ -3,20 +3,22 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { LoanProduct,LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
-interface Props { };
+interface Props {
+    title: string;
+ };
 interface State {
-    product: object
+    product: object;
 }
 
 class LoanProductCreation extends Component<Props, State>{
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             product:LoanProduct
         }
     }
     submit= (values: object): void => {
-        let obj = values
+        const obj = values
         console.log('Hereeee',obj)
     }
     render() {

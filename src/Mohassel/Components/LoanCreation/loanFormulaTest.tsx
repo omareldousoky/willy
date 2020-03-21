@@ -3,20 +3,22 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { loanFormulaTest, loanFormulaTestValidation } from './loanCreationInitialStates';
 import { LoanFormulaTestForm } from './loanFormulaTestForm';
-interface Props { };
+interface Props { 
+    title: string;
+};
 interface State {
-    formula: any,
+    formula: any;
 }
 
 class FormulaTest extends Component<Props, State>{
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             formula: loanFormulaTest
         }
     }
     submit= (values: object): void => {
-        let obj = values
+        const obj = values
     }
     render() {
         return (
