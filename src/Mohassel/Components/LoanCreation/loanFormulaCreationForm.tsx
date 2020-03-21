@@ -38,7 +38,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                         isInvalid={errors.interestType && touched.interestType}
                         maxLength={14}
                     >
-                        <option value="1">مصاريف متساويه محسوبه من إجمالى أصل القرض</option>
+                        <option value="flat">مصاريف متساويه محسوبه من إجمالى أصل القرض</option>
                         <option value="2">مصاريف متناقصه محسوبه من المتبقى من أصل القرض</option>
                         <option value="3">مصاريف متساوية محولة الي مصاريف متناقصه</option>
                     </Form.Control>
@@ -59,7 +59,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                         isInvalid={errors.installmentType && touched.installmentType}
                         maxLength={14}
                     >
-                        <option value="0">تتضمن أصل و مصاريف</option>
+                        <option value="up">تتضمن أصل و مصاريف</option>
                         <option value="1">أقساط بالمصاريف فقط اولا ثم بعد ذلك الأصل</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -152,7 +152,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                             onChange={handleChange}
                             isInvalid={errors.roundWhat && touched.roundWhat}
                             disabled={!values.rounding}>
-                            <option value="1">تقريب الأصل فقط</option>
+                            <option value="principal">تقريب الأصل فقط</option>
                             <option value="2">تقريب المصاريف فقط</option>
                             <option value="3">تقريب الأصل و المصاريف</option>
                             <option value="4">تقريب إجمالى قيمه القسط و الأصل</option>

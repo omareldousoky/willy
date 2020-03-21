@@ -555,7 +555,7 @@ export const LoanProductCreationForm = (props: any) => {
                 </Row>
                 <Row>
                     <Form.Group as={Row} controlId="individualApplicationFee">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.individualApplicationFees}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.individualApplicationFee}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="text"

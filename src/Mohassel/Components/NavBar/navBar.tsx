@@ -19,7 +19,7 @@ class NavBar extends Component <Props> {
                         <Nav.Link onClick={()=> this.props.history.push('/new-loan-product')}>Create Loan Product</Nav.Link>
                         <Nav.Link onClick={()=> {
                             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-                            window.location.href = process.env.REACT_APP_LOGIN_URL;
+                            window.location.href = (process.env.REACT_APP_LOGIN_URL)?process.env.REACT_APP_LOGIN_URL:''
                         }}>Logout</Nav.Link>
 
 

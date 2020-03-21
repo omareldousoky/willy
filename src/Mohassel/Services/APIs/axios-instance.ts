@@ -1,19 +1,5 @@
 import axiosLib from 'axios';
 
-// function getCookie(cname: string) {
-//     const name = cname + "=";
-//     const ca = document.cookie.split(';');
-//     for (let i = 0; i < ca.length; i++) {
-//       let c = ca[i];
-//       while (c.charAt(0) == ' ') {
-//         c = c.substring(1);
-//       }
-//       if (c.indexOf(name) == 0) {
-//         return c.substring(name.length, c.length);
-//       }
-//     }
-//     return "";
-//   }
 function errorResponseHandler(error: any) {
 
     // check for errorHandle config
@@ -33,7 +19,8 @@ function errorResponseHandler(error: any) {
     throw error;
 }
 function getCookie(cookie: string) {
-  const allCookies = document.cookie.split(';');
+  if(document.cookie){
+    const allCookies = document.cookie.split(';');
   for (let i = 0; i < allCookies.length; i++) {
     const name = allCookies[i].split('=')[0].toLowerCase().trim();
     const value = allCookies[i].split('=')[1].toLowerCase().trim();
@@ -41,11 +28,10 @@ function getCookie(cookie: string) {
       return value;
     } else if (value === cookie) {
       return name;
-    }
+    }}
   }
   return "";
 };
-console.log(getCookie('token'))
 
 const instance = axiosLib.create({
     headers: { 'Authorization': `Bearer ${getCookie('token')}` }
