@@ -19,7 +19,6 @@ class LoanProductCreation extends Component<Props, State>{
     }
     submit= (values: object): void => {
         const obj = values
-        console.log('Hereeee',obj)
     }
     render() {
         return (
