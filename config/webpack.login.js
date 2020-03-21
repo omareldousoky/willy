@@ -38,6 +38,7 @@ module.exports = () => {
                 'process.env': {
                     REACT_APP_BASE_URL: JSON.stringify(config.REACT_APP_BASE_URL),
                     REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
+                    REACT_APP_MOHASSEL_URL: JSON.stringify(config.REACT_APP_MOHASSEL_URL),
                 },}),
             new ForkTsCheckerWebpackPlugin({ eslint: true })
         ]
