@@ -13,30 +13,34 @@ import { StepThreeForm } from './StepThreeForm';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 
+interface CustomerInfo {
+  birthDate: number;
+  nationalIdIssueDate: number;
+  homePostalCode: number;
+  customerAddressLatLong: string
+  customerAddressLatLongNumber: {
+    lat: number;
+    lng: number;
+  };
+}
+interface CustomerBusiness {
+  businessAddressLatLong: string,
+  businessAddressLatLongNumber: {
+    lat: number;
+    lng: number;
+  };
+  businessPostalCode: any;
+  businessLicenseIssueDate: any;
+}
+interface CustomerExtraDetails {
+  applicationDate: any;
+  permanentEmployeeCount: any;
+  partTimeEmployeeCount: any;
+}
 interface Customer {
-  customerInfo: {
-    birthDate: number;
-    nationalIdIssueDate: number;
-    homePostalCode: number;
-    customerAddressLatLong: {
-      lat: string;
-      long: string;
-    };
-  };
-  customerBusiness: {
-    businessAddressLatLong: {
-      lat: string;
-      long: string;
-    };
-    businessAddressLatLongString: string;
-    businessPostalCode: number;
-    businessLicenseIssueDate: number;
-  };
-  customerExtraDetails: {
-    applicationDate: number;
-    permanentEmployeeCount: number;
-    partTimeEmployeeCount: number;
-  };
+  customerInfo: CustomerInfo
+  customerBusiness: CustomerBusiness
+  customerExtraDetails: CustomerExtraDetails
 }
 interface Props {
   history: Array<string>;
@@ -44,9 +48,50 @@ interface Props {
 interface State {
   step: number;
   submitObj: object;
-  step1: {};
-  step2: {};
-  step3: {};
+  step1: {
+    birthDate: number;
+    nationalIdIssueDate: number;
+    homePostalCode: number;
+    customerAddressLatLong: string,
+    customerAddressLatLongNumber: {
+      lat: number;
+      lng: number;
+    };
+  };
+  step2: {
+    businessAddressLatLong: string,
+    businessAddressLatLongNumber: {
+      lat: number;
+      lng: number;
+    };
+    businessName: string,
+    businessAddress: string,
+    governorate: string,
+    district: string,
+    village: string,
+    ruralUrban: string,
+    businessPostalCode: string,
+    businessPhoneNumber: string,
+    businessSector: string,
+    businessActivity: string,
+    businessSpeciality: string,
+    businessLicenseNumber: string,
+    businessLicenseIssuePlace: string,
+    businessLicenseIssueDate: string,
+    commercialRegisterNumber: string,
+    industryRegisterNumber: string,
+    taxCardNumber: string,
+  };
+  step3: {
+    geographicalDistribution: string,
+    representative: string,
+    applicationDate: any;
+    permanentEmployeeCount: any;
+    partTimeEmployeeCount: any;
+    accountNumber: string,
+    accountBranch: string,
+    comments: string,
+  };
   loading: boolean;
 }
 
@@ -69,11 +114,11 @@ class CustomerCreation extends Component<Props, State>{
         step: this.state.step + 1,
       } as any);
     } else {
-      this.setState({ step3: values, loading: true })
-      const objToSubmit = {
-        customerInfo: this.state.step1 ,
-        customerBusiness: this.state.step2 ,
-        customerExtraDetails: values
+      this.setState({ step3: values, loading: true } as any)
+      const objToSubmit: Customer = {
+        customerInfo: this.state.step1,
+        customerBusiness: this.state.step2,
+        customerExtraDetails: this.state.step3
       };
       this.createCustomer(objToSubmit);
     }
@@ -82,8 +127,8 @@ class CustomerCreation extends Component<Props, State>{
     obj.customerInfo.birthDate = new Date(obj.customerInfo.birthDate).valueOf();
     obj.customerInfo.nationalIdIssueDate = new Date(obj.customerInfo.nationalIdIssueDate).valueOf();
     obj.customerInfo.homePostalCode = Number(obj.customerInfo.homePostalCode);
-    Object.keys(obj.customerInfo.customerAddressLatLong).length === 0 ? obj.customerInfo.customerAddressLatLong = { lat:"", long:''} : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLong.lat},${obj.customerInfo.customerAddressLatLong.lng}`;
-    Object.keys(obj.customerBusiness.businessAddressLatLong).length === 0 ? obj.customerBusiness.businessAddressLatLong = { lat:"", long:''} : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLong.lat},${obj.customerBusiness.businessAddressLatLong.lng}`;
+    obj.customerInfo.customerAddressLatLongNumber.lat === 0 && obj.customerInfo.customerAddressLatLongNumber.lng === 0? obj.customerInfo.customerAddressLatLong = '' : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLongNumber.lat},${obj.customerInfo.customerAddressLatLongNumber.lng}`;
+    obj.customerBusiness.businessAddressLatLongNumber.lat === 0 && obj.customerBusiness.businessAddressLatLongNumber.lng === 0? obj.customerBusiness.businessAddressLatLong = '' : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLongNumber.lat},${obj.customerBusiness.businessAddressLatLongNumber.lng}`;
     obj.customerBusiness.businessPostalCode = Number(obj.customerBusiness.businessPostalCode);
     obj.customerBusiness.businessLicenseIssueDate = new Date(obj.customerBusiness.businessLicenseIssueDate).valueOf();
     obj.customerExtraDetails.applicationDate = new Date(obj.customerExtraDetails.applicationDate).valueOf();
