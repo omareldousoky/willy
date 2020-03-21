@@ -45,9 +45,10 @@ export class MapContainer extends Component<Props, State> {
     }
     componentDidMount() {
         const options = { componentRestrictions: { country: 'eg' } };
+        const input = document.getElementById('autocomplete') as HTMLInputElement;
         /*global google*/ // To disable any eslint 'google not defined' errors
         const autocomplete = new window.google.maps.places.Autocomplete(
-            document.getElementById('autocomplete'),
+            input,
             options,
         );
 
@@ -71,10 +72,11 @@ export class MapContainer extends Component<Props, State> {
         const lat = latLng.lat();
         const lng = latLng.lng();
         const geocoder = new google.maps.Geocoder;
+        const input = document.getElementById('autocomplete') as HTMLInputElement;
         geocoder.geocode({ 'location': latLng }, function (results: any, status: string) {
             if (status === 'OK') {
                 if (results[0]) {
-                    document.getElementById('autocomplete').value = results[0].formatted_address;
+                    input.value = results[0].formatted_address;
                 }
             }
         })

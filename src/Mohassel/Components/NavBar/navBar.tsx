@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import { withRouter } from 'react-router-dom';
 
 interface Props {
-    history: [];
+    history: Array<string>;
 }
 class NavBar extends Component <Props> {
     render() {
