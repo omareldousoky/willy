@@ -1,5 +1,6 @@
 kind: pipeline
 name: notify-pipeline-start
+
 steps:
 - name: notify-start
   image: plugins/slack
@@ -25,21 +26,28 @@ steps:
     - test
     event:
       - push
+
 ---
+
 kind: pipeline
 name: unit-test
+
 steps:
 - name: build
   image: node:12.16.1-alpine
   commands:
   - npm i 
   - npm run build
+
+
 - name: code-analysis
   image: aosapps/drone-sonar-plugin
   settings:
       sonar_host: https://sonarqube.halan.io
       sonar_token:
         from_secret: sonar_token
+
+
 trigger:
   branch:
   - master
@@ -49,9 +57,11 @@ trigger:
   event:
   - push
   - pull_request
+
 ---
 kind: pipeline
 name: PushToEcr
+
 steps:
 - name: publish-login
   image: plugins/ecr
@@ -83,6 +93,7 @@ steps:
     - test
     event:
       - push
+
 - name: publish-mohassel
   image: plugins/ecr
   environment:
@@ -113,11 +124,17 @@ steps:
     - test
     event:
       - push
+
 depends_on:
   - unit-test
+
 ---
+
+
+
 kind: pipeline
 name: kubernetes
+
 steps:
 - name: deploy-login
   image: quay.io/honestbee/drone-kubernetes
@@ -133,6 +150,7 @@ steps:
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
     container: fe-login
     tag: "${DRONE_COMMIT_SHA:0:8}"
+
   when:
     branch:
     - dev
@@ -140,6 +158,7 @@ steps:
     - staging
     event:
       - push
+
 - name: deploy-mohassel
   image: quay.io/honestbee/drone-kubernetes
   settings:
@@ -154,6 +173,7 @@ steps:
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
     container: fe-mohassel
     tag: "${DRONE_COMMIT_SHA:0:8}"
+
   when:
     branch:
     - dev
@@ -161,12 +181,15 @@ steps:
     - staging
     event:
       - push
+
 depends_on:
   - unit-test
   - PushToEcr
+
 ---
 kind: pipeline
 name: Endnotify
+
 steps:
 - name: notify-end
   image: plugins/slack
@@ -193,6 +216,8 @@ steps:
     - test
     event:
       - push
+
+
 depends_on:
   - unit-test
   - PushToEcr
