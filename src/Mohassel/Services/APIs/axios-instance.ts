@@ -1,4 +1,5 @@
 import axiosLib from 'axios';
+import { getCookie } from '../getCookie'; 
 
 function errorResponseHandler(error: any) {
 
@@ -18,20 +19,6 @@ function errorResponseHandler(error: any) {
     }
     throw error;
 }
-function getCookie(cookie: string) {
-  if(document.cookie){
-    const allCookies = document.cookie.split(';');
-  for (let i = 0; i < allCookies.length; i++) {
-    const name = allCookies[i].split('=')[0].toLowerCase().trim();
-    const value = allCookies[i].split('=')[1].trim();
-    if (name === cookie) {
-      return value;
-    } else if (value === cookie) {
-      return name;
-    }}
-  }
-  return "";
-};
 
 const instance = axiosLib.create({
     headers: { 'Authorization': `Bearer ${getCookie('token')}` }
