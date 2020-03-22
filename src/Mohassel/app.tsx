@@ -11,7 +11,9 @@ import { getCookie } from './Services/getCookie';
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
     if (getCookie('token') === '') {
-        window.location.href = (process.env.REACT_APP_LOGIN_URL) ? process.env.REACT_APP_LOGIN_URL : ''
+        window.location.href = process.env.REACT_APP_LOGIN_URL || ''
+        return <></>
+
     } else {
         return (
             <BrowserRouter>

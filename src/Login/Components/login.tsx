@@ -38,7 +38,7 @@ class Login extends React.PureComponent<Props, State> {
 
     }).then(succ => {
       this.setCookie(succ.data.token);
-      window.location.href = (process.env.REACT_APP_MOHASSEL_URL)?process.env.REACT_APP_MOHASSEL_URL:''
+      window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
       console.log('OnError', err)
     })
