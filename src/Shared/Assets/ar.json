@@ -118,5 +118,10 @@
     "save": "حفظ",
     "cancel": "الغاء",
     "customerCreated": "تم انشاء العميل",
-    "customerCreationError": "حصل خطا في انشاء العميل"
+    "formulaCreated": "تم انشاء طريقه الحساب",
+    "loanProductCreated": "تم انشاء نوع القرض",
+    "customerCreationError": "حصل خطا في انشاء العميل",
+    "formulaCreationError": "حصل خطا في انشاء طريقه الحساب",
+    "loanProductCreationError": "حصل خطا في انشاء نوع القرض"
+
 }    
