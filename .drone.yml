@@ -1,0 +1,224 @@
+kind: pipeline
+name: notify-pipeline-start
+
+steps:
+- name: notify-start
+  image: plugins/slack
+  settings:
+    channel: drone-notifications
+    webhook:
+        from_secret: slack_webhook_url
+    template: >
+      {{#if build.pull }}
+        *Build started*: {{ repo.owner }}/{{ repo.name }} - <https://github.com/{{ repo.owner }}/{{ repo.name }}/pull/{{ build.pull }}|Pull Request #{{ build.pull }}>
+      {{else}}
+        *Build started: {{ repo.owner }}/{{ repo.name }} - Build #{{ build.number }}* (type: `{{ build.event }}`)
+      {{/if}}
+      Commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ truncate build.commit 8 }}>
+      Branch: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commits/{{ build.branch }}|{{ build.branch }}>
+      Author: {{ build.author }}
+      <{{ build.link }}|Visit build page ↗>
+  when:
+    branch:
+    - master
+    - dev
+    - staging
+    - test
+    event:
+      - push
+
+---
+
+kind: pipeline
+name: unit-test
+
+steps:
+- name: build
+  image: node:12.16.1-alpine
+  commands:
+  - npm i 
+  - npm run build
+
+
+- name: code-analysis
+  image: aosapps/drone-sonar-plugin
+  settings:
+      sonar_host: https://sonarqube.halan.io
+      sonar_token:
+        from_secret: sonar_token
+
+
+trigger:
+  branch:
+  - master
+  - dev
+  - staging
+  - test
+  event:
+  - push
+  - pull_request
+
+---
+kind: pipeline
+name: PushToEcr
+
+steps:
+- name: publish-login
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/login.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/login
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    region: us-east-1
+    build_args:
+      - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_MOHASSEL_URL=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_GOOGLE_MAP_KEY=${REACT_APP_GOOGLE_MAP_KEY}
+    tags:
+      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    - test
+    event:
+      - push
+
+- name: publish-mohassel
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/mohassel.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/mohassel
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args:
+      - REACT_APP_BASE_URL=api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_MOHASSEL_URL=mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_GOOGLE_MAP_KEY=${REACT_APP_GOOGLE_MAP_KEY}
+    region: us-east-1
+    tags:
+      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    - test
+    event:
+      - push
+
+depends_on:
+  - unit-test
+
+---
+
+
+
+kind: pipeline
+name: kubernetes
+
+steps:
+- name: deploy-login
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-login
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
+    container: fe-login
+    tag: "${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - dev
+    - test
+    - staging
+    event:
+      - push
+
+- name: deploy-mohassel
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-mohassel
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
+    container: fe-mohassel
+    tag: "${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - dev
+    - test
+    - staging
+    event:
+      - push
+
+depends_on:
+  - unit-test
+  - PushToEcr
+
+---
+kind: pipeline
+name: Endnotify
+
+steps:
+- name: notify-end
+  image: plugins/slack
+  settings:
+    channel: drone-notifications
+    webhook:
+        from_secret: slack_webhook_url
+    template: >
+      {{#if build.pull }}
+        *{{#success build.status}}✔{{ else }}✘{{/success}} {{ uppercasefirst build.status }}*: {{ repo.owner }}/{{ repo.name }} - <https://github.com/{{ repo.owner }}/{{ repo.name }}/pull/{{ build.pull }}|Pull Request #{{ build.pull }}>
+      {{else}}
+        *{{#success build.status}}✔{{ else }}✘{{/success}} {{ uppercasefirst build.status }}: {{ repo.owner }}/{{ repo.name }} - Build #{{ build.number }}* (type: `{{ build.event }}`)
+      {{/if}}
+      Commit: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ truncate build.commit 8 }}>
+      Branch: <https://github.com/{{ repo.owner }}/{{ repo.name }}/commits/{{ build.branch }}|{{ build.branch }}>
+      Author: {{ build.author }}
+      Duration: {{ since build.created }}
+      <{{ build.link }}|Visit build page ↗>
+  when:
+    branch:
+    - master
+    - dev
+    - staging
+    - test
+    event:
+      - push
+
+
+depends_on:
+  - unit-test
+  - PushToEcr
+  - kubernetes
