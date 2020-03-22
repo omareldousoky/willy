@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,8 +7,41 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const LoanFormulaTestForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
+    const [formulasStat, setFormulas] = useState([{
+        "_id": "5e7355c2f688997a4265b15c",
+        "name": "nadim",
+    },
+    {
+        "_id": "5e762e369ecf225a3e66358e",
+        "name": "nadimTest1",
+    },
+    {
+        "_id": "5e762fa59ecf225a3e66358f",
+        "name": "willyTest1",
+    }]);
+
     return (
         <Form onSubmit={handleSubmit}>
+            <Form.Group as={Row} controlId="calculationFormulaId">
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.calculationFormulaId}</Form.Label>
+                <Col sm={6}>
+                    <Form.Control as="select"
+                        name="calculationFormulaId"
+                        data-qc="calculationFormulaId"
+                        value={values.calculationFormulaId}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
+                    >
+                        {formulasStat.map((formula, i) =>
+                            <option key={i} value={formula._id}>{formula.name}</option>
+                        )}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.calculationFormulaId}
+                    </Form.Control.Feedback>
+                </Col>
+            </Form.Group>
             <Form.Group as={Row} controlId="principal">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.principal}</Form.Label>
                 <Col sm={6}>
@@ -189,8 +222,8 @@ export const LoanFormulaTestForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.pushHolidays && touched.pushHolidays}
                     >
-                        <option value='1'>السابق</option>
-                        <option value='2'>التالى</option>
+                        <option value='previous'>السابق</option>
+                        <option value='next'>التالى</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.pushHolidays}
@@ -223,8 +256,9 @@ export const LoanFormulaTestForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.inAdvanceFrom && touched.inAdvanceFrom}
                     >
-                        <option value='0'>لا تستقطع من المصاريف الموزعه</option>
-                        <option value='1'>تستقطع من المصاريف الموزعه</option>
+                        <option value='principal'>نسبة من قيمة القرض</option>
+                        <option value='monthly'>شهري</option>
+                        <option value='yearly'>سنوي</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.inAdvanceFrom}
@@ -243,8 +277,8 @@ export const LoanFormulaTestForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.inAdvanceType && touched.inAdvanceType}
                     >
-                        <option value='1'>لا تستقطع من المصاريف الموزعه</option>
-                        <option value='2'>تستقطع من المصاريف الموزعه</option>
+                        <option value='uncut'>لا تستقطع من المصاريف الموزعه</option>
+                        <option value='cut'>تستقطع من المصاريف الموزعه</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.inAdvanceType}
