@@ -10,6 +10,7 @@ import { step1, step2, step3, customerCreationValidationStepOne, customerCreatio
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
+import { DocumentsUpload } from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 
@@ -99,7 +100,7 @@ class CustomerCreation extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 1,
+      step: 4,
       submitObj: {},
       step1: step1,
       step2: step2,
@@ -127,8 +128,8 @@ class CustomerCreation extends Component<Props, State>{
     obj.customerInfo.birthDate = new Date(obj.customerInfo.birthDate).valueOf();
     obj.customerInfo.nationalIdIssueDate = new Date(obj.customerInfo.nationalIdIssueDate).valueOf();
     obj.customerInfo.homePostalCode = Number(obj.customerInfo.homePostalCode);
-    obj.customerInfo.customerAddressLatLongNumber.lat === 0 && obj.customerInfo.customerAddressLatLongNumber.lng === 0? obj.customerInfo.customerAddressLatLong = '' : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLongNumber.lat},${obj.customerInfo.customerAddressLatLongNumber.lng}`;
-    obj.customerBusiness.businessAddressLatLongNumber.lat === 0 && obj.customerBusiness.businessAddressLatLongNumber.lng === 0? obj.customerBusiness.businessAddressLatLong = '' : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLongNumber.lat},${obj.customerBusiness.businessAddressLatLongNumber.lng}`;
+    obj.customerInfo.customerAddressLatLongNumber.lat === 0 && obj.customerInfo.customerAddressLatLongNumber.lng === 0 ? obj.customerInfo.customerAddressLatLong = '' : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLongNumber.lat},${obj.customerInfo.customerAddressLatLongNumber.lng}`;
+    obj.customerBusiness.businessAddressLatLongNumber.lat === 0 && obj.customerBusiness.businessAddressLatLongNumber.lng === 0 ? obj.customerBusiness.businessAddressLatLong = '' : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLongNumber.lat},${obj.customerBusiness.businessAddressLatLongNumber.lng}`;
     obj.customerBusiness.businessPostalCode = Number(obj.customerBusiness.businessPostalCode);
     obj.customerBusiness.businessLicenseIssueDate = new Date(obj.customerBusiness.businessLicenseIssueDate).valueOf();
     obj.customerExtraDetails.applicationDate = new Date(obj.customerExtraDetails.applicationDate).valueOf();
@@ -196,6 +197,22 @@ class CustomerCreation extends Component<Props, State>{
       </Formik>
     )
   }
+  renderDocuments() {
+    return (
+      <Formik
+        enableReinitialize
+        initialValues={this.state.step3}
+        onSubmit={this.submit}
+        validationSchema={customerCreationValidationStepThree}
+        validateOnBlur
+        validateOnChange
+      >
+        {(formikProps) =>
+          <DocumentsUpload {...formikProps} previousStep={() => this.previousStep()} />
+        }
+      </Formik>
+    )
+  }
 
   renderSteps(): any {
     switch (this.state.step) {
@@ -205,6 +222,8 @@ class CustomerCreation extends Component<Props, State>{
         return this.renderStepTwo();
       case 3:
         return this.renderStepThree();
+      case 4:
+        return this.renderDocuments();
       default: return null;
     }
   }
@@ -219,6 +238,8 @@ class CustomerCreation extends Component<Props, State>{
               <Tab eventKey={2} title={local.workInfo}>
               </Tab>
               <Tab eventKey={3} title={local.differentInfo}>
+              </Tab>
+              <Tab eventKey={4} title={local.documents}>
               </Tab>
             </Tabs>
             {this.renderSteps()}

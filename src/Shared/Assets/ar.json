@@ -118,5 +118,7 @@
     "save": "حفظ",
     "cancel": "الغاء",
     "customerCreated": "تم انشاء العميل",
-    "customerCreationError": "حصل خطا في انشاء العميل"
+    "customerCreationError": "حصل خطا في انشاء العميل",
+    "documents": "المستندات",
+    "nationalIdPhoto": "صورة بطاقة رقم القومي"
 }    
