@@ -8,7 +8,11 @@ export const step1: any = {
     birthDate: '',
     gender: '',
     nationalIdIssueDate: '',
-    customerAddressLatLong: {},
+    customerAddressLatLong: '',
+    customerAddressLatLongNumber: {
+        lat: 0,
+        lng: 0
+    },
     customerHomeAddress: '',
     homePostalCode: '',
     homePhoneNumber: '',
@@ -20,7 +24,11 @@ export const step1: any = {
 
 export const step2 = {
     businessName: '',
-    businessAddressLatLong: {},
+    businessAddressLatLong: '',
+    businessAddressLatLongNumber: {
+        lat: 0,
+        lng: 0
+    },
     businessAddress: '',
     governorate: '',
     district: '',

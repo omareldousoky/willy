@@ -1,22 +1,35 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import { loanFormula, loanFormulaCreationValidation } from './loanCreationInitialStates';
+import { Formula, loanFormula, loanFormulaCreationValidation } from './loanCreationInitialStates';
 import { LoanFormulaCreationForm } from './loanFormulaCreationForm';
-interface Props { };
+interface Props {
+    title: string;
+ };
 interface State {
-    formula: {};
+    formula: Formula;
 }
 
 class FormulaCreation extends Component<Props, State>{
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             formula: loanFormula
         }
     }
-    submit= (values: object): void => {
-        let obj = values
+    submit= (values: Formula): void => {
+        const obj = values
+        const toSend = {
+            name: values.loanCalculationFormulaName,
+            interestType: values.interestType,
+            installmentType: values.installmentType,
+            gracePeriodFees: values.gracePeriodFees,
+            // rounding: values.rounding,
+            roundDirection: values.roundDirection,
+            roundTo: Number(values.roundTo),
+            roundWhat: (values.rounding === false)?'noRounding':values.roundWhat,
+            equalInstallments: values.equalInstallments
+        }
     }
     render() {
         return (
