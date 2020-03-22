@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,6 +7,18 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
+    const [formulasStat, setFormulas] = useState([{
+        "_id": "5e7355c2f688997a4265b15c",
+        "name": "nadim",
+    },
+    {
+        "_id": "5e762e369ecf225a3e66358e",
+        "name": "nadimTest1",
+    },
+    {
+        "_id": "5e762fa59ecf225a3e66358f",
+        "name": "willyTest1",
+    }]);
     return (
         <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="productName">
@@ -37,8 +49,9 @@ export const LoanProductCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
                     >
-                        <option value='5e7355c2f688997a4265b15c'>test</option>
-                        <option value='2'>test2</option>
+                        {formulasStat.map((formula, i) =>
+                            <option key={i} value={formula._id}>{formula.name}</option>
+                        )}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.calculationFormulaId}
@@ -57,7 +70,6 @@ export const LoanProductCreationForm = (props: any) => {
                         isInvalid={errors.loanNature && touched.loanNature}
                     >
                         <option value='cash'>Cash</option>
-                        <option value='2'>test2</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.loanNature}
@@ -76,7 +88,6 @@ export const LoanProductCreationForm = (props: any) => {
                         isInvalid={errors.currency && touched.currency}
                     >
                         <option value='egp'>EGP</option>
-                        <option value='usd'>USD</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.currency}

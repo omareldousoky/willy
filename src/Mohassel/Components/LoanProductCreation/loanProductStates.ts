@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const LoanProduct: any = {
     productName:'',
-    calculationFormulaId:'5e7355c2f688997a4265b15c',
+    calculationFormulaId:'',
     loanNature:'cash',
     currency:'egp',
     periodLength:14,
@@ -10,7 +10,7 @@ export const LoanProduct: any = {
     noOfInstallments:20,
     lateDays:0,
     gracePeriod:0,
-    interest:0,
+    interest:0.2,
     interestPeriod:'yearly',
     allowInterestAdjustment:false,
     inAdvanceFees:0,
@@ -19,15 +19,15 @@ export const LoanProduct: any = {
     stamps:0,
     allowStampsAdjustment:true,
     representativeFees:0,
-    allowRepresentativeFeesAdjustment:false,
-    adminFees:0,
-    allowAdminFeesAdjustment:false,
+    allowRepresentativeFeesAdjustment:true,
+    adminFees:20,
+    allowAdminFeesAdjustment:true,
     earlyPaymentFees:0,
-    maxNoOfRestructuring:0,
+    maxNoOfRestructuring:1,
     minPrincipal:0,
-    maxPrincipal:0,
+    maxPrincipal:10000,
     minInstallment:0,
-    maxInstallment:0,
+    maxInstallment:10000,
     applicationFee:0,
     allowApplicationFeeAdjustment:false,
     spreadApplicationFee:false,
@@ -37,8 +37,8 @@ export const LoanProduct: any = {
     applicationFeePercentPerPerson:0,
     applicationFeePercentPerPersonType:'principal',
     loanImpactPrincipal:true,
-    mustEnterGuarantor:false,
-    guarantorGuaranteesMultiple:false,
+    mustEnterGuarantor:true,
+    guarantorGuaranteesMultiple:true,
     deductionFee:0,
     allocatedDebtForGoodLoans:0,
     aging:[{from:0,to:1,fee:0},{from:0,to:1,fee:0},{from:0,to:1,fee:0},{from:0,to:1,fee:0},{from:0,to:1,fee:0},{from:0,to:1,fee:0},{from:0,to:1,fee:0}],
@@ -56,5 +56,5 @@ export const LoanProduct: any = {
 }
 export const LoanProductValidation = Yup.object().shape({
     productName: Yup.string().required('required!'),
-    // password: Yup.string().required('required!')
+    calculationFormulaId: Yup.string().required('required!')
 })
