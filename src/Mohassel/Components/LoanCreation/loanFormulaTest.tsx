@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { FormulaTestClass, loanFormulaTest, loanFormulaTestValidation } from './loanCreationInitialStates';
@@ -14,6 +14,7 @@ interface Props {
 interface State {
     formula: FormulaTestClass;
     loading: boolean;
+    formulas: Array<object>;
 }
 
 class FormulaTest extends Component<Props, State>{
@@ -21,17 +22,27 @@ class FormulaTest extends Component<Props, State>{
         super(props);
         this.state = {
             formula: loanFormulaTest,
-            loading: false
+            loading: false,
+            formulas: []
         }
     }
-    UNSAFE_componentWillMount() {
-        // const formulas = getFormulas()
+    async UNSAFE_componentWillMount() {
+        const formulas = await getFormulas();
+        if(formulas.status === 'success'){
+            this.setState({
+                formulas: formulas.body.data
+            })
+        } else {
+            console.log('err')
+        }
     }
-    async submit(values: FormulaTestClass) {
+     submit = async(values: FormulaTestClass) => {
+        this.setState({ loading: true });
         const obj = values;
-        const date = new Date(values.loanStartDate).valueOf();
-        values.loanStartDate = date;
+        const date = new Date(obj.loanStartDate).valueOf();
+        obj.loanStartDate = date;
         const res = await testFormula(obj);
+        console.log(res)
         if (res.status === 'success') {
             this.setState({ loading: false });
             Swal.fire("success", local.formulaCreated).then(() => { console.log(res) })
@@ -54,7 +65,7 @@ class FormulaTest extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanFormulaTestForm {...formikProps} />
+                                <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} />
                             }
                         </Formik>
                     </Container>

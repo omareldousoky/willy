@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import { LoanProduct, LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
 import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
+import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import Swal from 'sweetalert2';
 import Spinner from 'react-bootstrap/Spinner';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -16,6 +17,7 @@ interface Props {
 interface State {
     product: object;
     loading: boolean;
+    formulas: Array<object>;
 }
 
 class LoanProductCreation extends Component<Props, State>{
@@ -23,11 +25,22 @@ class LoanProductCreation extends Component<Props, State>{
         super(props);
         this.state = {
             product: LoanProduct,
-            loading: false
-
+            loading: false,
+            formulas: []
         }
     }
-    async submit(values: object) {
+    async UNSAFE_componentWillMount() {
+        const formulas = await getFormulas();
+        if(formulas.status === 'success'){
+            this.setState({
+                formulas: formulas.body.data
+            })
+        } else {
+            console.log('err')
+        }
+    }
+    submit = async(values: object) => {
+        this.setState({ loading: true });
         const obj = values
         const res = await createProduct(obj);
         if (res.status === 'success') {
@@ -52,7 +65,7 @@ class LoanProductCreation extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanProductCreationForm {...formikProps} />
+                                <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} />
                             }
                         </Formik>
                     </Container>
