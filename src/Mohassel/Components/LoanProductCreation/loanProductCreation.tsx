@@ -1,42 +1,40 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import { FormulaTestClass, loanFormulaTest, loanFormulaTestValidation } from './loanCreationInitialStates';
-import { LoanFormulaTestForm } from './loanFormulaTestForm';
-import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
-import { testFormula } from '../../Services/APIs/LoanFormula/testFormula';
+import { LoanProduct, LoanProductValidation } from './loanProductStates';
+import { LoanProductCreationForm } from './loanProductCreationForm';
+import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
 import Swal from 'sweetalert2';
 import Spinner from 'react-bootstrap/Spinner';
 import * as local from '../../../Shared/Assets/ar.json';
+
 interface Props {
     title: string;
+    history: Array<string>;
+
 };
 interface State {
-    formula: FormulaTestClass;
+    product: object;
     loading: boolean;
 }
 
-class FormulaTest extends Component<Props, State>{
+class LoanProductCreation extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            formula: loanFormulaTest,
+            product: LoanProduct,
             loading: false
+
         }
     }
-    UNSAFE_componentWillMount() {
-        // const formulas = getFormulas()
-    }
-    async submit(values: FormulaTestClass) {
-        const obj = values;
-        const date = new Date(values.loanStartDate).valueOf();
-        values.loanStartDate = date;
-        const res = await testFormula(obj);
+    async submit(values: object) {
+        const obj = values
+        const res = await createProduct(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });
-            Swal.fire("success", local.formulaCreated).then(() => { console.log(res) })
+            Swal.fire("success", local.loanProductCreated).then(() => { this.props.history.push("/") })
         } else {
-            Swal.fire("error", local.formulaCreationError)
+            Swal.fire("error", local.loanProductCreationError)
             this.setState({ loading: false });
         }
     }
@@ -47,14 +45,14 @@ class FormulaTest extends Component<Props, State>{
                     <Container>
                         <Formik
                             enableReinitialize
-                            initialValues={this.state.formula}
+                            initialValues={this.state.product}
                             onSubmit={this.submit}
-                            validationSchema={loanFormulaTestValidation}
+                            validationSchema={LoanProductValidation}
                             validateOnBlur
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanFormulaTestForm {...formikProps} />
+                                <LoanProductCreationForm {...formikProps} />
                             }
                         </Formik>
                     </Container>
@@ -63,4 +61,4 @@ class FormulaTest extends Component<Props, State>{
         )
     }
 }
-export default FormulaTest;
+export default LoanProductCreation;

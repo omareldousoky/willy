@@ -1,8 +1,11 @@
 FROM node:12.16.1-alpine as builder
 COPY package*.json  ./
-RUN npm i 
+RUN npm i
 COPY . .
 ARG REACT_APP_BASE_URL
+ARG REACT_APP_MOHASSEL_URL
+ARG REACT_APP_LOGIN_URL
+ARG REACT_APP_GOOGLE_MAP_KEY
 RUN npm run build-mohassel
 
 FROM nginx:1.14.1-alpine

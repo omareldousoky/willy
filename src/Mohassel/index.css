@@ -17,6 +17,10 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   z-index: 1100;
 }
 
+.row{
+  flex-wrap: nowrap !important;
+}
+
 .map {
   margin: 20px;
   position: relative;
