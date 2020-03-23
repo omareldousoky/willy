@@ -12,5 +12,4 @@ export const DocumentsUpload = (props: any) => {
             <h1>HI</h1>
         </Form>
     )
-    
 }
