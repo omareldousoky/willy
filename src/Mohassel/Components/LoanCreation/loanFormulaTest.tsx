@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { FormulaTestClass, loanFormulaTest, loanFormulaTestValidation } from './loanCreationInitialStates';
@@ -8,35 +8,55 @@ import { testFormula } from '../../Services/APIs/LoanFormula/testFormula';
 import Swal from 'sweetalert2';
 import Spinner from 'react-bootstrap/Spinner';
 import * as local from '../../../Shared/Assets/ar.json';
+import { View } from '../PDF/documentView';
+import { DownloadPdf } from '../PDF/documentExport';
+
 interface Props {
     title: string;
 };
 interface State {
     formula: FormulaTestClass;
     loading: boolean;
+    formulas: Array<Formula>;
+    result: object;
 }
-
+interface Formula {
+    name: string;
+    _id: string;
+}
 class FormulaTest extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
             formula: loanFormulaTest,
-            loading: false
+            loading: false,
+            formulas: [],
+            result: {}
         }
     }
-    UNSAFE_componentWillMount() {
-        // const formulas = getFormulas()
+    async UNSAFE_componentWillMount() {
+        const formulas = await getFormulas();
+        if (formulas.status === 'success') {
+            this.setState({
+                formulas: formulas.body.data
+            })
+        } else {
+            console.log('err')
+        }
     }
-    async submit(values: FormulaTestClass) {
+    submit = async (values: FormulaTestClass) => {
+        this.setState({ loading: true });
         const obj = values;
-        const date = new Date(values.loanStartDate).valueOf();
-        values.loanStartDate = date;
+        const date = new Date(obj.loanStartDate).valueOf();
+        obj.loanStartDate = date;
+        const formula = this.state.formulas.find( formula =>formula._id === values.calculationFormulaId)
+        const formulaName = (formula)?formula.name:''
         const res = await testFormula(obj);
         if (res.status === 'success') {
-            this.setState({ loading: false });
-            Swal.fire("success", local.formulaCreated).then(() => { console.log(res) })
+            this.setState({ loading: false, result: {result:res.body.data, formulaName:formulaName} });
+            Swal.fire("success", local.formulaTested).then(() => { console.log(res) })
         } else {
-            Swal.fire("error", local.formulaCreationError)
+            Swal.fire("error", local.formulaTestError)
             this.setState({ loading: false });
         }
     }
@@ -54,9 +74,12 @@ class FormulaTest extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanFormulaTestForm {...formikProps} />
+                                <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
                             }
                         </Formik>
+                        {/* {Object.keys(this.state.result).length>0 && <View />} */}
+                        {Object.keys(this.state.result).length>0 && <DownloadPdf data={this.state.result} />}
+                        {Object.keys(this.state.result).length>0 && <View data={this.state.result} />}
                     </Container>
                 }
             </div>

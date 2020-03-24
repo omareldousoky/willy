@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import CustomerCreation from './Components/CustomerCreation/customer-creation';
 import FormulaCreation from './Components/LoanCreation/loanFormulaCreation';
 import FormulaTest from './Components/LoanCreation/loanFormulaTest';
-import LoanProductCreation from './Components/LoanProductCreation/loanProductCreation'
+import LoanProductCreation from './Components/LoanProductCreation/loanProductCreation';
+import LoanApplicationCreation from './Components/LoanApplication/loanApplicationCreation';
 import NavBar from './Components/NavBar/navBar';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
@@ -25,6 +26,7 @@ const App = () => {
                         <Route path="/new-formula" component={FormulaCreation} />
                         <Route path="/test-formula" component={FormulaTest} />
                         <Route path="/new-loan-product" component={LoanProductCreation} />
+                        <Route path="/new-loan-application" component={LoanApplicationCreation} />
                     </Switch>
                 </div>
             </BrowserRouter>
