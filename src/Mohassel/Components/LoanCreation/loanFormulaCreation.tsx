@@ -24,7 +24,8 @@ class FormulaCreation extends Component<Props, State>{
             loading: false
         }
     }
-    async submit(values: Formula){
+    submit = async(values: Formula) => {
+        this.setState({ loading: true });
         const obj = values
         const toSend = {
             name: values.loanCalculationFormulaName,
