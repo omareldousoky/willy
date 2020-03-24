@@ -7,19 +7,6 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const LoanFormulaTestForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
-    const [formulasStat, setFormulas] = useState([{
-        "_id": "5e7355c2f688997a4265b15c",
-        "name": "nadim",
-    },
-    {
-        "_id": "5e762e369ecf225a3e66358e",
-        "name": "nadimTest1",
-    },
-    {
-        "_id": "5e762fa59ecf225a3e66358f",
-        "name": "willyTest1",
-    }]);
-
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="calculationFormulaId">
@@ -33,7 +20,8 @@ export const LoanFormulaTestForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
                     >
-                        {formulasStat.map((formula, i) =>
+                        <option value=''></option>
+                        {props.formulas.map((formula, i) =>
                             <option key={i} value={formula._id}>{formula.name}</option>
                         )}
                     </Form.Control>

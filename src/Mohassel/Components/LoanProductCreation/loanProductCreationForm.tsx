@@ -7,18 +7,6 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
-    const [formulasStat, setFormulas] = useState([{
-        "_id": "5e7355c2f688997a4265b15c",
-        "name": "nadim",
-    },
-    {
-        "_id": "5e762e369ecf225a3e66358e",
-        "name": "nadimTest1",
-    },
-    {
-        "_id": "5e762fa59ecf225a3e66358f",
-        "name": "willyTest1",
-    }]);
     return (
         <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="productName">
@@ -49,7 +37,8 @@ export const LoanProductCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
                     >
-                        {formulasStat.map((formula, i) =>
+                        <option value=''></option>
+                        {props.formulas.map((formula, i) =>
                             <option key={i} value={formula._id}>{formula.name}</option>
                         )}
                     </Form.Control>
@@ -738,14 +727,7 @@ export const LoanProductCreationForm = (props: any) => {
                         value={values.guarantorGuaranteesMultiple}
                         checked={values.guarantorGuaranteesMultiple}
                         onBlur={handleBlur}
-                        onChange={(e: any) => {
-                            const val = e.currentTarget.value;
-                            if (val === true) {
-                                setFieldValue('guarantorGuaranteesMultiple', false)
-                            } else {
-                                setFieldValue('guarantorGuaranteesMultiple', true)
-                            }
-                        }}
+                        onChange={handleChange}
                         isInvalid={errors.guarantorGuaranteesMultiple && touched.guarantorGuaranteesMultiple}
                     />
                     <Form.Control.Feedback type="invalid">
