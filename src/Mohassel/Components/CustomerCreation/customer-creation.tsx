@@ -10,7 +10,7 @@ import { step1, step2, step3, customerCreationValidationStepOne, customerCreatio
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
-import { DocumentsUpload } from './documentsUpload';
+import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 
@@ -208,7 +208,10 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <DocumentsUpload {...formikProps} previousStep={() => this.previousStep()} />
+          <DocumentsUpload
+            {...formikProps}
+            // previousStep={() => this.previousStep()} 
+            />
         }
       </Formik>
     )
