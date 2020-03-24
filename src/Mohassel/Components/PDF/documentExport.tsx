@@ -4,7 +4,6 @@ import { MyDocument } from './document'
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
 export const DownloadPdf = (props: any) => {
-    console.log('Inexport',props)
     return (
         <PDFDownloadLink
           document={<MyDocument pass={props.data}/>}

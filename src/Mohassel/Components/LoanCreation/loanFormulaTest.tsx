@@ -51,9 +51,7 @@ class FormulaTest extends Component<Props, State>{
         obj.loanStartDate = date;
         const formula = this.state.formulas.find( formula =>formula._id === values.calculationFormulaId)
         const formulaName = (formula)?formula.name:''
-        console.log(formulaName)
         const res = await testFormula(obj);
-        console.log(res)
         if (res.status === 'success') {
             this.setState({ loading: false, result: {result:res.body.data, formulaName:formulaName} });
             Swal.fire("success", local.formulaTested).then(() => { console.log(res) })

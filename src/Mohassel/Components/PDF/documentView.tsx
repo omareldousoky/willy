@@ -9,7 +9,6 @@ export const View = (props: any) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log(props)
   return (
     <>
       <Button variant="primary" onClick={handleShow}>

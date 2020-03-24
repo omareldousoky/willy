@@ -26,10 +26,7 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 export const MyDocument = (props: any) => {
-  console.log('in doc', props)
   const result = (props.pass) ? props.pass.result : 'no result';
-  // const output = (props.result.output)?props.result.output:{};
-  // const sum = (props.result.sum)?props.result.sum:[];
   return (
     <Document>
       {result.sum && <Page size="A4" style={styles.page}>

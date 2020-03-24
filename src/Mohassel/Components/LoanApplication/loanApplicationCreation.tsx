@@ -7,6 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { LoanApplication, LoanApplicationValidation } from './loanApplicationStates';
 import { getBranches } from '../../Services/APIs/Branch/getBranches';
+import { getProducts } from '../../Services/APIs/loanProduct/getProducts';
 interface Props {
     title: string;
     history: Array<string>;
@@ -26,8 +27,8 @@ class LoanApplicationCreation extends Component<Props, State>{
     }
     async UNSAFE_componentWillMount(){
         const branches = await getBranches();
+        const products = await getProducts();
         if(branches.status === 'success'){
-            console.log(branches)
         } else {
             console.log('err')
         }
