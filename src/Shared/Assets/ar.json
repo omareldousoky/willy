@@ -117,11 +117,13 @@
     "dateShouldBeBeforeToday": "التاريخ يجب ان يكون في الماضي",
     "save": "حفظ",
     "cancel": "الغاء",
-    "customerCreated": "تم انشاء العميل",
-    "formulaCreated": "تم انشاء طريقه الحساب",
-    "loanProductCreated": "تم انشاء نوع القرض",
+    "customerCreated": "تم انشاء العميل بنجاح",
+    "formulaCreated": "تم انشاء طريقه الحساب بنجاح",
+    "formulaTested": "تم تجربة طريقه الحساب بنجاح",
+    "loanProductCreated": "تم انشاء نوع القرض بنجاح",
     "customerCreationError": "حصل خطا في انشاء العميل",
     "formulaCreationError": "حصل خطا في انشاء طريقه الحساب",
+    "formulaTestError": "حصل خطا في تجربة طريقه الحساب",
     "loanProductCreationError": "حصل خطا في انشاء نوع القرض"
 
 }    

@@ -726,14 +726,7 @@ export const LoanProductCreationForm = (props: any) => {
                         value={values.guarantorGuaranteesMultiple}
                         checked={values.guarantorGuaranteesMultiple}
                         onBlur={handleBlur}
-                        onChange={(e: any) => {
-                            const val = e.currentTarget.value;
-                            if (val === true) {
-                                setFieldValue('guarantorGuaranteesMultiple', false)
-                            } else {
-                                setFieldValue('guarantorGuaranteesMultiple', true)
-                            }
-                        }}
+                        onChange={handleChange}
                         isInvalid={errors.guarantorGuaranteesMultiple && touched.guarantorGuaranteesMultiple}
                     />
                     <Form.Control.Feedback type="invalid">
