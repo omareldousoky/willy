@@ -37,6 +37,7 @@ export const LoanProductCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
                     >
+                        <option value=''></option>
                         {props.formulas.map((formula, i) =>
                             <option key={i} value={formula._id}>{formula.name}</option>
                         )}
