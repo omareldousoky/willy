@@ -123,8 +123,9 @@
     "nationalIdPhoto": "صورة بطاقة رقم القومي",
     "documentUploadDragDropText": "اسقاط الملفات هنا للتحميل",
     "documentUploadBrowseFileText": "او اضغط لاختيار الملف",
-    "reciepts": "ايصالات",
+    "receipts": "ايصالات",
     "loanApplication": "استمارة طلب القرض",
-    "additionalPapers": "صفحات اضافية"
-
+    "additionalPapers": "صفحات اضافية",
+    "documentUploadError": "حصل خطا في رفع الصورة",
+    "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله"
 }    

@@ -1,39 +1,41 @@
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import Swal from 'sweetalert2';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+import { uploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocument';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface State {
   nationalId: Array<string>;
-  reciepts: Array<string>;
+  receipts: Array<string>;
   loanApplication: Array<string>;
   additionalPapers: Array<string>;
   dragging: boolean;
+  loading: Array<string>;
 }
 interface Props {
-
+  customerId: string;
+  previousStep: () => void;
 }
 class DocumentsUpload extends Component<Props, State>{
   private fileInput_nationalId: React.RefObject<HTMLInputElement>;
-  private fileInput_reciepts: React.RefObject<HTMLInputElement>;
+  private fileInput_receipts: React.RefObject<HTMLInputElement>;
   private fileInput_loanApplication: React.RefObject<HTMLInputElement>;
   private fileInput_additionalPapers: React.RefObject<HTMLInputElement>;
   private dragEventCounter: number = 0;
   constructor(props) {
     super(props);
     this.fileInput_nationalId = React.createRef();
-    this.fileInput_reciepts = React.createRef();
+    this.fileInput_receipts = React.createRef();
     this.fileInput_loanApplication = React.createRef();
     this.fileInput_additionalPapers = React.createRef();
     this.state = {
       nationalId: [],
-      reciepts: [],
+      receipts: [],
       loanApplication: [],
       additionalPapers: [],
       dragging: false,
+      loading: [],
     }
   }
   triggerInputFile(name: string) {
@@ -48,25 +50,37 @@ class DocumentsUpload extends Component<Props, State>{
   getImagesLimit(name: string): number {
     switch (name) {
       case 'nationalId': return 2;
-      case 'reciepts': return 3;
+      case 'receipts': return 3;
       case 'loanApplication': return 3;
       case 'additionalPapers': return 3;
       default: return 0;
     }
   }
-  readFiles(files: Array<File> | FileList, name: string) {
+  async readFiles(files: Array<File> | FileList, name: string) {
     const imagesLimit = this.getImagesLimit(name);
     if (files.length <= imagesLimit && this.state[name].length < imagesLimit) {
+      this.setState({ loading: [...this.state.loading, name] } as State);
       for (let index = 0; index < files.length; index++) {
-        let reader = new FileReader();
-        const file = files[index];
-        reader.onloadend = () => {
-          this.setState({
-            [name]: [...this.state[name], reader.result]
-          } as any)
+        const formData = new FormData();
+        formData.append("docName", name);
+        formData.append("customerId", this.props.customerId);
+        formData.append("file", files[index]);
+        const res = await uploadDocument(formData);
+        if (res.status === 'success') {
+          let reader = new FileReader();
+          const file = files[index];
+          reader.onloadend = () => {
+            this.setState({
+              [name]: [...this.state[name], reader.result]
+            } as any)
+          }
+          reader.readAsDataURL(file)
+        } else {
+          this.setState({ loading: this.state.loading.filter(val => val !== name) } as State);
+          Swal.fire("", local.documentUploadError, "error")
         }
-        reader.readAsDataURL(file)
       }
+      this.setState({ loading: this.state.loading.filter(val => val !== name) } as State);
     }
   }
   dragenterListener = (event: React.DragEvent<HTMLDivElement>) => {
@@ -102,16 +116,24 @@ class DocumentsUpload extends Component<Props, State>{
     event.preventDefault();
     event.stopPropagation();
   };
+  constructArr(name: string) {
+    const len = this.getImagesLimit(name);
+    let arr: number[] = [];
+    for (let i = 0; i < len; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }
   renderDropHere(key: number) {
     return (
-      <div key={key} style={{ display: 'flex', flexDirection: 'column', margin: 10, flex: 1, backgroundColor: 'white', textAlign: 'center', minHeight: 300, justifyContent: 'center' }}>
+      <div key={key} className="document-upload-image-container">
         <h5>Drop here</h5>
       </div>
     )
   }
   renderUploadPhoto(key: number) {
     return (
-      <div key={key} style={{ display: 'flex', flexDirection: 'column', margin: 10, flex: 1, backgroundColor: 'white', textAlign: 'center', minHeight: 300, justifyContent: 'center' }}>
+      <div key={key} className="document-upload-image-container">
         <img src={'/src/Mohassel/Assets/uploadDrag.svg'}
           alt="upload-document"
         />
@@ -124,101 +146,66 @@ class DocumentsUpload extends Component<Props, State>{
   }
   renderPhotoByName(key: number, name: string) {
     return (
-      <div key={key} style={{ display: 'flex', flexDirection: 'column', margin: 10, flex: 1, backgroundColor: 'white', textAlign: 'center', minHeight: 300, justifyContent: 'center' }}>
+      <div key={key} className="document-upload-image-container">
         <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={this.state[name][key]} key={key} alt="" />
       </div>
     )
   }
+  renderLoading() {
+    return (
+      <div className="document-upload-image-container">
+        <Spinner animation="border"></Spinner>
+      </div>
+    )
+  }
+
   renderContainer(name: string) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#f5f5f5', cursor: 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4 }}
+        data-qc={`upload-${name}`}
+        onClick={() => this.triggerInputFile(name)}
+        onDrag={this.overrideEventDefaults}
+        onDragStart={this.overrideEventDefaults}
+        onDragEnd={this.overrideEventDefaults}
+        onDragOver={this.overrideEventDefaults}
+        onDragEnter={this.dragenterListener}
+        onDragLeave={this.dragleaveListener}
+        onDrop={(e) => this.dropListener(e, name)}>
+        <input multiple type="file" name="img" style={{ display: 'none' }}
+          ref={this[`fileInput_${name}`]} onChange={(e) => this.handleOnChange(e, name)} />
+        {(this.state.loading.includes(name)) ? this.renderLoading()
+          : this.constructArr(name).map((_value: number, key: number) => {
+            if (this.state[name][key] === undefined) {
+              if (this.state.dragging) return this.renderDropHere(key)
+              else return this.renderUploadPhoto(key)
+            } else return this.renderPhotoByName(key, name)
+          })}
+      </div>
+    )
   }
   render() {
     return (
-      <Form>
-        <>
+      <>
+        <div style={{ marginBottom: 30 }}>
           <h4 style={{ textAlign: 'right' }}>{local.nationalIdPhoto}</h4>
-          <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#F5F5F5', cursor: 'pointer' }}
-            onClick={() => this.triggerInputFile('nationalId')}
-            onDrag={this.overrideEventDefaults}
-            onDragStart={this.overrideEventDefaults}
-            onDragEnd={this.overrideEventDefaults}
-            onDragOver={this.overrideEventDefaults}
-            onDragEnter={this.dragenterListener}
-            onDragLeave={this.dragleaveListener}
-            onDrop={(e) => this.dropListener(e, 'nationalId')}>
-            <input multiple type="file" name="img" style={{ display: 'none' }}
-              ref={this.fileInput_nationalId} onChange={(e) => this.handleOnChange(e, 'nationalId')} />
-            {[0, 1].map((_value: number, key: number) => {
-              if (this.state.nationalId[key] === undefined) {
-                if (this.state.dragging) return this.renderDropHere(key)
-                else return this.renderUploadPhoto(key)
-              } else return this.renderPhotoByName(key, 'nationalId')
-            })}
-          </div>
-        </>
-        <>
-          <h4 style={{ textAlign: 'right' }}>{local.reciepts}</h4>
-          <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#F5F5F5', cursor: 'pointer' }}
-            onClick={() => this.triggerInputFile('reciepts')}
-            onDrag={this.overrideEventDefaults}
-            onDragStart={this.overrideEventDefaults}
-            onDragEnd={this.overrideEventDefaults}
-            onDragOver={this.overrideEventDefaults}
-            onDragEnter={this.dragenterListener}
-            onDragLeave={this.dragleaveListener}
-            onDrop={(e) => this.dropListener(e, 'reciepts')}>
-            <input multiple type="file" name="img" style={{ display: 'none' }}
-              ref={this.fileInput_reciepts} onChange={(e) => this.handleOnChange(e, 'reciepts')} />
-            {[0, 1, 2].map((_value: number, key: number) => {
-              if (this.state.reciepts[key] === undefined) {
-                if (this.state.dragging) return this.renderDropHere(key)
-                else return this.renderUploadPhoto(key)
-              } else return this.renderPhotoByName(key, 'reciepts')
-            })}
-          </div>
-        </>
-        <>
+          {this.renderContainer('nationalId')}
+        </div>
+        <div style={{ marginBottom: 30 }}>
+          <h4 style={{ textAlign: 'right' }}>{local.receipts}</h4>
+          {this.renderContainer('receipts')}
+        </div>
+        <div style={{ marginBottom: 30 }}>
+
           <h4 style={{ textAlign: 'right' }}>{local.loanApplication}</h4>
-          <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#F5F5F5', cursor: 'pointer' }}
-            onClick={() => this.triggerInputFile('loanApplication')}
-            onDrag={this.overrideEventDefaults}
-            onDragStart={this.overrideEventDefaults}
-            onDragEnd={this.overrideEventDefaults}
-            onDragOver={this.overrideEventDefaults}
-            onDragEnter={this.dragenterListener}
-            onDragLeave={this.dragleaveListener}
-            onDrop={(e) => this.dropListener(e, 'loanApplication')}>
-            <input multiple type="file" name="img" style={{ display: 'none' }}
-              ref={this.fileInput_loanApplication} onChange={(e) => this.handleOnChange(e, 'loanApplication')} />
-            {[0, 1, 2].map((_value: number, key: number) => {
-              if (this.state.loanApplication[key] === undefined) {
-                if (this.state.dragging) return this.renderDropHere(key)
-                else return this.renderUploadPhoto(key)
-              } else return this.renderPhotoByName(key, 'loanApplication')
-            })}
-          </div>
-        </>
-        <>
+          {this.renderContainer('loanApplication')}
+        </div>
+        <div style={{ marginBottom: 30 }}>
+
           <h4 style={{ textAlign: 'right' }}>{local.additionalPapers}</h4>
-          <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#F5F5F5', cursor: 'pointer' }}
-            onClick={() => this.triggerInputFile('additionalPapers')}
-            onDrag={this.overrideEventDefaults}
-            onDragStart={this.overrideEventDefaults}
-            onDragEnd={this.overrideEventDefaults}
-            onDragOver={this.overrideEventDefaults}
-            onDragEnter={this.dragenterListener}
-            onDragLeave={this.dragleaveListener}
-            onDrop={(e) => this.dropListener(e, 'additionalPapers')}>
-            <input multiple type="file" name="img" style={{ display: 'none' }}
-              ref={this.fileInput_additionalPapers} onChange={(e) => this.handleOnChange(e, 'additionalPapers')} />
-            {[0, 1, 2].map((_value: number, key: number) => {
-              if (this.state.additionalPapers[key] === undefined) {
-                if (this.state.dragging) return this.renderDropHere(key)
-                else return this.renderUploadPhoto(key)
-              } else return this.renderPhotoByName(key, 'additionalPapers')
-            })}
-          </div>
-        </>
-      </Form>
+          {this.renderContainer('additionalPapers')}
+        </div>
+        <Button disabled style={{ float: 'right',marginBottom: 30 }} onClick={() => this.props.previousStep()} data-qc="previous">{local.previous}</Button>
+      </>
     )
   }
 }

@@ -93,6 +93,7 @@ interface State {
     accountBranch: string;
     comments: string;
   };
+  customerId: string;
   loading: boolean;
 }
 
@@ -100,11 +101,12 @@ class CustomerCreation extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 4,
+      step: 1,
       submitObj: {},
       step1: step1,
       step2: step2,
       step3: step3,
+      customerId: '',
       loading: false,
     }
   }
@@ -138,7 +140,7 @@ class CustomerCreation extends Component<Props, State>{
     const res = await createCustomer(obj);
     if (res.status === 'success') {
       this.setState({ loading: false });
-      Swal.fire("success", local.customerCreated).then(() => { this.props.history.push("/") })
+      Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.CustomerId }) })
     } else {
       Swal.fire("error", local.customerCreationError)
       this.setState({ loading: false });
@@ -199,21 +201,10 @@ class CustomerCreation extends Component<Props, State>{
   }
   renderDocuments() {
     return (
-      <Formik
-        enableReinitialize
-        initialValues={this.state.step3}
-        onSubmit={this.submit}
-        validationSchema={customerCreationValidationStepThree}
-        validateOnBlur
-        validateOnChange
-      >
-        {(formikProps) =>
-          <DocumentsUpload
-            {...formikProps}
-            // previousStep={() => this.previousStep()} 
-            />
-        }
-      </Formik>
+      <DocumentsUpload
+        customerId={this.state.customerId}
+        previousStep={() => this.previousStep()}
+      />
     )
   }
 
