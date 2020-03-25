@@ -124,6 +124,15 @@
     "customerCreationError": "حصل خطا في انشاء العميل",
     "formulaCreationError": "حصل خطا في انشاء طريقه الحساب",
     "formulaTestError": "حصل خطا في تجربة طريقه الحساب",
-    "loanProductCreationError": "حصل خطا في انشاء نوع القرض"
-
+    "loanProductCreationError": "حصل خطا في انشاء نوع القرض",
+    "documents": "المستندات",
+    "nationalIdPhoto": "صورة بطاقة رقم القومي",
+    "documentUploadDragDropText": "اسقاط الملفات هنا للتحميل",
+    "documentUploadBrowseFileText": "او اضغط لاختيار الملف",
+    "receipts": "ايصالات",
+    "loanApplication": "استمارة طلب القرض",
+    "additionalPapers": "صفحات اضافية",
+    "documentUploadError": "حصل خطا في رفع الصورة",
+    "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله",
+    "loginError": "خطأ في اسم المستخدم او كلمة السر"
 }    

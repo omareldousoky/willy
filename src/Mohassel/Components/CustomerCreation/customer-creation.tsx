@@ -10,6 +10,7 @@ import { step1, step2, step3, customerCreationValidationStepOne, customerCreatio
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
+import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 
@@ -92,6 +93,7 @@ interface State {
     accountBranch: string;
     comments: string;
   };
+  customerId: string;
   loading: boolean;
 }
 
@@ -104,6 +106,7 @@ class CustomerCreation extends Component<Props, State>{
       step1: step1,
       step2: step2,
       step3: step3,
+      customerId: '',
       loading: false,
     }
   }
@@ -127,8 +130,8 @@ class CustomerCreation extends Component<Props, State>{
     obj.customerInfo.birthDate = new Date(obj.customerInfo.birthDate).valueOf();
     obj.customerInfo.nationalIdIssueDate = new Date(obj.customerInfo.nationalIdIssueDate).valueOf();
     obj.customerInfo.homePostalCode = Number(obj.customerInfo.homePostalCode);
-    obj.customerInfo.customerAddressLatLongNumber.lat === 0 && obj.customerInfo.customerAddressLatLongNumber.lng === 0? obj.customerInfo.customerAddressLatLong = '' : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLongNumber.lat},${obj.customerInfo.customerAddressLatLongNumber.lng}`;
-    obj.customerBusiness.businessAddressLatLongNumber.lat === 0 && obj.customerBusiness.businessAddressLatLongNumber.lng === 0? obj.customerBusiness.businessAddressLatLong = '' : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLongNumber.lat},${obj.customerBusiness.businessAddressLatLongNumber.lng}`;
+    obj.customerInfo.customerAddressLatLongNumber.lat === 0 && obj.customerInfo.customerAddressLatLongNumber.lng === 0 ? obj.customerInfo.customerAddressLatLong = '' : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLongNumber.lat},${obj.customerInfo.customerAddressLatLongNumber.lng}`;
+    obj.customerBusiness.businessAddressLatLongNumber.lat === 0 && obj.customerBusiness.businessAddressLatLongNumber.lng === 0 ? obj.customerBusiness.businessAddressLatLong = '' : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLongNumber.lat},${obj.customerBusiness.businessAddressLatLongNumber.lng}`;
     obj.customerBusiness.businessPostalCode = Number(obj.customerBusiness.businessPostalCode);
     obj.customerBusiness.businessLicenseIssueDate = new Date(obj.customerBusiness.businessLicenseIssueDate).valueOf();
     obj.customerExtraDetails.applicationDate = new Date(obj.customerExtraDetails.applicationDate).valueOf();
@@ -137,7 +140,7 @@ class CustomerCreation extends Component<Props, State>{
     const res = await createCustomer(obj);
     if (res.status === 'success') {
       this.setState({ loading: false });
-      Swal.fire("success", local.customerCreated).then(() => { this.props.history.push("/") })
+      Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.CustomerId }) })
     } else {
       Swal.fire("error", local.customerCreationError)
       this.setState({ loading: false });
@@ -196,6 +199,14 @@ class CustomerCreation extends Component<Props, State>{
       </Formik>
     )
   }
+  renderDocuments() {
+    return (
+      <DocumentsUpload
+        customerId={this.state.customerId}
+        previousStep={() => this.previousStep()}
+      />
+    )
+  }
 
   renderSteps(): any {
     switch (this.state.step) {
@@ -205,6 +216,8 @@ class CustomerCreation extends Component<Props, State>{
         return this.renderStepTwo();
       case 3:
         return this.renderStepThree();
+      case 4:
+        return this.renderDocuments();
       default: return null;
     }
   }
@@ -219,6 +232,8 @@ class CustomerCreation extends Component<Props, State>{
               <Tab eventKey={2} title={local.workInfo}>
               </Tab>
               <Tab eventKey={3} title={local.differentInfo}>
+              </Tab>
+              <Tab eventKey={4} title={local.documents}>
               </Tab>
             </Tabs>
             {this.renderSteps()}
