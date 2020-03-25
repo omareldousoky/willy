@@ -77,7 +77,6 @@ class FormulaTest extends Component<Props, State>{
                                 <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
                             }
                         </Formik>
-                        {/* {Object.keys(this.state.result).length>0 && <View />} */}
                         {Object.keys(this.state.result).length>0 && <DownloadPdf data={this.state.result} />}
                         {Object.keys(this.state.result).length>0 && <View data={this.state.result} />}
                     </Container>

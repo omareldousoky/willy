@@ -36,3 +36,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   height: 100px;
   z-index: 99999;
 }
+
+.react-dual-listbox {
+  height: 400px;
+}
