@@ -46,6 +46,7 @@
     "mainInfo": "البيانات الاساسية",
     "workInfo": "بيانات العمل",
     "loanInfo":"بيانات طلب القرض",
+    "guarantorInfo":"بيانات الضامن",
     "differentInfo": "بيانات متفرقة",
     "male": "ذكر",
     "female": "أنثي",
