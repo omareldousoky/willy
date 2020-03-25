@@ -127,5 +127,6 @@
     "loanApplication": "استمارة طلب القرض",
     "additionalPapers": "صفحات اضافية",
     "documentUploadError": "حصل خطا في رفع الصورة",
-    "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله"
+    "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله",
+    "loginError": "خطأ في اسم المستخدم او كلمة السر"
 }    
