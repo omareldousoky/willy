@@ -18,17 +18,17 @@ interface Props {
   previousStep: () => void;
 }
 class DocumentsUpload extends Component<Props, State>{
-  private fileInput_nationalId: React.RefObject<HTMLInputElement>;
-  private fileInput_receipts: React.RefObject<HTMLInputElement>;
-  private fileInput_loanApplication: React.RefObject<HTMLInputElement>;
-  private fileInput_additionalPapers: React.RefObject<HTMLInputElement>;
-  private dragEventCounter: number = 0;
+  private fileInputnationalId: React.RefObject<HTMLInputElement>;
+  private fileInputreceipts: React.RefObject<HTMLInputElement>;
+  private fileInputloanApplication: React.RefObject<HTMLInputElement>;
+  private fileInputadditionalPapers: React.RefObject<HTMLInputElement>;
+  private dragEventCounter = 0;
   constructor(props) {
     super(props);
-    this.fileInput_nationalId = React.createRef();
-    this.fileInput_receipts = React.createRef();
-    this.fileInput_loanApplication = React.createRef();
-    this.fileInput_additionalPapers = React.createRef();
+    this.fileInputnationalId = React.createRef();
+    this.fileInputreceipts = React.createRef();
+    this.fileInputloanApplication = React.createRef();
+    this.fileInputadditionalPapers = React.createRef();
     this.state = {
       nationalId: [],
       receipts: [],
@@ -39,7 +39,7 @@ class DocumentsUpload extends Component<Props, State>{
     }
   }
   triggerInputFile(name: string) {
-    this[`fileInput_${name}`].current?.click()
+    this[`fileInput${name}`].current?.click()
   }
   handleOnChange = (event, name: string) => {
     event.preventDefault();
@@ -67,7 +67,7 @@ class DocumentsUpload extends Component<Props, State>{
         formData.append("file", files[index]);
         const res = await uploadDocument(formData);
         if (res.status === 'success') {
-          let reader = new FileReader();
+          const reader = new FileReader();
           const file = files[index];
           reader.onloadend = () => {
             this.setState({
@@ -118,7 +118,7 @@ class DocumentsUpload extends Component<Props, State>{
   };
   constructArr(name: string) {
     const len = this.getImagesLimit(name);
-    let arr: number[] = [];
+    const arr: number[] = [];
     for (let i = 0; i < len; i++) {
       arr.push(i);
     }
@@ -172,7 +172,7 @@ class DocumentsUpload extends Component<Props, State>{
         onDragLeave={this.dragleaveListener}
         onDrop={(e) => this.dropListener(e, name)}>
         <input multiple type="file" name="img" style={{ display: 'none' }}
-          ref={this[`fileInput_${name}`]} onChange={(e) => this.handleOnChange(e, name)} />
+          ref={this[`fileInput${name}`]} onChange={(e) => this.handleOnChange(e, name)} />
         {(this.state.loading.includes(name)) ? this.renderLoading()
           : this.constructArr(name).map((_value: number, key: number) => {
             if (this.state[name][key] === undefined) {

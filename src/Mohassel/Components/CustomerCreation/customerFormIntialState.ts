@@ -58,7 +58,7 @@ export const step3 = {
     comments: '',
 };
 
-let endOfDay: Date = new Date();
+const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 
 export const customerCreationValidationStepOne = Yup.object().shape({
