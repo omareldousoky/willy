@@ -133,5 +133,15 @@
     "dataEnrtyDate":"تاريخ الادخال",
     "loanPurpose":"الاستخدام",
     "examiner":"إسم القائم بالاستعلام",
-    "examinationDate":"تاريخ الزيارة"
+    "examinationDate":"تاريخ الزيارة",
+    "documents": "المستندات",
+    "nationalIdPhoto": "صورة بطاقة رقم القومي",
+    "documentUploadDragDropText": "اسقاط الملفات هنا للتحميل",
+    "documentUploadBrowseFileText": "او اضغط لاختيار الملف",
+    "receipts": "ايصالات",
+    "loanApplication": "استمارة طلب القرض",
+    "additionalPapers": "صفحات اضافية",
+    "documentUploadError": "حصل خطا في رفع الصورة",
+    "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله",
+    "loginError": "خطأ في اسم المستخدم او كلمة السر"
 }    

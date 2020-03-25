@@ -40,3 +40,16 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .react-dual-listbox {
   height: 400px;
 }
+
+.document-upload-image-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  flex: 1;
+  background-color: white;
+  text-align: center;
+  min-height: 300px;
+  justify-content: center;
+  align-items: center;
+  border: #e5e5e5 dashed 1px;
+}
