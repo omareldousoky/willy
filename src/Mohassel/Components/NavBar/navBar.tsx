@@ -13,7 +13,8 @@ class NavBar extends Component <Props> {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link onClick={()=> this.props.history.push('/new-user')}>Create User</Nav.Link>
+                        <Nav.Link onClick={()=> this.props.history.push('/new-customer')}>Create User</Nav.Link>
+                        <Nav.Link onClick={()=> this.props.history.push('/edit-customer')}>Edit User</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/new-formula')}>Create Calculation Method</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/test-formula')}>Test Calculation Method</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/new-loan-product')}>Create Loan Product</Nav.Link>
