@@ -23,7 +23,8 @@ const App = () => {
                     <NavBar />
                     <Switch>
                         <Route exact path="/" component={Landing} />
-                        <Route path="/new-user" component={CustomerCreation} />
+                        <Route exact path="/new-customer" render={(props) => <CustomerCreation {...props} edit={false} />} />
+                        <Route exact path="/edit-customer" render={(props) => <CustomerCreation {...props} edit={true} />} />
                         <Route path="/new-formula" component={FormulaCreation} />
                         <Route path="/test-formula" component={FormulaTest} />
                         <Route path="/new-loan-product" component={LoanProductCreation} />

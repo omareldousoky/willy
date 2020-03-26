@@ -33,22 +33,24 @@ class CustomerSearch extends Component<Props, State>{
         return (
             <div style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
 
-                <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
-                    <p>Search Customer</p>
-                    <input
-                        type="text"
-                        name="searchKey"
-                        data-qc="searchKey"
-                        value={this.state.searchKey}
-                        onChange={(e) => this.handleSearchChange(e)}
-                        style={{width:'50%'}}
-                    />
-                    <Button type="button" onClick={this.handleSubmit} style={{ margin: 10 }}>{local.submit}</Button>
-                </div>
-                {this.props.searchResults.length > 0 && <div>
+                <form style={{ width: '100%'}} onSubmit={this.handleSubmit}>
+                    <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                        <p>Search Customer</p>
+                        <input
+                            type="text"
+                            name="searchKey"
+                            data-qc="searchKey"
+                            value={this.state.searchKey}
+                            onChange={(e) => this.handleSearchChange(e)}
+                            style={{ width: '50%' }}
+                        />
+                        <Button type="submit" onClick={this.handleSubmit} style={{ margin: 10 }}>{local.submit}</Button>
+                    </div>
+                </form>
+                {this.props.searchResults && this.props.searchResults.length > 0 && <div>
                     {this.props.searchResults.map((element: any) => {
                         return (
-                            <p key={element.id} onClick={()=>this.props.selectCustomer(element)}>{element.customerInfo.customerName}</p>
+                            <p key={element.id} onClick={() => this.props.selectCustomer(element)}>{element.customerInfo.customerName}</p>
                         )
                     }
                     )}
