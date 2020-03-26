@@ -3,19 +3,26 @@ import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { uploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocument';
+import { getCustomerDocuments } from '../../Services/APIs/Customer-Creation/getDocuments';
+import { deleteDocument } from '../../Services/APIs/Customer-Creation/deleteDocument';
 import * as local from '../../../Shared/Assets/ar.json';
 
+interface Document {
+  key: string;
+  url: string | ArrayBuffer | null;
+}
 interface State {
-  nationalId: Array<string>;
-  receipts: Array<string>;
-  loanApplication: Array<string>;
-  additionalPapers: Array<string>;
+  nationalId: Array<Document>;
+  receipts: Array<Document>;
+  loanApplication: Array<Document>;
+  additionalPapers: Array<Document>;
   dragging: boolean;
   loading: Array<string>;
 }
 interface Props {
   customerId: string;
   previousStep: () => void;
+  edit: boolean;
 }
 class DocumentsUpload extends Component<Props, State>{
   private fileInputnationalId: React.RefObject<HTMLInputElement>;
@@ -36,6 +43,23 @@ class DocumentsUpload extends Component<Props, State>{
       additionalPapers: [],
       dragging: false,
       loading: [],
+    }
+  }
+  async componentDidMount() {
+    if (this.props.edit) {
+      this.setState({ loading: ["nationalId", "receipts", "loanApplication", "additionalPapers"] } as State);
+      const res = await getCustomerDocuments(this.props.customerId);
+      if (res.status === "success") {
+        this.setState({loading: []})
+        Object.keys(res.body.docs).forEach(element => {
+          this.setState({
+            [element]: res.body.docs[element]
+          } as State)
+        })
+      } else {
+        this.setState({ loading: [] })
+        Swal.fire("", "error in getting customer documents", "error");
+      }
     }
   }
   triggerInputFile(name: string) {
@@ -70,8 +94,12 @@ class DocumentsUpload extends Component<Props, State>{
           const reader = new FileReader();
           const file = files[index];
           reader.onloadend = () => {
+            const document: Document = {
+              key: res.body.message,
+              url: reader.result
+            }
             this.setState({
-              [name]: [...this.state[name], reader.result]
+              [name]: [...this.state[name], document]
             } as any)
           }
           reader.readAsDataURL(file)
@@ -116,6 +144,26 @@ class DocumentsUpload extends Component<Props, State>{
     event.preventDefault();
     event.stopPropagation();
   };
+  async deleteDocument(event, name: string, key: number) {
+    this.overrideEventDefaults(event);
+    this.setState({ loading: [...this.state.loading, name] } as State);
+    const data = {
+      customerId: this.props.customerId,
+      docName: name,
+      key: this.state[name][key].key
+    }
+    const res = await deleteDocument(data);
+    if (res.status === "success") {
+      this.setState({
+        [name]: this.state[name].filter((_el, index) => index !== key),
+        loading: this.state.loading.filter(val => val !== name)
+      } as State)
+    } else {
+      this.setState({ loading: this.state.loading.filter(val => val !== name) } as State);
+      Swal.fire("", local.deleteError, "error")
+    }
+  }
+
   constructArr(name: string) {
     const len = this.getImagesLimit(name);
     const arr: number[] = [];
@@ -126,14 +174,14 @@ class DocumentsUpload extends Component<Props, State>{
   }
   renderDropHere(key: number) {
     return (
-      <div key={key} className="document-upload-image-container">
+      <div key={key} className="document-upload-container">
         <h5>Drop here</h5>
       </div>
     )
   }
   renderUploadPhoto(key: number) {
     return (
-      <div key={key} className="document-upload-image-container">
+      <div key={key} className="document-upload-container">
         <img src={'/src/Mohassel/Assets/uploadDrag.svg'}
           alt="upload-document"
         />
@@ -146,14 +194,17 @@ class DocumentsUpload extends Component<Props, State>{
   }
   renderPhotoByName(key: number, name: string) {
     return (
-      <div key={key} className="document-upload-image-container">
-        <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={this.state[name][key]} key={key} alt="" />
+      <div key={key} className="document-upload-container">
+        <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument(e, name, key)}>
+          <span className="fa fa-trash">{local.delete}</span>
+        </div>
+        <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={this.state[name][key].url} key={key} alt="" />
       </div>
     )
   }
   renderLoading() {
     return (
-      <div className="document-upload-image-container">
+      <div className="document-upload-container">
         <Spinner animation="border"></Spinner>
       </div>
     )
@@ -204,7 +255,7 @@ class DocumentsUpload extends Component<Props, State>{
           <h4 style={{ textAlign: 'right' }}>{local.additionalPapers}</h4>
           {this.renderContainer('additionalPapers')}
         </div>
-        <Button disabled style={{ float: 'right',marginBottom: 30 }} onClick={() => this.props.previousStep()} data-qc="previous">{local.previous}</Button>
+        <Button disabled style={{ float: 'right', marginBottom: 30 }} onClick={() => this.props.previousStep()} data-qc="previous">{local.previous}</Button>
       </>
     )
   }

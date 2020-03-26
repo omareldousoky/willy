@@ -45,6 +45,8 @@
     "comments": "ملاحظات",
     "mainInfo": "البيانات الاساسية",
     "workInfo": "بيانات العمل",
+    "loanInfo":"بيانات طلب القرض",
+    "guarantorInfo":"بيانات الضامن",
     "differentInfo": "بيانات متفرقة",
     "male": "ذكر",
     "female": "أنثي",
@@ -125,6 +127,14 @@
     "formulaCreationError": "حصل خطا في انشاء طريقه الحساب",
     "formulaTestError": "حصل خطا في تجربة طريقه الحساب",
     "loanProductCreationError": "حصل خطا في انشاء نوع القرض",
+    "branch":"إختر الفرع",
+    "productAssigned":"تم الإضافة للفرع بنجاح",
+    "productAssignError":"حدث خطأ فالاضافة للفرع",
+    "customerCode":"كود العميل",
+    "dataEnrtyDate":"تاريخ الادخال",
+    "loanPurpose":"الاستخدام",
+    "examiner":"إسم القائم بالاستعلام",
+    "examinationDate":"تاريخ الزيارة",
     "documents": "المستندات",
     "nationalIdPhoto": "صورة بطاقة رقم القومي",
     "documentUploadDragDropText": "اسقاط الملفات هنا للتحميل",
@@ -134,5 +144,7 @@
     "additionalPapers": "صفحات اضافية",
     "documentUploadError": "حصل خطا في رفع الصورة",
     "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله",
-    "loginError": "خطأ في اسم المستخدم او كلمة السر"
+    "loginError": "خطأ في اسم المستخدم او كلمة السر",
+    "delete": "حذف",
+    "deleteError": "حدث خطأ في حذف الصورة"
 }    

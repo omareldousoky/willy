@@ -37,7 +37,12 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   z-index: 99999;
 }
 
-.document-upload-image-container {
+.react-dual-listbox {
+  height: 400px;
+}
+
+.document-upload-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin: 20px;
@@ -48,4 +53,14 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   justify-content: center;
   align-items: center;
   border: #e5e5e5 dashed 1px;
+}
+
+.delete-document {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
 }

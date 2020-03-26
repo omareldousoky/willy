@@ -13,11 +13,13 @@ class NavBar extends Component <Props> {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link onClick={()=> this.props.history.push('/new-user')}>Create User</Nav.Link>
+                        <Nav.Link onClick={()=> this.props.history.push('/new-customer')}>Create User</Nav.Link>
+                        <Nav.Link onClick={()=> this.props.history.push('/edit-customer')}>Edit User</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/new-formula')}>Create Calculation Method</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/test-formula')}>Test Calculation Method</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/new-loan-product')}>Create Loan Product</Nav.Link>
-                        {/* <Nav.Link onClick={()=> this.props.history.push('/new-loan-application')}>Create Loan Application</Nav.Link> */}
+                        <Nav.Link onClick={()=> this.props.history.push('/assign-branch-products')}>Assign Products To Branch</Nav.Link>
+                        <Nav.Link onClick={()=> this.props.history.push('/new-loan-application')}>Create Loan Application</Nav.Link>
                         <Nav.Link onClick={()=> {
                             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
                             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
