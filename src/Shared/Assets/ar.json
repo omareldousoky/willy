@@ -129,7 +129,7 @@
     "loanProductCreationError": "حصل خطا في انشاء نوع القرض",
     "branch":"إختر الفرع",
     "productAssigned":"تم الإضافة للفرع بنجاح",
-    "productAssignError":"حدث خطأ  فالاضافة للفرع",
+    "productAssignError":"حدث خطأ فالاضافة للفرع",
     "customerCode":"كود العميل",
     "entryDate":"تاريخ الادخال",
     "usage":"الاستخدام",
@@ -144,5 +144,7 @@
     "additionalPapers": "صفحات اضافية",
     "documentUploadError": "حصل خطا في رفع الصورة",
     "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله",
-    "loginError": "خطأ في اسم المستخدم او كلمة السر"
+    "loginError": "خطأ في اسم المستخدم او كلمة السر",
+    "delete": "حذف",
+    "deleteError": "حدث خطأ في حذف الصورة"
 }    
