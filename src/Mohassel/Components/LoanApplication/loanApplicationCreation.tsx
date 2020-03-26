@@ -7,12 +7,17 @@ import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import Swal from 'sweetalert2';
 import Spinner from 'react-bootstrap/Spinner';
-import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
+import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
+import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 interface Props {
     history: Array<string>;
 };
+interface Formula {
+    name: string;
+    _id: string;
+}
 interface Application {
     customerName: string;
     customerCode: string;
@@ -31,6 +36,8 @@ interface State {
     loading: boolean;
     selectedCustomer: object;
     searchResults: Array<Application>;
+    formulas: Array<Formula>;
+    
 }
 class LoanApplicationCreation extends Component<Props, State>{
     constructor(props: Props) {
@@ -39,18 +46,19 @@ class LoanApplicationCreation extends Component<Props, State>{
             application: LoanApplication,
             loading: false,
             selectedCustomer: {},
-            searchResults: []
+            searchResults: [],
+            formulas: [],
         }
     }
     async UNSAFE_componentWillMount() {
-        // const formulas = await getFormulas();
-        // if(formulas.status === 'success'){
-        //     this.setState({
-        //         formulas: formulas.body.data
-        //     })
-        // } else {
-        //     console.log('err')
-        // }
+        const formulas = await getFormulas();
+        if(formulas.status === 'success'){
+            this.setState({
+                formulas: formulas.body.data
+            })
+        } else {
+            console.log('err')
+        }
     }
     handleSearch = async (query) => {
         this.setState({ loading: true });
@@ -117,7 +125,7 @@ class LoanApplicationCreation extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanApplicationCreationForm {...formikProps} />
+                                <LoanApplicationCreationForm {...formikProps} formulas={this.state.formulas}/>
                             }
                         </Formik> : <CustomerSearch source='loanApplication' handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
                     </Container>
