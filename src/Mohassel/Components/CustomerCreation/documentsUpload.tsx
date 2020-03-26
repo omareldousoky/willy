@@ -95,7 +95,7 @@ class DocumentsUpload extends Component<Props, State>{
           const file = files[index];
           reader.onloadend = () => {
             const document: Document = {
-              key: '',
+              key: res.body.message,
               url: reader.result
             }
             this.setState({
