@@ -149,9 +149,9 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true, customerId: customer.id });
     const res = await getCustomerByID(customer.id)
     if (res.status === 'success') {
-      let customerInfo = res.body.customerInfo;
-      let customerBusiness = res.body.customerBusiness;
-      let customerExtraDetails = res.body.customerExtraDetails;
+      const customerInfo = res.body.customerInfo;
+      const customerBusiness = res.body.customerBusiness;
+      const customerExtraDetails = res.body.customerExtraDetails;
       customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
       customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
       customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerInfo.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
