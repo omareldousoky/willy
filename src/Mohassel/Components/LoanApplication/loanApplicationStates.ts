@@ -37,11 +37,11 @@ export const LoanApplication: any = {
     allowStampsAdjustment:true,
     adminFees:0,
     allowAdminFeesAdjustment:true,
-    dataEnrtyDate: '',
-    loanPurpose: '',
-    representative: '',
-    examiner: '',
-    examinationDate: ''
+    entryDate: '',
+    usage: '',
+    representativeId: '',
+    enquirorId: '',
+    visitationDate: ''
 }
 export const LoanApplicationValidation = Yup.object().shape({
 })

@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
+import CustomerSearch from '../CustomerSearch/customerSearchTable';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
@@ -202,15 +203,21 @@ export const LoanApplicationCreationForm = (props: any) => {
                     <Form.Group as={Row} controlId="productName">
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.productName}</Form.Label>
                         <Col sm={6}>
-                            <Form.Control
-                                type="text"
+                            <Form.Control as="select"
                                 name="productName"
                                 data-qc="productName"
                                 value={values.productName}
-                                onChange={handleChange}
                                 onBlur={handleBlur}
+                                onChange={(event) => {
+                                    props.getSelectedLoanProduct(event.currentTarget.value);
+                                }}
                                 isInvalid={errors.productName && touched.productName}
-                            />
+                            >
+                                <option value=''></option>
+                                {props.products.map((product, i) =>
+                                    <option key={i} value={product._id}>{product.productName}</option>
+                                )}
+                            </Form.Control>
                             <Form.Control.Feedback type="invalid">
                                 {errors.productName}
                             </Form.Control.Feedback>
@@ -226,6 +233,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
+                                disabled
                             >
                                 <option value=''></option>
                                 {props.formulas.map((formula, i) =>
@@ -247,6 +255,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.currency && touched.currency}
+                                disabled
                             >
                                 <option value='egp'>EGP</option>
                             </Form.Control>
@@ -299,6 +308,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.inAdvanceFees && touched.inAdvanceFees}
+                                disabled
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.inAdvanceFees}
@@ -312,6 +322,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.inAdvanceFrom && touched.inAdvanceFrom}
+                                disabled
                             >
                                 <option value='principal'>نسبة من قيمة القرض</option>
                                 <option value='monthly'>شهري</option>
@@ -332,6 +343,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.InAdvanceType && touched.InAdvanceType}
+                                disabled
                             >
                                 <option value='cut'>تستقطع من المصاريف</option>
                                 <option value='uncut'>لا تستقطع من المصاريف</option>
@@ -352,6 +364,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.periodLength && touched.periodLength}
+                                disabled
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.periodLength}
@@ -365,6 +378,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.periodType && touched.periodType}
+                                disabled
                             >
                                 <option value='months'>شهر</option>
                                 <option value='days'>يوم</option>
@@ -555,6 +569,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.representativeFees && touched.representativeFees}
+                                disabled={!values.allowRepresentativeFeesAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.representativeFees}
@@ -572,6 +587,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.stamps && touched.stamps}
+                                disabled={!values.allowStampsAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.stamps}
@@ -589,87 +605,87 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.adminFees && touched.adminFees}
+                                disabled={!values.allowAdminFeesAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.adminFees}
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="dataEnrtyDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.dataEnrtyDate}</Form.Label>
+                    <Form.Group as={Row} controlId="entryDate">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.entryDate}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="date"
-                                name="dataEnrtyDate"
-                                data-qc="dataEnrtyDate"
-                                value={values.dataEnrtyDate}
+                                name="entryDate"
+                                data-qc="entryDate"
+                                value={values.entryDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.dataEnrtyDate && touched.dataEnrtyDate}
+                                isInvalid={errors.entryDate && touched.entryDate}
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="loanPurpose">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.loanPurpose}</Form.Label>
+                    <Form.Group as={Row} controlId="usage">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.usage}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
                                 type="select"
-                                name="loanPurpose"
-                                data-qc="loanPurpose"
-                                value={values.loanPurpose}
+                                name="usage"
+                                data-qc="usage"
+                                value={values.usage}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.loanPurpose && touched.loanPurpose}
-                                disabled
+                                isInvalid={errors.usage && touched.usage}
+                            // disabled
                             >
                                 <option value="" disabled></option>
+                                <option value="finance">Finance</option>
                             </Form.Control>
                         </Col>
-                    </Form.Group><Form.Group as={Row} controlId="representative">
+                    </Form.Group><Form.Group as={Row} controlId="representativeId">
                         <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.representative}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
                                 type="select"
-                                name="representative"
-                                data-qc="representative"
-                                value={values.representative}
+                                name="representativeId"
+                                data-qc="representativeId"
+                                value={values.representativeId}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.representative && touched.representative}
-                                disabled
-                            >
-                                <option value="" disabled></option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group><Form.Group as={Row} controlId="examiner">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.examiner}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="examiner"
-                                data-qc="examiner"
-                                value={values.examiner}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.examiner && touched.examiner}
-                                disabled
+                                isInvalid={errors.representativeId && touched.representativeId}
                             >
                                 <option value="" disabled></option>
                             </Form.Control>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="examinationDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.examinationDate}</Form.Label>
+                    <Form.Group as={Row} controlId="enquirorId">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.enquiror}</Form.Label>
+                        <Col sm={6}>
+                            <Form.Control as="select"
+                                type="select"
+                                name="enquirorId"
+                                data-qc="enquirorId"
+                                value={values.enquirorId}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                isInvalid={errors.enquirorId && touched.enquirorId}
+                            >
+                                <option value="" disabled></option>
+                            </Form.Control>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="visitationDate">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.visitationDate}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="date"
-                                name="examinationDate"
-                                data-qc="examinationDate"
-                                value={values.examinationDate}
+                                name="visitationDate"
+                                data-qc="visitationDate"
+                                value={values.visitationDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.examinationDate && touched.examinationDate}
-                                disabled
+                                isInvalid={errors.visitationDate && touched.visitationDate}
                             />
                         </Col>
                     </Form.Group>
@@ -678,7 +694,8 @@ export const LoanApplicationCreationForm = (props: any) => {
             <div style={{ border: '1px solid black', width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.guarantorInfo}</p>
                 <div>
-
+                <CustomerSearch source='loanApplicationGuarantor' handleSearch={(query) => props.handleSearch(query,1)} searchResults={props.searchResults1} selectCustomer={(gurantor) => props.selectGuarantor(gurantor, 1)} />
+                {props.gurantorOneSelected && <CustomerSearch source='loanApplicationGuarantor2' handleSearch={(query) => props.handleSearch(query,2)} searchResults={props.searchResults2} selectCustomer={(gurantor) => props.selectGuarantor(gurantor, 2)} />}
                 </div>
             </div>
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
