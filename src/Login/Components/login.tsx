@@ -47,8 +47,7 @@ class Login extends React.PureComponent<Props, State> {
     })
   }
   setCookie(cvalue: string) {
-    // domain=.halan.io;
-    document.cookie = "token=" + cvalue + ";path=/;";
+    document.cookie = "token=" + cvalue + ";domain=.halan.io;path=/;";
   }
   render() {
     return (

@@ -68,7 +68,8 @@ interface State {
     guarantor2Res: Array<object>;
     formulas: Array<Formula>;
     products: Array<object>;
-    guarantor: Array<string>;
+    guarantor1: any;
+    guarantor2: any;
 }
 class LoanApplicationCreation extends Component<Props, State>{
     constructor(props: Props) {
@@ -82,7 +83,8 @@ class LoanApplicationCreation extends Component<Props, State>{
             products: [],
             guarantor1Res:[],
             guarantor2Res:[],
-            guarantor:[]
+            guarantor1:{},
+            guarantor2:{}
         }
     }
     async UNSAFE_componentWillMount() {
@@ -121,13 +123,13 @@ class LoanApplicationCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearchGurantors = async (query,guarantor) => {
+    handleSearchGuarantors = async (query,guarantor) => {
         console.log(this.state.selectedCustomer)
         this.setState({ loading: true });
         const obj = {
             name: query,
             sameBranch: true,
-            excludedIds:[this.state.application.customerID]
+            excludedIds:(guarantor===2)?[this.state.application.customerID,this.state.guarantor1.id]:[this.state.application.customerID]
         }
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
@@ -168,13 +170,16 @@ class LoanApplicationCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
-    selectGurantor(id,guarantor){
-        console.log(id)
-        const guar = this.state.guarantor;
-        guar.push(id)
-        this.setState({
-            guarantor: guar
-        },()=>{console.log(this.state)})
+    selectGuarantor = async (obj,guarantor) => {
+        // const guar = this.state.guarantor;
+        const selectedGuarantor = await getCustomerByID(obj.id);
+        console.log(obj);
+        if (selectedGuarantor.status === 'success'){
+            (guarantor === 1)?this.setState({guarantor1: {...selectedGuarantor.body, id:obj.id} }):this.setState({guarantor2: {...selectedGuarantor.body, id:obj.id} },()=>{console.log('Here2')});
+        }else{
+            console.log('err')
+        }
+        // guar.push(obj.id)
     }
     getSelectedLoanProduct = async (id) => {
         this.setState({ loading: true });
@@ -215,8 +220,9 @@ class LoanApplicationCreation extends Component<Props, State>{
         }
     }
     submit = async (values: object) => {
-        this.setState({ loading: true });
+        // this.setState({ loading: true });
         const obj = values
+        console.log('result', obj,this.state)
         // const res = await createProduct(obj);
         // if (res.status === 'success') {
         //     this.setState({ loading: false });
@@ -232,7 +238,6 @@ class LoanApplicationCreation extends Component<Props, State>{
                 {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
                     <Container>
                         {(Object.keys(this.state.selectedCustomer).length > 0) ? <Formik
-                            enableReinitialize
                             initialValues={this.state.application}
                             onSubmit={this.submit}
                             validationSchema={LoanApplicationValidation}
@@ -240,7 +245,7 @@ class LoanApplicationCreation extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanApplicationCreationForm {...formikProps} formulas={this.state.formulas} products={this.state.products} getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)} handleSearch={(query,guarantor)=>{this.handleSearchGurantors(query,guarantor)}} selectGuarantor={(query,guarantor)=>{this.selectGurantor(query,guarantor)}} searchResults1={this.state.guarantor1Res} searchResults2={this.state.guarantor2Res} gurantorOneSelected={this.state.guarantor.length>0}/>
+                                <LoanApplicationCreationForm {...formikProps} formulas={this.state.formulas} products={this.state.products} getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)} handleSearch={(query,guarantor)=>{this.handleSearchGuarantors(query,guarantor)}} selectGuarantor={(query,guarantor)=>{this.selectGuarantor(query,guarantor)}} searchResults1={this.state.guarantor1Res} searchResults2={this.state.guarantor2Res} guarantorOne={this.state.guarantor1} guarantorTwo={this.state.guarantor2}/>
                             }
                         </Formik> : <CustomerSearch source='loanApplication' handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
                     </Container>

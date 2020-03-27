@@ -41,7 +41,8 @@ export const LoanApplication: any = {
     usage: '',
     representativeId: '',
     enquirorId: '',
-    visitationDate: ''
+    visitationDate: '',
+    guarantors:[]
 }
 export const LoanApplicationValidation = Yup.object().shape({
 })
