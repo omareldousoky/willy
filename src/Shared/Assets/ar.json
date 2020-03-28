@@ -12,6 +12,7 @@
     "customerHomeAddress": "عنوان المنزل",
     "homePostalCode": "الرقم البريدي للمنزل",
     "homePhoneNumber": "تليفون المنزل",
+    "phoneNumber": "تليفون",
     "mobilePhoneNumber": "محمول",
     "faxNumber": "فاكس",
     "emailAddress": "البريد الإلكترونى",
@@ -48,6 +49,7 @@
     "loanInfo":"بيانات طلب القرض",
     "guarantorInfo":"بيانات الضامن",
     "differentInfo": "بيانات متفرقة",
+    "viceCustomersInfo":"بيانات من ينوبوا عن العميل",
     "male": "ذكر",
     "female": "أنثي",
     "next": "التالي",
@@ -146,5 +148,7 @@
     "wrongNationalId": "رقم البطاقة خطأ يرجي تعديله",
     "loginError": "خطأ في اسم المستخدم او كلمة السر",
     "delete": "حذف",
-    "deleteError": "حدث خطأ في حذف الصورة"
+    "deleteError": "حدث خطأ في حذف الصورة",
+    "loanApplicationCreated":"تم إنشاء طلب القرض بنجاح",
+    "loanApplicationCreationError":"حدث خطأ في إنشاء طلب القرض"
 }    

@@ -325,6 +325,7 @@ export const LoanProductCreationForm = (props: any) => {
                         name="allowStampsAdjustment"
                         data-qc="allowStampsAdjustment"
                         value={values.allowStampsAdjustment}
+                        checked={values.allowStampsAdjustment}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.allowStampsAdjustment && touched.allowStampsAdjustment}
@@ -357,6 +358,7 @@ export const LoanProductCreationForm = (props: any) => {
                         name="allowRepresentativeFeesAdjustment"
                         data-qc="allowRepresentativeFeesAdjustment"
                         value={values.allowRepresentativeFeesAdjustment}
+                        checked={values.allowRepresentativeFeesAdjustment}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.allowRepresentativeFeesAdjustment && touched.allowRepresentativeFeesAdjustment}
@@ -389,6 +391,7 @@ export const LoanProductCreationForm = (props: any) => {
                         name="allowAdminFeesAdjustment"
                         data-qc="allowAdminFeesAdjustment"
                         value={values.allowAdminFeesAdjustment}
+                        checked={values.allowAdminFeesAdjustment}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.allowAdminFeesAdjustment && touched.allowAdminFeesAdjustment}

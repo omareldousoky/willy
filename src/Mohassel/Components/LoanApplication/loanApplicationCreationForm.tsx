@@ -12,52 +12,52 @@ export const LoanApplicationCreationForm = (props: any) => {
             <div style={{ border: '1px solid black', width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.mainInfo}</p>
                 <div className="d-flex flex-row">
-                    <div className="d-flex flex-column" style={{width:'50%', textAlign:'right'}}>
+                    <div className="d-flex flex-column" style={{ width: '50%', textAlign: 'right' }}>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.name}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.customerName}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.name}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.customerName}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.customerCode}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.customerCode}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.customerCode}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.customerCode}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.nationalId}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.nationalId}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.nationalId}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.nationalId}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.birthDate}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.birthDate}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.birthDate}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.birthDate}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.gender}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.gender}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.gender}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.gender}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.nationalIdIssueDate}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.nationalIdIssueDate}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.nationalIdIssueDate}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.nationalIdIssueDate}</p>
                         </div>
                     </div>
-                    <div className="d-flex flex-column" style={{width:'50%', textAlign:'right'}}>
+                    <div className="d-flex flex-column" style={{ width: '50%', textAlign: 'right' }}>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.businessSector}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.businessSector}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessSector}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessSector}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.businessActivity}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.businessActivity}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessActivity}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessActivity}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.businessSpeciality}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.businessSpeciality}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessSpeciality}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessSpeciality}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.permanentEmployeeCount}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.permanentEmployeeCount}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.permanentEmployeeCount}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.permanentEmployeeCount}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{local.partTimeEmployeeCount}</p>
-                            <p style={{width:'50%', borderTop:'1px solid black', borderBottom:'1px solid black'}}>{values.partTimeEmployeeCount}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.partTimeEmployeeCount}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.partTimeEmployeeCount}</p>
                         </div>
                     </div>
                 </div>
@@ -65,18 +65,18 @@ export const LoanApplicationCreationForm = (props: any) => {
             <div style={{ width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.loanInfo}</p>
                 <div>
-                    <Form.Group as={Row} controlId="productName">
+                    <Form.Group as={Row} controlId="productID">
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.productName}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
-                                name="productName"
-                                data-qc="productName"
-                                value={values.productName}
+                                name="productID"
+                                data-qc="productID"
+                                value={values.productID}
                                 onBlur={handleBlur}
                                 onChange={(event) => {
                                     props.getSelectedLoanProduct(event.currentTarget.value);
                                 }}
-                                isInvalid={errors.productName && touched.productName}
+                                isInvalid={errors.productID && touched.productID}
                             >
                                 <option value=''></option>
                                 {props.products.map((product, i) =>
@@ -84,7 +84,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 )}
                             </Form.Control>
                             <Form.Control.Feedback type="invalid">
-                                {errors.productName}
+                                {errors.productID}
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
@@ -133,7 +133,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.interest}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="interest"
                                 data-qc="interest"
                                 value={values.interest}
@@ -166,7 +166,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceFees}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="inAdvanceFees"
                                 data-qc="inAdvanceFees"
                                 value={values.inAdvanceFees}
@@ -222,7 +222,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLength}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="periodLength"
                                 data-qc="periodLength"
                                 value={values.periodLength}
@@ -257,7 +257,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.gracePeriod}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="gracePeriod"
                                 data-qc="gracePeriod"
                                 value={values.gracePeriod}
@@ -291,7 +291,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfInstallments}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="noOfInstallments"
                                 data-qc="noOfInstallments"
                                 value={values.noOfInstallments}
@@ -325,7 +325,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFee}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFee"
                                 data-qc="applicationFee"
                                 value={values.applicationFee}
@@ -342,7 +342,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.individualApplicationFee}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="individualApplicationFee"
                                 data-qc="individualApplicationFee"
                                 value={values.individualApplicationFee}
@@ -359,7 +359,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercent}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFeePercent"
                                 data-qc="applicationFeePercent"
                                 value={values.applicationFeePercent}
@@ -393,7 +393,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFeePercentPerPerson"
                                 data-qc="applicationFeePercentPerPerson"
                                 value={values.applicationFeePercentPerPerson}
@@ -427,7 +427,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.representativeFees}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="representativeFees"
                                 data-qc="representativeFees"
                                 value={values.representativeFees}
@@ -445,7 +445,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.stamps}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="stamps"
                                 data-qc="stamps"
                                 value={values.stamps}
@@ -463,7 +463,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.adminFees}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="adminFees"
                                 data-qc="adminFees"
                                 value={values.adminFees}
@@ -563,19 +563,59 @@ export const LoanApplicationCreationForm = (props: any) => {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                     <CustomerSearch
                         source='loanApplicationGuarantor'
-                        handleSearch={(query) => props.handleSearch(query, 1)}
+                        handleSearch={(query) => props.handleSearch(query, 'guarantor1Res')}
                         searchResults={props.searchResults1}
-                        selectCustomer={(gurantor) => {props.selectGuarantor(gurantor, 1); console.log(values); setFieldValue('gurantors',values.guarantors.push(gurantor.id))}}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1') }}
                         selectedGuarantor={props.guarantorOne}
                     />
                     {Object.keys(props.guarantorOne).length > 0 && <CustomerSearch
                         source='loanApplicationGuarantor2'
-                        handleSearch={(query) => props.handleSearch(query, 2)}
+                        handleSearch={(query) => props.handleSearch(query, 'guarantor2Res')}
                         searchResults={props.searchResults2}
-                        selectCustomer={(gurantor) => {props.selectGuarantor(gurantor, 2); console.log(values.guarantors, gurantor); setFieldValue('guarantors',values.guarantors.push(gurantor.id))}}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2') }}
                         selectedGuarantor={props.guarantorTwo}
                     />}
                 </div>
+            </div>
+            <div style={{ width: '100%' }}>
+                <p style={{ textAlign: 'right' }}>{local.viceCustomersInfo}</p>
+                {props.viceCustomers.map((vice,i) =>
+                    <div key={i}>
+                        <Form.Group as={Row} controlId="viceCustomerName">
+                            <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.name}</Form.Label>
+                            <Col sm={6}>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    data-qc="viceCustomerName"
+                                    value={props.viceCustomers[i].viceCustomerName}
+                                    onBlur={handleBlur}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        props.updateViceCustomer(e.currentTarget.name,e.currentTarget.value,i,false)
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="viceCustomerNumber">
+                            <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.phoneNumber}</Form.Label>
+                            <Col sm={6}>
+                                <Form.Control
+                                    type="text"
+                                    name="phoneNumber"
+                                    data-qc="viceCustomerNumber"
+                                    value={props.viceCustomers[i].viceCustomerNumber}
+                                    onBlur={handleBlur}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        props.updateViceCustomer(e.currentTarget.name,e.currentTarget.value,i,false)
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        {i !== 0 && <Button type='button' onClick={()=>props.updateViceCustomer(null,null,i,true)}>-</Button>}
+                    </div>)}
+                    <Button type='button' onClick={()=>props.updateViceCustomer(null,null,null,true)}>+</Button>
             </div>
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
         </Form >

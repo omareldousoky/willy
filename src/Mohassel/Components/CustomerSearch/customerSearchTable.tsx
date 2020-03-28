@@ -66,7 +66,7 @@ class CustomerSearch extends Component<Props, State>{
                 </div>
                 }
                 {this.props.selectedGuarantor && Object.keys(this.props.selectedGuarantor).length > 0 && this.props.searchResults && this.props.searchResults.length > 0 && <div>
-                    <h1>{this.props.source}</h1>
+                    <h5>{this.props.source}</h5>
                     <p>{this.props.selectedGuarantor.customerInfo.customerName}</p>
                     <p>{this.props.selectedGuarantor.customerInfo.nationalId}</p>
                     <p>{new Date(this.props.selectedGuarantor.customerInfo.birthDate).toISOString()}</p>
