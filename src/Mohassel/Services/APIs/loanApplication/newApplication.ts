@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const getProducts = async () => {
-    const url = process.env.REACT_APP_BASE_URL + '/product/loan-product';
+export const newApplication = async (data: object) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/assign`;
     try {
-        const res = await axios.get(url);
+        const res = await axios.post(url, data);
         return { status: "success", body: res.data }
     }
     catch (error) {

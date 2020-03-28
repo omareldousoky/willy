@@ -43,7 +43,7 @@ export const LoginForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button type="button" style={{margin:10}} onClick={handleSubmit}>{local.login}</Button>
+            <Button type="submit" style={{margin:10}}>{local.login}</Button>
         </Form >
     )
 }
