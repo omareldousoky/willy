@@ -4,215 +4,87 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import CustomerSearch from '../CustomerSearch/customerSearchTable';
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
     return (
         <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
             <div style={{ border: '1px solid black', width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.mainInfo}</p>
-                <div>
-                    <Form.Group as={Row} controlId="customerName">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.name}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                name="customerName"
-                                data-qc="customerName"
-                                value={values.customerName}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.customerName && touched.customerName}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="customerCode">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.customerCode}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                name="customerCode"
-                                data-qc="customerCode"
-                                value={values.customerCode}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.customerCode && touched.customerCode}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="nationalId">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.nationalId}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                name="nationalId"
-                                data-qc="nationalId"
-                                value={values.nationalId}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.nationalId && touched.nationalId}
-                                maxLength={14}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="birthDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.birthDate}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="date"
-                                name="birthDate"
-                                data-qc="birthDate"
-                                value={values.birthDate}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.birthDate && touched.birthDate}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="gender">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.gender}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="gender"
-                                data-qc="gender"
-                                value={values.gender}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.gender && touched.gender}
-                                disabled
-                            >
-                                <option value="" disabled></option>
-                                <option value="male">{local.male}</option>
-                                <option value="female">{local.female}</option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="nationalIdIssueDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.nationalIdIssueDate}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="date"
-                                name="nationalIdIssueDate"
-                                data-qc="nationalIdIssueDate"
-                                value={values.nationalIdIssueDate}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="businessSector">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessSector}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="businessSector"
-                                data-qc="businessSector"
-                                value={values.businessSector}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.businessSector && touched.businessSector}
-                                disabled
-                            >
-                                <option value="" disabled></option>
-                                <option value="businessSector1">businessSector1</option>
-                                <option value="businessSector2">businessSector2</option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="businessActivity">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessActivity}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="businessActivity"
-                                data-qc="businessActivity"
-                                value={values.businessActivity}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.businessActivity && touched.businessActivity}
-                                disabled
-                            >
-                                <option value="" disabled></option>
-                                <option value="businessActivity1">businessActivity1</option>
-                                <option value="businessActivity2">businessActivity2</option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="businessSpeciality">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessSpeciality}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="businessSpeciality"
-                                data-qc="businessSpeciality"
-                                value={values.businessSpeciality}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.businessSpeciality && touched.businessSpeciality}
-                                disabled
-                            >
-                                <option value="" disabled></option>
-                                <option value="businessSpeciality1">businessSpeciality1</option>
-                                <option value="businessSpeciality2">businessSpeciality2</option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="permanentEmployeeCount">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.permanentEmployeeCount}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                name="permanentEmployeeCount"
-                                data-qc="permanentEmployeeCount"
-                                value={values.permanentEmployeeCount}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="partTimeEmployeeCount">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.partTimeEmployeeCount}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                name="partTimeEmployeeCount"
-                                data-qc="partTimeEmployeeCount"
-                                value={values.partTimeEmployeeCount}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
-                                disabled
-                            />
-                        </Col>
-                    </Form.Group>
+                <div className="d-flex flex-row">
+                    <div className="d-flex flex-column" style={{ width: '50%', textAlign: 'right' }}>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.name}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.customerName}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.customerCode}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.customerCode}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.nationalId}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.nationalId}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.birthDate}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.birthDate}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.gender}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.gender}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.nationalIdIssueDate}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.nationalIdIssueDate}</p>
+                        </div>
+                    </div>
+                    <div className="d-flex flex-column" style={{ width: '50%', textAlign: 'right' }}>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessSector}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessSector}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessActivity}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessActivity}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessSpeciality}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessSpeciality}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.permanentEmployeeCount}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.permanentEmployeeCount}</p>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.partTimeEmployeeCount}</p>
+                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.partTimeEmployeeCount}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style={{ width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.loanInfo}</p>
                 <div>
-                    <Form.Group as={Row} controlId="productName">
+                    <Form.Group as={Row} controlId="productID">
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.productName}</Form.Label>
                         <Col sm={6}>
-                            <Form.Control
-                                type="text"
-                                name="productName"
-                                data-qc="productName"
-                                value={values.productName}
-                                onChange={handleChange}
+                            <Form.Control as="select"
+                                name="productID"
+                                data-qc="productID"
+                                value={values.productID}
                                 onBlur={handleBlur}
-                                isInvalid={errors.productName && touched.productName}
-                            />
+                                onChange={(event) => {
+                                    props.getSelectedLoanProduct(event.currentTarget.value);
+                                }}
+                                isInvalid={errors.productID && touched.productID}
+                            >
+                                <option value=''></option>
+                                {props.products.map((product, i) =>
+                                    <option key={i} value={product._id}>{product.productName}</option>
+                                )}
+                            </Form.Control>
                             <Form.Control.Feedback type="invalid">
-                                {errors.productName}
+                                {errors.productID}
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
@@ -226,6 +98,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
+                                disabled
                             >
                                 <option value=''></option>
                                 {props.formulas.map((formula, i) =>
@@ -247,6 +120,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.currency && touched.currency}
+                                disabled
                             >
                                 <option value='egp'>EGP</option>
                             </Form.Control>
@@ -259,7 +133,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.interest}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="interest"
                                 data-qc="interest"
                                 value={values.interest}
@@ -292,13 +166,14 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceFees}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="inAdvanceFees"
                                 data-qc="inAdvanceFees"
                                 value={values.inAdvanceFees}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.inAdvanceFees && touched.inAdvanceFees}
+                                disabled
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.inAdvanceFees}
@@ -312,6 +187,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.inAdvanceFrom && touched.inAdvanceFrom}
+                                disabled
                             >
                                 <option value='principal'>نسبة من قيمة القرض</option>
                                 <option value='monthly'>شهري</option>
@@ -332,6 +208,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.InAdvanceType && touched.InAdvanceType}
+                                disabled
                             >
                                 <option value='cut'>تستقطع من المصاريف</option>
                                 <option value='uncut'>لا تستقطع من المصاريف</option>
@@ -345,13 +222,14 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLength}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="periodLength"
                                 data-qc="periodLength"
                                 value={values.periodLength}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.periodLength && touched.periodLength}
+                                disabled
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.periodLength}
@@ -365,6 +243,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.periodType && touched.periodType}
+                                disabled
                             >
                                 <option value='months'>شهر</option>
                                 <option value='days'>يوم</option>
@@ -378,7 +257,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.gracePeriod}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="gracePeriod"
                                 data-qc="gracePeriod"
                                 value={values.gracePeriod}
@@ -412,7 +291,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfInstallments}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="noOfInstallments"
                                 data-qc="noOfInstallments"
                                 value={values.noOfInstallments}
@@ -446,7 +325,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFee}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFee"
                                 data-qc="applicationFee"
                                 value={values.applicationFee}
@@ -463,7 +342,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.individualApplicationFee}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="individualApplicationFee"
                                 data-qc="individualApplicationFee"
                                 value={values.individualApplicationFee}
@@ -480,7 +359,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercent}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFeePercent"
                                 data-qc="applicationFeePercent"
                                 value={values.applicationFeePercent}
@@ -514,7 +393,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFeePercentPerPerson"
                                 data-qc="applicationFeePercentPerPerson"
                                 value={values.applicationFeePercentPerPerson}
@@ -548,13 +427,14 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.representativeFees}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="representativeFees"
                                 data-qc="representativeFees"
                                 value={values.representativeFees}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.representativeFees && touched.representativeFees}
+                                disabled={!values.allowRepresentativeFeesAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.representativeFees}
@@ -565,13 +445,14 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.stamps}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="stamps"
                                 data-qc="stamps"
                                 value={values.stamps}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.stamps && touched.stamps}
+                                disabled={!values.allowStampsAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.stamps}
@@ -582,94 +463,96 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.adminFees}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="adminFees"
                                 data-qc="adminFees"
                                 value={values.adminFees}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.adminFees && touched.adminFees}
+                                disabled={!values.allowAdminFeesAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.adminFees}
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="dataEnrtyDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.dataEnrtyDate}</Form.Label>
+                    <Form.Group as={Row} controlId="entryDate">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.entryDate}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="date"
-                                name="dataEnrtyDate"
-                                data-qc="dataEnrtyDate"
-                                value={values.dataEnrtyDate}
+                                name="entryDate"
+                                data-qc="entryDate"
+                                value={values.entryDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.dataEnrtyDate && touched.dataEnrtyDate}
+                                isInvalid={errors.entryDate && touched.entryDate}
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="loanPurpose">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.loanPurpose}</Form.Label>
+                    <Form.Group as={Row} controlId="usage">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.usage}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
                                 type="select"
-                                name="loanPurpose"
-                                data-qc="loanPurpose"
-                                value={values.loanPurpose}
+                                name="usage"
+                                data-qc="usage"
+                                value={values.usage}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.loanPurpose && touched.loanPurpose}
-                                disabled
+                                isInvalid={errors.usage && touched.usage}
+                            // disabled
                             >
                                 <option value="" disabled></option>
+                                <option value="finance">Finance</option>
                             </Form.Control>
                         </Col>
-                    </Form.Group><Form.Group as={Row} controlId="representative">
+                    </Form.Group><Form.Group as={Row} controlId="representativeId">
                         <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.representative}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
                                 type="select"
-                                name="representative"
-                                data-qc="representative"
-                                value={values.representative}
+                                name="representativeId"
+                                data-qc="representativeId"
+                                value={values.representativeId}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.representative && touched.representative}
-                                disabled
+                                isInvalid={errors.representativeId && touched.representativeId}
                             >
                                 <option value="" disabled></option>
-                            </Form.Control>
-                        </Col>
-                    </Form.Group><Form.Group as={Row} controlId="examiner">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.examiner}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="examiner"
-                                data-qc="examiner"
-                                value={values.examiner}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.examiner && touched.examiner}
-                                disabled
-                            >
-                                <option value="" disabled></option>
+                                <option value="1234321">WillyRep</option>
                             </Form.Control>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="examinationDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.examinationDate}</Form.Label>
+                    <Form.Group as={Row} controlId="enquirorId">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.enquiror}</Form.Label>
+                        <Col sm={6}>
+                            <Form.Control as="select"
+                                type="select"
+                                name="enquirorId"
+                                data-qc="enquirorId"
+                                value={values.enquirorId}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                isInvalid={errors.enquirorId && touched.enquirorId}
+                            >
+                                <option value="" disabled></option>
+                                <option value="4321234">WillyEnq</option>
+                            </Form.Control>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="visitationDate">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.visitationDate}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="date"
-                                name="examinationDate"
-                                data-qc="examinationDate"
-                                value={values.examinationDate}
+                                name="visitationDate"
+                                data-qc="visitationDate"
+                                value={values.visitationDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.examinationDate && touched.examinationDate}
-                                disabled
+                                isInvalid={errors.visitationDate && touched.visitationDate}
                             />
                         </Col>
                     </Form.Group>
@@ -677,9 +560,62 @@ export const LoanApplicationCreationForm = (props: any) => {
             </div>
             <div style={{ border: '1px solid black', width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.guarantorInfo}</p>
-                <div>
-
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+                    <CustomerSearch
+                        source='loanApplicationGuarantor'
+                        handleSearch={(query) => props.handleSearch(query, 'guarantor1Res')}
+                        searchResults={props.searchResults1}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1') }}
+                        selectedGuarantor={props.guarantorOne}
+                    />
+                    {Object.keys(props.guarantorOne).length > 0 && <CustomerSearch
+                        source='loanApplicationGuarantor2'
+                        handleSearch={(query) => props.handleSearch(query, 'guarantor2Res')}
+                        searchResults={props.searchResults2}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2') }}
+                        selectedGuarantor={props.guarantorTwo}
+                    />}
                 </div>
+            </div>
+            <div style={{ width: '100%' }}>
+                <p style={{ textAlign: 'right' }}>{local.viceCustomersInfo}</p>
+                {props.viceCustomers.map((vice,i) =>
+                    <div key={i}>
+                        <Form.Group as={Row} controlId="viceCustomerName">
+                            <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.name}</Form.Label>
+                            <Col sm={6}>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    data-qc="viceCustomerName"
+                                    value={props.viceCustomers[i].viceCustomerName}
+                                    onBlur={handleBlur}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        props.updateViceCustomer(e.currentTarget.name,e.currentTarget.value,i,false)
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="viceCustomerNumber">
+                            <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.phoneNumber}</Form.Label>
+                            <Col sm={6}>
+                                <Form.Control
+                                    type="text"
+                                    name="phoneNumber"
+                                    data-qc="viceCustomerNumber"
+                                    value={props.viceCustomers[i].viceCustomerNumber}
+                                    onBlur={handleBlur}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        props.updateViceCustomer(e.currentTarget.name,e.currentTarget.value,i,false)
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        {i !== 0 && <Button type='button' onClick={()=>props.updateViceCustomer(null,null,i,true)}>-</Button>}
+                    </div>)}
+                    <Button type='button' onClick={()=>props.updateViceCustomer(null,null,null,true)}>+</Button>
             </div>
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
         </Form >

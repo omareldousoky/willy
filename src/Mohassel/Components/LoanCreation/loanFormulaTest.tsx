@@ -66,7 +66,6 @@ class FormulaTest extends Component<Props, State>{
                 {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
                     <Container>
                         <Formik
-                            enableReinitialize
                             initialValues={this.state.formula}
                             onSubmit={this.submit}
                             validationSchema={loanFormulaTestValidation}

@@ -18,8 +18,11 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 interface CustomerInfo {
   birthDate: number;
+  customerName?: string;
   nationalIdIssueDate: number;
   homePostalCode: number;
+  nationalId?: string;
+  customerHomeAddress?: string;
   customerAddressLatLong: string;
   customerAddressLatLongNumber: {
     lat: number;
@@ -40,7 +43,7 @@ interface CustomerExtraDetails {
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
 }
-interface Customer {
+export interface Customer {
   customerInfo: CustomerInfo;
   customerBusiness: CustomerBusiness;
   customerExtraDetails: CustomerExtraDetails;
@@ -116,7 +119,7 @@ class CustomerCreation extends Component<Props, State>{
   componentDidUpdate(prevProps: Props, _prevState: State) {
     if (prevProps.edit !== this.props.edit) {
       //set State to initial value
-      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1,searchResults: [] });
+      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1, searchResults: [] });
     }
   }
   submit = (values: object) => {

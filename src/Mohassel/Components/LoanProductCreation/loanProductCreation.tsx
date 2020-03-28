@@ -58,7 +58,6 @@ class LoanProductCreation extends Component<Props, State>{
                 {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
                     <Container>
                         <Formik
-                            enableReinitialize
                             initialValues={this.state.product}
                             onSubmit={this.submit}
                             validationSchema={LoanProductValidation}

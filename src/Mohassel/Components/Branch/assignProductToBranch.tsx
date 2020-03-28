@@ -8,7 +8,7 @@ import { AssignProductToBranchForm } from './assignProductToBranchForm';
 import { assignProductToBranch, assignProductToBranchValidation } from './assignProductToBranchStates';
 import { getBranches, getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { assignProductToBranchAPI } from '../../Services/APIs/Branch/assignProductToBranch';
-import { getProducts } from '../../Services/APIs/loanProduct/getProducts';
+import { getProducts } from '../../Services/APIs/loanProduct/getProduct';
 interface Props {
     title: string;
     history: Array<string>;

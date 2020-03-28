@@ -12,7 +12,7 @@ export const LoanApplication: any = {
     businessSpeciality: '',
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
-    productName:'',
+    productID:'',
     calculationFormulaId:'',
     currency:'egp',
     interest:0,
@@ -37,11 +37,13 @@ export const LoanApplication: any = {
     allowStampsAdjustment:true,
     adminFees:0,
     allowAdminFeesAdjustment:true,
-    dataEnrtyDate: '',
-    loanPurpose: '',
-    representative: '',
-    examiner: '',
-    examinationDate: ''
+    entryDate: '',
+    usage: '',
+    representativeId: '',
+    enquirorId: '',
+    visitationDate: '',
+    guarantorIds:[],
+    viceCustomers:[]
 }
 export const LoanApplicationValidation = Yup.object().shape({
 })
