@@ -127,7 +127,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                     <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.roundTo}</Form.Label>
                     <Col sm={6}>
                         <Form.Control
-                            type="text"
+                            type="number"
                             name="roundTo"
                             data-qc="roundTo"
                             value={values.roundTo}
