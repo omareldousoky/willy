@@ -23,7 +23,7 @@ export const StepOneForm = (props: any) => {
         header={local.customerHomeAddressLocationTitle}
       />}
       <Form.Group as={Row} controlId="customerName">
-        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.name}</Form.Label>
+        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.name}*`}</Form.Label>
         <Col sm={6}>
           <Form.Control
             type="text"
@@ -40,7 +40,7 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="nationalId">
-        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.nationalId}</Form.Label>
+        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.nationalId}*`}</Form.Label>
         <Col sm={6}>
           <Form.Control
             type="text"
@@ -77,7 +77,7 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="birthDate">
-        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.birthDate}</Form.Label>
+        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.birthDate}*`}</Form.Label>
         <Col sm={6}>
           <Form.Control
             type="date"
@@ -95,7 +95,7 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="gender">
-        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.gender}</Form.Label>
+        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.gender}*`}</Form.Label>
         <Col sm={6}>
           <Form.Control as="select"
             type="select"
@@ -117,7 +117,7 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="nationalIdIssueDate">
-        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.nationalIdIssueDate}</Form.Label>
+        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.nationalIdIssueDate}*`}</Form.Label>
         <Col sm={6}>
           <Form.Control
             type="date"
@@ -134,7 +134,7 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="customerHomeAddress">
-        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.customerHomeAddress}</Form.Label>
+        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.customerHomeAddress}*`}</Form.Label>
         <Col sm={5}>
           <Form.Control
             type="text"
@@ -148,8 +148,8 @@ export const StepOneForm = (props: any) => {
             {errors.customerHomeAddress}
           </Form.Control.Feedback>
         </Col>
-        <Col sm={1}>
-          <Button onClick={() => openCloseMap(true)}>setLcation</Button>
+        <Col sm={3}>
+          <Button onClick={() => openCloseMap(true)}>{local.customerHomeAddressLocationTitle}</Button>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="homePostalCode">
@@ -206,6 +206,7 @@ export const StepOneForm = (props: any) => {
             name="mobilePhoneNumber"
             data-qc="mobilePhoneNumber"
             value={values.mobilePhoneNumber}
+            onBlur={handleBlur}
             onChange={(event: React.FormEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -228,6 +229,7 @@ export const StepOneForm = (props: any) => {
             name="faxNumber"
             data-qc="faxNumber"
             value={values.faxNumber}
+            onBlur={handleBlur}
             onChange={(event: React.FormEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -252,6 +254,7 @@ export const StepOneForm = (props: any) => {
             data-qc="emailAddress"
             value={values.emailAddress}
             onChange={handleChange}
+            onBlur={handleBlur}
             isInvalid={errors.emailAddress && touched.emailAddress}
           />
           <Form.Control.Feedback type="invalid">
@@ -268,6 +271,7 @@ export const StepOneForm = (props: any) => {
             data-qc="customerWebsite"
             value={values.customerWebsite}
             onChange={handleChange}
+            onBlur={handleBlur}
             isInvalid={errors.customerWebsite && touched.customerWebsite}
           />
           <Form.Control.Feedback type="invalid">

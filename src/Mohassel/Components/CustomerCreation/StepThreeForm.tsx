@@ -10,7 +10,7 @@ export const StepThreeForm = (props: any) => {
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="geographicalDistribution">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.geographicalDistribution}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.geographicalDistribution}*`}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="select"
                         type="select"
@@ -31,7 +31,7 @@ export const StepThreeForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="representative">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.representative}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.representative}*`}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="select"
                         type="select"
@@ -52,7 +52,7 @@ export const StepThreeForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="applicationDate">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.applicationDate}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.applicationDate}*`}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="date"
@@ -153,8 +153,8 @@ export const StepThreeForm = (props: any) => {
             <Form.Group as={Row} controlId="comments">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.comments}</Form.Label>
                 <Col sm={6}>
-                    <Form.Control
-                        type="text"
+                    <Form.Control as="textarea" 
+                        rows="3"
                         name="comments"
                         data-qc="comments"
                         value={values.comments}
@@ -166,7 +166,7 @@ export const StepThreeForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={previousStep} data-qc="previous">{local.previous}</Button>
+            <Button style={{ float: 'right' }} onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
             <Button type="submit" data-qc="submit">{local.submit}</Button>
         </Form>
     )

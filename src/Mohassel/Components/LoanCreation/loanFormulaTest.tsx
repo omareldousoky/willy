@@ -66,7 +66,6 @@ class FormulaTest extends Component<Props, State>{
                 {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
                     <Container>
                         <Formik
-                            enableReinitialize
                             initialValues={this.state.formula}
                             onSubmit={this.submit}
                             validationSchema={loanFormulaTestValidation}
@@ -77,7 +76,6 @@ class FormulaTest extends Component<Props, State>{
                                 <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
                             }
                         </Formik>
-                        {/* {Object.keys(this.state.result).length>0 && <View />} */}
                         {Object.keys(this.state.result).length>0 && <DownloadPdf data={this.state.result} />}
                         {Object.keys(this.state.result).length>0 && <View data={this.state.result} />}
                     </Container>

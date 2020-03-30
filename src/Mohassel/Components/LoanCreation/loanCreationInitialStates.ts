@@ -7,7 +7,7 @@ export interface Formula {
     gracePeriodFees: boolean;
     rounding: boolean;
     roundDirection: string;
-    roundTo: string;
+    roundTo: number;
     roundWhat: string;
     equalInstallments: boolean;
 }
@@ -35,7 +35,7 @@ export const loanFormula: Formula = {
     gracePeriodFees: false,
     rounding: true,
     roundDirection: 'up',
-    roundTo: '1',
+    roundTo: 0,
     roundWhat: 'principal',
     equalInstallments: true
 }
@@ -65,7 +65,7 @@ export const loanFormulaCreationValidation = Yup.object().shape({
     gracePeriodFees: Yup.boolean(),
     rounding: Yup.boolean(),
     roundDirection: Yup.string(),
-    roundTo: Yup.string().required('required!'),
+    roundTo: Yup.number().required('required!'),
     roundWhat: Yup.string().required('required!'),
     equalInstallments: Yup.boolean()
 })

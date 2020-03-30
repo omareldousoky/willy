@@ -12,14 +12,14 @@ export const StepTwoForm = (props: any) => {
     const [mapState, openCloseMap] = useState(false);
     return (
         <Form onSubmit={handleSubmit}>
-            <Map show={mapState}
+            {mapState && <Map show={mapState}
                 handleClose={() => openCloseMap(false)}
                 save={(businessAddressLatLong: { lat: number; long: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
                 location={businessAddressLatLong}
                 header={local.customerWorkAddressLocationTitle}
-            />
+            />}
             <Form.Group as={Row} controlId="businessName">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessName}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.businessName}*`}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="text"
@@ -36,7 +36,7 @@ export const StepTwoForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="businessAddress">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessAddress}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.businessAddress}*`}</Form.Label>
                 <Col sm={5}>
                     <Form.Control
                         type="text"
@@ -51,8 +51,8 @@ export const StepTwoForm = (props: any) => {
                         {errors.businessAddress}
                     </Form.Control.Feedback>
                 </Col>
-                <Col sm={1}>
-                    <Button onClick={() => openCloseMap(true)}>setLcation</Button>
+                <Col sm={3}>
+                    <Button onClick={() => openCloseMap(true)}>{local.customerWorkAddressLocationTitle}</Button>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="governorate">
@@ -140,7 +140,7 @@ export const StepTwoForm = (props: any) => {
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+                                setFieldValue('businessPostalCode', event.currentTarget.value)
                             }
                         }}
                         maxLength={5}
@@ -163,7 +163,7 @@ export const StepTwoForm = (props: any) => {
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+                                setFieldValue('businessPhoneNumber', event.currentTarget.value)
                             }
                         }}
                         maxLength={10}
@@ -175,7 +175,7 @@ export const StepTwoForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="businessSector">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessSector}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.businessSector}*`}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="select"
                         type="select"
@@ -193,7 +193,7 @@ export const StepTwoForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="businessActivity">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.businessActivity}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.businessActivity}*`}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="select"
                         type="select"
@@ -220,7 +220,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.businessSpeciality}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        isInvalid={errors.businessSpeciality && touched.businessSpeciality}
+                        isInvalid={errors.businessSpeciality && touched.businessSpeciality} 
                     >
                         <option value="" disabled></option>
                         <option value="businessSpeciality1">businessSpeciality1</option>
@@ -237,10 +237,11 @@ export const StepTwoForm = (props: any) => {
                         data-qc="businessLicenseNumber"
                         value={values.businessLicenseNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+                                setFieldValue('businessLicenseNumber', event.currentTarget.value)
                             }
                         }}
                         isInvalid={errors.businessLicenseNumber && touched.businessLicenseNumber}
@@ -260,6 +261,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.businessLicenseIssuePlace}
                         onBlur={handleBlur}
                         onChange={handleChange}
+                        maxLength={100}
                         isInvalid={errors.businessLicenseIssuePlace && touched.businessLicenseIssuePlace}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -279,6 +281,9 @@ export const StepTwoForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.businessLicenseIssueDate && touched.businessLicenseIssueDate}
                     />
+                <Form.Control.Feedback type="invalid">
+                    {errors.businessLicenseIssueDate}
+                </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="commercialRegisterNumber">
@@ -290,10 +295,11 @@ export const StepTwoForm = (props: any) => {
                         data-qc="commercialRegisterNumber"
                         value={values.commercialRegisterNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+                                setFieldValue('commercialRegisterNumber', event.currentTarget.value)
                             }
                         }}
                         isInvalid={errors.commercialRegisterNumber && touched.commercialRegisterNumber}
@@ -312,10 +318,11 @@ export const StepTwoForm = (props: any) => {
                         data-qc="industryRegisterNumber"
                         value={values.industryRegisterNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+                                setFieldValue('industryRegisterNumber', event.currentTarget.value)
                             }
                         }}
                         isInvalid={errors.industryRegisterNumber && touched.industryRegisterNumber}
@@ -334,10 +341,11 @@ export const StepTwoForm = (props: any) => {
                         data-qc="taxCardNumber"
                         value={values.taxCardNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                setFieldValue('mobilePhoneNumber', event.currentTarget.value)
+                                setFieldValue('taxCardNumber', event.currentTarget.value)
                             }
                         }}
                         isInvalid={errors.taxCardNumber && touched.taxCardNumber}
@@ -347,7 +355,7 @@ export const StepTwoForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={previousStep} data-qc="previous">{local.previous}</Button>
+            <Button style={{ float: 'right' }} onClick={()=> previousStep(values)} data-qc="previous">{local.previous}</Button>
             <Button type="submit" data-qc="next">{local.next}</Button>
         </Form>
     )

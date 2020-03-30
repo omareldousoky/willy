@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
+import { withRouter } from 'react-router-dom';
 import { LoanProduct, LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
 import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
@@ -57,7 +58,6 @@ class LoanProductCreation extends Component<Props, State>{
                 {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
                     <Container>
                         <Formik
-                            enableReinitialize
                             initialValues={this.state.product}
                             onSubmit={this.submit}
                             validationSchema={LoanProductValidation}
@@ -74,4 +74,4 @@ class LoanProductCreation extends Component<Props, State>{
         )
     }
 }
-export default LoanProductCreation;
+export default withRouter(LoanProductCreation);
