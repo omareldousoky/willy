@@ -65,7 +65,6 @@ class AssignProductToBranch extends Component<Props, State>{
         const obj = {
             branchId:values.branch.value,productIds:this.state.selectedBranchProducts
         }
-        console.log('To submit', obj)
         const res = await assignProductToBranchAPI(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });
@@ -79,7 +78,6 @@ class AssignProductToBranch extends Component<Props, State>{
         this.setState({ selectedBranchProducts: [] })
         const branchsProducts = await getProductsByBranch(id);
         if (branchsProducts.status === 'success') {
-            console.log(branchsProducts)
             const branchsProductsLabels: Array<string> = [];
             branchsProducts.body.data.productIds.forEach(product => {
                 branchsProductsLabels.push(product._id)
@@ -92,7 +90,6 @@ class AssignProductToBranch extends Component<Props, State>{
         }
     }
     handleProdChange(e) {
-        console.log(e)
         this.setState({ selectedBranchProducts: e });
     }
     render() {
