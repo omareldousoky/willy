@@ -4,12 +4,14 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { Customer } from '../CustomerCreation/customer-creation';
 import * as local from '../../../Shared/Assets/ar.json';
+import { getRenderDate } from '../../Services/getRenderDate';
 interface Props {
     source: string;
     searchResults: Array<object>;
     handleSearch: Function;
     selectCustomer: Function;
     selectedGuarantor?: Customer;
+    style?: object;
 };
 
 interface State {
@@ -39,7 +41,7 @@ class CustomerSearch extends Component<Props, State>{
     };
     render() {
         return (
-            <div style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column',...this.props.style }}>
 
                 {(!this.props.selectedGuarantor || Object.keys(this.props.selectedGuarantor).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -65,13 +67,28 @@ class CustomerSearch extends Component<Props, State>{
                     )}
                 </div>
                 }
-                {this.props.selectedGuarantor && Object.keys(this.props.selectedGuarantor).length > 0 && this.props.searchResults && this.props.searchResults.length > 0 && <div>
-                    <h5>{this.props.source}</h5>
-                    <p>{this.props.selectedGuarantor.customerInfo.customerName}</p>
-                    <p>{this.props.selectedGuarantor.customerInfo.nationalId}</p>
-                    <p>{new Date(this.props.selectedGuarantor.customerInfo.birthDate).toISOString()}</p>
-                    <p>{new Date(this.props.selectedGuarantor.customerInfo.nationalIdIssueDate).toISOString()}</p>
-                    <p>{this.props.selectedGuarantor.customerInfo.customerHomeAddress}</p>
+                {this.props.selectedGuarantor && Object.keys(this.props.selectedGuarantor).length > 0 && this.props.searchResults && this.props.searchResults.length > 0 && <div style={{ textAlign: 'right' }}>
+                    <h5>{local.guarantor + this.props.source}</h5>
+                    <div className="d-flex flex-row">
+                        <p>{local.name}</p>
+                        <p style={{ margin:'0 10px 0 0'}}>{this.props.selectedGuarantor.customerInfo.customerName}</p>
+                    </div>
+                    <div className="d-flex flex-row">
+                        <p>{local.nationalId}</p>
+                        <p style={{ margin:'0 10px 0 0'}}>{this.props.selectedGuarantor.customerInfo.nationalId}</p>
+                    </div>
+                    <div className="d-flex flex-row">
+                        <p>{local.birthDate}</p>
+                        <p style={{ margin:'0 10px 0 0'}}>{getRenderDate(this.props.selectedGuarantor.customerInfo.birthDate)}</p>
+                    </div>
+                    <div className="d-flex flex-row">
+                        <p>{local.nationalIdIssueDate}</p>
+                        <p style={{ margin:'0 10px 0 0'}}>{getRenderDate(this.props.selectedGuarantor.customerInfo.nationalIdIssueDate)}</p>
+                    </div>
+                    <div className="d-flex flex-row">
+                        <p>{local.customerHomeAddress}</p>
+                        <p style={{ width:'60%', margin:'0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedGuarantor.customerInfo.customerHomeAddress}</p>
+                    </div>
                 </div>
                 }
             </div>

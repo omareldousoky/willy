@@ -48,6 +48,7 @@
     "workInfo": "بيانات العمل",
     "loanInfo":"بيانات طلب القرض",
     "guarantorInfo":"بيانات الضامن",
+    "guarantor":"الضامن",
     "differentInfo": "بيانات متفرقة",
     "viceCustomersInfo":"بيانات من ينوبوا عن العميل",
     "male": "ذكر",
@@ -150,5 +151,6 @@
     "delete": "حذف",
     "deleteError": "حدث خطأ في حذف الصورة",
     "loanApplicationCreated":"تم إنشاء طلب القرض بنجاح",
-    "loanApplicationCreationError":"حدث خطأ في إنشاء طلب القرض"
+    "loanApplicationCreationError":"حدث خطأ في إنشاء طلب القرض",
+    "selectTwoGuarantors":"الرجاء التأكد من إختيار ضامنين"
 }    

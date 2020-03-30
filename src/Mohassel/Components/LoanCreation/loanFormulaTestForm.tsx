@@ -68,7 +68,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.noOfInstallments}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="noOfInstallments"
                         data-qc="noOfInstallments"
                         value={values.noOfInstallments}
@@ -85,7 +85,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.gracePeriod}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="gracePeriod"
                         data-qc="gracePeriod"
                         value={values.gracePeriod}
@@ -102,7 +102,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.periodLength}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="periodLength"
                         data-qc="periodLength"
                         value={values.periodLength}
@@ -135,7 +135,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.interest}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="interest"
                         data-qc="interest"
                         value={values.interest}
@@ -168,7 +168,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.adminFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="adminFees"
                         data-qc="adminFees"
                         value={values.adminFees}
@@ -223,7 +223,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.inAdvanceFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="inAdvanceFees"
                         data-qc="inAdvanceFees"
                         value={values.inAdvanceFees}
