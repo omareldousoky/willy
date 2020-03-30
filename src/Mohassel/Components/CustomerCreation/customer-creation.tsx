@@ -16,6 +16,7 @@ import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 
+import { Loader } from '../../../Shared/Components/Loader';
 interface CustomerInfo {
   birthDate: number;
   customerName?: string;
@@ -251,7 +252,7 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <DocumentsUpload
         customerId={this.state.customerId}
-        previousStep={() => this.setState({step: 3})}
+        previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
       />
     )
@@ -273,6 +274,7 @@ class CustomerCreation extends Component<Props, State>{
   render() {
     return (
       <div>
+        <Loader size="500"/>
         {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
           <Container>
             {this.props.edit && this.state.customerId === "" ?
