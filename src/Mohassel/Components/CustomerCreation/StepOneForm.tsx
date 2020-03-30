@@ -206,6 +206,7 @@ export const StepOneForm = (props: any) => {
             name="mobilePhoneNumber"
             data-qc="mobilePhoneNumber"
             value={values.mobilePhoneNumber}
+            onBlur={handleBlur}
             onChange={(event: React.FormEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -228,6 +229,7 @@ export const StepOneForm = (props: any) => {
             name="faxNumber"
             data-qc="faxNumber"
             value={values.faxNumber}
+            onBlur={handleBlur}
             onChange={(event: React.FormEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -252,6 +254,7 @@ export const StepOneForm = (props: any) => {
             data-qc="emailAddress"
             value={values.emailAddress}
             onChange={handleChange}
+            onBlur={handleBlur}
             isInvalid={errors.emailAddress && touched.emailAddress}
           />
           <Form.Control.Feedback type="invalid">
@@ -268,6 +271,7 @@ export const StepOneForm = (props: any) => {
             data-qc="customerWebsite"
             value={values.customerWebsite}
             onChange={handleChange}
+            onBlur={handleBlur}
             isInvalid={errors.customerWebsite && touched.customerWebsite}
           />
           <Form.Control.Feedback type="invalid">

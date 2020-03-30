@@ -166,7 +166,7 @@ export const StepThreeForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={previousStep} data-qc="previous">{local.previous}</Button>
+            <Button style={{ float: 'right' }} onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
             <Button type="submit" data-qc="submit">{local.submit}</Button>
         </Form>
     )
