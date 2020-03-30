@@ -9,7 +9,6 @@ import DualListBox from 'react-dual-listbox';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 export const AssignProductToBranchForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
-    console.log(errors)
     return (
         <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="branch" style={{ width: '100%' }}>
@@ -31,7 +30,6 @@ export const AssignProductToBranchForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            {console.log(props)}
             {props.products.length > 0 &&
                 <div style={{ width: '100%', height: 400 }}>
                     <DualListBox
