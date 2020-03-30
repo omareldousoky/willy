@@ -62,7 +62,7 @@ interface Application {
     allowAdminFeesAdjustment: boolean;
     entryDate: Date;
     usage: string;
-    representativeId: string;
+    representative: string;
     enquirorId: string;
     visitationDate: Date;
     guarantorIds: Array<string>;
@@ -115,6 +115,11 @@ class LoanApplicationCreation extends Component<Props, State>{
             console.log('err')
         }
         this.getProducts();
+    }
+    componentWillUnmount() {
+        this.setState({
+            application: LoanApplication
+        })
     }
     async getProducts() {
         this.setState({ products: [] })
@@ -171,6 +176,10 @@ class LoanApplicationCreation extends Component<Props, State>{
             defaultApplication.nationalIdIssueDate = this.getDateString(selectedCustomer.body.customerInfo.nationalIdIssueDate);
             defaultApplication.businessSector = selectedCustomer.body.customerBusiness.businessSector;
             defaultApplication.businessActivity = selectedCustomer.body.customerBusiness.businessActivity;
+            defaultApplication.businessSpeciality = selectedCustomer.body.customerBusiness.businessSpeciality;
+            defaultApplication.permanentEmployeeCount = selectedCustomer.body.customerExtraDetails.permanentEmployeeCount;
+            defaultApplication.partTimeEmployeeCount = selectedCustomer.body.customerExtraDetails.partTimeEmployeeCount;
+            defaultApplication.representative = selectedCustomer.body.customerExtraDetails.representative;
             this.setState({
                 loading: false,
                 selectedCustomer: selectedCustomer.body,
@@ -245,7 +254,6 @@ class LoanApplicationCreation extends Component<Props, State>{
         else {
             vices[i][name] = value;
         }
-        const vicesClean = vices.filter(item => item !== undefined);
         this.setState({
             viceCustomers: vices,
         })
@@ -272,18 +280,22 @@ class LoanApplicationCreation extends Component<Props, State>{
             adminFees: obj.adminFees,
             entryDate: new Date(obj.entryDate).valueOf(),
             usage: obj.usage,
-            representativeId: obj.representativeId,
+            representative: obj.representative,
             enquirorId: obj.enquirorId,
             visitationDate: new Date(obj.visitationDate).valueOf(),
             viceCustomers: this.state.viceCustomers.filter(item => item !== undefined),
         }
-        const res = await newApplication(objToSubmit);
-        if (res.status === 'success') {
-            this.setState({ loading: false });
-            Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
-        } else {
-            Swal.fire("error", local.loanApplicationCreationError)
-            this.setState({ loading: false });
+        if(obj.guarantorIds.length === 2){
+            const res = await newApplication(objToSubmit);
+            if (res.status === 'success') {
+                this.setState({ loading: false });
+                Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
+            } else {
+                Swal.fire("error", local.loanApplicationCreationError)
+                this.setState({ loading: false });
+            }
+        }else {
+            Swal.fire("error", local.selectTwoGuarantors)
         }
     }
     render() {

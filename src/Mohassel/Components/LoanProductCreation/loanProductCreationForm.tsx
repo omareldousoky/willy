@@ -87,7 +87,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLength}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="periodLength"
                         data-qc="periodLength"
                         value={values.periodLength}
@@ -120,7 +120,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfInstallments}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="noOfInstallments"
                         data-qc="noOfInstallments"
                         value={values.noOfInstallments}
@@ -137,7 +137,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.lateDays}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="lateDays"
                         data-qc="lateDays"
                         value={values.lateDays}
@@ -154,7 +154,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.gracePeriod}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="gracePeriod"
                         data-qc="gracePeriod"
                         value={values.gracePeriod}
@@ -171,7 +171,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.interest}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="interest"
                         data-qc="interest"
                         value={values.interest}
@@ -254,7 +254,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="inAdvanceFees"
                         data-qc="inAdvanceFees"
                         value={values.inAdvanceFees}
@@ -307,7 +307,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.stamps}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="stamps"
                         data-qc="stamps"
                         value={values.stamps}
@@ -340,7 +340,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.representativeFees}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="representativeFees"
                         data-qc="representativeFees"
                         value={values.representativeFees}
@@ -373,7 +373,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.adminFees}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="adminFees"
                         data-qc="adminFees"
                         value={values.adminFees}
@@ -406,7 +406,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.earlyPaymentFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="earlyPaymentFees"
                         data-qc="earlyPaymentFees"
                         value={values.earlyPaymentFees}
@@ -423,7 +423,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.maxNoOfRestructuring}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="maxNoOfRestructuring"
                         data-qc="maxNoOfRestructuring"
                         value={values.maxNoOfRestructuring}
@@ -440,7 +440,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.minPrincipal}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="minPrincipal"
                         data-qc="minPrincipal"
                         value={values.minPrincipal}
@@ -455,7 +455,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={1}>{local.maxPrincipal}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="maxPrincipal"
                         data-qc="maxPrincipal"
                         value={values.maxPrincipal}
@@ -472,7 +472,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.minInstallment}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="minInstallment"
                         data-qc="minInstallment"
                         value={values.minInstallment}
@@ -487,7 +487,7 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={1}>{local.maxInstallment}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
-                        type="text"
+                        type="number"
                         name="maxInstallment"
                         data-qc="maxInstallment"
                         value={values.maxInstallment}
@@ -506,7 +506,7 @@ export const LoanProductCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFee}</Form.Label>
                         <Col sm={4}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFee"
                                 data-qc="applicationFee"
                                 value={values.applicationFee}
@@ -561,7 +561,7 @@ export const LoanProductCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.individualApplicationFee}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="individualApplicationFee"
                                 data-qc="individualApplicationFee"
                                 value={values.individualApplicationFee}
@@ -580,7 +580,7 @@ export const LoanProductCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercent}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFeePercent"
                                 data-qc="applicationFeePercent"
                                 value={values.applicationFeePercent}
@@ -616,7 +616,7 @@ export const LoanProductCreationForm = (props: any) => {
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 name="applicationFeePercentPerPerson"
                                 data-qc="applicationFeePercentPerPerson"
                                 value={values.applicationFeePercentPerPerson}
