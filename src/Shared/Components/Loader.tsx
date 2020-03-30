@@ -1,49 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Spinner from "react-bootstrap/Spinner";
 
 export const Loader = (props: any) => {
-  const [loading, setLoading] = useState(true);
-  // renderInline() {
-  //   return <Spinner />
-  // }
-  // renderFullScreen() {
-  //   return (
-  //     <div className="loader-full-screen">
-  //       <div className="cover"></div>
-  //       <Spinner />
-  //     </div>
-  //   )
-  // }
-  // renderFullSection() {
-  //   return (
-  //     <div data-qc="ub4b1h66r76yjfkm" className="loader-full-section">
-  //       <div data-qc="r22ofwiy3g6lc3rh" className="cover"></div>
-  //       <Spinner />
-  //     </div>
-  //   )
-  // }
-  function render() {
+  function renderFullScreen() {
     return (
-      <div className="loader-fixed" style={{ left: `calc(50% - (${props.size}px / 2))` }}>
+      <div className="loader-full-screen">
+        <div className="cover"></div>
+        <Spinner animation="border" variant="primary" style={{ width: 100, height: 100 }} />
+      </div>
+    )
+  }
+  //To use fullsection type please make sure that it's parent has position absolute
+  function renderFullSection() {
+    return (
+      <div className="loader-full-section">
+        <div className="cover"></div>
         <Spinner animation="border" variant="primary" />
       </div>
     )
   }
-  if (loading) {
-    // if (props.type === "inline") {
-    //   return renderInline()
-    // } else if (props.type === "fullscreen") {
-    //   return renderFullScreen()
-    // } else if (props.type === "fullsection") {
-    //   return renderFullSection()
-    // } else if (props.type === "fixed") {
-    //   return renderFixed()
-    // } else {
-    //   return renderFullScreen()
-    // }
-    return render();
+  function renderInline() {
+    return <Spinner animation="border" variant="primary" />
   }
-  else {
-    return <span id="LOADER">Loading...</span>
+  if (props.open) {
+    if (props.type === "fullscreen")
+      return renderFullScreen();
+    else if (props.type === "fullsection")
+      return renderFullSection();
+    else return renderInline();
   }
+  else return null;
 }
+
+Loader.propTypes = {
+  open: PropTypes.bool, // true to open loader and false to close it
+  type: PropTypes.string // ['fullscreen' or 'fullsection' or 'inline']
+};
