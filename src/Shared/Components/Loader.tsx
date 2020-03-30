@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from "react-bootstrap/Spinner";
 
-export const Loader = (props: any) => {
+type Props = {
+  open: boolean;
+  type: string;
+}
+export const Loader = (props: Props) => {
   function renderFullScreen() {
     return (
       <div className="loader-full-screen">

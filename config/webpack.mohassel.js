@@ -29,8 +29,8 @@ module.exports = () => {
                     exclude: /dist/,
                 },
                 {
-                    test: /\.css$/i,
-                    use: ['style-loader', 'css-loader'],
+                    test: /\.(s?)css$/,
+                    use: ['style-loader', 'css-loader', 'sass-loader'],
                 },
             ]
         },
