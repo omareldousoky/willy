@@ -157,7 +157,7 @@ class CustomerCreation extends Component<Props, State>{
       const customerExtraDetails = res.body.customerExtraDetails;
       customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
       customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
-      customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerInfo.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
+      customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
       customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
       this.setState({
         loading: false,
@@ -191,8 +191,11 @@ class CustomerCreation extends Component<Props, State>{
       this.setState({ loading: false });
     }
   }
-  previousStep(): void {
-    this.setState({ step: this.state.step - 1 });
+  previousStep(values, step: number): void {
+    this.setState({
+      step: step - 1,
+      [`step${step}`]: values,
+    } as State);
   }
   renderStepOne(): any {
     return (
@@ -222,7 +225,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepTwoForm {...formikProps} previousStep={() => this.previousStep()} />
+          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} />
         }
       </Formik>
     )
@@ -239,7 +242,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepThreeForm {...formikProps} previousStep={() => this.previousStep()} />
+          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} />
         }
       </Formik>
     )
@@ -248,7 +251,7 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <DocumentsUpload
         customerId={this.state.customerId}
-        previousStep={() => this.previousStep()}
+        previousStep={() => this.setState({step: 3})}
         edit={this.props.edit}
       />
     )

@@ -220,7 +220,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.businessSpeciality}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        isInvalid={errors.businessSpeciality && touched.businessSpeciality}
+                        isInvalid={errors.businessSpeciality && touched.businessSpeciality} 
                     >
                         <option value="" disabled></option>
                         <option value="businessSpeciality1">businessSpeciality1</option>
@@ -237,6 +237,7 @@ export const StepTwoForm = (props: any) => {
                         data-qc="businessLicenseNumber"
                         value={values.businessLicenseNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -260,6 +261,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.businessLicenseIssuePlace}
                         onBlur={handleBlur}
                         onChange={handleChange}
+                        maxLength={100}
                         isInvalid={errors.businessLicenseIssuePlace && touched.businessLicenseIssuePlace}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -279,6 +281,9 @@ export const StepTwoForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.businessLicenseIssueDate && touched.businessLicenseIssueDate}
                     />
+                <Form.Control.Feedback type="invalid">
+                    {errors.businessLicenseIssueDate}
+                </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="commercialRegisterNumber">
@@ -290,6 +295,7 @@ export const StepTwoForm = (props: any) => {
                         data-qc="commercialRegisterNumber"
                         value={values.commercialRegisterNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -312,6 +318,7 @@ export const StepTwoForm = (props: any) => {
                         data-qc="industryRegisterNumber"
                         value={values.industryRegisterNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -334,6 +341,7 @@ export const StepTwoForm = (props: any) => {
                         data-qc="taxCardNumber"
                         value={values.taxCardNumber}
                         onBlur={handleBlur}
+                        maxLength={100}
                         onChange={(event: React.FormEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -347,7 +355,7 @@ export const StepTwoForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={previousStep} data-qc="previous">{local.previous}</Button>
+            <Button style={{ float: 'right' }} onClick={()=> previousStep(values)} data-qc="previous">{local.previous}</Button>
             <Button type="submit" data-qc="next">{local.next}</Button>
         </Form>
     )
