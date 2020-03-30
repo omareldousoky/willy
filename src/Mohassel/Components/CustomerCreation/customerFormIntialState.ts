@@ -64,27 +64,27 @@ endOfDay.setHours(23, 59, 59, 59);
 export const customerCreationValidationStepOne = Yup.object().shape({
     customerName: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     nationalId: Yup.number()
-    .when('nationalIdChecker', {
-        is: true,
-        then: Yup.number().test('error', local.duplicateNationalIdMessage, () => false),
-        otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
-    })
-    .when('birthDate',{
-        is: '1800-01-01',
-        then: Yup.number().test('error', local.wrongNationalId, () => false),
-        otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
-    }),
+        .when('nationalIdChecker', {
+            is: true,
+            then: Yup.number().test('error', local.duplicateNationalIdMessage, () => false),
+            otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
+        })
+        .when('birthDate', {
+            is: '1800-01-01',
+            then: Yup.number().test('error', local.wrongNationalId, () => false),
+            otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
+        }),
     nationalIdIssueDate: Yup.string().test(
         "Max Date", local.dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
     ).required(local.required),
     customerHomeAddress: Yup.string().trim().max(500, "Can't be more than 500 characters").required(local.required),
     homePostalCode: Yup.string().max(5, local.maxLength5),
-    homePhoneNumber: Yup.string().max(10, local.maxLength10),
-    mobilePhoneNumber: Yup.string().max(11, local.maxLength11),
-    faxNumber: Yup.number().min(1000000000).max(9999999999),
-    emailAddress: Yup.string().email(),
-    customerWebsite: Yup.string().url(),
+    homePhoneNumber: Yup.string().min(10, local.minLength10),
+    mobilePhoneNumber: Yup.string().min(11, local.minLength11),
+    faxNumber: Yup.string().max(11, local.maxLength10).min(10, local.minLength10),
+    emailAddress: Yup.string().matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, local.invalidEmail),
+    customerWebsite: Yup.string().url(local.invalidWebsite),
 })
 
 export const customerCreationValidationStepTwo = Yup.object().shape({
@@ -102,7 +102,7 @@ export const customerCreationValidationStepTwo = Yup.object().shape({
     businessLicenseNumber: Yup.string().trim(),
     businessLicenseIssuePlace: Yup.string().trim().max(100, local.maxLength100),
     businessLicenseIssueDate: Yup.string().test(
-        "Min Date", local.dateShouldBeBeforeToday,
+        "Max Date", local.dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }),
     commercialRegisterNumber: Yup.string().trim().max(100, local.maxLength100),
     industryRegisterNumber: Yup.string().trim().max(100, local.maxLength100),
@@ -113,7 +113,7 @@ export const customerCreationValidationStepThree = Yup.object().shape({
     geographicalDistribution: Yup.string().trim().required(local.required),
     representative: Yup.string().trim().required(local.required),
     applicationDate: Yup.string().test(
-        "Min Date", local.dateShouldBeBeforeToday,
+        "Max Date", local.dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(local.required),
     permanentEmployeeCount: Yup.string().trim(),
     partTimeEmployeeCount: Yup.string().trim(),

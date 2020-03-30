@@ -152,5 +152,12 @@
     "deleteError": "حدث خطأ في حذف الصورة",
     "loanApplicationCreated":"تم إنشاء طلب القرض بنجاح",
     "loanApplicationCreationError":"حدث خطأ في إنشاء طلب القرض",
-    "selectTwoGuarantors":"الرجاء التأكد من إختيار ضامنين"
+    "selectTwoGuarantors":"الرجاء التأكد من إختيار ضامنين",
+    "numberOfDocumentsError": "اقصي عدد للصور هو : ",
+    "invalidFileType": "خطأ في نوع الملف",
+    "minLength10": "لا يمكن ان يكون اقل من 10",
+    "minLength11": "لا يمكن ان يكون اقل من 11",
+    "invalidWebsite": "الموقع غير صحيح",
+    "invalidEmail": "الايميل غير صحيح"
+
 }    
