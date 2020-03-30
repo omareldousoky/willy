@@ -13,6 +13,7 @@ function errorResponseHandler(error: any) {
         case 401:
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
+            break;
         case 402:
         // localStorage.clear();
         // window.location.reload()
