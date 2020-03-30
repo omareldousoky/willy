@@ -50,7 +50,7 @@ class DocumentsUpload extends Component<Props, State>{
       this.setState({ loading: ["nationalId", "receipts", "loanApplication", "additionalPapers"] } as State);
       const res = await getCustomerDocuments(this.props.customerId);
       if (res.status === "success") {
-        this.setState({loading: []})
+        this.setState({ loading: [] })
         Object.keys(res.body.docs).forEach(element => {
           this.setState({
             [element]: res.body.docs[element]
@@ -63,12 +63,17 @@ class DocumentsUpload extends Component<Props, State>{
     }
   }
   triggerInputFile(name: string) {
+    const limit = this.getImagesLimit(name);
+    if (this.state[name].length < limit) {
     this[`fileInput${name}`].current?.click()
+    }
   }
   handleOnChange = (event, name: string) => {
     event.preventDefault();
     if (event.target.files.length <= 2 && this.state[name].length <= 2) {
       this.readFiles(event.target.files, name);
+    } else {
+      Swal.fire('', local.numberOfDocumentsError + this.getImagesLimit(name), 'error')
     }
   }
   getImagesLimit(name: string): number {
@@ -137,9 +142,22 @@ class DocumentsUpload extends Component<Props, State>{
     this.dragEventCounter = 0;
     this.setState({ dragging: false });
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
-      this.readFiles(event.dataTransfer.files, name);
+      const flag: boolean = this.checkFileType(event.dataTransfer.files)
+      if (flag) Swal.fire('', local.invalidFileType, 'error')
+      else this.readFiles(event.dataTransfer.files, name);
     }
   };
+  checkFileType(files: FileList) {
+    const length = files.length;
+    let flag = false;
+    for (let index = 0; index < length; index++) {
+      console.log("alfmas", files[index].type, files, length)
+      if (files[index].type === "image/png" || files[index].type === "image/jpeg" || files[index].type === "image/jpg")
+        flag = false;
+      else return true;
+    }
+    return flag;
+  }
   overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -223,6 +241,7 @@ class DocumentsUpload extends Component<Props, State>{
         onDragLeave={this.dragleaveListener}
         onDrop={(e) => this.dropListener(e, name)}>
         <input multiple type="file" name="img" style={{ display: 'none' }}
+          accept="image/png,image/jpeg,image/jpg,image/jpeg"
           ref={this[`fileInput${name}`]} onChange={(e) => this.handleOnChange(e, name)} />
         {(this.state.loading.includes(name)) ? this.renderLoading()
           : this.constructArr(name).map((_value: number, key: number) => {

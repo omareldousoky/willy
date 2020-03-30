@@ -150,5 +150,12 @@
     "delete": "حذف",
     "deleteError": "حدث خطأ في حذف الصورة",
     "loanApplicationCreated":"تم إنشاء طلب القرض بنجاح",
-    "loanApplicationCreationError":"حدث خطأ في إنشاء طلب القرض"
+    "loanApplicationCreationError":"حدث خطأ في إنشاء طلب القرض",
+    "numberOfDocumentsError": "اقصي عدد للصور هو : ",
+    "invalidFileType": "خطأ في نوع الملف",
+    "minLength10": "لا يمكن ان يكون اقل من 10",
+    "minLength11": "لا يمكن ان يكون اقل من 11",
+    "invalidWebsite": "الموقع غير صحيح",
+    "invalidEmail": "الايميل غير صحيح"
+
 }    
