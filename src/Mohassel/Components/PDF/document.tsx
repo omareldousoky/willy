@@ -62,9 +62,9 @@ export const MyDocument = (props: any) => {
             return (
               <View key={i} style={styles.row}>
                 <Text style={{width:'10%'}}>{installment.id}</Text>
-                <Text style={{width:'20%'}}>{installment.installmentResponse.toFixed(2)}</Text>
-                <Text style={{width:'20%'}}>{installment.principalInstallment.toFixed(2)}</Text>
-                <Text style={{width:'20%'}}>{installment.feesInstallment.toFixed(2)}</Text>
+                <Text style={{width:'20%'}}>{installment.installmentResponse?installment.installmentResponse.toFixed(2):0}</Text>
+                <Text style={{width:'20%'}}>{installment.principalInstallment?installment.principalInstallment.toFixed(2):0}</Text>
+                <Text style={{width:'20%'}}>{installment.feesInstallment?installment.feesInstallment.toFixed(2):0}</Text>
                 <Text style={{width:'30%'}}>{new Date(installment.dateOfPayment).getDate()}-{new Date(installment.dateOfPayment).getMonth()+1}-{new Date(installment.dateOfPayment).getFullYear()}</Text>
               </View>
             )

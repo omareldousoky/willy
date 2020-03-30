@@ -74,7 +74,11 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 value={values.productID}
                                 onBlur={handleBlur}
                                 onChange={(event) => {
-                                    props.getSelectedLoanProduct(event.currentTarget.value);
+                                    if(event.currentTarget.value.length>0){
+                                        props.getSelectedLoanProduct(event.currentTarget.value);
+                                    }else{
+                                        setFieldValue('productID','')
+                                    }
                                 }}
                                 isInvalid={errors.productID && touched.productID}
                             >
@@ -182,7 +186,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Col sm={3}>
                             <Form.Control as="select"
                                 name="inAdvanceFrom"
-                                data-qc="v"
+                                data-qc="inAdvanceFrom"
                                 value={values.inAdvanceFrom}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
@@ -489,6 +493,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 isInvalid={errors.entryDate && touched.entryDate}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.entryDate}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="usage">
@@ -502,27 +509,31 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.usage && touched.usage}
-                            // disabled
                             >
                                 <option value="" disabled></option>
                                 <option value="finance">Finance</option>
                             </Form.Control>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.usage}
+                            </Form.Control.Feedback>
                         </Col>
-                    </Form.Group><Form.Group as={Row} controlId="representativeId">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.representative}</Form.Label>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="representative">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.representative}</Form.Label>
                         <Col sm={6}>
-                            <Form.Control as="select"
-                                type="select"
-                                name="representativeId"
-                                data-qc="representativeId"
-                                value={values.representativeId}
-                                onBlur={handleBlur}
+                            <Form.Control
+                                type="string"
+                                name="representative"
+                                data-qc="representative"
+                                value={values.representative}
                                 onChange={handleChange}
-                                isInvalid={errors.representativeId && touched.representativeId}
-                            >
-                                <option value="" disabled></option>
-                                <option value="1234321">WillyRep</option>
-                            </Form.Control>
+                                onBlur={handleBlur}
+                                isInvalid={errors.representative && touched.representative}
+                                disabled
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.representative}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="enquirorId">
@@ -540,6 +551,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 <option value="" disabled></option>
                                 <option value="4321234">WillyEnq</option>
                             </Form.Control>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.enquirorId}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="visitationDate">
@@ -554,6 +568,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 isInvalid={errors.visitationDate && touched.visitationDate}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.visitationDate}
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                 </div>
@@ -562,14 +579,16 @@ export const LoanApplicationCreationForm = (props: any) => {
                 <p style={{ textAlign: 'right' }}>{local.guarantorInfo}</p>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                     <CustomerSearch
-                        source='loanApplicationGuarantor'
+                        source='1'
+                        style={{width: '48%'}}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor1Res')}
                         searchResults={props.searchResults1}
                         selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1') }}
                         selectedGuarantor={props.guarantorOne}
                     />
                     {Object.keys(props.guarantorOne).length > 0 && <CustomerSearch
-                        source='loanApplicationGuarantor2'
+                        source='2'
+                        style={{width: '48%'}}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor2Res')}
                         searchResults={props.searchResults2}
                         selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2') }}
@@ -615,7 +634,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Form.Group>
                         {i !== 0 && <Button type='button' onClick={()=>props.updateViceCustomer(null,null,i,true)}>-</Button>}
                     </div>)}
-                    <Button type='button' onClick={()=>props.updateViceCustomer(null,null,null,true)}>+</Button>
+                    {props.viceCustomers.filter(item => item !== undefined).length<3 && <Button type='button' onClick={()=>props.updateViceCustomer(null,null,null,true)}>+</Button>}
             </div>
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
         </Form >
