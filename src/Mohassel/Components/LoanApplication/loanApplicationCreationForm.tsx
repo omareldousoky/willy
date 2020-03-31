@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 export const LoanApplicationCreationForm = (props: any) => {
-    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
+    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
         <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
             <div style={{ border: '1px solid black', width: '100%' }}>
@@ -75,7 +75,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={(event) => {
                                     if(event.currentTarget.value.length>0){
-                                        props.getSelectedLoanProduct(event.currentTarget.value);
+                                        props.getSelectedLoanProduct(event.currentTarget.value, setValues, values);
                                     }else{
                                         setFieldValue('productID','')
                                     }

@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-const date = new Date();
 
 export interface Vice {
     name: string;
@@ -43,64 +42,14 @@ export interface Application {
     allowStampsAdjustment: boolean;
     adminFees: number;
     allowAdminFeesAdjustment: boolean;
-    entryDate: Date|string;
+    entryDate: string;
     usage: string;
     representative: string;
     enquirorId: string;
-    visitationDate: Date|string;
+    visitationDate: string;
     guarantorIds: Array<string>;
     viceCustomers: Array<Vice>;
     applicationFeePercentPerPersonType: string;
-}
-
-export const LoanApplication: Application = {
-    customerID: '',
-    customerName: '',
-    customerCode: '',
-    nationalId: '',
-    birthDate: '',
-    gender: '',
-    nationalIdIssueDate: '',
-    businessSector: '',
-    businessActivity: '',
-    businessSpeciality: '',
-    permanentEmployeeCount: '',
-    partTimeEmployeeCount: '',
-    productID: '',
-    calculationFormulaId: '',
-    currency: 'egp',
-    interest: 0,
-    interestPeriod: 'yearly',
-    inAdvanceFees: 0,
-    inAdvanceFrom: 'principal',
-    inAdvanceType: 'uncut',
-    periodLength: 1,
-    periodType: 'days',
-    gracePeriod: 0,
-    pushPayment: 0,
-    noOfInstallments: 1,
-    principal: 0,
-    applicationFee: 0,
-    individualApplicationFee: 0,
-    applicationFeePercent: 0,
-    applicationFeeType: 'principal',
-    applicationFeePercentPerPerson: 0,
-    applicationFeePercentPerPersonType: 'principal',
-    representativeFees: 0,
-    allowRepresentativeFeesAdjustment: true,
-    stamps: 0,
-    allowStampsAdjustment: true,
-    adminFees: 0,
-    allowAdminFeesAdjustment: true,
-    entryDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
-        .toISOString()
-        .split("T")[0],
-    usage: '',
-    representative: '',
-    enquirorId: '',
-    visitationDate: '',
-    guarantorIds: [],
-    viceCustomers: []
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),
