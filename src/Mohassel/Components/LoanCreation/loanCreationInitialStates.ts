@@ -41,7 +41,7 @@ export const loanFormula: Formula = {
 }
 export const loanFormulaTest: FormulaTestClass = {
     calculationFormulaId: '',
-    principal: 10000,
+    principal: 1,
     pushPayment:0,
     noOfInstallments:1,
     gracePeriod:0,

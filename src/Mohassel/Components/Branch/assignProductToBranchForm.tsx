@@ -31,8 +31,17 @@ export const AssignProductToBranchForm = (props: any) => {
                 </Col>
             </Form.Group>
             {props.products.length > 0 &&
-                <div style={{ width: '100%', height: 400 }}>
+                <div style={{ width: '100%' }}>
+                    <div style={{display:'flex', textAlign:'right'}}>
+                        <p style={{ width:'50%'}}>
+                            {local.loanProducts}
+                        </p>
+                        <p style={{ width:'46%', marginRight:'4%'}}>
+                            {local.loanProductsForBranch}
+                        </p>
+                    </div>
                     <DualListBox
+                        canFilter
                         options={props.products}
                         selected={props.selectedBranchProducts}
                         onChange={props.onChangeProducts}

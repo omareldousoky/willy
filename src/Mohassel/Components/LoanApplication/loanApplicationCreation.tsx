@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
-import { LoanApplication, LoanApplicationValidation } from './loanApplicationStates';
+import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/customerSearch';
 import Swal from 'sweetalert2';
-import Spinner from 'react-bootstrap/Spinner';
+import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { getProducts, getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
@@ -20,57 +20,6 @@ interface Props {
 interface Formula {
     name: string;
     _id: string;
-}
-interface Application {
-    customerID: string;
-    customerName: string;
-    customerCode: string;
-    nationalId: string;
-    birthDate: string;
-    gender: string;
-    nationalIdIssueDate: string;
-    businessSector: string;
-    businessActivity: string;
-    businessSpeciality: string;
-    permanentEmployeeCount: string;
-    partTimeEmployeeCount: string;
-    productID: string;
-    calculationFormulaId: string;
-    currency: string;
-    interest: number;
-    interestPeriod: string;
-    inAdvanceFees: number;
-    inAdvanceFrom: string;
-    inAdvanceType: string;
-    periodLength: number;
-    periodType: string;
-    gracePeriod: number;
-    principal: number;
-    pushPayment: number;
-    noOfInstallments: number;
-    applicationFee: number;
-    individualApplicationFee: number;
-    applicationFeePercent: number;
-    applicationFeeType: string;
-    applicationFeePercentPerPerson: number;
-    applicationFeePercentPerPersonType: number;
-    representativeFees: number;
-    allowRepresentativeFeesAdjustment: boolean;
-    stamps: number;
-    allowStampsAdjustment: boolean;
-    adminFees: number;
-    allowAdminFeesAdjustment: boolean;
-    entryDate: Date;
-    usage: string;
-    representative: string;
-    enquirorId: string;
-    visitationDate: Date;
-    guarantorIds: Array<string>;
-    viceCustomers: Array<Vice>;
-}
-interface Vice {
-    name: string;
-    phoneNumber: string;
 }
 interface State {
     application: Application;
@@ -85,11 +34,61 @@ interface State {
     guarantor2: any;
     viceCustomers: Array<Vice>;
 }
+const date = new Date();
+
 class LoanApplicationCreation extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            application: LoanApplication,
+            application: {
+                customerID: '',
+                customerName: '',
+                customerCode: '',
+                nationalId: '',
+                birthDate: '',
+                gender: '',
+                nationalIdIssueDate: '',
+                businessSector: '',
+                businessActivity: '',
+                businessSpeciality: '',
+                permanentEmployeeCount: '',
+                partTimeEmployeeCount: '',
+                productID: '',
+                calculationFormulaId: '',
+                currency: 'egp',
+                interest: 0,
+                interestPeriod: 'yearly',
+                inAdvanceFees: 0,
+                inAdvanceFrom: 'principal',
+                inAdvanceType: 'uncut',
+                periodLength: 1,
+                periodType: 'days',
+                gracePeriod: 0,
+                pushPayment: 0,
+                noOfInstallments: 1,
+                principal: 0,
+                applicationFee: 0,
+                individualApplicationFee: 0,
+                applicationFeePercent: 0,
+                applicationFeeType: 'principal',
+                applicationFeePercentPerPerson: 0,
+                applicationFeePercentPerPersonType: 'principal',
+                representativeFees: 0,
+                allowRepresentativeFeesAdjustment: true,
+                stamps: 0,
+                allowStampsAdjustment: true,
+                adminFees: 0,
+                allowAdminFeesAdjustment: true,
+                entryDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+                    .toISOString()
+                    .split("T")[0],
+                usage: '',
+                representative: '',
+                enquirorId: '',
+                visitationDate: '',
+                guarantorIds: [],
+                viceCustomers: []
+            },
             loading: false,
             selectedCustomer: {},
             searchResults: [],
@@ -106,30 +105,30 @@ class LoanApplicationCreation extends Component<Props, State>{
         }
     }
     async UNSAFE_componentWillMount() {
+        this.setState({ loading: true });
         const formulas = await getFormulas();
         if (formulas.status === 'success') {
             this.setState({
-                formulas: formulas.body.data
+                formulas: formulas.body.data,
+                loading: false
             })
         } else {
             console.log('err')
+            this.setState({ loading: false });
         }
         this.getProducts();
     }
-    componentWillUnmount() {
-        this.setState({
-            application: LoanApplication
-        })
-    }
     async getProducts() {
-        this.setState({ products: [] })
+        this.setState({ products: [],loading: true })
         const products = await getProducts();
         if (products.status === 'success') {
             this.setState({
-                products: products.body.data.data
+                products: products.body.data.data,
+                loading: false
             })
         } else {
             console.log('err')
+            this.setState({ loading: false });
         }
     }
     handleSearch = async (query) => {
@@ -148,11 +147,12 @@ class LoanApplicationCreation extends Component<Props, State>{
             sameBranch: true,
             excludedIds: (guarantor === 'guarantor2Res') ? [this.state.application.customerID, this.state.guarantor1.id] : [this.state.application.customerID]
         }
+        this.setState({ loading: true });
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
             const newState = {};
             newState[guarantor] = results.body.customers;
-            this.setState(newState);
+            this.setState(newState,()=>{this.setState({loading:false})});
         } else {
             Swal.fire("error", 'search error')
             this.setState({ loading: false });
@@ -192,18 +192,20 @@ class LoanApplicationCreation extends Component<Props, State>{
         }
     }
     selectGuarantor = async (obj, guarantor: string) => {
+        this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj.id);
         if (selectedGuarantor.status === 'success') {
             const defaultApplication = this.state.application
             defaultApplication.guarantorIds.push(obj.id)
             const newState = {};
             newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
-            this.setState(newState);
+            this.setState(newState,()=>{this.setState({loading: false})});
         } else {
             console.log('err')
+            this.setState({ loading: false });
         }
     }
-    getSelectedLoanProduct = async (id) => {
+    getSelectedLoanProduct = async (id, setValues, values) => {
         this.setState({ loading: true });
         const selectedProduct = await getProduct(id)
         if (selectedProduct.status === 'success') {
@@ -234,7 +236,8 @@ class LoanApplicationCreation extends Component<Props, State>{
             defaultApplication.allowStampsAdjustment = selectedProductDetails.allowStampsAdjustment;
             defaultApplication.adminFees = selectedProductDetails.adminFees;
             defaultApplication.allowAdminFeesAdjustment = selectedProductDetails.allowAdminFeesAdjustment;
-            this.setState({ loading: false, application: defaultApplication });
+            setValues({...values, ...defaultApplication})
+            this.setState({ loading: false });
         } else {
             Swal.fire("error", 'search error')
             this.setState({ loading: false });
@@ -285,7 +288,8 @@ class LoanApplicationCreation extends Component<Props, State>{
             visitationDate: new Date(obj.visitationDate).valueOf(),
             viceCustomers: this.state.viceCustomers.filter(item => item !== undefined),
         }
-        if(obj.guarantorIds.length === 2){
+        if (obj.guarantorIds.length === 2) {
+            this.setState({ loading: true });
             const res = await newApplication(objToSubmit);
             if (res.status === 'success') {
                 this.setState({ loading: false });
@@ -294,41 +298,39 @@ class LoanApplicationCreation extends Component<Props, State>{
                 Swal.fire("error", local.loanApplicationCreationError)
                 this.setState({ loading: false });
             }
-        }else {
+        } else {
             Swal.fire("error", local.selectTwoGuarantors)
         }
     }
     render() {
         return (
-            <div>
-                {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
-                    <Container>
-                        {(Object.keys(this.state.selectedCustomer).length > 0) ? <Formik
-                            initialValues={this.state.application}
-                            onSubmit={this.submit}
-                            validationSchema={LoanApplicationValidation}
-                            validateOnBlur
-                            validateOnChange
-                        >
-                            {(formikProps) =>
-                                <LoanApplicationCreationForm {...formikProps}
-                                    formulas={this.state.formulas}
-                                    products={this.state.products}
-                                    getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
-                                    handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
-                                    selectGuarantor={(query, guarantor) => { this.selectGuarantor(query, guarantor) }}
-                                    searchResults1={this.state.guarantor1Res}
-                                    searchResults2={this.state.guarantor2Res}
-                                    guarantorOne={this.state.guarantor1}
-                                    guarantorTwo={this.state.guarantor2}
-                                    viceCustomers={this.state.viceCustomers}
-                                    updateViceCustomer={(name, value, i, flag) => this.handleChangeVices(name, value, i, flag)}
-                                />
-                            }
-                        </Formik> : <CustomerSearch source='loanApplication' handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
-                    </Container>
-                }
-            </div>
+            <Container>
+                <Loader open={this.state.loading} type="fullscreen" />
+                {(Object.keys(this.state.selectedCustomer).length > 0) ? <Formik
+                    initialValues={this.state.application}
+                    onSubmit={this.submit}
+                    validationSchema={LoanApplicationValidation}
+                    validateOnBlur
+                    validateOnChange
+                    enableReinitialize
+                >
+                    {(formikProps) =>
+                        <LoanApplicationCreationForm {...formikProps}
+                            formulas={this.state.formulas}
+                            products={this.state.products}
+                            getSelectedLoanProduct={(id,setValues, values) => this.getSelectedLoanProduct(id,setValues, values)}
+                            handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
+                            selectGuarantor={(query, guarantor) => { this.selectGuarantor(query, guarantor) }}
+                            searchResults1={this.state.guarantor1Res}
+                            searchResults2={this.state.guarantor2Res}
+                            guarantorOne={this.state.guarantor1}
+                            guarantorTwo={this.state.guarantor2}
+                            viceCustomers={this.state.viceCustomers}
+                            updateViceCustomer={(name, value, i, flag) => this.handleChangeVices(name, value, i, flag)}
+                        />
+                    }
+                </Formik> : <CustomerSearch source='loanApplication' handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
+            </Container>
         )
     }
 }
