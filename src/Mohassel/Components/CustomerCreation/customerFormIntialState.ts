@@ -79,7 +79,7 @@ export const customerCreationValidationStepOne = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
     ).required(local.required),
     customerHomeAddress: Yup.string().trim().max(500, "Can't be more than 500 characters").required(local.required),
-    homePostalCode: Yup.string().max(5, local.maxLength5),
+    homePostalCode: Yup.string().min(5, local.minLength5),
     homePhoneNumber: Yup.string().min(10, local.minLength10),
     mobilePhoneNumber: Yup.string().min(11, local.minLength11),
     faxNumber: Yup.string().max(11, local.maxLength10).min(10, local.minLength10),
@@ -94,8 +94,8 @@ export const customerCreationValidationStepTwo = Yup.object().shape({
     district: Yup.string().trim(),
     village: Yup.string().trim(),
     ruralUrban: Yup.string().trim(),
-    businessPostalCode: Yup.string().max(5, local.maxLength5),
-    businessPhoneNumber: Yup.string().max(10, local.maxLength10),
+    businessPostalCode: Yup.string().min(5, local.minLength5),
+    businessPhoneNumber: Yup.string().min(10, local.minLength10),
     businessSector: Yup.string().trim().required(local.required),
     businessActivity: Yup.string().trim().required(local.required),
     businessSpeciality: Yup.string().trim(),
@@ -117,7 +117,6 @@ export const customerCreationValidationStepThree = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(local.required),
     permanentEmployeeCount: Yup.string().trim(),
     partTimeEmployeeCount: Yup.string().trim(),
-
     accountNumber: Yup.string().trim().max(100, local.maxLength100),
     accountBranch: Yup.string().trim().max(100, local.maxLength100),
     comments: Yup.string().trim().max(500, local.maxLength100),
