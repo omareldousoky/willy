@@ -14,8 +14,8 @@ module.exports = () => {
             }
         },
         output: {
+            filename: '[name].[contenthash].js',
             path: path.join(__dirname, '../build/login'),
-            filename: 'build.js'
         },
         module: {
             rules: [
