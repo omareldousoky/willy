@@ -64,6 +64,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   color: white;
   padding: 5px;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 /*Loader Component*/
