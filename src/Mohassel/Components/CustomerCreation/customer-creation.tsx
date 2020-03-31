@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Container from 'react-bootstrap/Container';
-import Spinner from 'react-bootstrap/Spinner';
+import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
@@ -251,7 +251,7 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <DocumentsUpload
         customerId={this.state.customerId}
-        previousStep={() => this.setState({step: 3})}
+        previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
       />
     )
@@ -272,28 +272,25 @@ class CustomerCreation extends Component<Props, State>{
   }
   render() {
     return (
-      <div>
-        {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
-          <Container>
-            {this.props.edit && this.state.customerId === "" ?
-              <CustomerSearch source='loanApplication' handleSearch={(query: string) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer: object) => this.selectCustomer(customer)} />
-              : <>
-                <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
-                  <Tab eventKey={1} title={local.mainInfo}>
-                  </Tab>
-                  <Tab eventKey={2} title={local.workInfo}>
-                  </Tab>
-                  <Tab eventKey={3} title={local.differentInfo}>
-                  </Tab>
-                  <Tab eventKey={4} title={local.documents}>
-                  </Tab>
-                </Tabs>
-                {this.renderSteps()}
-              </>
-            }
-          </Container>
+      <Container>
+        <Loader open={this.state.loading} type="fullscreen" />
+        {this.props.edit && this.state.customerId === "" ?
+          <CustomerSearch source='loanApplication' handleSearch={(query: string) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer: object) => this.selectCustomer(customer)} />
+          : <>
+            <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
+              <Tab eventKey={1} title={local.mainInfo}>
+              </Tab>
+              <Tab eventKey={2} title={local.workInfo}>
+              </Tab>
+              <Tab eventKey={3} title={local.differentInfo}>
+              </Tab>
+              <Tab eventKey={4} title={local.documents}>
+              </Tab>
+            </Tabs>
+            {this.renderSteps()}
+          </>
         }
-      </div>
+      </Container>
     )
   }
 }
