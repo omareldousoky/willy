@@ -10,6 +10,7 @@ export interface Formula {
     roundTo: number;
     roundWhat: string;
     equalInstallments: boolean;
+    roundLastInstallment: boolean;
 }
 export interface FormulaTestClass{
     calculationFormulaId: string;
@@ -37,7 +38,8 @@ export const loanFormula: Formula = {
     roundDirection: 'up',
     roundTo: 1,
     roundWhat: 'principal',
-    equalInstallments: true
+    equalInstallments: false,
+    roundLastInstallment:false
 }
 export const loanFormulaTest: FormulaTestClass = {
     calculationFormulaId: '',
@@ -65,17 +67,18 @@ export const loanFormulaCreationValidation = Yup.object().shape({
     gracePeriodFees: Yup.boolean(),
     rounding: Yup.boolean(),
     roundDirection: Yup.string(),
-    roundTo: Yup.number().min(0.00001,"Can't be 0").required('required!'),
+    roundTo: Yup.number().moreThan(0,"Can't be 0 or less").required('required!'),
     roundWhat: Yup.string().required('required!'),
-    equalInstallments: Yup.boolean()
+    equalInstallments: Yup.boolean(),
+    roundLastInstallment: Yup.boolean()
 })
 export const loanFormulaTestValidation = Yup.object().shape({
     calculationFormulaId:Yup.string().required('required!'),
     principal: Yup.number().min(1,"Can't be less than 1").required('required!'),
-    pushPayment: Yup.number().min(0,"Can't be less than zero").required('required!'),
-    noOfInstallments:Yup.number().min(1,"Can't be less than one").required('required!'),
-    gracePeriod:Yup.number().min(0,"Can't be less than zero").required('required!'),
-    periodLength:Yup.number().min(1,"Can't be less than 1").required('required!'),
+    pushPayment: Yup.number().integer('Must be int').min(0,"Can't be less than zero").required('required!'),
+    noOfInstallments:Yup.number().integer('Must be int').min(1,"Can't be less than one").required('required!'),
+    gracePeriod:Yup.number().integer('Must be int').min(0,"Can't be less than zero").required('required!'),
+    periodLength:Yup.number().integer('Must be int').min(1,"Can't be less than 1").required('required!'),
     periodType:Yup.string().required('required!'),
     interest:Yup.number().min(0,"Can't be less than zero").max(100,"Can't be more than 100").required('required!'),
     interestPeriod:Yup.string().required('required!'),

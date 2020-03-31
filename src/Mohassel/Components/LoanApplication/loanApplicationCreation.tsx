@@ -137,7 +137,7 @@ class LoanApplicationCreation extends Component<Props, State>{
         if (results.status === 'success') {
             this.setState({ loading: false, searchResults: results.body.customers });
         } else {
-            Swal.fire("error", 'search error')
+            Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
         }
     }
@@ -154,7 +154,7 @@ class LoanApplicationCreation extends Component<Props, State>{
             newState[guarantor] = results.body.customers;
             this.setState(newState,()=>{this.setState({loading:false})});
         } else {
-            Swal.fire("error", 'search error')
+            Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
         }
     }
@@ -187,7 +187,7 @@ class LoanApplicationCreation extends Component<Props, State>{
             });
 
         } else {
-            Swal.fire("error", 'search error')
+            Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
         }
     }
@@ -239,7 +239,7 @@ class LoanApplicationCreation extends Component<Props, State>{
             setValues({...values, ...defaultApplication})
             this.setState({ loading: false });
         } else {
-            Swal.fire("error", 'search error')
+            Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
         }
     }
@@ -295,11 +295,11 @@ class LoanApplicationCreation extends Component<Props, State>{
                 this.setState({ loading: false });
                 Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
             } else {
-                Swal.fire("error", local.loanApplicationCreationError)
+                Swal.fire("error", local.loanApplicationCreationError, 'error')
                 this.setState({ loading: false });
             }
         } else {
-            Swal.fire("error", local.selectTwoGuarantors)
+            Swal.fire("error", local.selectTwoGuarantors, 'error')
         }
     }
     render() {
