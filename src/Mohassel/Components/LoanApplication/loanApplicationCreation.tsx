@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
-import { LoanApplication, LoanApplicationValidation } from './loanApplicationStates';
+import { Application, Vice, LoanApplication, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/customerSearch';
@@ -21,57 +21,8 @@ interface Formula {
     name: string;
     _id: string;
 }
-interface Application {
-    customerID: string;
-    customerName: string;
-    customerCode: string;
-    nationalId: string;
-    birthDate: string;
-    gender: string;
-    nationalIdIssueDate: string;
-    businessSector: string;
-    businessActivity: string;
-    businessSpeciality: string;
-    permanentEmployeeCount: string;
-    partTimeEmployeeCount: string;
-    productID: string;
-    calculationFormulaId: string;
-    currency: string;
-    interest: number;
-    interestPeriod: string;
-    inAdvanceFees: number;
-    inAdvanceFrom: string;
-    inAdvanceType: string;
-    periodLength: number;
-    periodType: string;
-    gracePeriod: number;
-    principal: number;
-    pushPayment: number;
-    noOfInstallments: number;
-    applicationFee: number;
-    individualApplicationFee: number;
-    applicationFeePercent: number;
-    applicationFeeType: string;
-    applicationFeePercentPerPerson: number;
-    applicationFeePercentPerPersonType: number;
-    representativeFees: number;
-    allowRepresentativeFeesAdjustment: boolean;
-    stamps: number;
-    allowStampsAdjustment: boolean;
-    adminFees: number;
-    allowAdminFeesAdjustment: boolean;
-    entryDate: Date;
-    usage: string;
-    representative: string;
-    enquirorId: string;
-    visitationDate: Date;
-    guarantorIds: Array<string>;
-    viceCustomers: Array<Vice>;
-}
-interface Vice {
-    name: string;
-    phoneNumber: string;
-}
+
+
 interface State {
     application: Application;
     loading: boolean;
@@ -115,12 +66,16 @@ class LoanApplicationCreation extends Component<Props, State>{
             console.log('err')
         }
         this.getProducts();
+        console.log(LoanApplication)
+        // this.setState({
+        //     application: LoanApplication
+        // })
     }
-    componentWillUnmount() {
-        this.setState({
-            application: LoanApplication
-        })
-    }
+    // componentWillUnmount() {
+    //     this.setState({
+    //         application: LoanApplication
+    //     })
+    // }
     async getProducts() {
         this.setState({ products: [] })
         const products = await getProducts();
@@ -309,6 +264,7 @@ class LoanApplicationCreation extends Component<Props, State>{
                             validationSchema={LoanApplicationValidation}
                             validateOnBlur
                             validateOnChange
+                            enableReinitialize
                         >
                             {(formikProps) =>
                                 <LoanApplicationCreationForm {...formikProps}
