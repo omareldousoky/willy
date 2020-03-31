@@ -6,6 +6,7 @@ import FormulaTest from './Components/LoanCreation/loanFormulaTest';
 import LoanProductCreation from './Components/LoanProductCreation/loanProductCreation';
 import LoanApplicationCreation from './Components/LoanApplication/loanApplicationCreation';
 import AssignProductToBranch from './Components/Branch/assignProductToBranch';
+import TrackLoanApplications from './Components/TrackLoanApplications/trackLoanApplications';
 import NavBar from './Components/NavBar/navBar';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
@@ -30,6 +31,7 @@ const App = () => {
                         <Route path="/new-loan-product" component={LoanProductCreation} />
                         <Route path="/assign-branch-products" component={AssignProductToBranch} />
                         <Route path="/new-loan-application" component={LoanApplicationCreation} />
+                        <Route path="/track-loan-applications" component={TrackLoanApplications} />
                     </Switch>
                 </div>
             </BrowserRouter>
