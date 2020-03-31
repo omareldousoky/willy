@@ -59,7 +59,7 @@ class FormulaTest extends Component<Props, State>{
             this.setState({ loading: false, result: { result: res.body.data, formulaName: formulaName } });
             Swal.fire("success", local.formulaTested).then(() => { console.log(res) })
         } else {
-            Swal.fire("error", local.formulaTestError)
+            Swal.fire("error", local.formulaTestError, 'error')
             this.setState({ loading: false });
         }
     }

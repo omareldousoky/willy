@@ -35,7 +35,7 @@ class LoanProductCreation extends Component<Props, State>{
                 noOfInstallments: 1,
                 lateDays: 0,
                 gracePeriod: 0,
-                interest: 0,
+                interest: 0.1,
                 interestPeriod: 'yearly',
                 allowInterestAdjustment: false,
                 inAdvanceFees: 0,
@@ -104,7 +104,7 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
             Swal.fire("success", local.loanProductCreated).then(() => { this.props.history.push("/") })
         } else {
-            Swal.fire("error", local.loanProductCreationError)
+            Swal.fire("error", local.loanProductCreationError, 'error')
             this.setState({ loading: false });
         }
     }

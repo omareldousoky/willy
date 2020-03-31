@@ -75,7 +75,7 @@ class AssignProductToBranch extends Component<Props, State>{
             this.setState({ loading: false });
             Swal.fire("success", local.productAssigned).then(() => { this.props.history.push("/") })
         } else {
-            Swal.fire("error", local.productAssignError)
+            Swal.fire("error", local.productAssignError, 'error')
             this.setState({ loading: false });
         }
     }

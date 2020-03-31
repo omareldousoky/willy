@@ -64,7 +64,7 @@
     "roundDirection": "اإتجاه التقريب",
     "roundTo": "يتم التقريب الى أقرب",
     "roundWhat": "القيمه التى يتم تقريبها",
-    "equalInstallmentsFalse": "يتم تقريب اخر قسط",
+    "roundLastInstallment": "يتم تقريب اخر قسط",
     "equalInstallmentsTrue": "جميع الأقساط متساويه القيمه",
     "principal": "قيمه القرض",
     "pushPayment": "عدد أيام ترحيل الأقساط",
@@ -161,5 +161,6 @@
     "invalidEmail": "الايميل غير صحيح",
     "loanProducts":"أنواع القروض المتاحة",
     "loanProductsForBranch":"أنواع القروض المتاحة للفرع",
-    "minLength5":"لا يمكن ان يكون اقل من 5"
+    "minLength5":"لا يمكن ان يكون اقل من 5",
+    "searchError":"خطأ فالبحث"
 }    
