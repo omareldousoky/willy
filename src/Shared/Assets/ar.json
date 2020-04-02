@@ -162,5 +162,6 @@
     "loanProducts":"أنواع القروض المتاحة",
     "loanProductsForBranch":"أنواع القروض المتاحة للفرع",
     "minLength5":"لا يمكن ان يكون اقل من 5",
+    "search":"ابحث",
     "searchError":"خطأ فالبحث"
 }    

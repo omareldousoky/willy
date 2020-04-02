@@ -58,6 +58,11 @@ class LoanApplicationCreation extends Component<Props, State>{
                 currency: 'egp',
                 interest: 0,
                 interestPeriod: 'yearly',
+                minPrincipal: 0,
+                maxPrincipal: 0,
+                minInstallment: 0,
+                maxInstallment: 0,
+                allowInterestAdjustment: true,
                 inAdvanceFees: 0,
                 inAdvanceFrom: 'principal',
                 inAdvanceType: 'uncut',
@@ -85,9 +90,14 @@ class LoanApplicationCreation extends Component<Props, State>{
                 usage: '',
                 representative: '',
                 enquirorId: '',
-                visitationDate: '',
+                visitationDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+                .toISOString()
+                .split("T")[0],
                 guarantorIds: [],
-                viceCustomers: []
+                viceCustomers: [{
+                    viceCustomerName: '',
+                    viceCustomerNumber: ''
+                }]
             },
             loading: false,
             selectedCustomer: {},
@@ -99,8 +109,8 @@ class LoanApplicationCreation extends Component<Props, State>{
             guarantor1: {},
             guarantor2: {},
             viceCustomers: [{
-                name: '',
-                phoneNumber: ''
+                viceCustomerName: '',
+                viceCustomerNumber: ''
             }],
         }
     }
@@ -119,7 +129,7 @@ class LoanApplicationCreation extends Component<Props, State>{
         this.getProducts();
     }
     async getProducts() {
-        this.setState({ products: [],loading: true })
+        this.setState({ products: [], loading: true })
         const products = await getProducts();
         if (products.status === 'success') {
             this.setState({
@@ -145,14 +155,14 @@ class LoanApplicationCreation extends Component<Props, State>{
         const obj = {
             name: query,
             sameBranch: true,
-            excludedIds: (guarantor === 'guarantor2Res') ? [this.state.application.customerID, this.state.guarantor1.id] : [this.state.application.customerID]
+            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
         }
         this.setState({ loading: true });
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
             const newState = {};
             newState[guarantor] = results.body.customers;
-            this.setState(newState,()=>{this.setState({loading:false})});
+            this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
@@ -199,11 +209,23 @@ class LoanApplicationCreation extends Component<Props, State>{
             defaultApplication.guarantorIds.push(obj.id)
             const newState = {};
             newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
-            this.setState(newState,()=>{this.setState({loading: false})});
+            this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             console.log('err')
             this.setState({ loading: false });
         }
+    }
+    removeGuarantor = async (obj, guarantor: string) => {
+        this.setState({ loading: true });
+        const defaultApplication = this.state.application
+        defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj.id !== id)
+        const newState = {
+            application: defaultApplication
+        };
+        newState[guarantor] = {};
+        newState[`${guarantor}Res`] = [];
+        newState['loading'] = false;
+        this.setState(newState);
     }
     getSelectedLoanProduct = async (id, setValues, values) => {
         this.setState({ loading: true });
@@ -216,6 +238,7 @@ class LoanApplicationCreation extends Component<Props, State>{
             defaultApplication.currency = selectedProductDetails.currency;
             defaultApplication.interest = selectedProductDetails.interest;
             defaultApplication.interestPeriod = selectedProductDetails.interestPeriod;
+            defaultApplication.allowInterestAdjustment = selectedProductDetails.allowInterestAdjustment;
             defaultApplication.inAdvanceFees = selectedProductDetails.inAdvanceFees;
             defaultApplication.inAdvanceFrom = selectedProductDetails.inAdvanceFrom;
             defaultApplication.inAdvanceType = selectedProductDetails.inAdvanceType;
@@ -236,30 +259,16 @@ class LoanApplicationCreation extends Component<Props, State>{
             defaultApplication.allowStampsAdjustment = selectedProductDetails.allowStampsAdjustment;
             defaultApplication.adminFees = selectedProductDetails.adminFees;
             defaultApplication.allowAdminFeesAdjustment = selectedProductDetails.allowAdminFeesAdjustment;
-            setValues({...values, ...defaultApplication})
+            defaultApplication.minPrincipal = selectedProductDetails.minPrincipal;
+            defaultApplication.maxPrincipal = selectedProductDetails.maxPrincipal;
+            defaultApplication.minInstallment = selectedProductDetails.minInstallment;
+            defaultApplication.maxInstallment = selectedProductDetails.maxInstallment;
+            setValues({ ...values, ...defaultApplication })
             this.setState({ loading: false });
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
         }
-    }
-    handleChangeVices(name: string, value: string, i, flag) {
-        const vices = this.state.viceCustomers;
-
-        if (flag && i) {
-            delete vices[i]
-        } else if (flag && !i) {
-            vices.push({
-                name: '',
-                phoneNumber: ''
-            })
-        }
-        else {
-            vices[i][name] = value;
-        }
-        this.setState({
-            viceCustomers: vices,
-        })
     }
     submit = async (values: Application) => {
         const obj = values
@@ -288,7 +297,7 @@ class LoanApplicationCreation extends Component<Props, State>{
             visitationDate: new Date(obj.visitationDate).valueOf(),
             viceCustomers: this.state.viceCustomers.filter(item => item !== undefined),
         }
-        if (obj.guarantorIds.length === 2) {
+        if (Object.keys(this.state.guarantor1).length > 0 && Object.keys(this.state.guarantor2).length > 0) {
             this.setState({ loading: true });
             const res = await newApplication(objToSubmit);
             if (res.status === 'success') {
@@ -318,18 +327,18 @@ class LoanApplicationCreation extends Component<Props, State>{
                         <LoanApplicationCreationForm {...formikProps}
                             formulas={this.state.formulas}
                             products={this.state.products}
-                            getSelectedLoanProduct={(id,setValues, values) => this.getSelectedLoanProduct(id,setValues, values)}
+                            getSelectedLoanProduct={(id, setValues, values) => this.getSelectedLoanProduct(id, setValues, values)}
                             handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
                             selectGuarantor={(query, guarantor) => { this.selectGuarantor(query, guarantor) }}
+                            removeGuarantor={(query, guarantor) => { this.removeGuarantor(query, guarantor) }}
                             searchResults1={this.state.guarantor1Res}
                             searchResults2={this.state.guarantor2Res}
                             guarantorOne={this.state.guarantor1}
                             guarantorTwo={this.state.guarantor2}
                             viceCustomers={this.state.viceCustomers}
-                            updateViceCustomer={(name, value, i, flag) => this.handleChangeVices(name, value, i, flag)}
                         />
                     }
-                </Formik> : <CustomerSearch source='loanApplication' handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
+                </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
             </Container>
         )
     }

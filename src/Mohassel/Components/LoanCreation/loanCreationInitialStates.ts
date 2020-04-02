@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-const date = new Date();
 export interface Formula {
     loanCalculationFormulaName: string;
     interestType: string;
@@ -40,25 +39,6 @@ export const loanFormula: Formula = {
     roundWhat: 'principal',
     equalInstallments: false,
     roundLastInstallment:false
-}
-export const loanFormulaTest: FormulaTestClass = {
-    calculationFormulaId: '',
-    principal: 1,
-    pushPayment:0,
-    noOfInstallments:1,
-    gracePeriod:0,
-    periodLength:1,
-    periodType:'months',
-    interest:0,
-    interestPeriod:'yearly',
-    adminFees:0,
-    loanStartDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
-    .toISOString()
-    .split("T")[0],
-    pushHolidays:'next',
-    inAdvanceFees:0,
-    inAdvanceFrom:'principal',
-    inAdvanceType:'cut'
 }
 export const loanFormulaCreationValidation = Yup.object().shape({
     loanCalculationFormulaName: Yup.string().trim().max(100, "Can't be more than 100 characters").required('required!'),
