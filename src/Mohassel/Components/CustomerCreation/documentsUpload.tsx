@@ -70,7 +70,8 @@ class DocumentsUpload extends Component<Props, State>{
   }
   handleOnChange = (event, name: string) => {
     event.preventDefault();
-    if (event.target.files.length <= 2 && this.state[name].length <= 2) {
+    const imagesLimit = this.getImagesLimit(name);
+    if (event.target.files.length <= imagesLimit && this.state[name].length <= imagesLimit) {
       this.readFiles(event.target.files, name);
     } else {
       Swal.fire('', local.numberOfDocumentsError + this.getImagesLimit(name), 'error')
