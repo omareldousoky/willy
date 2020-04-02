@@ -271,7 +271,6 @@ class CustomerCreation extends Component<Props, State>{
     }
   }
   render() {
-    console.log(this.state)
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
