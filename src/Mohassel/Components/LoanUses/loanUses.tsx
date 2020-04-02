@@ -1,18 +1,95 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Container from 'react-bootstrap/Container';
+import { Loader } from '../../../Shared/Components/Loader';
+import * as local from '../../../Shared/Assets/ar.json';
 
-interface State {
-    loanUses: [];
+interface LoanUse {
+  name: string;
+  disabled: boolean;
+  loading: boolean;
 }
-class LoanUses extends Component <{}, State> {
-    constructor(props) {
-        super(props);
-        this.state = { 
-            loanUses: []
-        }
+interface State {
+  loanUses: Array<LoanUse>;
+}
+class LoanUses extends Component<{}, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loanUses: [
+        {
+          name: "loan use 1",
+          disabled: true,
+          loading: false
+        },
+        {
+          name: "loan use 2",
+          disabled: true,
+          loading: false,
+        },
+        {
+          name: "loan use 3",
+          disabled: true,
+          loading: false
+
+        },
+      ],
     }
-    render(){
-        return(<h1>hi</h1>)
+  }
+  addLoanUse() {
+    this.setState({
+      loanUses: [...this.state.loanUses, { name: "", disabled: false, loading: false }]
+    })
+  }
+  handleChangeInput(event: React.FormEvent<HTMLInputElement>, index: number) {
+    this.setState({
+      loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: event.currentTarget.value } : loanUse)
+    })
+  }
+  toggleClick(index: number) {
+    if (this.state.loanUses[index].disabled === false) {
+      this.setState({
+        loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, loading: true } : loanUse)
+      })
+      setTimeout(() => {
+        
+      }, 2000);
     }
+    this.setState({
+      loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabled: !loanUse.disabled, loading: false } : loanUse)
+    })
+  }
+  render() {
+    return (
+      <Container style={{ marginTop: 20 }}>
+        <div style={{ display: 'flex', textAlign: 'center' }}>
+          <h4 style={{ textAlign: 'right' }}>{local.loanUses}</h4>
+          <span
+            onClick={() => this.addLoanUse()}
+            className="fa fa-plus fa-lg"
+            style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
+          />
+        </div>
+        <ListGroup style={{ textAlign: 'right' }}>
+          {this.state.loanUses.map((loanUse, index) => {
+            return (
+              <ListGroup.Item key={index} style={{ display: 'flex', alignItems: 'center'}}>
+                <input value={loanUse.name}
+                  onChange={(e: React.FormEvent<HTMLInputElement>) => this.handleChangeInput(e, index)}
+                  disabled={loanUse.disabled}
+                  style={loanUse.disabled ? { background: 'none', border: 'none', marginLeft: 20 } : { marginLeft: 20 }} />
+                <span
+                  onClick={() => this.toggleClick(index)}
+                  style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
+                  className={loanUse.disabled ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
+                <Loader type="inline" open={loanUse.loading} />
+              </ListGroup.Item>
+            )
+          })}
+        </ListGroup>
+      </Container>
+    );
+  }
 }
 
 export default LoanUses;

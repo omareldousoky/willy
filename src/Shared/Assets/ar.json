@@ -178,5 +178,7 @@
     "loanCreationDate": "تاريخ إنشاء القرض",
     "issuingBank": "بنك الاصدار",
     "safePaymentDocuments": "خزينة مستندات السداد",
-    "searchError":"خطأ فالبحث"
+    "searchError":"خطأ فالبحث",
+    "loanUses": "أغراض القروض",
+    "loanUse": "غرض القرض"
 }    
