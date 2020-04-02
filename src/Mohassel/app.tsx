@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import CustomerCreation from './Components/CustomerCreation/customer-creation';
-import FormulaCreation from './Components/LoanCreation/loanFormulaCreation';
-import FormulaTest from './Components/LoanCreation/loanFormulaTest';
+import FormulaCreation from './Components/LoanFormulaCreation/loanFormulaCreation';
+import FormulaTest from './Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from './Components/LoanProductCreation/loanProductCreation';
 import LoanApplicationCreation from './Components/LoanApplication/loanApplicationCreation';
 import AssignProductToBranch from './Components/Branch/assignProductToBranch';
 import TrackLoanApplications from './Components/TrackLoanApplications/trackLoanApplications';
+import LoanCreation from './Components/LoanCreation/loanCreation';
 import NavBar from './Components/NavBar/navBar';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
@@ -32,6 +33,7 @@ const App = () => {
                         <Route path="/assign-branch-products" component={AssignProductToBranch} />
                         <Route path="/new-loan-application" component={LoanApplicationCreation} />
                         <Route path="/track-loan-applications" component={TrackLoanApplications} />
+                        <Route path="/create-loan" component={LoanCreation} />
                     </Switch>
                 </div>
             </BrowserRouter>

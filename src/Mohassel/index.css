@@ -93,3 +93,15 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background: rgba(255, 255, 255, 0.9);
 }
 /*End of Loader Component*/
+
+.chip {
+  background-color: lightgray;
+  display: inline-block;
+  margin:10px 5px;
+  padding: 3px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.chip-active {
+  background-color: #7dc356;
+}
