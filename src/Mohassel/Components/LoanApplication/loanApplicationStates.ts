@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 export interface Vice {
-    name: string;
-    phoneNumber: string;
+    viceCustomerName: string;
+    viceCustomerNumber: string;
 }
 export interface Application {
     customerID: string;
@@ -22,6 +22,11 @@ export interface Application {
     currency: string;
     interest: number;
     interestPeriod: string;
+    allowInterestAdjustment: boolean;
+    minPrincipal: number;
+    maxPrincipal: number;
+    minInstallment: number;
+    maxInstallment: number;
     inAdvanceFees: number;
     inAdvanceFrom: string;
     inAdvanceType: string;
@@ -54,17 +59,21 @@ export interface Application {
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),
     calculationFormulaId: Yup.string().required('required!'),
-    interest: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
+    interest: Yup.number().moreThan(0, "Can't be 0 or less").max(100, "Can't be more than 100").required('required!'),
     interestPeriod: Yup.string().required('required!'),
     inAdvanceFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
     inAdvanceFrom: Yup.string().required('required!'),
     inAdvanceType: Yup.string().required('required!'),
-    periodLength: Yup.number().min(1, "Can't be less than 1").required('required!'),
+    minPrincipal: Yup.number(),
+    maxPrincipal: Yup.number(),
+    minInstallment: Yup.number(),
+    maxInstallment: Yup.number(),
+    periodLength: Yup.number().integer('Must be int').min(1, "Can't be less than 1").required('required!'),
     periodType: Yup.string().required('required!'),
-    gracePeriod: Yup.number().min(0, "Can't be less than 0").required('required!'),
-    pushPayment: Yup.number().min(0, "Can't be less than 0").required('required!'),
-    noOfInstallments: Yup.number().min(1, "Can't be less than 1").required('required!'),
-    principal: Yup.number().min(0, "Can't be less than 0").required('required!'),
+    gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
+    pushPayment: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
+    noOfInstallments: Yup.number().integer('Must be int').min(1, "Can't be less than 1").required('required!'),
+    principal: Yup.number().min(Yup.ref('minPrincipal'), 'Value should be greater than min').max(Yup.ref('maxPrincipal'), 'Value should be less than max').required('required!'),
     applicationFee: Yup.number().min(0, "Can't be less than 0").required('required!'),
     individualApplicationFee: Yup.number().min(0, "Can't be less than 0").required('required!'),
     applicationFeePercent: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
@@ -84,4 +93,10 @@ export const LoanApplicationValidation = Yup.object().shape({
         "Min Date", "Select a future date",
         (value: any) => { return value ? new Date(value).valueOf() >= new Date().setHours(0, 0, 0, 0) : true }
     ).required('required!'),
-})
+    viceCustomers: Yup.array().of(
+            Yup.object().shape({
+                viceCustomerName: Yup.string(),
+                viceCustomerNumber: Yup.string().min(10).max(11)
+            })
+        ),
+});

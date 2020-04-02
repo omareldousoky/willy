@@ -144,7 +144,7 @@ class CustomerCreation extends Component<Props, State>{
     if (results.status === 'success') {
       this.setState({ loading: false, searchResults: results.body.customers });
     } else {
-      Swal.fire("error", 'search error')
+      Swal.fire("error", local.searchError, 'error')
       this.setState({ loading: false });
     }
   }
@@ -168,7 +168,7 @@ class CustomerCreation extends Component<Props, State>{
 
     } else {
       this.setState({ loading: false });
-      Swal.fire('', 'search error', 'error');
+      Swal.fire('error', local.searchError, 'error');
     }
   }
   async createCustomer(obj: Customer) {

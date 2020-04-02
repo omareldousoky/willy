@@ -64,7 +64,7 @@
     "roundDirection": "اإتجاه التقريب",
     "roundTo": "يتم التقريب الى أقرب",
     "roundWhat": "القيمه التى يتم تقريبها",
-    "equalInstallmentsFalse": "يتم تقريب اخر قسط",
+    "roundLastInstallment": "يتم تقريب اخر قسط",
     "equalInstallmentsTrue": "جميع الأقساط متساويه القيمه",
     "principal": "قيمه القرض",
     "pushPayment": "عدد أيام ترحيل الأقساط",
@@ -177,5 +177,6 @@
     "search": "بحث",
     "loanCreationDate": "تاريخ إنشاء القرض",
     "issuingBank": "بنك الاصدار",
-    "safePaymentDocuments": "خزينة مستندات السداد"
+    "safePaymentDocuments": "خزينة مستندات السداد",
+    "searchError":"خطأ فالبحث"
 }    

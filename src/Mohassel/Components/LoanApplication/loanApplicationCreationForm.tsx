@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import { Field, FieldArray } from 'formik';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -8,56 +9,56 @@ import CustomerSearch from '../CustomerSearch/customerSearchTable';
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
-        <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
             <div style={{ border: '1px solid black', width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.mainInfo}</p>
                 <div className="d-flex flex-row">
                     <div className="d-flex flex-column" style={{ width: '50%', textAlign: 'right' }}>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.name}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.customerName}</p>
+                            <p style={{ width: '50%', }}>{local.name}</p>
+                            <p style={{ width: '50%', }}>{values.customerName}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.customerCode}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.customerCode}</p>
+                            <p style={{ width: '50%', }}>{local.customerCode}</p>
+                            <p style={{ width: '50%', }}>{(values.customerCode) ? values.customerCode : 'N/A'}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.nationalId}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.nationalId}</p>
+                            <p style={{ width: '50%', }}>{local.nationalId}</p>
+                            <p style={{ width: '50%', }}>{values.nationalId}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.birthDate}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.birthDate}</p>
+                            <p style={{ width: '50%', }}>{local.birthDate}</p>
+                            <p style={{ width: '50%', }}>{values.birthDate}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.gender}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.gender}</p>
+                            <p style={{ width: '50%', }}>{local.gender}</p>
+                            <p style={{ width: '50%', }}>{values.gender}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.nationalIdIssueDate}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.nationalIdIssueDate}</p>
+                            <p style={{ width: '50%', }}>{local.nationalIdIssueDate}</p>
+                            <p style={{ width: '50%', }}>{values.nationalIdIssueDate}</p>
                         </div>
                     </div>
                     <div className="d-flex flex-column" style={{ width: '50%', textAlign: 'right' }}>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessSector}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessSector}</p>
+                            <p style={{ width: '50%', }}>{local.businessSector}</p>
+                            <p style={{ width: '50%', }}>{values.businessSector}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessActivity}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessActivity}</p>
+                            <p style={{ width: '50%', }}>{local.businessActivity}</p>
+                            <p style={{ width: '50%', }}>{values.businessActivity}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.businessSpeciality}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.businessSpeciality}</p>
+                            <p style={{ width: '50%', }}>{local.businessSpeciality}</p>
+                            <p style={{ width: '50%', }}>{(values.businessSpeciality) ? values.businessSpeciality : 'N/A'}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.permanentEmployeeCount}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.permanentEmployeeCount}</p>
+                            <p style={{ width: '50%', }}>{local.permanentEmployeeCount}</p>
+                            <p style={{ width: '50%', }}>{(values.permanentEmployeeCount) ? values.permanentEmployeeCount : 0}</p>
                         </div>
                         <div className="d-flex flex-row">
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{local.partTimeEmployeeCount}</p>
-                            <p style={{ width: '50%', borderTop: '1px solid black', borderBottom: '1px solid black' }}>{values.partTimeEmployeeCount}</p>
+                            <p style={{ width: '50%', }}>{local.partTimeEmployeeCount}</p>
+                            <p style={{ width: '50%', }}>{(values.partTimeEmployeeCount) ? values.partTimeEmployeeCount : 0}</p>
                         </div>
                     </div>
                 </div>
@@ -74,15 +75,15 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 value={values.productID}
                                 onBlur={handleBlur}
                                 onChange={(event) => {
-                                    if(event.currentTarget.value.length>0){
+                                    if (event.currentTarget.value.length > 0) {
                                         props.getSelectedLoanProduct(event.currentTarget.value, setValues, values);
-                                    }else{
-                                        setFieldValue('productID','')
+                                    } else {
+                                        setFieldValue('productID', '')
                                     }
                                 }}
                                 isInvalid={errors.productID && touched.productID}
                             >
-                                <option value=''></option>
+                                <option value="" disabled></option>
                                 {props.products.map((product, i) =>
                                     <option key={i} value={product._id}>{product.productName}</option>
                                 )}
@@ -104,7 +105,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
                                 disabled
                             >
-                                <option value=''></option>
+                                <option value="" disabled></option>
                                 {props.formulas.map((formula, i) =>
                                     <option key={i} value={formula._id}>{formula.name}</option>
                                 )}
@@ -126,6 +127,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 isInvalid={errors.currency && touched.currency}
                                 disabled
                             >
+                                <option value="" disabled></option>
                                 <option value='egp'>EGP</option>
                             </Form.Control>
                             <Form.Control.Feedback type="invalid">
@@ -144,6 +146,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.interest && touched.interest}
+                                disabled={!values.allowInterestAdjustment}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.interest}
@@ -157,7 +160,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.interestPeriod && touched.interestPeriod}
+                                disabled={!values.allowInterestAdjustment}
                             >
+                                <option value="" disabled></option>
                                 <option value='yearly'>نسبه سنويه</option>
                                 <option value='monthly'>نسبه شهريه</option>
                             </Form.Control>
@@ -193,6 +198,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 isInvalid={errors.inAdvanceFrom && touched.inAdvanceFrom}
                                 disabled
                             >
+                                <option value="" disabled></option>
                                 <option value='principal'>نسبة من قيمة القرض</option>
                                 <option value='monthly'>شهري</option>
                                 <option value='yearly'>سنوي</option>
@@ -202,23 +208,24 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="InAdvanceType">
+                    <Form.Group as={Row} controlId="inAdvanceType">
                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceType}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
-                                name="InAdvanceType"
-                                data-qc="InAdvanceType"
-                                value={values.InAdvanceType}
+                                name="inAdvanceType"
+                                data-qc="inAdvanceType"
+                                value={values.inAdvanceType}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.InAdvanceType && touched.InAdvanceType}
+                                isInvalid={errors.inAdvanceType && touched.inAdvanceType}
                                 disabled
                             >
+                                <option value="" disabled></option>
                                 <option value='cut'>تستقطع من المصاريف</option>
                                 <option value='uncut'>لا تستقطع من المصاريف</option>
                             </Form.Control>
                             <Form.Control.Feedback type="invalid">
-                                {errors.InAdvanceType}
+                                {errors.inAdvanceType}
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
@@ -249,6 +256,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 isInvalid={errors.periodType && touched.periodType}
                                 disabled
                             >
+                                <option value="" disabled></option>
                                 <option value='months'>شهر</option>
                                 <option value='days'>يوم</option>
                             </Form.Control>
@@ -275,7 +283,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="pushPayment">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.pushPayment}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.pushPayment}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="number"
@@ -309,7 +317,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="principal">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.principal}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.principal}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="number"
@@ -384,6 +392,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 isInvalid={errors.applicationFeeType && touched.applicationFeeType}
                             >
+                                <option value="" disabled></option>
                                 <option value='principal'>نسبة من قيمة القرض</option>
                                 <option value='monthly'>شهري</option>
                                 <option value='yearly'>سنوي</option>
@@ -418,6 +427,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 isInvalid={errors.applicationFeePercentPerPersonType && touched.applicationFeePercentPerPersonType}
                             >
+                                <option value="" disabled></option>
                                 <option value='principal'>نسبة من قيمة القرض</option>
                                 <option value='monthly'>شهري</option>
                                 <option value='yearly'>سنوي</option>
@@ -482,7 +492,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="entryDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.entryDate}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.entryDate}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="date"
@@ -499,7 +509,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="usage">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.usage}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.usage}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
                                 type="select"
@@ -537,7 +547,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="enquirorId">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.enquiror}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.enquiror}</Form.Label>
                         <Col sm={6}>
                             <Form.Control as="select"
                                 type="select"
@@ -557,7 +567,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="visitationDate">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.visitationDate}</Form.Label>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.visitationDate}</Form.Label>
                         <Col sm={6}>
                             <Form.Control
                                 type="date"
@@ -580,61 +590,74 @@ export const LoanApplicationCreationForm = (props: any) => {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                     <CustomerSearch
                         source='1'
-                        style={{width: '48%'}}
+                        style={{ width: '48%' }}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor1Res')}
                         searchResults={props.searchResults1}
                         selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1') }}
-                        selectedGuarantor={props.guarantorOne}
+                        selectedCustomer={props.guarantorOne}
+                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor1') }}
                     />
-                    {Object.keys(props.guarantorOne).length > 0 && <CustomerSearch
+                    {(values.guarantorIds.length > 0) && <CustomerSearch
                         source='2'
-                        style={{width: '48%'}}
+                        style={{ width: '48%' }}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor2Res')}
                         searchResults={props.searchResults2}
                         selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2') }}
-                        selectedGuarantor={props.guarantorTwo}
+                        selectedCustomer={props.guarantorTwo}
+                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor2') }}
                     />}
                 </div>
             </div>
             <div style={{ width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.viceCustomersInfo}</p>
-                {props.viceCustomers.map((vice,i) =>
-                    <div key={i}>
-                        <Form.Group as={Row} controlId="viceCustomerName">
-                            <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.name}</Form.Label>
-                            <Col sm={6}>
-                                <Form.Control
-                                    type="text"
-                                    name="name"
-                                    data-qc="viceCustomerName"
-                                    value={props.viceCustomers[i].viceCustomerName}
-                                    onBlur={handleBlur}
-                                    onChange={(e)=>{
-                                        e.preventDefault();
-                                        props.updateViceCustomer(e.currentTarget.name,e.currentTarget.value,i,false)
-                                    }}
-                                />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="viceCustomerNumber">
-                            <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.phoneNumber}</Form.Label>
-                            <Col sm={6}>
-                                <Form.Control
-                                    type="text"
-                                    name="phoneNumber"
-                                    data-qc="viceCustomerNumber"
-                                    value={props.viceCustomers[i].viceCustomerNumber}
-                                    onBlur={handleBlur}
-                                    onChange={(e)=>{
-                                        e.preventDefault();
-                                        props.updateViceCustomer(e.currentTarget.name,e.currentTarget.value,i,false)
-                                    }}
-                                />
-                            </Col>
-                        </Form.Group>
-                        {i !== 0 && <Button type='button' onClick={()=>props.updateViceCustomer(null,null,i,true)}>-</Button>}
-                    </div>)}
-                    {props.viceCustomers.filter(item => item !== undefined).length<3 && <Button type='button' onClick={()=>props.updateViceCustomer(null,null,null,true)}>+</Button>}
+                <FieldArray
+                    name="viceCustomers"
+                    render={arrayHelpers => (
+                        <div>
+                            {values.viceCustomers.length > 0 && values.viceCustomers.map((customer, index) => (
+                                <div key={index}>
+                                    {/* <Field name={`viceCustomers[${index}].name`} /> */}
+                                    <Form.Group as={Row} controlId="viceCustomerName">
+                                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.name}</Form.Label>
+                                        <Col sm={6}>
+                                            <Form.Control
+                                                type="text"
+                                                name={`viceCustomers[${index}].viceCustomerName`}
+                                                data-qc="viceCustomerName"
+                                                value={values.viceCustomers[index].viceCustomerName}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].viceCustomerName && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                {errors.viceCustomers[index].viceCustomerName}
+                                            </Form.Control.Feedback>}
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} controlId="viceCustomerNumber">
+                                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.phoneNumber}</Form.Label>
+                                        <Col sm={6}>
+                                            <Form.Control
+                                                type="text"
+                                                name={`viceCustomers.${index}.viceCustomerNumber`}
+                                                data-qc="viceCustomerNumber"
+                                                value={values.viceCustomers[index].viceCustomerNumber}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].viceCustomerNumber && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                {errors.viceCustomers[index].viceCustomerNumber}
+                                            </Form.Control.Feedback>}
+                                        </Col>
+                                    </Form.Group>
+                                    <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>
+                                </div>
+                            ))}
+                            {values.viceCustomers.length < 3 && <button
+                                type="button"
+                                onClick={() => arrayHelpers.push({ viceCustomerName: '', viceCustomerNumber: '' })}>+</button>}
+                        </div>
+                    )}
+                />
             </div>
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
         </Form >

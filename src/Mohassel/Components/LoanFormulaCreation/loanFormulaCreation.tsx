@@ -27,7 +27,6 @@ class FormulaCreation extends Component<Props, State>{
     }
     submit = async (values: Formula) => {
         this.setState({ loading: true });
-        const obj = values
         const toSend = {
             name: values.loanCalculationFormulaName,
             interestType: values.interestType,
@@ -37,14 +36,15 @@ class FormulaCreation extends Component<Props, State>{
             roundDirection: values.roundDirection,
             roundTo: Number(values.roundTo),
             roundWhat: (values.rounding === false) ? 'noRounding' : values.roundWhat,
-            equalInstallments: values.equalInstallments
+            equalInstallments: values.equalInstallments,
+            roundLastInstallment: values.roundLastInstallment
         }
         const res = await createFormula(toSend);
         if (res.status === 'success') {
             this.setState({ loading: false });
             Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/") })
         } else {
-            Swal.fire("error", local.formulaCreationError)
+            Swal.fire("error", local.formulaCreationError, 'error')
             this.setState({ loading: false });
         }
     }

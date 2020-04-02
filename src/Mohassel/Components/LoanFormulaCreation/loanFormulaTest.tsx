@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import { FormulaTestClass, loanFormulaTest, loanFormulaTestValidation } from './loanCreationInitialStates';
+import { FormulaTestClass, loanFormulaTestValidation } from './loanCreationInitialStates';
 import { LoanFormulaTestForm } from './loanFormulaTestForm';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { testFormula } from '../../Services/APIs/LoanFormula/testFormula';
@@ -24,11 +24,30 @@ interface Formula {
     name: string;
     _id: string;
 }
+const date = new Date();
 class FormulaTest extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            formula: loanFormulaTest,
+            formula: {
+                calculationFormulaId: '',
+                principal: 1,
+                pushPayment: 0,
+                noOfInstallments: 1,
+                gracePeriod: 0,
+                periodLength: 1,
+                periodType: 'months',
+                interest: 0,
+                interestPeriod: 'yearly',
+                adminFees: 0,
+                loanStartDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+                    .toISOString()
+                    .split("T")[0],
+                pushHolidays: 'next',
+                inAdvanceFees: 0,
+                inAdvanceFrom: 'principal',
+                inAdvanceType: 'cut'
+            },
             loading: false,
             formulas: [],
             result: {}
@@ -49,7 +68,7 @@ class FormulaTest extends Component<Props, State>{
     }
     submit = async (values: FormulaTestClass) => {
         this.setState({ loading: true });
-        const obj = values;
+        const obj = {...values};
         const date = new Date(obj.loanStartDate).valueOf();
         obj.loanStartDate = date;
         const formula = this.state.formulas.find(formula => formula._id === values.calculationFormulaId)
@@ -57,9 +76,9 @@ class FormulaTest extends Component<Props, State>{
         const res = await testFormula(obj);
         if (res.status === 'success') {
             this.setState({ loading: false, result: { result: res.body.data, formulaName: formulaName } });
-            Swal.fire("success", local.formulaTested).then(() => { console.log(res) })
+            Swal.fire("success", local.formulaTested)
         } else {
-            Swal.fire("error", local.formulaTestError)
+            Swal.fire("error", local.formulaTestError, 'error')
             this.setState({ loading: false });
         }
     }
