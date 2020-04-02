@@ -131,9 +131,9 @@ class CustomerCreation extends Component<Props, State>{
     } else {
       this.setState({ step3: values, loading: true } as any)
       const objToSubmit: Customer = {
-        customerInfo: this.state.step1,
-        customerBusiness: this.state.step2,
-        customerExtraDetails: this.state.step3
+        customerInfo: {...this.state.step1},
+        customerBusiness: {...this.state.step2},
+        customerExtraDetails: {...this.state.step3}
       };
       this.createCustomer(objToSubmit);
     }

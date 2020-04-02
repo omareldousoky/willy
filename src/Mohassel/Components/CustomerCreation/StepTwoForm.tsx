@@ -166,7 +166,7 @@ export const StepTwoForm = (props: any) => {
                                 setFieldValue('businessPhoneNumber', event.currentTarget.value)
                             }
                         }}
-                        maxLength={10}
+                        maxLength={11}
                         isInvalid={errors.businessPhoneNumber && touched.businessPhoneNumber}
                     />
                     <Form.Control.Feedback type="invalid">
