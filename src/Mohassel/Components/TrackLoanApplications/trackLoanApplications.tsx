@@ -127,9 +127,18 @@ class TrackLoanApplications extends Component<Props, State>{
       );
     } else if (loan.loanStatus === local.reviewed) {
       return (
-        <FormCheck type='checkbox'>
-
-        </FormCheck>)
+        <div>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, JSON.stringify({id: loan.loanApplicationId, state:'unreview'}))}>{local.undoLoanReview}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, JSON.stringify({id: loan.loanApplicationId, state:'reject'}))}>{local.rejectLoan}</Button>
+        </div>
+      )
+    } else if (loan.loanStatus === local.underReview) {
+      return (
+        <div>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, JSON.stringify({id: loan.loanApplicationId, state:'review'}))}>{local.reviewLoan}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, JSON.stringify({id: loan.loanApplicationId, state:'edit'}))}>{local.editLoan}</Button>
+        </div>
+      )
     }
 
     else return null;
@@ -195,21 +204,21 @@ class TrackLoanApplications extends Component<Props, State>{
                   name="issuingBank"
                   data-qc="issuingBank"
                   value={this.state.filteredLoanOfficer}
-                  onChange={(e)=> this.setState({filteredLoanOfficer: e.currentTarget.value})}
+                  onChange={(e) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
                 >
                   <option value="">{local.loanOfficer}</option>
                   {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {
                     return <option key={index} value={loanOfficer}>{loanOfficer}</option>
                   })}
                 </Form.Control>
-                </th>
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {this.state.searchResults
               .filter(loanItem => loanItem.customerName.includes(this.state.searchKeyWord))
-              .filter(loanItem => this.state.filteredLoanOfficer!==""?loanItem.loanOfficer === this.state.filteredLoanOfficer: loanItem)
+              .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
               .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.loanStatus) : loanItem)
               .map((loanItem, index) => {
                 return (

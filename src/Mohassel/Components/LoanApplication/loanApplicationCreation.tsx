@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
+import { RouteProps } from 'react-router';
 import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
@@ -14,8 +15,11 @@ import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication } from '../../Services/APIs/loanApplication/newApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
+import { Location } from '../LoanCreation/loanCreation'
 interface Props {
     history: Array<string>;
+    location: Location;
+    edit: boolean;
 };
 interface Formula {
     name: string;
@@ -36,23 +40,23 @@ interface State {
 }
 const date = new Date();
 
-class LoanApplicationCreation extends Component<Props, State>{
+class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
             application: {
-                customerID: '',
-                customerName: '',
+                customerID: '5e7cacc27d33706d57961f66',
+                customerName: "zaher branch test",
                 customerCode: '',
-                nationalId: '',
-                birthDate: '',
-                gender: '',
-                nationalIdIssueDate: '',
-                businessSector: '',
-                businessActivity: '',
+                nationalId: '77005678910124',
+                birthDate: '2020-03-14',
+                gender: 'male',
+                nationalIdIssueDate: '2020-03-14',
+                businessSector: 'sdsd',
+                businessActivity: 'sdsds2',
                 businessSpeciality: '',
-                permanentEmployeeCount: '',
-                partTimeEmployeeCount: '',
+                permanentEmployeeCount: '0',
+                partTimeEmployeeCount: '0',
                 productID: '',
                 calculationFormulaId: '',
                 currency: 'egp',
@@ -91,16 +95,31 @@ class LoanApplicationCreation extends Component<Props, State>{
                 representative: '',
                 enquirorId: '',
                 visitationDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
-                .toISOString()
-                .split("T")[0],
+                    .toISOString()
+                    .split("T")[0],
                 guarantorIds: [],
                 viceCustomers: [{
                     viceCustomerName: '',
                     viceCustomerNumber: ''
-                }]
+                }],
+                state: 'under_review',
+                id:'12345'
             },
             loading: false,
-            selectedCustomer: {},
+            selectedCustomer: {
+                customerID: '5e7cacc27d33706d57961f66',
+                customerName: "zaher branch test",
+                customerCode: '',
+                nationalId: '77005678910124',
+                birthDate: '2020-03-14',
+                gender: 'male',
+                nationalIdIssueDate: '2020-03-14',
+                businessSector: 'sdsd',
+                businessActivity: 'sdsds2',
+                businessSpeciality: '',
+                permanentEmployeeCount: '0',
+                partTimeEmployeeCount: '0'
+            },
             searchResults: [],
             formulas: [],
             products: [],
@@ -114,19 +133,41 @@ class LoanApplicationCreation extends Component<Props, State>{
             }],
         }
     }
-    async UNSAFE_componentWillMount() {
-        this.setState({ loading: true });
-        const formulas = await getFormulas();
-        if (formulas.status === 'success') {
-            this.setState({
-                formulas: formulas.body.data,
-                loading: false
-            })
-        } else {
-            console.log('err')
-            this.setState({ loading: false });
+    componentDidUpdate(prevProps: Props, _prevState: State) {
+        if (prevProps.edit !== this.props.edit) {
+            //set State to initial value
+            // I need to add application id in the form values to be passed to status helper component
+            const app = { ...this.state.application }
+            app.state = 'under_review';
+            this.setState({ application: app });
         }
-        this.getProducts();
+    }
+    async UNSAFE_componentWillMount() {
+        console.log('Here', this.props)
+        if (this.props.edit === false) {
+
+            this.setState({ loading: true });
+            const formulas = await getFormulas();
+            if (formulas.status === 'success') {
+                this.setState({
+                    formulas: formulas.body.data,
+                    loading: false
+                })
+            } else {
+                console.log('err')
+                this.setState({ loading: false });
+            }
+            this.getProducts();
+        } else {
+            const loanApplication = JSON.parse(this.props.location.state);
+            const status = loanApplication.state;
+            const loanApplicationId = loanApplication.id;
+            console.log(loanApplication)
+            const app = { ...this.state.application }
+            app.state = status;
+            // app.loanApplicationId = loanApplication.id;
+            this.setState({ application: app })
+        }
     }
     async getProducts() {
         this.setState({ products: [], loading: true })
@@ -231,7 +272,7 @@ class LoanApplicationCreation extends Component<Props, State>{
         this.setState({ loading: true });
         const selectedProduct = await getProduct(id)
         if (selectedProduct.status === 'success') {
-            const defaultApplication = this.state.application;
+            const defaultApplication = { ...this.state.application };
             const selectedProductDetails = selectedProduct.body.data;
             defaultApplication.productID = id;
             defaultApplication.calculationFormulaId = selectedProductDetails.calculationFormula._id;
@@ -271,7 +312,7 @@ class LoanApplicationCreation extends Component<Props, State>{
         }
     }
     submit = async (values: Application) => {
-        const obj = values
+        const obj = { ...values }
         const objToSubmit = {
             customerId: obj.customerID,
             guarantorIds: obj.guarantorIds,
@@ -295,7 +336,7 @@ class LoanApplicationCreation extends Component<Props, State>{
             representative: obj.representative,
             enquirorId: obj.enquirorId,
             visitationDate: new Date(obj.visitationDate).valueOf(),
-            viceCustomers: this.state.viceCustomers.filter(item => item !== undefined),
+            viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
         }
         if (Object.keys(this.state.guarantor1).length > 0 && Object.keys(this.state.guarantor2).length > 0) {
             this.setState({ loading: true });

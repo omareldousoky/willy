@@ -24,7 +24,7 @@ interface CustomerData {
   loanPrinciple: string;
   loanOfficer: string;
 }
-interface Location {
+export interface Location {
   pathname: string;
   search: string;
   hash: string;

@@ -55,6 +55,8 @@ export interface Application {
     guarantorIds: Array<string>;
     viceCustomers: Array<Vice>;
     applicationFeePercentPerPersonType: string;
+    state?: string;
+    id?: string;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),

@@ -31,7 +31,8 @@ const App = () => {
                         <Route path="/test-formula" component={FormulaTest} />
                         <Route path="/new-loan-product" component={LoanProductCreation} />
                         <Route path="/assign-branch-products" component={AssignProductToBranch} />
-                        <Route path="/new-loan-application" component={LoanApplicationCreation} />
+                        <Route path="/new-loan-application" render={(props)=> <LoanApplicationCreation {...props} edit={false} />} />
+                        <Route path="/edit-loan-application" render={(props)=> <LoanApplicationCreation {...props} edit={true} />} />
                         <Route path="/track-loan-applications" component={TrackLoanApplications} />
                         <Route path="/create-loan" component={LoanCreation} />
                     </Switch>
