@@ -182,5 +182,12 @@
     "loanUses": "أغراض القروض",
     "loanUse": "غرض القرض",
     "loginInfo01": "اذا واجهاتك اي مشكلة عند تسجيل الدخول ",
-    "loginInfo02": "الرجاء التواصل مع مسئول النظام"
+    "loginInfo02": "الرجاء التواصل مع مسئول النظام",
+    "selectBranch": "أختار الفرع",
+    "welcomeTo":"آهلا بك في",
+    "systemForLoanTracking": "نظام تتبع القروض",
+    "lowRateLoan":"للتمويل متناهى الصغر",
+    "currentPeriodStartsIn":"الفتره الحاليه تبدأ فى",
+    "andEndsIn":"و تنتهى فى",
+    "welcome":"آهلا"
 }    

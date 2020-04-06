@@ -6,8 +6,13 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import FormCheck from 'react-bootstrap/FormCheck';
 import { Loader } from '../../../Shared/Components/Loader';
+import { getBranches } from '../../Services/APIs/Branch/getBranches';
 import * as local from '../../../Shared/Assets/ar.json';
 
+interface Branch {
+  _id: string;
+  name: string;
+}
 interface LoanItem {
   customerType: string;
   loanApplicationId: string;
@@ -19,7 +24,7 @@ interface LoanItem {
   loanOfficer: string;
 }
 interface State {
-  branches: Array<string>;
+  branches: Array<Branch>;
   filteredBranch: string;
   searchResults: Array<LoanItem>;
   uniqueLoanOfficers: Array<string>;
@@ -36,80 +41,32 @@ class BulkApplicationApproval extends Component<Props, State>{
     this.state = {
       filteredBranch: '',
       filteredLoanOfficer: '',
-      branches: ['branch1', 'branch2'],
+      branches: [],
       searchResults: [],
       uniqueLoanOfficers: ["admin1", "admin2", "admin3"],
       selectedReviewedLoans: [],
       loading: false,
     }
   }
-  getDataFromBranch(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({loading: true})
+  async componentDidMount() {
+    this.setState({ loading: true })
+    const res = await getBranches();
+    if (res.status === "success") {
+      this.setState({ 
+        loading: false,
+        branches: res.body.data.data
+       })
+    } else {
+      this.setState({ loading: false })
+    }
+  }
+  async getDataFromBranch(e: React.FormEvent<HTMLInputElement>) {
+    this.setState({ loading: true })
+    // const res = await  ;
     this.setState({
       loading: false,
       filteredBranch: e.currentTarget.value,
-      searchResults: [
-        {
-          customerType: 'فردي',
-          loanApplicationId: '213',
-          customerName: 'احمد',
-          loanAppCreationDate: '15/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin1'
-        },
-        {
-          customerType: 'مجموعة',
-          loanApplicationId: '214',
-          customerName: 'محمد',
-          loanAppCreationDate: '16/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin1'
-        },
-        {
-          customerType: 'فردي',
-          loanApplicationId: '211',
-          customerName: 'جمال',
-          loanAppCreationDate: '10/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin3'
-        },
-        {
-          customerType: 'مجموعة',
-          loanApplicationId: '311',
-          customerName: 'علاء',
-          loanAppCreationDate: '10/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin1'
-        },
-        {
-          customerType: 'فردي',
-          loanApplicationId: '541',
-          customerName: 'سمير',
-          loanAppCreationDate: '10/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin2'
-        },
-        {
-          customerType: 'مجموعة',
-          loanApplicationId: '243',
-          customerName: 'محمد',
-          loanAppCreationDate: '16/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin2'
-        },
-      ]
+      // searchResults: 
     })
   }
   addRemoveItemFromChecked(id: string) {
@@ -130,11 +87,12 @@ class BulkApplicationApproval extends Component<Props, State>{
     } else this.setState({ selectedReviewedLoans: [] })
   }
   render() {
-    console.log("this.state => ", this.state)
     return (
       <Container>
+        <Loader type="fullscreen" open={this.state.loading} />
         <div style={{ display: 'flex' }}>
-          <Form.Group controlId="branchSelector" style={{ flex: 2, margin: 10 }}>
+          <Form.Group controlId="branchSelector" style={{ flex: 2, margin: 10, textAlign: 'right' }}>
+            <Form.Label>{`${local.selectBranch}*`}</Form.Label>
             <Form.Control as="select"
               placeholder="Search by Customer name or ID"
               data-qc="branchSelector"
@@ -143,14 +101,13 @@ class BulkApplicationApproval extends Component<Props, State>{
             >
               <option value="" disabled></option>
               {this.state.branches.map((branch, index) => {
-                return <option key={index} value={branch}>{branch}</option>
+                return <option key={index} value={branch._id}>{branch.name}</option>
               })}
             </Form.Control>
           </Form.Group>
         </div>
-        {this.state.searchResults.length || this.state.loading ?
-          <div style={{position: 'relative'}}>
-          <Loader type="fullsection" open={this.state.loading}/>
+        {this.state.searchResults.length ?
+          <div>
             <Table striped bordered hover>
               <thead>
                 <tr>

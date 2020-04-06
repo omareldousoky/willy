@@ -10,8 +10,6 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 interface State {
   loanCreationDate: string;
-  issuingBank: string;
-  safePaymentDocuments: string;
   customerData: CustomerData;
 }
 interface CustomerData {
@@ -40,8 +38,6 @@ class LoanCreation extends Component<Props, State> {
     super(props);
     this.state = {
       loanCreationDate: '',
-      issuingBank: '',
-      safePaymentDocuments: '',
       customerData: {
         customerType: '',
         loanApplicationId: '',
@@ -112,48 +108,6 @@ class LoanCreation extends Component<Props, State> {
                   />
                   <Form.Control.Feedback type="invalid">
                     {formikProps.errors.loanCreationDate}
-                  </Form.Control.Feedback>
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="issuingBank">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.issuingBank}*`}</Form.Label>
-                <Col sm={6}>
-                  <Form.Control as="select"
-                    type="select"
-                    name="issuingBank"
-                    data-qc="issuingBank"
-                    value={formikProps.values.issuingBank}
-                    onBlur={formikProps.handleBlur}
-                    onChange={formikProps.handleChange}
-                  // isInvalid={formikProps.errors.issuingBank && formikProps.touched.issuingBank}
-                  >
-                    <option value="" disabled></option>
-                    <option value="bank1">Bank1</option>
-                    <option value="bank2">Bank2</option>
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {formikProps.errors.issuingBank}
-                  </Form.Control.Feedback>
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="safePaymentDocuments">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.safePaymentDocuments}*`}</Form.Label>
-                <Col sm={6}>
-                  <Form.Control as="select"
-                    type="select"
-                    name="safePaymentDocuments"
-                    data-qc="safePaymentDocuments"
-                    value={formikProps.values.safePaymentDocuments}
-                    onBlur={formikProps.handleBlur}
-                    onChange={formikProps.handleChange}
-                  // isInvalid={formikProps.errors.safePaymentDocuments && formikProps.touched.safePaymentDocuments}
-                  >
-                    <option value="" disabled></option>
-                    <option value="safe1">Safe1</option>
-                    <option value="safe2">Safe2</option>
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {formikProps.errors.safePaymentDocuments}
                   </Form.Control.Feedback>
                 </Col>
               </Form.Group>

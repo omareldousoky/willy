@@ -105,3 +105,24 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .chip-active {
   background-color: #7dc356;
 }
+
+.primary-color {
+  color: #7dc356
+}
+
+.refresh-logo-navbar {
+  background-color: #7dc356;
+  display: flex;
+  width: 80px;
+  height: 75px;
+  justify-content: center;
+}
+.info-navbar {
+  background-color: #131848;
+  color: #fff;
+  padding: 0px 50px;
+  display: flex;
+  height: 75px;
+  align-items: center;
+  justify-content: space-evenly;
+}

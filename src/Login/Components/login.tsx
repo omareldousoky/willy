@@ -53,16 +53,16 @@ class Login extends React.PureComponent<Props, State> {
       <div className="login-parent">
         <div className="right-hero">
           <div className="texts">
-            <h1>آهلا بك في</h1>
-            <h1>نظام تتبع القروض</h1>
-            <h3>للتمويل متناهى الصغر</h3>
+            <h1>{local.welcomeTo}</h1>
+            <h1>{local.systemForLoanTracking}</h1>
+            <h3>{local.lowRateLoan}</h3>
           </div>
           <img alt="login-image" src='/src/Login/Assets/loginPhotos.png' />
         </div>
         <div className="left-hero">
           <img alt="login-log" className="login-logo" src='/src/Login/Assets/Logo.svg' />
           <div className="login-form">
-            <h2>تسجيل الدخول</h2>
+            <h2>{local.login}</h2>
             <Formik
               enableReinitialize
               initialValues={this.state.credentials}
