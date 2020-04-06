@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Formik } from 'formik';
-import Container from 'react-bootstrap/Container';
 import swal from 'sweetalert2';
 import { LoginForm } from './loginForm';
 import { loginCred, loginCredValidation } from './loginState';
@@ -47,24 +46,45 @@ class Login extends React.PureComponent<Props, State> {
     })
   }
   setCookie(cvalue: string) {
-    document.cookie = "token=" + cvalue + ";domain=.halan.io;path=/;";
+    document.cookie = "token=" + cvalue + "path=/;";
   }
   render() {
     return (
-      <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '50vw', height: '50vh', backgroundColor: 'beige', margin: 'auto' }}>
-        <Formik
-          enableReinitialize
-          initialValues={this.state.credentials}
-          onSubmit={this.submit}
-          validationSchema={loginCredValidation}
-          validateOnBlur
-          validateOnChange
-        >
-          {(formikProps) =>
-            <LoginForm {...formikProps} />
-          }
-        </Formik>
-      </Container>
+      <div className="login-parent">
+        <div className="right-hero">
+          <div className="texts">
+            <h1>آهلا بك في</h1>
+            <h1>نظام تتبع القروض</h1>
+            <h3>للتمويل متناهى الصغر</h3>
+          </div>
+          <img alt="login-image" src='/src/Login/Assets/loginPhotos.png' />
+        </div>
+        <div className="left-hero">
+          <img alt="login-log" className="login-logo" src='/src/Login/Assets/Logo.svg' />
+          <div className="login-form">
+            <h2>تسجيل الدخول</h2>
+            <Formik
+              enableReinitialize
+              initialValues={this.state.credentials}
+              onSubmit={this.submit}
+              validationSchema={loginCredValidation}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) =>
+                <LoginForm {...formikProps} />
+              }
+            </Formik>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <div className="vertical-line-login"></div>
+            <div style={{ margin: '100px 15px 0px 0px' }}>
+              <p>{local.loginInfo01}</p>
+              <p>{local.loginInfo02}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }

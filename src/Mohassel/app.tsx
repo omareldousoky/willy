@@ -10,6 +10,7 @@ import TrackLoanApplications from './Components/TrackLoanApplications/trackLoanA
 import LoanCreation from './Components/LoanCreation/loanCreation';
 import NavBar from './Components/NavBar/navBar';
 import LoanUses from './Components/LoanUses/loanUses';
+import BulkApplicationApproval from './Components/BulkApplicationApproval/bulkApplicationApproval';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
 
@@ -36,6 +37,7 @@ const App = () => {
                         <Route path="/track-loan-applications" component={TrackLoanApplications} />
                         <Route path="/create-loan" component={LoanCreation} />
                         <Route path="/loan-uses" component={LoanUses} />
+                        <Route path="/bulk-approvals" component={BulkApplicationApproval} />
                     </Switch>
                 </div>
             </BrowserRouter>

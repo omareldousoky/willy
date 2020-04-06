@@ -125,18 +125,10 @@ class TrackLoanApplications extends Component<Props, State>{
       return (
         <Button onClick={() => this.props.history.push('/create-loan', loan.loanApplicationId)}>{local.createLoan}</Button>
       );
-    } else if (loan.loanStatus === local.reviewed) {
-      return (
-        <FormCheck type='checkbox'>
-
-        </FormCheck>)
-    }
-
-    else return null;
+    } else return null;
   }
 
   render() {
-    console.log("this.state", this.state)
     return (
       <Container>
         <Formik

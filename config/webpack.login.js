@@ -27,7 +27,11 @@ module.exports = () => {
                         transpileOnly: true
                     },
                     exclude: /dist/,
-                }
+                },
+                {
+                    test: /\.(s?)css$/,
+                    use: ['style-loader', 'css-loader', 'sass-loader'],
+                },
             ]
         },
         plugins: [

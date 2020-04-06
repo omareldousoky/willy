@@ -21,6 +21,7 @@ class NavBar extends Component <Props> {
                         <Nav.Link onClick={()=> this.props.history.push('/assign-branch-products')}>Assign Products To Branch</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/new-loan-application')}>Create Loan Application</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/track-loan-applications')}>Track Loan Applications</Nav.Link>
+                        <Nav.Link onClick={()=> this.props.history.push('/bulk-approvals')}>Bulk Loan Applications Approval</Nav.Link>
                         <Nav.Link onClick={()=> this.props.history.push('/loan-uses')}>Loan Uses</Nav.Link>
                         <Nav.Link onClick={()=> {
                             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";

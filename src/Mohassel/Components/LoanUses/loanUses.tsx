@@ -44,7 +44,7 @@ class LoanUses extends Component<{}, State> {
       loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: event.currentTarget.value } : loanUse)
     })
   }
-  handleKeyDown(event, index) {
+  handleKeyDown(event: React.KeyboardEvent, index: number) {
     if (event.key === 'Enter') {
       this.toggleClick(index)
     }
