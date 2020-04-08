@@ -69,6 +69,7 @@
     "principal": "قيمه القرض",
     "pushPayment": "عدد أيام ترحيل الأقساط",
     "noOfInstallments": "عدد الأقساط",
+    "noOfGuarantors":"عدد الضمان",
     "gracePeriod": "فتره السماح",
     "periodLength": "فتره السداد كل",
     "periodType": "",

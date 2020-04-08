@@ -13,11 +13,14 @@ import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { getProducts, getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication } from '../../Services/APIs/loanApplication/newApplication';
+import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
-import { Location } from '../LoanCreation/loanCreation'
+import { Location } from '../LoanCreation/loanCreation';
+import { reviewApplication, undoreviewApplication, rejectApplication } from '../../Services/APIs/loanApplication/stateHandler';
+
 interface Props {
-    history: Array<string>;
+    history: any;
     location: Location;
     edit: boolean;
 };
@@ -25,10 +28,24 @@ interface Formula {
     name: string;
     _id: string;
 }
+interface Customer {
+    customerID?: string;
+    customerName?: string;
+    customerCode?: string;
+    nationalId?: string;
+    birthDate?: string;
+    gender?: string;
+    nationalIdIssueDate?: string;
+    businessSector?: string;
+    businessActivity?: string;
+    businessSpeciality?: string;
+    permanentEmployeeCount?: string;
+    partTimeEmployeeCount?: string;
+}
 interface State {
     application: Application;
     loading: boolean;
-    selectedCustomer: object;
+    selectedCustomer: Customer;
     searchResults: Array<Application>;
     guarantor1Res: Array<object>;
     guarantor2Res: Array<object>;
@@ -37,6 +54,7 @@ interface State {
     guarantor1: any;
     guarantor2: any;
     viceCustomers: Array<Vice>;
+    prevId: string;
 }
 const date = new Date();
 
@@ -45,18 +63,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         super(props);
         this.state = {
             application: {
-                customerID: '5e7cacc27d33706d57961f66',
-                customerName: "zaher branch test",
+                customerID: '',
+                customerName: "",
                 customerCode: '',
-                nationalId: '77005678910124',
-                birthDate: '2020-03-14',
-                gender: 'male',
-                nationalIdIssueDate: '2020-03-14',
-                businessSector: 'sdsd',
-                businessActivity: 'sdsds2',
+                nationalId: '',
+                birthDate: '',
+                gender: '',
+                nationalIdIssueDate: '',
+                businessSector: '',
+                businessActivity: '',
                 businessSpeciality: '',
-                permanentEmployeeCount: '0',
-                partTimeEmployeeCount: '0',
+                permanentEmployeeCount: '',
+                partTimeEmployeeCount: '',
                 productID: '',
                 calculationFormulaId: '',
                 currency: 'egp',
@@ -102,24 +120,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     viceCustomerName: '',
                     viceCustomerNumber: ''
                 }],
-                state: 'under_review',
-                id:'12345'
+                state: 'under_review'
             },
             loading: false,
-            selectedCustomer: {
-                customerID: '5e7cacc27d33706d57961f66',
-                customerName: "zaher branch test",
-                customerCode: '',
-                nationalId: '77005678910124',
-                birthDate: '2020-03-14',
-                gender: 'male',
-                nationalIdIssueDate: '2020-03-14',
-                businessSector: 'sdsd',
-                businessActivity: 'sdsds2',
-                businessSpeciality: '',
-                permanentEmployeeCount: '0',
-                partTimeEmployeeCount: '0'
-            },
+            selectedCustomer: {},
             searchResults: [],
             formulas: [],
             products: [],
@@ -131,42 +135,114 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 viceCustomerName: '',
                 viceCustomerNumber: ''
             }],
+            prevId: ''
         }
     }
-    componentDidUpdate(prevProps: Props, _prevState: State) {
-        if (prevProps.edit !== this.props.edit) {
+
+    static getDerivedStateFromProps(props, state) {
+        const application = { ...state.application };
+        console.log('Derived', props)
+        if ((props.history.location.state.id !== state.prevId) && (props.history.location.state.action !== state.application.state)) {
+            application.state = props.history.location.state.action
+            application.id = props.history.location.state.id
+            return { prevId: props.history.location.state.id, application: application }
+        }
+        return null
+    }
+    componentDidMount() {
+        console.log(this.state)
+        this.setappStats()
+    }
+    componentDidUpdate(prevProps: Props) {
+        console.log('Did update', prevProps, this.props, this.state)
+        // const application = state.application;
+        if (prevProps.location.state.action !== this.props.location.state.action) {
+            console.log('change')
             //set State to initial value
             // I need to add application id in the form values to be passed to status helper component
-            const app = { ...this.state.application }
-            app.state = 'under_review';
-            this.setState({ application: app });
+            // const app = { ...this.state.application }
+            // app.state = 'under_review';
+            // this.setState({ application: app });
+            this.setappStats();
         }
     }
-    async UNSAFE_componentWillMount() {
-        console.log('Here', this.props)
-        if (this.props.edit === false) {
-
-            this.setState({ loading: true });
-            const formulas = await getFormulas();
-            if (formulas.status === 'success') {
-                this.setState({
-                    formulas: formulas.body.data,
-                    loading: false
-                })
-            } else {
-                console.log('err')
-                this.setState({ loading: false });
-            }
-            this.getProducts();
-        } else {
-            const loanApplication = JSON.parse(this.props.location.state);
-            const status = loanApplication.state;
-            const loanApplicationId = loanApplication.id;
-            console.log(loanApplication)
-            const app = { ...this.state.application }
-            app.state = status;
+    setappStats() {
+        this.getProducts();
+        this.getFormulas();
+        if (this.state.prevId.length > 0) {
+            // const app = { ...this.state.application }
+            // const customer = { ...this.state.selectedCustomer }
+            this.getAppByID(this.state.prevId)
+            // app.state = status;
             // app.loanApplicationId = loanApplication.id;
-            this.setState({ application: app })
+            // app.customerID = '5e7cacc27d33706d57961f66';
+            // app.customerName = "zaher branch test";
+            // app.customerCode = '';
+            // app.nationalId = '77005678910124';
+            // app.birthDate = '2020-03-14';
+            // app.gender = 'male';
+            // app.nationalIdIssueDate = '2020-03-14';
+            // app.businessSector = 'sdsd';
+            // app.businessActivity = 'sdsds2';
+            // app.businessSpeciality = '';
+            // app.permanentEmployeeCount = '0';
+            // app.partTimeEmployeeCount = '0'
+            // customer.customerID = '5e7cacc27d33706d57961f66';
+            // customer.customerName = "zaher branch test";
+            // customer.customerCode = '';
+            // customer.nationalId = '77005678910124';
+            // customer.birthDate = '2020-03-14';
+            // customer.gender = 'male';
+            // customer.nationalIdIssueDate = '2020-03-14';
+            // customer.businessSector = 'sdsd';
+            // customer.businessActivity = 'sdsds2';
+            // customer.businessSpeciality = '';
+            // customer.permanentEmployeeCount = '0';
+            // customer.partTimeEmployeeCount = '0'
+            // this.setState({ application: app, selectedCustomer: customer })
+        } else {
+            this.setState({ selectedCustomer: {} })
+        }
+    }
+    async getAppByID(id) {
+        this.setState({ loading: true })
+        const application = await getApplication(id);
+        if (application.status === 'success') {
+            const formData = this.state.application;
+            const guarantor1 = application.body.guarantors[0];
+            const guarantor2 = application.body.guarantors[1];
+            formData.guarantorIds.push(guarantor1.customerInfo.nationalId);
+            formData.guarantorIds.push(guarantor2.customerInfo.nationalId);
+            formData.entryDate = this.getDateString(application.body.entryDate);
+            formData.visitationDate = this.getDateString(application.body.visitationDate);
+            formData.usage = application.body.usage;
+            formData.enquirorId = application.body.enquirorId;
+            formData.viceCustomers = application.body.viceCustomers;
+
+            this.populateCustomer(application.body.customer)
+            this.setState({
+                selectedCustomer: application.body.customer,
+                application: formData,
+                guarantor1,
+                guarantor2,
+                loading: false
+            })
+        } else {
+            console.log('err')
+            this.setState({ loading: false });
+        }
+    }
+    async getFormulas() {
+        this.setState({ loading: true });
+        const formulas = await getFormulas();
+        if (formulas.status === 'success') {
+            this.setState({
+                formulas: formulas.body.data,
+                loading: false
+            })
+        } else {
+            console.log('err')
+            this.setState({ loading: false });
         }
     }
     async getProducts() {
@@ -195,7 +271,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     handleSearchGuarantors = async (query, guarantor: string) => {
         const obj = {
             name: query,
-            sameBranch: true,
+            // sameBranch: true,
+            from:0,
+            size:30,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
         }
         this.setState({ loading: true });
@@ -214,23 +292,30 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
         )
     }
+    populateCustomer(response) {
+        const defaultApplication = this.state.application;
+        defaultApplication.customerName = response.customerInfo.customerName;
+        defaultApplication.nationalId = response.customerInfo.nationalId;
+        defaultApplication.birthDate = this.getDateString(response.customerInfo.birthDate);
+        defaultApplication.gender = getGenderFromNationalId(response.customerInfo.nationalId);
+        defaultApplication.nationalIdIssueDate = this.getDateString(response.customerInfo.nationalIdIssueDate);
+        defaultApplication.businessSector = response.customerBusiness.businessSector;
+        defaultApplication.businessActivity = response.customerBusiness.businessActivity;
+        defaultApplication.businessSpeciality = response.customerBusiness.businessSpeciality;
+        defaultApplication.permanentEmployeeCount = response.customerExtraDetails.permanentEmployeeCount;
+        defaultApplication.partTimeEmployeeCount = response.customerExtraDetails.partTimeEmployeeCount;
+        defaultApplication.representative = response.customerExtraDetails.representative;
+        this.setState({
+            application: defaultApplication
+        });
+    }
     selectCustomer = async (customer) => {
         this.setState({ loading: true });
         const selectedCustomer = await getCustomerByID(customer.id)
         if (selectedCustomer.status === 'success') {
             const defaultApplication = this.state.application;
             defaultApplication.customerID = customer.id;
-            defaultApplication.customerName = selectedCustomer.body.customerInfo.customerName;
-            defaultApplication.nationalId = selectedCustomer.body.customerInfo.nationalId;
-            defaultApplication.birthDate = this.getDateString(selectedCustomer.body.customerInfo.birthDate);
-            defaultApplication.gender = getGenderFromNationalId(selectedCustomer.body.customerInfo.nationalId);
-            defaultApplication.nationalIdIssueDate = this.getDateString(selectedCustomer.body.customerInfo.nationalIdIssueDate);
-            defaultApplication.businessSector = selectedCustomer.body.customerBusiness.businessSector;
-            defaultApplication.businessActivity = selectedCustomer.body.customerBusiness.businessActivity;
-            defaultApplication.businessSpeciality = selectedCustomer.body.customerBusiness.businessSpeciality;
-            defaultApplication.permanentEmployeeCount = selectedCustomer.body.customerExtraDetails.permanentEmployeeCount;
-            defaultApplication.partTimeEmployeeCount = selectedCustomer.body.customerExtraDetails.partTimeEmployeeCount;
-            defaultApplication.representative = selectedCustomer.body.customerExtraDetails.representative;
+            this.populateCustomer(customer.body)
             this.setState({
                 loading: false,
                 selectedCustomer: selectedCustomer.body,
@@ -311,6 +396,40 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
+    async handleStatusChange(intState, intProps) {
+        console.log('IN CREATION TSX')
+        this.setState({ loading: true });
+        if (intProps.status === 'review') {
+            const res = await reviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
+            if (res.status === 'success') {
+                this.setState({ loading: false });
+                Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
+            } else {
+                Swal.fire("error", local.loanApplicationCreationError, 'error')
+                this.setState({ loading: false });
+            }
+        } else if (intProps.status === 'unreview') {
+            console.log(intProps.status, intProps.id)
+            const res = await undoreviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
+            if (res.status === 'success') {
+                this.setState({ loading: false });
+                Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
+            } else {
+                Swal.fire("error", local.loanApplicationCreationError, 'error')
+                this.setState({ loading: false });
+            }
+        } else if (intProps.status === 'reject') {
+            console.log(intProps.status, intProps.id)
+            const res = await rejectApplication({ applicationIds: [intProps.id], rejectionDate: new Date(intState.rejectionDate).valueOf(), rejectionReason: intState.rejectionReason });
+            if (res.status === 'success') {
+                this.setState({ loading: false });
+                Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
+            } else {
+                Swal.fire("error", local.loanApplicationCreationError, 'error')
+                this.setState({ loading: false });
+            }
+        }
+    }
     submit = async (values: Application) => {
         const obj = { ...values }
         const objToSubmit = {
@@ -377,6 +496,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             guarantorOne={this.state.guarantor1}
                             guarantorTwo={this.state.guarantor2}
                             viceCustomers={this.state.viceCustomers}
+                            handleStatusChange={(state, props) => this.handleStatusChange(state, props)}
                         />
                     }
                 </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}

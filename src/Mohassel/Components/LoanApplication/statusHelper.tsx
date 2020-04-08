@@ -3,17 +3,15 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { Customer } from '../CustomerCreation/customer-creation';
-import Select from 'react-select';
-
 import * as local from '../../../Shared/Assets/ar.json';
-// import { getRenderDate } from '../../Services/getRenderDate';
 interface Props {
     status: string;
     id: string;
+    handleStatusChange: Function;
 };
 
 interface State {
+    loading: boolean;
     reviewStatus: string;
     unreviewStatus: string;
     rejectionStatus: string;
@@ -27,17 +25,18 @@ class StatusHelper extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
+            loading: false,
             reviewStatus: 'reviewRequired',
             unreviewStatus: 'reviewDone',
             rejectionStatus: '',
-            rejectionReason:'',
+            rejectionReason: '',
             reviewDate: today,
             unreviewDate: today,
             rejectionDate: today
         }
     }
     handleStatusChange() {
-        console.log(this.state, this.props)
+        this.props.handleStatusChange(this.state,this.props)
     }
     render() {
         const selectValues = [{
@@ -54,25 +53,25 @@ class StatusHelper extends Component<Props, State>{
         const rejectionReasonValues = [{
             value: 'noShow',
             label: local.noShow
-        },{
+        }, {
             value: 'wrongData',
             label: local.wrongData
-        },{
+        }, {
             value: 'changeRequirements',
             label: local.changeRequirements
-        },{
+        }, {
             value: 'badReputation',
             label: local.badReputation
-        },{
+        }, {
             value: 'existingFellony',
             label: local.existingFellony
-        },{
+        }, {
             value: 'existingLoan',
             label: local.existingLoan
-        },{
+        }, {
             value: 'existingDebts',
             label: local.existingDebts
-        },{
+        }, {
             value: 'guarantorRefused',
             label: local.guarantorRefused
         }]
