@@ -6,10 +6,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
+import StatusHelper from './statusHelper';
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
         <Form onSubmit={handleSubmit}>
+            <fieldset disabled={!(values.state==="edit" || values.state==="under_review")}>
             <div style={{ border: '1px solid black', width: '100%' }}>
                 <p style={{ textAlign: 'right' }}>{local.mainInfo}</p>
                 <div className="d-flex flex-row">
@@ -649,7 +651,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             </Form.Control.Feedback>}
                                         </Col>
                                     </Form.Group>
-                                    <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>
+                                   {index !== 0 && <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>}
                                 </div>
                             ))}
                             {values.viceCustomers.length < 3 && <button
@@ -659,7 +661,11 @@ export const LoanApplicationCreationForm = (props: any) => {
                     )}
                 />
             </div>
-            <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
+            </fieldset>
+            {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ width: '100%', border: '1px solid black', padding: 10, borderRadius: 4, margin: '10px 0'}}>
+                    <StatusHelper status={values.state} id={values.id} handleStatusChange={(internalstate,internalprops)=> {props.handleStatusChange(internalstate,internalprops)}}/>
+                </div>}
+            {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>}
         </Form >
     )
 }

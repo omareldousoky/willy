@@ -38,7 +38,7 @@ class LoanUses extends Component<{}, State> {
     }
   }
   async componentDidMount() {
-    this.setState({ loading: true });
+    // this.setState({ loading: true });
     const res = await getLoanUsage();
     if (res.status === "success") {
       this.setState({ loading: false });

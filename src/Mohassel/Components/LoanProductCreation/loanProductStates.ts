@@ -39,5 +39,6 @@ export const LoanProductValidation = Yup.object().shape({
     spreadApplicationFee: Yup.boolean().required('required!'),
     loanImpactPrincipal: Yup.boolean().required('required!'),
     mustEnterGuarantor: Yup.boolean().required('required!'),
+    noOfGuarantors: Yup.number().integer().required('required!'),
     guarantorGuaranteesMultiple: Yup.boolean().required('required!'),
 })

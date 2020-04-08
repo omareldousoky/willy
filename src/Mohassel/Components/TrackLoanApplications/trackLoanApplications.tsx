@@ -33,7 +33,7 @@ interface State {
   loading: boolean;
 }
 interface Props {
-  history: Array<string>;
+  history: any;
 };
 class TrackLoanApplications extends Component<Props, State>{
   constructor(props) {
@@ -48,7 +48,8 @@ class TrackLoanApplications extends Component<Props, State>{
       searchResults: [
         {
           customerType: 'فردي',
-          loanApplicationId: '213',
+          // loanApplicationId: '5e847f5d85a52c84914a0392',
+          loanApplicationId: '5e8c5780aadba6885c1f2626',
           customerName: 'احمد',
           loanAppCreationDate: '15/3/2020',
           loanStatus: 'تحت التحرير',
@@ -58,7 +59,7 @@ class TrackLoanApplications extends Component<Props, State>{
         },
         {
           customerType: 'مجموعة',
-          loanApplicationId: '214',
+          loanApplicationId: '5e8c5780aadba6885c1f2626',
           customerName: 'محمد',
           loanAppCreationDate: '16/3/2020',
           loanStatus: 'رُجعت',
@@ -161,7 +162,22 @@ class TrackLoanApplications extends Component<Props, State>{
       return <Button onClick={() => this.props.history.push('/create-loan', '{ "id": ' + loan.loanApplicationId + ',"type": "create"}')}>{local.createLoan}</Button>
     } else if (loan.loanStatus === local.created) {
       return <Button onClick={() => this.props.history.push('/create-loan', '{ "id": ' + loan.loanApplicationId + ',"type": "issue"}')}>{local.issueLoan}</Button>
-    } else return null;
+    } else if (loan.loanStatus === local.reviewed) {
+      return (
+        <div>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'unreview'})}>{local.undoLoanReview}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'reject'})}>{local.rejectLoan}</Button>
+        </div>
+      )
+    } else if (loan.loanStatus === local.underReview) {
+      return (
+        <div>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'review'})}>{local.reviewLoan}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'edit'})}>{local.editLoan}</Button>
+        </div>
+      )
+    }
+    else return null;
   }
 
   render() {
