@@ -4,8 +4,11 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import FormCheck from 'react-bootstrap/FormCheck';
+import Col from 'react-bootstrap/Col';
 import { Formik } from 'formik';
+import { Loader } from '../../../Shared/Components/Loader';
+import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
+import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface LoanItem {
@@ -19,7 +22,7 @@ interface LoanItem {
   loanOfficer: string;
 }
 interface State {
-  searchKeyWord: string;
+  searchKeyword: string;
   dateFrom: string;
   dateTo: string;
   filters: Array<string>;
@@ -27,6 +30,7 @@ interface State {
   uniqueLoanOfficers: Array<string>;
   filteredLoanOfficer: string;
   selectedReviewedLoans: Array<LoanItem>;
+  loading: boolean;
 }
 interface Props {
   history: Array<string>;
@@ -35,11 +39,12 @@ class TrackLoanApplications extends Component<Props, State>{
   constructor(props) {
     super(props);
     this.state = {
-      searchKeyWord: '',
+      searchKeyword: '',
       dateFrom: '',
       dateTo: '',
       filters: [],
       filteredLoanOfficer: '',
+      loading: false,
       searchResults: [
         {
           customerType: 'فردي',
@@ -106,8 +111,39 @@ class TrackLoanApplications extends Component<Props, State>{
       selectedReviewedLoans: [],
     }
   }
-  handleSubmit = () => {
-    console.log("hi", this.state)
+  async componentDidMount() {
+    this.setState({ loading: true })
+    const obj = {
+      branchId: '5e79ee0ba92c135c57399330',
+      from: 0,
+      size: 30
+    };
+    const res = await searchApplication(obj);
+    if (res.status === "success") {
+      this.setState({ loading: false })
+
+      console.log(res);
+    } else {
+      this.setState({ loading: false })
+
+    }
+  }
+  handleSubmit = async () => {
+    this.setState({ loading: true })
+    const obj = {
+      branchId: '5e79ee0ba92c135c57399330',
+      fromDate: this.state.dateFrom,
+      toDate: this.state.dateTo,
+      name: this.state.searchKeyword
+    }
+    const res = await searchApplication(obj);
+    if (res.status === "success") {
+      this.setState({ loading: false })
+      console.log(res);
+    } else {
+      this.setState({ loading: false })
+
+    }
   }
   toggleChip(loanStatus: string) {
     if (this.state.filters.includes(loanStatus)) {
@@ -122,46 +158,65 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   getActionFromStatus(loan: LoanItem) {
     if (loan.loanStatus === local.approved) {
-      return (
-        <Button onClick={() => this.props.history.push('/create-loan', loan.loanApplicationId)}>{local.createLoan}</Button>
-      );
+      return <Button onClick={() => this.props.history.push('/create-loan', '{ "id": ' + loan.loanApplicationId + ',"type": "create"}')}>{local.createLoan}</Button>
+    } else if (loan.loanStatus === local.created) {
+      return <Button onClick={() => this.props.history.push('/create-loan', '{ "id": ' + loan.loanApplicationId + ',"type": "issue"}')}>{local.issueLoan}</Button>
     } else return null;
   }
 
   render() {
     return (
       <Container>
+        <Loader open={this.state.loading} type="fullscreen" />
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit}
-          // validationSchema={customerCreationValidationStepOne}
+          validationSchema={searchApplicationValidation}
           validateOnBlur
           validateOnChange
         >{(formikProps) =>
-          <div style={{ display: 'flex' }}>
-            <Form.Group controlId="searchKeyWord" style={{ flex: 2, margin: 10 }}>
+          <Form onSubmit={formikProps.handleSubmit} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            <Form.Group as={Col} controlId="searchKeyword" style={{ flex: 2 }}>
+              <Form.Label style={{ textAlign: 'right' }} column >{`${local.searchByNameOrNationalId}*`}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Search by Customer name or ID"
-                onChange={(e) => this.setState({ searchKeyWord: e.target.value })}
+                name="searchKeyword"
+                data-qc="searchKeyword"
+                // placeholder="Search by Customer name or ID"
+                onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ searchKeyword: e.currentTarget.value })}
+              // isInvalid={Boolean(formikProps.errors.name) && Boolean(formikProps.touched.name)}
               />
+              <Form.Control.Feedback type="invalid">
+                {formikProps.errors.searchKeyword}
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="dateFrom" style={{ flex: 1, margin: 10 }}>
+            <Form.Group as={Col} controlId="dateFrom" style={{ flex: 1 }}>
+              <Form.Label style={{ textAlign: 'right' }} column >{local.dateFrom}</Form.Label>
               <Form.Control
                 type="date"
                 placeholder="Date from"
-                onChange={(e) => this.setState({ dateFrom: e.target.value })}
+                onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ dateFrom: e.currentTarget.value })}
               />
+              <Form.Control.Feedback type="invalid">
+                {formikProps.errors.dateFrom}
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="dateTo" style={{ flex: 1, margin: 10 }}>
+            <Form.Group controlId="dateTo" style={{ flex: 1, marginLeft: 10 }}>
+              <Form.Label style={{ textAlign: 'right' }} column >{local.dateTo}</Form.Label>
+
               <Form.Control
                 type="date"
                 placeholder="Date To"
-                onChange={(e) => this.setState({ dateTo: e.target.value })}
+                onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ dateTo: e.currentTarget.value })}
               />
+              <Form.Control.Feedback type="invalid">
+                {formikProps.errors.dateTo}
+              </Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit">{local.search}</Button>
-          </div>
+            <Form.Group>
+              <Button type="submit">{local.search}</Button>
+            </Form.Group>
+          </Form >
           }
         </Formik>
         <div style={{ textAlign: 'center' }}>
@@ -187,21 +242,20 @@ class TrackLoanApplications extends Component<Props, State>{
                   name="issuingBank"
                   data-qc="issuingBank"
                   value={this.state.filteredLoanOfficer}
-                  onChange={(e)=> this.setState({filteredLoanOfficer: e.currentTarget.value})}
+                  onChange={(e) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
                 >
                   <option value="">{local.loanOfficer}</option>
                   {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {
                     return <option key={index} value={loanOfficer}>{loanOfficer}</option>
                   })}
                 </Form.Control>
-                </th>
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {this.state.searchResults
-              .filter(loanItem => loanItem.customerName.includes(this.state.searchKeyWord))
-              .filter(loanItem => this.state.filteredLoanOfficer!==""?loanItem.loanOfficer === this.state.filteredLoanOfficer: loanItem)
+              .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
               .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.loanStatus) : loanItem)
               .map((loanItem, index) => {
                 return (

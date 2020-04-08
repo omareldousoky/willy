@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+import { addLoanUsage } from '../../Services/APIs/LoanUsage/addLoanUsage';
+import { updateLoanUsage } from '../../Services/APIs/LoanUsage/updateLoanUsage';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface LoanUse {
@@ -32,6 +35,16 @@ class LoanUses extends Component<{}, State> {
         },
       ],
       loading: false,
+    }
+  }
+  async componentDidMount() {
+    this.setState({ loading: true });
+    const res = await getLoanUsage();
+    if (res.status === "success") {
+      this.setState({ loading: false });
+      console.log(res);
+    } else {
+      this.setState({ loading: false });
     }
   }
   addLoanUse() {

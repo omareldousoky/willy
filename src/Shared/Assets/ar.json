@@ -174,8 +174,10 @@
     "rejected": "مرفوضة",
     "created": "إنشاء",
     "createLoan": "إنشاء قرض",
+    "issueLoan": "إصدار قرض",
     "search": "بحث",
     "loanCreationDate": "تاريخ إنشاء القرض",
+    "loanIssuanceDate": "تاريخ إصدار القرض",
     "issuingBank": "بنك الاصدار",
     "safePaymentDocuments": "خزينة مستندات السداد",
     "searchError":"خطأ فالبحث",
@@ -189,5 +191,8 @@
     "lowRateLoan":"للتمويل متناهى الصغر",
     "currentPeriodStartsIn":"الفتره الحاليه تبدأ فى",
     "andEndsIn":"و تنتهى فى",
-    "welcome":"آهلا"
+    "welcome":"آهلا",
+    "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "dateFrom":"التاريخ من",
+    "dateTo":"التاريخ الي"
 }    

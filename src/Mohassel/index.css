@@ -113,8 +113,8 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .refresh-logo-navbar {
   background-color: #7dc356;
   display: flex;
-  width: 80px;
-  height: 75px;
+  width: 100px;
+  height: 85px;
   justify-content: center;
 }
 .info-navbar {
@@ -122,7 +122,10 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   color: #fff;
   padding: 0px 50px;
   display: flex;
-  height: 75px;
+  height: 85px;
   align-items: center;
-  justify-content: space-evenly;
+  margin-left: 100px;
+}
+.navbar-nav a{
+  color: #fff !important;
 }

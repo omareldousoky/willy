@@ -13,27 +13,29 @@ class NavBar extends Component<Props> {
       <>
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto" style={{ flex: 'auto', alignItems: 'center', margin: '0px 30px', justifyContent: 'space-evenly' }}>
-              <Navbar.Brand><img alt="navbar-logo" src="/src/Login/Assets/Logo.svg" /></Navbar.Brand>
-              <Navbar.Text><h5 className="primary-color">{local.lowRateLoan}</h5></Navbar.Text>
+            <Nav style={{ flex: 'auto', alignItems: 'center', justifyContent: 'center' }}>
+              <Navbar.Brand style={{marginLeft: 40}}><img alt="navbar-logo" src="/src/Login/Assets/Logo.svg" /></Navbar.Brand>
+              <Navbar.Text style={{marginLeft: 40}}><h5 className="primary-color">{local.lowRateLoan}</h5></Navbar.Text>
               <div className="refresh-logo-navbar"><img alt="navbar-refresh" src="/src/Mohassel/Assets/refresh.svg" /></div>
               <div className="info-navbar">
-                <span>{local.currentPeriodStartsIn}</span>
-                <span>  01/02/2020  </span>
-                <span>{local.andEndsIn}</span>
+                <span style={{marginLeft: 10}}>{local.currentPeriodStartsIn}</span>
+                <span style={{marginLeft: 10}}>  01/02/2020  </span>
+                <span style={{marginLeft: 10}}>{local.andEndsIn}</span>
                 <span style={{marginLeft: 100}} className="primary-color">  29/02/2020  </span>
                 <span className="fa fa-map-marker-alt fa-lg" style={{marginLeft: 20, color: '#7dc356'}}></span>
                 <span>سوهاج</span>
               </div>
-              <span>{local.welcome}, <span className="primary-color">Ahmed</span> </span>
+              <span style={{marginLeft: 10}}>{local.welcome}, </span>
+              <span style={{marginLeft: 100}} className="primary-color">Ahmed</span>
               <img alt="drop-down-arrow" src="/src/Mohassel/Assets/dropDownArrow.svg"/>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Navbar bg="light" expand="lg">
+        <Navbar style={{backgroundColor: '#2a3390', height: 75}} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
+              <Nav.Link><img alt="home-icon" src="/src/Mohassel/Assets/homeIcon.svg"/></Nav.Link>
               <Nav.Link onClick={() => this.props.history.push('/new-customer')}>Create User</Nav.Link>
               <Nav.Link onClick={() => this.props.history.push('/edit-customer')}>Edit User</Nav.Link>
               <Nav.Link onClick={() => this.props.history.push('/new-formula')}>Create Calculation Method</Nav.Link>
