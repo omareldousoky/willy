@@ -9,7 +9,6 @@ import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import StatusHelper from './statusHelper';
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
-    console.log(values,'IN FORM')
     return (
         <Form onSubmit={handleSubmit}>
             <fieldset disabled={!(values.state==="edit" || values.state==="under_review")}>

@@ -141,7 +141,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
 
     static getDerivedStateFromProps(props, state) {
         const application = { ...state.application };
-        console.log('Derived', props)
         if ((props.history.location.state.id !== state.prevId) && (props.history.location.state.action !== state.application.state)) {
             application.state = props.history.location.state.action
             application.id = props.history.location.state.id
@@ -150,19 +149,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         return null
     }
     componentDidMount() {
-        console.log(this.state)
         this.setappStats()
     }
     componentDidUpdate(prevProps: Props) {
-        console.log('Did update', prevProps, this.props, this.state)
-        // const application = state.application;
         if (prevProps.location.state.action !== this.props.location.state.action) {
-            console.log('change')
             //set State to initial value
             // I need to add application id in the form values to be passed to status helper component
-            // const app = { ...this.state.application }
-            // app.state = 'under_review';
-            // this.setState({ application: app });
             this.setappStats();
         }
     }
@@ -170,36 +162,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.getProducts();
         this.getFormulas();
         if (this.state.prevId.length > 0) {
-            // const app = { ...this.state.application }
-            // const customer = { ...this.state.selectedCustomer }
             this.getAppByID(this.state.prevId)
-            // app.state = status;
-            // app.loanApplicationId = loanApplication.id;
-            // app.customerID = '5e7cacc27d33706d57961f66';
-            // app.customerName = "zaher branch test";
-            // app.customerCode = '';
-            // app.nationalId = '77005678910124';
-            // app.birthDate = '2020-03-14';
-            // app.gender = 'male';
-            // app.nationalIdIssueDate = '2020-03-14';
-            // app.businessSector = 'sdsd';
-            // app.businessActivity = 'sdsds2';
-            // app.businessSpeciality = '';
-            // app.permanentEmployeeCount = '0';
-            // app.partTimeEmployeeCount = '0'
-            // customer.customerID = '5e7cacc27d33706d57961f66';
-            // customer.customerName = "zaher branch test";
-            // customer.customerCode = '';
-            // customer.nationalId = '77005678910124';
-            // customer.birthDate = '2020-03-14';
-            // customer.gender = 'male';
-            // customer.nationalIdIssueDate = '2020-03-14';
-            // customer.businessSector = 'sdsd';
-            // customer.businessActivity = 'sdsds2';
-            // customer.businessSpeciality = '';
-            // customer.permanentEmployeeCount = '0';
-            // customer.partTimeEmployeeCount = '0'
-            // this.setState({ application: app, selectedCustomer: customer })
         } else {
             this.setState({ selectedCustomer: {} })
         }
@@ -397,7 +360,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         }
     }
     async handleStatusChange(intState, intProps) {
-        console.log('IN CREATION TSX')
         this.setState({ loading: true });
         if (intProps.status === 'review') {
             const res = await reviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
@@ -409,7 +371,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 this.setState({ loading: false });
             }
         } else if (intProps.status === 'unreview') {
-            console.log(intProps.status, intProps.id)
             const res = await undoreviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
@@ -419,7 +380,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 this.setState({ loading: false });
             }
         } else if (intProps.status === 'reject') {
-            console.log(intProps.status, intProps.id)
             const res = await rejectApplication({ applicationIds: [intProps.id], rejectionDate: new Date(intState.rejectionDate).valueOf(), rejectionReason: intState.rejectionReason });
             if (res.status === 'success') {
                 this.setState({ loading: false });

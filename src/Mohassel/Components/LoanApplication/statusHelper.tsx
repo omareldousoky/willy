@@ -75,7 +75,6 @@ class StatusHelper extends Component<Props, State>{
             value: 'guarantorRefused',
             label: local.guarantorRefused
         }]
-        console.log(this.props, this.state)
         if (this.props.status === 'review') {
             return (
                 <Col>
@@ -196,7 +195,6 @@ class StatusHelper extends Component<Props, State>{
                             </Form.Group>
                         </Col>
                         {this.state.rejectionStatus === "rejected" && <Col sm={8}>
-                            {/* rejectionReason */}
                             <Form.Group as={Row} controlId="productID">
                                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.decisionDate}</Form.Label>
                                 <Col sm={5}>
