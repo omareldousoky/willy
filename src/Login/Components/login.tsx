@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Formik } from 'formik';
-import Container from 'react-bootstrap/Container';
 import swal from 'sweetalert2';
 import { LoginForm } from './loginForm';
 import { loginCred, loginCredValidation } from './loginState';
@@ -40,31 +39,53 @@ class Login extends React.PureComponent<Props, State> {
       data: data
 
     }).then(succ => {
-      this.setCookie(succ.data.Token);
+      this.setCookie(succ.data.Token,JSON.stringify(succ.data.Branches));
       window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
       swal.fire('', local.loginError, 'error');
     })
   }
-  setCookie(cvalue: string) {
-    document.cookie = "token=" + cvalue + ";domain=.halan.io;path=/;";
+  setCookie(token: string, branches: string) {
+    document.cookie = "token=" + token + ";domain=.halan.io;path=/;";
+    document.cookie = "branches="+ branches +";domain=.halan.io;path=/;";
   }
   render() {
     return (
-      <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '50vw', height: '50vh', backgroundColor: 'beige', margin: 'auto' }}>
-        <Formik
-          enableReinitialize
-          initialValues={this.state.credentials}
-          onSubmit={this.submit}
-          validationSchema={loginCredValidation}
-          validateOnBlur
-          validateOnChange
-        >
-          {(formikProps) =>
-            <LoginForm {...formikProps} />
-          }
-        </Formik>
-      </Container>
+      <div className="login-parent">
+        <div className="right-hero">
+          <div className="texts">
+            <h1>{local.welcomeTo}</h1>
+            <h1>{local.systemForLoanTracking}</h1>
+            <h3>{local.lowRateLoan}</h3>
+          </div>
+          <img alt="login-image" src='/src/Login/Assets/loginPhotos.png' />
+        </div>
+        <div className="left-hero">
+          <img alt="login-log" className="login-logo" src='/src/Login/Assets/Logo.svg' />
+          <div className="login-form">
+            <h2>{local.login}</h2>
+            <Formik
+              enableReinitialize
+              initialValues={this.state.credentials}
+              onSubmit={this.submit}
+              validationSchema={loginCredValidation}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) =>
+                <LoginForm {...formikProps} />
+              }
+            </Formik>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <div className="vertical-line-login"></div>
+            <div style={{ margin: '100px 15px 0px 0px' }}>
+              <p>{local.loginInfo01}</p>
+              <p>{local.loginInfo02}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }

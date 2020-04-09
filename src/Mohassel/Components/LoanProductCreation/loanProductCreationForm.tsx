@@ -84,7 +84,7 @@ export const LoanProductCreationForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="periodLength">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLength}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLengthEvery}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="number"
@@ -709,6 +709,24 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.mustEnterGuarantor}
                     </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group as={Row} controlId="noOfGuarantors">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfGuarantors}</Form.Label>
+                        <Col sm={6}>
+                            <Form.Control
+                                type="number"
+                                name="noOfGuarantors"
+                                data-qc="noOfGuarantors"
+                                value={values.noOfGuarantors}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.noOfGuarantors && touched.noOfGuarantors}
+                                disabled={!values.mustEnterGuarantor}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.noOfGuarantors}
+                            </Form.Control.Feedback>
+                        </Col>
+                    </Form.Group>
                 <Form.Group as={Row} controlId='guarantorGuaranteesMultiple'>
                     <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
                     <Form.Check

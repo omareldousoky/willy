@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const searchCustomer = async (obj) => {
-    const url = process.env.REACT_APP_BASE_URL + `/search/customer`;
+export const bulkApproval = async (data: object) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/bulk-approve`;
     try {
-        const res = await axios.post(url,obj);
+        const res = await axios.put(url, data);
         return { status: "success", body: res.data }
     }
     catch (error) {

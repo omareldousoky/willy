@@ -63,13 +63,13 @@ class CustomerSearch extends Component<Props, State>{
                 style={{width: '50%', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'right', overflow: 'scroll', padding: 10}}>
                     {this.props.searchResults.map((element: any) => {
                         return (
-                            <p style={{width:'100%', borderBottom:'0.5px solid black', cursor:'all-scroll'}} key={element.id} onClick={() => this.props.selectCustomer(element)}>{element.customerInfo.customerName}</p>
+                            <p style={{width:'100%', borderBottom:'0.5px solid black', cursor:'all-scroll'}} key={element.Id} onClick={() => this.props.selectCustomer(element)}>{element.Customer.customerInfo.customerName}</p>
                         )
                     }
                     )}
                 </div>
                 }
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.searchResults && this.props.searchResults.length > 0 && <div style={{ textAlign: 'right', width:'100%' }}>
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && <div style={{ textAlign: 'right', width:'100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{local.guarantor + this.props.source}</h5>
                         <Button onClick={()=> this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>

@@ -63,6 +63,7 @@ class LoanProductCreation extends Component<Props, State>{
                 applicationFeePercentPerPersonType: 'principal',
                 loanImpactPrincipal: true,
                 mustEnterGuarantor: true,
+                noOfGuarantors:2,
                 guarantorGuaranteesMultiple: true,
                 deductionFee: 0,
                 allocatedDebtForGoodLoans: 0,

@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const searchCustomer = async (obj) => {
-    const url = process.env.REACT_APP_BASE_URL + `/search/customer`;
+export const addLoanUsage = async (data: object) => {
+    const url = process.env.REACT_APP_BASE_URL + `/config/usage`;
     try {
-        const res = await axios.post(url,obj);
+        const res = await axios.post(url, data);
         return { status: "success", body: res.data }
     }
     catch (error) {

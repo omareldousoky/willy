@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const searchCustomer = async (obj) => {
-    const url = process.env.REACT_APP_BASE_URL + `/search/customer`;
+export const getApplication = async (applicationId: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/${applicationId}`;
     try {
-        const res = await axios.post(url,obj);
+        const res = await axios.get(url);
         return { status: "success", body: res.data }
     }
     catch (error) {

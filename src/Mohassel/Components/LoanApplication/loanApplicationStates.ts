@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 export interface Vice {
-    viceCustomerName: string;
-    viceCustomerNumber: string;
+    name: string;
+    phoneNumber: string;
 }
 export interface Application {
     customerID: string;
@@ -55,6 +55,8 @@ export interface Application {
     guarantorIds: Array<string>;
     viceCustomers: Array<Vice>;
     applicationFeePercentPerPersonType: string;
+    state?: string;
+    id?: string;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),
@@ -95,8 +97,8 @@ export const LoanApplicationValidation = Yup.object().shape({
     ).required('required!'),
     viceCustomers: Yup.array().of(
             Yup.object().shape({
-                viceCustomerName: Yup.string(),
-                viceCustomerNumber: Yup.string().min(10).max(11)
+                name: Yup.string(),
+                phoneNumber: Yup.string().min(10).max(11)
             })
         ),
 });
