@@ -129,9 +129,6 @@ class BulkApplicationApproval extends Component<Props, State>{
       this.setState({ loading: false })
       Swal.fire('', local.bulkLoanError, 'error');
     }
-
-
-    console.log("submit", this.state.selectedReviewedLoans, values)
   }
   englishToArabic(status: string) {
     switch (status) {
