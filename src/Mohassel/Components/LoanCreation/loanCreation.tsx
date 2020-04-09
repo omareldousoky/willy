@@ -8,10 +8,25 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { Loader } from '../../../Shared/Components/Loader';
 import { loanCreationValidation, loanIssuanceValidation } from './loanCreationValidation';
+import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import { createLoan } from '../../Services/APIs/createIssueLoan/createLoan';
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import * as local from '../../../Shared/Assets/ar.json';
 
+interface CustomerData {
+  id: string;
+  name: string;
+  customerType: string;
+  maxPrincipal: number;
+  currency: string;
+  noOfInstallments: number;
+  gracePeriod: number;
+  periodLength: number;
+  periodType: string;
+  productName: string;
+  entryDate: number;
+  status: string;
+}
 interface State {
   loanCreationDate: string;
   loanIssuanceDate: string;
@@ -19,16 +34,6 @@ interface State {
   id: string;
   type: string;
   loading: boolean;
-}
-interface CustomerData {
-  customerType: string;
-  loanApplicationId: string;
-  customerName: string;
-  loanAppCreationDate: string;
-  loanStatus: string;
-  productName: string;
-  loanPrinciple: string;
-  loanOfficer: string;
 }
 export interface Location {
   pathname: string;
@@ -51,21 +56,32 @@ class LoanCreation extends Component<Props, State> {
       loanIssuanceDate: '',
       loading: false,
       customerData: {
+        id: '',
+        name: '',
         customerType: '',
-        loanApplicationId: '',
-        customerName: '',
-        loanAppCreationDate: '',
-        loanStatus: '',
+        maxPrincipal: 0,
+        currency: '',
+        noOfInstallments: 0,
+        gracePeriod: 0,
+        periodLength: 0,
+        periodType: '',
         productName: '',
-        loanPrinciple: '',
-        loanOfficer: '',
+        entryDate: 0,
+        status: '',
       }
     }
   }
-  componentDidMount() {
-    const { id, type } = JSON.parse(this.props.location.state);
-    this.setState({ id, type })
-    const loanApplicationId = this.props.location.state;
+  async componentDidMount() {
+    console.log(this.props.location.state)
+    const { id, type } = this.props.location.state;
+
+    this.setState({ id, type, loading: true })
+    const res = await getApplication(id);
+    if (res.status === "success") {
+      this.setState({ loading: false })
+
+      console.log(res.body)
+    } else this.setState({ loading: false })
   }
   handleSubmit = async (values) => {
     this.setState({ loading: true })
@@ -90,7 +106,7 @@ class LoanCreation extends Component<Props, State> {
     return (
       <Container>
         <Loader type="fullscreen" open={this.state.loading} />
-        <Table striped bordered hover>
+        <Table striped bordered hover size="sm">
           <thead>
             <tr>
               <th>{local.loanApplicationId}</th>
@@ -106,13 +122,13 @@ class LoanCreation extends Component<Props, State> {
           <tbody>
             <tr>
               <td>{this.state.customerData.customerType}</td>
-              <td>{this.state.customerData.loanApplicationId}</td>
+              {/* <td>{this.state.customerData.loanApplicationId}</td>
               <td>{this.state.customerData.customerName}</td>
               <td>{this.state.customerData.loanAppCreationDate}</td>
               <td>{this.state.customerData.loanStatus}</td>
               <td>{this.state.customerData.productName}</td>
               <td>{this.state.customerData.loanPrinciple}</td>
-              <td>{this.state.customerData.loanOfficer}</td>
+              <td>{this.state.customerData.loanOfficer}</td> */}
             </tr>
           </tbody>
         </Table>

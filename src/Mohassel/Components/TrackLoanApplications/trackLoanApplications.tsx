@@ -5,21 +5,38 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Col from 'react-bootstrap/Col';
+import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
 import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 
-interface LoanItem {
-  customerType: string;
-  loanApplicationId: string;
-  customerName: string;
-  loanAppCreationDate: string;
-  loanStatus: string;
+interface Product {
   productName: string;
-  loanPrinciple: string;
-  loanOfficer: string;
+  loanNature: string;
+}
+interface CustomerInfo {
+  customerName: string;
+  nationalId: string;
+  birthDate: number;
+  nationalIdIssueDate: number;
+  gender: string;
+}
+interface Customer {
+  customerInfo: CustomerInfo;
+}
+interface Application {
+  product: Product;
+  customer: Customer;
+  entryDate: number;
+  principal: number;
+  status: string;
+}
+interface LoanItem {
+  Id: string;
+  BranchId: string;
+  Application: Application;
 }
 interface State {
   searchKeyword: string;
@@ -45,106 +62,60 @@ class TrackLoanApplications extends Component<Props, State>{
       filters: [],
       filteredLoanOfficer: '',
       loading: false,
-      searchResults: [
-        {
-          customerType: 'فردي',
-          // loanApplicationId: '5e847f5d85a52c84914a0392',
-          loanApplicationId: '5e8efa460ac29d27e27a2637',
-          customerName: 'احمد',
-          loanAppCreationDate: '15/3/2020',
-          loanStatus: 'تحت التحرير',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin1'
-        },
-        {
-          customerType: 'مجموعة',
-          // loanApplicationId: '5e8c5780aadba6885c1f2626',
-          loanApplicationId: '5e8e3e400ac29d27e27a262f',
-          customerName: 'محمد',
-          loanAppCreationDate: '16/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin1'
-        },
-        {
-          customerType: 'فردي',
-          loanApplicationId: '211',
-          customerName: 'جمال',
-          loanAppCreationDate: '10/3/2020',
-          loanStatus: 'موافق عليها',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin3'
-        },
-        {
-          customerType: 'مجموعة',
-          loanApplicationId: '311',
-          customerName: 'علاء',
-          loanAppCreationDate: '10/3/2020',
-          loanStatus: 'مرفوضة',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin1'
-        },
-        {
-          customerType: 'فردي',
-          loanApplicationId: '541',
-          customerName: 'سمير',
-          loanAppCreationDate: '10/3/2020',
-          loanStatus: 'إنشاء',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin2'
-        },
-        {
-          customerType: 'مجموعة',
-          loanApplicationId: '214',
-          customerName: 'محمد',
-          loanAppCreationDate: '16/3/2020',
-          loanStatus: 'رُجعت',
-          productName: 'test1',
-          loanPrinciple: 'اصل القرض',
-          loanOfficer: 'admin2'
-        },
-      ],
-      uniqueLoanOfficers: ["admin1", "admin2", "admin3"],
+      searchResults: [],
+      uniqueLoanOfficers: [],
       selectedReviewedLoans: [],
     }
   }
   async componentDidMount() {
     this.setState({ loading: true })
     const obj = {
+      //hardcoded for now
       branchId: '5e79ee0ba92c135c57399330',
       from: 0,
       size: 30
     };
     const res = await searchApplication(obj);
     if (res.status === "success") {
-      this.setState({ loading: false })
-
-      console.log(res);
+      this.setState({
+        loading: false,
+        searchResults: res.body.applications
+      })
     } else {
       this.setState({ loading: false })
-
     }
   }
-  handleSubmit = async () => {
+  handleSubmit = async (values) => {
     this.setState({ loading: true })
-    const obj = {
-      branchId: '5e79ee0ba92c135c57399330',
-      fromDate: this.state.dateFrom,
-      toDate: this.state.dateTo,
-      name: this.state.searchKeyword
+    let obj = {}
+    if (values.dateFrom === "" && values.dateTo === "") {
+      obj = {
+        branchId: '5e79ee0ba92c135c57399330',
+        //tobe deleted
+        size: 20,
+        from: 0,
+      }
+    } else {
+      obj = {
+        branchId: '5e79ee0ba92c135c57399330',
+        fromDate: new Date(values.dateFrom).valueOf(),
+        toDate: new Date(values.dateTo).valueOf(),
+        //tobe deleted
+        size: 20,
+        from: 0,
+      }
     }
+    if (isNaN(Number(values.searchKeyword))) obj = { ...obj, name: values.searchKeyword }
+    else obj = { ...obj, nationalId: values.searchKeyword }
     const res = await searchApplication(obj);
     if (res.status === "success") {
-      this.setState({ loading: false })
-      console.log(res);
+      this.setState({
+        loading: false,
+        searchResults: res.body.applications ? res.body.applications : []
+      })
     } else {
-      this.setState({ loading: false })
-
+      this.setState({ loading: false });
+      Swal.fire('', local.searchError, 'error');
     }
   }
   toggleChip(loanStatus: string) {
@@ -159,26 +130,41 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   getActionFromStatus(loan: LoanItem) {
-    if (loan.loanStatus === local.approved) {
-      return <Button onClick={() => this.props.history.push('/create-loan', '{ "id": ' + loan.loanApplicationId + ',"type": "create"}')}>{local.createLoan}</Button>
-    } else if (loan.loanStatus === local.created) {
-      return <Button onClick={() => this.props.history.push('/create-loan', '{ "id": ' + loan.loanApplicationId + ',"type": "issue"}')}>{local.issueLoan}</Button>
-    } else if (loan.loanStatus === local.reviewed) {
+    if (loan.Application.status === 'approved') {
+      return <Button onClick={() => this.props.history.push('/create-loan', { id: loan.Id, type: "create" })}>{local.createLoan}</Button>
+    } else if (loan.Application.status === 'created') {
+      return <Button onClick={() => this.props.history.push('/create-loan', { id: loan.Id, type: "issue" })}>{local.issueLoan}</Button>
+    } else if (loan.Application.status === 'reviewed') {
       return (
         <div>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'unreview'})}>{local.undoLoanReview}</Button>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'reject'})}>{local.rejectLoan}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'unreview' })}>{local.undoLoanReview}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'reject' })}>{local.rejectLoan}</Button>
         </div>
       )
-    } else if (loan.loanStatus === local.underReview) {
+    } else if (loan.Application.status === 'underReview') {
       return (
         <div>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'review'})}>{local.reviewLoan}</Button>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, {id: loan.loanApplicationId, action:'edit'})}>{local.editLoan}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'review' })}>{local.reviewLoan}</Button>
+          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'edit' })}>{local.editLoan}</Button>
         </div>
       )
     }
     else return null;
+  }
+  englishToArabic(status: string) {
+    switch (status) {
+      case 'underReview':
+        return 'تحت التحرير';
+      case 'reviewed':
+        return 'رُجعت';
+      case 'rejected':
+        return 'مرفوضة';
+      case 'approved':
+        return 'موافق عليها';
+      case 'created':
+        return 'إنشاء';
+      default: return '';
+    }
   }
 
   render() {
@@ -194,14 +180,15 @@ class TrackLoanApplications extends Component<Props, State>{
         >{(formikProps) =>
           <Form onSubmit={formikProps.handleSubmit} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Form.Group as={Col} controlId="searchKeyword" style={{ flex: 2 }}>
-              <Form.Label style={{ textAlign: 'right' }} column >{`${local.searchByNameOrNationalId}*`}</Form.Label>
+              <Form.Label style={{ textAlign: 'right' }} column>{`${local.searchByNameOrNationalId}*`}</Form.Label>
               <Form.Control
                 type="text"
                 name="searchKeyword"
                 data-qc="searchKeyword"
-                // placeholder="Search by Customer name or ID"
-                onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ searchKeyword: e.currentTarget.value })}
-              // isInvalid={Boolean(formikProps.errors.name) && Boolean(formikProps.touched.name)}
+                value={formikProps.values.searchKeyword}
+                onChange={formikProps.handleChange}
+                onBlur={formikProps.handleBlur}
+                isInvalid={Boolean(formikProps.errors.searchKeyword) && Boolean(formikProps.touched.searchKeyword)}
               />
               <Form.Control.Feedback type="invalid">
                 {formikProps.errors.searchKeyword}
@@ -211,8 +198,11 @@ class TrackLoanApplications extends Component<Props, State>{
               <Form.Label style={{ textAlign: 'right' }} column >{local.dateFrom}</Form.Label>
               <Form.Control
                 type="date"
-                placeholder="Date from"
-                onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ dateFrom: e.currentTarget.value })}
+                data-qc="dateFrom"
+                value={formikProps.values.dateFrom}
+                onChange={formikProps.handleChange}
+                onBlur={formikProps.handleBlur}
+                isInvalid={Boolean(formikProps.errors.dateFrom) && Boolean(formikProps.touched.dateFrom)}
               />
               <Form.Control.Feedback type="invalid">
                 {formikProps.errors.dateFrom}
@@ -223,27 +213,30 @@ class TrackLoanApplications extends Component<Props, State>{
 
               <Form.Control
                 type="date"
-                placeholder="Date To"
-                onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ dateTo: e.currentTarget.value })}
+                data-qc="dateTo"
+                value={formikProps.values.dateTo}
+                onChange={formikProps.handleChange}
+                onBlur={formikProps.handleBlur}
+                isInvalid={Boolean(formikProps.errors.dateTo) && Boolean(formikProps.touched.dateTo)}
               />
               <Form.Control.Feedback type="invalid">
                 {formikProps.errors.dateTo}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
-              <Button type="submit">{local.search}</Button>
             </Form.Group>
+            <Button type="submit">{local.search}</Button>
           </Form >
           }
         </Formik>
         <div style={{ textAlign: 'center' }}>
-          <span className={this.state.filters.includes(local.underReview) ? "chip chip-active" : "chip"} onClick={() => this.toggleChip(local.underReview)}>{local.underReview}</span>
-          <span className={this.state.filters.includes(local.reviewed) ? "chip chip-active" : "chip"} onClick={() => this.toggleChip(local.reviewed)}>{local.reviewed}</span>
-          <span className={this.state.filters.includes(local.approved) ? "chip chip-active" : "chip"} onClick={() => this.toggleChip(local.approved)}>{local.approved}</span>
-          <span className={this.state.filters.includes(local.rejected) ? "chip chip-active" : "chip"} onClick={() => this.toggleChip(local.rejected)}>{local.rejected}</span>
-          <span className={this.state.filters.includes(local.created) ? "chip chip-active" : "chip"} onClick={() => this.toggleChip(local.created)}>{local.created}</span>
+          <span className={this.state.filters.includes('underReview') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('underReview')}>{local.underReview}</span>
+          <span className={this.state.filters.includes('reviewed') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('reviewed')}>{local.reviewed}</span>
+          <span className={this.state.filters.includes('rejected') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('rejected')}>{local.rejected}</span>
+          <span className={this.state.filters.includes('approved') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('approved')}>{local.approved}</span>
+          <span className={this.state.filters.includes('created') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('created')}>{local.created}</span>
         </div>
-        <Table striped bordered hover>
+        <Table striped bordered hover size="sm">
           <thead>
             <tr>
               <th>{local.customerType}</th>
@@ -272,19 +265,19 @@ class TrackLoanApplications extends Component<Props, State>{
           </thead>
           <tbody>
             {this.state.searchResults
-              .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
-              .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.loanStatus) : loanItem)
+              // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
+              .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.Application.status) : loanItem)
               .map((loanItem, index) => {
                 return (
                   <tr key={index}>
-                    <td>{loanItem.customerType}</td>
-                    <td>{loanItem.loanApplicationId}</td>
-                    <td>{loanItem.customerName}</td>
-                    <td>{loanItem.loanAppCreationDate}</td>
-                    <td>{loanItem.loanStatus}</td>
-                    <td>{loanItem.productName}</td>
-                    <td>{loanItem.loanPrinciple}</td>
-                    <td>{loanItem.loanOfficer}</td>
+                    <td></td>
+                    <td>{loanItem.Id}</td>
+                    <td>{loanItem.Application.customer.customerInfo.customerName}</td>
+                    <td>{new Date(loanItem.Application.entryDate).toISOString().slice(0, 10)}</td>
+                    <td>{this.englishToArabic(loanItem.Application.status)}</td>
+                    <td>{loanItem.Application.product.productName}</td>
+                    <td>{loanItem.Application.principal}</td>
+                    <td></td>
                     <td>{this.getActionFromStatus(loanItem)}</td>
                   </tr>
                 )

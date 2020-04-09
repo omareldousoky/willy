@@ -1,7 +1,7 @@
 import axios from '../axios-instance';
 
 export const getLoanUsage = async () => {
-    const url = process.env.REACT_APP_BASE_URL + `application/usage`;
+    const url = process.env.REACT_APP_BASE_URL + `/config/usage`;
     try {
         const res = await axios.get(url);
         return { status: "success", body: res.data }
