@@ -73,7 +73,6 @@ class LoanCreation extends Component<Props, State> {
     }
   }
   async componentDidMount() {
-    console.log(this.props.location.state)
     const { id, type } = this.props.location.state;
 
     this.setState({ id, type, loading: true })
@@ -96,8 +95,6 @@ class LoanCreation extends Component<Props, State> {
           status: res.body.status,
         }
       })
-
-      console.log(res.body)
     } else this.setState({ loading: false })
   }
   handleSubmit = async (values) => {
