@@ -49,7 +49,7 @@ class TrackLoanApplications extends Component<Props, State>{
         {
           customerType: 'فردي',
           // loanApplicationId: '5e847f5d85a52c84914a0392',
-          loanApplicationId: '5e8c5780aadba6885c1f2626',
+          loanApplicationId: '5e8efa460ac29d27e27a2637',
           customerName: 'احمد',
           loanAppCreationDate: '15/3/2020',
           loanStatus: 'تحت التحرير',
@@ -59,7 +59,8 @@ class TrackLoanApplications extends Component<Props, State>{
         },
         {
           customerType: 'مجموعة',
-          loanApplicationId: '5e8c5780aadba6885c1f2626',
+          // loanApplicationId: '5e8c5780aadba6885c1f2626',
+          loanApplicationId: '5e8e3e400ac29d27e27a262f',
           customerName: 'محمد',
           loanAppCreationDate: '16/3/2020',
           loanStatus: 'رُجعت',

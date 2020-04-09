@@ -39,14 +39,16 @@ class Login extends React.PureComponent<Props, State> {
       data: data
 
     }).then(succ => {
-      this.setCookie(succ.data.Token);
+      this.setCookie(succ.data.Token,JSON.stringify(succ.data.Branches));
       window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
       swal.fire('', local.loginError, 'error');
     })
   }
-  setCookie(cvalue: string) {
-    document.cookie = "token=" + cvalue + ";domain=.halan.io;path=/;";
+  setCookie(token: string, branches: string) {
+    // domain=.halan.io;
+    document.cookie = "token=" + token + ";path=/;";
+    document.cookie = "branches="+ branches +";path=/;";
   }
   render() {
     return (

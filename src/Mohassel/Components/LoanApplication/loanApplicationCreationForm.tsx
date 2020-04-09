@@ -78,7 +78,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={(event) => {
                                     if (event.currentTarget.value.length > 0) {
-                                        props.getSelectedLoanProduct(event.currentTarget.value, setValues, values);
+                                        props.getSelectedLoanProduct(event.currentTarget.value);
                                     } else {
                                         setFieldValue('productID', '')
                                     }
@@ -665,7 +665,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ width: '100%', border: '1px solid black', padding: 10, borderRadius: 4, margin: '10px 0'}}>
                     <StatusHelper status={values.state} id={values.id} handleStatusChange={(internalstate,internalprops)=> {props.handleStatusChange(internalstate,internalprops)}}/>
                 </div>}
-            {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>}
+            {(values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>}
         </Form >
     )
 }
