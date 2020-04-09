@@ -71,7 +71,7 @@
     "noOfInstallments": "عدد الأقساط",
     "noOfGuarantors":"عدد الضمان",
     "gracePeriod": "فتره السماح",
-    "periodLength": "فتره السداد كل",
+    "periodLength": "فتره السداد",
     "periodType": "",
     "interest": "نسبه المصاريف الموزعه",
     "interestPeriod": "",
@@ -215,5 +215,12 @@
     "existingFellony": "منع تعامل - وجود أحكام قضائية على العميل أو الضامنين",
     "existingLoan": "منع تعامل - وجود قروض على العميل أو الضامنين",
     "existingDebts": "منع تعامل - وجود تأخيرات على العميل",
-    "guarantorRefused": "منع تعامل - رفض أكتر من شخص ضمانة العميل"
+    "guarantorRefused": "منع تعامل - رفض أكتر من شخص ضمانة العميل",
+    "every": "كل",
+    "periodLengthEvery": "فتره السداد كل",
+    "loanCreationSuccess":"تم إنشاء القرض بنجاح",
+    "loanCreationError":"حدث خطأ في إنشاء القرض",
+    "loanIssuanceSuccess":"تم إصدار القرض بنجاح",
+    "loanIssuanceError":"حدث خطأ في إصدار القرض"
+
 }
