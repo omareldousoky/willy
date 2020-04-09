@@ -619,44 +619,44 @@ export const LoanApplicationCreationForm = (props: any) => {
                             {values.viceCustomers.length > 0 && values.viceCustomers.map((customer, index) => (
                                 <div key={index}>
                                     {/* <Field name={`viceCustomers[${index}].name`} /> */}
-                                    <Form.Group as={Row} controlId="viceCustomerName">
+                                    <Form.Group as={Row} controlId="name">
                                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.name}</Form.Label>
                                         <Col sm={6}>
                                             <Form.Control
                                                 type="text"
-                                                name={`viceCustomers[${index}].viceCustomerName`}
-                                                data-qc="viceCustomerName"
-                                                value={values.viceCustomers[index].viceCustomerName}
+                                                name={`viceCustomers[${index}].name`}
+                                                data-qc="name"
+                                                value={values.viceCustomers[index].name}
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                             />
-                                            {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].viceCustomerName && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
-                                                {errors.viceCustomers[index].viceCustomerName}
+                                            {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].name && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                {errors.viceCustomers[index].name}
                                             </Form.Control.Feedback>}
                                         </Col>
                                     </Form.Group>
-                                    <Form.Group as={Row} controlId="viceCustomerNumber">
+                                    <Form.Group as={Row} controlId="phoneNumber">
                                         <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.phoneNumber}</Form.Label>
                                         <Col sm={6}>
                                             <Form.Control
                                                 type="text"
-                                                name={`viceCustomers.${index}.viceCustomerNumber`}
-                                                data-qc="viceCustomerNumber"
-                                                value={values.viceCustomers[index].viceCustomerNumber}
+                                                name={`viceCustomers.${index}.phoneNumber`}
+                                                data-qc="phoneNumber"
+                                                value={values.viceCustomers[index].phoneNumber}
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                             />
-                                            {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].viceCustomerNumber && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
-                                                {errors.viceCustomers[index].viceCustomerNumber}
+                                            {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].phoneNumber && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                {errors.viceCustomers[index].phoneNumber}
                                             </Form.Control.Feedback>}
                                         </Col>
                                     </Form.Group>
                                    {index !== 0 && <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>}
                                 </div>
                             ))}
-                            {values.viceCustomers.length < 3 && <button
+                            {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <button
                                 type="button"
-                                onClick={() => arrayHelpers.push({ viceCustomerName: '', viceCustomerNumber: '' })}>+</button>}
+                                onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</button>}
                         </div>
                     )}
                 />

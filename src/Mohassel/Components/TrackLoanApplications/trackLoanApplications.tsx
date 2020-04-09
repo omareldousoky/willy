@@ -11,6 +11,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
 import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
+import { getCookie } from '../../Services/getCookie';
 
 interface Product {
   productName: string;
@@ -69,9 +70,9 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   async componentDidMount() {
     this.setState({ loading: true })
+    const branchId = JSON.parse(getCookie('branches'))
     const obj = {
-      //hardcoded for now
-      branchId: '5e79ee0ba92c135c57399330',
+      branchId: branchId[0],
       from: 0,
       size: 30
     };
@@ -88,19 +89,18 @@ class TrackLoanApplications extends Component<Props, State>{
   handleSubmit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
+    const branchId = JSON.parse(getCookie('branches'));
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
-        branchId: '5e79ee0ba92c135c57399330',
-        //tobe deleted
+        branchId: branchId[0],
         size: 20,
         from: 0,
       }
     } else {
       obj = {
-        branchId: '5e79ee0ba92c135c57399330',
+        branchId: branchId[0],
         fromDate: new Date(values.dateFrom).valueOf(),
         toDate: new Date(values.dateTo).valueOf(),
-        //tobe deleted
         size: 20,
         from: 0,
       }
