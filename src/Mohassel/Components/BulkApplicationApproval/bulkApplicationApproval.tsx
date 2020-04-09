@@ -5,23 +5,47 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import FormCheck from 'react-bootstrap/FormCheck';
+import Modal from 'react-bootstrap/Modal';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Swal from 'sweetalert2';
+import { Formik } from 'formik';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getBranches } from '../../Services/APIs/Branch/getBranches';
+import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
+import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
+import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Branch {
   _id: string;
   name: string;
 }
-interface LoanItem {
-  customerType: string;
-  loanApplicationId: string;
-  customerName: string;
-  loanAppCreationDate: string;
-  loanStatus: string;
+interface Product {
   productName: string;
-  loanPrinciple: string;
-  loanOfficer: string;
+  loanNature: string;
+}
+interface CustomerInfo {
+  customerName: string;
+  nationalId: string;
+  birthDate: number;
+  nationalIdIssueDate: number;
+  gender: string;
+}
+interface Customer {
+  customerInfo: CustomerInfo;
+}
+interface Application {
+  product: Product;
+  customer: Customer;
+  entryDate: number;
+  principal: number;
+  status: string;
+}
+interface LoanItem {
+  Id: string;
+  BranchId: string;
+  Application: Application;
 }
 interface State {
   branches: Array<Branch>;
@@ -31,6 +55,7 @@ interface State {
   filteredLoanOfficer: string;
   selectedReviewedLoans: Array<string>;
   loading: boolean;
+  showModal: boolean,
 }
 interface Props {
   history: Array<string>;
@@ -43,31 +68,34 @@ class BulkApplicationApproval extends Component<Props, State>{
       filteredLoanOfficer: '',
       branches: [],
       searchResults: [],
-      uniqueLoanOfficers: ["admin1", "admin2", "admin3"],
+      uniqueLoanOfficers: [],
       selectedReviewedLoans: [],
       loading: false,
+      showModal: false,
     }
   }
   async componentDidMount() {
     this.setState({ loading: true })
     const res = await getBranches();
     if (res.status === "success") {
-      this.setState({ 
+      this.setState({
         loading: false,
         branches: res.body.data.data
-       })
+      })
     } else {
       this.setState({ loading: false })
+      Swal.fire('', local.searchError, 'error');
     }
   }
   async getDataFromBranch(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({ loading: true })
-    // const res = await  ;
-    this.setState({
-      loading: false,
-      filteredBranch: e.currentTarget.value,
-      // searchResults: 
-    })
+    this.setState({ loading: true, filteredBranch: e.currentTarget.value });
+    const res = await searchApplication({ branchId: e.currentTarget.value, size: 50 });
+    if (res.status === "success") {
+      this.setState({ loading: false, searchResults: res.body.applications ? res.body.applications : [] });
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('', local.searchError, 'error');
+    }
   }
   addRemoveItemFromChecked(id: string) {
     if (this.state.selectedReviewedLoans.includes(id)) {
@@ -82,9 +110,43 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.loanApplicationId);
+      const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.Id);
       this.setState({ selectedReviewedLoans: newselectedReviewedLoans })
     } else this.setState({ selectedReviewedLoans: [] })
+  }
+  handleSubmit = async (values) => {
+    this.setState({ showModal: false, loading: true })
+    const obj = {
+      approvalDate: new Date(values.approvalDate).valueOf(),
+      fundSource: values.fundSource,
+      applicationIds: this.state.selectedReviewedLoans
+    }
+    const res = await bulkApproval(obj);
+    if (res.status === "success") {
+      this.setState({ loading: false })
+      Swal.fire('', local.bulkLoanApproved, 'success');
+    } else {
+      this.setState({ loading: false })
+      Swal.fire('', local.bulkLoanError, 'error');
+    }
+
+
+    console.log("submit", this.state.selectedReviewedLoans, values)
+  }
+  englishToArabic(status: string) {
+    switch (status) {
+      case 'underReview':
+        return 'تحت التحرير';
+      case 'reviewed':
+        return 'رُجعت';
+      case 'rejected':
+        return 'مرفوضة';
+      case 'approved':
+        return 'موافق عليها';
+      case 'created':
+        return 'إنشاء';
+      default: return '';
+    }
   }
   render() {
     return (
@@ -137,22 +199,23 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
-                  .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
+                  .filter(loanItem => loanItem.Application.status === "reviewed")
+                  // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
-                        <td>{loanItem.customerType}</td>
-                        <td>{loanItem.loanApplicationId}</td>
-                        <td>{loanItem.customerName}</td>
-                        <td>{loanItem.loanAppCreationDate}</td>
-                        <td>{loanItem.loanStatus}</td>
-                        <td>{loanItem.productName}</td>
-                        <td>{loanItem.loanPrinciple}</td>
-                        <td>{loanItem.loanOfficer}</td>
+                        <td></td>
+                        <td>{loanItem.Id}</td>
+                        <td>{loanItem.Application.customer.customerInfo.customerName}</td>
+                        <td>{new Date(loanItem.Application.entryDate).toISOString().slice(0, 10)}</td>
+                        <td>{this.englishToArabic(loanItem.Application.status)}</td>
+                        <td>{loanItem.Application.product.productName}</td>
+                        <td>{loanItem.Application.principal}</td>
+                        <td></td>
                         <td>
                           <FormCheck type='checkbox'
-                            checked={this.state.selectedReviewedLoans.includes(loanItem.loanApplicationId)}
-                            onChange={() => this.addRemoveItemFromChecked(loanItem.loanApplicationId)}>
+                            checked={this.state.selectedReviewedLoans.includes(loanItem.Id)}
+                            onChange={() => this.addRemoveItemFromChecked(loanItem.Id)}>
                           </FormCheck>
                         </td>
                       </tr>
@@ -160,9 +223,71 @@ class BulkApplicationApproval extends Component<Props, State>{
                   })}
               </tbody>
             </Table>
-            <Button>Approve</Button>
+            <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>Approve</Button>
           </div>
           : null}
+
+        {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
+          <Formik
+            initialValues={{ approvalDate: '', fundSource: '' }}
+            onSubmit={this.handleSubmit}
+            validationSchema={bulkApplicationApprovalValidation}
+            validateOnBlur
+            validateOnChange
+          >
+            {(formikProps) =>
+              <Form onSubmit={formikProps.handleSubmit}>
+                <Modal.Header>
+                  <Modal.Title>Bulk Approval</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                  <Form.Group as={Row} controlId="approvalDate">
+                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
+                    <Col sm={6}>
+                      <Form.Control
+                        type="date"
+                        name="approvalDate"
+                        data-qc="approvalDate"
+                        value={formikProps.values.approvalDate}
+                        onBlur={formikProps.handleBlur}
+                        onChange={formikProps.handleChange}
+                        isInvalid={Boolean(formikProps.errors.approvalDate) && Boolean(formikProps.touched.approvalDate)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {formikProps.errors.approvalDate}
+                      </Form.Control.Feedback>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} controlId="fundSource">
+                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.fundSource}*`}</Form.Label>
+                    <Col sm={6}>
+                      <Form.Control as="select"
+                        name="fundSource"
+                        data-qc="fundSource"
+                        value={formikProps.values.fundSource}
+                        onBlur={formikProps.handleBlur}
+                        onChange={formikProps.handleChange}
+                        isInvalid={Boolean(formikProps.errors.fundSource) && Boolean(formikProps.touched.fundSource)}
+                      >
+                        <option value="" disabled></option>
+                        <option value='tasaheel'>{local.tasaheel}</option>
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {formikProps.errors.fundSource}
+                      </Form.Control.Feedback>
+                    </Col>
+                  </Form.Group>
+
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={() => this.setState({ showModal: false })}>{local.cancel}</Button>
+                  <Button type="submit" variant="primary">{local.submit}</Button>
+                </Modal.Footer>
+              </Form>
+            }
+          </Formik>
+        </Modal>}
       </Container>
     )
   }

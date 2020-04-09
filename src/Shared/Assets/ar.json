@@ -221,6 +221,9 @@
     "loanCreationSuccess":"تم إنشاء القرض بنجاح",
     "loanCreationError":"حدث خطأ في إنشاء القرض",
     "loanIssuanceSuccess":"تم إصدار القرض بنجاح",
-    "loanIssuanceError":"حدث خطأ في إصدار القرض"
-
+    "loanIssuanceError":"حدث خطأ في إصدار القرض",
+    "fundSource": "مصدر التمويل",
+    "tasaheel": "تساهيل",
+    "bulkLoanApproved": "تم الموافقة علي القروض",
+    "bulkLoanError": "حدث خطأ في الموافقة علي القروض"
 }
