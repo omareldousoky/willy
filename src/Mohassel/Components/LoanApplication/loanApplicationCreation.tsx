@@ -120,8 +120,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     .split("T")[0],
                 guarantorIds: [],
                 viceCustomers: [{
-                    viceCustomerName: '',
-                    viceCustomerNumber: ''
+                    name: '',
+                    phoneNumber: ''
                 }],
                 state: 'under_review'
             },
@@ -135,8 +135,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             guarantor1: {},
             guarantor2: {},
             viceCustomers: [{
-                viceCustomerName: '',
-                viceCustomerNumber: ''
+                name: '',
+                phoneNumber: ''
             }],
             prevId: ''
         })
@@ -176,14 +176,14 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const guarantor1 = application.body.guarantors[0];
-            const guarantor2 = application.body.guarantors[1];
-            formData.guarantorIds.push(guarantor1.customerInfo.nationalId);
-            formData.guarantorIds.push(guarantor2.customerInfo.nationalId);
-            formData.entryDate = this.getDateString(application.body.entryDate);
-            formData.visitationDate = this.getDateString(application.body.visitationDate);
-            formData.usage = application.body.usage;
-            formData.enquirorId = application.body.enquirorId;
+            const guarantor1 = (application.body.guarantors[0])?application.body.guarantors[0]:null;
+            const guarantor2 = (application.body.guarantors[1])?application.body.guarantors[1]:null;
+            if(guarantor1)formData.guarantorIds.push(guarantor1.customerInfo.nationalId);
+            if(guarantor2)formData.guarantorIds.push(guarantor2.customerInfo.nationalId);
+            formData.entryDate = (application.body.entryDate)?this.getDateString(application.body.entryDate):'';
+            formData.visitationDate = (application.body.visitationDate)?this.getDateString(application.body.visitationDate):'';
+            formData.usage = (application.body.usage)?application.body.usage:'';
+            formData.enquirorId = (application.body.enquirorId)?application.body.enquirorId:'';
             formData.viceCustomers = application.body.viceCustomers;
             formData.principal = application.body.principal;
             formData.productID = application.body.product._id;
