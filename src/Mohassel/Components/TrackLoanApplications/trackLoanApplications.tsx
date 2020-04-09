@@ -12,6 +12,7 @@ import { searchApplication } from '../../Services/APIs/loanApplication/searchApp
 import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getCookie } from '../../Services/getCookie';
+import { DownloadReviewedPdf } from '../PDF/documentExport';
 
 interface Product {
   productName: string;
@@ -166,8 +167,8 @@ class TrackLoanApplications extends Component<Props, State>{
       default: return '';
     }
   }
-
   render() {
+    const reviewedResults = this.state.searchResults.filter(result => result.Application.status === "reviewed");
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
@@ -284,6 +285,7 @@ class TrackLoanApplications extends Component<Props, State>{
               })}
           </tbody>
         </Table>
+        {reviewedResults.length>0 && <DownloadReviewedPdf data={reviewedResults} />}
       </Container>
     )
   }
