@@ -55,7 +55,7 @@ interface State {
   filteredLoanOfficer: string;
   selectedReviewedLoans: Array<string>;
   loading: boolean;
-  showModal: boolean,
+  showModal: boolean;
 }
 interface Props {
   history: Array<string>;
