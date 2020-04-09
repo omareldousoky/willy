@@ -31,7 +31,7 @@ class NavBar extends Component<Props> {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Navbar style={{backgroundColor: '#2a3390', height: 75}} expand="lg">
+        <Navbar style={{backgroundColor: '#2a3390', height: 75, marginBottom: 20}} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
