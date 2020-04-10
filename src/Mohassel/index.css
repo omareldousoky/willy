@@ -28,6 +28,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   max-height: 400px;
 }
 
+/* to be deleted after Loader component is done*/
 .central-loader-fullscreen {
   position: absolute;
   top: 50%;
@@ -63,4 +64,68 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   color: white;
   padding: 5px;
   border-radius: 10px;
+  cursor: pointer;
+}
+
+/*Loader Component*/
+.loader-full-screen, .loader-full-section {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.loader-full-section {
+  position: absolute;
+}
+
+.loader-full-screen .cover, .loader-full-section .cover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.9);
+}
+/*End of Loader Component*/
+
+.chip {
+  background-color: lightgray;
+  display: inline-block;
+  margin:10px 5px;
+  padding: 3px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.chip-active {
+  background-color: #7dc356;
+}
+
+.primary-color {
+  color: #7dc356
+}
+
+.refresh-logo-navbar {
+  background-color: #7dc356;
+  display: flex;
+  width: 100px;
+  height: 85px;
+  justify-content: center;
+}
+.info-navbar {
+  background-color: #131848;
+  color: #fff;
+  padding: 0px 50px;
+  display: flex;
+  height: 85px;
+  align-items: center;
+  margin-left: 100px;
+}
+.navbar-nav a{
+  color: #fff !important;
 }

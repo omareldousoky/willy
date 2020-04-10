@@ -175,15 +175,8 @@ export const LoanFormulaCreationForm = (props: any) => {
                             value={values.equalInstallments}
                             checked={values.equalInstallments}
                             onBlur={handleBlur}
-                            disabled={!values.rounding}
-                            onChange={(e: any) => {
-                                const val = e.currentTarget.value;
-                                if (val === true) {
-                                    setFieldValue('equalInstallments', false)
-                                } else {
-                                    setFieldValue('equalInstallments', true)
-                                }
-                            }}
+                            disabled={!values.rounding || values.roundLastInstallment}
+                            onChange={handleChange}
                             isInvalid={errors.equalInstallments && touched.equalInstallments}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -191,29 +184,22 @@ export const LoanFormulaCreationForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId='equalInstallmentsFalse'>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.equalInstallmentsFalse}</Form.Label>
+                <Form.Group as={Row} controlId='roundLastInstallment'>
+                    <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.roundLastInstallment}</Form.Label>
                     <Col sm={6}>
                         <Form.Check
                             type='checkbox'
-                            name='equalInstallments'
-                            data-qc='equalInstallments'
-                            value={values.equalInstallments}
-                            checked={(!values.equalInstallments)}
+                            name='roundLastInstallment'
+                            data-qc='roundLastInstallment'
+                            value={values.roundLastInstallment}
+                            checked={values.roundLastInstallment}
                             onBlur={handleBlur}
-                            disabled={!values.rounding}
-                            onChange={(e: any) => {
-                                const val = e.currentTarget.value;
-                                if (val === false) {
-                                    setFieldValue('equalInstallments', true)
-                                } else {
-                                    setFieldValue('equalInstallments', false)
-                                }
-                            }}
-                            isInvalid={errors.equalInstallments && touched.equalInstallments}
+                            disabled={!values.rounding || values.equalInstallments}
+                            onChange={handleChange}
+                            isInvalid={errors.roundLastInstallment && touched.roundLastInstallment}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.equalInstallments}
+                            {errors.roundLastInstallment}
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>

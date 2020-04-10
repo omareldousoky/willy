@@ -65,12 +65,13 @@ class DocumentsUpload extends Component<Props, State>{
   triggerInputFile(name: string) {
     const limit = this.getImagesLimit(name);
     if (this.state[name].length < limit) {
-    this[`fileInput${name}`].current?.click()
+      this[`fileInput${name}`].current?.click()
     }
   }
   handleOnChange = (event, name: string) => {
     event.preventDefault();
-    if (event.target.files.length <= 2 && this.state[name].length <= 2) {
+    const imagesLimit = this.getImagesLimit(name);
+    if (event.target.files.length <= imagesLimit && this.state[name].length <= imagesLimit) {
       this.readFiles(event.target.files, name);
     } else {
       Swal.fire('', local.numberOfDocumentsError + this.getImagesLimit(name), 'error')
@@ -87,7 +88,9 @@ class DocumentsUpload extends Component<Props, State>{
   }
   async readFiles(files: Array<File> | FileList, name: string) {
     const imagesLimit = this.getImagesLimit(name);
-    if (files.length <= imagesLimit && this.state[name].length < imagesLimit) {
+    const flag: boolean = this.checkFileType(files)
+    if (flag) Swal.fire('', local.invalidFileType, 'error')
+    else if (files.length <= imagesLimit && this.state[name].length < imagesLimit) {
       this.setState({ loading: [...this.state.loading, name] } as State);
       for (let index = 0; index < files.length; index++) {
         const formData = new FormData();
@@ -142,16 +145,13 @@ class DocumentsUpload extends Component<Props, State>{
     this.dragEventCounter = 0;
     this.setState({ dragging: false });
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
-      const flag: boolean = this.checkFileType(event.dataTransfer.files)
-      if (flag) Swal.fire('', local.invalidFileType, 'error')
-      else this.readFiles(event.dataTransfer.files, name);
+      this.readFiles(event.dataTransfer.files, name);
     }
   };
-  checkFileType(files: FileList) {
+  checkFileType(files: Array<File> | FileList) {
     const length = files.length;
     let flag = false;
     for (let index = 0; index < length; index++) {
-      console.log("alfmas", files[index].type, files, length)
       if (files[index].type === "image/png" || files[index].type === "image/jpeg" || files[index].type === "image/jpg")
         flag = false;
       else return true;
@@ -230,7 +230,7 @@ class DocumentsUpload extends Component<Props, State>{
 
   renderContainer(name: string) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#f5f5f5', cursor: 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4 }}
+      <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#f5f5f5', cursor: this.state[name].length === this.getImagesLimit(name) ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4 }}
         data-qc={`upload-${name}`}
         onClick={() => this.triggerInputFile(name)}
         onDrag={this.overrideEventDefaults}
