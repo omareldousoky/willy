@@ -14,8 +14,8 @@ module.exports = () => {
             }
         },
         output: {
+            filename: '[name].[hash].js',
             path: path.join(__dirname, '../build/login'),
-            filename: 'build.js'
         },
         module: {
             rules: [
@@ -27,7 +27,11 @@ module.exports = () => {
                         transpileOnly: true
                     },
                     exclude: /dist/,
-                }
+                },
+                {
+                    test: /\.(s?)css$/,
+                    use: ['style-loader', 'css-loader', 'sass-loader'],
+                },
             ]
         },
         plugins: [

@@ -6,7 +6,7 @@ import { Formula, loanFormula, loanFormulaCreationValidation } from './loanCreat
 import { LoanFormulaCreationForm } from './loanFormulaCreationForm';
 import { createFormula } from '../../Services/APIs/LoanFormula/createFromula';
 import Swal from 'sweetalert2';
-import Spinner from 'react-bootstrap/Spinner';
+import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 interface Props {
     title: string;
@@ -25,9 +25,8 @@ class FormulaCreation extends Component<Props, State>{
             loading: false
         }
     }
-    submit = async(values: Formula) => {
+    submit = async (values: Formula) => {
         this.setState({ loading: true });
-        const obj = values
         const toSend = {
             name: values.loanCalculationFormulaName,
             interestType: values.interestType,
@@ -37,36 +36,34 @@ class FormulaCreation extends Component<Props, State>{
             roundDirection: values.roundDirection,
             roundTo: Number(values.roundTo),
             roundWhat: (values.rounding === false) ? 'noRounding' : values.roundWhat,
-            equalInstallments: values.equalInstallments
+            equalInstallments: values.equalInstallments,
+            roundLastInstallment: values.roundLastInstallment
         }
         const res = await createFormula(toSend);
         if (res.status === 'success') {
             this.setState({ loading: false });
             Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/") })
         } else {
-            Swal.fire("error", local.formulaCreationError)
+            Swal.fire("error", local.formulaCreationError, 'error')
             this.setState({ loading: false });
         }
     }
     render() {
         return (
-            <div>
-                {this.state.loading ? <Spinner animation="border" className="central-loader-fullscreen" /> :
-                    <Container>
-                        <Formik
-                            initialValues={this.state.formula}
-                            onSubmit={this.submit}
-                            validationSchema={loanFormulaCreationValidation}
-                            validateOnBlur
-                            validateOnChange
-                        >
-                            {(formikProps) =>
-                                <LoanFormulaCreationForm {...formikProps} />
-                            }
-                        </Formik>
-                    </Container>
-                }
-            </div>
+            <Container>
+                <Loader open={this.state.loading} type="fullscreen" />
+                <Formik
+                    initialValues={this.state.formula}
+                    onSubmit={this.submit}
+                    validationSchema={loanFormulaCreationValidation}
+                    validateOnBlur
+                    validateOnChange
+                >
+                    {(formikProps) =>
+                        <LoanFormulaCreationForm {...formikProps} />
+                    }
+                </Formik>
+            </Container>
         )
     }
 }

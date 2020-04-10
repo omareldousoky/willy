@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
+import { Loader } from '../../../Shared/Components/Loader';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from './map';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -73,7 +73,7 @@ export const StepOneForm = (props: any) => {
           </Form.Control.Feedback>
         </Col>
         <Col sm={1}>
-          {loading ? <Spinner animation="border" /> : null}
+          <Loader type="inline" open={loading}/>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="birthDate">

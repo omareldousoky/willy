@@ -14,8 +14,8 @@ module.exports = () => {
             }
         },
         output: {
+            filename: '[name].[hash].js',
             path: path.join(__dirname, '../build/mohassel'),
-            filename: 'build.js'
         },
         module: {
             rules: [
@@ -29,8 +29,8 @@ module.exports = () => {
                     exclude: /dist/,
                 },
                 {
-                    test: /\.css$/i,
-                    use: ['style-loader', 'css-loader'],
+                    test: /\.(s?)css$/,
+                    use: ['style-loader', 'css-loader', 'sass-loader'],
                 },
             ]
         },

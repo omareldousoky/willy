@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,7 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
     return (
-        <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
             <Form.Group as={Row} controlId="productName">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.productName}</Form.Label>
                 <Col sm={6}>
@@ -84,7 +84,7 @@ export const LoanProductCreationForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="periodLength">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLength}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLengthEvery}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="number"
@@ -202,53 +202,49 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Group>
             <Form.Group as={Row} controlId='allowInterestAdjustmentTrue'>
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowInterestAdjustment}</Form.Label>
-                <Col sm={6}>
-                    <Form.Check
-                        type='checkbox'
-                        name='allowInterestAdjustment'
-                        data-qc='allowInterestAdjustment'
-                        value={values.allowInterestAdjustment}
-                        checked={values.allowInterestAdjustment}
-                        onBlur={handleBlur}
-                        onChange={(e: any) => {
-                            const val = e.currentTarget.value;
-                            if (val === true) {
-                                setFieldValue('allowInterestAdjustment', false)
-                            } else {
-                                setFieldValue('allowInterestAdjustment', true)
-                            }
-                        }}
-                        isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.allowInterestAdjustment}
-                    </Form.Control.Feedback>
-                </Col>
+                <Form.Check
+                    type='checkbox'
+                    name='allowInterestAdjustment'
+                    data-qc='allowInterestAdjustment'
+                    value={values.allowInterestAdjustment}
+                    checked={values.allowInterestAdjustment}
+                    onBlur={handleBlur}
+                    onChange={(e: any) => {
+                        const val = e.currentTarget.value;
+                        if (val === true) {
+                            setFieldValue('allowInterestAdjustment', false)
+                        } else {
+                            setFieldValue('allowInterestAdjustment', true)
+                        }
+                    }}
+                    isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.allowInterestAdjustment}
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Row} controlId='allowInterestAdjustmentFalse'>
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowInterestAdjustmentFalse}</Form.Label>
-                <Col sm={6}>
-                    <Form.Check
-                        type='checkbox'
-                        name='allowInterestAdjustment'
-                        data-qc='allowInterestAdjustment'
-                        value={values.allowInterestAdjustment}
-                        checked={(!values.allowInterestAdjustment)}
-                        onBlur={handleBlur}
-                        onChange={(e: any) => {
-                            const val = e.currentTarget.value;
-                            if (val === false) {
-                                setFieldValue('allowInterestAdjustment', true)
-                            } else {
-                                setFieldValue('allowInterestAdjustment', false)
-                            }
-                        }}
-                        isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.allowInterestAdjustment}
-                    </Form.Control.Feedback>
-                </Col>
+                <Form.Check
+                    type='checkbox'
+                    name='allowInterestAdjustment'
+                    data-qc='allowInterestAdjustment'
+                    value={values.allowInterestAdjustment}
+                    checked={(!values.allowInterestAdjustment)}
+                    onBlur={handleBlur}
+                    onChange={(e: any) => {
+                        const val = e.currentTarget.value;
+                        if (val === false) {
+                            setFieldValue('allowInterestAdjustment', true)
+                        } else {
+                            setFieldValue('allowInterestAdjustment', false)
+                        }
+                    }}
+                    isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.allowInterestAdjustment}
+                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Row} controlId="inAdvanceFees">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceFees}</Form.Label>
@@ -319,7 +315,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.stamps}
                     </Form.Control.Feedback>
                 </Col>
-                <Col sm={3}>
+                <Form.Label style={{ textAlign: 'right' }} column md={3}>{local.allowStampsAdjustment}</Form.Label>
+                <Col sm={1}>
                     <Form.Check
                         type="checkbox"
                         name="allowStampsAdjustment"
@@ -333,7 +330,6 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.allowStampsAdjustment}
                     </Form.Control.Feedback>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowStampsAdjustment}</Form.Label>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="representativeFees">
@@ -352,7 +348,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.representativeFees}
                     </Form.Control.Feedback>
                 </Col>
-                <Col sm={3}>
+                <Form.Label style={{ textAlign: 'right' }} column sm={3}>{local.allowRepresentativeFeesAdjustment}</Form.Label>
+                <Col sm={1}>
                     <Form.Check
                         type="checkbox"
                         name="allowRepresentativeFeesAdjustment"
@@ -366,7 +363,6 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.allowRepresentativeFeesAdjustment}
                     </Form.Control.Feedback>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowRepresentativeFeesAdjustment}</Form.Label>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="adminFees">
@@ -385,7 +381,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.adminFees}
                     </Form.Control.Feedback>
                 </Col>
-                <Col sm={3}>
+                <Form.Label style={{ textAlign: 'right' }} column sm={3}>{local.allowAdminFeesAdjustment}</Form.Label>
+                <Col sm={1}>
                     <Form.Check
                         type="checkbox"
                         name="allowAdminFeesAdjustment"
@@ -399,7 +396,6 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.allowAdminFeesAdjustment}
                     </Form.Control.Feedback>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowAdminFeesAdjustment}</Form.Label>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="earlyPaymentFees">
@@ -500,229 +496,239 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Col style={{ width: '100%', border: '1px solid black', borderRadius: '9px' }}>
+            <Col style={{ border: '1px solid black', borderRadius: '9px', margin: '10px 0 10px 0' }}>
                 <Row>
-                    <Form.Group as={Row} controlId="applicationFee">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFee}</Form.Label>
-                        <Col sm={4}>
-                            <Form.Control
-                                type="number"
-                                name="applicationFee"
-                                data-qc="applicationFee"
-                                value={values.applicationFee}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.applicationFee && touched.applicationFee}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.applicationFee}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId='allowApplicationFeeAdjustment'>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowApplicationFeeAdjustment}</Form.Label>
-                        <Col sm={2}>
-                            <Form.Check
-                                type='checkbox'
-                                name='allowApplicationFeeAdjustment'
-                                data-qc='allowApplicationFeeAdjustment'
-                                value={values.allowApplicationFeeAdjustment}
-                                checked={values.allowApplicationFeeAdjustment}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.allowApplicationFeeAdjustment && touched.allowApplicationFeeAdjustment}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.allowApplicationFeeAdjustment}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId='spreadApplicationFee'>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.spreadApplicationFee}</Form.Label>
-                        <Col sm={2}>
-                            <Form.Check
-                                type='checkbox'
-                                name='spreadApplicationFee'
-                                data-qc='spreadApplicationFee'
-                                value={values.spreadApplicationFee}
-                                checked={values.spreadApplicationFee}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.spreadApplicationFee && touched.spreadApplicationFee}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.spreadApplicationFee}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
+                    <Col>
+                        <Form.Group as={Row} sm={4} controlId="applicationFee">
+                            <Form.Label style={{ textAlign: 'right' }} column sm={6}>{local.applicationFee}</Form.Label>
+                            <Col sm={6}>
+                                <Form.Control
+                                    type="number"
+                                    name="applicationFee"
+                                    data-qc="applicationFee"
+                                    value={values.applicationFee}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={errors.applicationFee && touched.applicationFee}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.applicationFee}
+                                </Form.Control.Feedback>
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group as={Row} sm={8} controlId='allowApplicationFeeAdjustment'>
+                            <Form.Label style={{ textAlign: 'right' }} column sm={7}>{local.allowApplicationFeeAdjustment}</Form.Label>
+                            <Col sm={1}>
+                                <Form.Check
+                                    type='checkbox'
+                                    name='allowApplicationFeeAdjustment'
+                                    data-qc='allowApplicationFeeAdjustment'
+                                    value={values.allowApplicationFeeAdjustment}
+                                    checked={values.allowApplicationFeeAdjustment}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    isInvalid={errors.allowApplicationFeeAdjustment && touched.allowApplicationFeeAdjustment}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.allowApplicationFeeAdjustment}
+                                </Form.Control.Feedback>
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group as={Row} sm={8} controlId='spreadApplicationFee'>
+                            <Form.Label style={{ textAlign: 'right' }} column sm={7}>{local.spreadApplicationFee}</Form.Label>
+                            <Col sm={1}>
+                                <Form.Check
+                                    type='checkbox'
+                                    name='spreadApplicationFee'
+                                    data-qc='spreadApplicationFee'
+                                    value={values.spreadApplicationFee}
+                                    checked={values.spreadApplicationFee}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    isInvalid={errors.spreadApplicationFee && touched.spreadApplicationFee}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.spreadApplicationFee}
+                                </Form.Control.Feedback>
+                            </Col>
+                        </Form.Group>
+                    </Col>
                 </Row>
-                <Row>
-                    <Form.Group as={Row} controlId="individualApplicationFee">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.individualApplicationFee}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="number"
-                                name="individualApplicationFee"
-                                data-qc="individualApplicationFee"
-                                value={values.individualApplicationFee}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.individualApplicationFee && touched.individualApplicationFee}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.individualApplicationFee}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Row>
-                <Row>
-                    <Form.Group as={Row} controlId="applicationFeePercent">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercent}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="number"
-                                name="applicationFeePercent"
-                                data-qc="applicationFeePercent"
-                                value={values.applicationFeePercent}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.applicationFeePercent && touched.applicationFeePercent}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.applicationFeePercent}
-                            </Form.Control.Feedback>
-                        </Col>
-                        <Col sm={4}>
-                            <Form.Control as="select"
-                                name="applicationFeeType"
-                                data-qc="applicationFeeType"
-                                value={values.applicationFeeType}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.applicationFeeType && touched.applicationFeeType}
-                            >
-                                <option value='principal'>نسبة من قيمة القرض</option>
-                                <option value='monthly'>شهري</option>
-                                <option value='yearly'>سنوي</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.applicationFeeType}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Row>
-                <Row>
-                    <Form.Group as={Row} controlId="applicationFeePercentPerPerson">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="number"
-                                name="applicationFeePercentPerPerson"
-                                data-qc="applicationFeePercentPerPerson"
-                                value={values.applicationFeePercentPerPerson}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.applicationFeePercentPerPerson && touched.applicationFeePercentPerPerson}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.applicationFeePercentPerPerson}
-                            </Form.Control.Feedback>
-                        </Col>
-                        <Col sm={4}>
-                            <Form.Control as="select"
-                                name="applicationFeePercentPerPersonType"
-                                data-qc="applicationFeePercentPerPersonType"
-                                value={values.applicationFeePercentPerPersonType}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.applicationFeePercentPerPersonType && touched.applicationFeePercentPerPersonType}
-                            >
-                                <option value='principal'>نسبة من قيمة القرض</option>
-                                <option value='monthly'>شهري</option>
-                                <option value='yearly'>سنوي</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.applicationFeePercentPerPersonType}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Row>
+                <Form.Group as={Row} controlId="individualApplicationFee">
+                    <Form.Label style={{ textAlign: 'right' }} column md={4}>{local.individualApplicationFee}</Form.Label>
+                    <Col md={8}>
+                        <Form.Control
+                            type="number"
+                            name="individualApplicationFee"
+                            data-qc="individualApplicationFee"
+                            value={values.individualApplicationFee}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.individualApplicationFee && touched.individualApplicationFee}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.individualApplicationFee}
+                        </Form.Control.Feedback>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="applicationFeePercent">
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercent}</Form.Label>
+                    <Col sm={4}>
+                        <Form.Control
+                            type="number"
+                            name="applicationFeePercent"
+                            data-qc="applicationFeePercent"
+                            value={values.applicationFeePercent}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.applicationFeePercent && touched.applicationFeePercent}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.applicationFeePercent}
+                        </Form.Control.Feedback>
+                    </Col>
+                    <Col sm={4}>
+                        <Form.Control as="select"
+                            name="applicationFeeType"
+                            data-qc="applicationFeeType"
+                            value={values.applicationFeeType}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.applicationFeeType && touched.applicationFeeType}
+                        >
+                            <option value='principal'>نسبة من قيمة القرض</option>
+                            <option value='monthly'>شهري</option>
+                            <option value='yearly'>سنوي</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.applicationFeeType}
+                        </Form.Control.Feedback>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="applicationFeePercentPerPerson">
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
+                    <Col sm={4}>
+                        <Form.Control
+                            type="number"
+                            name="applicationFeePercentPerPerson"
+                            data-qc="applicationFeePercentPerPerson"
+                            value={values.applicationFeePercentPerPerson}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.applicationFeePercentPerPerson && touched.applicationFeePercentPerPerson}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.applicationFeePercentPerPerson}
+                        </Form.Control.Feedback>
+                    </Col>
+                    <Col sm={4}>
+                        <Form.Control as="select"
+                            name="applicationFeePercentPerPersonType"
+                            data-qc="applicationFeePercentPerPersonType"
+                            value={values.applicationFeePercentPerPersonType}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.applicationFeePercentPerPersonType && touched.applicationFeePercentPerPersonType}
+                        >
+                            <option value='principal'>نسبة من قيمة القرض</option>
+                            <option value='monthly'>شهري</option>
+                            <option value='yearly'>سنوي</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.applicationFeePercentPerPersonType}
+                        </Form.Control.Feedback>
+                    </Col>
+                </Form.Group>
             </Col>
-            <Row style={{ width: '100%' }}>
-                <Col style={{ border: '2px solid black', borderRadius: '9px' }}>
-                    <Form.Group as={Row} controlId='loanImpactPrincipal'>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanImpactPrincipal}</Form.Label>
+            <Col style={{ border: '2px solid black', borderRadius: '9px' }}>
+                <Form.Group as={Row} controlId='loanImpactPrincipal'>
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanImpactPrincipal}</Form.Label>
+                    <Form.Check
+                        type='checkbox'
+                        name='loanImpactPrincipal'
+                        data-qc='loanImpactPrincipal'
+                        value={values.loanImpactPrincipal}
+                        checked={values.loanImpactPrincipal}
+                        onBlur={handleBlur}
+                        onChange={(e: any) => {
+                            const val = e.currentTarget.value;
+                            if (val === true) {
+                                setFieldValue('loanImpactPrincipal', false)
+                            } else {
+                                setFieldValue('loanImpactPrincipal', true)
+                            }
+                        }}
+                        isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.loanImpactPrincipal}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Row} controlId='loanImpactPrincipal'>
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanImpactPrincipal2}</Form.Label>
+                    <Form.Check
+                        type='checkbox'
+                        name='loanImpactPrincipal'
+                        data-qc='loanImpactPrincipal'
+                        value={values.loanImpactPrincipal}
+                        checked={(!values.loanImpactPrincipal)}
+                        onBlur={handleBlur}
+                        onChange={(e: any) => {
+                            const val = e.currentTarget.value;
+                            if (val === false) {
+                                setFieldValue('loanImpactPrincipal', true)
+                            } else {
+                                setFieldValue('loanImpactPrincipal', false)
+                            }
+                        }}
+                        isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.loanImpactPrincipal}
+                    </Form.Control.Feedback>
+                </Form.Group>
+            </Col>
+            <Col>
+                <Form.Group as={Row} controlId='mustEnterGuarantor'>
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.mustEnterGuarantor}</Form.Label>
+                    <Form.Check
+                        type='checkbox'
+                        name='mustEnterGuarantor'
+                        data-qc='mustEnterGuarantor'
+                        value={values.mustEnterGuarantor}
+                        checked={values.mustEnterGuarantor}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        isInvalid={errors.mustEnterGuarantor && touched.mustEnterGuarantor}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.mustEnterGuarantor}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Row} controlId="noOfGuarantors">
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfGuarantors}</Form.Label>
                         <Col sm={6}>
-                            <Form.Check
-                                type='checkbox'
-                                name='loanImpactPrincipal'
-                                data-qc='loanImpactPrincipal'
-                                value={values.loanImpactPrincipal}
-                                checked={values.loanImpactPrincipal}
-                                onBlur={handleBlur}
-                                onChange={(e: any) => {
-                                    const val = e.currentTarget.value;
-                                    if (val === true) {
-                                        setFieldValue('loanImpactPrincipal', false)
-                                    } else {
-                                        setFieldValue('loanImpactPrincipal', true)
-                                    }
-                                }}
-                                isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.loanImpactPrincipal}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId='loanImpactPrincipal'>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanImpactPrincipal2}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Check
-                                type='checkbox'
-                                name='loanImpactPrincipal'
-                                data-qc='loanImpactPrincipal'
-                                value={values.loanImpactPrincipal}
-                                checked={(!values.loanImpactPrincipal)}
-                                onBlur={handleBlur}
-                                onChange={(e: any) => {
-                                    const val = e.currentTarget.value;
-                                    if (val === false) {
-                                        setFieldValue('loanImpactPrincipal', true)
-                                    } else {
-                                        setFieldValue('loanImpactPrincipal', false)
-                                    }
-                                }}
-                                isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.loanImpactPrincipal}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Col>
-                <Col>
-                    <Form.Group as={Row} controlId='mustEnterGuarantor'>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.mustEnterGuarantor}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Check
-                                type='checkbox'
-                                name='mustEnterGuarantor'
-                                data-qc='mustEnterGuarantor'
-                                value={values.mustEnterGuarantor}
-                                checked={values.mustEnterGuarantor}
-                                onBlur={handleBlur}
+                            <Form.Control
+                                type="number"
+                                name="noOfGuarantors"
+                                data-qc="noOfGuarantors"
+                                value={values.noOfGuarantors}
                                 onChange={handleChange}
-                                isInvalid={errors.mustEnterGuarantor && touched.mustEnterGuarantor}
+                                onBlur={handleBlur}
+                                isInvalid={errors.noOfGuarantors && touched.noOfGuarantors}
+                                disabled={!values.mustEnterGuarantor}
                             />
                             <Form.Control.Feedback type="invalid">
-                                {errors.mustEnterGuarantor}
+                                {errors.noOfGuarantors}
                             </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId='guarantorGuaranteesMultiple'>
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
-                <Col sm={6}>
+                <Form.Group as={Row} controlId='guarantorGuaranteesMultiple'>
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
                     <Form.Check
                         type='checkbox'
                         name='guarantorGuaranteesMultiple'
@@ -736,10 +742,8 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.guarantorGuaranteesMultiple}
                     </Form.Control.Feedback>
-                </Col>
-            </Form.Group>
-                </Col>
-            </Row>
+                </Form.Group>
+            </Col>
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
         </Form >
     )

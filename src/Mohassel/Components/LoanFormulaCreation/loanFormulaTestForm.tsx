@@ -99,7 +99,7 @@ export const LoanFormulaTestForm = (props: any) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="periodLength">
-                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.periodLength}</Form.Label>
+                <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.periodLengthEvery}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="number"
