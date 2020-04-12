@@ -168,7 +168,7 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   render() {
-    const reviewedResults = this.state.searchResults.filter(result => result.Application.status === "reviewed");
+    const reviewedResults = (this.state.searchResults) ? this.state.searchResults.filter(result => result.Application.status === "reviewed") : [];
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
@@ -265,7 +265,7 @@ class TrackLoanApplications extends Component<Props, State>{
             </tr>
           </thead>
           <tbody>
-            {this.state.searchResults
+            {this.state.searchResults && this.state.searchResults
               // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
               .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.Application.status) : loanItem)
               .map((loanItem, index) => {
