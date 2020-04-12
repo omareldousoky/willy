@@ -97,7 +97,7 @@
     "maxNoOfRestructuring": "الحد الأقصي لعدد مرات الترحيل للقرض",
     "minPrincipal": "قيمة القرض المسموحة: من:",
     "maxPrincipal": "الي:",
-    "minInstallment": "قيمةالاقساط المسموحة للقرض: من:",
+    "minInstallment": "عدد الاقساط المسموحة للقرض: من:",
     "maxInstallment": "الي:",
     "applicationFee": "رسوم طلب القرض",
     "allowApplicationFeeAdjustment": "السماح بالتعديل عند إدراج الطلب",
