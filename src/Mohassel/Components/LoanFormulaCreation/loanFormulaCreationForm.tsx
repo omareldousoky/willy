@@ -57,10 +57,9 @@ export const LoanFormulaCreationForm = (props: any) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.installmentType && touched.installmentType}
-                        maxLength={14}
                     >
-                        <option value="included">تتضمن أصل و مصاريف</option>
-                        <option value="isntIncluded">أقساط بالمصاريف فقط اولا ثم بعد ذلك الأصل</option>
+                        <option value="principalAndFees">تتضمن أصل و مصاريف</option>
+                        <option value="feesFirst">أقساط بالمصاريف فقط اولا ثم بعد ذلك الأصل</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.installmentType}
