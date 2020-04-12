@@ -31,7 +31,7 @@ export interface FormulaTestClass{
 export const loanFormula: Formula = {
     loanCalculationFormulaName: '',
     interestType: 'flat',
-    installmentType: 'up',
+    installmentType: 'principalAndFees',
     gracePeriodFees: false,
     rounding: true,
     roundDirection: 'up',

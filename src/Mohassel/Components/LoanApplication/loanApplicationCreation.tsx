@@ -195,7 +195,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
@@ -208,7 +208,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
@@ -221,7 +221,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
@@ -304,7 +304,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             newState[guarantor] = { ...selectedGuarantor.body, id: obj.Id };
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }

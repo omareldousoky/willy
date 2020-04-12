@@ -44,8 +44,9 @@ class AssignProductToBranch extends Component<Props, State>{
                 loading: false
             })
         } else {
-            console.log('err')
             this.setState({ loading: false });
+            Swal.fire('', local.searchError, 'error');
+
         }
     }
     async getProducts() {
@@ -61,8 +62,8 @@ class AssignProductToBranch extends Component<Props, State>{
                 loading: false
             })
         } else {
-            console.log('err')
             this.setState({ loading: false });
+            Swal.fire('', local.searchError, 'error');
         }
     }
     submit = async (values: any) => {
@@ -91,7 +92,7 @@ class AssignProductToBranch extends Component<Props, State>{
                 selectedBranchProducts: branchsProductsLabels
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
         }
     }
     handleProdChange(e) {
