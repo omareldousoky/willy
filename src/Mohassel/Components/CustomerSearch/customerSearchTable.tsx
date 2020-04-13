@@ -10,7 +10,7 @@ interface Customer {
     nationalIdIssueDate: number;
     homePostalCode: number;
     nationalId?: string;
-    customerHomeAddress?: string;
+    homeAddress?: string;
     customerAddressLatLong: string;
     customerAddressLatLongNumber: {
       lat: number;
@@ -114,7 +114,7 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerHomeAddress}</p>
+                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.homeAddress}</p>
                     </div>
                 </div>
                 }
