@@ -142,7 +142,7 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const results = await searchCustomerByName(query)
     if (results.status === 'success') {
-      this.setState({ loading: false, searchResults: results.body.Customers });
+      this.setState({ loading: false, searchResults: results.body.customers });
     } else {
       Swal.fire("error", local.searchError, 'error')
       this.setState({ loading: false });
