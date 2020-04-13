@@ -152,9 +152,10 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true, customerId: customer.id });
     const res = await getCustomerByID(customer.id)
     if (res.status === 'success') {
-      const customerInfo = {...res.body.customer};
-      const customerBusiness = {...res.body.customer};
-      const customerExtraDetails = {...res.body.customer};
+
+      const customerInfo = {...res.body};
+      const customerBusiness = {...res.body};
+      const customerExtraDetails = {...res.body};
       // const { birthDate,
       //   customerName,
       //   nationalIdIssueDate,
@@ -229,6 +230,7 @@ class CustomerCreation extends Component<Props, State>{
       //   accountBranch,
       //   comments
       // };
+      console.log('customerinfo:',customerInfo)
       customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
       customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
       customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;

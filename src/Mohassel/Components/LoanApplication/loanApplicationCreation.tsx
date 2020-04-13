@@ -282,10 +282,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         if (selectedCustomer.status === 'success') {
             const defaultApplication = this.state.application;
             defaultApplication.customerID = customer.id;
-            this.populateCustomer(selectedCustomer.body.customer)
+            this.populateCustomer(selectedCustomer.body)
             this.setState({
                 loading: false,
-                selectedCustomer: selectedCustomer.body.customer,
+                selectedCustomer: selectedCustomer.body,
                 application: defaultApplication
             });
 
@@ -301,7 +301,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const defaultApplication = this.state.application
             defaultApplication.guarantorIds.push(obj.id)
             const newState = {};
-            newState[guarantor] = { ...selectedGuarantor.body.customer, id: obj.id };
+            newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire('', local.searchError, 'error');
