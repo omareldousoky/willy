@@ -9,6 +9,7 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
+import Select from 'react-select';
 import { Formik } from 'formik';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getBranches } from '../../Services/APIs/Branch/getBranches';
@@ -18,8 +19,8 @@ import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalVali
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Branch {
-  _id: string;
-  name: string;
+  label: string;
+  value: string;
 }
 interface Product {
   productName: string;
@@ -49,7 +50,7 @@ interface LoanItem {
 }
 interface State {
   branches: Array<Branch>;
-  filteredBranch: string;
+  filteredBranch: Branch;
   searchResults: Array<LoanItem>;
   uniqueLoanOfficers: Array<string>;
   filteredLoanOfficer: string;
@@ -64,7 +65,7 @@ class BulkApplicationApproval extends Component<Props, State>{
   constructor(props) {
     super(props);
     this.state = {
-      filteredBranch: '',
+      filteredBranch: { label: '', value: '' },
       filteredLoanOfficer: '',
       branches: [],
       searchResults: [],
@@ -78,18 +79,25 @@ class BulkApplicationApproval extends Component<Props, State>{
     this.setState({ loading: true })
     const res = await getBranches();
     if (res.status === "success") {
+      const branches: any = [];
+      res.body.data.data.forEach(branch => {
+        branches.push({
+          label: branch.name,
+          value: branch._id
+        })
+      })
       this.setState({
         loading: false,
-        branches: res.body.data.data
+        branches: branches
       })
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.searchError, 'error');
     }
   }
-  async getDataFromBranch(e: React.FormEvent<HTMLInputElement>) {
-    this.setState({ loading: true, filteredBranch: e.currentTarget.value });
-    const res = await searchApplication({ branchId: e.currentTarget.value, size: 50 });
+  async getDataFromBranch(e: Branch) {
+    this.setState({ loading: true, filteredBranch: e });
+    const res = await searchApplication({ branchId: e.value, size: 50 });
     if (res.status === "success") {
       this.setState({ loading: false, searchResults: res.body.applications ? res.body.applications : [] });
     } else {
@@ -152,20 +160,16 @@ class BulkApplicationApproval extends Component<Props, State>{
         <div style={{ display: 'flex' }}>
           <Form.Group controlId="branchSelector" style={{ flex: 2, margin: 10, textAlign: 'right' }}>
             <Form.Label>{`${local.selectBranch}*`}</Form.Label>
-            <Form.Control as="select"
-              placeholder="Search by Customer name or ID"
+            <Select
               data-qc="branchSelector"
               value={this.state.filteredBranch}
-              onChange={(e: React.FormEvent<HTMLInputElement>) => this.getDataFromBranch(e)}
-            >
-              <option value="" disabled></option>
-              {this.state.branches.map((branch, index) => {
-                return <option key={index} value={branch._id}>{branch.name}</option>
-              })}
-            </Form.Control>
+              onChange={(e: Branch) => this.getDataFromBranch(e)}
+              type='text'
+              options={this.state.branches}
+            />
           </Form.Group>
         </div>
-        {this.state.searchResults.length ?
+        {this.state.searchResults.filter(loanItem => loanItem.Application.status === "reviewed").length ?
           <div>
             <Table striped bordered hover>
               <thead>
@@ -222,8 +226,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             </Table>
             <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>Approve</Button>
           </div>
-          : null}
-
+          : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
             initialValues={{ approvalDate: '', fundSource: '' }}

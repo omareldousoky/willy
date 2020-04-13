@@ -131,9 +131,9 @@ class CustomerCreation extends Component<Props, State>{
     } else {
       this.setState({ step3: values, loading: true } as any)
       const objToSubmit: Customer = {
-        customerInfo: {...this.state.step1},
-        customerBusiness: {...this.state.step2},
-        customerExtraDetails: {...this.state.step3}
+        customerInfo: { ...this.state.step1 },
+        customerBusiness: { ...this.state.step2 },
+        customerExtraDetails: { ...this.state.step3 }
       };
       this.createCustomer(objToSubmit);
     }
@@ -142,7 +142,7 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const results = await searchCustomerByName(query)
     if (results.status === 'success') {
-      this.setState({ loading: false, searchResults: results.body.customers });
+      this.setState({ loading: false, searchResults: results.body.Customers });
     } else {
       Swal.fire("error", local.searchError, 'error')
       this.setState({ loading: false });
@@ -152,9 +152,83 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true, customerId: customer.id });
     const res = await getCustomerByID(customer.id)
     if (res.status === 'success') {
-      const customerInfo = res.body.customerInfo;
-      const customerBusiness = res.body.customerBusiness;
-      const customerExtraDetails = res.body.customerExtraDetails;
+      const customerInfo = {...res.body.customer};
+      const customerBusiness = {...res.body.customer};
+      const customerExtraDetails = {...res.body.customer};
+      // const { birthDate,
+      //   customerName,
+      //   nationalIdIssueDate,
+      //   homePostalCode,
+      //   nationalId,
+      //   customerHomeAddress,
+      //   customerAddressLatLong } = res.body.customer;
+      // const { businessAddressLatLong,
+      //   businessName,
+      //   businessAddress,
+      //   governorate,
+      //   district,
+      //   village,
+      //   ruralUrban,
+      //   businessPostalCode,
+      //   businessPhoneNumber,
+      //   businessSector,
+      //   businessActivity,
+      //   businessSpeciality,
+      //   businessLicenseNumber,
+      //   businessLicenseIssuePlace,
+      //   businessLicenseIssueDate,
+      //   commercialRegisterNumber,
+      //   industryRegisterNumber,
+      //   taxCardNumber } = res.body.customer;
+      // const {
+      //   geographicalDistribution,
+      //   representative,
+      //   applicationDate,
+      //   permanentEmployeeCount,
+      //   partTimeEmployeeCount,
+      //   accountNumber,
+      //   accountBranch,
+      //   comments
+      // } = res.body.customer;
+      // const customerInfo = {
+      //   birthDate,
+      //   customerName,
+      //   nationalIdIssueDate,
+      //   homePostalCode,
+      //   nationalId,
+      //   customerHomeAddress,
+      //   customerAddressLatLong
+      // };
+      // const customerBusiness = {
+      //   businessAddressLatLong,
+      //   businessName,
+      //   businessAddress,
+      //   governorate,
+      //   district,
+      //   village,
+      //   ruralUrban,
+      //   businessPostalCode,
+      //   businessPhoneNumber,
+      //   businessSector,
+      //   businessActivity,
+      //   businessSpeciality,
+      //   businessLicenseNumber,
+      //   businessLicenseIssuePlace,
+      //   businessLicenseIssueDate,
+      //   commercialRegisterNumber,
+      //   industryRegisterNumber,
+      //   taxCardNumber
+      // };
+      // const customerExtraDetails = {
+      //   geographicalDistribution,
+      //   representative,
+      //   applicationDate,
+      //   permanentEmployeeCount,
+      //   partTimeEmployeeCount,
+      //   accountNumber,
+      //   accountBranch,
+      //   comments
+      // };
       customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
       customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
       customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
@@ -172,17 +246,16 @@ class CustomerCreation extends Component<Props, State>{
     }
   }
   async createCustomer(obj: Customer) {
-    obj.customerInfo.birthDate = new Date(obj.customerInfo.birthDate).valueOf();
-    obj.customerInfo.nationalIdIssueDate = new Date(obj.customerInfo.nationalIdIssueDate).valueOf();
-    obj.customerInfo.homePostalCode = Number(obj.customerInfo.homePostalCode);
-    obj.customerInfo.customerAddressLatLongNumber.lat === 0 && obj.customerInfo.customerAddressLatLongNumber.lng === 0 ? obj.customerInfo.customerAddressLatLong = '' : obj.customerInfo.customerAddressLatLong = `${obj.customerInfo.customerAddressLatLongNumber.lat},${obj.customerInfo.customerAddressLatLongNumber.lng}`;
-    obj.customerBusiness.businessAddressLatLongNumber.lat === 0 && obj.customerBusiness.businessAddressLatLongNumber.lng === 0 ? obj.customerBusiness.businessAddressLatLong = '' : obj.customerBusiness.businessAddressLatLong = `${obj.customerBusiness.businessAddressLatLongNumber.lat},${obj.customerBusiness.businessAddressLatLongNumber.lng}`;
-    obj.customerBusiness.businessPostalCode = Number(obj.customerBusiness.businessPostalCode);
-    obj.customerBusiness.businessLicenseIssueDate = new Date(obj.customerBusiness.businessLicenseIssueDate).valueOf();
-    obj.customerExtraDetails.applicationDate = new Date(obj.customerExtraDetails.applicationDate).valueOf();
-    obj.customerExtraDetails.permanentEmployeeCount = Number(obj.customerExtraDetails.permanentEmployeeCount);
-    obj.customerExtraDetails.partTimeEmployeeCount = Number(obj.customerExtraDetails.partTimeEmployeeCount);
-    const res = await createCustomer(obj);
+    const objToSubmit = { ...obj.customerInfo, ...obj.customerBusiness, ...obj.customerExtraDetails };
+    objToSubmit.birthDate = new Date(objToSubmit.birthDate).valueOf();
+    objToSubmit.nationalIdIssueDate = new Date(objToSubmit.nationalIdIssueDate).valueOf();
+    objToSubmit.customerAddressLatLongNumber.lat === 0 && objToSubmit.customerAddressLatLongNumber.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber.lat},${objToSubmit.customerAddressLatLongNumber.lng}`;
+    objToSubmit.businessAddressLatLongNumber.lat === 0 && objToSubmit.businessAddressLatLongNumber.lng === 0 ? objToSubmit.businessAddressLatLong = '' : objToSubmit.businessAddressLatLong = `${objToSubmit.businessAddressLatLongNumber.lat},${objToSubmit.businessAddressLatLongNumber.lng}`;
+    objToSubmit.businessLicenseIssueDate = new Date(objToSubmit.businessLicenseIssueDate).valueOf();
+    objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
+    objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
+    objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
+    const res = await createCustomer(objToSubmit);
     if (res.status === 'success') {
       this.setState({ loading: false });
       Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.CustomerId }) })

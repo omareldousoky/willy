@@ -225,5 +225,7 @@
     "fundSource": "مصدر التمويل",
     "tasaheel": "تساهيل",
     "bulkLoanApproved": "تم الموافقة علي القروض",
-    "bulkLoanError": "حدث خطأ في الموافقة علي القروض"
+    "bulkLoanError": "حدث خطأ في الموافقة علي القروض",
+    "active":"فعال",
+    "noApprovedApplicationsForThisBranch": " لا يوجد قروض موافق عليها لهذا الفرع"
 }

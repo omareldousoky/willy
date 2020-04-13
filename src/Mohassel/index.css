@@ -129,3 +129,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .navbar-nav a{
   color: #fff !important;
 }
+.checkbox-label, label {
+  margin-right: 20px;
+}
