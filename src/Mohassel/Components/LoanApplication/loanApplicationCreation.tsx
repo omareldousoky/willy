@@ -278,7 +278,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     selectCustomer = async (customer) => {
         this.setState({ loading: true });
-        const selectedCustomer = await getCustomerByID(customer.Id)
+        const selectedCustomer = await getCustomerByID(customer.id)
         if (selectedCustomer.status === 'success') {
             const defaultApplication = this.state.application;
             defaultApplication.customerID = customer.Id;

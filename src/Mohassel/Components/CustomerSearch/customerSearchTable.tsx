@@ -63,7 +63,7 @@ class CustomerSearch extends Component<Props, State>{
                 style={{width: '50%', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'right', overflow: 'scroll', padding: 10}}>
                     {this.props.searchResults.map((element: any) => {
                         return (
-                            <p style={{width:'100%', borderBottom:'0.5px solid black', cursor:'all-scroll'}} key={element.Id} onClick={() => this.props.selectCustomer(element)}>{element.Customer.customerInfo.customerName}</p>
+                            <p style={{width:'100%', borderBottom:'0.5px solid black', cursor:'all-scroll'}} key={element.id} onClick={() => this.props.selectCustomer(element)}>{element.customer.customerName}</p>
                         )
                     }
                     )}
