@@ -178,8 +178,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.populateLoanProduct(application.body.product)
             const guarantor1 = (application.body.guarantors[0])?application.body.guarantors[0]:null;
             const guarantor2 = (application.body.guarantors[1])?application.body.guarantors[1]:null;
-            if(guarantor1)formData.guarantorIds.push(guarantor1.customerInfo.nationalId);
-            if(guarantor2)formData.guarantorIds.push(guarantor2.customerInfo.nationalId);
+            if(guarantor1)formData.guarantorIds.push(guarantor1.nationalId);
+            if(guarantor2)formData.guarantorIds.push(guarantor2.nationalId);
             formData.entryDate = (application.body.entryDate)?this.getDateString(application.body.entryDate):'';
             formData.visitationDate = (application.body.visitationDate)?this.getDateString(application.body.visitationDate):'';
             formData.usage = (application.body.usage)?application.body.usage:'';
@@ -195,7 +195,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
@@ -208,7 +208,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
@@ -221,7 +221,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
@@ -261,17 +261,17 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     populateCustomer(response) {
         const defaultApplication = this.state.application;
-        defaultApplication.customerName = response.customerInfo.customerName;
-        defaultApplication.nationalId = response.customerInfo.nationalId;
-        defaultApplication.birthDate = this.getDateString(response.customerInfo.birthDate);
-        defaultApplication.gender = getGenderFromNationalId(response.customerInfo.nationalId);
-        defaultApplication.nationalIdIssueDate = this.getDateString(response.customerInfo.nationalIdIssueDate);
-        defaultApplication.businessSector = response.customerBusiness.businessSector;
-        defaultApplication.businessActivity = response.customerBusiness.businessActivity;
-        defaultApplication.businessSpeciality = response.customerBusiness.businessSpeciality;
-        defaultApplication.permanentEmployeeCount = response.customerExtraDetails.permanentEmployeeCount;
-        defaultApplication.partTimeEmployeeCount = response.customerExtraDetails.partTimeEmployeeCount;
-        defaultApplication.representative = response.customerExtraDetails.representative;
+        defaultApplication.customerName = response.customerName;
+        defaultApplication.nationalId = response.nationalId;
+        defaultApplication.birthDate = this.getDateString(response.birthDate);
+        defaultApplication.gender = getGenderFromNationalId(response.nationalId);
+        defaultApplication.nationalIdIssueDate = this.getDateString(response.nationalIdIssueDate);
+        defaultApplication.businessSector = response.businessSector;
+        defaultApplication.businessActivity = response.businessActivity;
+        defaultApplication.businessSpeciality = response.businessSpeciality;
+        defaultApplication.permanentEmployeeCount = response.permanentEmployeeCount;
+        defaultApplication.partTimeEmployeeCount = response.partTimeEmployeeCount;
+        defaultApplication.representative = response.representative;
         this.setState({
             application: defaultApplication
         });
@@ -281,11 +281,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedCustomer = await getCustomerByID(customer.id)
         if (selectedCustomer.status === 'success') {
             const defaultApplication = this.state.application;
-            defaultApplication.customerID = customer.Id;
-            this.populateCustomer(selectedCustomer.body)
+            defaultApplication.customerID = customer.id;
+            this.populateCustomer(selectedCustomer.body.customer)
             this.setState({
                 loading: false,
-                selectedCustomer: selectedCustomer.body,
+                selectedCustomer: selectedCustomer.body.customer,
                 application: defaultApplication
             });
 
@@ -296,15 +296,15 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     selectGuarantor = async (obj, guarantor: string) => {
         this.setState({ loading: true });
-        const selectedGuarantor = await getCustomerByID(obj.Id);
+        const selectedGuarantor = await getCustomerByID(obj.id);
         if (selectedGuarantor.status === 'success') {
             const defaultApplication = this.state.application
-            defaultApplication.guarantorIds.push(obj.Id)
+            defaultApplication.guarantorIds.push(obj.id)
             const newState = {};
-            newState[guarantor] = { ...selectedGuarantor.body, id: obj.Id };
+            newState[guarantor] = { ...selectedGuarantor.body.customer, id: obj.id };
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }

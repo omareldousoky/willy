@@ -2,9 +2,31 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import { Customer } from '../CustomerCreation/customer-creation';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
+interface Customer {
+    birthDate: number;
+    customerName?: string;
+    nationalIdIssueDate: number;
+    homePostalCode: number;
+    nationalId?: string;
+    customerHomeAddress?: string;
+    customerAddressLatLong: string;
+    customerAddressLatLongNumber: {
+      lat: number;
+      lng: number;
+    };
+    businessAddressLatLong: string;
+    businessAddressLatLongNumber: {
+      lat: number;
+      lng: number;
+    };
+    businessPostalCode: any;
+    businessLicenseIssueDate: any;
+    applicationDate: any;
+    permanentEmployeeCount: any;
+    partTimeEmployeeCount: any;
+  }
 interface Props {
     source: string;
     searchResults: Array<object>;
@@ -76,23 +98,23 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.name}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerInfo.customerName}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerName}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.nationalId}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.customerInfo.nationalId}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalId}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.birthDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.customerInfo.birthDate)}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.birthDate)}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.nationalIdIssueDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.customerInfo.nationalIdIssueDate)}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerInfo.customerHomeAddress}</p>
+                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{this.props.selectedCustomer.customerHomeAddress}</p>
                     </div>
                 </div>
                 }

@@ -62,7 +62,7 @@ class FormulaTest extends Component<Props, State>{
                 loading: false
             })
         } else {
-            console.log('err')
+            Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
