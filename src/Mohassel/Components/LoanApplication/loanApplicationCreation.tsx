@@ -229,7 +229,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const results = await searchCustomerByName(query)
         if (results.status === 'success') {
-            this.setState({ loading: false, searchResults: results.body.Customers });
+            this.setState({ loading: false, searchResults: results.body.customers });
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
@@ -247,7 +247,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
             const newState = {};
-            newState[guarantor] = results.body.Customers;
+            newState[guarantor] = results.body.customers;
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire("error", local.searchError, 'error')

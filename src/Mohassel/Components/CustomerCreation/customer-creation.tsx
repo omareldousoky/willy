@@ -142,7 +142,7 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const results = await searchCustomerByName(query)
     if (results.status === 'success') {
-      this.setState({ loading: false, searchResults: results.body.Customers });
+      this.setState({ loading: false, searchResults: results.body.customers });
     } else {
       Swal.fire("error", local.searchError, 'error')
       this.setState({ loading: false });
@@ -258,7 +258,7 @@ class CustomerCreation extends Component<Props, State>{
     const res = await createCustomer(objToSubmit);
     if (res.status === 'success') {
       this.setState({ loading: false });
-      Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.CustomerId }) })
+      Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
     } else {
       Swal.fire("error", local.customerCreationError)
       this.setState({ loading: false });
