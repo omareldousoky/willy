@@ -165,6 +165,8 @@ class TrackLoanApplications extends Component<Props, State>{
         return 'موافق عليها';
       case 'created':
         return 'إنشاء';
+      case 'issued':
+        return 'أصدرت';
       default: return '';
     }
   }
