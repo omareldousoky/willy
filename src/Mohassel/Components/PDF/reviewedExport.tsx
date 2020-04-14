@@ -40,7 +40,7 @@ export const ReviewedApplicationsDocument = (props: any) => {
 
     const result = (props.pass) ? props.pass : 'no result';
     let total = 0;
-    result.forEach(application => total += application.Application.principal)
+    result.forEach(application => total += application.application.principal)
     return (
         <Document>
             {result && <Page size="A4" style={styles.page}>

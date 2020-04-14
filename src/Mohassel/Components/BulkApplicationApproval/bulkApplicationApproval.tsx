@@ -26,15 +26,12 @@ interface Product {
   productName: string;
   loanNature: string;
 }
-interface CustomerInfo {
+interface Customer {
   customerName: string;
   nationalId: string;
   birthDate: number;
   nationalIdIssueDate: number;
   gender: string;
-}
-interface Customer {
-  customerInfo: CustomerInfo;
 }
 interface Application {
   product: Product;
@@ -44,9 +41,9 @@ interface Application {
   status: string;
 }
 interface LoanItem {
-  Id: string;
-  BranchId: string;
-  Application: Application;
+  id: string;
+  branchId: string;
+  application: Application;
 }
 interface State {
   branches: Array<Branch>;
@@ -118,7 +115,7 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.Id);
+      const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.id);
       this.setState({ selectedReviewedLoans: newselectedReviewedLoans })
     } else this.setState({ selectedReviewedLoans: [] })
   }
@@ -169,7 +166,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             />
           </Form.Group>
         </div>
-        {this.state.searchResults.filter(loanItem => loanItem.Application.status === "reviewed").length ?
+        {this.state.searchResults.filter(loanItem => loanItem.application.status === "reviewed").length ?
           <div>
             <Table striped bordered hover>
               <thead>
@@ -200,23 +197,23 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
-                  .filter(loanItem => loanItem.Application.status === "reviewed")
+                  .filter(loanItem => loanItem.application.status === "reviewed")
                   // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
                         <td></td>
-                        <td>{loanItem.Id}</td>
-                        <td>{loanItem.Application.customer.customerInfo.customerName}</td>
-                        <td>{new Date(loanItem.Application.entryDate).toISOString().slice(0, 10)}</td>
-                        <td>{this.englishToArabic(loanItem.Application.status)}</td>
-                        <td>{loanItem.Application.product.productName}</td>
-                        <td>{loanItem.Application.principal}</td>
+                        <td>{loanItem.id}</td>
+                        <td>{loanItem.application.customer.customerName}</td>
+                        <td>{new Date(loanItem.application.entryDate).toISOString().slice(0, 10)}</td>
+                        <td>{this.englishToArabic(loanItem.application.status)}</td>
+                        <td>{loanItem.application.product.productName}</td>
+                        <td>{loanItem.application.principal}</td>
                         <td></td>
                         <td>
                           <FormCheck type='checkbox'
-                            checked={this.state.selectedReviewedLoans.includes(loanItem.Id)}
-                            onChange={() => this.addRemoveItemFromChecked(loanItem.Id)}>
+                            checked={this.state.selectedReviewedLoans.includes(loanItem.id)}
+                            onChange={() => this.addRemoveItemFromChecked(loanItem.id)}>
                           </FormCheck>
                         </td>
                       </tr>
