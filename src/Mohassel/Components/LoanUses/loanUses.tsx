@@ -66,7 +66,7 @@ class LoanUses extends Component<{}, State> {
       if (this.state.loanUses[index].id === "") {
         //New 
         this.setState({ loading: true })
-        const res = await addLoanUsage({ name: this.state.loanUses[index].name });
+        const res = await addLoanUsage({ name: this.state.loanUses[index].name, activated: this.state.loanUses[index].activated });
         if (res.status === "success") {
           this.setState({
             loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse),
@@ -76,7 +76,7 @@ class LoanUses extends Component<{}, State> {
       } else {
         //Edit 
         this.setState({ loading: true })
-        const res = await updateLoanUsage(this.state.loanUses[index].id, this.state.loanUses[index].name);
+        const res = await updateLoanUsage(this.state.loanUses[index].id, this.state.loanUses[index].name, this.state.loanUses[index].activated);
         if (res.status === "success") {
           this.setState({
             loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse),

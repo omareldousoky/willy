@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const updateLoanUsage = async (id: string, name: string) => {
+export const updateLoanUsage = async (id: string, name: string, activated: boolean) => {
     const url = process.env.REACT_APP_BASE_URL + `/config/usage/${id}`;
     try {
-        const res = await axios.put(url, { name: name });
+        const res = await axios.put(url, { name: name, activated: activated });
         return { status: "success", body: res.data }
     }
     catch (error) {
