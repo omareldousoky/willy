@@ -1,7 +1,10 @@
 import React from 'react';
+import Can from '../../config/Can'; 
 
 export const Landing = () => {
     return(
-        <h1>Welcome to Mohassel</h1>
+        <Can I="view" a="Profile" passThrough>
+           {allowed => <button disabled={!allowed}>Welcome to Mohassel</button >}
+        </Can>
     )
 }
