@@ -283,7 +283,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepOneForm {...formikProps} />
+          <StepOneForm {...formikProps} edit={this.props.edit}/>
         }
       </Formik>
     )

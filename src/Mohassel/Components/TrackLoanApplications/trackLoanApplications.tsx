@@ -13,6 +13,7 @@ import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getCookie } from '../../Services/getCookie';
 import { DownloadReviewedPdf } from '../PDF/documentExport';
+import Can from '../../config/Can';
 
 interface Product {
   productName: string;
@@ -132,21 +133,21 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   getActionFromStatus(loan: LoanItem) {
     if (loan.application.status === 'approved') {
-      return <Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "create" })}>{local.createLoan}</Button>
+      return <Can I='create' a='Loan'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "create" })}>{local.createLoan}</Button></Can>
     } else if (loan.application.status === 'created') {
-      return <Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "issue" })}>{local.issueLoan}</Button>
+      return <Can I='issue' a='Loan'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "issue" })}>{local.issueLoan}</Button></Can>
     } else if (loan.application.status === 'reviewed') {
       return (
         <div>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button>
+          <Can I='unReview' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
+          <Can I='reject' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
         </div>
       )
     } else if (loan.application.status === 'underReview') {
       return (
         <div>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button>
+          <Can I='review' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
+          <Can I='edit' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
         </div>
       )
     }
@@ -285,7 +286,7 @@ class TrackLoanApplications extends Component<Props, State>{
               })}
           </tbody>
         </Table>
-        {reviewedResults.length>0 && <DownloadReviewedPdf data={reviewedResults} />}
+        {reviewedResults.length > 0 && <DownloadReviewedPdf data={reviewedResults} />}
       </Container>
     )
   }
