@@ -63,12 +63,12 @@ export const ReviewedApplicationsDocument = (props: any) => {
                             return (
                                 <View key={i} style={styles.row}>
                                     {/* <Text style={{ width: '10%' }}>{application.Id}</Text> */}
-                                    <Text style={{ width: '20%' }}>{application.Application.customer.customerInfo.customerName}</Text>
-                                    <Text style={{ width: '10%' }}>{getAge(application.Application.customer.customerInfo.birthDate)}</Text>
+                                    <Text style={{ width: '20%' }}>{application.application.customer.customerName}</Text>
+                                    <Text style={{ width: '10%' }}>{getAge(application.application.customer.birthDate)}</Text>
                                     {/* <Text style={{ width: '10%' }}>{application.Application.customer.customerInfo.gender}</Text> */}
-                                    <Text style={{ width: '30%' }}>{application.Application.customer.customerInfo.nationalId}</Text>
-                                    <Text style={{ width: '20%' }}>{application.Application.principal}</Text>
-                                    <Text style={{ width: '20%' }}>{application.Application.product.noOfInstallments}</Text>
+                                    <Text style={{ width: '30%' }}>{application.application.customer.nationalId}</Text>
+                                    <Text style={{ width: '20%' }}>{application.application.principal}</Text>
+                                    <Text style={{ width: '20%' }}>{application.application.product.noOfInstallments}</Text>
                                 </View>
                             )
                         })}
