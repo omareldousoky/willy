@@ -277,7 +277,7 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td></td>
                     <td>{loanItem.id}</td>
                     <td>{loanItem.application.customer.customerName}</td>
-                    <td>{new Date(loanItem.application.entryDate).toISOString().slice(0, 10)}</td>
+                    <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
                     <td>{this.englishToArabic(loanItem.application.status)}</td>
                     <td>{loanItem.application.product.productName}</td>
                     <td>{loanItem.application.principal}</td>

@@ -123,6 +123,7 @@
     "dateShouldBeBeforeToday": "التاريخ يجب ان يكون في الماضي",
     "save": "حفظ",
     "cancel": "الغاء",
+    "edit":"تعديل",
     "customerCreated": "تم انشاء العميل بنجاح",
     "formulaCreated": "تم انشاء طريقه الحساب بنجاح",
     "formulaTested": "تم تجربة طريقه الحساب بنجاح",
@@ -152,7 +153,9 @@
     "delete": "حذف",
     "deleteError": "حدث خطأ في حذف الصورة",
     "loanApplicationCreated": "تم إنشاء طلب القرض بنجاح",
+    "loanApplicationEdited": "تم تعديل طلب القرض بنجاح",
     "loanApplicationCreationError": "حدث خطأ في إنشاء طلب القرض",
+    "loanApplicationEditError": "حدث خطأ في تعديل طلب القرض",
     "selectTwoGuarantors": "الرجاء التأكد من إختيار ضامنين",
     "numberOfDocumentsError": "اقصي عدد للصور هو : ",
     "invalidFileType": "خطأ في نوع الملف",
@@ -229,5 +232,9 @@
     "active":"فعال",
     "noApprovedApplicationsForThisBranch": " لا يوجد قروض موافق عليها لهذا الفرع",
     "paymentDate": "يوم الدفع",
-    "fees": "الرسوم"
+    "fees": "الرسوم",
+    "reviewSuccess":"تم مراجعة الطلب بنجاح",
+    "unreviewSuccess":"تم إعادة حالة الطلب إلى تحت المراجعة",
+    "rejectSuccess":"تم رفض الطلب بنجاح",
+    "statusChangeError":"حدث خطأ في تعديل حالة الطلب الطلب"
 }
