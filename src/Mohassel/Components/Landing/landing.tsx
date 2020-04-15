@@ -1,7 +1,8 @@
 import React from 'react';
+import Can from '../../config/Can';
 
 export const Landing = () => {
-    return(
+    return (
         <h1>Welcome to Mohassel</h1>
     )
 }

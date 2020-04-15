@@ -12,7 +12,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { getProducts, getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
-import { newApplication } from '../../Services/APIs/loanApplication/newApplication';
+import { newApplication, editApplication } from '../../Services/APIs/loanApplication/newApplication';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
@@ -63,8 +63,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         super(props);
         this.state = this.setInitState();
     }
-    setInitState(){
-        return({
+    setInitState() {
+        return ({
             application: {
                 customerID: '',
                 customerName: "",
@@ -176,16 +176,17 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const guarantor1 = (application.body.guarantors[0])?application.body.guarantors[0]:null;
-            const guarantor2 = (application.body.guarantors[1])?application.body.guarantors[1]:null;
-            if(guarantor1)formData.guarantorIds.push(guarantor1.customerInfo.nationalId);
-            if(guarantor2)formData.guarantorIds.push(guarantor2.customerInfo.nationalId);
-            formData.entryDate = (application.body.entryDate)?this.getDateString(application.body.entryDate):'';
-            formData.visitationDate = (application.body.visitationDate)?this.getDateString(application.body.visitationDate):'';
-            formData.usage = (application.body.usage)?application.body.usage:'';
-            formData.enquirorId = (application.body.enquirorId)?application.body.enquirorId:'';
+            const guarantor1 = (application.body.guarantors[0]) ? application.body.guarantors[0] : null;
+            const guarantor2 = (application.body.guarantors[1]) ? application.body.guarantors[1] : null;
+            if (guarantor1) formData.guarantorIds.push(guarantor1._id);
+            if (guarantor2) formData.guarantorIds.push(guarantor2._id);
+            formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
+            formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
+            formData.usage = (application.body.usage) ? application.body.usage : '';
+            formData.enquirorId = (application.body.enquirorId) ? application.body.enquirorId : '';
             formData.viceCustomers = application.body.viceCustomers;
-            formData.principal = application.body.principal;
+            formData.principal = (application.body.principal) ? application.body.principal : 0;
+            formData.customerID = application.body.customer._id;
             formData.productID = application.body.product._id;
             this.setState({
                 selectedCustomer: application.body.customer,
@@ -229,7 +230,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const results = await searchCustomerByName(query)
         if (results.status === 'success') {
-            this.setState({ loading: false, searchResults: results.body.Customers });
+            this.setState({ loading: false, searchResults: results.body.customers });
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
@@ -247,7 +248,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
             const newState = {};
-            newState[guarantor] = results.body.Customers;
+            newState[guarantor] = results.body.customers;
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire("error", local.searchError, 'error')
@@ -261,27 +262,27 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     populateCustomer(response) {
         const defaultApplication = this.state.application;
-        defaultApplication.customerName = response.customerInfo.customerName;
-        defaultApplication.nationalId = response.customerInfo.nationalId;
-        defaultApplication.birthDate = this.getDateString(response.customerInfo.birthDate);
-        defaultApplication.gender = getGenderFromNationalId(response.customerInfo.nationalId);
-        defaultApplication.nationalIdIssueDate = this.getDateString(response.customerInfo.nationalIdIssueDate);
-        defaultApplication.businessSector = response.customerBusiness.businessSector;
-        defaultApplication.businessActivity = response.customerBusiness.businessActivity;
-        defaultApplication.businessSpeciality = response.customerBusiness.businessSpeciality;
-        defaultApplication.permanentEmployeeCount = response.customerExtraDetails.permanentEmployeeCount;
-        defaultApplication.partTimeEmployeeCount = response.customerExtraDetails.partTimeEmployeeCount;
-        defaultApplication.representative = response.customerExtraDetails.representative;
+        defaultApplication.customerName = response.customerName;
+        defaultApplication.nationalId = response.nationalId;
+        defaultApplication.birthDate = this.getDateString(response.birthDate);
+        defaultApplication.gender = getGenderFromNationalId(response.nationalId);
+        defaultApplication.nationalIdIssueDate = this.getDateString(response.nationalIdIssueDate);
+        defaultApplication.businessSector = response.businessSector;
+        defaultApplication.businessActivity = response.businessActivity;
+        defaultApplication.businessSpeciality = response.businessSpeciality;
+        defaultApplication.permanentEmployeeCount = response.permanentEmployeeCount;
+        defaultApplication.partTimeEmployeeCount = response.partTimeEmployeeCount;
+        defaultApplication.representative = response.representative;
         this.setState({
             application: defaultApplication
         });
     }
     selectCustomer = async (customer) => {
         this.setState({ loading: true });
-        const selectedCustomer = await getCustomerByID(customer.Id)
+        const selectedCustomer = await getCustomerByID(customer.id)
         if (selectedCustomer.status === 'success') {
             const defaultApplication = this.state.application;
-            defaultApplication.customerID = customer.Id;
+            defaultApplication.customerID = customer.id;
             this.populateCustomer(selectedCustomer.body)
             this.setState({
                 loading: false,
@@ -296,12 +297,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     selectGuarantor = async (obj, guarantor: string) => {
         this.setState({ loading: true });
-        const selectedGuarantor = await getCustomerByID(obj.Id);
+        const selectedGuarantor = await getCustomerByID(obj.id);
         if (selectedGuarantor.status === 'success') {
             const defaultApplication = this.state.application
-            defaultApplication.guarantorIds.push(obj.Id)
+            defaultApplication.guarantorIds.push(obj.id)
             const newState = {};
-            newState[guarantor] = { ...selectedGuarantor.body, id: obj.Id };
+            newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire('', local.searchError, 'error');
@@ -311,7 +312,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     removeGuarantor = async (obj, guarantor: string) => {
         this.setState({ loading: true });
         const defaultApplication = this.state.application
-        defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj.id !== id)
+        defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj._id !== id)
         const newState = {
             application: defaultApplication
         };
@@ -322,35 +323,36 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
+        const defaultValues = this.setInitState().application;
         defaultApplication.calculationFormulaId = selectedProductDetails.calculationFormula._id;
         defaultApplication.currency = selectedProductDetails.currency;
-        defaultApplication.interest = selectedProductDetails.interest;
+        defaultApplication.interest = (selectedProductDetails.interest) ? selectedProductDetails.interest : defaultValues.interest;
         defaultApplication.interestPeriod = selectedProductDetails.interestPeriod;
         defaultApplication.allowInterestAdjustment = selectedProductDetails.allowInterestAdjustment;
-        defaultApplication.inAdvanceFees = selectedProductDetails.inAdvanceFees;
+        defaultApplication.inAdvanceFees = (selectedProductDetails.inAdvanceFees) ? selectedProductDetails.inAdvanceFees : defaultValues.inAdvanceFees;
         defaultApplication.inAdvanceFrom = selectedProductDetails.inAdvanceFrom;
         defaultApplication.inAdvanceType = selectedProductDetails.inAdvanceType;
-        defaultApplication.periodLength = selectedProductDetails.periodLength;
+        defaultApplication.periodLength = (selectedProductDetails.periodLength) ? selectedProductDetails.periodLength : defaultValues.periodLength;
         defaultApplication.periodType = selectedProductDetails.periodType;
-        defaultApplication.gracePeriod = selectedProductDetails.gracePeriod;
-        defaultApplication.pushPayment = selectedProductDetails.pushPayment;
-        defaultApplication.noOfInstallments = selectedProductDetails.noOfInstallments;
-        defaultApplication.applicationFee = selectedProductDetails.applicationFee;
-        defaultApplication.individualApplicationFee = selectedProductDetails.individualApplicationFee;
-        defaultApplication.applicationFeePercent = selectedProductDetails.applicationFeePercent;
+        defaultApplication.gracePeriod = (selectedProductDetails.gracePeriod) ? selectedProductDetails.gracePeriod : defaultValues.gracePeriod;
+        defaultApplication.pushPayment = (selectedProductDetails.pushPayment) ? selectedProductDetails.pushPayment : defaultValues.pushPayment;
+        defaultApplication.noOfInstallments = (selectedProductDetails.noOfInstallments) ? selectedProductDetails.noOfInstallments : defaultValues.noOfInstallments;
+        defaultApplication.applicationFee = (selectedProductDetails.applicationFee) ? selectedProductDetails.applicationFee : defaultValues.applicationFee;
+        defaultApplication.individualApplicationFee = (selectedProductDetails.individualApplicationFee) ? selectedProductDetails.individualApplicationFee : defaultValues.individualApplicationFee;
+        defaultApplication.applicationFeePercent = (selectedProductDetails.applicationFeePercent) ? selectedProductDetails.applicationFeePercent : defaultValues.applicationFeePercent;
         defaultApplication.applicationFeeType = selectedProductDetails.applicationFeeType;
-        defaultApplication.applicationFeePercentPerPerson = selectedProductDetails.applicationFeePercentPerPerson;
+        defaultApplication.applicationFeePercentPerPerson = (selectedProductDetails.applicationFeePercentPerPerson) ? selectedProductDetails.applicationFeePercentPerPerson : defaultValues.applicationFeePercentPerPerson;
         defaultApplication.applicationFeePercentPerPersonType = selectedProductDetails.applicationFeePercentPerPersonType;
-        defaultApplication.representativeFees = selectedProductDetails.representativeFees;
+        defaultApplication.representativeFees = (selectedProductDetails.representativeFees) ? selectedProductDetails.representativeFees : defaultValues.representativeFees;
         defaultApplication.allowRepresentativeFeesAdjustment = selectedProductDetails.allowRepresentativeFeesAdjustment;
-        defaultApplication.stamps = selectedProductDetails.stamps;
+        defaultApplication.stamps = (selectedProductDetails.stamps) ? selectedProductDetails.stamps : defaultValues.stamps;
         defaultApplication.allowStampsAdjustment = selectedProductDetails.allowStampsAdjustment;
-        defaultApplication.adminFees = selectedProductDetails.adminFees;
+        defaultApplication.adminFees = (selectedProductDetails.adminFees) ? selectedProductDetails.adminFees : defaultValues.adminFees;
         defaultApplication.allowAdminFeesAdjustment = selectedProductDetails.allowAdminFeesAdjustment;
-        defaultApplication.minPrincipal = selectedProductDetails.minPrincipal;
-        defaultApplication.maxPrincipal = selectedProductDetails.maxPrincipal;
-        defaultApplication.minInstallment = selectedProductDetails.minInstallment;
-        defaultApplication.maxInstallment = selectedProductDetails.maxInstallment;
+        defaultApplication.minPrincipal = (selectedProductDetails.minPrincipal) ? selectedProductDetails.minPrincipal : defaultValues.minPrincipal;
+        defaultApplication.maxPrincipal = (selectedProductDetails.maxPrincipal) ? selectedProductDetails.maxPrincipal : defaultValues.maxPrincipal;
+        defaultApplication.minInstallment = (selectedProductDetails.minInstallment) ? selectedProductDetails.minInstallment : defaultValues.minInstallment;
+        defaultApplication.maxInstallment = (selectedProductDetails.maxInstallment) ? selectedProductDetails.maxInstallment : defaultValues.maxInstallment;
         this.setState({ application: defaultApplication });
     }
     getSelectedLoanProduct = async (id) => {
@@ -373,27 +375,27 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const res = await reviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
-                Swal.fire("success", 'Reviewed Success').then(() => { this.props.history.push("/track-loan-applications") })
+                Swal.fire("success", local.reviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
             } else {
-                Swal.fire("error", local.loanApplicationCreationError, 'error')
+                Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
         } else if (intProps.status === 'unreview') {
             const res = await undoreviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
-                Swal.fire("success", 'Unreview Success').then(() => { this.props.history.push("/track-loan-applications") })
+                Swal.fire("success", local.unreviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
             } else {
-                Swal.fire("error", local.loanApplicationCreationError, 'error')
+                Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
         } else if (intProps.status === 'reject') {
             const res = await rejectApplication({ applicationIds: [intProps.id], rejectionDate: new Date(intState.rejectionDate).valueOf(), rejectionReason: intState.rejectionReason });
             if (res.status === 'success') {
                 this.setState({ loading: false });
-                Swal.fire("success", 'Rejection Success').then(() => { this.props.history.push("/track-loan-applications") })
+                Swal.fire("success", local.rejectSuccess).then(() => { this.props.history.push("/track-loan-applications") })
             } else {
-                Swal.fire("error", local.loanApplicationCreationError, 'error')
+                Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
         }
@@ -426,14 +428,26 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
         }
         if (Object.keys(this.state.guarantor1).length > 0 && Object.keys(this.state.guarantor2).length > 0) {
-            this.setState({ loading: true });
-            const res = await newApplication(objToSubmit);
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
-            } else {
-                Swal.fire("error", local.loanApplicationCreationError, 'error')
-                this.setState({ loading: false });
+            if (!this.props.edit) {
+                this.setState({ loading: true });
+                const res = await newApplication(objToSubmit);
+                if (res.status === 'success') {
+                    this.setState({ loading: false });
+                    Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
+                } else {
+                    Swal.fire("error", local.loanApplicationCreationError, 'error')
+                    this.setState({ loading: false });
+                }
+            } else if (this.props.edit) {
+                this.setState({ loading: true });
+                const res = await editApplication(objToSubmit,this.state.prevId);
+                if (res.status === 'success') {
+                    this.setState({ loading: false });
+                    Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/") })
+                } else {
+                    Swal.fire("error", local.loanApplicationEditError, 'error')
+                    this.setState({ loading: false });
+                }
             }
         } else {
             Swal.fire("error", local.selectTwoGuarantors, 'error')
