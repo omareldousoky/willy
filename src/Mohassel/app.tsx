@@ -13,6 +13,7 @@ import LoanUses from './Components/LoanUses/loanUses';
 import BulkApplicationApproval from './Components/BulkApplicationApproval/bulkApplicationApproval';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
+import Can from './config/Can';
 
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
@@ -27,18 +28,18 @@ const App = () => {
                     <NavBar />
                     <Switch>
                         <Route exact path="/" component={Landing} />
-                        <Route exact path="/new-customer" render={(props) => <CustomerCreation {...props} edit={false} />} />
-                        <Route exact path="/edit-customer" render={(props) => <CustomerCreation {...props} edit={true} />} />
-                        <Route path="/new-formula" component={FormulaCreation} />
-                        <Route path="/test-formula" component={FormulaTest} />
-                        <Route path="/new-loan-product" component={LoanProductCreation} />
-                        <Route path="/assign-branch-products" component={AssignProductToBranch} />
-                        <Route path="/new-loan-application" render={(props)=> <LoanApplicationCreation {...props} edit={false} />} />
-                        <Route path="/edit-loan-application" render={(props)=> <LoanApplicationCreation {...props} edit={true} />} />
-                        <Route path="/track-loan-applications" component={TrackLoanApplications} />
-                        <Route path="/create-loan" component={LoanCreation} />
-                        <Route path="/loan-uses" component={LoanUses} />
-                        <Route path="/bulk-approvals" component={BulkApplicationApproval} />
+                        <Route exact path="/new-customer" render={(props) => <Can I='create' a='Customer'><CustomerCreation {...props} edit={false} /></Can>} />
+                        <Route exact path="/edit-customer" render={(props) => <Can I='edit' a='Customer'><CustomerCreation {...props} edit={true} /> </Can>} />
+                        <Route path="/new-formula" render={(props) => <Can I='create' a='CalculationMethod'><FormulaCreation /></Can>} />
+                        <Route path="/test-formula" render={(props) => <Can I='test' a='CalculationMethod'><FormulaTest {...props} /></Can>} />
+                        <Route path="/new-loan-product" render={(props) => <Can I='create' a='LoanProduct'><LoanProductCreation /></Can>} />
+                        <Route path="/assign-branch-products" render={(props) => <Can I='assignToBranch' a='LoanProduct'> <AssignProductToBranch {...props} /> </Can>} />
+                        <Route path="/new-loan-application" render={(props) => <Can I='create' a='Application'><LoanApplicationCreation {...props} edit={false} /> </Can>} />
+                        <Route path="/edit-loan-application" render={(props) => <Can I='view' a='Application'><LoanApplicationCreation {...props} edit={true} /> </Can>} />
+                        <Route path="/track-loan-applications" render={(props) => <Can I='view' a='Application'><TrackLoanApplications /></Can>} />
+                        <Route path="/create-loan" render={(props) => <LoanCreation {...props} />} />
+                        <Route path="/loan-uses" render={(props) => <Can I='create' a='LoanUsage'><LoanUses /></Can>} />
+                        <Route path="/bulk-approvals" render={(props) => <Can I='bulkApprove' a='Application'> <BulkApplicationApproval /></Can>} />
                     </Switch>
                 </div>
             </BrowserRouter>

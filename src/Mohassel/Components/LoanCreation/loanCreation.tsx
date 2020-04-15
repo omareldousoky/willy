@@ -12,6 +12,7 @@ import { loanCreationValidation, loanIssuanceValidation } from './loanCreationVa
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import { createLoan } from '../../Services/APIs/createIssueLoan/createLoan';
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
+import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface CustomerData {
@@ -35,6 +36,7 @@ interface State {
   id: string;
   type: string;
   loading: boolean;
+  installmentsData: any;
 }
 export interface Location {
   pathname: string;
@@ -69,20 +71,27 @@ class LoanCreation extends Component<Props, State> {
         productName: '',
         entryDate: 0,
         status: '',
-      }
+      },
+      installmentsData: {}
     }
   }
   async componentDidMount() {
     const { id, type } = this.props.location.state;
 
     this.setState({ id, type, loading: true })
+    if (type === "create") {
+      const res = await testCalculateApplication(id);
+      if (res.status === "success") {
+        this.setState({ installmentsData: res.body })
+      } else console.log(res)
+    }
     const res = await getApplication(id);
     if (res.status === "success") {
       this.setState({
         loading: false,
         customerData: {
           id: id,
-          customerName: res.body.customer.customerInfo.customerName,
+          customerName: res.body.customer.customerName,
           customerType: '',
           maxPrincipal: res.body.product.maxPrincipal,
           currency: res.body.product.currency,
@@ -93,8 +102,12 @@ class LoanCreation extends Component<Props, State> {
           productName: res.body.product.productName,
           entryDate: res.body.entryDate,
           status: res.body.status,
+          
         }
       })
+      if(type === "issue"){
+        this.setState({installmentsData: res.body.installmentsObject})
+      }
     } else this.setState({ loading: false })
   }
   handleSubmit = async (values) => {
@@ -104,19 +117,19 @@ class LoanCreation extends Component<Props, State> {
       const res = await createLoan(this.state.id, creationDate);
       if (res.status === "success") {
         this.setState({ loading: false });
-        Swal.fire('',local.loanCreationSuccess,'success').then(()=> this.props.history.push('track-loan-applications'));
+        Swal.fire('', local.loanCreationSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
       } else {
         this.setState({ loading: false });
-        Swal.fire('',local.loanCreationError,'error');
+        Swal.fire('', local.loanCreationError, 'error');
       }
     } else {
       const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf());
       if (res.status === "success") {
         this.setState({ loading: false });
-        Swal.fire('',local.loanIssuanceSuccess,'success').then(()=> this.props.history.push('track-loan-applications'));
+        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
       } else {
         this.setState({ loading: false });
-        Swal.fire('',local.loanIssuanceError,'error');
+        Swal.fire('', local.loanIssuanceError, 'error');
       }
     }
   }
@@ -156,6 +169,30 @@ class LoanCreation extends Component<Props, State> {
               <td>{this.state.customerData.productName}</td>
               <td>{new Date(this.state.customerData.entryDate).toISOString().slice(0, 10)}</td>
             </tr>
+          </tbody>
+        </Table>
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>{local.loanApplicationId}</th>
+              <th>{local.installmentType}</th>
+              <th>{local.principal}</th>
+              <th>{local.fees}</th>
+              <th>{local.paymentDate}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.installmentsData.output && this.state.installmentsData.output.map((installment, index) => {
+              return (
+                <tr key={index}>
+                  <td>{installment.id}</td>
+                  <td>{installment.installmentResponse ? installment.installmentResponse.toFixed(2) : 0}</td>
+                  <td>{installment.principalInstallment ? installment.principalInstallment.toFixed(2) : 0}</td>
+                  <td>{installment.feesInstallment ? installment.feesInstallment.toFixed(2) : 0}</td>
+                  <td>{new Date(installment.dateOfPayment).toISOString().slice(0, 10)}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </Table>
         <Formik
