@@ -17,9 +17,9 @@ class NavBar extends Component<Props> {
         <Navbar expand="lg" style={{ background: '#f5f5f5', padding: 0 }}>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav style={{ flex: 'auto', alignItems: 'center', justifyContent: 'center' }}>
-              <Navbar.Brand style={{ marginLeft: 40 }}><img alt="navbar-logo" src="/src/Login/Assets/Logo.svg" /></Navbar.Brand>
+              <Navbar.Brand style={{ marginLeft: 40 }}><img alt="navbar-logo" src={require('../../../Shared/Assets/Logo.svg')} /></Navbar.Brand>
               <Navbar.Text style={{ marginLeft: 40 }}><h5 className="primary-color">{local.lowRateLoan}</h5></Navbar.Text>
-              <div className="refresh-logo-navbar"><img alt="navbar-refresh" src="/src/Mohassel/Assets/refresh.svg" /></div>
+              <div className="refresh-logo-navbar"><img alt="navbar-refresh" src={require('../../Assets/refresh.svg')} /></div>
               <div className="info-navbar">
                 <span style={{ marginLeft: 10 }}>{local.currentPeriodStartsIn}</span>
                 <span style={{ marginLeft: 10 }}>  01/02/2020  </span>
@@ -30,7 +30,7 @@ class NavBar extends Component<Props> {
               </div>
               <span style={{ marginLeft: 10 }}>{local.welcome}, </span>
               <span style={{ marginLeft: 100 }} className="primary-color">Ahmed({roles})</span>
-              <img alt="drop-down-arrow" src="/src/Mohassel/Assets/dropDownArrow.svg" />
+              <img alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -38,7 +38,7 @@ class NavBar extends Component<Props> {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link><img alt="home-icon" src="/src/Mohassel/Assets/homeIcon.svg" /></Nav.Link>
+              <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='create' a='Customer'><Nav.Link onClick={() => this.props.history.push('/new-customer')}>Create User</Nav.Link></Can>}
               {<Can I='edit' a='Customer'><Nav.Link onClick={() => this.props.history.push('/edit-customer')}>Edit User</Nav.Link></Can>}
               {<Can I='create' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>Create Calculation Method</Nav.Link></Can>}
