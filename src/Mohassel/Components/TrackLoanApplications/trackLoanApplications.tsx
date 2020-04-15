@@ -13,6 +13,7 @@ import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getCookie } from '../../Services/getCookie';
 import { DownloadReviewedPdf } from '../PDF/documentExport';
+import Can from '../../config/Can';
 
 interface Product {
   productName: string;
@@ -26,7 +27,7 @@ interface CustomerInfo {
   gender: string;
 }
 interface Customer {
-  customerInfo: CustomerInfo;
+  customerName: string;
 }
 interface Application {
   product: Product;
@@ -36,9 +37,9 @@ interface Application {
   status: string;
 }
 interface LoanItem {
-  Id: string;
-  BranchId: string;
-  Application: Application;
+  id: string;
+  branchId: string;
+  application: Application;
 }
 interface State {
   searchKeyword: string;
@@ -131,22 +132,22 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   getActionFromStatus(loan: LoanItem) {
-    if (loan.Application.status === 'approved') {
-      return <Button onClick={() => this.props.history.push('/create-loan', { id: loan.Id, type: "create" })}>{local.createLoan}</Button>
-    } else if (loan.Application.status === 'created') {
-      return <Button onClick={() => this.props.history.push('/create-loan', { id: loan.Id, type: "issue" })}>{local.issueLoan}</Button>
-    } else if (loan.Application.status === 'reviewed') {
+    if (loan.application.status === 'approved') {
+      return <Can I='create' a='Loan'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "create" })}>{local.createLoan}</Button></Can>
+    } else if (loan.application.status === 'created') {
+      return <Can I='issue' a='Loan'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "issue" })}>{local.issueLoan}</Button></Can>
+    } else if (loan.application.status === 'reviewed') {
       return (
         <div>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'unreview' })}>{local.undoLoanReview}</Button>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'reject' })}>{local.rejectLoan}</Button>
+          <Can I='unReview' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
+          <Can I='reject' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
         </div>
       )
-    } else if (loan.Application.status === 'underReview') {
+    } else if (loan.application.status === 'underReview') {
       return (
         <div>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'review' })}>{local.reviewLoan}</Button>
-          <Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.Id, action: 'edit' })}>{local.editLoan}</Button>
+          <Can I='review' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
+          <Can I='edit' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
         </div>
       )
     }
@@ -164,11 +165,13 @@ class TrackLoanApplications extends Component<Props, State>{
         return 'موافق عليها';
       case 'created':
         return 'إنشاء';
+      case 'issued':
+        return 'أصدرت';
       default: return '';
     }
   }
   render() {
-    const reviewedResults = (this.state.searchResults) ? this.state.searchResults.filter(result => result.Application.status === "reviewed") : [];
+    const reviewedResults = (this.state.searchResults) ? this.state.searchResults.filter(result => result.application.status === "reviewed") : [];
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
@@ -267,17 +270,17 @@ class TrackLoanApplications extends Component<Props, State>{
           <tbody>
             {this.state.searchResults && this.state.searchResults
               // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
-              .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.Application.status) : loanItem)
+              .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.application.status) : loanItem)
               .map((loanItem, index) => {
                 return (
                   <tr key={index}>
                     <td></td>
-                    <td>{loanItem.Id}</td>
-                    <td>{loanItem.Application.customer.customerInfo.customerName}</td>
-                    <td>{new Date(loanItem.Application.entryDate).toISOString().slice(0, 10)}</td>
-                    <td>{this.englishToArabic(loanItem.Application.status)}</td>
-                    <td>{loanItem.Application.product.productName}</td>
-                    <td>{loanItem.Application.principal}</td>
+                    <td>{loanItem.id}</td>
+                    <td>{loanItem.application.customer.customerName}</td>
+                    <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
+                    <td>{this.englishToArabic(loanItem.application.status)}</td>
+                    <td>{loanItem.application.product.productName}</td>
+                    <td>{loanItem.application.principal}</td>
                     <td></td>
                     <td>{this.getActionFromStatus(loanItem)}</td>
                   </tr>
@@ -285,7 +288,7 @@ class TrackLoanApplications extends Component<Props, State>{
               })}
           </tbody>
         </Table>
-        {reviewedResults.length>0 && <DownloadReviewedPdf data={reviewedResults} />}
+        {reviewedResults.length > 0 && <DownloadReviewedPdf data={reviewedResults} />}
       </Container>
     )
   }

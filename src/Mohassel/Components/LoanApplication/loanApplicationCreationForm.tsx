@@ -665,7 +665,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ width: '100%', border: '1px solid black', padding: 10, borderRadius: 4, margin: '10px 0'}}>
                     <StatusHelper status={values.state} id={values.id} handleStatusChange={(internalstate,internalprops)=> {props.handleStatusChange(internalstate,internalprops)}}/>
                 </div>}
-            {(values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>}
+            {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{(values.state === 'under_review')?local.submit:local.edit}</Button>}
         </Form >
     )
 }

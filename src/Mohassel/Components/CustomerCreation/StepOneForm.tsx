@@ -8,7 +8,7 @@ import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Servi
 import Map from './map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
-
+import Can from '../../config/Can';
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
   const [customerAddressLatLong, setLocation] = useState({ lat: 0, long: 0 });
@@ -42,7 +42,8 @@ export const StepOneForm = (props: any) => {
       <Form.Group as={Row} controlId="nationalId">
         <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.nationalId}*`}</Form.Label>
         <Col sm={6}>
-          <Form.Control
+        <Can I="edit" a="NationalId" passThrough>
+          {allowed => <Form.Control
             type="text"
             name="nationalId"
             data-qc="nationalId"
@@ -67,7 +68,9 @@ export const StepOneForm = (props: any) => {
             }}
             isInvalid={errors.nationalId && touched.nationalId}
             maxLength={14}
-          />
+            disabled={(!allowed && props.edit)}
+          />}
+          </Can>
           <Form.Control.Feedback type="invalid">
             {errors.nationalId}
           </Form.Control.Feedback>
