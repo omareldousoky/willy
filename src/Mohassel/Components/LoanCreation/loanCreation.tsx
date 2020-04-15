@@ -117,7 +117,7 @@ class LoanCreation extends Component<Props, State> {
       const res = await createLoan(this.state.id, creationDate);
       if (res.status === "success") {
         this.setState({ loading: false });
-        Swal.fire('', local.loanCreationSuccess, 'success').then(() => this.props.history.push('track-loan-applications'));
+        Swal.fire('', local.loanCreationSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
       } else {
         this.setState({ loading: false });
         Swal.fire('', local.loanCreationError, 'error');
@@ -126,7 +126,7 @@ class LoanCreation extends Component<Props, State> {
       const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf());
       if (res.status === "success") {
         this.setState({ loading: false });
-        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => this.props.history.push('track-loan-applications'));
+        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
       } else {
         this.setState({ loading: false });
         Swal.fire('', local.loanIssuanceError, 'error');
