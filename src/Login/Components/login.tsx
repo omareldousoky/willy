@@ -60,10 +60,10 @@ class Login extends React.PureComponent<Props, State> {
             <h1>{local.systemForLoanTracking}</h1>
             <h3>{local.lowRateLoan}</h3>
           </div>
-          <img alt="login-image" src='/src/Login/Assets/loginPhotos.png' />
+          <img alt="login-image" src={require('../Assets/loginPhotos.png')} />
         </div>
         <div className="left-hero">
-          <img alt="login-log" className="login-logo" src='/src/Login/Assets/Logo.svg' />
+          <img alt="login-log" className="login-logo" src={require('../../Shared/Assets/Logo.svg')} />
           <div className="login-form">
             <h2>{local.login}</h2>
             <Formik

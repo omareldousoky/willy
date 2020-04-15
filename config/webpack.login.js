@@ -32,6 +32,18 @@ module.exports = () => {
                     test: /\.(s?)css$/,
                     use: ['style-loader', 'css-loader', 'sass-loader'],
                 },
+                {
+                    test: /\.(png|svg|jpg)$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: 'assets/[name].[hash:8].[ext]'
+                            },
+                        },
+                    ],
+                },
             ]
         },
         plugins: [
@@ -43,7 +55,8 @@ module.exports = () => {
                     REACT_APP_BASE_URL: JSON.stringify(config.REACT_APP_BASE_URL),
                     REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
                     REACT_APP_MOHASSEL_URL: JSON.stringify(config.REACT_APP_MOHASSEL_URL),
-                },}),
+                },
+            }),
             new ForkTsCheckerWebpackPlugin({ eslint: true })
         ]
     }
