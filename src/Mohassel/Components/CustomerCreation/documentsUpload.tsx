@@ -200,7 +200,7 @@ class DocumentsUpload extends Component<Props, State>{
   renderUploadPhoto(key: number) {
     return (
       <div key={key} className="document-upload-container">
-        <img src={'/src/Mohassel/Assets/uploadDrag.svg'}
+        <img src={require('../../Assets/uploadDrag.svg')}
           alt="upload-document"
         />
         <div style={{ marginTop: 30 }}>

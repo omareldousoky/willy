@@ -32,6 +32,18 @@ module.exports = () => {
                     test: /\.(s?)css$/,
                     use: ['style-loader', 'css-loader', 'sass-loader'],
                 },
+                {
+                    test: /\.(png|svg|jpg)$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: 'assets/[name].[hash:8].[ext]'
+                            },
+                        },
+                    ],
+                },
             ]
         },
         devServer: {
