@@ -295,23 +295,25 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    selectGuarantor = async (obj, guarantor: string) => {
+    selectGuarantor = async (obj, guarantor: string, values) => {
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj.id);
         if (selectedGuarantor.status === 'success') {
-            const defaultApplication = this.state.application
+            const defaultApplication = {...values}
             defaultApplication.guarantorIds.push(obj.id)
-            const newState = {};
+            const newState = {
+                application: {...defaultApplication}
+            };
             newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
-            this.setState(newState, () => { this.setState({ loading: false }) });
+            this.setState({...newState}, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
-    removeGuarantor = async (obj, guarantor: string) => {
+    removeGuarantor =  (obj, guarantor: string, values) => {
         this.setState({ loading: true });
-        const defaultApplication = this.state.application
+        const defaultApplication = {...values}
         defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj._id !== id)
         const newState = {
             application: defaultApplication
@@ -319,7 +321,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         newState[guarantor] = {};
         newState[`${guarantor}Res`] = [];
         newState['loading'] = false;
-        this.setState(newState);
+        this.setState({...newState});
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
@@ -471,8 +473,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             products={this.state.products}
                             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
                             handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
-                            selectGuarantor={(query, guarantor) => { this.selectGuarantor(query, guarantor) }}
-                            removeGuarantor={(query, guarantor) => { this.removeGuarantor(query, guarantor) }}
+                            selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
+                            removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
                             searchResults1={this.state.guarantor1Res}
                             searchResults2={this.state.guarantor2Res}
                             guarantorOne={this.state.guarantor1}

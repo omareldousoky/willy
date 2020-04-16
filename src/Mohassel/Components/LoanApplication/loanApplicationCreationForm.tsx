@@ -595,18 +595,18 @@ export const LoanApplicationCreationForm = (props: any) => {
                         style={{ width: '48%' }}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor1Res')}
                         searchResults={props.searchResults1}
-                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1') }}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1',values) }}
                         selectedCustomer={props.guarantorOne}
-                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor1') }}
+                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor1',values) }}
                     />
                     {(values.guarantorIds.length > 0) && <CustomerSearch
                         source='2'
                         style={{ width: '48%' }}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor2Res')}
                         searchResults={props.searchResults2}
-                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2') }}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2',values) }}
                         selectedCustomer={props.guarantorTwo}
-                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor2') }}
+                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor2',values) }}
                     />}
                 </div>
             </div>
