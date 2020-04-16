@@ -9,8 +9,7 @@ function subjectName(item) {
     return item.__type
 }
 const ability = new Ability([], { subjectName });
-// const roles = JSON.parse(getCookie('roles'))
-const roles =["Data-Entry","Auditor","Sys-admin","IT-ops"]
+const roles = JSON.parse(getCookie('roles'))
 function defineRulesFor(auth) {
     const { can, rules } = new AbilityBuilder<Ability>(Ability);
     if (auth.includes("Data-Entry")) {
