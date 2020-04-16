@@ -64,7 +64,6 @@ class CustomerSearch extends Component<Props, State>{
         }
     }
     handleSubmit = (e) => {
-        console.log('Search', this.state.searchKey, this.state.searchKey.length, this.state.searchKey.trim().length)
         e.preventDefault();
         if (this.state.searchKey.trim().length > 0) {
             this.props.handleSearch(this.state.searchKey)
@@ -73,7 +72,6 @@ class CustomerSearch extends Component<Props, State>{
         }
     };
     render() {
-        console.log(this.state, this.props)
         return (
             <div style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column', ...this.props.style }}>
 
