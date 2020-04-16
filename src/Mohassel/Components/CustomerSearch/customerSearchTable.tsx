@@ -100,7 +100,7 @@ class CustomerSearch extends Component<Props, State>{
                     )}
                 </div>
                 }
-                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <h1>No results</h1>}
+                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{width:'50%'}}><h4>No results</h4></div>}
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{local.guarantor + this.props.source}</h5>
