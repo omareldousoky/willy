@@ -42,13 +42,17 @@ interface Customer {
     permanentEmployeeCount?: string;
     partTimeEmployeeCount?: string;
 }
+interface Results {
+    results: Array<object>;
+    empty: boolean;
+}
 interface State {
     application: Application;
     loading: boolean;
     selectedCustomer: Customer;
-    searchResults: Array<Application>;
-    guarantor1Res: Array<object>;
-    guarantor2Res: Array<object>;
+    searchResults: Results;
+    guarantor1Res: Results;
+    guarantor2Res: Results;
     formulas: Array<Formula>;
     products: Array<object>;
     guarantor1: any;
@@ -127,11 +131,20 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             },
             loading: false,
             selectedCustomer: {},
-            searchResults: [],
+            searchResults: {
+                results: [],
+                empty: false
+            },
             formulas: [],
             products: [],
-            guarantor1Res: [],
-            guarantor2Res: [],
+            guarantor1Res: {
+                results: [],
+                empty: false
+            },
+            guarantor2Res: {
+                results: [],
+                empty: false
+            },
             guarantor1: {},
             guarantor2: {},
             viceCustomers: [{
@@ -230,7 +243,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const results = await searchCustomerByName(query)
         if (results.status === 'success') {
-            this.setState({ loading: false, searchResults: results.body.customers });
+            if (results.body.customers.length > 0) {
+                this.setState({ loading: false, searchResults: { results: results.body.customers, empty: false } });
+            } else {
+                this.setState({ loading: false, searchResults: { results: results.body.customers, empty: true } });
+            }
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
@@ -248,7 +265,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
             const newState = {};
-            newState[guarantor] = results.body.customers;
+            if (results.body.customers.length > 0) {
+                newState[guarantor] = { results: results.body.customers, empty: false };
+            } else {
+                newState[guarantor] = { results: results.body.customers, empty: true };
+            }
             this.setState(newState, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire("error", local.searchError, 'error')
@@ -440,7 +461,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 }
             } else if (this.props.edit) {
                 this.setState({ loading: true });
-                const res = await editApplication(objToSubmit,this.state.prevId);
+                const res = await editApplication(objToSubmit, this.state.prevId);
                 if (res.status === 'success') {
                     this.setState({ loading: false });
                     Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/") })
