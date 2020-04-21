@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
+import Swal from 'sweetalert2';
 interface Customer {
     birthDate: number;
     customerName?: string;
@@ -13,23 +14,27 @@ interface Customer {
     homeAddress?: string;
     customerAddressLatLong: string;
     customerAddressLatLongNumber: {
-      lat: number;
-      lng: number;
+        lat: number;
+        lng: number;
     };
     businessAddressLatLong: string;
     businessAddressLatLongNumber: {
-      lat: number;
-      lng: number;
+        lat: number;
+        lng: number;
     };
     businessPostalCode: any;
     businessLicenseIssueDate: any;
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
-  }
+}
+interface Results {
+    results: Array<object>;
+    empty: boolean;
+}
 interface Props {
     source: string;
-    searchResults: Array<object>;
+    searchResults: Results;
     handleSearch: Function;
     selectCustomer: Function;
     removeCustomer?: Function;
@@ -60,7 +65,11 @@ class CustomerSearch extends Component<Props, State>{
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.handleSearch(this.state.searchKey)
+        if (this.state.searchKey.trim().length > 0) {
+            this.props.handleSearch(this.state.searchKey)
+        } else {
+            Swal.fire("", "please enter query", "error");
+        }
     };
     render() {
         return (
@@ -81,20 +90,21 @@ class CustomerSearch extends Component<Props, State>{
                         <Button type="button" onClick={this.handleSubmit} style={{ margin: 10 }}>{local.submit}</Button>
                     </div>
                 </div>}
-                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults && this.props.searchResults.length > 0 && <div
-                style={{width: '50%', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'right', overflow: 'scroll', padding: 10}}>
-                    {this.props.searchResults.map((element: any) => {
+                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length > 0 && <div
+                    style={{ width: '50%', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'right', overflow: 'scroll', padding: 10 }}>
+                    {this.props.searchResults.results.map((element: any) => {
                         return (
-                            <p style={{width:'100%', borderBottom:'0.5px solid black', cursor:'all-scroll'}} key={element.id} onClick={() => this.props.selectCustomer(element)}>{element.customer.customerName}</p>
+                            <p style={{ width: '100%', borderBottom: '0.5px solid black', cursor: 'all-scroll' }} key={element.id} onClick={() => this.props.selectCustomer(element)}>{element.customer.customerName}</p>
                         )
                     }
                     )}
                 </div>
                 }
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && <div style={{ textAlign: 'right', width:'100%' }}>
+                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{width:'50%'}}><h4>No results</h4></div>}
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{local.guarantor + this.props.source}</h5>
-                        <Button onClick={()=> this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
+                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.name}</p>

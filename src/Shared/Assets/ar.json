@@ -191,6 +191,7 @@
     "editLoan": "تعديل قرض",
     "reviewStatus": "حالة المراجعة",
     "reviewDate": "تاريخ المراجعة",
+    "unreviewDate": "تاريخ إعادة المراجعة",
     "search": "بحث",
     "loanCreationDate": "تاريخ إنشاء القرض",
     "loanIssuanceDate": "تاريخ إصدار القرض",
@@ -236,5 +237,8 @@
     "reviewSuccess":"تم مراجعة الطلب بنجاح",
     "unreviewSuccess":"تم إعادة حالة الطلب إلى تحت المراجعة",
     "rejectSuccess":"تم رفض الطلب بنجاح",
-    "statusChangeError":"حدث خطأ في تعديل حالة الطلب الطلب"
+    "statusChangeError":"حدث خطأ في تعديل حالة الطلب الطلب",
+    "creationDateCannotBeBeforeAcceptanceDate": "تاريخ الإنشاء يجب ان يكون بعد تاريخ الموافقة",
+    "issuanceDateCannotBeBeforeCreationDate": "تاريخ الإصدار يجب ان يكون بعد تاريخ الإنشاء"
+
 }
