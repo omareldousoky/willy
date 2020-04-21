@@ -127,7 +127,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     name: '',
                     phoneNumber: ''
                 }],
-                state: 'under_review'
+                state: 'under_review',
+                reviewedDate: date,
+                undoReviewDate: date,
+                rejectionDate: date,
             },
             loading: false,
             selectedCustomer: {},
@@ -201,6 +204,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.principal = (application.body.principal) ? application.body.principal : 0;
             formData.customerID = application.body.customer._id;
             formData.productID = application.body.product._id;
+            formData.reviewedDate = application.body.reviewedDate;
+            formData.undoReviewDate = application.body.undoReviewDate;
+            formData.rejectionDate = application.body.reviewedDate;
+
             this.setState({
                 selectedCustomer: application.body.customer,
                 application: formData,
@@ -320,21 +327,21 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj.id);
         if (selectedGuarantor.status === 'success') {
-            const defaultApplication = {...values}
+            const defaultApplication = { ...values }
             defaultApplication.guarantorIds.push(obj.id)
             const newState = {
-                application: {...defaultApplication}
+                application: { ...defaultApplication }
             };
             newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
-            this.setState({...newState}, () => { this.setState({ loading: false }) });
+            this.setState({ ...newState }, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
-    removeGuarantor =  (obj, guarantor: string, values) => {
+    removeGuarantor = (obj, guarantor: string, values) => {
         this.setState({ loading: true });
-        const defaultApplication = {...values}
+        const defaultApplication = { ...values }
         defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj._id !== id)
         const newState = {
             application: defaultApplication
@@ -342,7 +349,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         newState[guarantor] = {};
         newState[`${guarantor}Res`] = [];
         newState['loading'] = false;
-        this.setState({...newState});
+        this.setState({ ...newState });
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
