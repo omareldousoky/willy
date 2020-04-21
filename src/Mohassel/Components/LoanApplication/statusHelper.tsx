@@ -45,6 +45,9 @@ class StatusHelper extends Component<Props, State>{
             this.props.handleStatusChange(this.state, this.props)
         }
     }
+    getDateString(date){
+        return new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    }
     render() {
         const selectValues = [{
             value: "reviewRequired",
@@ -162,7 +165,7 @@ class StatusHelper extends Component<Props, State>{
                                         type="date"
                                         name="reviewedDate"
                                         data-qc="reviewedDate"
-                                        value={new Date(new Date(this.props.application.reviewedDate).getTime() - (new Date(this.props.application.reviewedDate).getTimezoneOffset() * 60000)).toISOString().split("T")[0]}
+                                        value={this.getDateString(this.props.application.reviewedDate)}
                                         disabled
                                     />
                                 </Col>
@@ -176,7 +179,7 @@ class StatusHelper extends Component<Props, State>{
                                         data-qc="entryDate"
                                         value={this.state.unreviewDate}
                                         onChange={(e) => { this.setState({ unreviewDate: e.currentTarget.value }) }}
-                                        min={new Date(new Date(this.props.application.reviewedDate).getTime() - (new Date(this.props.application.reviewedDate).getTimezoneOffset() * 60000)).toISOString().split("T")[0]}
+                                        min={this.getDateString(this.props.application.reviewedDate)}
                                     />
                                 </Col>
                                 <Button onClick={() => this.handleStatusChange()}>{local.undoLoanReview}</Button>
@@ -220,7 +223,7 @@ class StatusHelper extends Component<Props, State>{
                                         type="date"
                                         name="reviewedDate"
                                         data-qc="reviewedDate"
-                                        value={new Date(new Date(this.props.application.reviewedDate).getTime() - (new Date(this.props.application.reviewedDate).getTimezoneOffset() * 60000)).toISOString().split("T")[0]}
+                                        value={this.getDateString(this.props.application.reviewedDate)}
                                         disabled
                                     />
                                 </Col>
@@ -234,7 +237,7 @@ class StatusHelper extends Component<Props, State>{
                                         data-qc="entryDate"
                                         value={this.state.rejectionDate}
                                         onChange={(e) => { this.setState({ rejectionDate: e.currentTarget.value }) }}
-                                        min={new Date(new Date(this.props.application.reviewedDate).getTime() - (new Date(this.props.application.reviewedDate).getTimezoneOffset() * 60000)).toISOString().split("T")[0]}
+                                        min={this.getDateString(this.props.application.reviewedDate)}
                                     />
                                 </Col>
                             </Form.Group>
