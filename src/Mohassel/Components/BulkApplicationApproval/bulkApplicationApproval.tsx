@@ -226,7 +226,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: '', fundSource: '' }}
+            initialValues={{ approvalDate: new Date().toISOString().slice(0, 10), fundSource: '' }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur
@@ -238,7 +238,6 @@ class BulkApplicationApproval extends Component<Props, State>{
                   <Modal.Title>Bulk Approval</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-
                   <Form.Group as={Row} controlId="approvalDate">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
                     <Col sm={6}>
