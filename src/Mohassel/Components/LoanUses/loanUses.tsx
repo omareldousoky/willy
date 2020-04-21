@@ -47,7 +47,8 @@ class LoanUses extends Component<{}, State> {
   addLoanUse() {
     if (!this.state.loanUses.some(loanUse => loanUse.name === "")) {
       this.setState({
-        loanUses: [...this.state.loanUses, { name: "", disabledUi: false, id: "", activated: true }]
+        loanUses: [...this.state.loanUses, { name: "", disabledUi: false, id: "", activated: true }],
+        temp: [...this.state.temp, '']
       })
     }
   }
@@ -62,7 +63,7 @@ class LoanUses extends Component<{}, State> {
     }
   }
   async toggleClick(index: number, submit: boolean) {
-    if (this.state.loanUses[index].disabledUi === false && this.state.loanUses[index].name !== "") {
+    if (this.state.loanUses[index].disabledUi === false && this.state.loanUses[index].name.trim() !== "") {
       if (this.state.loanUses[index].id === "") {
         //New 
         this.setState({ loading: true })
@@ -127,7 +128,7 @@ class LoanUses extends Component<{}, State> {
                       onKeyDown={(e: React.KeyboardEvent) => this.handleKeyDown(e, index)}
                       disabled={loanUse.disabledUi}
                       style={loanUse.disabledUi ? { background: 'none', border: 'none' } : {}}
-                      isInvalid={this.state.loanUses[index].name === ""}
+                      isInvalid={this.state.loanUses[index].name.trim() === ""}
                     />
                     <Form.Control.Feedback type="invalid">
                       {local.required}
@@ -149,7 +150,7 @@ class LoanUses extends Component<{}, State> {
                       />
                       <span className="fa fa-undo fa-lg"
                         style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
-                        onClick={() => this.setState({ loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: this.state.temp[index], disabledUi: true } : loanUse) })}
+                        onClick={() => this.state.temp[index] !== '' ? this.setState({ loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: this.state.temp[index], disabledUi: true } : loanUse) }) : {}}
                       />
                     </>
                   }
