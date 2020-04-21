@@ -191,6 +191,7 @@
     "editLoan": "تعديل قرض",
     "reviewStatus": "حالة المراجعة",
     "reviewDate": "تاريخ المراجعة",
+    "unreviewDate": "تاريخ إعادة المراجعة",
     "search": "بحث",
     "loanCreationDate": "تاريخ إنشاء القرض",
     "loanIssuanceDate": "تاريخ إصدار القرض",

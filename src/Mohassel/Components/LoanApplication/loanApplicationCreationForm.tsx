@@ -595,18 +595,18 @@ export const LoanApplicationCreationForm = (props: any) => {
                         style={{ width: '48%' }}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor1Res')}
                         searchResults={props.searchResults1}
-                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1') }}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor1',values) }}
                         selectedCustomer={props.guarantorOne}
-                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor1') }}
+                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor1',values) }}
                     />
                     {(values.guarantorIds.length > 0) && <CustomerSearch
                         source='2'
                         style={{ width: '48%' }}
                         handleSearch={(query) => props.handleSearch(query, 'guarantor2Res')}
                         searchResults={props.searchResults2}
-                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2') }}
+                        selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, 'guarantor2',values) }}
                         selectedCustomer={props.guarantorTwo}
-                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor2') }}
+                        removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, 'guarantor2',values) }}
                     />}
                 </div>
             </div>
@@ -663,7 +663,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             </div>
             </fieldset>
             {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ width: '100%', border: '1px solid black', padding: 10, borderRadius: 4, margin: '10px 0'}}>
-                    <StatusHelper status={values.state} id={values.id} handleStatusChange={(internalstate,internalprops)=> {props.handleStatusChange(internalstate,internalprops)}}/>
+                    <StatusHelper status={values.state} id={values.id} handleStatusChange={(internalstate,internalprops)=> {props.handleStatusChange(internalstate,internalprops)}} application={values}/>
                 </div>}
             {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{(values.state === 'under_review')?local.submit:local.edit}</Button>}
         </Form >
