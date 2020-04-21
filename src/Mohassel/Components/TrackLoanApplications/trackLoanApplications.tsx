@@ -101,8 +101,8 @@ class TrackLoanApplications extends Component<Props, State>{
     } else {
       obj = {
         branchId: branchId[0],
-        fromDate: new Date(values.dateFrom).valueOf(),
-        toDate: new Date(values.dateTo).valueOf(),
+        fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
+        toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: 20,
         from: 0,
       }
@@ -214,14 +214,15 @@ class TrackLoanApplications extends Component<Props, State>{
             </Form.Group>
             <Form.Group controlId="dateTo" style={{ flex: 1, marginLeft: 10 }}>
               <Form.Label style={{ textAlign: 'right' }} column >{local.dateTo}</Form.Label>
-
               <Form.Control
                 type="date"
                 data-qc="dateTo"
                 value={formikProps.values.dateTo}
+                min={formikProps.values.dateFrom}
                 onChange={formikProps.handleChange}
                 onBlur={formikProps.handleBlur}
                 isInvalid={Boolean(formikProps.errors.dateTo) && Boolean(formikProps.touched.dateTo)}
+                disabled={!Boolean(formikProps.values.dateFrom)}
               />
               <Form.Control.Feedback type="invalid">
                 {formikProps.errors.dateTo}
@@ -229,7 +230,7 @@ class TrackLoanApplications extends Component<Props, State>{
             </Form.Group>
             <Form.Group>
             </Form.Group>
-            <Button type="submit">{local.search}</Button>
+            <Button type="submit" disabled={!Boolean(formikProps.values.searchKeyword || (formikProps.values.dateFrom && formikProps.values.dateTo))}>{local.search}</Button>
           </Form >
           }
         </Formik>
@@ -280,7 +281,7 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
                     <td>{this.englishToArabic(loanItem.application.status)}</td>
                     <td>{loanItem.application.product.productName}</td>
-                    <td>{loanItem.application.principal}</td>
+                    <td>{loanItem.application.principal || 0}</td>
                     <td></td>
                     <td>{this.getActionFromStatus(loanItem)}</td>
                   </tr>
