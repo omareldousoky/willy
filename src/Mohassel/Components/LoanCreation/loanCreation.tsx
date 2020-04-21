@@ -19,7 +19,7 @@ interface CustomerData {
   id: string;
   customerName: string;
   customerType: string;
-  maxPrincipal: number;
+  principal: number;
   currency: string;
   noOfInstallments: number;
   gracePeriod: number;
@@ -37,6 +37,7 @@ interface State {
   type: string;
   loading: boolean;
   installmentsData: any;
+  approvalDate: string;
 }
 export interface Location {
   pathname: string;
@@ -55,14 +56,15 @@ class LoanCreation extends Component<Props, State> {
     this.state = {
       id: '',
       type: '',
-      loanCreationDate: '',
-      loanIssuanceDate: '',
+      approvalDate: '',
+      loanCreationDate: new Date().toISOString().slice(0, 10),
+      loanIssuanceDate: new Date().toISOString().slice(0, 10),
       loading: false,
       customerData: {
         id: '',
         customerName: '',
         customerType: '',
-        maxPrincipal: 0,
+        principal: 0,
         currency: '',
         noOfInstallments: 0,
         gracePeriod: 0,
@@ -89,11 +91,13 @@ class LoanCreation extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         loading: false,
+        approvalDate: res.body.approvalDate,
+        loanCreationDate: res.body.creationDate? res.body.creationDate: this.state.loanCreationDate,
         customerData: {
           id: id,
           customerName: res.body.customer.customerName,
           customerType: '',
-          maxPrincipal: res.body.product.maxPrincipal,
+          principal: res.body.principal,
           currency: res.body.product.currency,
           noOfInstallments: res.body.product.noOfInstallments,
           gracePeriod: res.body.product.gracePeriod,
@@ -101,8 +105,7 @@ class LoanCreation extends Component<Props, State> {
           periodType: res.body.product.periodType,
           productName: res.body.product.productName,
           entryDate: res.body.entryDate,
-          status: res.body.status,
-          
+          status: res.body.status,   
         }
       })
       if(type === "issue"){
@@ -159,7 +162,7 @@ class LoanCreation extends Component<Props, State> {
               <td>{this.state.customerData.id}</td>
               <td>{this.state.customerData.customerName}</td>
               <td>{this.state.customerData.customerType}</td>
-              <td>{this.state.customerData.maxPrincipal}</td>
+              <td>{this.state.customerData.principal}</td>
               <td>{this.state.customerData.currency}</td>
               <td>{this.state.customerData.noOfInstallments}</td>
               <td>{this.state.customerData.periodLength}</td>
@@ -196,6 +199,7 @@ class LoanCreation extends Component<Props, State> {
           </tbody>
         </Table>
         <Formik
+          enableReinitialize
           initialValues={this.state}
           onSubmit={this.handleSubmit}
           validationSchema={this.state.type === "create" ? loanCreationValidation : loanIssuanceValidation}

@@ -19,7 +19,6 @@ export const getBirthdateFromNationalId = (nationalIdNumber: string): string => 
     const month = nationalIdNumberTrimmed.substring(3, 5);
     const day = nationalIdNumberTrimmed.substring(5, 7);
     const birthDate = `${year}-${month}-${day}`;
-    console.log(isNaN(new Date(birthDate).valueOf()), birthDate, new Date(birthDate))
     if(isNaN(new Date(birthDate).valueOf()) || firstDigitsYear === ''){
         return '1800-01-01';
     }

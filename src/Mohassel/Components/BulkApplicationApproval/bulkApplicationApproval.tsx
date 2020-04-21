@@ -135,6 +135,13 @@ class BulkApplicationApproval extends Component<Props, State>{
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
+  dateSlice(date){
+    if(!date){
+      return new Date().toISOString().slice(0, 10)
+    }else{
+      return new Date(date).toISOString().slice(0, 10)
+    }
+  }
   englishToArabic(status: string) {
     switch (status) {
       case 'underReview':
@@ -205,7 +212,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                         <td></td>
                         <td>{loanItem.id}</td>
                         <td>{loanItem.application.customer.customerName}</td>
-                        <td>{new Date(loanItem.application.entryDate).toISOString().slice(0, 10)}</td>
+                        <td>{this.dateSlice(loanItem.application.entryDate)}</td>
                         <td>{this.englishToArabic(loanItem.application.status)}</td>
                         <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.principal}</td>
@@ -226,7 +233,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: '', fundSource: '' }}
+            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '' }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur
@@ -238,7 +245,6 @@ class BulkApplicationApproval extends Component<Props, State>{
                   <Modal.Title>Bulk Approval</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-
                   <Form.Group as={Row} controlId="approvalDate">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
                     <Col sm={6}>
