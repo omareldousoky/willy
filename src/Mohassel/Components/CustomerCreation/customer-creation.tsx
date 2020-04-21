@@ -100,7 +100,10 @@ interface State {
   };
   customerId: string;
   loading: boolean;
-  searchResults: Array<object>;
+  searchResults: {
+    results: Array<object>;
+    empty: boolean;
+  };
 }
 
 class CustomerCreation extends Component<Props, State>{
@@ -113,13 +116,16 @@ class CustomerCreation extends Component<Props, State>{
       step3: step3,
       customerId: '',
       loading: false,
-      searchResults: [],
+      searchResults: {
+        results: [],
+        empty: false
+      },
     }
   }
   componentDidUpdate(prevProps: Props, _prevState: State) {
     if (prevProps.edit !== this.props.edit) {
       //set State to initial value
-      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1, searchResults: [] });
+      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1, searchResults: { results: [], empty: false } });
     }
   }
   submit = (values: object) => {
@@ -142,7 +148,11 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const results = await searchCustomerByName(query)
     if (results.status === 'success') {
-      this.setState({ loading: false, searchResults: results.body.customers });
+      if (results.body.customers.length > 0) {
+        this.setState({ loading: false, searchResults: { results: results.body.customers, empty: false } });
+      }else{
+        this.setState({ loading: false, searchResults: { results: results.body.customers, empty: true } });
+      }
     } else {
       Swal.fire("error", local.searchError, 'error')
       this.setState({ loading: false });
@@ -153,9 +163,9 @@ class CustomerCreation extends Component<Props, State>{
     const res = await getCustomerByID(customer.id)
     if (res.status === 'success') {
 
-      const customerInfo = {...res.body};
-      const customerBusiness = {...res.body};
-      const customerExtraDetails = {...res.body};
+      const customerInfo = { ...res.body };
+      const customerBusiness = { ...res.body };
+      const customerExtraDetails = { ...res.body };
       customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
       customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
       customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
@@ -208,7 +218,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepOneForm {...formikProps} edit={this.props.edit}/>
+          <StepOneForm {...formikProps} edit={this.props.edit} />
         }
       </Formik>
     )

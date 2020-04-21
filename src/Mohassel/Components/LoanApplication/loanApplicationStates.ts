@@ -57,6 +57,9 @@ export interface Application {
     applicationFeePercentPerPersonType: string;
     state?: string;
     id?: string;
+    reviewedDate: any;
+    undoReviewDate: any;
+    rejectionDate: any;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),
@@ -96,9 +99,9 @@ export const LoanApplicationValidation = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() >= new Date().setHours(0, 0, 0, 0) : true }
     ).required('required!'),
     viceCustomers: Yup.array().of(
-            Yup.object().shape({
-                name: Yup.string(),
-                phoneNumber: Yup.string().min(10).max(11)
-            })
-        ),
+        Yup.object().shape({
+            name: Yup.string(),
+            phoneNumber: Yup.string().min(10).max(11)
+        })
+    ),
 });

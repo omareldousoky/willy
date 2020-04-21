@@ -35,7 +35,7 @@ class LoanProductCreation extends Component<Props, State>{
                 noOfInstallments: 1,
                 lateDays: 0,
                 gracePeriod: 0,
-                interest: 0.1,
+                interest: 0,
                 interestPeriod: 'yearly',
                 allowInterestAdjustment: false,
                 inAdvanceFees: 0,

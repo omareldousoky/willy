@@ -10,11 +10,10 @@ export const searchApplicationValidation = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
     ),
     // .required(local.required),
-    dateTo: Yup.string().test(
-        "Max Date", local.dateShouldBeBeforeToday,
-        (value: any) => { return value ? (new Date(value).valueOf() <= endOfDay.valueOf()) : true }
-    ),
-    // .required(local.required),
+    dateTo: Yup.string()
+        .test(
+            "Max Date", local.dateShouldBeBeforeToday,
+            (value: any) => { return value ? (new Date(value).valueOf() <= endOfDay.valueOf()) : true }
+        ),
     searchKeyword: Yup.string()
-    // .required(local.required)
 })
