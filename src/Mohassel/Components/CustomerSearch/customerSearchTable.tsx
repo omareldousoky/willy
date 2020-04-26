@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Swal from 'sweetalert2';
-export interface Customer {
+interface Customer {
     birthDate?: any;
     customerName?: string;
     nationalIdIssueDate?: any;
