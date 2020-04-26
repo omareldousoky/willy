@@ -1,32 +1,36 @@
 import React, { Component } from 'react';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Swal from 'sweetalert2';
-interface Customer {
-    birthDate: number;
+export interface Customer {
+    birthDate?: any;
     customerName?: string;
-    nationalIdIssueDate: number;
-    homePostalCode: number;
+    nationalIdIssueDate?: any;
+    homePostalCode?: number;
     nationalId?: string;
     homeAddress?: string;
-    customerAddressLatLong: string;
-    customerAddressLatLongNumber: {
+    customerAddressLatLong?: string;
+    customerAddressLatLongNumber?: {
         lat: number;
         lng: number;
     };
-    businessAddressLatLong: string;
-    businessAddressLatLongNumber: {
+    businessAddressLatLong?: string;
+    businessAddressLatLongNumber?: {
         lat: number;
         lng: number;
     };
-    businessPostalCode: any;
-    businessLicenseIssueDate: any;
-    applicationDate: any;
-    permanentEmployeeCount: any;
-    partTimeEmployeeCount: any;
+    businessPostalCode?: any;
+    businessLicenseIssueDate?: any;
+    applicationDate?: any;
+    permanentEmployeeCount?: any;
+    partTimeEmployeeCount?: any;
+    customerID?: string;
+    customerCode?: string;
+    gender?: string;
+    businessSector?: string;
+    businessActivity?: string;
+    businessSpeciality?: string;
 }
 interface Results {
     results: Array<object>;
@@ -38,7 +42,7 @@ interface Props {
     handleSearch: Function;
     selectCustomer: Function;
     removeCustomer?: Function;
-    selectedCustomer?: Customer;
+    selectedCustomer: Customer;
     style?: object;
 };
 
@@ -100,10 +104,10 @@ class CustomerSearch extends Component<Props, State>{
                     )}
                 </div>
                 }
-                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{width:'50%'}}><h4>No results</h4></div>}
+                {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{ width: '50%' }}><h4>No results</h4></div>}
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
-                        <h5>{local.guarantor + this.props.source}</h5>
+                        <h5>{local.guarantor + ` ` + this.props.source}</h5>
                         <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
                     </div>
                     <div className="d-flex flex-row">

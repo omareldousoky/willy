@@ -1,8 +1,12 @@
 import * as Yup from 'yup';
-
+import { Customer, Results } from './loanApplicationCreation';
 export interface Vice {
     name: string;
     phoneNumber: string;
+}
+interface Guarantor {
+    searchResults: Results;
+    guarator: Customer;
 }
 export interface Application {
     customerID: string;
@@ -60,6 +64,8 @@ export interface Application {
     reviewedDate: any;
     undoReviewDate: any;
     rejectionDate: any;
+    noOfGuarantors: number;
+    guarantors: Array<Guarantor>;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),
