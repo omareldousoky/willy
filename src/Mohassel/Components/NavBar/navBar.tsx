@@ -39,8 +39,8 @@ class NavBar extends Component<Props> {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
-              {<Can I='create' a='Customer'><Nav.Link onClick={() => this.props.history.push('/new-customer')}>Create User</Nav.Link></Can>}
-              {<Can I='edit' a='Customer'><Nav.Link onClick={() => this.props.history.push('/edit-customer')}>Edit User</Nav.Link></Can>}
+              {<Can I='create' a='Customer'><Nav.Link onClick={() => this.props.history.push('/new-customer')}>{'Create Customer'}</Nav.Link></Can>}
+              {<Can I='edit' a='Customer'><Nav.Link onClick={() => this.props.history.push('/edit-customer')}>{'Edit User'}</Nav.Link></Can>}
               {<Can I='create' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>Create Calculation Method</Nav.Link></Can>}
               {<Can I='test' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>Test Calculation Method</Nav.Link></Can>}
               {<Can I='create' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>Create Loan Product</Nav.Link></Can>}
