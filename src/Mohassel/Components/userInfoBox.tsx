@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
+import { getRenderDate } from '../Services/getRenderDate';
+
 interface Props {
     values: any;
 };
@@ -38,7 +40,7 @@ class InfoBox extends Component<Props, State>{
                     </Form.Group>
                     <Form.Group as={Col} md="4">
                         <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.birthDate}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.birthDate} />
+                        <Form.Control plaintext readOnly defaultValue={getRenderDate(values.birthDate)} />
                     </Form.Group>
                     <Form.Group as={Col} md="4">
                         <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.gender}</Form.Label>
@@ -48,7 +50,7 @@ class InfoBox extends Component<Props, State>{
                 <Form.Row>
                     <Form.Group as={Col} md="4">
                         <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.nationalIdIssueDate}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.nationalIdIssueDate} />
+                        <Form.Control plaintext readOnly defaultValue={getRenderDate(values.nationalIdIssueDate)} />
                     </Form.Group>
                     <Form.Group as={Col} md="4">
                         <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.businessSector}</Form.Label>
