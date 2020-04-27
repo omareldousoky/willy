@@ -3,7 +3,7 @@
     "password": "كلمة المرور",
     "login": "تسجيل الدخول",
     "customerType": "نوع العميل",
-    "name": "الاسم",
+    "name": "الإسم",
     "gender": "النوع",
     "nameSecondLang": "الاسم باللغة الثانية",
     "nationalId": "الرقم القومي",
@@ -239,6 +239,13 @@
     "rejectSuccess":"تم رفض الطلب بنجاح",
     "statusChangeError":"حدث خطأ في تعديل حالة الطلب الطلب",
     "creationDateCannotBeBeforeAcceptanceDate": "تاريخ الإنشاء يجب ان يكون بعد تاريخ الموافقة",
-    "issuanceDateCannotBeBeforeCreationDate": "تاريخ الإصدار يجب ان يكون بعد تاريخ الإنشاء"
+    "issuanceDateCannotBeBeforeCreationDate": "تاريخ الإصدار يجب ان يكون بعد تاريخ الإنشاء",
+    "example": "مثال",
+    "nationalIdPlaceholder": "12345678901234",
+    "confrimPassword":"إعادة إدخال كلمة المرور",
+    "dateOfHire": "تاريخ التعين",
+    "hrCode":"كود الموارد البشرية"
+
+
 
 }

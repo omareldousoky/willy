@@ -132,3 +132,13 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .checkbox-label, label {
   margin-right: 20px;
 }
+.btn-cancel-prev {
+  background-color: #fff;
+  border-color: #7dc356;
+  color: #7dc356;
+
+}
+.btn-submit-next {
+  background-color: #7dc356;
+  color: #fff;
+}
