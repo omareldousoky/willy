@@ -13,6 +13,7 @@ export const step1: Values = {
     userConfirmPassword:'',
 }
 
+
 export const userCreationValidationStepOne = Yup.object().shape({
     userFullName: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     userName: Yup.string().trim().max(100, local.maxLength100).required(local.required),
@@ -25,7 +26,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
         otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
     }),
     userPassword: Yup.string().required(local.required),
-    userConfrimPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    userConfirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null],local.confrimPasswordCheck),
 
 });

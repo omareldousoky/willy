@@ -44,7 +44,7 @@ class UserCreation extends Component <Props, State> {
     }
     renderStepOne(): JSX.Element {
         return(
-             <Formik
+       <Formik
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}

@@ -80,7 +80,6 @@ export const UserDataForm = (props: Props) => {
                 >{`${local.dateOfHire}*`}
                 </Form.Label>
                 <Form.Control
-                    className={"input-group date"}
                     type={"date"}
                     name={"userHiringDate"}
                     data-qc={"userHiringDate"}
@@ -93,6 +92,31 @@ export const UserDataForm = (props: Props) => {
                 <Form.Control.Feedback
                     type="invalid">
                     {props.errors.userHiringDate}
+                </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group
+            controlId={'userMobileNumber'}
+            className={'user-data-group'}
+            >
+                <Form.Label
+                className={'user-data-label'}
+                >{`${local.mobilePhoneNumber}`}
+                </Form.Label>
+                <Form.Control 
+                   type={"text"}
+                   name={"userMobileNumber"}
+                   data-qc={"userMobileNumber"}
+                   value={props.values.userMobileNumber}
+                   onChange={props.handleChange}
+                   onBlur={props.handleBlur}
+                   isInvalid={(props.errors.userMobileNumber && props.touched.userMobileNumber) as boolean}
+
+                />
+                <Form.Control.Feedback
+                type={"invalid"}
+                >
+                    {props.errors.userMobileNumber}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -123,13 +147,24 @@ export const UserDataForm = (props: Props) => {
             >
                 <Col>
                     <Form.Label
-                        className={'user-data-label'}
+                        className={'user-data-label'} 
                     >{`${local.password}*`}
                     </Form.Label>
                     <Form.Control
                         type={"password"}
+                        name={"userPassword"}
+                        data-qc={"userPassword"}
+                        value= {props.values.userPassword}
                         placeholder={local.password}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        isInvalid={(props.errors.userPassword && props.touched.userPassword) as boolean}
                     />
+                    <Form.Control.Feedback
+                    type={'invalid'}
+                    >
+                        {props.errors.userPassword}
+                    </Form.Control.Feedback>
                 </Col>
                 <Col>
                     <Form.Label
@@ -138,8 +173,19 @@ export const UserDataForm = (props: Props) => {
                     </Form.Label>
                     <Form.Control
                         type={"password"}
+                        name={'userConfirmPassword'}
+                        data-qc={'userConfirmPassword'}
+                        value={props.values.userConfirmPassword}
                         placeholder={local.confrimPassword}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        isInvalid={(props.errors.userConfirmPassword && props.touched.userConfirmPassword) as boolean}
                     />
+                    <Form.Control.Feedback
+                    type={'invalid'}
+                    >
+                        {props.errors.userConfirmPassword}
+                    </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group 
