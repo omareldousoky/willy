@@ -4,8 +4,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
+import { Application } from '../LoanApplication/loanApplicationStates';
+import Swal from 'sweetalert2';
 interface Props {
     status: string;
+    application: Application;
     id: string;
     handleStatusChange: Function;
 };
@@ -36,7 +39,14 @@ class StatusHelper extends Component<Props, State>{
         }
     }
     handleStatusChange() {
-        this.props.handleStatusChange(this.state,this.props)
+        if(this.props.status === 'reject' && this.state.rejectionReason.length === 0){
+            Swal.fire('','Rejection reason mandatory','warning')
+        }else{
+            this.props.handleStatusChange(this.state, this.props)
+        }
+    }
+    getDateString(date){
+        return new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     }
     render() {
         const selectValues = [{
@@ -112,7 +122,6 @@ class StatusHelper extends Component<Props, State>{
                                         data-qc="entryDate"
                                         value={this.state.reviewDate}
                                         onChange={(e) => { this.setState({ reviewDate: e.currentTarget.value }) }}
-                                        max={this.state.reviewDate}
                                     />
                                 </Col>
                                 <Button onClick={() => this.handleStatusChange()}>{local.reviewLoan}</Button>
@@ -154,11 +163,23 @@ class StatusHelper extends Component<Props, State>{
                                 <Col sm={5}>
                                     <Form.Control
                                         type="date"
+                                        name="reviewedDate"
+                                        data-qc="reviewedDate"
+                                        value={this.getDateString(this.props.application.reviewedDate)}
+                                        disabled
+                                    />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="productID">
+                                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.unreviewDate}</Form.Label>
+                                <Col sm={5}>
+                                    <Form.Control
+                                        type="date"
                                         name="entryDate"
                                         data-qc="entryDate"
                                         value={this.state.unreviewDate}
                                         onChange={(e) => { this.setState({ unreviewDate: e.currentTarget.value }) }}
-                                        max={this.state.unreviewDate}
+                                        min={this.getDateString(this.props.application.reviewedDate)}
                                     />
                                 </Col>
                                 <Button onClick={() => this.handleStatusChange()}>{local.undoLoanReview}</Button>
@@ -195,6 +216,18 @@ class StatusHelper extends Component<Props, State>{
                             </Form.Group>
                         </Col>
                         {this.state.rejectionStatus === "rejected" && <Col sm={8}>
+                        <Form.Group as={Row} controlId="productID">
+                                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.reviewDate}</Form.Label>
+                                <Col sm={5}>
+                                    <Form.Control
+                                        type="date"
+                                        name="reviewedDate"
+                                        data-qc="reviewedDate"
+                                        value={this.getDateString(this.props.application.reviewedDate)}
+                                        disabled
+                                    />
+                                </Col>
+                            </Form.Group>
                             <Form.Group as={Row} controlId="productID">
                                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.decisionDate}</Form.Label>
                                 <Col sm={5}>
@@ -204,7 +237,7 @@ class StatusHelper extends Component<Props, State>{
                                         data-qc="entryDate"
                                         value={this.state.rejectionDate}
                                         onChange={(e) => { this.setState({ rejectionDate: e.currentTarget.value }) }}
-                                        max={this.state.rejectionDate}
+                                        min={this.getDateString(this.props.application.reviewedDate)}
                                     />
                                 </Col>
                             </Form.Group>

@@ -1,8 +1,12 @@
 import * as Yup from 'yup';
-
+import { Customer, Results } from './loanApplicationCreation';
 export interface Vice {
     name: string;
     phoneNumber: string;
+}
+interface Guarantor {
+    searchResults: Results;
+    guarator: Customer;
 }
 export interface Application {
     customerID: string;
@@ -57,6 +61,11 @@ export interface Application {
     applicationFeePercentPerPersonType: string;
     state?: string;
     id?: string;
+    reviewedDate: any;
+    undoReviewDate: any;
+    rejectionDate: any;
+    noOfGuarantors: number;
+    guarantors: Array<Guarantor>;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required('required!'),
@@ -96,9 +105,9 @@ export const LoanApplicationValidation = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() >= new Date().setHours(0, 0, 0, 0) : true }
     ).required('required!'),
     viceCustomers: Yup.array().of(
-            Yup.object().shape({
-                name: Yup.string(),
-                phoneNumber: Yup.string().min(10).max(11)
-            })
-        ),
+        Yup.object().shape({
+            name: Yup.string(),
+            phoneNumber: Yup.string().min(10).max(11)
+        })
+    ),
 });

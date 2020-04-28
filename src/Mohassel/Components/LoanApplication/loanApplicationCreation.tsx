@@ -28,7 +28,7 @@ interface Formula {
     name: string;
     _id: string;
 }
-interface Customer {
+export interface Customer {
     customerID?: string;
     customerName?: string;
     customerCode?: string;
@@ -42,13 +42,17 @@ interface Customer {
     permanentEmployeeCount?: string;
     partTimeEmployeeCount?: string;
 }
+export interface Results {
+    results: Array<object>;
+    empty: boolean;
+}
 interface State {
     application: Application;
     loading: boolean;
     selectedCustomer: Customer;
-    searchResults: Array<Application>;
-    guarantor1Res: Array<object>;
-    guarantor2Res: Array<object>;
+    searchResults: Results;
+    guarantor1Res: Results;
+    guarantor2Res: Results;
     formulas: Array<Formula>;
     products: Array<object>;
     guarantor1: any;
@@ -123,15 +127,29 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     name: '',
                     phoneNumber: ''
                 }],
-                state: 'under_review'
+                state: 'under_review',
+                reviewedDate: date,
+                undoReviewDate: date,
+                rejectionDate: date,
+                noOfGuarantors:0,
+                guarantors: []
             },
             loading: false,
             selectedCustomer: {},
-            searchResults: [],
+            searchResults: {
+                results: [],
+                empty: false
+            },
             formulas: [],
             products: [],
-            guarantor1Res: [],
-            guarantor2Res: [],
+            guarantor1Res: {
+                results: [],
+                empty: false
+            },
+            guarantor2Res: {
+                results: [],
+                empty: false
+            },
             guarantor1: {},
             guarantor2: {},
             viceCustomers: [{
@@ -176,10 +194,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const guarantor1 = (application.body.guarantors[0]) ? application.body.guarantors[0] : null;
-            const guarantor2 = (application.body.guarantors[1]) ? application.body.guarantors[1] : null;
-            if (guarantor1) formData.guarantorIds.push(guarantor1._id);
-            if (guarantor2) formData.guarantorIds.push(guarantor2._id);
+            const element = {
+                searchResults: {
+                    results: [],
+                    empty: false
+                },
+                guarantor: {},
+            };
+            const value = (application.body.product.noOfGuarantors)?application.body.product.noOfGuarantors:2;
+            const guarsArr = Array(value).fill(element);
+            application.body.guarantors.map( (guar,i) => {
+                guarsArr[i].guarantor = guar
+                formData.guarantorIds.push(guar._id);
+            })
             formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
             formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
             formData.usage = (application.body.usage) ? application.body.usage : '';
@@ -188,11 +215,14 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.principal = (application.body.principal) ? application.body.principal : 0;
             formData.customerID = application.body.customer._id;
             formData.productID = application.body.product._id;
+            formData.reviewedDate = application.body.reviewedDate;
+            formData.undoReviewDate = application.body.undoReviewDate;
+            formData.rejectionDate = application.body.reviewedDate;
+            formData.guarantors = guarsArr;
+
             this.setState({
                 selectedCustomer: application.body.customer,
                 application: formData,
-                guarantor1,
-                guarantor2,
                 loading: false
             })
         } else {
@@ -230,13 +260,17 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const results = await searchCustomerByName(query)
         if (results.status === 'success') {
-            this.setState({ loading: false, searchResults: results.body.customers });
+            if (results.body.customers.length > 0) {
+                this.setState({ loading: false, searchResults: { results: results.body.customers, empty: false } });
+            } else {
+                this.setState({ loading: false, searchResults: { results: results.body.customers, empty: true } });
+            }
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
         }
     }
-    handleSearchGuarantors = async (query, guarantor: string) => {
+    handleSearchGuarantors = async (query, index) => {
         const obj = {
             name: query,
             // sameBranch: true,
@@ -247,9 +281,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const results = await searchCustomer(obj)
         if (results.status === 'success') {
-            const newState = {};
-            newState[guarantor] = results.body.customers;
-            this.setState(newState, () => { this.setState({ loading: false }) });
+            const defaultApp = { ...this.state.application };
+            const defaultGuarantors = { ...defaultApp.guarantors };
+            const defaultGuar = { ...defaultGuarantors[index] };
+            if (results.body.customers.length > 0) {
+                defaultGuar.searchResults = { results: results.body.customers, empty: false };
+            } else {
+                defaultGuar.searchResults = { results: results.body.customers, empty: true };
+            }
+            defaultApp.guarantors[index] = defaultGuar
+            this.setState({
+                application: defaultApp
+            }, () => { this.setState({ loading: false }) });
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
@@ -295,31 +338,33 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    selectGuarantor = async (obj, guarantor: string) => {
+    selectGuarantor = async (obj, index, values) => {
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj.id);
         if (selectedGuarantor.status === 'success') {
-            const defaultApplication = this.state.application
+            const defaultApplication = { ...values }
+            const defaultGuarantors = { ...defaultApplication.guarantors };
+            const defaultGuar = { ...defaultGuarantors[index] };
+            defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj.id };
             defaultApplication.guarantorIds.push(obj.id)
-            const newState = {};
-            newState[guarantor] = { ...selectedGuarantor.body, id: obj.id };
-            this.setState(newState, () => { this.setState({ loading: false }) });
+            defaultApplication.guarantors[index] = defaultGuar;
+            this.setState({ application: defaultApplication, loading: false });
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
     }
-    removeGuarantor = async (obj, guarantor: string) => {
+    removeGuarantor = (obj, index, values) => {
         this.setState({ loading: true });
-        const defaultApplication = this.state.application
+        const defaultApplication = { ...values }
+        const defaultGuarantors = { ...defaultApplication.guarantors };
+        const defaultGuar = { ...defaultGuarantors[index] };
         defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj._id !== id)
-        const newState = {
-            application: defaultApplication
-        };
-        newState[guarantor] = {};
-        newState[`${guarantor}Res`] = [];
-        newState['loading'] = false;
-        this.setState(newState);
+        defaultGuar.guarantor = {};
+        defaultGuar.searchResults.results = [];
+        defaultGuar.searchResults.empty = false;
+        defaultApplication.guarantors[index] = defaultGuar;
+        this.setState({ application: defaultApplication, loading:false });
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
@@ -353,6 +398,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.maxPrincipal = (selectedProductDetails.maxPrincipal) ? selectedProductDetails.maxPrincipal : defaultValues.maxPrincipal;
         defaultApplication.minInstallment = (selectedProductDetails.minInstallment) ? selectedProductDetails.minInstallment : defaultValues.minInstallment;
         defaultApplication.maxInstallment = (selectedProductDetails.maxInstallment) ? selectedProductDetails.maxInstallment : defaultValues.maxInstallment;
+        defaultApplication.noOfGuarantors = (selectedProductDetails.noOfGuarantors) ? selectedProductDetails.noOfGuarantors : defaultValues.noOfGuarantors;
+
         this.setState({ application: defaultApplication });
     }
     getSelectedLoanProduct = async (id) => {
@@ -361,7 +408,16 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         if (selectedProduct.status === 'success') {
             const selectedProductDetails = selectedProduct.body.data;
             this.populateLoanProduct(selectedProductDetails)
+            const element = {
+                searchResults: {
+                    results: [],
+                    empty: false
+                },
+                guarantor: {},
+            };
+            const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(element)
             const defaultApplication = { ...this.state.application };
+            defaultApplication.guarantors = guarsArr;
             defaultApplication.productID = id;
             this.setState({ loading: false, application: defaultApplication });
         } else {
@@ -427,7 +483,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             visitationDate: new Date(obj.visitationDate).valueOf(),
             viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
         }
-        if (Object.keys(this.state.guarantor1).length > 0 && Object.keys(this.state.guarantor2).length > 0) {
+        if (this.state.application.guarantorIds.length === this.state.application.noOfGuarantors) {
             if (!this.props.edit) {
                 this.setState({ loading: true });
                 const res = await newApplication(objToSubmit);
@@ -440,7 +496,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 }
             } else if (this.props.edit) {
                 this.setState({ loading: true });
-                const res = await editApplication(objToSubmit,this.state.prevId);
+                const res = await editApplication(objToSubmit, this.state.prevId);
                 if (res.status === 'success') {
                     this.setState({ loading: false });
                     Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/") })
@@ -471,8 +527,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             products={this.state.products}
                             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
                             handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
-                            selectGuarantor={(query, guarantor) => { this.selectGuarantor(query, guarantor) }}
-                            removeGuarantor={(query, guarantor) => { this.removeGuarantor(query, guarantor) }}
+                            selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
+                            removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
                             searchResults1={this.state.guarantor1Res}
                             searchResults2={this.state.guarantor2Res}
                             guarantorOne={this.state.guarantor1}
@@ -481,7 +537,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             handleStatusChange={(state, props) => this.handleStatusChange(state, props)}
                         />
                     }
-                </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
+                </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
             </Container>
         )
     }

@@ -17,7 +17,7 @@ import { searchApplication } from '../../Services/APIs/loanApplication/searchApp
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import { englishToArabic }  from '../../Services/statusLanguage';
 interface Branch {
   label: string;
   value: string;
@@ -135,19 +135,11 @@ class BulkApplicationApproval extends Component<Props, State>{
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
-  englishToArabic(status: string) {
-    switch (status) {
-      case 'underReview':
-        return 'تحت التحرير';
-      case 'reviewed':
-        return 'رُجعت';
-      case 'rejected':
-        return 'مرفوضة';
-      case 'approved':
-        return 'موافق عليها';
-      case 'created':
-        return 'إنشاء';
-      default: return '';
+  dateSlice(date){
+    if(!date){
+      return new Date().toISOString().slice(0, 10)
+    }else{
+      return new Date(date).toISOString().slice(0, 10)
     }
   }
   render() {
@@ -205,8 +197,8 @@ class BulkApplicationApproval extends Component<Props, State>{
                         <td></td>
                         <td>{loanItem.id}</td>
                         <td>{loanItem.application.customer.customerName}</td>
-                        <td>{new Date(loanItem.application.entryDate).toISOString().slice(0, 10)}</td>
-                        <td>{this.englishToArabic(loanItem.application.status)}</td>
+                        <td>{this.dateSlice(loanItem.application.entryDate)}</td>
+                        <td>{englishToArabic(loanItem.application.status)}</td>
                         <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.principal}</td>
                         <td></td>
@@ -226,7 +218,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: new Date().toISOString().slice(0, 10), fundSource: '' }}
+            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '' }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur
