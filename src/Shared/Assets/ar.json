@@ -244,7 +244,8 @@
     "nationalIdPlaceholder": "12345678901234",
     "confrimPassword":"إعادة إدخال كلمة المرور",
     "dateOfHire": "تاريخ التعين",
-    "hrCode":"كود الموارد البشرية"
+    "hrCode":"كود الموارد البشرية",
+    "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق"
 
 
 
