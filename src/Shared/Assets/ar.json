@@ -254,5 +254,12 @@
     "employment": "التعيين",
     "creationDate": "تاريخ الإنشاء",
     "noOfUsers": "عدد المستخدمين",
-    "userSearchPlaceholder": "إبحث بإسم المستخدم أو رقم تعريفه"
+    "userSearchPlaceholder": "إبحث بإسم المستخدم أو رقم تعريفه",
+    "searchByBranch": "إبحث بالفرع",
+    "noOfBranches": "عدد الفروع",
+    "noOfRoles": "عدد الأدوار",
+    "roleName": "مسمى الدور",
+    "permissions": "الصلاحيات",
+    "view": "مشاهدة",
+    "disable": "تعطيل"
 }

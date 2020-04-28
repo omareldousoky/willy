@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import UsersList from './usersList';
+import BranchesList from './branchesList';
+import RolesList from './rolesList';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 
@@ -18,7 +20,7 @@ class ManageAccounts extends Component<{}, State> {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 1,
+      activeTab: 0,
       tabsArray: [
         {
           icon: 'roles',
@@ -41,8 +43,14 @@ class ManageAccounts extends Component<{}, State> {
   }
   renderContent(){
     switch(this.state.activeTab){
+      case 0 : 
+        return <RolesList/>
       case 1 :
         return <UsersList/>
+      case 2 :
+        return <BranchesList/>
+      default: 
+        return <RolesList/>
     }
   }
   render() {

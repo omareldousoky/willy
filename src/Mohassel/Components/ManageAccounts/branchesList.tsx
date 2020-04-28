@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
-import { withRouter } from 'react-router-dom';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -12,17 +11,12 @@ import { searchApplication } from '../../Services/APIs/loanApplication/searchApp
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
-interface Props {
-  history: Array<string>;
-};
 interface State {
   data: any;
   size: number;
   from: number;
   searchKeyWord: string;
-  selectedRole: string;
-  selectedEmployment: string;
-  selectedBranch: string;
+  selectedGovernorate: string;
   dateFrom: string;
   dateTo: string;
   loading: boolean;
@@ -45,27 +39,25 @@ const mappers = [
   },
 ]
 
-class UsersList extends Component<Props, State> {
-  constructor(props: Props) {
+class UsersList extends Component<{}, State> {
+  constructor(props) {
     super(props);
     this.state = {
       data: [],
       size: 5,
       from: 0,
       searchKeyWord: '',
-      selectedRole: '',
-      selectedEmployment: '',
-      selectedBranch: '',
+      selectedGovernorate: '',
       dateFrom: '',
       dateTo: '',
       loading: false,
     }
   }
   componentDidMount() {
-    this.getUsers()
+    this.getBranches()
   }
 
-  async getUsers() {
+  async getBranches() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
     const res = await searchApplication({ size: this.state.size, from: this.state.from, branchId: branchId });
@@ -90,11 +82,11 @@ class UsersList extends Component<Props, State> {
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                <span className="text-muted">{local.noOfUsers}</span>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
+                <span className="text-muted">{local.noOfBranches}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
+                <Button className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
                 <Button variant="outline-primary" className="big-button">download pdf</Button>
               </div>
             </div>
@@ -108,19 +100,28 @@ class UsersList extends Component<Props, State> {
               {(formikProps) =>
                 <Form onSubmit={formikProps.handleSubmit}>
                   <div className="custom-card-body">
-                    <InputGroup style={{ direction: 'ltr', marginLeft: 20, flex: 1 }}>
+                    <InputGroup style={{ direction: 'ltr' }}>
                       <Form.Control
                         type="text"
                         name="searchKeyWord"
                         data-qc="searchKeyWord"
                         onChange={formikProps.handleChange}
                         style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-                        placeholder={local.userSearchPlaceholder}
+                        placeholder={local.searchByBranch}
                       />
                       <InputGroup.Append>
                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
+                  </div>
+                  <div className="custom-card-body">
+                    <div className="dropdown-container" style={{ flex: 1, marginLeft: 20 }}>
+                      <p className="dropdown-label">{local.governorate}</p>
+                      <Form.Control as="select" className="dropdown-select" data-qc="governorate">
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                      </Form.Control>
+                    </div>
                     <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
                       <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{local.creationDate}</p>
                       <span>{local.from}</span>
@@ -145,40 +146,16 @@ class UsersList extends Component<Props, State> {
                       </Form.Control>
                     </div>
                   </div>
+
                 </Form>
               }
             </Formik>
-            <div className="custom-card-body">
-              <div style={{ flex: 2, display: 'flex', marginLeft: 20 }}>
-                <div className="dropdown-container" style={{ flex: 1, marginLeft: 20 }}>
-                  <p className="dropdown-label">{local.onlyRoles}</p>
-                  <Form.Control as="select" className="dropdown-select" data-qc="roles">
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                  </Form.Control>
-                </div>
-                <div className="dropdown-container" style={{ flex: 1 }}>
-                  <p className="dropdown-label">{local.employment}</p>
-                  <Form.Control as="select" className="dropdown-select" data-qc="employment">
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                  </Form.Control>
-                </div>
-              </div>
-              <div className="dropdown-container" style={{ flex: 2 }}>
-                <p className="dropdown-label">{local.oneBranch}</p>
-                <Form.Control as="select" className="dropdown-select" data-qc="branch">
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                </Form.Control>
-              </div>
-            </div>
             <DynamicTable
               mappers={mappers}
               pagination={true}
               data={this.state.data}
               changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getUsers());
+                this.setState({ [key]: number } as any, () => this.getBranches());
               }}
             />
           </Card.Body>
@@ -188,4 +165,4 @@ class UsersList extends Component<Props, State> {
   }
 }
 
-export default withRouter(UsersList);
+export default UsersList;

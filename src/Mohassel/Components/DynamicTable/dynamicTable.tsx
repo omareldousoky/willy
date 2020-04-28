@@ -5,7 +5,7 @@ import './styles.scss';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
-  mappers: any;
+  mappers: Array<any>;
   pagination: boolean;
   data: Array<any>;
   changeNumber: (key: string, number: number) => void;
@@ -46,10 +46,11 @@ const DynamicTable = (props: Props) => {
         <div className="footer-container">
           <div className="dropdown-container">
             <p className="dropdown-label">{local.show}</p>
-            <Form.Control as="select" custom className="dropdown-select" onChange={(event) => {
+            <Form.Control as="select" className="dropdown-select" onChange={(event) => {
               changeRowsPerPage(Number(event.currentTarget.value));
               props.changeNumber('size', Number(event.currentTarget.value))
               props.changeNumber('from', 0)
+              changePage(0)
             }}>
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -57,18 +58,20 @@ const DynamicTable = (props: Props) => {
           </div>
           <div className="pagination-container">
             <div className={page === 0 ? "pagination-next-prev-disabled" : "pagination-next-prev-enabled"}
-              onClick={page !== 0 ? () => {
-                changePage(page - 1);
-                props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
-              } : () => { }}>{local.previous}</div>
+              onClick={() => {
+                if (page !== 0) {
+                  changePage(page - 1);
+                  props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
+                }
+              }}>{local.previous}</div>
             {[1, 2, 3, 4, 5, 6].map(number => {
               return (
                 <div key={number}
                   className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
-                  onClick={page !== number - 1 ? () => {
+                  onClick={() => {
                     changePage(number - 1);
                     props.changeNumber('from', (number - 1 * rowsPerPage + rowsPerPage))
-                  } : () => { }}>
+                  }}>
                   <p>{number}</p>
                 </div>
               )
