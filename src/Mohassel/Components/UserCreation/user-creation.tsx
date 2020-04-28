@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { UserDataForm } from './userDataFrom';
+import { withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
 import {
     step1,
     userCreationValidationStepOne,
 } from './userFromInitialState';
 import { Values } from './userCreationinterfaces';
+import UserRolesAndPermisonsFrom from './userRolesAndPermisonsFrom';
 interface Props {
     edit: boolean;
 }
@@ -33,17 +35,17 @@ class UserCreation extends Component <Props, State> {
         }
     }
     submit = (values: object) => {
-        if(this.state.step <2) {
-            this.setState({
-                [`step${this.state.step}`]: values,
-                step: this.state.step + 1,
-            } as any);
-        } else {
-            console.log('Waiting for APIs');
-        }
+    if(this.state.step <2) {
+        this.setState({
+            step: this.state.step+1,
+        })
+    }  
+    else {
+        console.log('Waiting Backend')
     }
-    renderStepOne(): JSX.Element {
-        return(
+    }
+    renderStepOne(): any{
+     return(
        <Formik
         enableReinitialize
         initialValues={this.state.step1}
@@ -54,14 +56,21 @@ class UserCreation extends Component <Props, State> {
         >
              {(formikProps) =>
                         <UserDataForm {...formikProps} />
-                    }
+            }
         </Formik>
         )
+    }
+    renderStepTwo(): any {
+        return(
+            <UserRolesAndPermisonsFrom/>
+        );
     }
     renderSteps(){
         switch(this.state.step) {
             case 1:
                 return this.renderStepOne();
+            case 2: 
+                return this.renderStepTwo();    
             default: return null;    
         }
     }
@@ -76,4 +85,4 @@ class UserCreation extends Component <Props, State> {
     }
 }
 
-export default UserCreation
+export default withRouter(UserCreation);

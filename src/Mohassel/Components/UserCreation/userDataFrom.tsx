@@ -13,15 +13,16 @@ interface Props {
     values: Values;
     errors: Errors;
     touched: Touched;
-    handleChange?: any;
-    handleBlur?: any;
-    handleSubmit?: any;
+    handleChange: any;
+    handleBlur: any;
+    handleSubmit: any;
 }
 export const UserDataForm = (props: Props) => {
+    const handleSubmit = props.handleSubmit;
     return (
         <Form
-            onSubmit={() => props.handleSubmit}
-            className="user-data-form"
+             onSubmit={handleSubmit}
+             className="user-data-form"
         >
             <Form.Group
                 className={'user-data-group'}
@@ -40,7 +41,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     isInvalid={(props.errors.userFullName && props.touched.userFullName) as boolean}
-                />
+                /> 
                 <Form.Control.Feedback
                     type="invalid">
                     {props.errors.userFullName}
@@ -94,7 +95,29 @@ export const UserDataForm = (props: Props) => {
                     {props.errors.userHiringDate}
                 </Form.Control.Feedback>
             </Form.Group>
-
+            <Form.Group
+                className={'user-data-group'}
+                controlId={'userHrCode'}
+            >
+                <Form.Label
+                    className={'user-data-label'}
+                >{`${local.hrCode}*`}
+                </Form.Label>
+                <Form.Control
+                    placeholder={local.hrCode}
+                    type={"text"}
+                    name={"userHrCode"}
+                    data-qc={"userHrCode"}
+                    value={props.values.userHrCode}
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    isInvalid={(props.errors.userHrCode && props.touched.userHrCode) as boolean}
+                /> 
+                <Form.Control.Feedback
+                    type="invalid">
+                    {props.errors.userHrCode}
+                </Form.Control.Feedback>
+            </Form.Group>
             <Form.Group
             controlId={'userMobileNumber'}
             className={'user-data-group'}
