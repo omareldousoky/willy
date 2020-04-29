@@ -28,7 +28,7 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => any; }[];
+  mappers: { title: string; key: string; render: (data: any) => any }[]
   constructor(props: Props) {
     super(props);
     this.state = {
