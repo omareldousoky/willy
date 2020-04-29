@@ -47,6 +47,7 @@
     "mainInfo": "البيانات الاساسية",
     "workInfo": "بيانات العمل",
     "loanInfo": "بيانات طلب القرض",
+    "loanDetails":"تفاصيل القرض",
     "guarantorInfo": "بيانات الضامن",
     "guarantor": "الضامن",
     "differentInfo": "بيانات متفرقة",
@@ -273,5 +274,10 @@
     "earlyPayment": "سداد معجل",
     "payInstallment": "إدخال حركة",
     "enterPayment": "إدخل القيمة",
-    "remainingPrincipal":"المتبقي من القرض"
+    "remainingPrincipal":"المتبقي من القرض",
+    "logs":"سجل",
+    "customerCard":"كارت العميل",
+    "payments":"مدفوعات",
+    "rescheduling":"إعادة جدولة",
+    "reschedulingTest":"تجربة إعادة جدولة"
 }

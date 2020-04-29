@@ -27,7 +27,7 @@ const App = () => {
     } else {
         return (
             <BrowserRouter>
-                <div style={{ direction: 'rtl' }}>
+                <div style={{ direction: 'rtl', backgroundColor:'#fafafa' }}>
                     <NavBar />
                     <Switch>
                         <Route exact path="/" component={Landing} />
