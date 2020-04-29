@@ -169,7 +169,7 @@
     "loanApplicationId": "طلب القرض",
     "customerName": "اسم العميل",
     "loanAppCreationDate": "تاريخ الطلب",
-    "loanStatus": "حالة الطلب",
+    "applicationStatus": "حالة الطلب",
     "loanPrinciple": "أصل القرض",
     "loanOfficer": "المندوب",
     "underReview": "تحت التحرير",
@@ -262,5 +262,16 @@
     "roleName": "مسمى الدور",
     "permissions": "الصلاحيات",
     "view": "مشاهدة",
-    "disable": "تعطيل"
+    "disable": "تعطيل",
+    "installmentNumber": "رقم القسط",
+    "principalInstallment": "قيمة الأصل",
+    "feesInstallment": "قيمة الفائدة",
+    "installmentResponse": "إجمالي القسط",
+    "dateOfPayment":"تاريخ الاستحقاق",
+    "loanStatus": "حالة القسط",
+    "requiredAmount": "المطلوب سداده هو",
+    "earlyPayment": "سداد معجل",
+    "payInstallment": "إدخال حركة",
+    "enterPayment": "إدخل القيمة",
+    "remainingPrincipal":"المتبقي من القرض"
 }

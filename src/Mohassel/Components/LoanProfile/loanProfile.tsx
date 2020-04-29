@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import InfoBox from '../userInfoBox';
+import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Tab from 'react-bootstrap/Tab';
@@ -176,7 +177,7 @@ class LoanProfile extends Component<Props, State>{
                         </div>
                         <InfoBox values={this.state.application.customer} />
                         <div>
-                            <Tab.Container id="tabs-example" defaultActiveKey="first">
+                            <Tab.Container id="tabs-example" defaultActiveKey="fourth">
                                 <Nav variant="pills" className="flex-row" style={{margin:'20px 0'}}>
                                     <Nav.Item>
                                         <Nav.Link eventKey="first">بيانات طلب القرض</Nav.Link>
@@ -186,6 +187,9 @@ class LoanProfile extends Component<Props, State>{
                                     </Nav.Item>
                                     <Nav.Item>
                                         <Nav.Link eventKey="third">سجل</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="fourth">payments</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                                 <Row>
@@ -203,6 +207,9 @@ class LoanProfile extends Component<Props, State>{
                                             <p>Logs</p>
                                             <p>Logs</p>
                                             <p>Logs</p>
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="fourth">
+                                           <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id}/>
                                         </Tab.Pane>
                                     </Tab.Content>
                                 </Row>

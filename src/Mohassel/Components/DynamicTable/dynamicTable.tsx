@@ -8,7 +8,7 @@ interface Props {
   mappers: Array<any>;
   pagination: boolean;
   data: Array<any>;
-  changeNumber: (key: string, number: number) => void;
+  changeNumber: (key: string, number: number) => void | undefined;
 }
 
 const DynamicTable = (props: Props) => {
@@ -64,13 +64,13 @@ const DynamicTable = (props: Props) => {
                   props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
                 }
               }}>{local.previous}</div>
-            {[1, 2, 3, 4, 5, 6].map(number => {
+            {[1, 2, 3, 4, 5, 6, 7, 8 ,9 ,10].map(number => {
               return (
                 <div key={number}
                   className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
                   onClick={() => {
                     changePage(number - 1);
-                    props.changeNumber('from', (number - 1 * rowsPerPage + rowsPerPage))
+                    props.changeNumber('from', (number - 1)*rowsPerPage)
                   }}>
                   <p>{number}</p>
                 </div>

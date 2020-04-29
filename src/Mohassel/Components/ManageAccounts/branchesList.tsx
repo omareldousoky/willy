@@ -39,7 +39,7 @@ const mappers = [
   },
 ]
 
-class UsersList extends Component<{}, State> {
+class BranchesList extends Component<{}, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -165,4 +165,4 @@ class UsersList extends Component<{}, State> {
   }
 }
 
-export default UsersList;
+export default BranchesList;
