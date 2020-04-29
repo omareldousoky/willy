@@ -47,6 +47,7 @@
     "mainInfo": "البيانات الاساسية",
     "workInfo": "بيانات العمل",
     "loanInfo": "بيانات طلب القرض",
+    "loanDetails":"تفاصيل القرض",
     "guarantorInfo": "بيانات الضامن",
     "guarantor": "الضامن",
     "differentInfo": "بيانات متفرقة",
@@ -262,5 +263,10 @@
     "roleName": "مسمى الدور",
     "permissions": "الصلاحيات",
     "view": "مشاهدة",
-    "disable": "تعطيل"
+    "disable": "تعطيل",
+    "logs":"سجل",
+    "customerCard":"كارت العميل",
+    "payments":"مدفوعات",
+    "rescheduling":"إعادة جدولة",
+    "reschedulingTest":"تجربة إعادة جدولة"
 }

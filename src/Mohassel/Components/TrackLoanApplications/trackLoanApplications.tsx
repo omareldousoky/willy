@@ -265,7 +265,7 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td onClick={()=>this.goToLoan(loanItem.id)}>{loanItem.id}</td>
                     <td>{loanItem.application.customer.customerName}</td>
                     <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
-                    <td>{englishToArabic(loanItem.application.status)}</td>
+                    <td>{englishToArabic(loanItem.application.status).text}</td>
                     <td>{loanItem.application.product.productName}</td>
                     <td>{loanItem.application.principal || 0}</td>
                     <td></td>

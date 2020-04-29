@@ -14,11 +14,17 @@
     padding: 15px 50px;
     cursor: pointer;
 }
+.navBar-item {
+    display: flex;
+    justify-content: center;
+    padding: 15px 15px;
+    cursor: pointer;
+}
 
 .card-item img{
     margin-left: 20px;
 }
-.card-item h5{
+.card-item,.navBar-item h5,h6{
     margin-bottom: 0px;
 }
 .card-item p{
@@ -37,6 +43,10 @@
         color: #7dc356;  
     }
 }
-.card-item:not(:last-of-type) {
+.navBar-item.active {
+    border-bottom: 1px solid #7dc356;
+    color: #7dc356;
+}
+.card-item,.navBar-item:not(:last-of-type) {
     margin-left: 20px;
 }

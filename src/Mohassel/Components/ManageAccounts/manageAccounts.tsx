@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import {HeaderWithCards, Tab} from '../HeaderWithCards/headerWithCards';
 import UsersList from './usersList';
 import BranchesList from './branchesList';
 import RolesList from './rolesList';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 
-interface Tab {
-  icon: string;
-  header: string;
-  desc?: string;
-}
+
 interface State {
   activeTab: number;
   tabsArray: Array<Tab>;

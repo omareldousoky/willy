@@ -198,7 +198,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                         <td>{loanItem.id}</td>
                         <td>{loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
-                        <td>{englishToArabic(loanItem.application.status)}</td>
+                        <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.principal}</td>
                         <td></td>
