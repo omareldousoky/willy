@@ -11,6 +11,7 @@ import LoanCreation from './Components/LoanCreation/loanCreation';
 import NavBar from './Components/NavBar/navBar';
 import LoanUses from './Components/LoanUses/loanUses';
 import BulkApplicationApproval from './Components/BulkApplicationApproval/bulkApplicationApproval';
+import ManageAccounts from './Components/ManageAccounts/manageAccounts';
 import LoanProfile from './Components/LoanProfile/loanProfile';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
@@ -41,6 +42,7 @@ const App = () => {
                         <Route path="/create-loan" render={(props) => <LoanCreation {...props} />} />
                         <Route path="/loan-uses" render={(props) => <Can I='create' a='LoanUsage'><LoanUses /></Can>} />
                         <Route path="/bulk-approvals" render={(props) => <Can I='bulkApprove' a='Application'> <BulkApplicationApproval /></Can>} />
+                        <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
                         <Route path="/loan-profile" render={(props) => <Can I='view' a='Application'> <LoanProfile {...props} /></Can>} />
                     </Switch>
                 </div>

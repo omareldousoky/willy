@@ -49,6 +49,7 @@ class NavBar extends Component<Props> {
               {<Can I='view' a='Application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>Track Loan Applications</Nav.Link></Can>}
               {<Can I='bulkApprove' a='Application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>Bulk Loan Applications Approval</Nav.Link></Can>}
               {<Can I='create' a='LoanUsage'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>Loan Uses</Nav.Link></Can>}
+              <Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>Manage Accounts</Nav.Link>
               <Nav.Link onClick={() => {
                 document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
                 window.location.href = process.env.REACT_APP_LOGIN_URL || '';
