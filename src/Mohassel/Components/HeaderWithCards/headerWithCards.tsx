@@ -1,18 +1,19 @@
 import React from 'react';
 import './styles.scss';
 
-interface Tab {
-  icon: string;
+export interface Tab {
+  icon?: string;
   header: string;
   desc?: string;
+  stringKey?: string;
 }
 interface Props {
   header: string;
   array: Array<Tab>;
-  active: number;
-  selectTab: (index: number) => void;
+  active: number|string;
+  selectTab: (index) => void;
 }
-const HeaderWithCards = (props: Props) => {
+export const HeaderWithCards = (props: Props) => {
   return (
     <div className="header-cards-parent">
       <h4>{props.header}</h4>
@@ -33,4 +34,18 @@ const HeaderWithCards = (props: Props) => {
   )
 }
 
-export default HeaderWithCards;
+export const CardNavBar =(props: Props) => {
+  return (
+      <div className="cards-container">
+        {props.array.map((item, index) => {
+          return (
+            <div key={index} className={item.stringKey === props.active ?"navBar-item active":"navBar-item"} onClick={() => props.selectTab(item.stringKey)}>
+              <div style={{margin: 'auto 0px'}}>
+                <h6>{item.header}</h6>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+  )
+}
