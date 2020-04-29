@@ -152,7 +152,7 @@ class LoanCreation extends Component<Props, State> {
               <th>{local.periodLength}</th>
               <th>{local.every}</th>
               <th>{local.gracePeriod}</th>
-              <th>{local.loanStatus}</th>
+              <th>{local.applicationStatus}</th>
               <th>{local.productName}</th>
               <th>{local.loanAppCreationDate}</th>
             </tr>

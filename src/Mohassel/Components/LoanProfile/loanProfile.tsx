@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import InfoBox from '../userInfoBox';
+import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -91,7 +92,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                // return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id}/>
+                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id}/>
             default:
                 return null
         }

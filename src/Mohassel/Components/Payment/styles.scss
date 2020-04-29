@@ -1,0 +1,21 @@
+.payment-amount-container {
+    border-radius: 40px;
+    border: 1px black solid;
+    margin: 50px auto;
+    height: 200px;
+    width: 60%;
+    h5 {
+        margin: 50px 100px 10px 0px;
+    }
+    h2 {
+        color: #7dc356;
+        font-weight: bolder;
+        text-align: center;
+    }
+}
+
+.payment-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}

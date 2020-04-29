@@ -167,7 +167,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                   <th>{local.loanApplicationId}</th>
                   <th>{local.customerName}</th>
                   <th>{local.loanAppCreationDate}</th>
-                  <th>{local.loanStatus}</th>
+                  <th>{local.applicationStatus}</th>
                   <th>{local.productName}</th>
                   <th>{local.loanPrinciple}</th>
                   <th>

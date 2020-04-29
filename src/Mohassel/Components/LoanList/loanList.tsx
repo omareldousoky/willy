@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
@@ -8,12 +7,12 @@ import { withRouter } from 'react-router-dom';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
-import { searchUsers } from '../../Services/APIs/Users/searchUsers';
+import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
 interface Props {
-  history: Array<string>;
+  history: Array<any>;
 };
 interface State {
   data: any;
@@ -27,25 +26,9 @@ interface State {
   dateTo: string;
   loading: boolean;
 }
-const mappers = [
-  {
-    title: local.username,
-    key: "username",
-    render: data => data.username
-  },
-  {
-    title: local.name,
-    key: "name",
-    render: data => data.name
-  },
-  {
-    title: local.branches,
-    key: "branches",
-    render: data => data.branches
-  },
-]
 
-class UsersList extends Component<Props, State> {
+class LoanList extends Component<Props, State> {
+  mappers: { title: string; key: string; render: (data: any) => any }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -60,19 +43,35 @@ class UsersList extends Component<Props, State> {
       dateTo: '',
       loading: false,
     }
+    this.mappers = [
+      {
+        title: "Customer Name",
+        key: "customerName",
+        render: data => <div onClick={() => this.props.history.push('/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
+      },
+      {
+        title: "Status",
+        key: "status",
+        render: data => data.application.status
+      },
+      {
+        title: "Customer Name",
+        key: "customerName",
+        render: data => data.application.customer.customerName
+      },
+    ]
   }
   componentDidMount() {
-    this.getUsers()
+    this.getLoans()
   }
 
-  async getUsers() {
+  async getLoans() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId });
-    console.log(res)
+    const res = await searchLoan({ size: this.state.size, from: this.state.from, branchId: branchId });
     if (res.status === "success") {
       this.setState({
-        data: res.body.data,
+        data: res.body.applications,
         loading: false
       })
     } else {
@@ -93,10 +92,6 @@ class UsersList extends Component<Props, State> {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
                 <span className="text-muted">{local.noOfUsers}</span>
-              </div>
-              <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -150,36 +145,27 @@ class UsersList extends Component<Props, State> {
               }
             </Formik>
             <div className="custom-card-body">
-              <div style={{ flex: 2, display: 'flex', marginLeft: 20 }}>
-                <div className="dropdown-container" style={{ flex: 1, marginLeft: 20 }}>
-                  <p className="dropdown-label">{local.onlyRoles}</p>
-                  <Form.Control as="select" className="dropdown-select" data-qc="roles">
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                  </Form.Control>
-                </div>
-                <div className="dropdown-container" style={{ flex: 1 }}>
-                  <p className="dropdown-label">{local.employment}</p>
-                  <Form.Control as="select" className="dropdown-select" data-qc="employment">
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                  </Form.Control>
-                </div>
-              </div>
-              <div className="dropdown-container" style={{ flex: 2 }}>
+              <div className="dropdown-container" style={{ flex: 2, marginLeft: 20 }}>
                 <p className="dropdown-label">{local.oneBranch}</p>
                 <Form.Control as="select" className="dropdown-select" data-qc="branch">
                   <option value={5}>5</option>
                   <option value={10}>10</option>
                 </Form.Control>
               </div>
+              <div className="dropdown-container" style={{ flex: 2 }}>
+                <p className="dropdown-label">{local.representative}</p>
+                <Form.Control as="select" className="dropdown-select" data-qc="representative">
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                </Form.Control>
+              </div>
             </div>
             <DynamicTable
-              mappers={mappers}
+              mappers={this.mappers}
               pagination={true}
               data={this.state.data}
               changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getUsers());
+                this.setState({ [key]: number } as any, () => this.getLoans());
               }}
             />
           </Card.Body>
@@ -189,4 +175,4 @@ class UsersList extends Component<Props, State> {
   }
 }
 
-export default withRouter(UsersList);
+export default withRouter(LoanList);
