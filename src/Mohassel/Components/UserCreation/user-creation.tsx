@@ -4,9 +4,11 @@ import { withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
 import {
     step1,
+    step2,
     userCreationValidationStepOne,
+    userCreationValidationStepTwo,
 } from './userFromInitialState';
-import { Values } from './userCreationinterfaces';
+import { Values , RolesValues} from './userCreationinterfaces';
 import UserRolesAndPermisonsFrom from './userRolesAndPermisonsFrom';
 interface Props {
     edit: boolean;
@@ -14,7 +16,7 @@ interface Props {
 interface State {
 step: number;
 step1: Values;
-userId: string;
+step2: RolesValues;
 }
 class UserCreation extends Component <Props, State> {
     constructor(props: Props) {
@@ -22,14 +24,13 @@ class UserCreation extends Component <Props, State> {
         this.state = {
             step:1,
             step1,
-            userId: '',
+            step2,
         }
     }
     componentDidUpdate(prevProps: Props, _prevState: State ){
         if(prevProps.edit !==this.props.edit){
             this.setState({
                 step:1,
-                userId: '',
                 step1, 
             })
         }
@@ -37,8 +38,9 @@ class UserCreation extends Component <Props, State> {
     submit = (values: object) => {
     if(this.state.step <2) {
         this.setState({
+            [`step${this.state.step}`]: values, 
             step: this.state.step+1,
-        })
+        }as any)
     }  
     else {
         console.log('Waiting Backend')
@@ -62,7 +64,18 @@ class UserCreation extends Component <Props, State> {
     }
     renderStepTwo(): any {
         return(
-            <UserRolesAndPermisonsFrom/>
+            <Formik
+            enableReinitialize
+            initialValues={this.state.step2}
+            onSubmit={this.submit}
+            validationSchema={userCreationValidationStepTwo}
+            validateOnBlur
+            validateOnChange
+            >
+            {(formikProps) =>
+            <UserRolesAndPermisonsFrom {...formikProps}/>
+    }
+            </Formik>
         );
     }
     renderSteps(){

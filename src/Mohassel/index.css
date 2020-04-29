@@ -1,5 +1,7 @@
+
 body {
     margin: 0;
+    height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
@@ -12,7 +14,6 @@ code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-  
 .pac-container.pac-logo.hdpi, .pac-container.pac-logo {
   z-index: 1100;
 }
@@ -93,7 +94,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background: rgba(255, 255, 255, 0.9);
 }
 /*End of Loader Component*/
-
 .chip {
   background-color: lightgray;
   display: inline-block;

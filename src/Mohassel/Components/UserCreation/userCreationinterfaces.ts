@@ -28,5 +28,9 @@ export interface Errors {
     userHiringDate?: string;
     userPassword?: string;
     userConfirmPassword?: string;
+}
 
+export interface RolesValues {
+    userRoles:  {label: string; value: string;hasBranch: string}[];
+    userBranches: {label: string; value: string}[];
 }

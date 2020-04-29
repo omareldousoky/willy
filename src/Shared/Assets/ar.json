@@ -245,7 +245,10 @@
     "confrimPassword":"إعادة إدخال كلمة المرور",
     "dateOfHire": "تاريخ التعين",
     "hrCode":"كود الموارد البشرية",
-    "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق"
+    "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق",
+    "selectUserPermision": "تحديد دور المستخدم",
+    "searchByUserRole":"البحث بدور المستخدم",
+    "searchByBranchName":"البحث بإسم الفرع"
 
 
 
