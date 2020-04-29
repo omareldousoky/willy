@@ -43,6 +43,7 @@ class LoanProfile extends Component<Props, State>{
         }
     }
     renderApplicationData() {
+        console.log('Here1')
         return (
             <Table striped bordered style={{ textAlign: 'right' }}>
                 <tbody>
@@ -135,6 +136,7 @@ class LoanProfile extends Component<Props, State>{
         )
     }
     renderGuarantorData() {
+        console.log('Here2')
         return(
             <div className="d-flex justify-content-around">
                 {(this.state.application.guarantors.length>0) ? this.state.application.guarantors.map((guar,i) => 
