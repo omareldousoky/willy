@@ -5,6 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import { withRouter } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -19,7 +20,7 @@ interface State {
   data: any;
   size: number;
   from: number;
-  searchKeyWord: string;
+  searchKeyword: string;
   selectedRole: string;
   selectedEmployment: string;
   selectedBranch: string;
@@ -27,32 +28,16 @@ interface State {
   dateTo: string;
   loading: boolean;
 }
-const mappers = [
-  {
-    title: local.username,
-    key: "username",
-    render: data => data.username
-  },
-  {
-    title: local.name,
-    key: "name",
-    render: data => data.name
-  },
-  {
-    title: local.branches,
-    key: "branches",
-    render: data => data.branches
-  },
-]
 
 class UsersList extends Component<Props, State> {
+  mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
       data: [],
       size: 5,
       from: 0,
-      searchKeyWord: '',
+      searchKeyword: '',
       selectedRole: '',
       selectedEmployment: '',
       selectedBranch: '',
@@ -60,6 +45,38 @@ class UsersList extends Component<Props, State> {
       dateTo: '',
       loading: false,
     }
+    this.mappers = [
+      {
+        title: local.username,
+        key: "username",
+        render: data => data.username
+      },
+      {
+        title: local.name,
+        key: "name",
+        render: data => data.name
+      },
+      {
+        title: local.employment,
+        key: "employment",
+        render: data => "employment"
+      },
+      {
+        title: local.createdBy,
+        key: "createdBy",
+        render: data => "createdBy"
+      },
+      {
+        title: local.creationDate,
+        key: "creationDate",
+        render: data => "creationDate"
+      },
+      {
+        title: '',
+        key: "actions",
+        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+      },
+    ]
   }
   componentDidMount() {
     this.getUsers()
@@ -80,8 +97,37 @@ class UsersList extends Component<Props, State> {
       this.setState({ loading: false })
     }
   }
-  submit = (values) => {
-    console.log(values)
+  submit = async (values) => {
+    this.setState({ loading: true })
+    let obj = {}
+    const branchId = JSON.parse(getCookie('branches'));
+    if (values.dateFrom === "" && values.dateTo === "") {
+      obj = {
+        branchId: branchId[0],
+        size: this.state.size,
+        from: 0,
+      }
+    } else {
+      obj = {
+        branchId: branchId[0],
+        fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
+        toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
+        size: this.state.size,
+        from: 0,
+      }
+    }
+    if (isNaN(Number(values.searchKeyword))) obj = { ...obj, name: values.searchKeyword }
+    else obj = { ...obj, nationalId: values.searchKeyword }
+    const res = await searchUsers(obj);
+    if (res.status === "success") {
+      this.setState({
+        loading: false,
+        data: res.body.data
+      })
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('', local.searchError, 'error');
+    }
   }
   render() {
     return (
@@ -112,8 +158,8 @@ class UsersList extends Component<Props, State> {
                     <InputGroup style={{ direction: 'ltr', marginLeft: 20, flex: 1 }}>
                       <Form.Control
                         type="text"
-                        name="searchKeyWord"
-                        data-qc="searchKeyWord"
+                        name="searchKeyword"
+                        data-qc="searchKeyword"
                         onChange={formikProps.handleChange}
                         style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                         placeholder={local.userSearchPlaceholder}
@@ -175,7 +221,7 @@ class UsersList extends Component<Props, State> {
               </div>
             </div>
             <DynamicTable
-              mappers={mappers}
+              mappers={this.mappers}
               pagination={true}
               data={this.state.data}
               changeNumber={(key: string, number: number) => {

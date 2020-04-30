@@ -21,25 +21,9 @@ interface State {
   dateTo: string;
   loading: boolean;
 }
-const mappers = [
-  {
-    title: "Customer Name",
-    key: "customerName",
-    render: data => data.application.customer.customerName
-  },
-  {
-    title: "Status",
-    key: "status",
-    render: data => data.application.status
-  },
-  {
-    title: "Customer Name",
-    key: "customerName",
-    render: data => data.application.customer.customerName
-  },
-]
 
 class BranchesList extends Component<{}, State> {
+  mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
@@ -52,6 +36,38 @@ class BranchesList extends Component<{}, State> {
       dateTo: '',
       loading: false,
     }
+    this.mappers = [
+      {
+        title: local.governorate,
+        key: "governorate",
+        render: data => 'governorate'
+      },
+      {
+        title: local.oneBranch,
+        key: "branch",
+        render: data => 'branch'
+      },
+      {
+        title: local.noOfUsers,
+        key: "noOfUsers",
+        render: data => 'noOfUsers'
+      },
+      {
+        title: local.createdBy,
+        key: "createdBy",
+        render: data => 'createdBy'
+      },
+      {
+        title: local.creationDate,
+        key: "creationDate",
+        render: data => 'creationDate'
+      },
+      {
+        title: '',
+        key: "actions",
+        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+      },
+    ]
   }
   componentDidMount() {
     this.getBranches()
@@ -151,7 +167,7 @@ class BranchesList extends Component<{}, State> {
               }
             </Formik>
             <DynamicTable
-              mappers={mappers}
+              mappers={this.mappers}
               pagination={true}
               data={this.state.data}
               changeNumber={(key: string, number: number) => {

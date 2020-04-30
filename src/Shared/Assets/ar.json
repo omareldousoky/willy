@@ -279,5 +279,14 @@
     "customerCard":"كارت العميل",
     "payments":"مدفوعات",
     "rescheduling":"إعادة جدولة",
-    "reschedulingTest":"تجربة إعادة جدولة"
+    "reschedulingTest":"تجربة إعادة جدولة",
+    "installmentStatus":"حالة القسط",
+    "role": "الدور",
+    "createdBy": "تم الإنشاء بواسطة",
+    "late": "متأخر",
+    "paid": "مدفوع",
+    "unpaid": "لم يستحق",
+    "rescheduled": "تمت إعادة جدولته",
+    "partiallyPaid": "مدفوع جزئيا",
+    "cancelled": "ملغي"
 }

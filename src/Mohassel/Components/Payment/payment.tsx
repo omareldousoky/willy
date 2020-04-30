@@ -15,6 +15,8 @@ import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
+import PaymentReceipt from './paymentReceipt';
+
 interface Installment {
   id: number;
   installmentResponse: number;
@@ -40,7 +42,7 @@ interface State {
 }
 
 class Payment extends Component<Props, State>{
-  mappers: { title: string; key: string; render: (data: any) => any }[]
+  mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -80,15 +82,35 @@ class Payment extends Component<Props, State>{
         render: data => new Date(data.dateOfPayment).toISOString().slice(0, 10)
       },
       {
-        title: local.loanStatus,
-        key: "loanStatus",
-        render: data => data.status
+        title: local.installmentStatus,
+        key: "installmentStatus",
+        render: data => this.getStatus(data)
       },
     ]
   }
+  getStatus(data) {
+    // const todaysDate = new Date("2020-06-30").valueOf();
+    const todaysDate = new Date().valueOf();
+    switch (data.status) {
+      case 'unpaid':
+        if (data.dateOfPayment < todaysDate)
+          return <div className="status-chip late">{local.late}</div>
+        else
+          return <div className="status-chip unpaid">{local.unpaid}</div>
+      case 'rescheduled':
+        return <div className="status-chip rescheduled">{local.rescheduled}</div>
+      case 'partiallyPaid':
+        return <div className="status-chip partiallyPaid">{local.partiallyPaid}</div>
+      case 'cancelled':
+        return <div className="status-chip cancelled">{local.cancelled}</div>
+      case 'paid':
+        return <div className="status-chip paid">{local.paid}</div>
+      default: return null;
+    }
+  }
   getRequiredAmount() {
-    const todaysDate = new Date("2020-06-30").valueOf();
-    // const todaysDate = new Date().valueOf();
+    // const todaysDate = new Date("2020-06-30").valueOf();
+    const todaysDate = new Date().valueOf();
     let total = 0;
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
@@ -216,11 +238,12 @@ class Payment extends Component<Props, State>{
           <h5>{local.requiredAmount}</h5>
           <h2>{this.getRequiredAmount()}{(this.props.currency).toUpperCase()}</h2>
         </div>
-        <div className="payment-buttons">
+        <div className="payment-buttons-container">
           <Button variant="outline-primary" onClick={() => this.handleClickEarlyPayment()}>{local.earlyPayment}</Button>
           <Button variant="outline-primary" onClick={() => this.setState({ showModal: true, modalType: 1 })}>{local.payInstallment}</Button>
         </div>
         {this.state.showModal && this.renderModal()}
+        <PaymentReceipt/>
       </>
     );
   }

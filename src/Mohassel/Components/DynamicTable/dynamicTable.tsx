@@ -16,7 +16,7 @@ const DynamicTable = (props: Props) => {
   const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 5 : props.data.length);
   return (
     <>
-      <Table striped hover>
+      <Table striped hover style={{textAlign: 'right'}}>
         <thead>
           <tr>
             {props.mappers.map((mapper, index: number) => {

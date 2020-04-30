@@ -6,6 +6,7 @@
     width: 60%;
     h5 {
         margin: 50px 100px 10px 0px;
+        text-align: right;
     }
     h2 {
         color: #7dc356;
@@ -14,8 +15,30 @@
     }
 }
 
-.payment-buttons {
+.payment-buttons-container {
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
+}
+
+.status-chip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 30px; 
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    width: 90px;
+    height: 25px;
+    &.late {
+        background-color: #d51b1b;
+    }
+    &.paid {
+        background-color: #7DC356;
+    }
+    &.unpaid {
+        background-color: #009bed;
+    }
 }
