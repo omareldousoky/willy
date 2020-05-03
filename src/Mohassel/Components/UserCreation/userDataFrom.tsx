@@ -13,9 +13,10 @@ interface Props {
     values: Values;
     errors: Errors;
     touched: Touched;
-    handleChange: any;
-    handleBlur: any;
-    handleSubmit: any;
+    handleChange:  (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
+    handleBlur: (eventOrString: any) => void | ((e: any) => void);
+    handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+    cancle: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
 }
 export const UserDataForm = (props: Props) => {
     const handleSubmit = props.handleSubmit;
@@ -26,7 +27,7 @@ export const UserDataForm = (props: Props) => {
         >
             <Form.Group
                 className={'user-data-group'}
-                controlId={'userFullName'}
+                controlId={'name'}
             >
                 <Form.Label
                     className={'user-data-label'}
@@ -35,21 +36,21 @@ export const UserDataForm = (props: Props) => {
                 <Form.Control
                     placeholder={local.name}
                     type={"text"}
-                    name={"userFullName"}
-                    data-qc={"userFullName"}
-                    value={props.values.userFullName}
+                    name={"name"}
+                    data-qc={"name"}
+                    value={props.values.name}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    isInvalid={(props.errors.userFullName && props.touched.userFullName) as boolean}
+                    isInvalid={(props.errors.name && props.touched.name) as boolean}
                 /> 
                 <Form.Control.Feedback
                     type="invalid">
-                    {props.errors.userFullName}
+                    {props.errors.name}
                 </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group
-                controlId={'userNationalId'}
+                controlId={'nationalId'}
                 className={'user-data-group'}
             >
                 <Form.Label
@@ -59,21 +60,21 @@ export const UserDataForm = (props: Props) => {
                 <Form.Control
                     type={"text"}
                     placeholder={`${local.example} : ${local.nationalIdPlaceholder}`}
-                    name={"userNationalId"}
-                    data-qc={"userNationalId"}
-                    value={props.values.userNationalId}
+                    name={"nationalId"}
+                    data-qc={"nationalId"}
+                    value={props.values.nationalId}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    isInvalid={(props.errors.userNationalId && props.touched.userNationalId) as boolean}
+                    isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
                 />
                 <Form.Control.Feedback
                     type="invalid">
-                    {props.errors.userNationalId}
+                    {props.errors.nationalId}
                 </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group
-                controlId={'userHiringDate'}
+                controlId={'hiringDate'}
                 className={'user-data-group'}
             >
                 <Form.Label
@@ -82,22 +83,22 @@ export const UserDataForm = (props: Props) => {
                 </Form.Label>
                 <Form.Control
                     type={"date"}
-                    name={"userHiringDate"}
-                    data-qc={"userHiringDate"}
-                    value={props.values.userHiringDate}
+                    name={"hiringDate"}
+                    data-qc={"hiringDate"}
+                    value={props.values.hiringDate as string}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    isInvalid={(props.errors.userHiringDate && props.touched.userHiringDate) as boolean}
+                    isInvalid={(props.errors.hiringDate && props.touched.hiringDate) as boolean}
                 >
                 </Form.Control>
-                <Form.Control.Feedback
+                {/* <Form.Control.Feedback
                     type="invalid">
-                    {props.errors.userHiringDate}
-                </Form.Control.Feedback>
+                    {props.errors.hiringDate}
+                </Form.Control.Feedback> */}
             </Form.Group>
             <Form.Group
                 className={'user-data-group'}
-                controlId={'userHrCode'}
+                controlId={'hrCode'}
             >
                 <Form.Label
                     className={'user-data-label'}
@@ -106,20 +107,20 @@ export const UserDataForm = (props: Props) => {
                 <Form.Control
                     placeholder={local.hrCode}
                     type={"text"}
-                    name={"userHrCode"}
-                    data-qc={"userHrCode"}
-                    value={props.values.userHrCode}
+                    name={"hrCode"}
+                    data-qc={"hrCode"}
+                    value={props.values.hrCode}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    isInvalid={(props.errors.userHrCode && props.touched.userHrCode) as boolean}
+                    isInvalid={(props.errors.hrCode && props.touched.hrCode) as boolean}
                 /> 
                 <Form.Control.Feedback
                     type="invalid">
-                    {props.errors.userHrCode}
+                    {props.errors.hrCode}
                 </Form.Control.Feedback>
             </Form.Group>
             <Form.Group
-            controlId={'userMobileNumber'}
+            controlId={'mobilePhoneNumber'}
             className={'user-data-group'}
             >
                 <Form.Label
@@ -128,41 +129,41 @@ export const UserDataForm = (props: Props) => {
                 </Form.Label>
                 <Form.Control 
                    type={"text"}
-                   name={"userMobileNumber"}
-                   data-qc={"userMobileNumber"}
-                   value={props.values.userMobileNumber}
+                   name={"mobilePhoneNumber"}
+                   data-qc={"mobilePhoneNumber"}
+                   value={props.values.mobilePhoneNumber}
                    onChange={props.handleChange}
                    onBlur={props.handleBlur}
-                   isInvalid={(props.errors.userMobileNumber && props.touched.userMobileNumber) as boolean}
+                   isInvalid={(props.errors.mobilePhoneNumber && props.touched.mobilePhoneNumber) as boolean}
 
                 />
                 <Form.Control.Feedback
                 type={"invalid"}
                 >
-                    {props.errors.userMobileNumber}
+                    {props.errors.mobilePhoneNumber}
                 </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group
-                controlId={'userName'}
+                controlId={'username'}
                 className={'user-data-group'}
             >
                 <Form.Label
                     className={'user-data-label'}
-                >{`${local.username}*`}
+                >{`${local.username }*`}
                 </Form.Label>
                 <Form.Control
                     type={"text"}
-                    name={"userName"}
-                    data-qc={"userName"}
-                    value={props.values.userName}
+                    name={"username"}
+                    data-qc={"username"}
+                    value={props.values.username}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    isInvalid={(props.errors.userName && props.touched.userName) as boolean}
+                    isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />
                 <Form.Control.Feedback
                     type="invalid">
-                    {props.errors.userName}
+                    {props.errors.username}
                 </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Row}
@@ -175,18 +176,18 @@ export const UserDataForm = (props: Props) => {
                     </Form.Label>
                     <Form.Control
                         type={"password"}
-                        name={"userPassword"}
-                        data-qc={"userPassword"}
-                        value= {props.values.userPassword}
+                        name={"password"}
+                        data-qc={"password"}
+                        value= {props.values.password}
                         placeholder={local.password}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
-                        isInvalid={(props.errors.userPassword && props.touched.userPassword) as boolean}
+                        isInvalid={(props.errors.password && props.touched.password) as boolean}
                     />
                     <Form.Control.Feedback
                     type={'invalid'}
                     >
-                        {props.errors.userPassword}
+                        {props.errors.password}
                     </Form.Control.Feedback>
                 </Col>
                 <Col>
@@ -196,18 +197,18 @@ export const UserDataForm = (props: Props) => {
                     </Form.Label>
                     <Form.Control
                         type={"password"}
-                        name={'userConfirmPassword'}
-                        data-qc={'userConfirmPassword'}
-                        value={props.values.userConfirmPassword}
+                        name={'confirmPassword'}
+                        data-qc={'confirmPassword'}
+                        value={props.values.confirmPassword}
                         placeholder={local.confrimPassword}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
-                        isInvalid={(props.errors.userConfirmPassword && props.touched.userConfirmPassword) as boolean}
+                        isInvalid={(props.errors.confirmPassword && props.touched.confirmPassword) as boolean}
                     />
                     <Form.Control.Feedback
                     type={'invalid'}
                     >
-                        {props.errors.userConfirmPassword}
+                        {props.errors.confirmPassword}
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
@@ -216,7 +217,10 @@ export const UserDataForm = (props: Props) => {
             className={['user-data-group']}
             >
                 <Col >
-                    <Button className ={'btn-cancel-prev'} style={{ width:'60%' }} >{local.cancel}</Button>
+                    <Button 
+                    className ={'btn-cancel-prev'} style={{ width:'60%' }}  
+                    onClick = {()=>{props.cancle()}}
+                    >{local.cancel}</Button>
                 </Col>
                 <Col>
                     <Button  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="submit" data-qc="next">{local.next}</Button>

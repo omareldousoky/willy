@@ -7,14 +7,15 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import Select from 'react-select';
 import {theme} from '../../../theme';
-import {RolesValues} from './userCreationinterfaces';
+import {RolesBranchesValues} from './userCreationinterfaces';
 import {userRolesOptions,userBranchesOptions} from './userFromInitialState';
 
 interface Props{
-    values: RolesValues;
+    values: RolesBranchesValues;
     handleSubmit: any;
     handleBlur: any;
     handleChange: any;
+    previousStep: any;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any;
 }
 const style = {
@@ -75,7 +76,7 @@ const customFilterOption = (option, rawInput) => {
         >
             <Form.Group
                 className={'user-role-group'}
-                controlId='userRoles'
+                controlId='roles'
             >
                 <Form.Label 
                   className={'user-role-label'}
@@ -86,20 +87,20 @@ const customFilterOption = (option, rawInput) => {
                     isSearchable = {true}
                     filterOption = {customFilterOption}
                     placeholder={<span style={{width:'100%',padding:"5px", margin:"5px"}}><img style={{float:"right"}} alt="search-icon" src={require('../../Assets/searchIcon.svg')}/> {local.searchByUserRole}</span>}
-                    name="userRoles"
-                    data-qc="userRoles"
+                    name="roles"
+                    data-qc="roles"
                     onChange= {
-                        (event: any) => { props.setFieldValue('userRoles', event)}
+                        (event: any) => { props.setFieldValue('roles', event)}
                     }
                     onBlur={props.handleBlur}
-                    value={props.values.userRoles}
+                    value={props.values.roles}
                     options = {userRolesOptions}
                     type='text'
                 />
            </Form.Group>
        <Form.Group
         className={'user-role-group'}
-        controlId={'userBranches'}
+        controlId={'branches'}
        >
            <Form.Label
             className={'user-role-label'}
@@ -114,10 +115,10 @@ const customFilterOption = (option, rawInput) => {
                     name="userBranches"
                     data-qc="userBranches"
                     onChange= {
-                        (event: any) => { props.setFieldValue('userBranches', event)}
+                        (event: any) => { props.setFieldValue('branches', event)}
                     }
                     onBlur={props.handleBlur}
-                    value={props.values.userBranches}
+                    value={props.values.branches}
                     options = {userBranchesOptions}
                     type='text'
             />
@@ -127,7 +128,11 @@ const customFilterOption = (option, rawInput) => {
             className={'user-stick-buttons'}
             >
                 <Col >
-                    <Button className ={'btn-cancel-prev'} style={{ width:'60%' }}  data-qc="previous" >{local.previous}</Button>
+                    <Button 
+                    className ={'btn-cancel-prev'} style={{ width:'60%' }} 
+                     data-qc="previous"
+                     onClick = {()=>{props.previousStep(props.values)}}
+                      >{local.previous}</Button>
                 </Col>
                 <Col>
                     <Button  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="submit" data-qc="submit">{local.submit}</Button>

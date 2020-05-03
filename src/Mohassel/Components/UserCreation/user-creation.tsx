@@ -8,23 +8,28 @@ import {
     userCreationValidationStepOne,
     userCreationValidationStepTwo,
 } from './userFromInitialState';
-import { Values , RolesValues} from './userCreationinterfaces';
+import {
+        Values, 
+        User,
+        RolesBranchesValues,
+    } from './userCreationinterfaces';
 import UserRolesAndPermisonsFrom from './userRolesAndPermisonsFrom';
 interface Props {
     edit: boolean;
+    history: Array<string>;
 }
 interface State {
 step: number;
 step1: Values;
-step2: RolesValues;
+step2: RolesBranchesValues;
 }
 class UserCreation extends Component <Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            step:1,
-            step1,
-            step2,
+            step:2,
+            step1:step1,
+            step2:step2,
         }
     }
     componentDidUpdate(prevProps: Props, _prevState: State ){
@@ -32,8 +37,29 @@ class UserCreation extends Component <Props, State> {
             this.setState({
                 step:1,
                 step1, 
+                step2,
             })
         }
+    }
+ 
+    cancel(): void {
+        this.setState({
+            step:1,
+            step1, 
+            step2,
+        })
+        this.props.history.push("/");
+    }
+    previousStep(values, step: number): void {
+        this.setState({
+          step: step - 1,
+          [`step${step}`]: values,
+        } as State);
+      }
+  async createUser(userObj: User){
+        const user ={...userObj.userInfo, branches:userObj.branches,roles:userObj.roles};
+        user.hiringDate = new Date(user.hiringDate).valueOf();
+        console.log('created user : ',user);
     }
     submit = (values: object) => {
     if(this.state.step <2) {
@@ -43,8 +69,28 @@ class UserCreation extends Component <Props, State> {
         }as any)
     }  
     else {
-        console.log('Waiting Backend')
-    }
+       this.setState({step2: values} as any)
+       const labeledBranches = this.state.step2.userBranches;
+       const labeledRoles = this.state.step2.userRoles;
+       const branches: string[]|undefined = labeledBranches?.map(
+           (branch)=>{
+                return branch.value;
+           }
+       );
+       console.log("branches : ",branches);
+       const roles: string[] = labeledRoles.map(
+           (role) => {
+               return role.value;
+           }
+       );
+       const userObj: User =  {
+           userInfo: {...this.state.step1},
+           roles,
+           branches,
+       }
+       console.log("userObj",userObj);
+       this.createUser(userObj);
+     } 
     }
     renderStepOne(): any{
      return(
@@ -52,12 +98,12 @@ class UserCreation extends Component <Props, State> {
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}
-        validationSchema = {userCreationValidationStepOne}
+         validationSchema = {userCreationValidationStepOne}
         validateOnBlur
         validateOnChange
         >
              {(formikProps) =>
-                        <UserDataForm {...formikProps} />
+                        <UserDataForm {...formikProps} cancle={()=>this.cancel()} />
             }
         </Formik>
         )
@@ -73,7 +119,10 @@ class UserCreation extends Component <Props, State> {
             validateOnChange
             >
             {(formikProps) =>
-            <UserRolesAndPermisonsFrom {...formikProps}/>
+            <UserRolesAndPermisonsFrom 
+            {...formikProps} 
+            previousStep={(valuesOfStep2)=> this.previousStep(valuesOfStep2,2)}
+            />
     }
             </Formik>
         );
