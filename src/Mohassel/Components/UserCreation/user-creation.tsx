@@ -79,7 +79,7 @@ class UserCreation extends Component <Props, State> {
     } else {
         Swal.fire('', local.searchError, 'error');
     }
-    console.log(labeldRoles);
+
     }
     componentDidUpdate(prevProps: Props, _prevState: State ){
         if(prevProps.edit !==this.props.edit){
@@ -111,8 +111,7 @@ class UserCreation extends Component <Props, State> {
         };
         user.birthDate = new Date(user.birthDate).valueOf();
         user.hiringDate = new Date(user.hiringDate).valueOf();
-         user.nationalIdIssueDate = new Date(user.nationalIdIssueDate).valueOf();
-        console.log(user);
+        user.nationalIdIssueDate = new Date(user.nationalIdIssueDate).valueOf();
        const res=  await createUser (user);
        if (res.status === 'success') {
         this.setState({ loading: false });
@@ -151,11 +150,10 @@ class UserCreation extends Component <Props, State> {
            roles,
            branches,
        }
-       console.log("userObj",userObj);
        this.createUser(userObj);
      } 
     }
-     getUserInfo():UserInfo{
+     getUserInfo(): UserInfo{
          const user = this.state.step1;
          return  {
             name: user.name,
@@ -229,7 +227,7 @@ class UserCreation extends Component <Props, State> {
                     direction ="vertical"
                     currentStepNumber = {this.state.step-1}
                     stepColor="#7dc356"
-                    steps = {["١.البيانات الأساسية","٢.الأدوار والصلاحيات"]}
+                    steps = {[local.userBasicStep1,local.userRolesStep2]}
                     />
                 </div>
                 

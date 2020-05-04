@@ -100,7 +100,9 @@ const customFilterOption = (option, rawInput) => {
                                  return true;
                             }
                           } )
-      
+                       if(!hasBranch) {
+                        props.setFieldValue('branches', '');
+                       }
                       }
 
                     }

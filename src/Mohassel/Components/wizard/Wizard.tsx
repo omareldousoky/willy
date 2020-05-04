@@ -99,7 +99,7 @@ export default class Wizard extends Component  <Props , State>{
   render() {
     const { direction, stepColor } = this.props;
     const { steps } = this.state;
-    const renderedSteps = steps.map((step, index) => {
+    const renderedSteps = steps.map((step: Step, index) => {
       return (
         <div className="step-wrapper" key={index}>
           <div
