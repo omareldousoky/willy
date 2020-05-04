@@ -1,3 +1,15 @@
+.stepper-container-vertical {
+  border: 1px solid #7dc356;
+  box-shadow: 0 0 13px #333;
+  border-radius: 3px;
+  margin: 40px auto;
+  padding: 30px;
+  width: 25%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .user-data-form{
     width: 60%;
     text-align: right;

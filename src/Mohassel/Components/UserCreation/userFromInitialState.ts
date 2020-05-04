@@ -7,6 +7,9 @@ export const step1: Values = {
     username: '',
     nationalId: '',
     hrCode: '',
+    birthDate: '',
+    gender: '',
+    nationalIdIssueDate:'',
     mobilePhoneNumber: '',
     hiringDate: 0,
     password: '',
@@ -14,7 +17,7 @@ export const step1: Values = {
 }
 
 export const userRolesOptions = [
-    { label: "مراجع إداري", value: '1' ,hasBranch:'true'},
+    { label: "مراجع إداري", value: '1', hasBranch: 'true' },
     { label: "مراجع مالي", value: '2' },
     { label: "مدخل بيانات", value: '3' },
 ];
@@ -31,33 +34,44 @@ export const userBranchesOptions = [
 ];
 export const step2: RolesBranchesValues = {
     roles: [],
-    branches:[],
+    branches: [],
 
 }
+const endOfDay: Date = new Date();
+endOfDay.setHours(23, 59, 59, 59);
 export const userCreationValidationStepOne = Yup.object().shape({
     name: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     username: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     mobilePhoneNumber: Yup.string().min(11, local.minLength11),
-    nationalId: Yup.number().required(local.required),
-    // .when('nationalIdChecker', {
-    //     is: true,
-    //     then: Yup.number().test('error', local.duplicateNationalIdMessage, () => false),
-    //     otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
-    // }),
+    nationalId: Yup.number()
+        .when('nationalIdChecker', {
+            is: true,
+            then: Yup.number().test('error', local.duplicateNationalIdMessage, () => false),
+            otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
+        })
+        .when('birthDate', {
+            is: '1800-01-01',
+            then: Yup.number().test('error', local.wrongNationalId, () => false),
+            otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
+        }),
+    nationalIdIssueDate: Yup.string().test(
+        "Max Date", local.dateShouldBeBeforeToday,
+        (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
+    ).required(local.required),
     password: Yup.string().required(local.required),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], local.confrimPasswordCheck),
 
 })
 export const userCreationValidationStepTwo = Yup.object().shape({
-    roles: Yup.array().min(1).of(
+    roles: Yup.array().of(
         Yup.object().shape({
-            lable: Yup.string().required(local.required),
-            value: Yup.string().required(local.required),
-            hasBranch: Yup.boolean().required(local.required)
+            lable: Yup.string(),
+            value: Yup.string(),
+            hasBranch: Yup.boolean()
         })
-    ),
+    ).min(1),
     branches: Yup.array().of(
         Yup.object().shape({
             label: Yup.string(),

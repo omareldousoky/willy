@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { UserDataForm } from './userDataFrom';
 import { withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
+import Swal from 'sweetalert2';
+import * as local from '../../../Shared/Assets/ar.json';
+import Wizard from '../wizard/Wizard';
+import { Loader } from '../../../Shared/Components/Loader';
 import {
     step1,
     step2,
@@ -12,8 +16,12 @@ import {
         Values, 
         User,
         RolesBranchesValues,
+        UserInfo,
     } from './userCreationinterfaces';
 import UserRolesAndPermisonsFrom from './userRolesAndPermisonsFrom';
+import './userCreation.scss';
+import {getUserRolesAndBranches} from '../../Services/APIs/User-Creation/getUserRolesAndBranches'
+import {createUser} from '../../Services/APIs/User-Creation/createUser';
 interface Props {
     edit: boolean;
     history: Array<string>;
@@ -21,16 +29,57 @@ interface Props {
 interface State {
 step: number;
 step1: Values;
+loading: boolean;
 step2: RolesBranchesValues;
+branchesLabeled: Array<object>;
+rolesLabeled: Array<object>;
 }
 class UserCreation extends Component <Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            step:2,
+            step:1,
+            loading:false,
             step1:step1,
             step2:step2,
+            branchesLabeled:[],
+            rolesLabeled: [],
         }
+    }
+  async  componentDidMount(){
+      this.setState({loading:true})
+    const RolesAndBranches=  await getUserRolesAndBranches();
+    const labeldRoles: Array<object>=[];
+    const labeldBranches: Array<object>=[];
+    if(RolesAndBranches[0].status = 'success'){
+         RolesAndBranches[0].body.roles.forEach(role=>{
+                  labeldRoles.push({
+                      label: role.roleName ,
+                      hasBranch: role.hasBranch,
+                      value: role._id ,
+                  })  
+         })
+         this.setState({
+             loading:false,
+              rolesLabeled: labeldRoles,
+         })
+    } else {
+        Swal.fire('', local.searchError, 'error');
+        this.setState({
+            loading:false,
+        })
+    }
+    if(RolesAndBranches[1].status = 'success'){
+        RolesAndBranches[1].body.data.data.forEach(branch => {
+            labeldBranches.push({ value: branch._id, label: branch.name })
+        })
+        this.setState({
+            branchesLabeled: labeldBranches,
+        })
+    } else {
+        Swal.fire('', local.searchError, 'error');
+    }
+    console.log(labeldRoles);
     }
     componentDidUpdate(prevProps: Props, _prevState: State ){
         if(prevProps.edit !==this.props.edit){
@@ -57,9 +106,23 @@ class UserCreation extends Component <Props, State> {
         } as State);
       }
   async createUser(userObj: User){
-        const user ={...userObj.userInfo, branches:userObj.branches,roles:userObj.roles};
+        const user ={...userObj.userInfo,
+            branches:userObj.branches,roles:userObj.roles
+        };
+        user.birthDate = new Date(user.birthDate).valueOf();
         user.hiringDate = new Date(user.hiringDate).valueOf();
-        console.log('created user : ',user);
+         user.nationalIdIssueDate = new Date(user.nationalIdIssueDate).valueOf();
+        console.log(user);
+       const res=  await createUser (user);
+       if (res.status === 'success') {
+        this.setState({ loading: false });
+        Swal.fire("success",local.userCreated ).then(()=>{
+            this.props.history.push("/");
+        });
+      } else {
+        Swal.fire("error",local.userCreationError)
+        this.setState({ loading: false });
+      }
     }
     submit = (values: object) => {
     if(this.state.step <2) {
@@ -70,21 +133,21 @@ class UserCreation extends Component <Props, State> {
     }  
     else {
        this.setState({step2: values} as any)
-       const labeledBranches = this.state.step2.userBranches;
-       const labeledRoles = this.state.step2.userRoles;
+       const labeledBranches = this.state.step2.branches;
+       const labeledRoles = this.state.step2.roles;
        const branches: string[]|undefined = labeledBranches?.map(
            (branch)=>{
                 return branch.value;
            }
        );
-       console.log("branches : ",branches);
+
        const roles: string[] = labeledRoles.map(
            (role) => {
                return role.value;
            }
        );
        const userObj: User =  {
-           userInfo: {...this.state.step1},
+           userInfo:this.getUserInfo(),
            roles,
            branches,
        }
@@ -92,13 +155,31 @@ class UserCreation extends Component <Props, State> {
        this.createUser(userObj);
      } 
     }
+     getUserInfo():UserInfo{
+         const user = this.state.step1;
+         return  {
+            name: user.name,
+            username: user.username,
+            nationalId: user.nationalId,
+            gender: user.gender,
+            birthDate: user.birthDate,
+            nationalIdIssueDate: user.nationalIdIssueDate,
+            hrCode: user.hrCode,
+            mobilePhoneNumber: user.mobilePhoneNumber,
+            hiringDate: user.hiringDate,
+            password: user.password,
+            faxNumber: "",
+            emailAddress: "",
+
+         }
+     }
     renderStepOne(): any{
      return(
        <Formik
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}
-         validationSchema = {userCreationValidationStepOne}
+        validationSchema = {userCreationValidationStepOne}
         validateOnBlur
         validateOnChange
         >
@@ -121,6 +202,8 @@ class UserCreation extends Component <Props, State> {
             {(formikProps) =>
             <UserRolesAndPermisonsFrom 
             {...formikProps} 
+          userRolesOptions ={this.state.rolesLabeled}
+          userBranchesOptions={this.state.branchesLabeled}
             previousStep={(valuesOfStep2)=> this.previousStep(valuesOfStep2,2)}
             />
     }
@@ -138,11 +221,22 @@ class UserCreation extends Component <Props, State> {
     }
     render() {
         return (
-            <div>
-                {this.props.edit ? 'Edit User' : 'Create User'}
+            <>
+           <Loader type="fullscreen" open={this.state.loading} />
+            <div style={{display:"flex",flexDirection:"row"}} >
+                <div className="stepper-container-vertical">
+                    <Wizard 
+                    direction ="vertical"
+                    currentStepNumber = {this.state.step}
+                    stepColor="#7dc356"
+                    steps = {["١.البيانات الأساسية","٢.الأدوار والصلاحيات"]}
+                    />
+                </div>
+                
+                
                {this.renderSteps()}
-
             </div>
+            </>
         );
     }
 }

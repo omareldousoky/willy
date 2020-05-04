@@ -1,5 +1,5 @@
-import React from 'react';
-import './userCreation.css';
+import React,{useState} from 'react';
+import './userCreation.scss';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,10 +8,11 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Select from 'react-select';
 import {theme} from '../../../theme';
 import {RolesBranchesValues} from './userCreationinterfaces';
-import {userRolesOptions,userBranchesOptions} from './userFromInitialState';
 
 interface Props{
     values: RolesBranchesValues;
+    userRolesOptions: Array<object>;
+    userBranchesOptions: Array<object>;
     handleSubmit: any;
     handleBlur: any;
     handleChange: any;
@@ -61,6 +62,7 @@ const style = {
     };
 
 const UserRolesAndPermisonsFrom = (props: Props) => {
+  const [hasBranch, setHasBranch] = useState(false);
 const customFilterOption = (option, rawInput) => {
   const words = rawInput.split(' ');
   return words.reduce(
@@ -90,11 +92,21 @@ const customFilterOption = (option, rawInput) => {
                     name="roles"
                     data-qc="roles"
                     onChange= {
-                        (event: any) => { props.setFieldValue('roles', event)}
+                        (event: any) => { props.setFieldValue('roles', event)
+                        setHasBranch(false);
+                           event?.map(e=> {
+                            if(e.hasBranch===true) {
+                             setHasBranch(true);
+                                 return true;
+                            }
+                          } )
+      
+                      }
+
                     }
                     onBlur={props.handleBlur}
                     value={props.values.roles}
-                    options = {userRolesOptions}
+                    options = {props.userRolesOptions}
                     type='text'
                 />
            </Form.Group>
@@ -107,20 +119,21 @@ const customFilterOption = (option, rawInput) => {
            >{local.branch}</Form.Label>
 
            <Select
-           styles={style}
+                   styles={style}
                     isMulti
                     isSearchable = {true}
                     filterOption = {customFilterOption}
                     placeholder={<span style={{width:'100%',padding:"5px", margin:"5px"}}><img style={{float:"right"}} alt="search-icon" src={require('../../Assets/searchIcon.svg')}/> {local.searchByBranchName}</span>}
-                    name="userBranches"
-                    data-qc="userBranches"
+                    name="branches"
+                    data-qc="branches"
                     onChange= {
                         (event: any) => { props.setFieldValue('branches', event)}
                     }
                     onBlur={props.handleBlur}
                     value={props.values.branches}
-                    options = {userBranchesOptions}
+                    options = {props.userBranchesOptions}
                     type='text'
+                    isDisabled = {!hasBranch}
             />
        </Form.Group>
        <Form.Group 
@@ -139,6 +152,7 @@ const customFilterOption = (option, rawInput) => {
                 </Col>
             </Form.Group>
         </Form>
+                  
     )
 }
 
