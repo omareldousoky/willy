@@ -86,7 +86,6 @@ class UsersList extends Component<Props, State> {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
     const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId });
-    console.log(res)
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
@@ -105,7 +104,7 @@ class UsersList extends Component<Props, State> {
       obj = {
         branchId: branchId[0],
         size: this.state.size,
-        from: 0,
+        from: this.state.from,
       }
     } else {
       obj = {
@@ -113,7 +112,7 @@ class UsersList extends Component<Props, State> {
         fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: this.state.size,
-        from: 0,
+        from: this.state.from,
       }
     }
     if (isNaN(Number(values.searchKeyword))) obj = { ...obj, name: values.searchKeyword }

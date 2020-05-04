@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -31,8 +31,11 @@ interface Props {
   applicationId: string;
 }
 interface State {
-  showModal: boolean;
+  paymentModal: boolean;
+  receiptModal: boolean;
+  receiptData: any;
   payAmount: number;
+  truthDate: string;
   modalType: number;
   loading: boolean;
   loadingFullScreen: boolean;
@@ -46,8 +49,11 @@ class Payment extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      showModal: false,
+      paymentModal: false,
+      receiptModal: false,
+      receiptData: {},
       payAmount: 0,
+      truthDate: new Date().toISOString().slice(0, 10),
       modalType: 0,
       loading: false,
       loadingFullScreen: false,
@@ -100,7 +106,7 @@ class Payment extends Component<Props, State>{
       case 'rescheduled':
         return <div className="status-chip rescheduled">{local.rescheduled}</div>
       case 'partiallyPaid':
-        return <div className="status-chip partiallyPaid">{local.partiallyPaid}</div>
+        return <div className="status-chip partially-paid">{local.partiallyPaid}</div>
       case 'cancelled':
         return <div className="status-chip cancelled">{local.cancelled}</div>
       case 'paid':
@@ -121,27 +127,28 @@ class Payment extends Component<Props, State>{
     return total;
   }
   handleSubmit = async (values) => {
-    this.setState({ showModal: false, loadingFullScreen: true })
+    this.setState({ paymentModal: false, loadingFullScreen: true })
     if (this.state.modalType === 1) {
-      const res = await payInstallment(this.props.applicationId, this.state.payAmount);
+      const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf());
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false });
-        Swal.fire("", "payment done", "success")
+        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+        // Swal.fire("", "payment done", "success")
       } else {
         this.setState({ loadingFullScreen: false });
       }
     } else {
       const res = await earlyPayment(this.props.applicationId);
+      this.setState({payAmount: res.body.requiredAmount})
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false });
-        Swal.fire("", "early payment done", "success")
+        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+        // Swal.fire("", "early payment done", "success")
       } else {
         this.setState({ loadingFullScreen: false });
       }
     }
   }
   async handleClickEarlyPayment() {
-    this.setState({ showModal: true, modalType: 2, loading: true })
+    this.setState({ paymentModal: true, modalType: 2, loading: true })
     const res = await calculateEarlyPayment(this.props.applicationId);
     if (res.status === 'success') {
       this.setState({
@@ -156,11 +163,12 @@ class Payment extends Component<Props, State>{
   }
   renderModal() {
     return (
-      <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })} >
+      <Modal show={this.state.paymentModal} onHide={() => this.setState({ paymentModal: false })} >
         {
           this.state.modalType === 1 ?
             <Formik
-              initialValues={{ payAmount: '' }}
+              enableReinitialize
+              initialValues={this.state}
               onSubmit={this.handleSubmit}
               validationSchema={paymentValidation}
               validateOnBlur
@@ -172,22 +180,45 @@ class Payment extends Component<Props, State>{
                     <Modal.Title>{local.enterPayment}</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <Form.Control
-                      type="number"
-                      name="payAmount"
-                      data-qc="payAmount"
-                      value={formikProps.values.payAmount}
-                      onBlur={formikProps.handleBlur}
-                      onChange={formikProps.handleChange}
-                      isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
-                    >
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.payAmount}
-                    </Form.Control.Feedback>
+                    <Form.Group as={Row} controlId="payAmount">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.amount}`}</Form.Label>
+                      <Col sm={6}>
+                        <Form.Control
+                          type="number"
+                          name="payAmount"
+                          data-qc="payAmount"
+                          value={formikProps.values.payAmount.toString()}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="truthDate">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.truthDate}`}</Form.Label>
+                      <Col sm={6}>
+                        <Form.Control
+                          type="date"
+                          name="truthDate"
+                          data-qc="truthDate"
+                          value={formikProps.values.truthDate}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.truthDate}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button variant="secondary" data-qc="cancel" onClick={() => this.setState({ showModal: false })}>{local.cancel}</Button>
+                    <Button variant="secondary" data-qc="cancel" onClick={() => this.setState({ paymentModal: false })}>{local.cancel}</Button>
                     <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
                   </Modal.Footer>
                 </Form>
@@ -221,7 +252,7 @@ class Payment extends Component<Props, State>{
                 </Form.Group>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" data-qc="cancel" onClick={() => this.setState({ showModal: false })}>{local.cancel}</Button>
+                <Button variant="secondary" data-qc="cancel" onClick={() => this.setState({ paymentModal: false })}>{local.cancel}</Button>
                 <Button variant="primary" data-qc="submit" onClick={this.handleSubmit}>{local.submit}</Button>
               </Modal.Footer>
             </>
@@ -233,17 +264,17 @@ class Payment extends Component<Props, State>{
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable pagination={false} data={this.props.installments} mappers={this.mappers} changeNumber={() => console.log("")} />
+        <DynamicTable pagination={false} data={this.props.installments} mappers={this.mappers}  />
         <div className="payment-amount-container">
           <h5>{local.requiredAmount}</h5>
           <h2>{this.getRequiredAmount()}{(this.props.currency).toUpperCase()}</h2>
         </div>
         <div className="payment-buttons-container">
           <Button variant="outline-primary" onClick={() => this.handleClickEarlyPayment()}>{local.earlyPayment}</Button>
-          <Button variant="outline-primary" onClick={() => this.setState({ showModal: true, modalType: 1 })}>{local.payInstallment}</Button>
+          <Button variant="outline-primary" onClick={() => this.setState({ paymentModal: true, modalType: 1 })}>{local.payInstallment}</Button>
         </div>
-        {this.state.showModal && this.renderModal()}
-        <PaymentReceipt/>
+        {this.state.paymentModal && this.renderModal()}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={()=> this.setState({receiptModal: false})} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
       </>
     );
   }

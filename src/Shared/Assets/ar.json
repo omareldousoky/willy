@@ -288,5 +288,18 @@
     "unpaid": "لم يستحق",
     "rescheduled": "تمت إعادة جدولته",
     "partiallyPaid": "مدفوع جزئيا",
-    "cancelled": "ملغي"
+    "cancelled": "ملغي",
+    "tasaheelName": "شركة تساهيل للتمويل متناهي الصغر",
+    "paymentReceipt": "إيصال إيداع نقدية",
+    "date": "التاريخ",
+    "receiptNumber": "رقم الإيصال",
+    "paidFrom": "مسدد من قبل",
+    "currentPayment": "السداد الحالي",
+    "purpose": "الغرض",
+    "remaining": "المتبقي",
+    "recipientSignature": "توقيع المستلم",
+    "revisedAndIssued": "روجع واعتمد",
+    "amount": "المبلغ",
+    "truthDate": "تاريخ الحق",
+    "download": "تنزيل"
 }

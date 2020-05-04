@@ -4,10 +4,11 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
+import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
-import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
+import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
@@ -75,8 +76,7 @@ class BranchesList extends Component<{}, State> {
 
   async getBranches() {
     this.setState({ loading: true })
-    const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchApplication({ size: this.state.size, from: this.state.from, branchId: branchId });
+    const res = await searchBranches({ size: this.state.size, from: this.state.from });
     if (res.status === "success") {
       this.setState({
         data: res.body.applications,
@@ -87,8 +87,33 @@ class BranchesList extends Component<{}, State> {
       this.setState({ loading: false })
     }
   }
-  submit = (values) => {
-    console.log(values)
+  submit = async(values) => {
+    this.setState({ loading: true })
+    let obj = {}
+    if (values.dateFrom === "" && values.dateTo === "") {
+      obj = {
+        size: this.state.size,
+        from: this.state.from,
+        name: this.state.searchKeyWord
+      }
+    } else {
+      obj = {
+        fromDate: new Date(values.dateFrom).setHours(this.state.from, 0, 0, 0).valueOf(),
+        toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
+        size: this.state.size,
+        from: 0,
+      }
+    }
+    const res = await searchBranches(obj);
+    if (res.status === "success") {
+      this.setState({
+        loading: false,
+        data: res.body.data
+      })
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('', local.searchError, 'error');
+    }
   }
   render() {
     return (
