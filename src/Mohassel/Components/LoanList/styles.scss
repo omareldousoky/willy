@@ -1,0 +1,33 @@
+.custom-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+    .big-button {
+        width: 170px;
+        height: 50px;
+    }
+}
+.dashed-line {
+    border-top: 1px dashed #e5e5e5;
+}
+.custom-card-body {
+    display: flex;
+    margin: 30px;
+}
+
+.dropdown-container {
+    display: flex;
+    border: 1px #e5e5e5 solid;
+    border-radius: 5px;
+    padding-left: 10px;
+    .dropdown-label {
+        margin: 0px;
+        background: #E5E5E5;
+        padding: 10px 15px;
+    }
+    .dropdown-select {
+        height: auto;
+        border: 0px;
+        cursor: pointer;
+    }
+}

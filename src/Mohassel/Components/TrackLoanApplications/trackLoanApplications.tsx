@@ -14,7 +14,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { getCookie } from '../../Services/getCookie';
 import { DownloadReviewedPdf } from '../PDF/documentExport';
 import Can from '../../config/Can';
-
+import {englishToArabic} from '../../Services/statusLanguage'
 interface Product {
   productName: string;
   loanNature: string;
@@ -153,22 +153,8 @@ class TrackLoanApplications extends Component<Props, State>{
     }
     else return null;
   }
-  englishToArabic(status: string) {
-    switch (status) {
-      case 'underReview':
-        return 'تحت التحرير';
-      case 'reviewed':
-        return 'رُجعت';
-      case 'rejected':
-        return 'مرفوضة';
-      case 'approved':
-        return 'موافق عليها';
-      case 'created':
-        return 'إنشاء';
-      case 'issued':
-        return 'أصدرت';
-      default: return '';
-    }
+  goToLoan(id){
+    this.props.history.push('/loan-profile',{id:id})
   }
   render() {
     const reviewedResults = (this.state.searchResults) ? this.state.searchResults.filter(result => result.application.status === "reviewed") : [];
@@ -276,10 +262,10 @@ class TrackLoanApplications extends Component<Props, State>{
                 return (
                   <tr key={index}>
                     <td></td>
-                    <td>{loanItem.id}</td>
+                    <td onClick={()=>this.goToLoan(loanItem.id)}>{loanItem.id}</td>
                     <td>{loanItem.application.customer.customerName}</td>
                     <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
-                    <td>{this.englishToArabic(loanItem.application.status)}</td>
+                    <td>{englishToArabic(loanItem.application.status).text}</td>
                     <td>{loanItem.application.product.productName}</td>
                     <td>{loanItem.application.principal || 0}</td>
                     <td></td>
