@@ -49,9 +49,11 @@
 .stepper-wrapper-vertical {
     .step-wrapper {
         display: flex;
-        height: 100;
-        align-items: center;
-        margin-bottom: 1.2rem;
+        flex-direction: column;
+        justify-content:flex-start;
+        height: auto;
+        align-items: flex-start;
+        margin-bottom: 40px;
         position: relative;
     }
 
@@ -62,22 +64,23 @@
         height: 18px;
         padding: 4.5px 4px 4px;
         text-align: center;
-        font-size: 95%;
+        font-size: 11px;
         left: 10px;
     }
 
     .step-description {
         margin-left: 1.2rem;
+        font-size: 12px;
         padding-bottom: 3px;
     }
 
     .divider-line {
-        height:20px;
-        width: 1px;
+        height:44px;
+        width: 2px;
         background-color: #bdbdbd;
         position: absolute;
         top: 100%;
-        left: 10px;
+        left: 18px;
     }
 }
 

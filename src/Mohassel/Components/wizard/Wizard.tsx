@@ -99,7 +99,7 @@ export default class Wizard extends Component  <Props , State>{
   render() {
     const { direction, stepColor } = this.props;
     const { steps } = this.state;
-    const stepsJSX = steps.map((step, index) => {
+    const renderedSteps = steps.map((step, index) => {
       return (
         <div className="step-wrapper" key={index}>
           <div
@@ -123,6 +123,6 @@ export default class Wizard extends Component  <Props , State>{
       );
     });
 
-    return <div className={`stepper-wrapper-${direction}`}>{stepsJSX}</div>;
+    return <div className={`stepper-wrapper-${direction}`}>{renderedSteps}</div>;
   }
 }

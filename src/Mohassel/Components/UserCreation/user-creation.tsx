@@ -227,7 +227,7 @@ class UserCreation extends Component <Props, State> {
                 <div className="stepper-container-vertical">
                     <Wizard 
                     direction ="vertical"
-                    currentStepNumber = {this.state.step}
+                    currentStepNumber = {this.state.step-1}
                     stepColor="#7dc356"
                     steps = {["١.البيانات الأساسية","٢.الأدوار والصلاحيات"]}
                     />
