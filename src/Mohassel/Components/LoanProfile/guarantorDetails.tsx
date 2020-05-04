@@ -1,6 +1,7 @@
 import React from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
+import Table from 'react-bootstrap/Table';
 
 interface Props {
     guarantors: any;
@@ -35,6 +36,34 @@ export const GuarantorView = (props: Props) => {
                 </div>
             )
                 : <p>No Guarantors</p>}
+        </div>
+    )
+}
+export const GuarantorTableView = (props: Props) => {
+    return (
+        <div className="d-flex justify-content-center">
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Guarantor Code</th>
+                        <th>{local.name}</th>
+                        <th>Area</th>
+                        <th>{local.customerHomeAddress}</th>
+                        <th>Telephone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {props.guarantors.length > 0 && props.guarantors.map((guar, i) =>
+                        <tr key={i}>
+                            <td></td>
+                            <td>{guar.customerName}</td>
+                            <td>{guar.geographicalDistribution}</td>
+                            <td>{guar.homeAddress}</td>
+                            <td>{guar.homePhoneNumber}</td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
         </div>
     )
 }
