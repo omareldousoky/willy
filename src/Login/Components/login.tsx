@@ -30,7 +30,7 @@ class Login extends React.PureComponent<Props, State> {
   }
   submit = (values: User): void => {
     const data = {
-      username: values.username.trim(),,
+      username: values.username.trim(),
       password: values.password
     }
     axios({

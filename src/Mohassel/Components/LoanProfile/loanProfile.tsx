@@ -13,8 +13,10 @@ import { getCookie } from '../../Services/getCookie';
 
 import Logs from './applicationLogs';
 import Card from 'react-bootstrap/Card';
-import { DetailsTableView } from './applicationsDetails';
+import { LoanDetailsTableView } from './applicationsDetails';
 import { GuarantorView } from './guarantorDetails'
+import { CustomerCardView } from './customerCard';
+import Rescheduling from '../Rescheduling/rescheduling';
 interface State {
     prevId: string;
     application: any;
@@ -35,7 +37,18 @@ class LoanProfile extends Component<Props, State>{
             prevId: '',
             application: {},
             activeTab: 'loanDetails',
-            tabsArray: [
+            tabsArray: [],
+            loading: false,
+        };
+    }
+    componentDidMount() {
+        const appId = this.props.history.location.state.id;
+        this.getAppByID(appId)
+    }
+    async getAppByID(id) {
+        const application = await getApplication(id);
+        if (application.status === 'success') {
+            const tabsToRender = [
                 {
                     header: local.loanInfo,
                     stringKey: 'loanDetails'
@@ -47,36 +60,28 @@ class LoanProfile extends Component<Props, State>{
                 {
                     header: local.logs,
                     stringKey: 'loanLogs'
-                },
-                // {
-                //     header: local.customerCard,
-                //     stringKey: 'customerCard'
-                // },
-                {
-                    header: local.payments,
-                    stringKey: 'loanPayments'
-                },
-                // {
-                //     header: local.rescheduling,
-                //     stringKey: 'loanRescheduling'
-                // }, 
-                // {
-                //     header: local.reschedulingTest,
-                //     stringKey: 'loanReschedulingTest'
-                // }
-            ],
-            loading: false,
-        };
-    }
-    componentDidMount() {
-        const appId = this.props.history.location.state.id;
-        this.getAppByID(appId)
-    }
-    async getAppByID(id) {
-        const application = await getApplication(id);
-        if (application.status === 'success') {
+                }
+            ]
+            const customerCardTab = {
+                header: local.customerCard,
+                stringKey: 'customerCard'
+            };
+            const paymentTab = {
+                header: local.payments,
+                stringKey: 'loanPayments'
+            };
+            const reschedulingTab = {
+                header: local.rescheduling,
+                stringKey: 'loanRescheduling'
+            };
+            const reschedulingTestTab = {
+                header: local.reschedulingTest,
+                stringKey: 'loanReschedulingTest'
+            };
+            if (application.body.status === "issued") tabsToRender.push(...[customerCardTab, paymentTab, reschedulingTab, reschedulingTestTab])
             this.setState({
-                application: application.body
+                application: application.body,
+                tabsArray: tabsToRender
             })
         } else {
             Swal.fire('', 'fetch error', 'error')
@@ -86,13 +91,19 @@ class LoanProfile extends Component<Props, State>{
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
-                return <DetailsTableView application={this.state.application} />
+                return <LoanDetailsTableView application={this.state.application} />
             case 'loanGuarantors':
                 return <GuarantorView guarantors={this.state.application.guarantors} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id}/>
+                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} />
+            case 'customerCard':
+                return <CustomerCardView application={this.state.application} />
+            case 'loanRescheduling':
+                return  <Rescheduling application={this.state.application} test={false}/>
+            case 'loanReschedulingTest':
+                return  <Rescheduling application={this.state.application} test={true}/>
             default:
                 return null
         }

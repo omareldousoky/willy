@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
+import Row from 'react-bootstrap/Row';
 
 interface Props {
     values: any;
@@ -25,54 +26,98 @@ class InfoBox extends Component<Props, State>{
                 <h5>{local.mainInfo}</h5>
                 <Form.Row>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.name}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.customerName} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.name}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{values.customerName} </Form.Label>
+                        </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.customerCode}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={(values.customerCode) ? values.customerCode : 'N/A'} />
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.nationalId}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.nationalId} />
-                    </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.birthDate}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={getRenderDate(values.birthDate)} />
-                    </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.gender}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.gender} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.customerCode}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{(values.customerCode) ? values.customerCode : 'N/A'} </Form.Label>
+                        </Row>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.nationalIdIssueDate}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={getRenderDate(values.nationalIdIssueDate)} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.nationalId}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{values.nationalId} </Form.Label>
+                        </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.businessSector}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.businessSector} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.birthDate}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{getRenderDate(values.birthDate)} </Form.Label>
+                        </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.businessActivity}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.businessActivity} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.gender}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{values.gender} </Form.Label>
+                        </Row>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.businessSpeciality}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={values.businessSpeciality} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.nationalIdIssueDate}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{getRenderDate(values.nationalIdIssueDate)} </Form.Label>
+                        </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.permanentEmployeeCount}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={(values.permanentEmployeeCount) ? values.permanentEmployeeCount : 0} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.businessSector}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{values.businessSector} </Form.Label>
+                        </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">
-                        <Form.Label style={{marginRight:0, color:'#6e6e6e'}}>{local.partTimeEmployeeCount}</Form.Label>
-                        <Form.Control plaintext readOnly defaultValue={(values.partTimeEmployeeCount) ? values.partTimeEmployeeCount : 0} />
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.businessActivity}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{values.businessActivity} </Form.Label>
+                        </Row>
+                    </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                    <Form.Group as={Col} md="4">
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.businessSpeciality}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{values.businessSpeciality} </Form.Label>
+                        </Row>
+                    </Form.Group>
+                    <Form.Group as={Col} md="4">
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.permanentEmployeeCount}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{(values.permanentEmployeeCount) ? values.permanentEmployeeCount : 0} </Form.Label>
+                        </Row>
+                    </Form.Group>
+                    <Form.Group as={Col} md="4">
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{local.partTimeEmployeeCount}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{(values.partTimeEmployeeCount) ? values.partTimeEmployeeCount : 0} </Form.Label>
+                        </Row>
                     </Form.Group>
                 </Form.Row>
             </Form>
