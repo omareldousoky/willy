@@ -24,6 +24,7 @@ interface State {
     withInterest: boolean;
     postponementInterest: number;
     payWhere: string;
+    installmentNumber: number;
 }
 class PostponeInstallments extends Component<Props, State>{
     mappers: { title: string; key: string; render: (data: any) => any }[]
@@ -35,7 +36,8 @@ class PostponeInstallments extends Component<Props, State>{
             noOfInstallments: 0,
             withInterest: false,
             postponementInterest: 0,
-            payWhere: ''
+            payWhere: '',
+            installmentNumber: 0
         };
 
 
@@ -79,19 +81,23 @@ class PostponeInstallments extends Component<Props, State>{
     }
     async handleSubmit(values) {
         console.log(values)
-        // this.setState({ loading: true })
-        // const res = await testFreeRescheduling(this.props.application._id, values);
-        // if (res.status === "success") {
-        //     this.setState({ loading: false })
-        //     this.setState({
-        //         noOfInstallments: values.noOfInstallments,
-        //         installmentsAfterRescheduling: res.body.output
-        //     })
-        //     Swal.fire('', 'Test Success', 'success');
-        // } else {
-        //     this.setState({ loading: false })
-        //     Swal.fire('', 'Test Fail', 'error');
-        // }
+        this.setState({ loading: true })
+        const res = await testFreeRescheduling(this.props.application._id, values);
+        if (res.status === "success") {
+            this.setState({ loading: false })
+            this.setState({
+                noOfInstallments: values.noOfInstallments,
+                withInterest: values.withInterest,
+                postponementInterest: values.postponementInterest,
+                payWhere: values.payWhere,
+                installmentNumber: values.installmentNumber,
+                installmentsAfterRescheduling: res.body.output
+            })
+            Swal.fire('', 'Test Success', 'success');
+        } else {
+            this.setState({ loading: false })
+            Swal.fire('', 'Test Fail', 'error');
+        }
     }
     applyChanges() {
         Swal.fire({
@@ -111,7 +117,11 @@ class PostponeInstallments extends Component<Props, State>{
     async pushInstallments() {
         this.setState({ loading: true })
         const obj = {
-            noOfInstallments: this.state.noOfInstallments
+            noOfInstallments: this.state.noOfInstallments,
+            withInterest: this.state.withInterest,
+            postponementInterest: this.state.postponementInterest,
+            payWhere: this.state.payWhere,
+            installmentNumber: this.state.installmentNumber
         }
         const res = await freeRescheduling(this.props.application._id, obj);
         if (res.status === "success") {
@@ -133,7 +143,8 @@ class PostponeInstallments extends Component<Props, State>{
                         noOfInstallments: this.state.noOfInstallments,
                         withInterest: this.state.withInterest,
                         postponementInterest: this.state.postponementInterest,
-                        payWhere: this.state.payWhere
+                        payWhere: this.state.payWhere,
+                        installmentNumber: this.state.installmentNumber
                     }}
                     onSubmit={this.handleSubmit.bind(this)}
                     validationSchema={reschedulingValidation}
@@ -216,12 +227,32 @@ class PostponeInstallments extends Component<Props, State>{
                                             <option value=''></option>
                                             <option value='now'>Now</option>
                                             <option value='divide'>Divide</option>
-                                            {this.props.application.installmentsObject.installments.filter(inst => (inst.status === 'unpaid')||(inst.status === 'partiallyPaid')).map(inst=>
-                                            <option key={inst.id} value={inst.id}> Installment number {inst.id}</option>)}
-
+                                            <option value='installment'>Installment</option>
                                         </Form.Control>
                                         <Form.Control.Feedback type="invalid">
                                             {formikProps.errors.payWhere}
+                                        </Form.Control.Feedback>
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="installmentNumber">
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>installmentNumber</Form.Label>
+                                    <Col sm={6}>
+                                        <Form.Control as="select"
+                                            name="installmentNumber"
+                                            data-qc="installmentNumber"
+                                            value={(formikProps.values.installmentNumber).toString()}
+                                            onBlur={formikProps.handleBlur}
+                                            onChange={formikProps.handleChange}
+                                            isInvalid={Boolean(formikProps.errors.installmentNumber) && Boolean(formikProps.touched.installmentNumber)}
+                                            disabled={!(formikProps.values.payWhere === "installment")}
+                                        >
+                                            <option value=''></option>
+                                            {this.props.application.installmentsObject.installments.filter(inst => (inst.status === 'unpaid') || (inst.status === 'partiallyPaid')).map(inst =>
+                                                <option key={inst.id} value={inst.id}> Installment number {inst.id}</option>)}
+
+                                        </Form.Control>
+                                        <Form.Control.Feedback type="invalid">
+                                            {formikProps.errors.installmentNumber}
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
@@ -236,14 +267,14 @@ class PostponeInstallments extends Component<Props, State>{
                     <Row>
                         <h5>{local.installmentsTableBeforeRescheduling}</h5>
                     </Row>
-                    <DynamicTable pagination={false} data={this.props.application.installmentsObject.installments} mappers={this.mappers} changeNumber={() => console.log("")} />
+                    <DynamicTable pagination={false} data={this.props.application.installmentsObject.installments} mappers={this.mappers} />
                 </div>
                 {this.state.installmentsAfterRescheduling.length > 0 &&
                     <div style={{ margin: '10px 0' }}>
                         <Row>
                             <h5>{local.installmentsTableAfterRescheduling}</h5>
                         </Row>
-                        <DynamicTable pagination={false} data={this.state.installmentsAfterRescheduling} mappers={this.mappers} changeNumber={() => console.log("")} />
+                        <DynamicTable pagination={false} data={this.state.installmentsAfterRescheduling} mappers={this.mappers} />
                     </div>
                 }
                 {!this.props.test && <Button disabled={this.state.noOfInstallments === 0} onClick={() => this.applyChanges()}>{local.save}</Button>}
