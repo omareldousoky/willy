@@ -28,7 +28,7 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => any }[]
+  mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -45,19 +45,29 @@ class LoanList extends Component<Props, State> {
     }
     this.mappers = [
       {
-        title: "Customer Name",
+        title: local.customerName ,
         key: "customerName",
         render: data => <div onClick={() => this.props.history.push('/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
-        title: "Status",
-        key: "status",
-        render: data => data.application.status
+        title: local.customerCode,
+        key: "customerCode",
+        render: data => data.application.customer._id
       },
       {
-        title: "Customer Name",
-        key: "customerName",
-        render: data => data.application.customer.customerName
+        title: local.productName,
+        key: "productName",
+        render: data => data.application.product.productName
+      },
+      {
+        title: local.representative,
+        key: "representative",
+        render: data => ""
+      },
+      {
+        title: local.loanIssuanceDate,
+        key: "loanIssuanceDate",
+        render: data => new Date(data.application.issueDate).toISOString().slice(0,10)
       },
     ]
   }
