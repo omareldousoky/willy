@@ -48,7 +48,6 @@ class RoleCreation extends Component<Props, State>{
         console.log(e, parent, val)
     }
     render() {
-        console.log(this.state.roles)
         return (
             <div style={{ textAlign: 'right' }}>
                 <Loader type="fullsection" open={this.state.loading} />

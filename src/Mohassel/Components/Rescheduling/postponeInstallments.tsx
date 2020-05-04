@@ -80,7 +80,6 @@ class PostponeInstallments extends Component<Props, State>{
         }
     }
     async handleSubmit(values) {
-        console.log(values)
         this.setState({ loading: true })
         const res = await testFreeRescheduling(this.props.application._id, values);
         if (res.status === "success") {

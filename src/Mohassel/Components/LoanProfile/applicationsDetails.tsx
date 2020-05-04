@@ -315,7 +315,6 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                         </Row>
                     </Form.Group>
                 </Form.Row>
-                {console.log(props.application.guarantors)}
                 {props.application.guarantors && <Form.Row>
                     <GuarantorTableView guarantors={props.application.guarantors} />
                 </Form.Row>}
