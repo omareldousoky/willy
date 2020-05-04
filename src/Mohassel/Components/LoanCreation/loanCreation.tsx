@@ -79,7 +79,6 @@ class LoanCreation extends Component<Props, State> {
   }
   async componentDidMount() {
     const { id, type } = this.props.location.state;
-
     this.setState({ id, type, loading: true })
     if (type === "create") {
       const res = await testCalculateApplication(id);

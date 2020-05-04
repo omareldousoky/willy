@@ -4,10 +4,11 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
+import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
-import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
+import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
@@ -21,25 +22,9 @@ interface State {
   dateTo: string;
   loading: boolean;
 }
-const mappers = [
-  {
-    title: "Customer Name",
-    key: "customerName",
-    render: data => data.application.customer.customerName
-  },
-  {
-    title: "Status",
-    key: "status",
-    render: data => data.application.status
-  },
-  {
-    title: "Customer Name",
-    key: "customerName",
-    render: data => data.application.customer.customerName
-  },
-]
 
 class BranchesList extends Component<{}, State> {
+  mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
@@ -52,6 +37,38 @@ class BranchesList extends Component<{}, State> {
       dateTo: '',
       loading: false,
     }
+    this.mappers = [
+      {
+        title: local.governorate,
+        key: "governorate",
+        render: data => 'governorate'
+      },
+      {
+        title: local.oneBranch,
+        key: "branch",
+        render: data => 'branch'
+      },
+      {
+        title: local.noOfUsers,
+        key: "noOfUsers",
+        render: data => 'noOfUsers'
+      },
+      {
+        title: local.createdBy,
+        key: "createdBy",
+        render: data => 'createdBy'
+      },
+      {
+        title: local.creationDate,
+        key: "creationDate",
+        render: data => 'creationDate'
+      },
+      {
+        title: '',
+        key: "actions",
+        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+      },
+    ]
   }
   componentDidMount() {
     this.getBranches()
@@ -59,8 +76,7 @@ class BranchesList extends Component<{}, State> {
 
   async getBranches() {
     this.setState({ loading: true })
-    const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchApplication({ size: this.state.size, from: this.state.from, branchId: branchId });
+    const res = await searchBranches({ size: this.state.size, from: this.state.from });
     if (res.status === "success") {
       this.setState({
         data: res.body.applications,
@@ -71,8 +87,33 @@ class BranchesList extends Component<{}, State> {
       this.setState({ loading: false })
     }
   }
-  submit = (values) => {
-    console.log(values)
+  submit = async(values) => {
+    this.setState({ loading: true })
+    let obj = {}
+    if (values.dateFrom === "" && values.dateTo === "") {
+      obj = {
+        size: this.state.size,
+        from: this.state.from,
+        name: this.state.searchKeyWord
+      }
+    } else {
+      obj = {
+        fromDate: new Date(values.dateFrom).setHours(this.state.from, 0, 0, 0).valueOf(),
+        toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
+        size: this.state.size,
+        from: 0,
+      }
+    }
+    const res = await searchBranches(obj);
+    if (res.status === "success") {
+      this.setState({
+        loading: false,
+        data: res.body.data
+      })
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('', local.searchError, 'error');
+    }
   }
   render() {
     return (
@@ -151,7 +192,7 @@ class BranchesList extends Component<{}, State> {
               }
             </Formik>
             <DynamicTable
-              mappers={mappers}
+              mappers={this.mappers}
               pagination={true}
               data={this.state.data}
               changeNumber={(key: string, number: number) => {
