@@ -17,7 +17,7 @@ import { searchApplication } from '../../Services/APIs/loanApplication/searchApp
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import { englishToArabic }  from '../../Services/statusLanguage';
 interface Branch {
   label: string;
   value: string;
@@ -142,21 +142,6 @@ class BulkApplicationApproval extends Component<Props, State>{
       return new Date(date).toISOString().slice(0, 10)
     }
   }
-  englishToArabic(status: string) {
-    switch (status) {
-      case 'underReview':
-        return 'تحت التحرير';
-      case 'reviewed':
-        return 'رُجعت';
-      case 'rejected':
-        return 'مرفوضة';
-      case 'approved':
-        return 'موافق عليها';
-      case 'created':
-        return 'إنشاء';
-      default: return '';
-    }
-  }
   render() {
     return (
       <Container>
@@ -182,7 +167,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                   <th>{local.loanApplicationId}</th>
                   <th>{local.customerName}</th>
                   <th>{local.loanAppCreationDate}</th>
-                  <th>{local.loanStatus}</th>
+                  <th>{local.applicationStatus}</th>
                   <th>{local.productName}</th>
                   <th>{local.loanPrinciple}</th>
                   <th>
@@ -213,7 +198,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                         <td>{loanItem.id}</td>
                         <td>{loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
-                        <td>{this.englishToArabic(loanItem.application.status)}</td>
+                        <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.principal}</td>
                         <td></td>

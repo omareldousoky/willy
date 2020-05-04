@@ -1,0 +1,80 @@
+.payment-amount-container {
+    border-radius: 40px;
+    border: 1px black solid;
+    margin: 50px auto;
+    height: 200px;
+    width: 60%;
+    h5 {
+        margin: 50px 100px 10px 0px;
+        text-align: right;
+    }
+    h2 {
+        color: #7dc356;
+        font-weight: bolder;
+        text-align: center;
+    }
+}
+
+.payment-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.status-chip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 30px; 
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    width: 90px;
+    height: 25px;
+    &.late {
+        background-color: #d51b1b;
+    }
+    &.paid {
+        background-color: #7DC356;
+    }
+    &.unpaid {
+        background-color: #009bed;
+    }
+    &.partially-paid {
+        background-color: #edb600;
+    }
+    &.cancelled {
+        background-color: gray;
+    }
+}
+.receipt-modal {
+    .modal-content {
+        width: 520px;
+    }
+}
+.receipt-container{
+    width: 500px;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid black;
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .receipt-content {
+        text-align: right;
+        .title {
+            text-align: left;
+        }
+        .info {
+            padding-right: 10px;
+            margin-right: 0px;
+            border: 1px black solid;
+        }
+        .dots {
+            padding-right: 10px;
+            margin-right: 0px;
+        }
+    }
+}
