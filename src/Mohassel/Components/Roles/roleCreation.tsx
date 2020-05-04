@@ -71,8 +71,8 @@ class RoleCreation extends Component<Props, State>{
     checkAll(e, parent, action) {
         const sections = this.state.sections 
         console.log(e, parent, action, sections)
-        const section = sections.filter((section)=> section.key === parent)
-        console.log(section, section.actions)
+        const section = sections.find((section)=> section.key === parent)
+        console.log(section, section?.actions)
     }
     render() {
         return (
