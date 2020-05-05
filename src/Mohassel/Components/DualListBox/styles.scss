@@ -1,0 +1,18 @@
+.box {
+    // width: 45%;
+}
+.listBox {
+    height: 400px;
+    overflow: scroll;
+    text-align: right;
+}
+.list {
+    list-style-type:  none;
+}
+.listItem {
+
+}
+.listItem:hover {
+    background-color: grey;
+    color: white;
+}

@@ -4,6 +4,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
+import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 interface Section {
     _id: string;
     key: string;
@@ -43,18 +44,21 @@ class RoleCreation extends Component<Props, State>{
             this.setState({ loading: false })
         }
     }
-    check(e, parent, val) {
-        console.log(e, parent, val)
-        const perms = { ...this.state.permissions }
+    objectHandler(perms, e, parent, action){
         if (e) {
+            console.log('here')
             if (!Object.keys(perms).includes(parent)) {
+                console.log('here1')
+
                 perms[parent] = [];
             }
-            if (!perms[parent].includes(val)) {
-                perms[parent].push(val)
+            if (!perms[parent].includes(action)) {
+                console.log('here2')
+
+                perms[parent].push(action)
             }
         } else {
-            const index = perms[parent].indexOf(val);
+            const index = perms[parent].indexOf(action);
             if (index > -1) {
                 perms[parent].splice(index, 1);
                 if(perms[parent].length === 0){
@@ -62,17 +66,29 @@ class RoleCreation extends Component<Props, State>{
                 }
             }
         }
+        return perms
+    }
+    check(e, parent, val) {
+        console.log(e, parent, val)
+        const perms = { ...this.state.permissions }
+        const newPerms = this.objectHandler(perms, e, parent,val)
         this.setState({
-            permissions: perms
-        }, () => {
-            console.log(perms, this.state.permissions)
+            permissions: newPerms
         })
     }
     checkAll(e, parent, action) {
         const sections = this.state.sections 
-        console.log(e, parent, action, sections)
         const section = sections.find((section)=> section.key === parent)
-        console.log(section, section?.actions)
+        const actionsInRelation = section?.actions.filter((obj)=>  Object.keys(obj).includes(action))
+        let perms = { ...this.state.permissions }
+        actionsInRelation?.forEach(elem => {
+            console.log(e,parent,elem , elem[action])
+            const newPerms = this.objectHandler(perms,e,parent,elem[action])
+            perms = newPerms
+        })
+        this.setState({
+            permissions: perms
+        })
     }
     render() {
         return (
@@ -81,27 +97,27 @@ class RoleCreation extends Component<Props, State>{
                 <p>
                     Roles
                 </p>
-                <div>
+                <div style={{ width:'50%' , backgroundColor: '#fafafa'}}>
                     <>
                         {this.state.sections.map((obj, i) =>
                             <Table key={i}>
                                 <thead>
-                                    <tr>
+                                    <tr style={{ backgroundColor: 'grey', color: 'white'}}>
                                         <th style={{ width: '30%' }}>{obj.i18n.ar}</th>
                                         <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'create')}></Form.Check></th>
-                                        <th style={{ width: '15%' }}>R</th>
-                                        <th style={{ width: '15%' }}>U</th>
-                                        <th style={{ width: '15%' }}>D</th>
+                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'get')}></Form.Check></th>
+                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'update')}></Form.Check></th>
+                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'delete')}></Form.Check></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {obj.actions.map((action, i) =>
                                         <tr key={i}>
                                             <td style={{ width: '30%' }}>{action.i18n.ar}</td>
-                                            <td style={{ width: '15%' }}>{(action.create) ? <Form.Check type='checkbox' onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.create)}></Form.Check> : ''}</td>
-                                            <td style={{ width: '15%' }}>{(action.get) ? <Form.Check type='checkbox' onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.get)}></Form.Check> : ''}</td>
-                                            <td style={{ width: '15%' }}>{(action.update) ? <Form.Check type='checkbox' onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.update)}></Form.Check> : ''}</td>
-                                            <td style={{ width: '15%' }}>{(action.delete) ? <Form.Check type='checkbox' onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)}></Form.Check> : ''}</td>
+                                            <td style={{ width: '15%' }}>{(action.create) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.create)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.create)}></Form.Check> : ''}</td>
+                                            <td style={{ width: '15%' }}>{(action.get) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.get)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.get)}></Form.Check> : ''}</td>
+                                            <td style={{ width: '15%' }}>{(action.update) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.update)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.update)}></Form.Check> : ''}</td>
+                                            <td style={{ width: '15%' }}>{(action.delete) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.delete)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)}></Form.Check> : ''}</td>
                                         </tr>
                                     )}
                                 </tbody>

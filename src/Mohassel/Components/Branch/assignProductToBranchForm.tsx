@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import Select from 'react-select';
-import DualListBox from 'react-dual-listbox';
+import DualBox from '../DualListBox/dualListBox';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 export const AssignProductToBranchForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
@@ -32,15 +32,15 @@ export const AssignProductToBranchForm = (props: any) => {
             </Form.Group>
             {props.products.length > 0 &&
                 <div style={{ width: '100%' }}>
-                    <div style={{display:'flex', textAlign:'right'}}>
-                        <p style={{ width:'50%'}}>
+                    <div style={{ display: 'flex', textAlign: 'right' }}>
+                        <p style={{ width: '50%' }}>
                             {local.loanProducts}
                         </p>
-                        <p style={{ width:'46%', marginRight:'4%'}}>
+                        <p style={{ width: '46%', marginRight: '4%' }}>
                             {local.loanProductsForBranch}
                         </p>
                     </div>
-                    <DualListBox
+                    {/* <DualListBox
                         canFilter
                         options={props.products}
                         selected={props.selectedBranchProducts}
@@ -61,6 +61,10 @@ export const AssignProductToBranchForm = (props: any) => {
                             moveDown: <span className="fa fa-chevron-down" />,
                             moveUp: <span className="fa fa-chevron-up" />,
                         }}
+                    /> */}
+                    <DualBox options={props.products}
+                        selected={props.selectedBranchProducts}
+                        onChange={props.onChangeProducts}
                     />
                 </div>
             }
