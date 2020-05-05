@@ -111,7 +111,7 @@ export const UserDataForm = (props: Props) => {
                             type="Date"
                             name="birthDate"
                             data-qc="birthDate"
-                            value={props.values.birthDate}
+                            value={(props.values.birthDate) as string}
                             onBlur={props.handleBlur}
                             onChange={props.handleChange}
                             isInvalid={(props.errors.birthDate && props.touched.birthDate) as boolean}
@@ -150,7 +150,7 @@ export const UserDataForm = (props: Props) => {
                     type="date"
                     name="nationalIdIssueDate"
                     data-qc="nationalIdIssueDate"
-                    value={props.values.nationalIdIssueDate}
+                    value={(props.values.nationalIdIssueDate) as string}
                     onBlur={props.handleBlur}
                     onChange={props.handleChange}
                     isInvalid={(props.errors.nationalIdIssueDate && props.touched.nationalIdIssueDate) as boolean}

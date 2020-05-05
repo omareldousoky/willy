@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import "./Wizard.scss";
 interface Step {
-    description: any;
+    description: string;
     highlighted: boolean;
     selected: boolean;
     completed: boolean;
@@ -30,11 +30,13 @@ export default class Wizard extends Component  <Props , State>{
     const { steps, currentStepNumber } = this.props;
 
     const stepsState = steps.map((step, index) => {
-      const stepObj: any = {};
-      stepObj.description = step;
-      stepObj.highlighted = index === 0 ? true : false;
-      stepObj.selected = index === 0 ? true : false;
-      stepObj.completed = false;
+      const stepObj: Step = {
+        description : step,
+        highlighted : index === 0 ? true : false,
+        selected : index === 0 ? true : false,
+        completed : false,
+      };
+     
       return stepObj;
     });
 
@@ -62,7 +64,7 @@ export default class Wizard extends Component  <Props , State>{
 
     while (stepCounter < newSteps.length) {
     
-      if (stepCounter === stepNumber) {
+      if (stepCounter === stepNumber ) {
         newSteps[stepCounter] = {
           ...newSteps[stepCounter],
           highlighted: true,
@@ -77,7 +79,7 @@ export default class Wizard extends Component  <Props , State>{
           ...newSteps[stepCounter],
           highlighted: false,
           selected: true,
-          completed: true
+          completed: true,
         };
         stepCounter++;
       }
@@ -112,7 +114,7 @@ export default class Wizard extends Component  <Props , State>{
           </div>
           <div
             className={`step-description ${step.highlighted &&
-              "step-description-active"}`}
+              "step-description-active"} ${step.completed && "step-description-completed "}`} 
           >
             {step.description}
           </div>
