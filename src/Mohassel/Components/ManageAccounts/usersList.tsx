@@ -74,7 +74,7 @@ class UsersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+        render: data => <><span onClick={()=>{console.log(data) ,this.props.history.push("/user-details")}}  className='fa fa-eye icon'></span> <span onClick={()=>{this.props.history.push("/edit-user")}} className='fa fa-pencil-alt icon'></span></>
       },
     ]
   }

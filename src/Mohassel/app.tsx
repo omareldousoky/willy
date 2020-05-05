@@ -19,6 +19,7 @@ import RoleCreation from './Components/Roles/roleCreation';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
 import Can from './config/Can';
+import UserDetails from './Components/userDetails/user-details';
 
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
@@ -51,6 +52,7 @@ const App = () => {
                         <Route exact path = "/new-user" render={(props)=> <Can I='create' a= 'User'><UserCreation  {...props} edit={false} /></Can> }></Route>
                         <Route exact path = "/edit-user" render={(props)=> <Can I='edit' a= 'User'><UserCreation  {...props} edit={true} /></Can> }></Route>
                         <Route path="/new-role" render={(props) => <RoleCreation {...props} />}/>
+                        <Route exact path="/user-details"  render={(props)=> <UserDetails {...props}/>} />
                     </Switch>
                 </div>
             </BrowserRouter>
