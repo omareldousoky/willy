@@ -1,0 +1,43 @@
+.stepper-container-vertical {
+  border: 1px solid #7dc356;
+  box-shadow: 0 0 13px #333;
+  border-radius: 3px;
+  margin: 40px auto;
+  padding: 30px;
+  width: 25%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.user-data-form{
+    width: 60%;
+    text-align: right;
+    margin: 20px;
+}
+.user-data-group{
+  padding-bottom: 20px;
+}
+.user-data-label{
+  font-weight: bold; 
+  font-size: 12px;
+}
+.user-role-form{
+  width: 60%;
+  min-height: 100%;
+  text-align: right;
+   margin: auto;
+}
+.user-role-group{
+  padding-bottom: 25px;
+}
+
+.user-role-label{
+  font-weight: bold; 
+  font-size: 14px;
+}
+.user-stick-buttons{
+  position: fixed;
+  bottom: 0;
+  width: 60%;
+}
