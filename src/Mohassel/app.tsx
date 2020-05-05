@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import CustomerCreation from './Components/CustomerCreation/customer-creation';
+import UserCreation from './Components/UserCreation/user-creation';
 import FormulaCreation from './Components/LoanFormulaCreation/loanFormulaCreation';
 import FormulaTest from './Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from './Components/LoanProductCreation/loanProductCreation';
@@ -47,6 +48,8 @@ const App = () => {
                         <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
                         <Route path="/loan-profile" render={(props) => <Can I='view' a='Application'> <LoanProfile {...props} /></Can>} />
                         <Route path="/loans" render={(props) => <LoanList {...props} />}/>
+                        <Route exact path = "/new-user" render={(props)=> <Can I='create' a= 'User'><UserCreation  {...props} edit={false} /></Can> }></Route>
+                        <Route exact path = "/edit-user" render={(props)=> <Can I='edit' a= 'User'><UserCreation  {...props} edit={true} /></Can> }></Route>
                         <Route path="/new-role" render={(props) => <RoleCreation {...props} />}/>
                     </Switch>
                 </div>

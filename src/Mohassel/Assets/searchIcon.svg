@@ -1,0 +1,15 @@
+<svg id="search_ic_20px" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #2f2f2f;
+      }
+    </style>
+  </defs>
+  <rect id="boundary" class="cls-1" width="20" height="20"/>
+  <path id="Union_11" data-name="Union 11" class="cls-2" d="M.293,15.9a1,1,0,0,1,0-1.415L5.3,9.474a6,6,0,1,1,1.414,1.414L1.707,15.9a1,1,0,0,1-1.414,0ZM7.364,3.169A4,4,0,1,0,10.193,2,4,4,0,0,0,7.364,3.169Z" transform="translate(2.463 2.24)"/>
+</svg>
