@@ -152,7 +152,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             <Select
               data-qc="branchSelector"
               value={this.state.filteredBranch}
-              onChange={(e: Branch) => this.getDataFromBranch(e)}
+              onChange={(e: any) => this.getDataFromBranch(e)}
               type='text'
               options={this.state.branches}
             />
