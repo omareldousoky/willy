@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import DropDownList from '../DropDownList/dropDownList';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
+interface Props {
+  history: Array<string>;
+};
 interface State {
   data: any;
   activeRole: number;
   loading: boolean;
-}
+};
 
-class RolesList extends Component<{}, State> {
+class RolesList extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +62,7 @@ class RolesList extends Component<{}, State> {
                 <span className="text-muted">{local.noOfRoles}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }}>new role</Button>
+                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>new role</Button>
               </div>
             </div>
             {this.state.data.map((el, index) => {
@@ -97,4 +101,4 @@ class RolesList extends Component<{}, State> {
   }
 }
 
-export default RolesList;
+export default withRouter(RolesList);

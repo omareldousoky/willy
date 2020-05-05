@@ -15,6 +15,7 @@ import BulkApplicationApproval from './Components/BulkApplicationApproval/bulkAp
 import ManageAccounts from './Components/ManageAccounts/manageAccounts';
 import LoanProfile from './Components/LoanProfile/loanProfile';
 import LoanList from './Components/LoanList/loanList';
+import RoleCreation from './Components/Roles/roleCreation';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
 import Can from './config/Can';
@@ -49,6 +50,7 @@ const App = () => {
                         <Route path="/loans" render={(props) => <LoanList {...props} />}/>
                         <Route exact path = "/new-user" render={(props)=> <Can I='create' a= 'User'><UserCreation  {...props} edit={false} /></Can> }></Route>
                         <Route exact path = "/edit-user" render={(props)=> <Can I='edit' a= 'User'><UserCreation  {...props} edit={true} /></Can> }></Route>
+                        <Route path="/new-role" render={(props) => <RoleCreation {...props} />}/>
                     </Switch>
                 </div>
             </BrowserRouter>
