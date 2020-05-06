@@ -1,18 +1,59 @@
 .box {
     // width: 45%;
 }
+
 .listBox {
     height: 400px;
     overflow: scroll;
     text-align: right;
 }
-.list {
-    list-style-type:  none;
-}
-.listItem {
 
+.list {
+    list-style-type: none;
 }
+
+.listItem {}
+
 .listItem:hover {
+    background-color: grey;
+    color: white;
+}
+
+
+//-------
+
+.dual-list .list-group {
+    margin-top: 8px;
+}
+
+.list-left li,
+.list-right li {
+    cursor: pointer;
+}
+
+.list-arrows {
+    padding-top: 100px;
+}
+
+.list-arrows button {
+    margin-bottom: 20px;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.list-group-item-selected {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    background-color: blue;
+}
+.list-group-item:hover {
     background-color: grey;
     color: white;
 }
