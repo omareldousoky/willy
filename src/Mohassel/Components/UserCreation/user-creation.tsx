@@ -227,7 +227,7 @@ class UserCreation extends Component <Props, State> {
                     direction ="vertical"
                     currentStepNumber = {this.state.step-1}
                     stepColor="#7dc356"
-                    steps = {[local.userBasicStep1,local.userRolesStep2]}
+                    steps = {[local.userBasicData,local.userRoles]}
                     />
                 </div>
                 
