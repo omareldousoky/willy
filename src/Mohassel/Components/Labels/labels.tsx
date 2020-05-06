@@ -1,41 +1,51 @@
-import React from 'react'
-import Label from './label'
+import React  ,{ Component} from 'react';
 
+import './styles.scss'
 
+interface State {
+ selected: boolean;
+ item: number;
+}
 interface Props{
-
     labelsTextArr?: string[];
-    labelColor: string;
-    labelBackground: string;
-    fontSize: string;
+    isClickable?: boolean;
+    onClick?: () => void;
 }
 
-const Labels = (props: Props) => {
-    const styles={
-        color: props.labelColor,
-        backgroundColor: props.labelBackground,
-        borderRadius: "20px",
-        fontSize: props.fontSize,
-        textAlign:"center",
-        fontWeight: "normal",
-        marginRight:"10px",
-        padding:".5rem",
-       }
+class Labels extends Component<Props,State>  {
+    constructor(props: Props){
+        super(props);
+        this.state={
+            selected: false,
+            item: 0,
+        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(index){
+        this.setState({
+            selected:true,
+            item:index,
+        })
+      }
+   render() {
     return (
         <div style={{display:"flex",flexDirection:'row'}}>
-            { props.labelsTextArr?.map((labelText,index)=>{
+            { this.props.labelsTextArr?.map((labelText,index)=>{
                 return (
-                <Label 
-                key={index}
-                labelText = {labelText}
-                labelStyle = {styles}
-                 />
+                    <div 
+                    key={index}  
+                    className={this.props.isClickable? (this.state.selected && index == this.state.item)? 'labels-active-selected': 'labels-active':'labels'} 
+                    onClick={()=>{this.handleClick(index),this.props.onClick}} >
+                    {labelText}
+                   </div>
                 )
             })
             
             }
         </div>
     )
+        }
 }
 
 export default Labels;

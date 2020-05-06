@@ -34,7 +34,7 @@ const UserDetailsView = (props: Props) => {
             <Table striped bordered hover >
                 <tbody>
                     <tr><td style={header}>{local.creationDate}*</td><td style={cell}>{timeToDate(data.created.at)}</td></tr>
-                    <tr><td style={header}>{local.userRole}*</td><td style={cell}> <Labels fontSize="14px" labelBackground={theme.colors.veryLightGray} labelColor={theme.colors.blackText} labelsTextArr={data.roles}/></td></tr>
+                    <tr><td style={header}>{local.userRole}*</td><td style={cell}> <Labels labelsTextArr={data.roles}/></td></tr>
                     <tr><td style={header}>{local.name}*</td><td style={cell}>{data.name}</td></tr>
                     <tr><td style={header}>{local.nationalId}*</td><td style={cell}>{data.nationalId}</td></tr>
                     <tr><td style={header}>{local.birthDate}*</td><td style={cell}>{timeToDate(data.birthDate)}</td></tr>
@@ -45,7 +45,7 @@ const UserDetailsView = (props: Props) => {
                     <tr><td style={header}>{local.dateOfHire}*</td><td style={cell}>{timeToDate(data.hiringDate)}</td></tr>
                     <tr><td style={header}>{local.username}*</td><td style={cell}>{data.username}</td></tr>
                     <tr><td style={header}>{local.secretNumber}*</td><td style={cell}><h3>{'.....'}</h3></td></tr>
-                    <tr><td style={header}>{local.branches}</td><td style={cell}><Labels fontSize="14px" labelBackground={theme.colors.veryLightGray} labelColor={theme.colors.blackText} labelsTextArr={data.branches}/></td></tr>
+                    <tr><td style={header}>{local.branches}</td><td style={cell}><Labels labelsTextArr={data.branches}/></td></tr>
                 </tbody>
 
             </Table>
