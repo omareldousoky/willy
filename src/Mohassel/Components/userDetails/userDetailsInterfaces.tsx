@@ -3,12 +3,12 @@ export interface UserDateValues {
   roles: string[];
   branches?: string[];
   nationalId: string;
-  nationalIdIssueDate: number|string;
-  birthDate: number|string;
+  nationalIdIssueDate: number;
+  birthDate: number;
   gender: string;
   hrCode: string;
   mobilePhoneNumber: string;
-  hiringDate: number|string;
+  hiringDate: number;
   username: string;
   name: string;
 

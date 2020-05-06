@@ -32,7 +32,6 @@ interface State {
         }
     }
     render() {
-        console.log(this.props.history.location.state.details);
         return (
             <>
                 <BackButton title={local.userDetails} />
