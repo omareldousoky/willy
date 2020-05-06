@@ -1,0 +1,103 @@
+.logo-navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: auto;
+    .refresh-logo-navbar {
+        background-color: #7dc356;
+        display: flex;
+        width: 120px;
+        height: 85px;
+        justify-content: center;
+      }
+      .info-navbar {
+        background-color: #131848;
+        color: #fff;
+        width: 100%;
+        justify-content: center;
+        padding: 0px 50px;
+        display: flex;
+        height: 85px;
+        align-items: center;
+      }
+}
+.navbar-choose-branch {
+    position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
+    cursor: pointer;
+    .pin-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        margin-left: 20px;
+        background: #7dc356;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+    }
+    .selected-branch {
+        display: flex;
+        align-items: center;
+    }
+}
+.navbar-branch-list {
+    position: absolute;
+    z-index: 4;
+    background: #fff;
+    left: 0px;
+    top: 50px;
+    border-radius: 6px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+    .item {
+        width: 400px;
+        height: 90px;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 30px;
+        align-items: center;
+        cursor: pointer;
+        &:hover:not(:last-child){
+            background-color: #7dc356;  
+            .pin-icon {
+                background-color: #fff;
+                color: #7dc356;
+            }
+            .branch-name {
+                color: #fff;
+            }
+            .fa-arrow-left {
+                color: #fff;
+            }
+
+        }
+        .pin-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: #7dc356;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            margin-left: 20px;
+        }
+        .branch-name {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            span {
+                font-size: 12px;
+            }
+            h6 {
+                font-size: 18px;
+            }
+        }
+        .btn {
+            width: 100%;
+        }
+    }
+
+}
