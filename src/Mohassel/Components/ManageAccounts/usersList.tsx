@@ -74,12 +74,20 @@ class UsersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <><span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span> <span onClick={() => { this.props.history.push("/edit-user") }} className='fa fa-pencil-alt icon'></span></>
+        render: (data) => this.renderIcons(data)
       },
     ]
   }
   componentDidMount() {
     this.getUsers()
+  }
+  renderIcons(data: any) {
+    return(
+      <>
+      <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span> 
+      <span onClick={() => { this.props.history.push("/edit-user") }} className='fa fa-pencil-alt icon'></span> 
+      <span ><img alt={"deactive"} src ={require('../../Assets/deactivate-user.svg')} /> </span> </>
+    );
   }
 
   async getUsers() {

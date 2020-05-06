@@ -331,7 +331,8 @@
     "activate":"تفعيل",
     "deactivate": "تعطيل",
     "userDetails":"تفاصيل المستخدم",
-    "secretNumber":"الرقم السري"
+    "secretNumber":"الرقم السري",
+    "userDetialsError": "حدث خطأ في إسترجاع بيانات المستخدم"
 
 
 

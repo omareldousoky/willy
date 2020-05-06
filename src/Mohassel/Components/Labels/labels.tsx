@@ -7,26 +7,30 @@ interface State {
  item: number;
 }
 interface Props{
-    labelsTextArr?: string[];
+    labelsTextArr: string[];
     isClickable?: boolean;
-    onClick?: () => void;
+    defaultSelect?: boolean;
+    onClick?: any;
 }
 
 class Labels extends Component<Props,State>  {
     constructor(props: Props){
         super(props);
         this.state={
-            selected: false,
+            selected: this.props.defaultSelect? true: false,
             item: 0,
         }
-        this.handleClick = this.handleClick.bind(this);
+
     }
 
-    handleClick(index){
+    handleClick = (index) =>{
+        if(this.props.isClickable) {
         this.setState({
             selected:true,
             item:index,
         })
+        this.props.onClick(index);
+    }
       }
    render() {
     return (
@@ -35,8 +39,10 @@ class Labels extends Component<Props,State>  {
                 return (
                     <div 
                     key={index}  
-                    className={this.props.isClickable? (this.state.selected && index == this.state.item)? 'labels-active-selected': 'labels-active':'labels'} 
-                    onClick={()=>{this.handleClick(index),this.props.onClick}} >
+                    className={this.props.isClickable? (this.state.selected && index === this.state.item)? 'labels-active-selected': 'labels-active':'labels'} 
+                    onClick={()=>this.handleClick(index)}
+                     >
+                      
                     {labelText}
                    </div>
                 )

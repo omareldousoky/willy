@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import BackButton from '../BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
 import Card from 'react-bootstrap/Card';
@@ -9,63 +9,88 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { getUserDetails } from '../../Services/APIs/Users/userDetails';
 import { UserDateValues } from './userDetailsInterfaces';
+import Swal from 'sweetalert2';
+import { Loader } from '../../../Shared/Components/Loader';
+import { theme } from '../../../theme';
+import UserRolesView from './userRolesView';
 interface Props {
-  history: any;
+    history: any;
 }
 interface State {
     step: number;
     isLoading: boolean;
     data: UserDateValues;
 }
- class UserDetails extends Component <Props,State> {
-    constructor(props: Props){
+class UserDetails extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
-       this.state = {
-           step:1,
-           isLoading: false,
-           data: {
-               updated:{by: '',at:0},
-               created:{by:'',at:0},
-               username: '',
-               name: '',
-               nationalId:'',
-               nationalIdIssueDate: 0,
-               gender: '',
-               birthDate:0,
-               branches:[''],
-               roles:[''],
-               _id:'',
-               hiringDate:0,
-               hrCode:'',
-               mobilePhoneNumber:'',
-               status: '',
-               
-           },
-       }
+        this.state = {
+            step: 1,
+            isLoading: false,
+            data: {
+                updated: { by: '', at: 0 },
+                created: { by: '', at: 0 },
+                username: '',
+                name: '',
+                nationalId: '',
+                nationalIdIssueDate: 0,
+                gender: '',
+                birthDate: 0,
+                branches: [''],
+                roles: [''],
+                _id: '',
+                hiringDate: 0,
+                hrCode: '',
+                mobilePhoneNumber: '',
+                status: '',
+
+            },
+        }
     }
-    setUserDetails(data: any): UserDateValues{
-      const user: UserDateValues =data.user;
-                user.branches= data.branches?.map((branch)=> {return branch.name});
-                user.roles =  data.roles.map((role)=> {return role.roleName});
-     return user;
+
+    setUserDetails(data: any): UserDateValues {
+        const user: UserDateValues = data.user;
+        user.branches = data.branches?.map((branch) => { return branch.name });
+        user.roles = data.roles.map((role) => { return role.roleName });
+        return user;
     }
-  async  componentDidMount(){
-        const _id= this.props.history.location.state.details;
-        console.log(_id);
-      const res = await getUserDetails(_id) ;
-      const user = this.setUserDetails(res.body);
-       if(res.status==="success"){
-           this.setState({
-               data: user,
-           })
-       }
+    async  componentDidMount() {
+        const _id = this.props.history.location.state.details;
+        this.setState({ isLoading: true });
+        const res = await getUserDetails(_id);
+        const user = this.setUserDetails(res.body);
+        if (res.status === "success") {
+            this.setState({
+                data: user,
+                isLoading: false,
+            })
+        } else {
+            this.setState({ isLoading: false });
+            Swal.fire("erroe", local.userDetialsError);
+        }
+    }
+    renderICons() {
+        return (
+            <div className={'rowContainer'}>
+                <div
+                    className={'iconConatiner'}
+                    onClick={() => { this.props.history.push("/edit-user") }}
+                >
+                    <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
+                    {local.edit}</div>
+                <div
+                     className={'iconConatiner'}>
+                    <img className={'iconImage'} alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />
+                    {local.deactivate}</div>
+            </div>
+        );
     }
     renderTabs(): any {
         switch (this.state.step) {
             case 1:
-               return(<UserDetailsView  data={this.state.data}/>);
-            
-        
+                return (<UserDetailsView data={this.state.data} />);
+            case 2:
+                return(<UserRolesView roles ={this.state.data.roles} />);
             default:
                 return null;
         }
@@ -73,21 +98,24 @@ interface State {
     render() {
         return (
             <>
-                <BackButton title={local.userDetails} />
+                <div className={'rowContainer'}>
+                    <BackButton title={local.userDetails} />
+                    {this.renderICons()}
+                </div>
                 <Card className='card'>
-                    <Tabs activeKey={this.state.step} id="user-tab-details" style={{ marginBottom: 20, }} onSelect={(key: string) => this.setState({ step: Number(key) }) } >
+                    <Loader type="fullsection" open={this.state.isLoading} />
+                    <Tabs activeKey={this.state.step} id="user-tab-details" style={{ marginBottom: 20, }} onSelect={(key: string) => this.setState({ step: Number(key) })} >
                         <Tab eventKey={1} title={local.userBasicData}></Tab>
                         <Tab eventKey={2} title={local.userRoles}></Tab>
                     </Tabs>
                     <Card.Body>
-
-                      {this.renderTabs()}
+                        {this.renderTabs()}
                     </Card.Body>
                 </Card>
-                
+
             </>
         )
     }
 }
 
-export default  withRouter(UserDetails);
+export default withRouter(UserDetails);

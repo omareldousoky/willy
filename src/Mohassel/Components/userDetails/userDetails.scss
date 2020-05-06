@@ -5,3 +5,46 @@
     display:inline-table;
     float: right;
 }
+
+.rowContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.columnContianer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin: 1rem;
+}
+.roleContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #e5e5e5;
+}
+.iconConatiner{
+    font-weight: bold;
+    font-size: 12px;
+    padding: 1rem;
+    color: #2f2f2f;
+}
+.iconImage{
+    margin-left: .5rem;
+}
+.labelContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.subTitle{
+  font-size: 12px;
+  font-weight: normal;
+  text-align: right;
+  color: #6e6e6e;
+  margin: .25rem;
+}
