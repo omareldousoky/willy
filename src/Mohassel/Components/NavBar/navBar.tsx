@@ -142,7 +142,7 @@ class NavBar extends Component<Props, State> {
                   <span style={{ marginLeft: 10 }}>{local.currentPeriodStartsIn}</span>
                   <span style={{ marginLeft: 10 }} className="primary-color">  01/02/2020  </span>
                   <span style={{ marginLeft: 10 }}>{local.andEndsIn}</span>
-                  <span style={{ marginLeft: 50 }} className="primary-color">  29/02/2020  </span>
+                  <span className="primary-color">  29/02/2020  </span>
                 </div>
               </div>
               <div className="navbar-choose-branch" onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
