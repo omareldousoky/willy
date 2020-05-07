@@ -4,7 +4,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { theme } from '../../../theme'
 import { UserDateValues } from './userDetailsInterfaces';
 import { timeToDate } from '../../Services/utils';
-import Labels from '../Labels/Labels';
+import Labels from '../Labels/labels';
 
 interface Props {
     data: UserDateValues;
