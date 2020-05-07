@@ -81,7 +81,14 @@ class PostponeInstallments extends Component<Props, State>{
     }
     async handleSubmit(values) {
         this.setState({ loading: true })
-        const res = await testFreeRescheduling(this.props.application._id, values);
+        const obj = {
+            noOfInstallments: values.noOfInstallments,
+            withInterest: values.withInterest,
+            postponementInterest: values.postponementInterest,
+            payWhere: values.payWhere,
+            installmentNumber: Number(values.installmentNumber)
+        }
+        const res = await testFreeRescheduling(this.props.application._id, obj);
         if (res.status === "success") {
             this.setState({ loading: false })
             this.setState({
@@ -120,7 +127,7 @@ class PostponeInstallments extends Component<Props, State>{
             withInterest: this.state.withInterest,
             postponementInterest: this.state.postponementInterest,
             payWhere: this.state.payWhere,
-            installmentNumber: this.state.installmentNumber
+            installmentNumber: Number(this.state.installmentNumber)
         }
         const res = await freeRescheduling(this.props.application._id, obj);
         if (res.status === "success") {

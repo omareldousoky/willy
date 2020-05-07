@@ -321,6 +321,7 @@
     "dateOfHire": "تاريخ التعين",
     "userBasicStep1":"١.البيانات الأساسية",
     "userRolesStep2":"٢.الأدوار و الصلاحيات",
+    "rolesStep2":"٢. الصلاحيات",
     "hrCode":"كود الموارد البشرية",
     "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق",
     "selectUserPermision": "تحديد دور المستخدم",
@@ -329,5 +330,14 @@
     "goToBranch":"الإنتقال إلي فرع",
     "logOut":"تسجيل الخروج",
     "noResults": "لا توجد نتائج",
-    "looksLikeYouCantFindResults": "يبدو أننا لا نستطيع العثور على أي نتائج بناءً على بحثك"
+    "looksLikeYouCantFindResults": "يبدو أننا لا نستطيع العثور على أي نتائج بناءً على بحثك",
+    "hQpermission":"صلاحيات على مستوى المقر الرئيسي",
+    "roleDetails":"تفاصيل الدور",
+    "add": "إضافة",
+    "checkAll": "تحديد الكل",
+    "count": "العدد",
+    "deleteAll": "حذف الجميع",
+    "read":"مراجعة"
+
+
 }
