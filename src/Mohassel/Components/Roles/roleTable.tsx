@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
+import * as local from '../../../Shared/Assets/ar.json';
+
 interface SectionAction {
     i18n: any;
     create?: number;
@@ -100,34 +101,47 @@ class RoleTable extends Component<Props, State> {
         }
     }
     render() {
+        const tableHead = {
+            backgroundColor: 'white'
+        }
+        const lowerTableHead = {
+            backgroundColor: '#fafafa'
+        }
         return (
             <div>
-                    <Row style={{ textAlign: 'right' }}>
-                        <p style={{ width: '30%' }}>Name</p>
-                        <p style={{ width: '15%' }}>create</p>
-                        <p style={{ width: '15%' }}>get</p>
-                        <p style={{ width: '15%' }}>update</p>
-                        <p style={{ width: '15%' }}>delete</p>
-                    </Row>
+                <Table style={{ textAlign: 'right', margin: 0 }}>
+                    <thead style={tableHead}>
+                        <tr style={{}}>
+                            <th style={{ width: '30%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.permissions}</th>
+                            <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.created}</th>
+                            <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.read}</th>
+                            <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.edit}</th>
+                            <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.delete}</th>
+                            <th style={{ width: '30%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}></th>
+                        </tr>
+                    </thead>
+                </Table>
                 {this.state.sections.map((obj, i) =>
-                    <Table key={i} style={{ textAlign: 'right' }}>
-                        <thead>
-                            <tr style={{ backgroundColor: 'grey', color: 'white' }}>
-                                <th style={{ width: '30%' }}>{obj.i18n.ar}</th>
-                                <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'create')} disabled={!this.props.updatePerms}></Form.Check></th>
-                                <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'get')} disabled={!this.props.updatePerms}></Form.Check></th>
-                                <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'update')} disabled={!this.props.updatePerms}></Form.Check></th>
-                                <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'delete')} disabled={!this.props.updatePerms}></Form.Check></th>
+                    <Table key={i} style={{ textAlign: 'right', margin: 0 }}>
+                        <thead style={lowerTableHead}>
+                            <tr>
+                                <th style={{ width: '30%', borderBottom: 'none', fontSize: 14 }}>{obj.i18n.ar}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'create')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'get')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'update')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'delete')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '30%', borderBottom: 'none' }}></th>
                             </tr>
                         </thead>
                         <tbody>
                             {obj.actions.map((action, i) => {
                                 return <tr key={i}>
-                                    <td style={{ width: '30%' }}>{action.i18n.ar}</td>
-                                    <td style={{ width: '15%' }}>{(action.create) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.create, action.i18n.en, 'create')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.create)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
-                                    <td style={{ width: '15%' }}>{(action.get) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.get, action.i18n.en, 'get')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.get)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
-                                    <td style={{ width: '15%' }}>{(action.update) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.update, action.i18n.en, 'update')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.update)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
-                                    <td style={{ width: '15%' }}>{(action.delete) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.delete, action.i18n.en, 'delete')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
+                                    <td style={{ width: '30%', fontSize: 12 }}>{action.i18n.ar}</td>
+                                    <td style={{ width: '10%' }}>{(action.create) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.create, action.i18n.en, 'create')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.create)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
+                                    <td style={{ width: '10%' }}>{(action.get) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.get, action.i18n.en, 'get')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.get)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
+                                    <td style={{ width: '10%' }}>{(action.update) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.update, action.i18n.en, 'update')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.update)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
+                                    <td style={{ width: '10%' }}>{(action.delete) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.delete, action.i18n.en, 'delete')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
+                                    <td style={{ width: '30%' }}></td>
                                 </tr>
                             }
                             )}

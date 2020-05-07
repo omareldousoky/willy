@@ -31,3 +31,14 @@ export const createRole = async (data: object) => {
         return { status: "error", error: error.response.data }
     }
 }
+
+export const getUserCountPerRole = async (id: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/user/role/count?id=${id}`;
+    try {
+        const res = await axios.get(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}

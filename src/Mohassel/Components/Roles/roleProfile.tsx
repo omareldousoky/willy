@@ -11,6 +11,7 @@ import Col from 'react-bootstrap/Col';
 import RoleTable from './roleTable';
 import { getPermissions } from '../../Services/APIs/Roles/roles';
 import { Section } from "./roleCreation";
+import RoleUsers from './roleUsers';
 interface Role {
     permissions: Array<any>;
     hasBranch: boolean;
@@ -57,16 +58,13 @@ class RoleProfile extends Component<Props, State>{
     }
     componentDidMount() {
         const role = this.props.history.location.state;
-        this.getAllPermissions();
-
         this.setState({
             role
-        })
+        }, () => this.getAllPermissions())
     }
     async getAllPermissions() {
         this.setState({ loading: true })
-        console.log(this.state.role)
-        const id  = (this.state.role.hasBranch)? 'requireBranch' : 'req' ;
+        const id = (this.state.role.hasBranch) ? 'requireBranch' : 'req';
         const res = await getPermissions(id);
         if (res.status === "success") {
             this.setState({
@@ -82,7 +80,7 @@ class RoleProfile extends Component<Props, State>{
             case 'roleDetails':
                 return <div>
                     <Form style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5' }}>
-                        <h5>{local.mainInfo}</h5>
+                        <h5>{local.role}</h5>
                         <Form.Row>
                             <Form.Group as={Col} md="4">
                                 <Row>
@@ -102,16 +100,18 @@ class RoleProfile extends Component<Props, State>{
                             </Form.Group>
                         </Form.Row>
                     </Form>
-                    <RoleTable sections={ this.state.allSections } permissions={ this.state.role.permissions } />
+                    <div className="d-flex">
+                        <span style={{ padding: "5px", margin: " 30px 30px 10px 0px", fontSize: 14, fontWeight:'bold' }}><img style={{ float: "right", margin:'0px 5px' }} alt="search-icon" src={require('../../Assets/permissions-inactive.svg')} /> {local.permissions}</span>
+                    </div>
+                    <RoleTable sections={this.state.allSections} permissions={this.state.role.permissions} />
                 </div>
             case 'roleUsers':
-                return <div>users</div>
+                return <RoleUsers role={this.state.role} />
             default:
                 return null
         }
     }
     render() {
-        console.log(this.state, this.props)
         return (
             <Container>
                 {Object.keys(this.state.role).length > 0 &&
@@ -127,7 +127,7 @@ class RoleProfile extends Component<Props, State>{
                                 selectTab={(index: string) => this.setState({ activeTab: index })}
                             />
                             <Loader type="fullscreen" open={this.state.loading} />
-                            <div style={{ padding: 20, marginTop: 15 }}>
+                            <div>
                                 {this.renderContent()}
                             </div>
                         </Card>
