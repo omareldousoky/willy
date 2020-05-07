@@ -149,7 +149,6 @@ class RoleCreation extends Component<Props, State>{
         )
     }
     async submit(){
-        console.log(this.state)
         this.setState({ loading: true });
         const perms: Array<any> = []
         Object.keys(this.state.permissions).forEach(key => perms.push({ key: key, value:this.state.permissions[key]}))

@@ -96,7 +96,6 @@ class RoleUsers extends Component<Props, State> {
     async getUsersCount() {
         const res = await getUserCountPerRole(this.props.role._id );
         if (res.status === "success") {
-            console.log(res)
             this.setState({
                 roleCount: Number(res.body.message),
                 loading: false
