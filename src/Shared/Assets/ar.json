@@ -326,8 +326,11 @@
     "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق",
     "selectUserPermision": "تحديد دور المستخدم",
     "searchByUserRole":"البحث بدور المستخدم",
-    "searchByBranchName":"البحث بإسم الفرع"
-
+    "searchByBranchName":"البحث بإسم الفرع",
+    "add": "إضافة",
+    "checkAll": "تحديد الكل",
+    "count": "العدد",
+    "deleteAll": "حذف الجميع"
 
 
 }

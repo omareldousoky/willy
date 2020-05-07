@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import { AssignProductToBranchForm } from './assignProductToBranchForm';
-import { assignProductToBranch, assignProductToBranchValidation } from './assignProductToBranchStates';
 import { getBranches, getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { assignProductToBranchAPI } from '../../Services/APIs/Branch/assignProductToBranch';
 import { getProducts } from '../../Services/APIs/loanProduct/getProduct';
@@ -20,25 +17,27 @@ interface Props {
     title: string;
     history: Array<string>;
 };
+interface Branch {
+    _id: string;
+    name: string;
+}
 interface State {
-    application: {
-        branch: {
-            name: string;
-            label: string;
-        };
-    };
+    branch: Branch;
     loading: boolean;
-    branchesLabels: Array<object>;
+    branches: Array<Branch>;
     products: Array<object>;
-    selectedBranchProducts: Array<string>;
+    selectedBranchProducts: Array<Branch>;
 }
 class AssignProductToBranch extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
-            application: assignProductToBranch,
+            branch: {
+                _id: '',
+                name: '',
+            },
             loading: false,
-            branchesLabels: [],
+            branches: [],
             products: [],
             selectedBranchProducts: []
         }
@@ -47,12 +46,8 @@ class AssignProductToBranch extends Component<Props, State>{
         this.setState({ loading: true });
         const branches = await getBranches();
         if (branches.status === 'success') {
-            const branchLabels: Array<object> = [];
-            branches.body.data.data.forEach(branch => {
-                branchLabels.push({ value: branch._id, label: branch.name })
-            })
             this.setState({
-                branchesLabels: branchLabels,
+                branches: branches.body.data.data,
                 loading: false
             })
         } else {
@@ -65,12 +60,12 @@ class AssignProductToBranch extends Component<Props, State>{
         this.setState({ loading: true, products: [] })
         const products = await getProducts();
         if (products.status === 'success') {
-            const ProductLabels: Array<object> = [];
-            products.body.data.data.forEach(product => {
-                ProductLabels.push({ value: product._id, label: product.productName })
-            })
+            // const ProductLabels: Array<object> = [];
+            // products.body.data.data.forEach(product => {
+            //     ProductLabels.push({ value: product._id, label: product.productName })
+            // })
             this.setState({
-                products: ProductLabels,
+                products: products.body.data.data,
                 loading: false
             })
         } else {
@@ -78,31 +73,28 @@ class AssignProductToBranch extends Component<Props, State>{
             Swal.fire('', local.searchError, 'error');
         }
     }
-    submit = async (values: any) => {
+    submit = async () => {
         this.setState({ loading: true });
         const obj = {
-            branchId: values.branch.value, productIds: this.state.selectedBranchProducts
+            branchId: this.state.branch._id,
+            productIds: this.state.selectedBranchProducts.map(item => item._id)
         }
-        // const res = await assignProductToBranchAPI(obj);
-        // if (res.status === 'success') {
-        //     this.setState({ loading: false });
-        //     Swal.fire("success", local.productAssigned).then(() => { this.props.history.push("/") })
-        // } else {
-        //     Swal.fire("error", local.productAssignError, 'error')
-        //     this.setState({ loading: false });
-        // }
+        const res = await assignProductToBranchAPI(obj);
+        if (res.status === 'success') {
+            this.setState({ loading: false });
+            Swal.fire("success", local.productAssigned).then(() => { this.props.history.push("/") })
+        } else {
+            Swal.fire("error", local.productAssignError, 'error')
+            this.setState({ loading: false });
+        }
     }
-    async getProductsForBranch(id) {
+    async getProductsForBranch(branch) {
         this.getProducts();
-        this.setState({ selectedBranchProducts: [], loading: true })
-        const branchsProducts = await getProductsByBranch(id);
+        this.setState({ loading: true, branch: branch })
+        const branchsProducts = await getProductsByBranch(branch._id);
         if (branchsProducts.status === 'success') {
-            const branchsProductsLabels: Array<string> = [];
-            branchsProducts.body.data.productIds.forEach(product => {
-                branchsProductsLabels.push(product._id)
-            })
             this.setState({
-                selectedBranchProducts: branchsProductsLabels,
+                selectedBranchProducts: branchsProducts.body.data.productIds,
                 loading: false
             })
         } else {
@@ -112,65 +104,42 @@ class AssignProductToBranch extends Component<Props, State>{
             })
         }
     }
-    handleProdChange(e) {
-        this.setState({ selectedBranchProducts: e });
+    handleChange(list) {
+        this.setState({ selectedBranchProducts: list });
     }
     render() {
-        console.log(this.state.selectedBranchProducts)
         return (
             <Container>
                 <Loader open={this.state.loading} type="fullscreen" />
-                <Formik
-                    enableReinitialize
-                    initialValues={this.state.application}
-                    onSubmit={this.submit}
-                    validationSchema={assignProductToBranchValidation}
-                    validateOnBlur
-                    validateOnChange
-                >
-                    {(formikProps) =>
-                        // <AssignProductToBranchForm {...formikProps} getProducts={(id) => { this.getProducts(), this.getProductsForBranch(id) }} branchesLabels={this.state.branchesLabels} products={this.state.products} selectedBranchProducts={this.state.selectedBranchProducts} onChangeProducts={(prod) => this.handleProdChange(prod)} />
-                        <Form style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
-                            <Form.Group as={Row} controlId="branch" style={{ width: '100%' }}>
-                                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.branch}</Form.Label>
-                                <Col sm={6}>
-                                    <Select
-                                        name="branch"
-                                        data-qc="branch"
-                                        value={formikProps.values.branch}
-                                        enableReinitialize={false}
-                                        onChange={(event: any) => { formikProps.values.branch = event; this.getProductsForBranch(event.value) }}
-                                        type='text'
-                                        options={this.state.branchesLabels}
-                                        onBlur={formikProps.handleBlur}
-                                        isInvalid={formikProps.errors.branch && formikProps.touched.branch}
-                                    />
-                                    <Form.Control.Feedback type="invalid" style={{ display: (formikProps.errors.branch && formikProps.touched.branch) ? 'block' : 'none' }}>
-                                        {(formikProps.errors.branch && formikProps.touched.branch) ? formikProps.errors.branch.label : ''}
-                                    </Form.Control.Feedback>
-                                </Col>
-                            </Form.Group>
-                            {this.state.products.length > 0 &&
-                                <div style={{ width: '100%' }}>
-                                    <div style={{ display: 'flex', textAlign: 'right' }}>
-                                        <p style={{ width: '50%' }}>
-                                            {local.loanProducts}
-                                        </p>
-                                        <p style={{ width: '46%', marginRight: '4%' }}>
-                                            {local.loanProductsForBranch}
-                                        </p>
-                                    </div>
-                                    <DualBox
-                                        options={this.state.products}
-                                        selected={this.state.selectedBranchProducts}
-                                        onChange={(e) => this.handleProdChange(e)}
-                                    />
-                                </div>
-                            }
-                            {/* <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button> */}
-                        </Form >
+                <Form style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <Form.Group as={Row} controlId="branch" style={{ width: '100%' }}>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.branch}</Form.Label>
+                        <Col sm={6}>
+                            <Select
+                                name="branch"
+                                data-qc="branch"
+                                value={this.state.branch}
+                                enableReinitialize={false}
+                                onChange={(event: any) => { this.getProductsForBranch(event) }}
+                                type='text'
+                                getOptionLabel ={(option)=>option.name}
+                                getOptionValue ={(option)=>option._id}
+                                options={this.state.branches}
+                            />
+                        </Col>
+                    </Form.Group>
+                    {this.state.products.length > 0 &&
+                        <DualBox
+                            options={this.state.products}
+                            selected={this.state.selectedBranchProducts}
+                            onChange={(list) => this.handleChange(list)}
+                            filterKey={this.state.branch._id}
+                            rightHeader={local.loanProducts}
+                            leftHeader={local.loanProductsForBranch}
+                        />
                     }
-                </Formik>
+                    {this.state.branch._id ? <Button type="button" style={{ margin: 10, width: '10%', alignSelf: 'flex-end' }} onClick={this.submit}>{local.submit}</Button> : null}
+                </Form >
             </Container>
         )
     }

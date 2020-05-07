@@ -1,59 +1,50 @@
-.box {
-    // width: 45%;
-}
-
-.listBox {
-    height: 400px;
-    overflow: scroll;
-    text-align: right;
-}
-
-.list {
-    list-style-type: none;
-}
-
-.listItem {}
-
-.listItem:hover {
-    background-color: grey;
-    color: white;
-}
-
-
-//-------
 
 .dual-list .list-group {
-    margin-top: 8px;
+    margin-top: 20px;
+    padding-right: 0px;
+    height: 500px;
+    .scrollable-list {
+        overflow: auto;
+    }
 }
 
-.list-left li,
-.list-right li {
-    cursor: pointer;
+.list-button {
+    margin: auto;
+    span {
+        margin-right: 10px;
+    }
 }
 
-.list-arrows {
-    padding-top: 100px;
-}
-
-.list-arrows button {
-    margin-bottom: 20px;
-}
 .list-group-item {
     position: relative;
+    text-align: right;
     display: block;
     padding: 0.75rem 1.25rem;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.125);
-}
-.list-group-item-selected {
-    position: relative;
-    display: block;
-    padding: 0.75rem 1.25rem;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    background-color: blue;
-}
-.list-group-item:hover {
-    background-color: grey;
-    color: white;
+    cursor: pointer;
+    .form-check *{
+        cursor: pointer;
+    }
+    &.delete-all-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &.selected {
+        background-color: #edffe2;
+        border: 1px #7dc356 solid;
+        border-radius: inherit;
+        color: #7dc356;
+    }
+    &:hover {
+        background-color: #edffe2;
+        border: 1px #7dc356 solid;
+        border-radius: inherit;
+        color: #7dc356;
+    }
+    
+    span {
+        margin-left: 10px;
+    }
 }
