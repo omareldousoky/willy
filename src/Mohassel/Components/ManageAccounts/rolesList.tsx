@@ -27,15 +27,15 @@ class RolesList extends Component<Props, State> {
     }
   }
   componentDidMount() {
-    document.body.addEventListener('click', () => this.resetActiveRole());
+    // document.body.addEventListener('click', () => this.resetActiveRole());
     this.getRoles();
   }
   resetActiveRole() {
     this.setState({ activeRole: -1 });
   }
-  componentWillUnmount() {
-    document.body.removeEventListener('click', () => this.resetActiveRole());
-  }
+  // componentWillUnmount() {
+  //   document.body.removeEventListener('click', () => this.resetActiveRole());
+  // }
 
   async getRoles() {
     this.setState({ loading: true })
