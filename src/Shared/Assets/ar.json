@@ -328,6 +328,10 @@
     "searchByUserRole":"البحث بدور المستخدم",
     "searchByBranchName":"البحث بإسم الفرع",
     "hQpermission":"صلاحيات على مستوى المقر الرئيسي",
-    "roleDetails":"تفاصيل الدور"
+    "roleDetails":"تفاصيل الدور",
+    "add": "إضافة",
+    "checkAll": "تحديد الكل",
+    "count": "العدد",
+    "deleteAll": "حذف الجميع"
 
 }

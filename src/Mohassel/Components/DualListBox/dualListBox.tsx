@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import './styles.scss';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -8,6 +9,9 @@ interface Props {
     options: any;
     selected: any;
     onChange: any;
+    filterKey: string;
+    rightHeader?: string;
+    leftHeader?: string;
 }
 
 interface State {
@@ -15,24 +19,9 @@ interface State {
     selectedOptions: Array<any>;
     selectedOptionsIDs: Array<any>;
     selectionArray: Array<any>;
-}
-const getData2 = (selectedIdArray, objArr) => {
-    const selectedOptions: Array<any> = [];
-    const selectedOptionsIDs: Array<string> = [];
-    selectedIdArray.forEach(selectedOption => {
-        const foundOption = objArr.find((option) => option.value === selectedOption)
-        console.log(selectedOption, foundOption)
-        if (foundOption) {
-            selectedOptions.push(foundOption);
-            selectedOptionsIDs.push(foundOption.value);
-        }
-    })
-    const options: Array<any> = objArr.filter(option => !selectedOptionsIDs.includes(option.value));
-    return ({
-        options,
-        selectedOptions,
-        selectedOptionsIDs,
-    })
+    filterKey: string;
+    checkAll: boolean;
+    searchKeyword: string;
 }
 class DualBox extends Component<Props, State> {
     constructor(props: Props) {
@@ -41,106 +30,148 @@ class DualBox extends Component<Props, State> {
             options: [],
             selectedOptions: [],
             selectedOptionsIDs: [],
-            selectionArray: []
+            selectionArray: [],
+            filterKey: '',
+            checkAll: false,
+            searchKeyword: ''
         }
-    }
-    componentDidMount() {
-        this.setData(this.state.selectedOptions, this.state.options)
     }
     static getDerivedStateFromProps(props, state) {
-        console.log(props, state)
-        if (props.options.length !== state.options.length || props.selected.length !== state.selectedOptions.length) {
-            const data = getData2(props.selected, props.options);
-            return { options: data.options, selectedOptions: data.selectedOptions }
+        if ((props.filterKey !== state.filterKey)) {
+            const selectedIds = props.selected.map(item => item._id);
+            return {
+                filterKey: props.filterKey,
+                options: props.options.filter(item => !selectedIds.includes(item._id)),
+                selectedOptions: props.selected
+            }
         }
-        return null
+        return null;
     }
-    componentDidUpdate(prevProps: Props) {
-        console.log('pre --->', prevProps, this.props)
-        if (prevProps.options.length !== this.props.options.length || prevProps.selected.length !== this.props.selected.length) {
-            console.log('here')
-            //set State to initial value
-            // I need to add application id in the form values to be passed to status helper component
-            this.setData(this.state.selectedOptions, this.state.options)
-
+    componentDidUpdate(prevProps) {
+        if (this.props.filterKey !== prevProps.filterKey) {
+            this.setState({ filterKey: this.props.filterKey })
         }
     }
-    setData(selected, options) {
-        const data = getData2(selected, options);
-        this.setState({
-            options: data.options,
-            selectedOptions: data.selectedOptions,
-            selectedOptionsIDs: data.selectedOptionsIDs
-        })
-    }
-    selectItem = (from, option) => {
-        console.log(from, option)
+    selectItem = (option) => {
         const arr: Array<any> = this.state.selectionArray;
-        if (!arr.includes(option.value)) {
-            arr.push(option.value)
+        if (!arr.includes(option)) {
+            arr.push(option)
         } else {
-            const index = arr.indexOf(option.value);
+            const index = arr.indexOf(option);
             if (index !== -1) arr.splice(index, 1);
         }
         this.setState({ selectionArray: arr })
     }
+    addToSelectedList() {
+        let options = [...this.state.options];
+        this.state.selectionArray.forEach(el => {
+            options = options.filter(item => item.productName !== el.productName);
+        })
+        const newList = [...this.state.selectedOptions, ...this.state.selectionArray];
+        this.props.onChange(newList);
+        this.setState({
+            options: options,
+            selectedOptions: newList,
+            selectionArray: []
+        })
+    }
+    removeItemFromList(option) {
+        this.setState({
+            selectedOptions: this.state.selectedOptions.filter(item => item._id !== option._id),
+            options: [...this.state.options, option]
+        })
+    }
+    selectAllOptions() {
+        if (this.state.checkAll) {
+            this.setState({
+                selectionArray: [],
+                checkAll: false
+            })
+        } else {
+            this.setState({
+                selectionArray: [...this.state.options],
+                checkAll: true
+            })
+        }
+    }
+    removeAllFromList() {
+        this.setState({
+            options: [...this.state.options, ...this.state.selectedOptions],
+            selectedOptions: []
+        })
+    }
     render() {
         return (
-            <div className="container">
-                <br />
+            <div className="container" style={{ marginTop: 20 }}>
                 <div className="row">
-
                     <div className="dual-list list-left col-md-5">
                         <div className="well text-right">
-                            <div className="row">
-                                <div className="col-md-10">
-                                    <div className="input-group">
-                                        <span className="input-group-addon glyphicon glyphicon-search"></span>
-                                        <input type="text" name="SearchDualList" className="form-control" placeholder="search" />
-                                    </div>
-                                </div>
-                                <div className="col-md-2">
-                                    <div className="btn-group">
-                                        <a className="btn btn-default selector" title="select all"><i className="fa fa-square"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+                            <h6>{this.props.rightHeader}</h6>
                             <ul className="list-group">
-                                {this.state.options.map(option => <li key={option.value} onClick={() => this.selectItem('options', option)} className={(this.state.selectionArray.includes(option.value)) ? "list-group-item-selected" : "list-group-item"}>{option.label}</li>)}
+                                <InputGroup style={{ direction: 'ltr' }}>
+                                    <Form.Control
+                                        type="text"
+                                        name="searchKeyWord"
+                                        data-qc="searchKeyWord"
+                                        onChange={(e) => this.setState({ searchKeyword: e.currentTarget.value })}
+                                        style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+                                        placeholder={local.search}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                                <div className="list-group-item" style={{ background: '#FAFAFA' }} onClick={() => this.selectAllOptions()} >
+                                    <Form.Check
+                                        type='checkbox'
+                                        readOnly
+                                        id='check-all'
+                                        label={local.checkAll}
+                                        checked={this.state.checkAll}
+                                    />
+                                </div>
+                                <div className="scrollable-list">
+                                    {this.state.options
+                                        .filter(option => option.productName.includes(this.state.searchKeyword))
+                                        .map(option =>
+                                            <div key={option._id} onClick={() => this.selectItem(option)}
+                                                className={(this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1) ? "list-group-item selected" : "list-group-item"}>
+                                                <Form.Check
+                                                    type='checkbox'
+                                                    onChange={() => this.selectItem(option)}
+                                                    id={option._id}
+                                                    label={option.productName}
+                                                    checked={this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1}
+                                                />
+                                            </div>
+                                        )}
+                                </div>
                             </ul>
                         </div>
                     </div>
-
-                    <div className="list-arrows col-md-1 text-center">
-                        <button className="btn btn-default btn-sm move-right">
-                            <span className="fa fa-chevron-right"></span>
-                        </button>
-                        <button className="btn btn-default btn-sm move-left">
-                            <span className="fa fa-chevron-left"></span>
-                        </button>
+                    <div className="list-button">
+                        <Button className="btn btn-default btn-md" style={{ height: 45, width: 95 }} disabled={this.state.selectionArray.length < 1} onClick={() => this.addToSelectedList()}>
+                            {local.add}<span className="fa fa-arrow-left"></span>
+                        </Button>
                     </div>
-
                     <div className="dual-list list-right col-md-5">
-                        <div className="well">
-                            <div className="row">
-                                <div className="col-md-2">
-                                    <div className="btn-group">
-                                        <a className="btn btn-default selector" title="select all"><i className="fa fa-check-square"></i></a>
-                                    </div>
-                                </div>
-                                <div className="col-md-10">
-                                    <div className="input-group">
-                                        <input type="text" name="SearchDualList" className="form-control" placeholder="search" />
-                                        <span className="input-group-addon glyphicon glyphicon-search"></span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="well text-right">
+                            <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
-                                {this.state.selectedOptions.map(option => <li key={option.value} onClick={() => this.selectItem('selected', option)} className={(this.state.selectionArray.includes(option.value)) ? "list-group-item-selected" : "list-group-item"}>{option.label}</li>)}
+                                <div className="list-group-item delete-all-row" style={{ background: '#FAFAFA' }}>
+                                    <span className="text-muted">{local.count}({this.state.selectedOptions.length})</span>
+                                    <div onClick={() => this.removeAllFromList()}>
+                                        <span className="fa fa-trash"></span>
+                                        <span>{local.deleteAll}</span>
+                                    </div>
+                                </div>
+                                <div className="scrollable-list">
+                                    {this.state.selectedOptions.map(option => <li key={option._id}
+                                        className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span>{option.productName}</li>)}
+                                </div>
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         )
