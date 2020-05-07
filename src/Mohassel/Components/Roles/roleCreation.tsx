@@ -1,40 +1,60 @@
 import React, { Component } from 'react';
-import { getRoles } from '../../Services/APIs/Roles/roles';
+import { getPermissions, createRole } from '../../Services/APIs/Roles/roles';
 import { Loader } from '../../../Shared/Components/Loader';
+import { step1, roleCreationStep1Validation } from './roleStates'
+import Wizard from '../wizard/Wizard';
 import * as local from '../../../Shared/Assets/ar.json';
-import Table from 'react-bootstrap/Table';
+import RoleTable from './roleTable';
+import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
-import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
-interface Section {
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+import Swal from 'sweetalert2';
+export interface Section {
     _id: string;
     key: string;
     i18n: any;
     actions: Array<any>;
 }
 interface Props {
+    history: Array<string>;
+    edit: boolean;
     application: any;
     test: boolean;
 }
 interface State {
+    step: number;
+    step1: {
+        roleName: string;
+        hQpermission: boolean;
+    };
     sections: Array<Section>;
+    permissions: Array<any>;
     loading: boolean;
-    permissions: any;
 }
 class RoleCreation extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
+            step: 1,
+            step1: step1,
             sections: [],
+            permissions: [],
             loading: false,
-            permissions: {},
         };
     }
-    componentDidMount() {
-        this.getRoles();
+    componentDidUpdate(prevProps: Props, _prevState: State) {
+        if (prevProps.edit !== this.props.edit) {
+            this.setState({ step1: step1, step: 1, sections: [], loading: false });
+        }
     }
-    async getRoles() {
+    // componentDidMount() {
+    // }
+    async getPermissions() {
         this.setState({ loading: true })
-        const res = await getRoles();
+        const id = (this.state.step1.hQpermission) ? 'req' : 'requireBanch';
+        const res = await getPermissions(id);
         if (res.status === "success") {
             this.setState({
                 loading: false,
@@ -44,86 +64,150 @@ class RoleCreation extends Component<Props, State>{
             this.setState({ loading: false })
         }
     }
-    objectHandler(perms, e, parent, action){
-        if (e) {
-            console.log('here')
-            if (!Object.keys(perms).includes(parent)) {
-                console.log('here1')
-
-                perms[parent] = [];
-            }
-            if (!perms[parent].includes(action)) {
-                console.log('here2')
-
-                perms[parent].push(action)
-            }
-        } else {
-            const index = perms[parent].indexOf(action);
-            if (index > -1) {
-                perms[parent].splice(index, 1);
-                if(perms[parent].length === 0){
-                    delete perms[parent]
-                }
-            }
+    renderSteps() {
+        switch (this.state.step) {
+            case 1:
+                return this.renderStepOne();
+            case 2:
+                return this.renderStepTwo();
+            default: return null;
         }
-        return perms
     }
-    check(e, parent, val) {
-        console.log(e, parent, val)
-        const perms = { ...this.state.permissions }
-        const newPerms = this.objectHandler(perms, e, parent,val)
-        this.setState({
-            permissions: newPerms
-        })
+    renderStepOne(): any {
+        return (
+            <Formik
+                enableReinitialize
+                initialValues={this.state.step1}
+                onSubmit={this.submitToStep2}
+                validationSchema={roleCreationStep1Validation}
+                validateOnBlur
+                validateOnChange
+            >
+                {(formikProps) =>
+                    // <UserDataForm {...formikProps} cancle={() => this.cancel()} />
+                    <Form onSubmit={formikProps.handleSubmit}>
+                        <Col>
+                            <Form.Group as={Col} md="5" controlId="roleName" >
+                                <Form.Label style={{ margin: 0 }}>{local.roleName}</Form.Label>
+                                <Row>
+                                    <Form.Control
+                                        type="text"
+                                        name="roleName"
+                                        data-qc="roleName"
+                                        value={(formikProps.values.roleName).toString()}
+                                        onBlur={formikProps.handleBlur}
+                                        onChange={formikProps.handleChange}
+                                        isInvalid={Boolean(formikProps.errors.roleName) && Boolean(formikProps.touched.roleName)}
+                                    >
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        {formikProps.errors.roleName}
+                                    </Form.Control.Feedback>
+                                </Row>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="hQpermission">
+                                {/* <Col sm={4}/> */}
+                                <Col sm={1}>
+                                    <Form.Check
+                                        type="checkbox"
+                                        name="hQpermission"
+                                        data-qc="hQpermission"
+                                        value={(formikProps.values.hQpermission).toString()}
+                                        checked={formikProps.values.hQpermission}
+                                        onBlur={formikProps.handleBlur}
+                                        onChange={formikProps.handleChange}
+                                        isInvalid={Boolean(formikProps.errors.hQpermission) && Boolean(formikProps.touched.hQpermission)}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formikProps.errors.hQpermission}
+                                    </Form.Control.Feedback>
+                                </Col>
+                                <Form.Label style={{ textAlign: 'right' }} column md={4}>{local.hQpermission}</Form.Label>
+
+                            </Form.Group>
+                            <Form.Group as={Row} className="justify-content-around">
+                                <Button style={{ width: '20%' }} onClick={() => { this.cancel() }}>{local.cancel}</Button>
+                                <Button style={{ float: 'left', width: '20%' }} type="submit" data-qc="next">{local.next}</Button>
+                            </Form.Group>
+                        </Col>
+                    </Form>
+                }
+            </Formik>
+        )
     }
-    checkAll(e, parent, action) {
-        const sections = this.state.sections 
-        const section = sections.find((section)=> section.key === parent)
-        const actionsInRelation = section?.actions.filter((obj)=>  Object.keys(obj).includes(action))
-        let perms = { ...this.state.permissions }
-        actionsInRelation?.forEach(elem => {
-            console.log(e,parent,elem , elem[action])
-            const newPerms = this.objectHandler(perms,e,parent,elem[action])
-            perms = newPerms
-        })
-        this.setState({
+    renderStepTwo(): any {
+        return (
+            <div style={{ backgroundColor: '#fafafa' }}>
+                <>
+                    <RoleTable sections={this.state.sections} permissions={this.state.permissions} updatePerms={(perms) => { this.setState({ permissions: perms }) }} />
+                    <Row className="justify-content-around">
+                        <Button style={{ width: '20%' }} onClick={() => { this.previousStep(2) }}>{local.previous}</Button>
+                        <Button style={{ float: 'left', width: '20%' }} type="button" onClick={() => this.submit()} data-qc="next">{local.next}</Button>
+                    </Row>
+                </>
+            </div>
+        )
+    }
+    async submit(){
+        console.log(this.state)
+        this.setState({ loading: true });
+        const perms: Array<any> = []
+        Object.keys(this.state.permissions).forEach(key => perms.push({ key: key, value:this.state.permissions[key]}))
+        const obj = {
+            roleName: this.state.step1.roleName,
+            hasBranch: !this.state.step1.hQpermission,
             permissions: perms
+        }
+        const res = await createRole(obj);
+        if (res.status === 'success') {
+            this.setState({ loading: false });
+            Swal.fire("success", local.loanProductCreated)
+        } else {
+            Swal.fire("error", local.loanProductCreationError, 'error')
+            this.setState({ loading: false });
+        }
+    }
+    submitToStep2 = (values: object) => {
+            this.setState({
+                [`step${this.state.step}`]: values,
+                step: this.state.step + 1,
+            } as any, () => {
+                if (this.state.step === 2) {
+                    this.getPermissions();
+                }
+            })
+    }
+    previousStep(step: number): void {
+        this.setState({
+            step: step - 1,
+            // [`step${step}`]: values,
+        } as State);
+    }
+    cancel(): void {
+        this.setState({
+            step: 1,
+            step1,
         })
+        // this.props.history.push("/");
     }
     render() {
         return (
-            <div style={{ textAlign: 'right' }}>
+            <div>
                 <Loader type="fullsection" open={this.state.loading} />
-                <p>
-                    Roles
-                </p>
-                <div style={{ width:'50%' , backgroundColor: '#fafafa'}}>
-                    <>
-                        {this.state.sections.map((obj, i) =>
-                            <Table key={i}>
-                                <thead>
-                                    <tr style={{ backgroundColor: 'grey', color: 'white'}}>
-                                        <th style={{ width: '30%' }}>{obj.i18n.ar}</th>
-                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'create')}></Form.Check></th>
-                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'get')}></Form.Check></th>
-                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'update')}></Form.Check></th>
-                                        <th style={{ width: '15%' }}><Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'delete')}></Form.Check></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {obj.actions.map((action, i) =>
-                                        <tr key={i}>
-                                            <td style={{ width: '30%' }}>{action.i18n.ar}</td>
-                                            <td style={{ width: '15%' }}>{(action.create) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.create)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.create)}></Form.Check> : ''}</td>
-                                            <td style={{ width: '15%' }}>{(action.get) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.get)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.get)}></Form.Check> : ''}</td>
-                                            <td style={{ width: '15%' }}>{(action.update) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.update)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.update)}></Form.Check> : ''}</td>
-                                            <td style={{ width: '15%' }}>{(action.delete) ? <Form.Check type='checkbox' checked={this.state.permissions[obj.key] && this.state.permissions[obj.key].includes(action.delete)} onClick={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)}></Form.Check> : ''}</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </Table>
-                        )}
-                    </>
+
+                <div style={{ display: "flex", flexDirection: "row", textAlign: 'right' }}>
+                    <div className="stepper-container-vertical">
+                        <Wizard
+                            direction="vertical"
+                            currentStepNumber={this.state.step - 1}
+                            stepColor="#7dc356"
+                            steps={[local.userBasicStep1, local.rolesStep2]}
+                        />
+                    </div>
+
+                    <div style={{ width: '70%', margin: '40px auto' }}>
+                        {this.renderSteps()}
+                    </div>
                 </div>
             </div>
         )
