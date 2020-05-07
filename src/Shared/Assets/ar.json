@@ -315,19 +315,25 @@
     "amount": "المبلغ",
     "truthDate": "تاريخ الحق",
     "download": "تنزيل",
-    "issuanceDateCannotBeBeforeCreationDate": "تاريخ الإصدار يجب ان يكون بعد تاريخ الإنشاء",
     "example": "مثال",
     "nationalIdPlaceholder": "12345678901234",
     "confrimPassword":"إعادة إدخال كلمة المرور",
     "dateOfHire": "تاريخ التعين",
     "userBasicStep1":"١.البيانات الأساسية",
     "userRolesStep2":"٢.الأدوار و الصلاحيات",
+    "rolesStep2":"٢. الصلاحيات",
     "hrCode":"كود الموارد البشرية",
     "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق",
     "selectUserPermision": "تحديد دور المستخدم",
     "searchByUserRole":"البحث بدور المستخدم",
-    "searchByBranchName":"البحث بإسم الفرع"
-
+    "searchByBranchName":"البحث بإسم الفرع",
+    "hQpermission":"صلاحيات على مستوى المقر الرئيسي",
+    "roleDetails":"تفاصيل الدور",
+    "add": "إضافة",
+    "checkAll": "تحديد الكل",
+    "count": "العدد",
+    "deleteAll": "حذف الجميع",
+    "read":"مراجعة"
 
 
 }
