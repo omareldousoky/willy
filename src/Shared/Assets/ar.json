@@ -327,5 +327,7 @@
     "searchByUserRole":"البحث بدور المستخدم",
     "searchByBranchName":"البحث بإسم الفرع",
     "goToBranch":"الإنتقال إلي فرع",
-    "logOut":"تسجيل الخروج"
+    "logOut":"تسجيل الخروج",
+    "noResults": "لا توجد نتائج",
+    "looksLikeYouCantFindResults": "يبدو أننا لا نستطيع العثور على أي نتائج بناءً على بحثك"
 }

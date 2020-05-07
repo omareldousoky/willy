@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -13,30 +15,41 @@ import './styles.scss';
 interface Props {
   history: any;
 }
+interface Branch {
+  _id: string;
+  name: string;
+}
 interface State {
-  selectedBranch: string;
-  branches: Array<string>;
+  selectedBranch: Branch;
+  branches: Array<Branch>;
   openBranchList: boolean;
   loading: boolean;
+  searchKeyWord: string;
 }
 class NavBar extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      selectedBranch: "",
+      selectedBranch: {
+        _id: '',
+        name: ''
+      },
+      searchKeyWord: '',
       branches: [],
       openBranchList: false,
       loading: false
     }
   }
   componentDidMount() {
-    const branches = JSON.parse(getCookie('branches'));
+    const branches = JSON.parse(getCookie("validbranches"));
+    this.setState({ branches: branches })
+    if (branches.length === 1) {
+      this.setState({ selectedBranch: branches[0], branches: branches })
+    }
     const token = getCookie('token');
     const tokenData = this.parseJwt(token);
-    if (branches.length === 1) {
-      this.setState({ selectedBranch: branches[0] })
-    } else {
-      this.setState({ branches: branches })
+    if (tokenData.branch !== "") {
+      this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
     }
   }
   parseJwt(token: string) {
@@ -46,42 +59,69 @@ class NavBar extends Component<Props, State> {
       return null;
     }
   };
-  async goToBranch(branch: string) {
-    this.setState({ loading: true })
-    const res = await contextBranch(branch);
+  async goToBranch(branch: Branch) {
+    this.setState({ loading: true, openBranchList: false })
+    const res = await contextBranch(branch._id);
     if (res.status === "success") {
       this.setState({ loading: false, selectedBranch: branch })
       document.cookie = "token=" + res.body.token + ";path=/;";
-      const tokenData = this.parseJwt(res.body.token);
-      console.log('eltoken', tokenData);
+      // const tokenData = this.parseJwt(res.body.token);
     } else console.log(res)
   }
   renderBranchList() {
     return (
       <div className="navbar-branch-list">
-        {this.state.branches.map((branch, index) => {
-          return (
-            <div key={index}>
-              <div className="item" onClick={() => this.goToBranch(branch)}>
-                <div style={{ display: 'flex' }}>
-                  <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
-                  <div className="branch-name">
-                    <span className="text-muted">{local.goToBranch}</span>
-                    <h6>{'دمنهور (دمنهور)'}</h6>
+        <InputGroup style={{ direction: 'ltr', marginLeft: 20 }}>
+          <Form.Control
+            type="text"
+            name="searchKeyWord"
+            data-qc="searchKeyWord"
+            onChange={(e) => this.setState({ searchKeyWord: e.currentTarget.value })}
+            style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+            placeholder={local.userSearchPlaceholder}
+          />
+          <InputGroup.Append>
+            <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+          </InputGroup.Append>
+        </InputGroup>
+        <div className={this.state.branches.length > 5 ? "scrollable" : ""}>
+          {this.state.branches
+            .filter(branch => branch.name.includes(this.state.searchKeyWord))
+            .map((branch, index) => {
+              return (
+                <div key={index}>
+                  <div className="item" onClick={() => this.goToBranch(branch)}>
+                    <div style={{ display: 'flex' }}>
+                      <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
+                      <div className="branch-name">
+                        <span className="text-muted">{local.goToBranch}</span>
+                        <h6>{branch.name}</h6>
+                      </div>
+                    </div>
+                    <span className="fa fa-arrow-left"></span>
                   </div>
+                  <hr style={{ margin: 0 }} />
                 </div>
-                <span className="fa fa-arrow-left"></span>
-              </div>
-              <hr style={{ margin: 0 }} />
-            </div>
-          )
-        })}
-        <div className="item">
-          <Button variant="outline-primary" onClick={() => {
-                document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-                window.location.href = process.env.REACT_APP_LOGIN_URL || '';
-              }}>{local.logOut}</Button>
+              )
+            })}
+            {console.log(this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)))}
         </div>
+            {this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults(): null}
+        <div className="item">
+          <Button variant="outline-secondary" onClick={() => {
+            document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            window.location.href = process.env.REACT_APP_LOGIN_URL || '';
+          }}>{local.logOut}</Button>
+        </div>
+      </div>
+    )
+  }
+  renderNoResults() {
+    return(
+      <div className="no-branches-container">
+        <img alt="no-branches-found" src={require('../../Assets/noBranchesFound.svg')} />
+        <h4>{local.noResults}</h4>
+        <h6 className="text-muted">{local.looksLikeYouCantFindResults}</h6>
       </div>
     )
   }
@@ -109,12 +149,12 @@ class NavBar extends Component<Props, State> {
                 <div>
                   <div className="selected-branch">
                     <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
-                    <span>{this.state.selectedBranch === "" ? local.selectBranch : this.state.selectedBranch}</span>
+                    <span>{this.state.selectedBranch._id === "" ? local.selectBranch : this.state.selectedBranch.name}</span>
                   </div>
                 </div>
                 <img alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
-                {this.state.openBranchList ? this.renderBranchList() : null}
               </div>
+                {this.state.openBranchList ? this.renderBranchList() : null}
             </Nav>
           </Navbar.Collapse>
         </Navbar>

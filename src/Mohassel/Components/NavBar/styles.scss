@@ -48,9 +48,13 @@
     z-index: 4;
     background: #fff;
     left: 0px;
-    top: 50px;
+    top: 85px;
     border-radius: 6px;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+    .scrollable {
+        overflow: auto;
+        max-height: 650px;
+    }
     .item {
         width: 400px;
         height: 90px;
@@ -71,7 +75,6 @@
             .fa-arrow-left {
                 color: #fff;
             }
-
         }
         .pin-icon {
             width: 40px;
@@ -99,5 +102,11 @@
             width: 100%;
         }
     }
+}
 
+.no-branches-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
 }
