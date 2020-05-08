@@ -334,7 +334,9 @@
     "userDetialsError": "حدث خطأ في إسترجاع بيانات المستخدم",
     "userBasicData":"البيانات الأساسية",
     "userRoles":"الأدوار و الصلاحيات",
-    "userRole": "دور المستخدم"
+    "userRole": "دور المستخدم",
+    "headquarters":"المقر الرئيسي",
+    "userActivationError": "لم يتم تغير الحالة للمستخدم"
 
 
 

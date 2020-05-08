@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Labels from '../Labels/Labels';
+import Labels from '../Labels/labels';
 import './userDetails.scss';
 import Card from 'react-bootstrap/Card';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
     roles: string[];
+    hasBranch: boolean;
 }
 
 interface State {
@@ -38,7 +39,7 @@ export default class UserRolesView extends Component<Props, State> {
                                 alt={'role'} src={require('../../Assets/roleIcon.svg')} />{local.role}</span>
                         <div className={'rowContainer'}>
                             <div className={'columnContianer'}><div className={'subTitle'}>{local.roleName}</div><div>{this.state.selectedRole}</div> </div>
-                            <div className={'columnContianer'}><div className={'subTitle'}>{local.permissions} </div><div>{'permision'}</div></div>
+        <div className={'columnContianer'}><div className={'subTitle'}>{local.permissions} </div><div>{this.props.hasBranch? local.branches : local.headquarters}</div></div>
                         </div>
                     </Card.Body>
                 </Card>

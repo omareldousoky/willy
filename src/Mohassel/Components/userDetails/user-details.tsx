@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { theme } from '../../../theme';
 import UserRolesView from './userRolesView';
+import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 interface Props {
     history: any;
 }
@@ -47,14 +48,29 @@ class UserDetails extends Component<Props, State> {
             },
         }
     }
-
+    async handleActivationClick(){
+        const id =  this.props.history.location.state.details;
+        const req= {id, status: this.state.data.status ==="active"?"inactive" :"active"}
+        this.setState({isLoading:true});
+    
+        const res = await setUserActivation(req);
+         if(res.status==='success'){
+           await this.getUserDetails();
+           Swal.fire("success",`${this.state.data.username} is ${req.status} now`)
+      
+         } else {
+          this.setState({isLoading:false})
+           Swal.fire("error");
+         }
+    
+      }
     setUserDetails(data: any): UserDateValues {
         const user: UserDateValues = data.user;
         user.branches = data.branches?.map((branch) => { return branch.name });
-        user.roles = data.roles.map((role) => { return role.roleName });
+        user.roles =  data.roles?.map((role) => { return role.roleName });
         return user;
     }
-    async  componentDidMount() {
+    async  getUserDetails (){
         const _id = this.props.history.location.state.details;
         this.setState({ isLoading: true });
         const res = await getUserDetails(_id);
@@ -69,6 +85,11 @@ class UserDetails extends Component<Props, State> {
             Swal.fire("erroe", local.userDetialsError);
         }
     }
+    async  componentDidMount() {
+        await this.getUserDetails();
+       
+      
+    }
     renderICons() {
         return (
             <div className={'rowContainer'}>
@@ -79,9 +100,10 @@ class UserDetails extends Component<Props, State> {
                     <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
                     {local.edit}</div>
                 <div
+                onClick = {async ()=>this.handleActivationClick()}
                      className={'iconConatiner'}>
-                    <img className={'iconImage'} alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />
-                    {local.deactivate}</div>
+                   {this.state.data.status ==="active" && <img className={'iconImage'} alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />}
+                    {this.state.data.status ==="active" ? local.deactivate : local.activate}</div>
             </div>
         );
     }
@@ -90,7 +112,7 @@ class UserDetails extends Component<Props, State> {
             case 1:
                 return (<UserDetailsView data={this.state.data} />);
             case 2:
-                return(<UserRolesView roles ={this.state.data.roles} />);
+                return(<UserRolesView hasBranch={this.state.data.branches?.length?true:false} roles ={this.state.data.roles} />);
             default:
                 return null;
         }
