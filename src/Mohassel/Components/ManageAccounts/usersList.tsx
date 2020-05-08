@@ -12,9 +12,10 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 
 interface Props {
-  history: Array<string>;
+  history: any;
 };
 interface State {
   data: any;
@@ -44,6 +45,7 @@ class UsersList extends Component<Props, State> {
       dateFrom: '',
       dateTo: '',
       loading: false,
+
     }
     this.mappers = [
       {
@@ -74,14 +76,37 @@ class UsersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+        render: (data) => this.renderIcons(data)
       },
     ]
   }
   componentDidMount() {
     this.getUsers()
   }
+  async handleActivationClick(data: any){
+    console.log(data)
+    const req= {id:data._id,status: data.status ==="active"?"inactive" :"active"}
+    this.setState({loading:true});
 
+    const res = await setUserActivation(req);
+     if(res.status==='success'){
+       await this.getUsers();
+       Swal.fire("success",`${data.username} is ${req.status} now`)
+  
+     } else {
+      this.setState({loading:false})
+       Swal.fire("error");
+     }
+
+  }
+  renderIcons(data: any) {
+    return(
+      <>
+      <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span> 
+      <span onClick={() => { this.props.history.push("/edit-user") }} className='fa fa-pencil-alt icon'></span> 
+    <span onClick={()=>this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src ={require('../../Assets/deactivate-user.svg')} />} {data.status==="inactive"&& local.activate} </span> </>
+    );
+  }
   async getUsers() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
