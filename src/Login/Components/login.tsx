@@ -50,7 +50,7 @@ class Login extends React.PureComponent<Props, State> {
     document.cookie = "token=" + token + ";domain=.halan.io;path=/;";
     document.cookie = "branches="+ branches +";domain=.halan.io;path=/;";
     document.cookie = "roles="+ roles +";domain=.halan.io;path=/;";
-    document.cookie = "x="+ validbranches +";domain=.halan.io;path=/;";
+    document.cookie = "validbranches="+ validbranches +";domain=.halan.io;path=/;";
   }
   render() {
     return (
