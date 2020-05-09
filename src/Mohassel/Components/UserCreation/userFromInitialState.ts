@@ -44,6 +44,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
     username: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     mobilePhoneNumber: Yup.string().min(11, local.minLength11),
+    hiringDate: Yup.string().required() ,
     nationalId: Yup.number()
         .when('nationalIdChecker', {
             is: true,
@@ -63,6 +64,28 @@ export const userCreationValidationStepOne = Yup.object().shape({
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], local.confrimPasswordCheck),
 
+})
+export const editUserValidationStepOne = Yup.object().shape({
+    name: Yup.string().trim().max(100, local.maxLength100).required(local.required),
+    username: Yup.string().trim().max(100, local.maxLength100).required(local.required),
+    hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
+    mobilePhoneNumber: Yup.string().min(11, local.minLength11),
+    hiringDate: Yup.string().required() ,
+    nationalId: Yup.number()
+        .when('nationalIdChecker', {
+            is: true,
+            then: Yup.number().test('error', local.duplicateNationalIdMessage, () => false),
+            otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
+        })
+        .when('birthDate', {
+            is: '1800-01-01',
+            then: Yup.number().test('error', local.wrongNationalId, () => false),
+            otherwise: Yup.number().required().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required)
+        }),
+    nationalIdIssueDate: Yup.string().test(
+        "Max Date", local.dateShouldBeBeforeToday,
+        (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
+    ).required(local.required),
 })
 export const userCreationValidationStepTwo = Yup.object().shape({
     roles: Yup.array().of(

@@ -10,6 +10,7 @@ import {
     step1,
     step2,
     userCreationValidationStepOne,
+    editUserValidationStepOne,
     userCreationValidationStepTwo,
 } from './userFromInitialState';
 import {
@@ -22,9 +23,13 @@ import UserRolesAndPermisonsFrom from './userRolesAndPermisonsFrom';
 import './userCreation.scss';
 import {getUserRolesAndBranches} from '../../Services/APIs/User-Creation/getUserRolesAndBranches'
 import {createUser} from '../../Services/APIs/User-Creation/createUser';
+import {editUser} from '../../Services/APIs/User-Creation/editUser';
+import { getUserDetails } from '../../Services/APIs/Users/userDetails';
+import { timeToDateyyymmdd } from '../../Services/utils';
+
 interface Props {
     edit: boolean;
-    history: Array<string>;
+    history: any;
 }
 interface State {
 step: number;
@@ -46,8 +51,37 @@ class UserCreation extends Component <Props, State> {
             rolesLabeled: [],
         }
     }
+    async getUser(){
+        const _id = this.props.history.location.state.details;
+        const res =  await getUserDetails(_id);
+        const step1: Values = {
+            name: res.body.user.name,
+            username: res.body.user.username,
+            nationalId: res.body.user.nationalId,
+            hrCode: res.body.user.hrCode,
+            birthDate: timeToDateyyymmdd(res.body.user.birthDate),
+            gender: res.body.user.gender,
+            nationalIdIssueDate: timeToDateyyymmdd(res.body.user.nationalIdIssueDate),
+            mobilePhoneNumber: res.body.user.mobilePhoneNumber,
+            hiringDate: timeToDateyyymmdd(res.body.user.hiringDate) ,
+            password: '',
+            confirmPassword: '',
+
+        }
+        const step2: RolesBranchesValues = {roles:[],branches:[]}
+           res.body.roles?.forEach(role => {
+            step2.roles.push({label:role.roleName,value: role._id,hasBranch:role.hasBranch});
+            }),
+              res.body.branches?.forEach(branch => {
+                 step2.branches?.push({label:branch.name,value: branch._id});
+            })
+            this.setState({step1,step2})
+    } 
   async  componentDidMount(){
-      this.setState({loading:true})
+     this.setState({loading:true})
+     if(this.props.edit){
+         this.getUser();
+     }
     const RolesAndBranches=  await getUserRolesAndBranches();
     const labeldRoles: Array<object>=[];
     const labeldBranches: Array<object>=[];
@@ -105,17 +139,37 @@ class UserCreation extends Component <Props, State> {
           [`step${step}`]: values,
         } as State);
       }
-  async createUser(userObj: User){
+        prepareUser(userObj: User) {
         const user ={...userObj.userInfo,
             branches:userObj.branches,roles:userObj.roles
         };
         user.birthDate = new Date(user.birthDate).valueOf();
         user.hiringDate = new Date(user.hiringDate).valueOf();
         user.nationalIdIssueDate = new Date(user.nationalIdIssueDate).valueOf();
+        return user;
+      }
+  async createUser(userObj: User){
+        const user = this.prepareUser(userObj);
+        this.setState({loading:true});
        const res=  await createUser (user);
        if (res.status === 'success') {
         this.setState({ loading: false });
         Swal.fire("success",local.userCreated ).then(()=>{
+            this.props.history.push("/");
+        });
+      } else {
+        Swal.fire("error",local.userCreationError)
+        this.setState({ loading: false });
+      }
+    }
+    async editUser (userObj: User) {
+        const user = this.prepareUser(userObj);
+        const id = this.props.history.location.state.details;
+        this.setState({loading:true});
+      const res = await  editUser(user,id);
+      if (res.status === 'success') {
+        this.setState({ loading: false });
+        Swal.fire("success",local.userEdited ).then(()=>{
             this.props.history.push("/");
         });
       } else {
@@ -150,7 +204,12 @@ class UserCreation extends Component <Props, State> {
            roles,
            branches,
        }
+       if(this.props.edit){
+           this.editUser(userObj);
+
+       }else{
        this.createUser(userObj);
+       }
      } 
     }
      getUserInfo(): UserInfo{
@@ -177,12 +236,12 @@ class UserCreation extends Component <Props, State> {
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}
-        validationSchema = {userCreationValidationStepOne}
+        validationSchema = {this.props.edit? editUserValidationStepOne : userCreationValidationStepOne}
         validateOnBlur
         validateOnChange
         >
              {(formikProps) =>
-                        <UserDataForm {...formikProps} cancle={()=>this.cancel()} />
+                        <UserDataForm {...formikProps} edit={this.props.edit} cancle={()=>this.cancel()} />
             }
         </Formik>
         )
