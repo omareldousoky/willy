@@ -15,8 +15,13 @@ export const StepThreeForm = (props: any) => {
     const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficers>>([]);
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
-        setLoanOfficers(res.body.data);
-        return res.body.data;
+        if(res.status === "success"){
+            setLoanOfficers(res.body.data);
+            return res.body.data;
+        } else {
+            setLoanOfficers([]);
+            return [];
+        }
     }
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
