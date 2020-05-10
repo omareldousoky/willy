@@ -79,7 +79,7 @@ class BranchesList extends Component<{}, State> {
     const res = await searchBranches({ size: this.state.size, from: this.state.from });
     if (res.status === "success") {
       this.setState({
-        data: res.body.applications,
+        data: res.body.data,
         loading: false
       })
     } else {
