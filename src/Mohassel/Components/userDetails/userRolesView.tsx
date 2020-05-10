@@ -3,14 +3,19 @@ import Labels from '../Labels/labels';
 import './userDetails.scss';
 import Card from 'react-bootstrap/Card';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import { Role, Section } from './userDetailsInterfaces';
+import { getPermissions } from '../../Services/APIs/Roles/roles';
+import { Loader } from '../../../Shared/Components/Loader';
+import RoleTable from '../Roles/roleTable';
 interface Props {
-    roles: string[];
-    hasBranch: boolean;
+    roles: Role[];
 }
 
 interface State {
-    selectedRole?: string;
+    selectedRole?: Role;
+    rolesLabels: string[];
+    loading: boolean;
+    allSections: Array<Section>;
 }
 
 export default class UserRolesView extends Component<Props, State> {
@@ -18,17 +23,43 @@ export default class UserRolesView extends Component<Props, State> {
         super(props);
         this.state = {
             selectedRole: this.props.roles[0],
+            rolesLabels: [],
+            allSections: [],
+            loading:false,
+            
         }
 
     }
-    handleClick = (index: number) => {
-        this.setState({ selectedRole: this.props.roles[index] })
+    async getAllPermissions() {
+        this.setState({ loading: true })
+        const id = (this.state.selectedRole?.hasBranch) ? 'requireBranch' : 'req';
+        const res = await getPermissions(id);
+        if (res.status === "success") {
+            this.setState({
+                loading: false,
+                allSections: res.body.actions
+            })
+        } else {
+            this.setState({ loading: false })
+        }
+    }
+    handleClick = async (index: number) => {
+        this.setState({ selectedRole: this.props.roles[index] });
+        await this.getAllPermissions();
 
     };
+   async componentDidMount(){
+        this.setState({
+            rolesLabels: this.props.roles.map((role)=>{return role.roleName})
+        })
+       await  this.getAllPermissions()
+
+    }
     roleCard() {
         return (
             <>
                 <Card>
+                    <Loader type="fullscreen" open={this.state.loading} />
                     <Card.Body
                         className={'roleContainer'}
                     >
@@ -38,8 +69,8 @@ export default class UserRolesView extends Component<Props, State> {
                                 className={"iconImage"}
                                 alt={'role'} src={require('../../Assets/roleIcon.svg')} />{local.role}</span>
                         <div className={'rowContainer'}>
-                            <div className={'columnContianer'}><div className={'subTitle'}>{local.roleName}</div><div>{this.state.selectedRole}</div> </div>
-        <div className={'columnContianer'}><div className={'subTitle'}>{local.permissions} </div><div>{this.props.hasBranch? local.branches : local.headquarters}</div></div>
+                            <div className={'columnContianer'}><div className={'subTitle'}>{local.roleName}</div><div>{this.state.selectedRole?.roleName}</div> </div>
+        <div className={'columnContianer'}><div className={'subTitle'}>{local.permissions} </div><div>{this.state.selectedRole?.hasBranch? local.branches : local.headquarters}</div></div>
                         </div>
                     </Card.Body>
                 </Card>
@@ -47,13 +78,20 @@ export default class UserRolesView extends Component<Props, State> {
         );
     }
     render() {
-        console.log(this.state.selectedRole);
         return (
             <>
                 <div className={'labelContainer'}>
-                    <Labels defaultSelect={true} isClickable={true} onClick={this.handleClick} labelsTextArr={this.props.roles} />
+                    <Labels 
+                    defaultSelect={true}
+                     isClickable={true} 
+                     onClick={this.handleClick} 
+                     labelsTextArr={this.state.rolesLabels} />
                 </div>
                 {this.roleCard()}
+                <div className="d-flex">
+                        <span style={{ padding: "5px", margin: " 30px 30px 10px 0px", fontSize: 14, fontWeight:'bold' }}><img style={{ float: "right", margin:'0px 5px' }} alt="search-icon" src={require('../../Assets/permissions-inactive.svg')} /> {local.permissions}</span>
+                    </div>
+                    <RoleTable sections={this.state.allSections} permissions={this.state.selectedRole?.permissions} />
             </>
         )
     }

@@ -34,7 +34,7 @@ const UserDetailsView = (props: Props) => {
             <Table striped bordered hover >
                 <tbody>
                     <tr><td style={header}>{local.creationDate}*</td><td style={cell}>{timeToDate(data.created.at)}</td></tr>
-                    <tr><td style={header}>{local.userRole}*</td><td style={cell}> <Labels labelsTextArr={data.roles} /></td></tr>
+                    <tr><td style={header}>{local.userRole}*</td><td style={cell}> <Labels labelsTextArr={data.roles?.map((role)=> {return role.roleName})} /></td></tr>
                     <tr><td style={header}>{local.name}*</td><td style={cell}>{data.name}</td></tr>
                     <tr><td style={header}>{local.nationalId}*</td><td style={cell}>{data.nationalId}</td></tr>
                     <tr><td style={header}>{local.birthDate}*</td><td style={cell}>{timeToDate(data.birthDate)}</td></tr>

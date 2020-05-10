@@ -38,7 +38,7 @@ class UserDetails extends Component<Props, State> {
                 gender: '',
                 birthDate: 0,
                 branches: [''],
-                roles: [''],
+                roles: [],
                 _id: '',
                 hiringDate: 0,
                 hrCode: '',
@@ -67,7 +67,7 @@ class UserDetails extends Component<Props, State> {
     setUserDetails(data: any): UserDateValues {
         const user: UserDateValues = data.user;
         user.branches = data.branches?.map((branch) => { return branch.name });
-        user.roles =  data.roles?.map((role) => { return role.roleName });
+        user.roles =  data.roles;
         return user;
     }
     async  getUserDetails (){
@@ -112,7 +112,7 @@ class UserDetails extends Component<Props, State> {
             case 1:
                 return (<UserDetailsView data={this.state.data} />);
             case 2:
-                return(<UserRolesView hasBranch={this.state.data.branches?.length?true:false} roles ={this.state.data.roles} />);
+                return(<UserRolesView roles ={this.state.data.roles} />);
             default:
                 return null;
         }

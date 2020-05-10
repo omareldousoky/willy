@@ -84,7 +84,6 @@ class UsersList extends Component<Props, State> {
     this.getUsers()
   }
   async handleActivationClick(data: any){
-    console.log(data)
     const req= {id:data._id,status: data.status ==="active"?"inactive" :"active"}
     this.setState({loading:true});
 
