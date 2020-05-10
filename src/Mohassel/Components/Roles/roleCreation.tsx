@@ -195,14 +195,10 @@ class RoleCreation extends Component<Props, State>{
                 <Loader type="fullsection" open={this.state.loading} />
 
                 <div style={{ display: "flex", flexDirection: "row", textAlign: 'right' }}>
-                    <div className="stepper-container-vertical">
                         <Wizard
-                            direction="vertical"
                             currentStepNumber={this.state.step - 1}
-                            stepColor="#7dc356"
-                            steps={[local.userBasicStep1, local.rolesStep2]}
+                            stepsDescription={[local.userBasicStep1, local.rolesStep2]}
                         />
-                    </div>
 
                     <div style={{ width: '70%', margin: '40px auto' }}>
                         {this.renderSteps()}

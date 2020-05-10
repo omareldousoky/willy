@@ -37,6 +37,19 @@ export const step2: RolesBranchesValues = {
     branches: [],
 
 }
+export const wizardStepsArr = [
+    {
+        description: local.userBasicStep1,
+        selected: true,
+        completed: false,
+
+    },
+    {
+        description: local.userRolesStep2,
+        selected: false,
+        completed: false,
+    }
+]
 const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 export const userCreationValidationStepOne = Yup.object().shape({

@@ -140,7 +140,6 @@ const customFilterOption = (option, rawInput) => {
        </Form.Group>
        <Form.Group 
             as={Row}
-            className={'user-stick-buttons'}
             >
                 <Col >
                     <Button 

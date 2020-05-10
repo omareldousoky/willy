@@ -47,7 +47,6 @@ export default class UserRolesView extends Component<Props, State> {
         );
     }
     render() {
-        console.log(this.state.selectedRole);
         return (
             <>
                 <div className={'labelContainer'}>
