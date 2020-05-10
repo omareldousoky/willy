@@ -137,7 +137,7 @@ class Payment extends Component<Props, State>{
         this.setState({ loadingFullScreen: false });
       }
     } else {
-      const res = await earlyPayment(this.props.applicationId);
+      const res = await earlyPayment(this.props.applicationId, this.state.requiredAmount);
       this.setState({payAmount: res.body.requiredAmount})
       if (res.status === 'success') {
         this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
