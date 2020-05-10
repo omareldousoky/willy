@@ -102,7 +102,7 @@ class UsersList extends Component<Props, State> {
     return(
       <>
       <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span> 
-      <span onClick={() => { this.props.history.push("/edit-user") }} className='fa fa-pencil-alt icon'></span> 
+      <span onClick={() => { this.props.history.push({pathname:"/edit-user",state: { details: data._id }}) }} className='fa fa-pencil-alt icon'></span> 
     <span onClick={()=>this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src ={require('../../Assets/deactivate-user.svg')} />} {data.status==="inactive"&& local.activate} </span> </>
     );
   }

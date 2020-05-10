@@ -276,6 +276,7 @@ export const UserDataForm = (props: Props) => {
                         placeholder={local.password}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
+                        disabled={props.edit}
                         isInvalid={(props.errors.password && props.touched.password) as boolean}
                     />
                     <Form.Control.Feedback
@@ -297,6 +298,7 @@ export const UserDataForm = (props: Props) => {
                         placeholder={local.confrimPassword}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
+                        disabled={props.edit}
                         isInvalid={(props.errors.confirmPassword && props.touched.confirmPassword) as boolean}
                     />
                     <Form.Control.Feedback
