@@ -260,10 +260,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const results = await searchCustomerByName(query)
         if (results.status === 'success') {
-            if (results.body.customers.length > 0) {
-                this.setState({ loading: false, searchResults: { results: results.body.customers, empty: false } });
+            if (results.body.data.length > 0) {
+                this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
             } else {
-                this.setState({ loading: false, searchResults: { results: results.body.customers, empty: true } });
+                this.setState({ loading: false, searchResults: { results: results.body.data, empty: true } });
             }
         } else {
             Swal.fire("error", local.searchError, 'error')
@@ -284,10 +284,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const defaultApp = { ...this.state.application };
             const defaultGuarantors = { ...defaultApp.guarantors };
             const defaultGuar = { ...defaultGuarantors[index] };
-            if (results.body.customers.length > 0) {
-                defaultGuar.searchResults = { results: results.body.customers, empty: false };
+            if (results.body.data.length > 0) {
+                defaultGuar.searchResults = { results: results.body.data, empty: false };
             } else {
-                defaultGuar.searchResults = { results: results.body.customers, empty: true };
+                defaultGuar.searchResults = { results: results.body.data, empty: true };
             }
             defaultApp.guarantors[index] = defaultGuar
             this.setState({
@@ -322,10 +322,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     selectCustomer = async (customer) => {
         this.setState({ loading: true });
-        const selectedCustomer = await getCustomerByID(customer.id)
+        const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
             const defaultApplication = this.state.application;
-            defaultApplication.customerID = customer.id;
+            defaultApplication.customerID = customer._id;
             this.populateCustomer(selectedCustomer.body)
             this.setState({
                 loading: false,
@@ -340,13 +340,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     selectGuarantor = async (obj, index, values) => {
         this.setState({ loading: true });
-        const selectedGuarantor = await getCustomerByID(obj.id);
+        const selectedGuarantor = await getCustomerByID(obj._id);
         if (selectedGuarantor.status === 'success') {
             const defaultApplication = { ...values }
             const defaultGuarantors = { ...defaultApplication.guarantors };
             const defaultGuar = { ...defaultGuarantors[index] };
-            defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj.id };
-            defaultApplication.guarantorIds.push(obj.id)
+            defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id };
+            defaultApplication.guarantorIds.push(obj._id)
             defaultApplication.guarantors[index] = defaultGuar;
             this.setState({ application: defaultApplication, loading: false });
         } else {

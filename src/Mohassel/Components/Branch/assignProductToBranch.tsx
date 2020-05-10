@@ -94,7 +94,7 @@ class AssignProductToBranch extends Component<Props, State>{
         const branchsProducts = await getProductsByBranch(branch._id);
         if (branchsProducts.status === 'success') {
             this.setState({
-                selectedBranchProducts: branchsProducts.body.data.productIds,
+                selectedBranchProducts: (branchsProducts.body.data.productIds)?branchsProducts.body.data.productIds:[],
                 loading: false
             })
         } else {

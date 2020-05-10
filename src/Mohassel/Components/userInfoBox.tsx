@@ -22,7 +22,7 @@ class InfoBox extends Component<Props, State>{
     render() {
         const values = this.props.values;
         return (
-            <Form style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5' }}>
+            <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5' }}>
                 <h5>{local.mainInfo}</h5>
                 <Form.Row>
                     <Form.Group as={Col} md="4">
@@ -120,7 +120,7 @@ class InfoBox extends Component<Props, State>{
                         </Row>
                     </Form.Group>
                 </Form.Row>
-            </Form>
+            </div>
         )
     }
 }
