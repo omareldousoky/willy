@@ -150,10 +150,10 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const results = await searchCustomerByName(query)
     if (results.status === 'success') {
-      if (results.body.customers.length > 0) {
-        this.setState({ loading: false, searchResults: { results: results.body.customers, empty: false } });
+      if (results.body.data.length > 0) {
+        this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
       }else{
-        this.setState({ loading: false, searchResults: { results: results.body.customers, empty: true } });
+        this.setState({ loading: false, searchResults: { results: results.body.data, empty: true } });
       }
     } else {
       Swal.fire("error", local.searchError, 'error')
@@ -161,8 +161,8 @@ class CustomerCreation extends Component<Props, State>{
     }
   }
   async selectCustomer(customer) {
-    this.setState({ loading: true, customerId: customer.id });
-    const res = await getCustomerByID(customer.id)
+    this.setState({ loading: true, customerId: customer._id });
+    const res = await getCustomerByID(customer._id)
     if (res.status === 'success') {
 
       const customerInfo = { ...res.body };
