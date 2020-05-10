@@ -327,6 +327,17 @@
     "selectUserPermision": "تحديد دور المستخدم",
     "searchByUserRole":"البحث بدور المستخدم",
     "searchByBranchName":"البحث بإسم الفرع",
+    "goToBranch":"الإنتقال إلي فرع",
+    "logOut":"تسجيل الخروج",
+    "noResults": "لا توجد نتائج",
+    "looksLikeYouCantFindResults": "يبدو أننا لا نستطيع العثور على أي نتائج بناءً على بحثك",
+    "hQpermission":"صلاحيات على مستوى المقر الرئيسي",
+    "roleDetails":"تفاصيل الدور",
+    "add": "إضافة",
+    "checkAll": "تحديد الكل",
+    "count": "العدد",
+    "deleteAll": "حذف الجميع",
+    "read":"مراجعة",
     "activate":"تفعيل",
     "deactivate": "تعطيل",
     "userDetails":"تفاصيل المستخدم",
@@ -349,6 +360,5 @@
     "deleteAll": "حذف الجميع",
     "read":"مراجعة",
     "userEdited":"تم تعديل المستخدم بنجاح"
-
 
 }
