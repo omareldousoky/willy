@@ -70,7 +70,7 @@ export const UserDataForm = (props: Props) => {
                                 data-qc={"nationalId"}
                                 value={props.values.nationalId}
                                 onBlur={props.handleBlur}
-                                onChange={async (event: React.FormEvent<HTMLInputElement>) => {
+                                onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                     const re = /^\d*$/;
                                     const { name, value } = event.currentTarget;
                                     if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {

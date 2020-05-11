@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
 
 export const step1: BasicValues = {
-    branchAddressLatLong: undefined, 
+    branchAddressLatLong: {lat: 0, lng: 0}, 
     name: '',
     governorate: '',
     status: 'active',

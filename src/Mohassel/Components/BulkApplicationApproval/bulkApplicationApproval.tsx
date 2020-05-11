@@ -176,7 +176,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                       name="issuingBank"
                       data-qc="issuingBank"
                       value={this.state.filteredLoanOfficer}
-                      onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
                     >
                       <option value="">{local.loanOfficer}</option>
                       {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {

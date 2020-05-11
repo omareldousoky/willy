@@ -8,13 +8,13 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const StepTwoForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
-    const [businessAddressLatLong, setLocation] = useState({ lat: 0, long: 0 });
+    const [businessAddressLatLong, setLocation] = useState({ lat: 0, lng: 0 });
     const [mapState, openCloseMap] = useState(false);
     return (
         <Form onSubmit={handleSubmit}>
             {mapState && <Map show={mapState}
                 handleClose={() => openCloseMap(false)}
-                save={(businessAddressLatLong: { lat: number; long: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
+                save={(businessAddressLatLong: { lat: number; lng: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
                 location={businessAddressLatLong}
                 header={local.customerWorkAddressLocationTitle}
             />}
@@ -137,7 +137,7 @@ export const StepTwoForm = (props: any) => {
                         data-qc="businessPostalCode"
                         value={values.businessPostalCode}
                         onBlur={handleBlur}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('businessPostalCode', event.currentTarget.value)
@@ -160,7 +160,7 @@ export const StepTwoForm = (props: any) => {
                         data-qc="businessPhoneNumber"
                         value={values.businessPhoneNumber}
                         onBlur={handleBlur}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('businessPhoneNumber', event.currentTarget.value)
@@ -238,7 +238,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.businessLicenseNumber}
                         onBlur={handleBlur}
                         maxLength={100}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('businessLicenseNumber', event.currentTarget.value)
@@ -296,7 +296,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.commercialRegisterNumber}
                         onBlur={handleBlur}
                         maxLength={100}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('commercialRegisterNumber', event.currentTarget.value)
@@ -319,7 +319,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.industryRegisterNumber}
                         onBlur={handleBlur}
                         maxLength={100}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('industryRegisterNumber', event.currentTarget.value)
@@ -342,7 +342,7 @@ export const StepTwoForm = (props: any) => {
                         value={values.taxCardNumber}
                         onBlur={handleBlur}
                         maxLength={100}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('taxCardNumber', event.currentTarget.value)

@@ -105,7 +105,7 @@ export const StepThreeForm = (props: any) => {
                         data-qc="permanentEmployeeCount"
                         value={values.permanentEmployeeCount}
                         onBlur={handleBlur}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('permanentEmployeeCount', event.currentTarget.value)
@@ -127,7 +127,7 @@ export const StepThreeForm = (props: any) => {
                         data-qc="partTimeEmployeeCount"
                         value={values.partTimeEmployeeCount}
                         onBlur={handleBlur}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
@@ -149,7 +149,7 @@ export const StepThreeForm = (props: any) => {
                         data-qc="accountNumber"
                         value={values.accountNumber}
                         onBlur={handleBlur}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const re = /^\d*$/;
                             if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                                 setFieldValue('accountNumber', event.currentTarget.value)
@@ -182,7 +182,7 @@ export const StepThreeForm = (props: any) => {
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.comments}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="textarea"
-                        rows="3"
+                        rows={3}
                         name="comments"
                         data-qc="comments"
                         value={values.comments}
