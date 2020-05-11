@@ -12,8 +12,8 @@ import { BasicValues, BasicErrors,BasicTouched } from './branchCreationInterface
  interface Props {
      values: BasicValues;
      handleSubmit: any;
-     handleChange?: any;
-     handleBlur?: any;
+     handleChange: any;
+     handleBlur: any;
      setFieldValue: any;
      cancel: any;
      errors: BasicErrors;
