@@ -64,12 +64,12 @@ class UsersList extends Component<Props, State> {
       {
         title: local.createdBy,
         key: "createdBy",
-        render: data => "createdBy"
+        render: data => data.created.by
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => "creationDate"
+        render: data => new Date(data.created.at).toISOString()
       },
       {
         title: '',
@@ -99,16 +99,16 @@ class UsersList extends Component<Props, State> {
   submit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
-    const branchId = JSON.parse(getCookie('branches'));
+    // const branchId = JSON.parse(getCookie('branches'));
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
-        branchId: branchId[0],
+        // branchId: branchId[0],
         size: this.state.size,
         from: this.state.from,
       }
     } else {
       obj = {
-        branchId: branchId[0],
+        // branchId: branchId[0],
         fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: this.state.size,

@@ -337,7 +337,7 @@
     "checkAll": "تحديد الكل",
     "count": "العدد",
     "deleteAll": "حذف الجميع",
-    "read":"مراجعة"
-
-
+    "read":"مراجعة",
+    "allPermissions": "جميع الصلاحيات",
+    "branchPermissions": "صلاحيات الفروع"
 }
