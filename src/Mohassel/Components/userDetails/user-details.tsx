@@ -91,11 +91,12 @@ class UserDetails extends Component<Props, State> {
       
     }
     renderICons() {
+        const id = this.props.history.location.state.details;
         return (
             <div className={'rowContainer'}>
                 <div
                     className={'iconConatiner'}
-                    onClick={() => { this.props.history.push("/edit-user") }}
+                    onClick={() => { this.props.history.push({pathname:"/edit-user",state: { details: id }}) }}
                 >
                     <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
                     {local.edit}</div>

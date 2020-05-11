@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import AsyncSelect from 'react-select/async';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import * as local from '../../../Shared/Assets/ar.json';
 
+interface LoanOfficers {
+    _id: string;
+    username: string;
+}
 export const StepThreeForm = (props: any) => {
+    const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficers>>([]);
+    const getLoanOfficers = async (inputValue: string) => {
+        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
+        if(res.status === "success"){
+            setLoanOfficers(res.body.data);
+            return res.body.data;
+        } else {
+            setLoanOfficers([]);
+            return [];
+        }
+    }
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
         <Form onSubmit={handleSubmit}>
@@ -33,7 +50,7 @@ export const StepThreeForm = (props: any) => {
             <Form.Group as={Row} controlId="representative">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.representative}*`}</Form.Label>
                 <Col sm={6}>
-                    <Form.Control as="select"
+                    {/* <Form.Control as="select"
                         type="select"
                         name="representative"
                         data-qc="representative"
@@ -45,7 +62,18 @@ export const StepThreeForm = (props: any) => {
                         <option value="" disabled></option>
                         <option value="representative1">representative1</option>
                         <option value="representative2">representative2</option>
-                    </Form.Control>
+                    </Form.Control> */}
+                    <AsyncSelect
+                        name="representative"
+                        data-qc="representative"
+                        value={loanOfficers?.find(loanOfficer => loanOfficer._id ===values.representative)}
+                        onBlur={handleBlur}
+                        onChange={(id) => setFieldValue("representative", id)}
+                        getOptionLabel={(option) => option.username}
+                        getOptionValue={(option) => option._id}
+                        loadOptions={getLoanOfficers}
+                        cacheOptions defaultOptions
+                    />
                     <Form.Control.Feedback type="invalid">
                         {errors.representative}
                     </Form.Control.Feedback>
@@ -153,7 +181,7 @@ export const StepThreeForm = (props: any) => {
             <Form.Group as={Row} controlId="comments">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{local.comments}</Form.Label>
                 <Col sm={6}>
-                    <Form.Control as="textarea" 
+                    <Form.Control as="textarea"
                         rows="3"
                         name="comments"
                         data-qc="comments"

@@ -3,19 +3,16 @@ import PropTypes from "prop-types";
 import "./Wizard.scss";
 interface Step {
     description: string;
-    highlighted: boolean;
     selected: boolean;
     completed: boolean;
 }
 interface Props{
-    direction: string;
     currentStepNumber: number;
-    stepColor: string;
-    steps: any[];
+    stepsDescription: string[];
     
 };
 interface State{
- steps: any[];
+ steps: Step[];
 }
 export default class Wizard extends Component  <Props , State>{
   constructor(props: Props) {
@@ -25,14 +22,19 @@ export default class Wizard extends Component  <Props , State>{
       steps: []
     };
   }
+  resetStateStepsSelection(steps: Step[]) {
+    return steps.forEach(step => {
+      step.selected =false;
+    });
+
+  }
 
   componentDidMount() {
-    const { steps, currentStepNumber } = this.props;
+    const { stepsDescription } = this.props;
 
-    const stepsState = steps.map((step, index) => {
+    const stepsState = stepsDescription.map((stepDescription, index) => {
       const stepObj: Step = {
-        description : step,
-        highlighted : index === 0 ? true : false,
+        description : stepDescription,
         selected : index === 0 ? true : false,
         completed : false,
       };
@@ -40,91 +42,64 @@ export default class Wizard extends Component  <Props , State>{
       return stepObj;
     });
 
-    const currentSteps = this.updateStep(currentStepNumber, stepsState);
-
     this.setState({
-      steps: currentSteps
+      steps: stepsState
     });
   }
+  
 
-  componentDidUpdate(prevProps) {
-    const { steps } = this.state;
-    const currentSteps = this.updateStep(this.props.currentStepNumber, steps);
-
-    if (prevProps.currentStepNumber !== this.props.currentStepNumber)
-      this.setState({
-        steps: currentSteps
-      });
-  }
-
-  updateStep(stepNumber, steps) {
-    const newSteps = [...steps];
-    let stepCounter = 0;
-
-
-    while (stepCounter < newSteps.length) {
+  componentDidUpdate (previousProps){
+    if(previousProps.currentStepNumber !== this.props.currentStepNumber){
+      const index = this.props.currentStepNumber;
+    const stepsState = this.state.steps;
+    this.resetStateStepsSelection(stepsState);
+    stepsState[index].selected =true;
     
-      if (stepCounter === stepNumber ) {
-        newSteps[stepCounter] = {
-          ...newSteps[stepCounter],
-          highlighted: true,
-          selected: true,
-          completed: false
-        };
-        stepCounter++;
-      }
-
-      else if (stepCounter < stepNumber) {
-        newSteps[stepCounter] = {
-          ...newSteps[stepCounter],
-          highlighted: false,
-          selected: true,
-          completed: true,
-        };
-        stepCounter++;
-      }
-     
-      else {
-        newSteps[stepCounter] = {
-          ...newSteps[stepCounter],
-          highlighted: false,
-          selected: false,
-          completed: false
-        };
-        stepCounter++;
-      }
+     if(index >0 && index< this.state.steps.length){
+       
+          stepsState[index-1].completed =true;
+          stepsState[index-1].selected = false;
+          
+     }
+     this.setState({steps:stepsState});
     }
-
-    return newSteps;
   }
 
-  render() {
-    const { direction, stepColor } = this.props;
+
+   render() {
     const { steps } = this.state;
     const renderedSteps = steps.map((step: Step, index) => {
       return (
         <div className="step-wrapper" key={index}>
           <div
-            className={`step-number ${
-              step.selected ? "step-number-selected" : "step-number-disabled"
-            }`}
-            style={{ background: `${step.selected ? stepColor : "none"}` }}
-          >
-            {step.completed ? <span>&#10003;</span> : index + 1}
-          </div>
-          <div
-            className={`step-description ${step.highlighted &&
-              "step-description-active"} ${step.completed && "step-description-completed "}`} 
+            className={`step-description ${(step.completed||step.selected) && "step-visited"}`} 
           >
             {step.description}
           </div>
-          {index !== steps.length - 1 && (
-            <div className={`divider-line divider-line-${steps.length}`} />
-          )}
+         
+            {
+              (step.completed && step.selected === false)&& <div className={"selected-circile"}></div>
+            }
+           { step.selected && <>
+            <div className={"outer"}>
+            <div className={ "inner" } > </div> </div>
+             </>
+           }
+           { step.completed && 
+             
+            <div className={"divider-line"} > </div>
+            
+           }
         </div>
       );
     });
 
-    return <div className={`stepper-wrapper-${direction}`}>{renderedSteps}</div>;
+    return (
+      <div className="stepper-container-vertical">
+       <div className={`stepper-wrapper-vertical`}>
+      {renderedSteps}
+      </div>
+    </div>
+    );
   }
 }

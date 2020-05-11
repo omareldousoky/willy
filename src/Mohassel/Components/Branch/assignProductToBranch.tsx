@@ -60,17 +60,9 @@ class AssignProductToBranch extends Component<Props, State>{
         this.setState({ loading: true, products: [] })
         const products = await getProducts();
         if (products.status === 'success') {
-            // const ProductLabels: Array<object> = [];
-            // products.body.data.data.forEach(product => {
-            //     ProductLabels.push({ value: product._id, label: product.productName })
-            // })
-            this.setState({
-                products: products.body.data.data,
-                loading: false
-            })
+            return (products.body.data.data)
         } else {
-            this.setState({ loading: false });
-            Swal.fire('', local.searchError, 'error');
+            return ([])
         }
     }
     submit = async () => {
@@ -89,18 +81,20 @@ class AssignProductToBranch extends Component<Props, State>{
         }
     }
     async getProductsForBranch(branch) {
-        this.getProducts();
+        const products = await this.getProducts();
         this.setState({ loading: true, branch: branch })
         const branchsProducts = await getProductsByBranch(branch._id);
         if (branchsProducts.status === 'success') {
             this.setState({
-                selectedBranchProducts: branchsProducts.body.data.productIds,
-                loading: false
+                selectedBranchProducts: (branchsProducts.body.data.productIds) ? branchsProducts.body.data.productIds : [],
+                loading: false,
+                products
             })
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({
-                loading: false
+                loading: false,
+                products
             })
         }
     }
@@ -122,8 +116,8 @@ class AssignProductToBranch extends Component<Props, State>{
                                 enableReinitialize={false}
                                 onChange={(event: any) => { this.getProductsForBranch(event) }}
                                 type='text'
-                                getOptionLabel ={(option)=>option.name}
-                                getOptionValue ={(option)=>option._id}
+                                getOptionLabel={(option) => option.name}
+                                getOptionValue={(option) => option._id}
                                 options={this.state.branches}
                             />
                         </Col>
