@@ -56,11 +56,11 @@ class UsersList extends Component<Props, State> {
         key: "name",
         render: data => data.name
       },
-      {
-        title: local.employment,
-        key: "employment",
-        render: data => "employment"
-      },
+      // {
+      //   title: local.employment,
+      //   key: "employment",
+      //   render: data => "employment"
+      // },
       {
         title: local.createdBy,
         key: "createdBy",
