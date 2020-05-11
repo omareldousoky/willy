@@ -1,5 +1,5 @@
 export interface BasicValues {
-    branchAddressLatLong?: {lat: number ; lng: number};
+    branchAddressLatLong: {lat: number ; lng: number};
     name: string;
     governorate: string;
     status: string;
@@ -20,8 +20,7 @@ export interface Branch {
     postalCode?: string;
 
 }
-export interface BasicErrors {
-    branchAddressLatLong?: string;
+export interface BasicErrors { 
     name?: string;
     governorate?: string;
     status?: string;
@@ -39,5 +38,4 @@ export interface BasicTouched {
     faxNumber?: boolean;
     address?: boolean;
     postalCode?: boolean;
-    branchAddressLatLong?: boolean;
 }
