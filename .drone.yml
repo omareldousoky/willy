@@ -36,6 +36,8 @@ steps:
 - name: build
   image: node:12.16.1-alpine
   commands:
+  - npm cache clean -f
+  - rm -rf node_modules
   - npm i 
   - npm run build
 
