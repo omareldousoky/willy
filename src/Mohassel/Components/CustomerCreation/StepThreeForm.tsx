@@ -68,7 +68,7 @@ export const StepThreeForm = (props: any) => {
                         data-qc="representative"
                         value={loanOfficers?.find(loanOfficer => loanOfficer._id ===values.representative)}
                         onBlur={handleBlur}
-                        onChange={(e) => setFieldValue("representative", e._id)}
+                        onChange={(id) => setFieldValue("representative", id)}
                         getOptionLabel={(option) => option.username}
                         getOptionValue={(option) => option._id}
                         loadOptions={getLoanOfficers}

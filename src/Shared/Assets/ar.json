@@ -353,6 +353,16 @@
     "userEdited":"تم تعديل المستخدم بنجاح",
     "branchCode": "كود الفرع",
     "transactions": "المعاملات",
-    "status": "الحالة"
+    "status": "الحالة",
+    "branchName": "إسم الفرع",
+    "branchOnMap": "تحديد عنوان الفرع على الخريطة",
+    "branchAddress":"عنوان الفرع", 
+    "postalCode":"الرقم البريدي",
+    "newBranch":"فرع جديد",
+    "branchCreated":"تم إنشاء الفرع بنجاح",
+    "branchCreationError":"حدث خطأ ،لم يتم إنشاء الفرع",
+    "branchState": "حالة الفرع",
+    "activeBranch": "نشط",
+    "inActiveBranch":"غير نشط"
 
 }

@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
-import Map from './map';
+import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';

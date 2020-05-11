@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #7dc356;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect id="Boundary" class="cls-1" width="20" height="20" transform="translate(0 20) rotate(-90)"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_55" data-name="Mask Group 55" class="cls-2">
+    <g id="pin" transform="translate(2.383)">
+      <g id="Group_8315" data-name="Group 8315">
+        <g id="Group_8314" data-name="Group 8314">
+          <path id="Path_7451" data-name="Path 7451" class="cls-1" d="M10,0A7.626,7.626,0,0,0,2.383,7.617c0,2.711.825,3.8,4.788,9.024.688.907,1.468,1.935,2.36,3.125a.586.586,0,0,0,.938,0c.887-1.183,1.663-2.207,2.349-3.111,3.973-5.24,4.8-6.331,4.8-9.037A7.626,7.626,0,0,0,10,0Zm1.884,15.947c-.563.742-1.187,1.565-1.884,2.492-.7-.932-1.329-1.76-1.9-2.506-3.855-5.082-4.55-6-4.55-8.316a6.445,6.445,0,0,1,12.891,0C16.445,9.93,15.749,10.849,11.884,15.947Z" transform="translate(-2.383)"/>
+        </g>
+      </g>
+      <g id="Group_8317" data-name="Group 8317" transform="translate(3.516 3.516)">
+        <g id="Group_8316" data-name="Group 8316">
+          <path id="Path_7452" data-name="Path 7452" class="cls-1" d="M10,3.516a4.1,4.1,0,1,0,4.1,4.1A4.106,4.106,0,0,0,10,3.516Zm0,7.031a2.93,2.93,0,1,1,2.93-2.93A2.933,2.933,0,0,1,10,10.547Z" transform="translate(-5.898 -3.516)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -21,6 +21,7 @@ import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
 import Can from './config/Can';
 import UserDetails from './Components/userDetails/user-details';
+import CreateBranch from './Components/BranchCreation/create-branch';
 
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
@@ -53,8 +54,9 @@ const App = () => {
                         <Route exact path = "/new-user" render={(props)=> <Can I='create' a= 'User'><UserCreation  {...props} edit={false} /></Can> }></Route>
                         <Route exact path = "/edit-user" render={(props)=> <Can I='edit' a= 'User'><UserCreation  {...props} edit={true} /></Can> }></Route>
                         <Route path="/new-role" render={(props) => <RoleCreation {...props} />}/>
-                        <Route exact path="/user-details"  render={(props)=> <UserDetails {...props}/>} />
                         <Route path="/role-profile" render={(props) => <RoleProfile {...props} />}/>
+                        <Route exact path="/user-details"  render={(props)=> <UserDetails {...props}/>} />
+                        <Route exact path = "/new-branch"  render={(props)=> <Can I='create' a='Branch'><CreateBranch {...props} /></Can>}/>
                     </Switch>
                 </div>
             </BrowserRouter>
