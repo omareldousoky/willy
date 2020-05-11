@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Formik } from 'formik'
-import { BasicValues, step1, Branch } from './branchCreationInterfaces';
+import { BasicValues, Branch } from './branchCreationInterfaces';
 import StepOneForm from './stepOneForm';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-
+import {step1,branchCreationValidationStepOne} from './branchCreationInitialState';
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json'
 import { createBranch } from '../../Services/APIs/Branch/createBranch';
@@ -30,6 +30,9 @@ interface Props {
 
     submit= (values) =>{
        if(this.state.step ===1){
+           this.setState({
+               step1:values
+           })
            this.createbranch(this.state.step1)
        }
     }
@@ -42,6 +45,7 @@ interface Props {
 
     }
     prepareBranch = (values: BasicValues) => {
+        console.log("values",values)
             const branch: Branch = {
                 longitude: values.branchAddressLatLong?.lng,
                 latitude: values.branchAddressLatLong?.lat,
@@ -78,8 +82,10 @@ interface Props {
                 <Formik 
                  enableReinitialize
                  initialValues={this.state.step1}
+                 validationSchema={branchCreationValidationStepOne}
                  onSubmit={this.submit}
                  validateOnChange
+                 validateOnBlur
                 >
                     {(formikProps)=>
                         <StepOneForm  {...formikProps} cancel ={()=>this.cancel()}/>

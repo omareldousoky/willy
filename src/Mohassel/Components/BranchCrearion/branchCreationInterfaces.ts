@@ -41,13 +41,3 @@ export interface BasicTouched {
     postalCode?: boolean;
     branchAddressLatLong?: boolean;
 }
-export const step1: BasicValues = {
-    branchAddressLatLong: undefined, 
-    name: '',
-    governorate: '',
-    status: '',
-    phoneNumber: '',
-    faxNumber: '',
-    address: '',
-    postalCode: '',
-}

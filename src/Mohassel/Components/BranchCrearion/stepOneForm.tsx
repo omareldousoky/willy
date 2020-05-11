@@ -14,12 +14,15 @@ import { BasicValues, BasicErrors,BasicTouched } from './branchCreationInterface
      handleSubmit: any;
      handleChange?: any;
      handleBlur?: any;
+     setFieldValue: any;
      cancel: any;
      errors: BasicErrors;
      touched: BasicTouched;
  }
 const StepOneForm = (props: Props) => {
     const [mapState, openCloseMap] = useState(false);
+    const [activeState, setActive] = useState(true);
+    const [inactiveState, setInactive] = useState(false);
     return (
         <Form 
         className={'branch-data-form'}
@@ -84,12 +87,12 @@ const StepOneForm = (props: Props) => {
                 >{`${local.branchOnMap}`}
                 </div>
                 <Button
-                 className ={'map-btn'}
+                   className ={'map-btn'}
                     name={"branchAddressLatLong"}
                     data-qc={"branchAddressLatLong"}
                     onClick = {()=>openCloseMap(true)}
         
-    >{local.branchOnMap}</Button>
+    ><span><img alt={'location'}  src = {require('../../Assets/activeLocation.svg')}/> {local.branchOnMap} </span></Button>
             </Col>
             <Row>
                 <Col>
@@ -160,6 +163,10 @@ const StepOneForm = (props: Props) => {
                     onBlur={props.handleBlur}
                     isInvalid={(props.errors.phoneNumber && props.touched.phoneNumber) as boolean}
                      />
+                     <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.phoneNumber}
+                        </Form.Control.Feedback>
                 </Form.Group>
                 </Col>
                 <Col>
@@ -177,9 +184,46 @@ const StepOneForm = (props: Props) => {
                      onBlur={props.handleBlur}
                      isInvalid={(props.errors.faxNumber && props.touched.faxNumber) as boolean}
                     />
+                    <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.faxNumber}
+                        </Form.Control.Feedback>
                 </Form.Group>
                 </Col>
             </Row>
+            <Form.Group 
+             className={'branch-data-group'}
+           >
+                <Form.Label
+                className= {'branch-data-label'}
+                >{local.branchState}</Form.Label>
+              <Row style={{margin:"1rem"}}> 
+            <Form.Check 
+             type={'radio'} 
+             label={local.activeBranch} 
+             value ={'active'} checked={activeState} 
+             onChange = {props.handleChange}
+             onClick = {(e: any)=>{
+                 setActive(true);
+                 setInactive(false)
+                 props.setFieldValue('status',e.target.value);
+             }}
+             />
+            <Form.Check 
+            type={'radio'} 
+            label={local.inActiveBranch}
+             value ={'inactive'}
+              checked = {inactiveState}
+              onChange = {props.handleChange}
+              onClick = {(e: any)=>{
+                setActive(false);
+                setInactive(true)
+                props.setFieldValue('status',e.target.value);
+            }}
+
+              />
+              </Row> 
+            </Form.Group>
             <Form.Group
                 as={Row}
                 className={['branch-data-group']}

@@ -130,7 +130,7 @@ class BranchesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfBranches}</span>
               </div>
               <div>
-                <Button onClick = {()=> {console.log("ff"),this.props.history.push("/new-branch")}} className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
+                <Button onClick = {()=> {this.props.history.push("/new-branch")}} className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
                 <Button variant="outline-primary" className="big-button">download pdf</Button>
               </div>
             </div>

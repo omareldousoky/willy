@@ -354,6 +354,9 @@
     "postalCode":"الرقم البريدي",
     "newBranch":"فرع جديد",
     "branchCreated":"تم إنشاء الفرع بنجاح",
-    "branchCreationError":"حدث خطأ ،لم يتم إنشاء الفرع"
+    "branchCreationError":"حدث خطأ ،لم يتم إنشاء الفرع",
+    "branchState": "حالة الفرع",
+    "activeBranch": "نشط",
+    "inActiveBranch":"غير نشط"
 
 }
