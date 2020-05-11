@@ -21,7 +21,7 @@ class RolesList extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      data: [1, 2, 3],
+      data: [],
       loading: false,
       activeRole: -1,
     }
@@ -72,14 +72,14 @@ class RolesList extends Component<Props, State> {
                   <Card.Body>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <h5 style={{ marginLeft: 50 }}>#{index + 1}</h5>
-                        <div style={{ marginLeft: 150 }}>
+                        <h5 style={{ marginLeft: 50, minWidth: 50 }}>#{index + 1}</h5>
+                        <div style={{ marginLeft: 150, minWidth: 200 }}>
                           <span className="text-muted">{local.roleName}</span>
                           <h6>{el.roleName}</h6>
                         </div>
                         <div>
                           <span className="text-muted">{local.permissions}</span>
-                          <h6>hello</h6>
+                          <h6>{el.hasBranch ? local.branchPermissions : local.allPermissions}</h6>
                         </div>
                       </div>
                       {/* <div style={{ position: 'relative' }}>
