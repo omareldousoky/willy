@@ -45,7 +45,7 @@ interface Props {
 
     }
     prepareBranch = (values: BasicValues) => {
-        console.log("values",values)
+
             const branch: Branch = {
                 longitude: values.branchAddressLatLong?.lng,
                 latitude: values.branchAddressLatLong?.lat,
@@ -64,8 +64,9 @@ interface Props {
         this.setState({loading:true});
          const res = await createBranch(branch);
          if(res.status === 'success'){
-             this.setState({loading: false})
+             this.setState({loading: false,step:1,step1})
              Swal.fire('success',local.branchCreated)
+             this.props.history.goBack();
          } else {
              Swal.fire("error",local.branchCreationError);
              this.setState({loading:false});
