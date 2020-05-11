@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import { getCookie } from '../../Services/getCookie';
+import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -17,7 +17,6 @@ interface State {
   size: number;
   from: number;
   searchKeyWord: string;
-  selectedGovernorate: string;
   dateFrom: string;
   dateTo: string;
   loading: boolean;
@@ -32,21 +31,20 @@ class BranchesList extends Component<{}, State> {
       size: 5,
       from: 0,
       searchKeyWord: '',
-      selectedGovernorate: '',
       dateFrom: '',
       dateTo: '',
       loading: false,
     }
     this.mappers = [
       {
-        title: local.governorate,
-        key: "governorate",
-        render: data => 'governorate'
+        title: local.branchCode,
+        key: "branchCode",
+        render: data => data.branchCode
       },
       {
         title: local.oneBranch,
         key: "branch",
-        render: data => 'branch'
+        render: data => data.governorate + "-" + data.name
       },
       {
         title: local.noOfUsers,
@@ -54,14 +52,24 @@ class BranchesList extends Component<{}, State> {
         render: data => 'noOfUsers'
       },
       {
-        title: local.createdBy,
-        key: "createdBy",
-        render: data => 'createdBy'
+        title: local.transactions,
+        key: "transactions",
+        render: data => "transactions"
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => 'creationDate'
+        render: data => getDateAndTime(data.created.at)
+      },
+      {
+        title: local.status,
+        key: "status",
+        render: data =>  data.status
+      },
+      {
+        title: local.gender,
+        key: "type",
+        render: data =>  data.type
       },
       {
         title: '',
@@ -94,7 +102,7 @@ class BranchesList extends Component<{}, State> {
       obj = {
         size: this.state.size,
         from: this.state.from,
-        name: this.state.searchKeyWord
+        name: values.searchKeyWord
       }
     } else {
       obj = {
@@ -102,6 +110,7 @@ class BranchesList extends Component<{}, State> {
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: this.state.size,
         from: 0,
+        name: values.searchKeyWord
       }
     }
     const res = await searchBranches(obj);
@@ -141,7 +150,7 @@ class BranchesList extends Component<{}, State> {
               {(formikProps) =>
                 <Form onSubmit={formikProps.handleSubmit}>
                   <div className="custom-card-body">
-                    <InputGroup style={{ direction: 'ltr' }}>
+                    <InputGroup style={{ direction: 'ltr', flex: 1, marginLeft: 20 }}>
                       <Form.Control
                         type="text"
                         name="searchKeyWord"
@@ -154,15 +163,6 @@ class BranchesList extends Component<{}, State> {
                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
-                  </div>
-                  <div className="custom-card-body">
-                    <div className="dropdown-container" style={{ flex: 1, marginLeft: 20 }}>
-                      <p className="dropdown-label">{local.governorate}</p>
-                      <Form.Control as="select" className="dropdown-select" data-qc="governorate">
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                      </Form.Control>
-                    </div>
                     <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
                       <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{local.creationDate}</p>
                       <span>{local.from}</span>
@@ -187,7 +187,6 @@ class BranchesList extends Component<{}, State> {
                       </Form.Control>
                     </div>
                   </div>
-
                 </Form>
               }
             </Formik>

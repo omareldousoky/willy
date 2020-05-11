@@ -350,6 +350,9 @@
     "userRole": "دور المستخدم",
     "headquarters":"المقر الرئيسي",
     "userActivationError": "لم يتم تغير الحالة للمستخدم",
-    "userEdited":"تم تعديل المستخدم بنجاح"
+    "userEdited":"تم تعديل المستخدم بنجاح",
+    "branchCode": "كود الفرع",
+    "transactions": "المعاملات",
+    "status": "الحالة"
 
 }

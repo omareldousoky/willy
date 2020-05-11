@@ -95,7 +95,7 @@ class RoleProfile extends Component<Props, State>{
                                     <Form.Label style={{ color: '#6e6e6e' }}>{local.permissions}</Form.Label>
                                 </Row>
                                 <Row>
-                                    <Form.Label>N/A</Form.Label>
+                                    <Form.Label>{this.state.role.hasBranch ? local.branchPermissions : local.allPermissions}</Form.Label>
                                 </Row>
                             </Form.Group>
                         </Form.Row>
