@@ -318,9 +318,9 @@
     "example": "مثال",
     "nationalIdPlaceholder": "12345678901234",
     "confrimPassword":"إعادة إدخال كلمة المرور",
-    "dateOfHire": "تاريخ التعين",
     "userBasicStep1":"١.البيانات الأساسية",
     "userRolesStep2":"٢.الأدوار و الصلاحيات",
+    "dateOfHire": "تاريخ التعين",
     "rolesStep2":"٢. الصلاحيات",
     "hrCode":"كود الموارد البشرية",
     "confrimPasswordCheck":"كلمة المرور يجب ان تتطابق",
@@ -339,5 +339,17 @@
     "deleteAll": "حذف الجميع",
     "read":"مراجعة",
     "allPermissions": "جميع الصلاحيات",
-    "branchPermissions": "صلاحيات الفروع"
+    "branchPermissions": "صلاحيات الفروع",
+    "activate":"تفعيل",
+    "deactivate": "تعطيل",
+    "userDetails":"تفاصيل المستخدم",
+    "secretNumber":"الرقم السري",
+    "userDetialsError": "حدث خطأ في إسترجاع بيانات المستخدم",
+    "userBasicData":"البيانات الأساسية",
+    "userRoles":"الأدوار و الصلاحيات",
+    "userRole": "دور المستخدم",
+    "headquarters":"المقر الرئيسي",
+    "userActivationError": "لم يتم تغير الحالة للمستخدم",
+    "userEdited":"تم تعديل المستخدم بنجاح"
+
 }
