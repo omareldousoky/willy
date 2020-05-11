@@ -45,11 +45,12 @@ function defineRulesFor(auth) {
         can("view", "Application")
         can("bulkApprove", "Application")
         can('filterByBranch','Application')
+        can('create','Branch')
     }
     return rules
 }
 //for all roles:
-// ability.update(defineRulesFor(["Data-Entry","Auditor","Sys-admin","IT-ops"]));
+//ability.update(defineRulesFor(["Data-Entry","Auditor","Sys-admin","IT-ops"]));
 ability.update(defineRulesFor(roles));
 
 export default ability;
