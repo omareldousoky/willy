@@ -10,6 +10,7 @@ import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import * as local from '../../../Shared/Assets/ar.json';
+import { withRouter } from 'react-router-dom';
 import './styles.scss';
 
 interface State {
@@ -22,8 +23,10 @@ interface State {
   dateTo: string;
   loading: boolean;
 }
-
-class BranchesList extends Component<{}, State> {
+interface Props {
+  history: any;
+}
+class BranchesList extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props) {
     super(props);
@@ -127,7 +130,7 @@ class BranchesList extends Component<{}, State> {
                 <span className="text-muted">{local.noOfBranches}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
+                <Button onClick = {()=> {console.log("ff"),this.props.history.push("/new-branch")}} className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
                 <Button variant="outline-primary" className="big-button">download pdf</Button>
               </div>
             </div>
@@ -206,4 +209,4 @@ class BranchesList extends Component<{}, State> {
   }
 }
 
-export default BranchesList;
+export default withRouter(BranchesList);

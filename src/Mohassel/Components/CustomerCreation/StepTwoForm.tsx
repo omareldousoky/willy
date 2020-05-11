@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Map from './map';
+import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 
 export const StepTwoForm = (props: any) => {

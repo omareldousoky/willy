@@ -347,7 +347,13 @@
     "userRoles":"الأدوار و الصلاحيات",
     "userRole": "دور المستخدم",
     "headquarters":"المقر الرئيسي",
-    "userActivationError": "لم يتم تغير الحالة للمستخدم"
-
+    "userActivationError": "لم يتم تغير الحالة للمستخدم",
+    "branchName": "إسم الفرع",
+    "branchOnMap": "تحديد عنوان الفرع على الخريطة",
+    "branchAddress":"عنوان الفرع", 
+    "postalCode":"الرقم البريدي",
+    "newBranch":"فرع جديد",
+    "branchCreated":"تم إنشاء الفرع بنجاح",
+    "branchCreationError":"حدث خطأ ،لم يتم إنشاء الفرع"
 
 }
