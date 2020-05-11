@@ -194,6 +194,7 @@ class BranchesList extends Component<Props, State> {
                 </Form>
               }
             </Formik>
+            { this.state.data &&
             <DynamicTable
               mappers={this.mappers}
               pagination={true}
@@ -202,6 +203,7 @@ class BranchesList extends Component<Props, State> {
                 this.setState({ [key]: number } as any, () => this.getBranches());
               }}
             />
+  }
           </Card.Body>
         </Card>
       </>

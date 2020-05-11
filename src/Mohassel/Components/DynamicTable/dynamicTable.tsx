@@ -19,7 +19,7 @@ const DynamicTable = (props: Props) => {
       <Table striped hover style={{ textAlign: 'right' }}>
         <thead>
           <tr>
-            {props.mappers?.map((mapper, index: number) => {
+            {props.mappers.map((mapper, index: number) => {
               return <th key={index}>{mapper.title}</th>
             })}
           </tr>
@@ -27,10 +27,10 @@ const DynamicTable = (props: Props) => {
         <tbody>
           {props.data
             // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            ?.map((item, index: number) => {
+            .map((item, index: number) => {
               return (
                 <tr key={index}>
-                  {props.mappers?.map((mapper, index: number) => {
+                  {props.mappers.map((mapper, index: number) => {
                     return (
                       <td key={index}>
                         {(mapper.render || (data => data[mapper.key]))(item, index)}
