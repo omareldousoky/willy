@@ -64,11 +64,15 @@ const style = {
 const UserRolesAndPermisonsFrom = (props: Props) => {
   const [hasBranch, setHasBranch] = useState(false);
 const customFilterOption = (option, rawInput) => {
+
+ 
+  if(option.label) {
   const words = rawInput.split(' ');
   return words.reduce(
     (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
     true,
   );
+  }
 };
     
     return (
@@ -100,8 +104,8 @@ const customFilterOption = (option, rawInput) => {
                                  return true;
                             }
                           } )
-                       if(!hasBranch) {
-                        props.setFieldValue('branches', '');
+                       if(!hasBranch || !props.values.roles.length) {
+                         props.setFieldValue('branches', '');
                        }
                       }
 
@@ -109,7 +113,6 @@ const customFilterOption = (option, rawInput) => {
                     onBlur={props.handleBlur}
                     value={props.values.roles}
                     options = {props.userRolesOptions}
-                    type='text'
                 />
            </Form.Group>
        <Form.Group
@@ -134,7 +137,6 @@ const customFilterOption = (option, rawInput) => {
                     onBlur={props.handleBlur}
                     value={props.values.branches}
                     options = {props.userBranchesOptions}
-                    type='text'
                     isDisabled = {!hasBranch}
             />
        </Form.Group>

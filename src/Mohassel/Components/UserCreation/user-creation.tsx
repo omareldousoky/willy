@@ -86,7 +86,7 @@ class UserCreation extends Component<Props, State> {
         const RolesAndBranches = await getUserRolesAndBranches();
         const labeldRoles: Array<object> = [];
         const labeldBranches: Array<object> = [];
-        if (RolesAndBranches[0].status = 'success') {
+        if (RolesAndBranches[0].status === 'success') {
             RolesAndBranches[0].body.roles.forEach(role => {
                 labeldRoles.push({
                     label: role.roleName,
@@ -104,7 +104,7 @@ class UserCreation extends Component<Props, State> {
                 loading: false,
             })
         }
-        if (RolesAndBranches[1].status = 'success') {
+        if (RolesAndBranches[1].status === 'success') {
             RolesAndBranches[1].body.data.data.forEach(branch => {
                 labeldBranches.push({ value: branch._id, label: branch.name })
             })
@@ -153,7 +153,7 @@ class UserCreation extends Component<Props, State> {
     async createUser(userObj: User) {
         const user = this.prepareUser(userObj);
         this.setState({ loading: true });
-        const res = await createUser(user);
+        const res = await createUser({user});
         if (res.status === 'success') {
             this.setState({ loading: false });
             Swal.fire("success", local.userCreated).then(() => {
