@@ -42,6 +42,7 @@ interface CustomerExtraDetails {
   applicationDate: any;
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
+  representative: any;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -195,6 +196,7 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
+    objToSubmit.representative = objToSubmit.representative._id;
     const res = await createCustomer(objToSubmit);
     if (res.status === 'success') {
       this.setState({ loading: false });

@@ -87,14 +87,8 @@ export const StepOneForm = (props: any) => {
             name="birthDate"
             data-qc="birthDate"
             value={values.birthDate}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            isInvalid={errors.birthDate && touched.birthDate}
             disabled
           />
-          <Form.Control.Feedback type="invalid">
-            {errors.birthDate}
-          </Form.Control.Feedback>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="gender">
@@ -105,18 +99,12 @@ export const StepOneForm = (props: any) => {
             name="gender"
             data-qc="gender"
             value={values.gender}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            isInvalid={errors.gender && touched.gender}
             disabled
           >
             <option value="" disabled></option>
             <option value="male">{local.male}</option>
             <option value="female">{local.female}</option>
           </Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {errors.gender}
-          </Form.Control.Feedback>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="nationalIdIssueDate">

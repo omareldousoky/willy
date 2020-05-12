@@ -190,7 +190,10 @@ class TrackLoanApplications extends Component<Props, State>{
                 type="date"
                 data-qc="dateFrom"
                 value={formikProps.values.dateFrom}
-                onChange={formikProps.handleChange}
+                onChange={(e)=> {
+                  formikProps.setFieldValue("dateFrom",e.currentTarget.value);
+                  if(e.currentTarget.value === "") formikProps.setFieldValue("dateTo", "")
+                }}
                 onBlur={formikProps.handleBlur}
                 isInvalid={Boolean(formikProps.errors.dateFrom) && Boolean(formikProps.touched.dateFrom)}
               />
@@ -216,7 +219,7 @@ class TrackLoanApplications extends Component<Props, State>{
             </Form.Group>
             <Form.Group>
             </Form.Group>
-            <Button type="submit" disabled={!Boolean(formikProps.values.searchKeyword || (formikProps.values.dateFrom && formikProps.values.dateTo))}>{local.search}</Button>
+            <Button type="submit">{local.search}</Button>
           </Form >
           }
         </Formik>
