@@ -36,7 +36,6 @@ export const LoanFormulaCreationForm = (props: any) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.interestType && touched.interestType}
-                        maxLength={14}
                     >
                         <option value="flat">مصاريف متساويه محسوبه من إجمالى أصل القرض</option>
                         <option value="reducing">مصاريف متناقصه محسوبه من المتبقى من أصل القرض</option>

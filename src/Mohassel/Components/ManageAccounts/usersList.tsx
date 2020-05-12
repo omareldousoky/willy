@@ -8,13 +8,15 @@ import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
+import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 
 interface Props {
-  history: Array<string>;
+  history: any;
 };
 interface State {
   data: any;
@@ -44,6 +46,7 @@ class UsersList extends Component<Props, State> {
       dateFrom: '',
       dateTo: '',
       loading: false,
+
     }
     this.mappers = [
       {
@@ -56,32 +59,54 @@ class UsersList extends Component<Props, State> {
         key: "name",
         render: data => data.name
       },
-      {
-        title: local.employment,
-        key: "employment",
-        render: data => "employment"
-      },
+      // {
+      //   title: local.employment,
+      //   key: "employment",
+      //   render: data => "employment"
+      // },
       {
         title: local.createdBy,
         key: "createdBy",
-        render: data => "createdBy"
+        render: data => data.created.by
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => "creationDate"
+        render: data => data.created.at ? getDateAndTime(data.created.at) : ''
       },
       {
         title: '',
         key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+        render: (data) => this.renderIcons(data)
       },
     ]
   }
   componentDidMount() {
     this.getUsers()
   }
+  async handleActivationClick(data: any) {
+    const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
+    this.setState({ loading: true });
 
+    const res = await setUserActivation(req);
+    if (res.status === 'success') {
+      await this.getUsers();
+      Swal.fire("success", `${data.username} is ${req.status} now`)
+
+    } else {
+      this.setState({ loading: false })
+      Swal.fire("error");
+    }
+
+  }
+  renderIcons(data: any) {
+    return (
+      <>
+        <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
+        <span onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
+        <span onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
+    );
+  }
   async getUsers() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
@@ -99,24 +124,24 @@ class UsersList extends Component<Props, State> {
   submit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
-    const branchId = JSON.parse(getCookie('branches'));
+    // const branchId = JSON.parse(getCookie('branches'));
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
-        branchId: branchId[0],
+        // branchId: branchId[0],
         size: this.state.size,
         from: this.state.from,
+        name: values.searchKeyword
       }
     } else {
       obj = {
-        branchId: branchId[0],
+        // branchId: branchId[0],
         fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: this.state.size,
         from: this.state.from,
+        name: values.searchKeyword
       }
     }
-    if (isNaN(Number(values.searchKeyword))) obj = { ...obj, name: values.searchKeyword }
-    else obj = { ...obj, nationalId: values.searchKeyword }
     const res = await searchUsers(obj);
     if (res.status === "success") {
       this.setState({
@@ -154,7 +179,7 @@ class UsersList extends Component<Props, State> {
               {(formikProps) =>
                 <Form onSubmit={formikProps.handleSubmit}>
                   <div className="custom-card-body">
-                    <InputGroup style={{ direction: 'ltr', marginLeft: 20, flex: 1 }}>
+                    <InputGroup style={{ direction: 'ltr', flex: 1 }}>
                       <Form.Control
                         type="text"
                         name="searchKeyword"
@@ -167,6 +192,18 @@ class UsersList extends Component<Props, State> {
                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
+                    
+                  </div>
+                  <div className="custom-card-body">
+                    <div style={{ display: 'flex', marginLeft: 20,  flex: 1 }}>
+                      <div className="dropdown-container" style={{ flex: 1 }}>
+                        <p className="dropdown-label">{local.employment}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="employment">
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                        </Form.Control>
+                      </div>
+                    </div>
                     <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
                       <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{local.creationDate}</p>
                       <span>{local.from}</span>
@@ -194,31 +231,6 @@ class UsersList extends Component<Props, State> {
                 </Form>
               }
             </Formik>
-            <div className="custom-card-body">
-              <div style={{ flex: 2, display: 'flex', marginLeft: 20 }}>
-                <div className="dropdown-container" style={{ flex: 1, marginLeft: 20 }}>
-                  <p className="dropdown-label">{local.onlyRoles}</p>
-                  <Form.Control as="select" className="dropdown-select" data-qc="roles">
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                  </Form.Control>
-                </div>
-                <div className="dropdown-container" style={{ flex: 1 }}>
-                  <p className="dropdown-label">{local.employment}</p>
-                  <Form.Control as="select" className="dropdown-select" data-qc="employment">
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                  </Form.Control>
-                </div>
-              </div>
-              <div className="dropdown-container" style={{ flex: 2 }}>
-                <p className="dropdown-label">{local.oneBranch}</p>
-                <Form.Control as="select" className="dropdown-select" data-qc="branch">
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                </Form.Control>
-              </div>
-            </div>
             <DynamicTable
               mappers={this.mappers}
               pagination={true}

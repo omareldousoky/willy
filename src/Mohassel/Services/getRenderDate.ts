@@ -12,3 +12,8 @@ export const getRenderDate = (date: number) => {
     }
     return(dd+'-'+mm+'-'+yyyy)
 }
+
+export const getDateAndTime = (date: number) => {
+    const dateString = new Date(date).toISOString();
+    return dateString.slice(11,16) + " - " + dateString.slice(0,10)
+}

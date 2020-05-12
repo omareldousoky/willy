@@ -152,7 +152,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             <Select
               data-qc="branchSelector"
               value={this.state.filteredBranch}
-              onChange={(e: Branch) => this.getDataFromBranch(e)}
+              onChange={(e: any) => this.getDataFromBranch(e)}
               type='text'
               options={this.state.branches}
             />
@@ -176,7 +176,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                       name="issuingBank"
                       data-qc="issuingBank"
                       value={this.state.filteredLoanOfficer}
-                      onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
                     >
                       <option value="">{local.loanOfficer}</option>
                       {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {

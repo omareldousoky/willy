@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import CustomerCreation from './Components/CustomerCreation/customer-creation';
+import UserCreation from './Components/UserCreation/user-creation';
 import FormulaCreation from './Components/LoanFormulaCreation/loanFormulaCreation';
 import FormulaTest from './Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from './Components/LoanProductCreation/loanProductCreation';
@@ -15,9 +16,12 @@ import ManageAccounts from './Components/ManageAccounts/manageAccounts';
 import LoanProfile from './Components/LoanProfile/loanProfile';
 import LoanList from './Components/LoanList/loanList';
 import RoleCreation from './Components/Roles/roleCreation';
+import RoleProfile from './Components/Roles/roleProfile';
 import { Landing } from './Components/Landing/landing';
 import { getCookie } from './Services/getCookie';
 import Can from './config/Can';
+import UserDetails from './Components/userDetails/user-details';
+import CreateBranch from './Components/BranchCreation/create-branch';
 
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
@@ -47,7 +51,12 @@ const App = () => {
                         <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
                         <Route path="/loan-profile" render={(props) => <Can I='view' a='Application'> <LoanProfile {...props} /></Can>} />
                         <Route path="/loans" render={(props) => <LoanList {...props} />}/>
+                        <Route exact path = "/new-user" render={(props)=> <Can I='create' a= 'User'><UserCreation  {...props} edit={false} /></Can> }></Route>
+                        <Route exact path = "/edit-user" render={(props)=> <Can I='edit' a= 'User'><UserCreation  {...props} edit={true} /></Can> }></Route>
                         <Route path="/new-role" render={(props) => <RoleCreation {...props} />}/>
+                        <Route path="/role-profile" render={(props) => <RoleProfile {...props} />}/>
+                        <Route exact path="/user-details"  render={(props)=> <UserDetails {...props}/>} />
+                        <Route exact path = "/new-branch"  render={(props)=> <Can I='create' a='Branch'><CreateBranch {...props} /></Can>}/>
                     </Switch>
                 </div>
             </BrowserRouter>
