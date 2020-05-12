@@ -131,7 +131,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 reviewedDate: date,
                 undoReviewDate: date,
                 rejectionDate: date,
-                noOfGuarantors:0,
+                noOfGuarantors: 0,
                 guarantors: []
             },
             loading: false,
@@ -194,19 +194,28 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const element = {
-                searchResults: {
-                    results: [],
-                    empty: false
-                },
-                guarantor: {},
-            };
-            const value = (application.body.product.noOfGuarantors)?application.body.product.noOfGuarantors:2;
-            const guarsArr = Array(value).fill(element);
-            application.body.guarantors.map( (guar,i) => {
-                guarsArr[i].guarantor = guar
-                formData.guarantorIds.push(guar._id);
-            })
+            const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
+            const guarsArr: Array<any> = [];
+            for (let i = 0; i < value; i++) {
+                if (application.body.guarantors[i]) {
+                    guarsArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        guarantor: application.body.guarantors[i],
+                    })
+                    formData.guarantorIds.push(application.body.guarantors[i]._id);
+                } else {
+                    guarsArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        guarantor: {},
+                    })
+                }
+            }
             formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
             formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
             formData.usage = (application.body.usage) ? application.body.usage : '';
@@ -364,7 +373,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultGuar.searchResults.results = [];
         defaultGuar.searchResults.empty = false;
         defaultApplication.guarantors[index] = defaultGuar;
-        this.setState({ application: defaultApplication, loading:false });
+        this.setState({ application: defaultApplication, loading: false });
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
