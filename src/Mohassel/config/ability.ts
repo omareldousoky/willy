@@ -50,7 +50,7 @@ function defineRulesFor(auth) {
     return rules
 }
 //for all roles:
-//ability.update(defineRulesFor(["Data-Entry","Auditor","Sys-admin","IT-ops"]));
+// ability.update(defineRulesFor(["Data-Entry","Auditor","Sys-admin","IT-ops"]));
 ability.update(defineRulesFor(roles));
 
 export default ability;
