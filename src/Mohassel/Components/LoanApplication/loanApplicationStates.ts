@@ -111,3 +111,25 @@ export const LoanApplicationValidation = Yup.object().shape({
         })
     ),
 });
+export const ReviewLoanValidation = Yup.object().shape({
+    reviewStatus: Yup.string().required('required!'),
+    reviewDate: Yup.date().test(
+        "Min Date", "Can't Select a future date",
+        (value: any) => { return value ? new Date(value).valueOf() <= new Date().setHours(0, 0, 0, 0) : true }
+    ).required('required!'),
+})
+export const UnReviewLoanValidation = Yup.object().shape({
+    unreviewStatus: Yup.string().required('required!'),
+    unreviewDate: Yup.date().test(
+        "Min Date", "Can't Select a future date",
+        (value: any) => { return value ? new Date(value).valueOf() <= new Date().setHours(0, 0, 0, 0) : true }
+    ).required('required!'),
+})
+export const RejectLoanValidation = Yup.object().shape({
+    rejectionStatus: Yup.string().required('required!'),
+    rejectionReason: Yup.string().required('required!'),
+    rejectionDate: Yup.date().test(
+        "Min Date", "Can't Select a future date",
+        (value: any) => { return value ? new Date(value).valueOf() <= new Date().setHours(0, 0, 0, 0) : true }
+    ).required('required!'),
+})
