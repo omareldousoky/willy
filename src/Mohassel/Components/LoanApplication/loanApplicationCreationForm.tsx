@@ -11,6 +11,7 @@ import InfoBox from '../userInfoBox';
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
+        <>
         <Form style={{ textAlign: 'right' }} onSubmit={handleSubmit}>
             <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
                 <InfoBox values={values} />
@@ -603,10 +604,11 @@ export const LoanApplicationCreationForm = (props: any) => {
                     />
                 </div>
             </fieldset>
-            {!(values.state === 'edit' || values.state === 'under_review') && <div style={{  margin: '20px 0', border: '1px solid black', padding: 10, borderRadius: 4 }}>
-                <StatusHelper status={values.state} id={values.id} handleStatusChange={(internalstate, internalprops) => { props.handleStatusChange(internalstate, internalprops) }} application={values} />
-            </div>}
             {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{(values.state === 'under_review') ? local.submit : local.edit}</Button>}
         </Form >
+         {!(values.state === 'edit' || values.state === 'under_review') && <div style={{  margin: '20px 0', border: '1px solid black', padding: 10, borderRadius: 4 }}>
+         <StatusHelper status={values.state} id={values.id} handleStatusChange={(values, status) => { props.handleStatusChange(values, status) }} application={values} />
+     </div>}
+     </>
     )
 }

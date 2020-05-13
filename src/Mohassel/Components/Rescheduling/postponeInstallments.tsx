@@ -86,7 +86,8 @@ class PostponeInstallments extends Component<Props, State>{
             withInterest: values.withInterest,
             postponementInterest: values.postponementInterest,
             payWhere: values.payWhere,
-            installmentNumber: Number(values.installmentNumber)
+            installmentNumber: Number(values.installmentNumber),
+            shiftInstallments:true
         }
         const res = await testFreeRescheduling(this.props.application._id, obj);
         if (res.status === "success") {
@@ -127,7 +128,9 @@ class PostponeInstallments extends Component<Props, State>{
             withInterest: this.state.withInterest,
             postponementInterest: this.state.postponementInterest,
             payWhere: this.state.payWhere,
-            installmentNumber: Number(this.state.installmentNumber)
+            installmentNumber: Number(this.state.installmentNumber),
+            shiftInstallments:true
+
         }
         const res = await freeRescheduling(this.props.application._id, obj);
         if (res.status === "success") {
