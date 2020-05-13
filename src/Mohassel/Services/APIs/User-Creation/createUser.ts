@@ -1,7 +1,7 @@
 import axios from '../axios-instance';
 
 export const createUser = async (data: object) => {
-    const url = process.env.REACT_APP_BASE_URL + `/user`;
+    const url = process.env.REACT_APP_BASE_URL + "/user";
     try {
         const res = await axios.post(url, data);
         return { status: "success", body: res.data }

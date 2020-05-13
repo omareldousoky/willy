@@ -142,7 +142,7 @@ class RoleCreation extends Component<Props, State>{
                     <RoleTable sections={this.state.sections} permissions={this.state.permissions} updatePerms={(perms) => { this.setState({ permissions: perms }) }} />
                     <Row className="justify-content-around">
                         <Button style={{ width: '20%' }} onClick={() => { this.previousStep(2) }}>{local.previous}</Button>
-                        <Button style={{ float: 'left', width: '20%' }} type="button" onClick={() => this.submit()} data-qc="next">{local.next}</Button>
+                        <Button style={{ float: 'left', width: '20%' }} type="button" onClick={() => this.submit()} data-qc="next">{local.submit}</Button>
                     </Row>
                 </>
             </div>
@@ -160,9 +160,9 @@ class RoleCreation extends Component<Props, State>{
         const res = await createRole(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });
-            Swal.fire("success", local.loanProductCreated)
+            Swal.fire("success", local.userRoleCreated).then(() => { this.props.history.push("/manage-accounts") })
         } else {
-            Swal.fire("error", local.loanProductCreationError, 'error')
+            Swal.fire("error", local.userRoleCreationError, 'error')
             this.setState({ loading: false });
         }
     }
