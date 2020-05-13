@@ -22,16 +22,18 @@ interface State {
     reviewState: {
         reviewStatus: string;
         reviewDate: any;
-
+        entryDate: any;
     };
     unreviewState: {
         unreviewStatus: string;
         unreviewDate: any;
+        reviewedDate: any;
     };
     rejectState: {
         rejectionStatus: string;
         rejectionReason: string;
         rejectionDate: any;
+        reviewedDate: any;
     };
 }
 const today = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -79,15 +81,18 @@ class StatusHelper extends Component<Props, State>{
             reviewState: {
                 reviewStatus: 'reviewRequired',
                 reviewDate: today,
+                entryDate: this.props.application.entryDate
             },
             unreviewState: {
                 unreviewStatus: 'reviewDone',
                 unreviewDate: today,
+                reviewedDate: this.props.application.reviewedDate
             },
             rejectState: {
                 rejectionStatus: '',
                 rejectionReason: '',
-                rejectionDate: today
+                rejectionDate: today,
+                reviewedDate: this.props.application.reviewedDate
             }
         }
     }
@@ -148,7 +153,7 @@ class StatusHelper extends Component<Props, State>{
                                                 name="reviewDate"
                                                 data-qc="reviewDate"
                                                 value={formikProps.values.reviewDate}
-                                                min={this.props.application.entryDate}
+                                                // min={this.props.application.entryDate}
                                                 onChange={formikProps.handleChange}
                                                 onBlur={formikProps.handleBlur}
                                                 isInvalid={Boolean(formikProps.errors.reviewDate) && Boolean(formikProps.touched.reviewDate)}
@@ -232,7 +237,7 @@ class StatusHelper extends Component<Props, State>{
                                                 name="unreviewDate"
                                                 data-qc="unreviewDate"
                                                 value={formikProps.values.unreviewDate}
-                                                min={this.getDateString(this.props.application.reviewedDate)}
+                                                // min={this.getDateString(this.props.application.reviewedDate)}
                                                 onChange={formikProps.handleChange}
                                                 onBlur={formikProps.handleBlur}
                                                 isInvalid={Boolean(formikProps.errors.unreviewDate) && Boolean(formikProps.touched.unreviewDate)}
@@ -312,7 +317,7 @@ class StatusHelper extends Component<Props, State>{
                                                 data-qc="rejectionDate"
                                                 value={formikProps.values.rejectionDate}
                                                 onChange={formikProps.handleChange}
-                                                min={this.getDateString(this.props.application.reviewedDate)}
+                                                // min={this.getDateString(this.props.application.reviewedDate)}
                                                 onBlur={formikProps.handleBlur}
                                                 isInvalid={Boolean(formikProps.errors.rejectionDate) && Boolean(formikProps.touched.rejectionDate)}
                                             />
