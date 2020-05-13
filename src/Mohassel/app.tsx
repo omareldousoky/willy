@@ -22,6 +22,7 @@ import { getCookie } from './Services/getCookie';
 import Can from './config/Can';
 import UserDetails from './Components/userDetails/user-details';
 import CreateBranch from './Components/BranchCreation/create-branch';
+import CustomersList from './Components/CustomerCreation/customersList';
 
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
@@ -36,6 +37,7 @@ const App = () => {
                     <NavBar />
                     <Switch>
                         <Route exact path="/" component={Landing} />
+                        <Route exact path = "/customers"  render={(props)=> <Can I='view' a='Customer'><CustomersList {...props} /></Can>}/>
                         <Route exact path="/new-customer" render={(props) => <Can I='create' a='Customer'><CustomerCreation {...props} edit={false} /></Can>} />
                         <Route exact path="/edit-customer" render={(props) => <Can I='edit' a='Customer'><CustomerCreation {...props} edit={true} /> </Can>} />
                         <Route path="/new-formula" render={(props) => <Can I='create' a='CalculationMethod'><FormulaCreation /></Can>} />

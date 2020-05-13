@@ -333,7 +333,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     {errors.applicationFeePercent}
                                 </Form.Control.Feedback>
                             </Col>
-                            <Col sm={4}>
+                            <Col sm={3}>
                                 <Form.Control as="select"
                                     name="applicationFeeType"
                                     data-qc="applicationFeeType"
@@ -368,7 +368,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     {errors.applicationFeePercentPerPerson}
                                 </Form.Control.Feedback>
                             </Col>
-                            <Col sm={4}>
+                            <Col sm={3}>
                                 <Form.Control as="select"
                                     name="applicationFeePercentPerPersonType"
                                     data-qc="applicationFeePercentPerPersonType"

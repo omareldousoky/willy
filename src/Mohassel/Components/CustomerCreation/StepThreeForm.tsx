@@ -50,19 +50,6 @@ export const StepThreeForm = (props: any) => {
             <Form.Group as={Row} controlId="representative">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.representative}*`}</Form.Label>
                 <Col sm={6}>
-                    {/* <Form.Control as="select"
-                        type="select"
-                        name="representative"
-                        data-qc="representative"
-                        value={values.representative}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={errors.representative && touched.representative}
-                    >
-                        <option value="" disabled></option>
-                        <option value="representative1">representative1</option>
-                        <option value="representative2">representative2</option>
-                    </Form.Control> */}
                     <AsyncSelect
                         name="representative"
                         data-qc="representative"

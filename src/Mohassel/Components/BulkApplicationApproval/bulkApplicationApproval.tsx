@@ -129,7 +129,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     const res = await bulkApproval(obj);
     if (res.status === "success") {
       this.setState({ loading: false })
-      Swal.fire('', local.bulkLoanApproved, 'success');
+      Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getDataFromBranch(this.state.filteredBranch));
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.bulkLoanError, 'error');

@@ -5,8 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { RouteProps } from 'react-router';
 import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
-import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/customerSearch';
+import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
+import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
@@ -131,7 +131,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 reviewedDate: date,
                 undoReviewDate: date,
                 rejectionDate: date,
-                noOfGuarantors:0,
+                noOfGuarantors: 0,
                 guarantors: []
             },
             loading: false,
@@ -194,19 +194,28 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const element = {
-                searchResults: {
-                    results: [],
-                    empty: false
-                },
-                guarantor: {},
-            };
-            const value = (application.body.product.noOfGuarantors)?application.body.product.noOfGuarantors:2;
-            const guarsArr = Array(value).fill(element);
-            application.body.guarantors.map( (guar,i) => {
-                guarsArr[i].guarantor = guar
-                formData.guarantorIds.push(guar._id);
-            })
+            const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
+            const guarsArr: Array<any> = [];
+            for (let i = 0; i < value; i++) {
+                if (application.body.guarantors[i]) {
+                    guarsArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        guarantor: application.body.guarantors[i],
+                    })
+                    formData.guarantorIds.push(application.body.guarantors[i]._id);
+                } else {
+                    guarsArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        guarantor: {},
+                    })
+                }
+            }
             formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
             formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
             formData.usage = (application.body.usage) ? application.body.usage : '';
@@ -258,7 +267,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (query) => {
         this.setState({ loading: true });
-        const results = await searchCustomerByName(query)
+        const results = await searchCustomer({from: 0, size: 50, name: query})
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -364,7 +373,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultGuar.searchResults.results = [];
         defaultGuar.searchResults.empty = false;
         defaultApplication.guarantors[index] = defaultGuar;
-        this.setState({ application: defaultApplication, loading:false });
+        this.setState({ application: defaultApplication, loading: false });
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
@@ -489,7 +498,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 const res = await newApplication(objToSubmit);
                 if (res.status === 'success') {
                     this.setState({ loading: false });
-                    Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
+                    Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
                 } else {
                     Swal.fire("error", local.loanApplicationCreationError, 'error')
                     this.setState({ loading: false });
@@ -499,7 +508,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 const res = await editApplication(objToSubmit, this.state.prevId);
                 if (res.status === 'success') {
                     this.setState({ loading: false });
-                    Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/") })
+                    Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/track-loan-applications") })
                 } else {
                     Swal.fire("error", local.loanApplicationEditError, 'error')
                     this.setState({ loading: false });
