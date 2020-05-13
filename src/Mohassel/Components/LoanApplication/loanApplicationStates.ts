@@ -118,7 +118,6 @@ export const ReviewLoanValidation = Yup.object().shape({
         "Date should be smaller than entry date", local.reviewDateCannotBeBeforeEntryDate,
         function (this: any, value: any) {
             const { entryDate } = this.parent;
-            console.log(new Date(entryDate).valueOf(), entryDate, new Date(value).valueOf())
             return value ? new Date(value).setHours(23, 59, 0, 0).valueOf() >= new Date(entryDate).valueOf() : true
         }
     ).test("Min Date", local.dateShouldBeBeforeToday,
@@ -148,7 +147,6 @@ export const RejectLoanValidation = Yup.object().shape({
         "Min Date", local.rejectionDateCannotBeForeReviewDate,
         function (this: any, value: any) {
             const { reviewedDate } = this.parent;
-            console.log(reviewedDate)
             return value ? new Date(value).setHours(23, 59, 0, 0).valueOf() >= new Date(reviewedDate).valueOf() : true
         }
     ).test("Min Date", local.dateShouldBeBeforeToday,
