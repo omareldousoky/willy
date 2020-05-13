@@ -59,10 +59,10 @@ class RolesList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.roles}</Card.Title>
-                <span className="text-muted">{local.noOfRoles}</span>
+                <span className="text-muted">{local.noOfRoles} {this.state.data.length}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>new role</Button>
+                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>{local.createNewRole}</Button>
               </div>
             </div>
             {this.state.data.map((el, index) => {
