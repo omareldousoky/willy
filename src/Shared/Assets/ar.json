@@ -366,6 +366,8 @@
     "branchCreationError":"حدث خطأ ،لم يتم إنشاء الفرع",
     "branchState": "حالة الفرع",
     "activeBranch": "نشط",
-    "inActiveBranch":"غير نشط"
+    "inActiveBranch":"غير نشط",
+    "customers": "العملاء",
+    "noOfCustomers": "عدد العملاء"
 
 }

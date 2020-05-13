@@ -15,6 +15,7 @@ function defineRulesFor(auth) {
     if (auth.includes("Data-Entry")) {
         can("create", "Customer")
         can("edit", "Customer")
+        can("view", "Customer")
         can("view", "Application")
         can("edit", "Application")
         can("create", "Application")
@@ -39,6 +40,7 @@ function defineRulesFor(auth) {
     }
     if (auth.includes("IT-ops")) {
         can("edit", "Customer")
+        can("view", "Customer")
         can("create","User")
         can("edit","User")
         can("edit", "NationalId")
