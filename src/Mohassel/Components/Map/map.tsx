@@ -9,7 +9,7 @@ const mapStyles = {
     margin: '20px',
     borderRadius: '10px',
     overflow: 'hidden',
-    border: '2px solid #2d2c76',
+    border: '2px solid #131948',
     height: '400px'
 };
 interface Props {
@@ -51,7 +51,23 @@ export class MapContainer extends Component<Props, State> {
             input,
             options,
         );
-
+        if (this.props.location.lat !== 0 && this.props.location.lng !== 0) {
+            const input = document.getElementById('autocomplete') as HTMLInputElement;
+            const geocoder = new google.maps.Geocoder;
+            this.setState({
+                lat: this.props.location.lat,
+                lng: this.props.location.lng,
+                mapCenterLat: this.props.location.lat,
+                mapCenterLng: this.props.location.lng
+            })
+            geocoder.geocode({ 'location': this.props.location }, function (results: any, status: string) {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        input.value = results[0].formatted_address;
+                    }
+                }
+            })
+        }
         // Fire Event when a suggested name is selected
         autocomplete.addListener('place_changed', () => {
             this.handlePlaceSelect(autocomplete)
@@ -83,6 +99,8 @@ export class MapContainer extends Component<Props, State> {
         this.setState({
             lat,
             lng,
+            mapCenterLat: lat,
+            mapCenterLng: lng
         })
     }
     render() {
@@ -97,10 +115,9 @@ export class MapContainer extends Component<Props, State> {
                         <label htmlFor="input" className="control-label"></label><i className="bar"></i>
                     </div>
                     <Map
-                        // className="map"
                         google={this.props.google}
                         zoom={12}
-                        // style={mapStyles}
+                        style={mapStyles}
                         initialCenter={{ lat: this.state.mapCenterLat, lng: this.state.mapCenterLng }}
                         center={{ lat: this.state.mapCenterLat, lng: this.state.mapCenterLng }}
                         onClick={this.handleClick}

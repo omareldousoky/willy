@@ -137,27 +137,31 @@ class CustomerCreation extends Component<Props, State>{
   }
   async getCustomerById() {
     this.setState({ loading: true });
-      const res = await getCustomerByID(this.props.location.state.id)
-      if (res.status === 'success') {
-        const customerInfo = { ...res.body };
-        const customerBusiness = { ...res.body };
-        const customerExtraDetails = { ...res.body };
-        customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
-        customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
-        customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
-        customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
-        this.setState({
-          loading: false,
-          selectedCustomer: res.body,
-          step1: { ...this.state.step1, ...customerInfo },
-          step2: { ...this.state.step2, ...customerBusiness },
-          step3: { ...this.state.step3, ...customerExtraDetails },
-        });
+    const res = await getCustomerByID(this.props.location.state.id)
+    if (res.status === 'success') {
+      const customerInfo = { ...res.body };
+      const customerBusiness = { ...res.body };
+      const customerExtraDetails = { ...res.body };
+      const customerAddressLatLongNumber = { lat: Number(res.body.customerAddressLatLong.split(',')[0]), lng: Number(res.body.customerAddressLatLong.split(',')[1]) }
+      const businessAddressLatLongNumber = { lat: Number(res.body.businessAddressLatLong.split(',')[0]), lng: Number(res.body.businessAddressLatLong.split(',')[1]) }
+      customerInfo.customerAddressLatLongNumber = customerAddressLatLongNumber;
+      customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
+      customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
+      customerBusiness.businessAddressLatLongNumber = businessAddressLatLongNumber;
+      customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
+      customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
+      this.setState({
+        loading: false,
+        selectedCustomer: res.body,
+        step1: { ...this.state.step1, ...customerInfo },
+        step2: { ...this.state.step2, ...customerBusiness },
+        step3: { ...this.state.step3, ...customerExtraDetails },
+      });
 
-      } else {
-        this.setState({ loading: false });
-        Swal.fire('error', local.searchError, 'error');
-      }
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('error', local.searchError, 'error');
+    }
   }
   submit = (values: object) => {
     if (this.state.step < 3) {

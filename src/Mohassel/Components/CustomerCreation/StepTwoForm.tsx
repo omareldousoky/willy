@@ -8,14 +8,13 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const StepTwoForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
-    const [businessAddressLatLong, setLocation] = useState({ lat: 0, lng: 0 });
     const [mapState, openCloseMap] = useState(false);
     return (
         <Form onSubmit={handleSubmit}>
             {mapState && <Map show={mapState}
                 handleClose={() => openCloseMap(false)}
-                save={(businessAddressLatLong: { lat: number; lng: number }) => { setLocation(businessAddressLatLong); setFieldValue('businessAddressLatLong', businessAddressLatLong); openCloseMap(false) }}
-                location={businessAddressLatLong}
+                save={(businessAddressLatLong: { lat: number; lng: number }) => { setFieldValue('businessAddressLatLongNumber', businessAddressLatLong); openCloseMap(false) }}
+                location={props.values.businessAddressLatLongNumber}
                 header={local.customerWorkAddressLocationTitle}
             />}
             <Form.Group as={Row} controlId="businessName">

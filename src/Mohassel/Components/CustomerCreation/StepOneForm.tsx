@@ -11,15 +11,14 @@ import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation
 import Can from '../../config/Can';
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
-  const [customerAddressLatLong, setLocation] = useState({ lat: 0, lng: 0 });
   const [mapState, openCloseMap] = useState(false);
   const [loading, setLoading] = useState(false);
   return (
     <Form onSubmit={handleSubmit}>
       {mapState && <Map show={mapState}
         handleClose={() => openCloseMap(false)}
-        save={(customerAddressLatLong: { lat: number; lng: number }) => { setLocation(customerAddressLatLong); setFieldValue('customerAddressLatLong', customerAddressLatLong); openCloseMap(false) }}
-        location={customerAddressLatLong}
+        save={(customerAddressLatLong: { lat: number; lng: number }) => { setFieldValue('customerAddressLatLongNumber', customerAddressLatLong); openCloseMap(false) }}
+        location={props.values.customerAddressLatLongNumber}
         header={local.customerHomeAddressLocationTitle}
       />}
       <Form.Group as={Row} controlId="customerName">
