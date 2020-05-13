@@ -5,8 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { RouteProps } from 'react-router';
 import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
-import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/customerSearch';
+import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
+import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
@@ -258,7 +258,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (query) => {
         this.setState({ loading: true });
-        const results = await searchCustomerByName(query)
+        const results = await searchCustomer({from: 0, size: 50, name: query})
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
