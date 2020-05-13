@@ -99,6 +99,7 @@ interface State {
     comments: string;
   };
   customerId: string;
+  selectedCustomer: any;
   loading: boolean;
   searchResults: {
     results: Array<object>;
@@ -120,12 +121,13 @@ class CustomerCreation extends Component<Props, State>{
         results: [],
         empty: false
       },
+      selectedCustomer: {}
     }
   }
   componentDidUpdate(prevProps: Props, _prevState: State) {
     if (prevProps.edit !== this.props.edit) {
       //set State to initial value
-      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1, searchResults: { results: [], empty: false } });
+      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1, searchResults: { results: [], empty: false }, selectedCustomer: {} });
     }
   }
   submit = (values: object) => {
@@ -148,10 +150,10 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const results = await searchCustomerByName(query)
     if (results.status === 'success') {
-      if (results.body.customers.length > 0) {
-        this.setState({ loading: false, searchResults: { results: results.body.customers, empty: false } });
+      if (results.body.data.length > 0) {
+        this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
       }else{
-        this.setState({ loading: false, searchResults: { results: results.body.customers, empty: true } });
+        this.setState({ loading: false, searchResults: { results: results.body.data, empty: true } });
       }
     } else {
       Swal.fire("error", local.searchError, 'error')
@@ -159,8 +161,8 @@ class CustomerCreation extends Component<Props, State>{
     }
   }
   async selectCustomer(customer) {
-    this.setState({ loading: true, customerId: customer.id });
-    const res = await getCustomerByID(customer.id)
+    this.setState({ loading: true, customerId: customer._id });
+    const res = await getCustomerByID(customer._id)
     if (res.status === 'success') {
 
       const customerInfo = { ...res.body };
@@ -172,6 +174,7 @@ class CustomerCreation extends Component<Props, State>{
       customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
       this.setState({
         loading: false,
+        selectedCustomer: res.body,
         step1: { ...this.state.step1, ...customerInfo },
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
@@ -285,7 +288,7 @@ class CustomerCreation extends Component<Props, State>{
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
         {this.props.edit && this.state.customerId === "" ?
-          <CustomerSearch source='loanApplication' handleSearch={(query: string) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer: object) => this.selectCustomer(customer)} />
+          <CustomerSearch source='loanApplication' handleSearch={(query: string) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer: object) => this.selectCustomer(customer)} selectedCustomer={this.state.selectedCustomer}/>
           : <>
             <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
               <Tab eventKey={1} title={local.mainInfo}>

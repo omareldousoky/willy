@@ -7,7 +7,7 @@ export const LoanProductValidation = Yup.object().shape({
     noOfInstallments: Yup.number().integer('Must be int').min(Yup.ref('minInstallment'), "Can't be less than minimum").max(Yup.ref('maxInstallment'), "Can't be more than maximum").required('required!'),
     lateDays: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
     gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
-    interest: Yup.number().min(0, "Can't be less than zero").max(100,"Can't be more than 100").required('required!'),
+    interest: Yup.number().moreThan(0, "Can't be less than zero").max(100,"Can't be more than 100").required('required!'),
     inAdvanceFees: Yup.number().min(0, "Can't be less than 0").max(100,"Can't be more than 100").required('required!'),
     stamps: Yup.number().min(0, "Can't be less than 0").required('required!'),
     representativeFees: Yup.number().min(0, "Can't be less than 0").required('required!'),

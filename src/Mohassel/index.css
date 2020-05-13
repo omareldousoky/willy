@@ -1,5 +1,7 @@
+
 body {
     margin: 0;
+    height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
@@ -12,7 +14,6 @@ code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-  
 .pac-container.pac-logo.hdpi, .pac-container.pac-logo {
   z-index: 1100;
 }
@@ -93,7 +94,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background: rgba(255, 255, 255, 0.9);
 }
 /*End of Loader Component*/
-
 .chip {
   background-color: lightgray;
   display: inline-block;
@@ -109,26 +109,22 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .primary-color {
   color: #7dc356
 }
-
-.refresh-logo-navbar {
-  background-color: #7dc356;
-  display: flex;
-  width: 100px;
-  height: 85px;
-  justify-content: center;
-}
-.info-navbar {
-  background-color: #131848;
-  color: #fff;
-  padding: 0px 50px;
-  display: flex;
-  height: 85px;
-  align-items: center;
-  margin-left: 100px;
-}
 .navbar-nav a{
   color: #fff !important;
 }
 .checkbox-label, label {
   margin-right: 20px;
+}
+.btn-primary {
+  color: #fff;
+}
+.btn-cancel-prev {
+  background-color: #fff;
+  border-color: #7dc356;
+  color: #7dc356;
+
+}
+.btn-submit-next {
+  background-color: #7dc356;
+  color: #fff;
 }
