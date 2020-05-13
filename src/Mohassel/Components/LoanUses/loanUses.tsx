@@ -47,12 +47,13 @@ class LoanUses extends Component<{}, State> {
   addLoanUse() {
     if (!this.state.loanUses.some(loanUse => loanUse.name === "")) {
       this.setState({
+        filterLoanUsage: '',
         loanUses: [...this.state.loanUses, { name: "", disabledUi: false, id: "", activated: true }],
         temp: [...this.state.temp, '']
       })
     }
   }
-  handleChangeInput(event: React.FormEvent<HTMLInputElement>, index: number) {
+  handleChangeInput(event: React.ChangeEvent<HTMLInputElement>, index: number) {
     this.setState({
       loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: event.currentTarget.value } : loanUse)
     })
@@ -100,7 +101,8 @@ class LoanUses extends Component<{}, State> {
           placeholder={local.search}
           style={{ marginBottom: 20 }}
           maxLength={100}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ filterLoanUsage: e.currentTarget.value })}
+          value={this.state.filterLoanUsage}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterLoanUsage: e.currentTarget.value })}
         />
         <div style={{ display: 'flex', textAlign: 'center' }}>
           <h4 style={{ textAlign: 'right' }}>{local.loanUses}</h4>
@@ -113,7 +115,7 @@ class LoanUses extends Component<{}, State> {
         <ListGroup style={{ textAlign: 'right', position: 'absolute', marginBottom: 30 }}>
           <Loader type="fullsection" open={this.state.loading} />
           {this.state.loanUses
-            .filter(loanUse => loanUse.name.includes(this.state.filterLoanUsage))
+            .filter(loanUse => loanUse.name.toLocaleLowerCase().includes(this.state.filterLoanUsage.toLocaleLowerCase()))
             .map((loanUse, index) => {
               return (
                 <ListGroup.Item key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -124,7 +126,7 @@ class LoanUses extends Component<{}, State> {
                       maxLength={100}
                       title={loanUse.name}
                       value={loanUse.name}
-                      onChange={(e: React.FormEvent<HTMLInputElement>) => this.handleChangeInput(e, index)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.handleChangeInput(e, index)}
                       onKeyDown={(e: React.KeyboardEvent) => this.handleKeyDown(e, index)}
                       disabled={loanUse.disabledUi}
                       style={loanUse.disabledUi ? { background: 'none', border: 'none' } : {}}
@@ -150,7 +152,7 @@ class LoanUses extends Component<{}, State> {
                       />
                       <span className="fa fa-undo fa-lg"
                         style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
-                        onClick={() => this.state.temp[index] !== '' ? this.setState({ loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: this.state.temp[index], disabledUi: true } : loanUse) }) : {}}
+                        onClick={() => this.state.temp[index] !== '' ? this.setState({ loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: this.state.temp[index], disabledUi: true } : loanUse) }) : this.setState({loanUses: this.state.loanUses.filter(loanItem => loanItem.id !== "")})}
                       />
                     </>
                   }

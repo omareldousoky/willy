@@ -5,20 +5,20 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
-import Map from './map';
+import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
-  const [customerAddressLatLong, setLocation] = useState({ lat: 0, long: 0 });
+  const [customerAddressLatLong, setLocation] = useState({ lat: 0, lng: 0 });
   const [mapState, openCloseMap] = useState(false);
   const [loading, setLoading] = useState(false);
   return (
     <Form onSubmit={handleSubmit}>
       {mapState && <Map show={mapState}
         handleClose={() => openCloseMap(false)}
-        save={(customerAddressLatLong: { lat: number; long: number }) => { setLocation(customerAddressLatLong); setFieldValue('customerAddressLatLong', customerAddressLatLong); openCloseMap(false) }}
+        save={(customerAddressLatLong: { lat: number; lng: number }) => { setLocation(customerAddressLatLong); setFieldValue('customerAddressLatLong', customerAddressLatLong); openCloseMap(false) }}
         location={customerAddressLatLong}
         header={local.customerHomeAddressLocationTitle}
       />}
@@ -49,7 +49,7 @@ export const StepOneForm = (props: any) => {
             data-qc="nationalId"
             value={values.nationalId}
             onBlur={handleBlur}
-            onChange={async (event: React.FormEvent<HTMLInputElement>) => {
+            onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               const { name, value } = event.currentTarget;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -87,14 +87,8 @@ export const StepOneForm = (props: any) => {
             name="birthDate"
             data-qc="birthDate"
             value={values.birthDate}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            isInvalid={errors.birthDate && touched.birthDate}
             disabled
           />
-          <Form.Control.Feedback type="invalid">
-            {errors.birthDate}
-          </Form.Control.Feedback>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="gender">
@@ -105,18 +99,12 @@ export const StepOneForm = (props: any) => {
             name="gender"
             data-qc="gender"
             value={values.gender}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            isInvalid={errors.gender && touched.gender}
             disabled
           >
             <option value="" disabled></option>
             <option value="male">{local.male}</option>
             <option value="female">{local.female}</option>
           </Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {errors.gender}
-          </Form.Control.Feedback>
         </Col>
       </Form.Group>
       <Form.Group as={Row} controlId="nationalIdIssueDate">
@@ -163,7 +151,7 @@ export const StepOneForm = (props: any) => {
             name="homePostalCode"
             data-qc="homePostalCode"
             value={values.homePostalCode}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                 setFieldValue('homePostalCode', event.currentTarget.value)
@@ -186,7 +174,7 @@ export const StepOneForm = (props: any) => {
             name="homePhoneNumber"
             data-qc="homePhoneNumber"
             value={values.homePhoneNumber}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                 setFieldValue('homePhoneNumber', event.currentTarget.value)
@@ -210,7 +198,7 @@ export const StepOneForm = (props: any) => {
             data-qc="mobilePhoneNumber"
             value={values.mobilePhoneNumber}
             onBlur={handleBlur}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                 setFieldValue('mobilePhoneNumber', event.currentTarget.value)
@@ -233,7 +221,7 @@ export const StepOneForm = (props: any) => {
             data-qc="faxNumber"
             value={values.faxNumber}
             onBlur={handleBlur}
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               const re = /^\d*$/;
               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
                 setFieldValue('faxNumber', event.currentTarget.value)

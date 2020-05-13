@@ -39,10 +39,13 @@ function defineRulesFor(auth) {
     }
     if (auth.includes("IT-ops")) {
         can("edit", "Customer")
+        can("create","User")
+        can("edit","User")
         can("edit", "NationalId")
         can("view", "Application")
         can("bulkApprove", "Application")
         can('filterByBranch','Application')
+        can('create','Branch')
     }
     return rules
 }

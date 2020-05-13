@@ -17,7 +17,7 @@ import { searchApplication } from '../../Services/APIs/loanApplication/searchApp
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import { englishToArabic }  from '../../Services/statusLanguage';
 interface Branch {
   label: string;
   value: string;
@@ -129,7 +129,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     const res = await bulkApproval(obj);
     if (res.status === "success") {
       this.setState({ loading: false })
-      Swal.fire('', local.bulkLoanApproved, 'success');
+      Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getDataFromBranch(this.state.filteredBranch));
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.bulkLoanError, 'error');
@@ -142,21 +142,6 @@ class BulkApplicationApproval extends Component<Props, State>{
       return new Date(date).toISOString().slice(0, 10)
     }
   }
-  englishToArabic(status: string) {
-    switch (status) {
-      case 'underReview':
-        return 'تحت التحرير';
-      case 'reviewed':
-        return 'رُجعت';
-      case 'rejected':
-        return 'مرفوضة';
-      case 'approved':
-        return 'موافق عليها';
-      case 'created':
-        return 'إنشاء';
-      default: return '';
-    }
-  }
   render() {
     return (
       <Container>
@@ -167,7 +152,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             <Select
               data-qc="branchSelector"
               value={this.state.filteredBranch}
-              onChange={(e: Branch) => this.getDataFromBranch(e)}
+              onChange={(e: any) => this.getDataFromBranch(e)}
               type='text'
               options={this.state.branches}
             />
@@ -182,7 +167,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                   <th>{local.loanApplicationId}</th>
                   <th>{local.customerName}</th>
                   <th>{local.loanAppCreationDate}</th>
-                  <th>{local.loanStatus}</th>
+                  <th>{local.applicationStatus}</th>
                   <th>{local.productName}</th>
                   <th>{local.loanPrinciple}</th>
                   <th>
@@ -191,7 +176,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                       name="issuingBank"
                       data-qc="issuingBank"
                       value={this.state.filteredLoanOfficer}
-                      onChange={(e: React.FormEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
                     >
                       <option value="">{local.loanOfficer}</option>
                       {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {
@@ -213,7 +198,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                         <td>{loanItem.id}</td>
                         <td>{loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
-                        <td>{this.englishToArabic(loanItem.application.status)}</td>
+                        <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.principal}</td>
                         <td></td>

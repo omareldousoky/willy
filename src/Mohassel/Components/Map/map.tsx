@@ -97,7 +97,7 @@ export class MapContainer extends Component<Props, State> {
                         <label htmlFor="input" className="control-label"></label><i className="bar"></i>
                     </div>
                     <Map
-                        className="map"
+                        // className="map"
                         google={this.props.google}
                         zoom={12}
                         // style={mapStyles}
@@ -118,5 +118,5 @@ export class MapContainer extends Component<Props, State> {
 }
 
 export default GoogleApiWrapper({
-    apiKey: process.env.REACT_APP_GOOGLE_MAP_KEY
+    apiKey: process.env.REACT_APP_GOOGLE_MAP_KEY||''
 })(MapContainer);

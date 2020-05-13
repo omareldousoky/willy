@@ -79,7 +79,6 @@ class LoanCreation extends Component<Props, State> {
   }
   async componentDidMount() {
     const { id, type } = this.props.location.state;
-
     this.setState({ id, type, loading: true })
     if (type === "create") {
       const res = await testCalculateApplication(id);
@@ -152,7 +151,7 @@ class LoanCreation extends Component<Props, State> {
               <th>{local.periodLength}</th>
               <th>{local.every}</th>
               <th>{local.gracePeriod}</th>
-              <th>{local.loanStatus}</th>
+              <th>{local.applicationStatus}</th>
               <th>{local.productName}</th>
               <th>{local.loanAppCreationDate}</th>
             </tr>
