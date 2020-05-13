@@ -51,8 +51,10 @@ export interface Customer {
 interface Props {
   history: Array<string>;
   location: {
-    state: { id: string; };
-  }
+    state: {
+      id: string;
+    };
+  };
   edit: boolean;
 };
 interface State {
