@@ -6,8 +6,7 @@ import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
-import CustomerSearch from '../CustomerSearch/customerSearchTable';
-import { searchCustomerByName, getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
+import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
@@ -51,6 +50,11 @@ export interface Customer {
 }
 interface Props {
   history: Array<string>;
+  location: {
+    state: {
+      id: string;
+    };
+  };
   edit: boolean;
 };
 interface State {
@@ -125,11 +129,35 @@ class CustomerCreation extends Component<Props, State>{
       selectedCustomer: {}
     }
   }
-  componentDidUpdate(prevProps: Props, _prevState: State) {
-    if (prevProps.edit !== this.props.edit) {
-      //set State to initial value
-      this.setState({ customerId: '', step1: step1, step2: step2, step3: step3, step: 1, searchResults: { results: [], empty: false }, selectedCustomer: {} });
+
+  componentDidMount() {
+    if (this.props.edit) {
+      this.getCustomerById();
     }
+  }
+  async getCustomerById() {
+    this.setState({ loading: true });
+      const res = await getCustomerByID(this.props.location.state.id)
+      if (res.status === 'success') {
+        const customerInfo = { ...res.body };
+        const customerBusiness = { ...res.body };
+        const customerExtraDetails = { ...res.body };
+        customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
+        customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
+        customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
+        customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
+        this.setState({
+          loading: false,
+          selectedCustomer: res.body,
+          step1: { ...this.state.step1, ...customerInfo },
+          step2: { ...this.state.step2, ...customerBusiness },
+          step3: { ...this.state.step3, ...customerExtraDetails },
+        });
+
+      } else {
+        this.setState({ loading: false });
+        Swal.fire('error', local.searchError, 'error');
+      }
   }
   submit = (values: object) => {
     if (this.state.step < 3) {
@@ -145,45 +173,6 @@ class CustomerCreation extends Component<Props, State>{
         customerExtraDetails: { ...this.state.step3 }
       };
       this.createCustomer(objToSubmit);
-    }
-  }
-  async handleSearch(query: string) {
-    this.setState({ loading: true });
-    const results = await searchCustomerByName(query)
-    if (results.status === 'success') {
-      if (results.body.data.length > 0) {
-        this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
-      }else{
-        this.setState({ loading: false, searchResults: { results: results.body.data, empty: true } });
-      }
-    } else {
-      Swal.fire("error", local.searchError, 'error')
-      this.setState({ loading: false });
-    }
-  }
-  async selectCustomer(customer) {
-    this.setState({ loading: true, customerId: customer._id });
-    const res = await getCustomerByID(customer._id)
-    if (res.status === 'success') {
-
-      const customerInfo = { ...res.body };
-      const customerBusiness = { ...res.body };
-      const customerExtraDetails = { ...res.body };
-      customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
-      customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
-      customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
-      customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
-      this.setState({
-        loading: false,
-        selectedCustomer: res.body,
-        step1: { ...this.state.step1, ...customerInfo },
-        step2: { ...this.state.step2, ...customerBusiness },
-        step3: { ...this.state.step3, ...customerExtraDetails },
-      });
-
-    } else {
-      this.setState({ loading: false });
-      Swal.fire('error', local.searchError, 'error');
     }
   }
   async createCustomer(obj: Customer) {
@@ -289,22 +278,19 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
-        {this.props.edit && this.state.customerId === "" ?
-          <CustomerSearch source='loanApplication' handleSearch={(query: string) => this.handleSearch(query)} searchResults={this.state.searchResults} selectCustomer={(customer: object) => this.selectCustomer(customer)} selectedCustomer={this.state.selectedCustomer}/>
-          : <>
-            <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
-              <Tab eventKey={1} title={local.mainInfo}>
-              </Tab>
-              <Tab eventKey={2} title={local.workInfo}>
-              </Tab>
-              <Tab eventKey={3} title={local.differentInfo}>
-              </Tab>
-              <Tab eventKey={4} title={local.documents}>
-              </Tab>
-            </Tabs>
-            {this.renderSteps()}
-          </>
-        }
+        <>
+          <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
+            <Tab eventKey={1} title={local.mainInfo}>
+            </Tab>
+            <Tab eventKey={2} title={local.workInfo}>
+            </Tab>
+            <Tab eventKey={3} title={local.differentInfo}>
+            </Tab>
+            <Tab eventKey={4} title={local.documents}>
+            </Tab>
+          </Tabs>
+          {this.renderSteps()}
+        </>
       </Container>
     )
   }
