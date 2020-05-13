@@ -78,7 +78,6 @@ class StatusHelper extends Component<Props, State>{
         }
     }
     handleStatusChange() {
-        console.log(this.props, this.state)
         if (this.props.status === 'reject' && this.state.rejectionReason.length === 0) {
             Swal.fire('', 'Rejection reason mandatory', 'warning')
         } else {
