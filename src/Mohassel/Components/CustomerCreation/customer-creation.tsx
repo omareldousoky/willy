@@ -130,9 +130,13 @@ class CustomerCreation extends Component<Props, State>{
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (this.props.edit) {
-      this.setState({ loading: true });
+      this.getCustomerById();
+    }
+  }
+  async getCustomerById() {
+    this.setState({ loading: true });
       const res = await getCustomerByID(this.props.location.state.id)
       if (res.status === 'success') {
         const customerInfo = { ...res.body };
@@ -154,7 +158,6 @@ class CustomerCreation extends Component<Props, State>{
         this.setState({ loading: false });
         Swal.fire('error', local.searchError, 'error');
       }
-    }
   }
   submit = (values: object) => {
     if (this.state.step < 3) {
