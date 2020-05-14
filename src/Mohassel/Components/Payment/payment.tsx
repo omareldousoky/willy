@@ -22,6 +22,9 @@ interface Installment {
   installmentResponse: number;
   principalInstallment: number;
   feesInstallment: number;
+  totalPaid: number;
+  principalPaid: number;
+  feesPaid: number;
   dateOfPayment: number;
   status: string;
 }
@@ -83,6 +86,21 @@ class Payment extends Component<Props, State>{
         render: data => data.installmentResponse
       },
       {
+        title: local.feesPaid,
+        key: "feesPaid",
+        render: data => data.feesPaid
+      },
+      {
+        title: local.principalPaid,
+        key: "principalPaid",
+        render: data => data.principalPaid
+      },
+      {
+        title: local.totalPaid,
+        key: "totalPaid",
+        render: data => data.totalPaid
+      },
+      {
         title: local.dateOfPayment,
         key: "dateOfPayment",
         render: data => new Date(data.dateOfPayment).toISOString().slice(0, 10)
@@ -121,7 +139,7 @@ class Payment extends Component<Props, State>{
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
         if (installment.status !== "paid")
-          total = total + installment.installmentResponse;
+          total = total + installment.installmentResponse - installment.totalPaid;
       } else return total;
     })
     return total;
@@ -168,7 +186,7 @@ class Payment extends Component<Props, State>{
           this.state.modalType === 1 ?
             <Formik
               enableReinitialize
-              initialValues={this.state}
+              initialValues={{...this.state, requiredAmount: this.getRequiredAmount()}}
               onSubmit={this.handleSubmit}
               validationSchema={paymentValidation}
               validateOnBlur
@@ -274,7 +292,7 @@ class Payment extends Component<Props, State>{
           <Button variant="outline-primary" onClick={() => this.setState({ paymentModal: true, modalType: 1 })}>{local.payInstallment}</Button>
         </div>
         {this.state.paymentModal && this.renderModal()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={()=> this.setState({receiptModal: false})} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={()=> this.setState({receiptModal: false, payAmount: 0})} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
       </>
     );
   }

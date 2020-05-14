@@ -365,6 +365,12 @@
     "activeBranch": "نشط",
     "inActiveBranch":"غير نشط",
     "customers": "العملاء",
-    "noOfCustomers": "عدد العملاء"
+    "noOfCustomers": "عدد العملاء",
+    "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
+    "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من المبلغ المطلوب",
+    "totalPayment": "إجمالي المدفوع",
+    "feesPaid":"المصاريف المسدده",
+    "principalPaid":"الاصل المسدد",
+    "totalPaid": "مسدد"
 
 }
