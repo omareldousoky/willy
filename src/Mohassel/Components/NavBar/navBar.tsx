@@ -104,7 +104,6 @@ class NavBar extends Component<Props, State> {
                 </div>
               )
             })}
-            {console.log(this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)))}
         </div>
             {this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults(): null}
         <div className="item">

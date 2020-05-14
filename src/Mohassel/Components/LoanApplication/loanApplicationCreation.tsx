@@ -434,10 +434,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    async handleStatusChange(intState, intProps) {
+    async handleStatusChange(values, status) {
         this.setState({ loading: true });
-        if (intProps.status === 'review') {
-            const res = await reviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
+        if (status === 'review') {
+            const res = await reviewApplication({ id: this.state.prevId, date: new Date(values.reviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
                 Swal.fire("success", local.reviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
@@ -445,8 +445,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
-        } else if (intProps.status === 'unreview') {
-            const res = await undoreviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
+        } else if (status === 'unreview') {
+            const res = await undoreviewApplication({ id: this.state.prevId, date: new Date(values.unreviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
                 Swal.fire("success", local.unreviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
@@ -454,8 +454,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
-        } else if (intProps.status === 'reject') {
-            const res = await rejectApplication({ applicationIds: [intProps.id], rejectionDate: new Date(intState.rejectionDate).valueOf(), rejectionReason: intState.rejectionReason });
+        } else if (status === 'reject') {
+            const res = await rejectApplication({ applicationIds: [this.state.prevId], rejectionDate: new Date(values.rejectionDate).valueOf(), rejectionReason: values.rejectionReason });
             if (res.status === 'success') {
                 this.setState({ loading: false });
                 Swal.fire("success", local.rejectSuccess).then(() => { this.props.history.push("/track-loan-applications") })
@@ -543,7 +543,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             guarantorOne={this.state.guarantor1}
                             guarantorTwo={this.state.guarantor2}
                             viceCustomers={this.state.viceCustomers}
-                            handleStatusChange={(state, props) => this.handleStatusChange(state, props)}
+                            handleStatusChange={(values, status) => this.handleStatusChange(values, status)}
                         />
                     }
                 </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}

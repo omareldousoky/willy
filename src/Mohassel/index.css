@@ -22,13 +22,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   flex-wrap: nowrap !important;
 }
 
-.map {
-  margin: 20px;
-  position: relative;
-  max-width: 95%;
-  max-height: 400px;
-}
-
 /* to be deleted after Loader component is done*/
 .central-loader-fullscreen {
   position: absolute;
