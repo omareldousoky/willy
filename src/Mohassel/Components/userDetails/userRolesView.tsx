@@ -48,11 +48,13 @@ export default class UserRolesView extends Component<Props, State> {
         await this.getAllPermissions();
 
     };
-   async componentDidMount(){
+   
+     componentDidMount(){
         this.setState({
-            rolesLabels: this.props.roles.map((role)=>{return role.roleName})
+            rolesLabels: this.props.roles.map((role)=>{return role.roleName},()=> {
+                this.getAllPermissions()
+            })
         })
-       await  this.getAllPermissions()
 
     }
     roleCard() {
