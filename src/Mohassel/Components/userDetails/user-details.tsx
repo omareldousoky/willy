@@ -72,7 +72,6 @@ class UserDetails extends Component<Props, State> {
     }
     async  getUserDetails (){
         const _id = this.props.history.location.state.details;
-        this.setState({ isLoading: true });
         const res = await getUserDetails(_id);
         const user = this.setUserDetails(res.body);
         if (res.status === "success") {
@@ -85,8 +84,8 @@ class UserDetails extends Component<Props, State> {
             Swal.fire("erroe", local.userDetialsError);
         }
     }
-    async  componentDidMount() {
-        await this.getUserDetails();
+      componentDidMount() {
+        this.setState( {isLoading: true},()=> this.getUserDetails())
        
       
     }
