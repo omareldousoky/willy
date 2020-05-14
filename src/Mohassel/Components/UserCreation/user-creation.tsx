@@ -78,11 +78,7 @@ class UserCreation extends Component<Props, State> {
             })
         this.setState({ step1, step2 })
     }
-    async  componentDidMount() {
-        this.setState({ loading: true })
-        if (this.props.edit) {
-            this.getUser();
-        }
+    async getUserRolePermissions () {
         const RolesAndBranches = await getUserRolesAndBranches();
         const labeldRoles: Array<object> = [];
         const labeldBranches: Array<object> = [];
@@ -115,6 +111,14 @@ class UserCreation extends Component<Props, State> {
             Swal.fire('', local.searchError, 'error');
         }
 
+
+    }
+      componentDidMount() {
+       
+        if (this.props.edit) {
+           this.setState({loading: true}, () => this.getUser())
+        }
+        this.setState({ loading: true },()=>this.getUserRolePermissions())
     }
     componentDidUpdate(prevProps: Props, _prevState: State) {
         if (prevProps.edit !== this.props.edit) {
