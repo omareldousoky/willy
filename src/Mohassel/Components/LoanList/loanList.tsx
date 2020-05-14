@@ -25,6 +25,7 @@ interface State {
   dateFrom: string;
   dateTo: string;
   loading: boolean;
+  totalCount: number;
 }
 
 class LoanList extends Component<Props, State> {
@@ -42,6 +43,7 @@ class LoanList extends Component<Props, State> {
       dateFrom: '',
       dateTo: '',
       loading: false,
+      totalCount: 0,
     }
     this.mappers = [
       {
@@ -82,6 +84,7 @@ class LoanList extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         data: res.body.applications,
+        totalCount: res.body.totalCount,
         loading: false
       })
     } else {
@@ -171,6 +174,7 @@ class LoanList extends Component<Props, State> {
               </div>
             </div>
             <DynamicTable
+              totalCount={this.state.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.state.data}

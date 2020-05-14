@@ -8,10 +8,12 @@ interface Props {
   mappers: Array<any>;
   pagination: boolean;
   data: Array<any>;
+  totalCount?: number;
   changeNumber?: (key: string, number: number) => void | undefined;
 }
 
 const DynamicTable = (props: Props) => {
+  console.log(props)
   const [page, changePage] = useState(0);
   const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 5 : props.data.length);
   return (
