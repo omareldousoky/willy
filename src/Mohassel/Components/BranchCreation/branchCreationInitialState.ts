@@ -14,8 +14,8 @@ export const step1: BasicValues = {
 }
 
 export const branchCreationValidationStepOne = Yup.object().shape({
-    name: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    governorate: Yup.string().trim().max(11,local.maxLength11).required(local.required),
+    name: Yup.string().trim().matches(/^[a-zA-Z ]*$/,local.branchNameInavlid).max(100, local.maxLength100).required(local.required),
+    governorate: Yup.string().trim().matches(/^([^0-9]*)$/,local.governorateNameInavlid).max(11,local.maxLength11).required(local.required),
     phoneNumber: Yup.string().min(11, local.minLength11),
     faxNumber: Yup.string().trim(),
     address: Yup.string().trim().max(100, local.maxLength100).required(local.required),
