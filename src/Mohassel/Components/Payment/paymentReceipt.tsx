@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
+import {getCookie} from '../../Services/getCookie'
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
@@ -21,9 +22,9 @@ const PaymentReceipt = (props: any) => {
   }
   useEffect(() => {
     let alreadyPaid = 0;
-    props.receiptData.installmentsObject.output.forEach(installment => {
+    props.receiptData.installmentsObject.installments.forEach(installment => {
       if(installment.status === "paid" || installment.status === "partiallyPaid"){
-        alreadyPaid = alreadyPaid + installment.principalPaid;
+        alreadyPaid = alreadyPaid + installment.principalPaid + installment.feesPaid;
       }
     })
     changeAlreadyPaid(alreadyPaid)
@@ -35,7 +36,7 @@ const PaymentReceipt = (props: any) => {
         <div id="nodeToRenderAsPDF" className="receipt-container">
           <div className="receipt-header">
             <h5>{local.tasaheelName}</h5>
-            <h5>الأقصر-الأقصر</h5>
+            <h5>{JSON.parse(getCookie('validbranches')).find(branch => branch._id === props.receiptData.branchId).name}</h5>
             <h5>{local.paymentReceipt}</h5>
             <h5>خزينة 1 فرع الأقصر</h5>
           </div>
