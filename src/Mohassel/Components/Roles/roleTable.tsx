@@ -36,7 +36,7 @@ class RoleTable extends Component<Props, State> {
         }
     }
     static getDerivedStateFromProps(props, state) {
-        return { sections: props.sections }
+        return { sections: props.sections, permissions: props.permissions }
     }
     check(e, parent, val) {
         const perms = { ...this.state.permissions }
@@ -61,6 +61,7 @@ class RoleTable extends Component<Props, State> {
         this.props.updatePerms && this.props.updatePerms(perms)
     }
     objectHandler(perms, e, parent, action) {
+        console.log(perms, action, e)
         if (e) {
             if (!Object.keys(perms).includes(parent)) {
                 perms[parent] = [];
@@ -69,6 +70,7 @@ class RoleTable extends Component<Props, State> {
                 perms[parent].push(action)
             }
         } else {
+            console.log(perms[parent])
             const index = perms[parent].indexOf(action);
             if (index > -1) {
                 perms[parent].splice(index, 1);
@@ -80,27 +82,29 @@ class RoleTable extends Component<Props, State> {
         return perms
     }
     isChecked(objectKey, actionVal, fieldKey, action) {
+        const section = this.state.sections.find(obj => obj.key === objectKey);
+        const actionValue: SectionAction = section?.actions.find(action => action.i18n.en === fieldKey);
         //Manual Select
-        if (this.state.permissions[objectKey] && this.state.permissions[objectKey].includes(actionVal) && this.props.updatePerms) {
+        if (this.props.updatePerms && this.state.permissions &&this.state.permissions[objectKey] && (Array.isArray(this.props.permissions[objectKey]) && this.state.permissions[objectKey].includes(actionVal) || (this.props.permissions[objectKey] & actionValue[action]) === actionValue[action])) {
             return true
         }
         //Step function 
-        else if (this.props.updatePerms && this.props.permissions && this.props.permissions[objectKey] && this.props.permissions[objectKey].includes(actionVal)) {
+        else if (this.props.updatePerms && this.props.permissions && this.props.permissions[objectKey] && (Array.isArray(this.props.permissions[objectKey]) && this.props.permissions[objectKey].includes(actionVal) || (this.props.permissions[objectKey] & actionValue[action]) === actionValue[action])) {
             return true
         }
         //View function
         else if (!this.props.updatePerms) {
-            const section = this.state.sections.find(obj => obj.key === objectKey)
-            const actionValue: SectionAction = section?.actions.find(action => action.i18n.en === fieldKey);
-            if ((this.props.permissions[objectKey] & actionValue[action]) === actionValue[action]) {
+            if (this.props.permissions && Object.keys(this.props.permissions).length > 0 && (this.props.permissions[objectKey] & actionValue[action]) === actionValue[action]) {
                 return true
             }
+            return false;
         }
         else {
             return false
         }
     }
     render() {
+        console.log('Render',this.state, this.props)
         const tableHead = {
             backgroundColor: 'white'
         }

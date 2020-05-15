@@ -12,6 +12,8 @@ import RoleTable from './roleTable';
 import { getPermissions } from '../../Services/APIs/Roles/roles';
 import { Section } from "./roleCreation";
 import RoleUsers from './roleUsers';
+import Button from 'react-bootstrap/Button';
+import BackButton from '../BackButton/back-button';
 interface Role {
     permissions: Array<any>;
     hasBranch: boolean;
@@ -101,7 +103,7 @@ class RoleProfile extends Component<Props, State>{
                         </Form.Row>
                     </Form>
                     <div className="d-flex">
-                        <span style={{ padding: "5px", margin: " 30px 30px 10px 0px", fontSize: 14, fontWeight:'bold' }}><img style={{ float: "right", margin:'0px 5px' }} alt="search-icon" src={require('../../Assets/permissions-inactive.svg')} /> {local.permissions}</span>
+                        <span style={{ padding: "5px", margin: " 30px 30px 10px 0px", fontSize: 14, fontWeight: 'bold' }}><img style={{ float: "right", margin: '0px 5px' }} alt="search-icon" src={require('../../Assets/permissions-inactive.svg')} /> {local.permissions}</span>
                     </div>
                     <RoleTable sections={this.state.allSections} permissions={this.state.role.permissions} />
                 </div>
@@ -116,8 +118,11 @@ class RoleProfile extends Component<Props, State>{
             <Container>
                 {Object.keys(this.state.role).length > 0 &&
                     <div>
-                        <div className="d-flex">
-                            <h3>{local.roleDetails}</h3>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <BackButton title={local.roleDetails} />
+                            <div>
+                                <span onClick={() => { this.props.history.push({ pathname: "/edit-role", state: { role: this.state.role } }) }}><span className='fa fa-pencil-alt icon'>{local.edit}</span></span>
+                            </div>
                         </div>
                         <Card style={{ marginTop: 15 }}>
                             <CardNavBar

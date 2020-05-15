@@ -68,7 +68,7 @@ class RolesList extends Component<Props, State> {
             {this.state.data.map((el, index) => {
               const role = el;
               return (
-                <Card style={{ margin: '20px 50px' }} key={index} onClick={() => this.props.history.push(`/role-profile`, role)}>
+                <Card style={{ margin: '20px 50px', cursor:'pointer' }} key={index} onClick={() => this.props.history.push(`/role-profile`, role)}>
                   <Card.Body>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div style={{ display: 'flex', alignItems: 'center' }}>
