@@ -121,7 +121,7 @@ class RoleProfile extends Component<Props, State>{
                         <div className="d-flex justify-content-between align-items-center">
                             <BackButton title={local.roleDetails} />
                             <div>
-                                <span onClick={() => { this.props.history.push({ pathname: "/edit-role", state: { role: this.state.role } }) }}><span className='fa fa-pencil-alt icon'>{local.edit}</span></span>
+                                <span onClick={() => { this.props.history.push({ pathname: "/edit-role", state: { role: this.state.role } }) }}><span className='fa fa-pencil-alt icon'> {local.edit}</span></span>
                             </div>
                         </div>
                         <Card style={{ marginTop: 15 }}>

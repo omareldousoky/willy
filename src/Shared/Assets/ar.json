@@ -346,6 +346,8 @@
     "createNewRole":"إنشاء دور جديد",
     "userRoleCreated":"تم إنشاء دور جديد بنجاح",
     "userRoleCreationError":"حدث خطأ ،لم يتم إنشاء الدور  ",
+    "userRoleEdited":"تم تعديل الدور بنجاح",
+    "userRoleEditError":"حدث خطأ ،لم يتم تعديل الدور  ",
     "mustSelectPermissions":"يجب إختيار صلاحيات",
     "activate":"تفعيل",
     "deactivate": "تعطيل",

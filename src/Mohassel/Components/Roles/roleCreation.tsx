@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getPermissions, createRole } from '../../Services/APIs/Roles/roles';
+import { getPermissions, createRole, editRole } from '../../Services/APIs/Roles/roles';
 import { Loader } from '../../../Shared/Components/Loader';
 import { step1, roleCreationStep1Validation } from './roleStates'
 import Wizard from '../wizard/Wizard';
@@ -44,26 +44,15 @@ class RoleCreation extends Component<Props, State>{
             loading: false,
         };
     }
-    // static getDerivedStateFromProps(props, state) {
-    //     console.log(props, state)
-    //     return null;
-    // }
-    // componentDidUpdate(prevProps: Props, _prevState: State) {
-    //     console.log('Update',this.props, this.state)
-    //     if (prevProps.edit !== this.props.edit) {
-    //         this.setState({ step1: step1, step: 1, sections: [], loading: false });
-    //     }
-    // }
     componentDidMount() {
         if (this.props.edit) {
             const role = this.props.history.location.state.role;
             const step1Edit = { ...this.state.step1 };
             step1Edit.roleName = role.roleName;
             step1Edit.hQpermission = !role.hasBranch
-            console.log('edit', role, step1Edit)
+            this.getEditPermissions(role.hasBranch);
             this.setState({
-                step1: step1Edit,
-                permissions: role.permissions
+                step1: step1Edit
             })
         }
     }
@@ -72,9 +61,47 @@ class RoleCreation extends Component<Props, State>{
         const id = (this.state.step1.hQpermission) ? 'req' : 'requireBranch';
         const res = await getPermissions(id);
         if (res.status === "success") {
+            const sections = res.body.actions;
             this.setState({
                 loading: false,
-                sections: res.body.actions
+                sections,
+            })
+        } else {
+            this.setState({ loading: false })
+        }
+    }
+    async getEditPermissions(hasbranch) {
+        this.setState({ loading: true })
+        const id = (!hasbranch) ? 'req' : 'requireBranch';
+        const res = await getPermissions(id);
+        if (res.status === "success") {
+            const sections = res.body.actions;
+            const rolePermissionsArray = [];
+            const rolePermissions = (this.props.history.location.state.role.permissions) ? this.props.history.location.state.role.permissions : {};
+            Object.keys(rolePermissions).forEach((roleSection) => {
+                const sectionObject = sections.find((section) => section.key === roleSection)
+                sectionObject && sectionObject.actions.map((action, i) => {
+                    const keyArray = Object.keys(action);
+                    const i18nI = keyArray.indexOf('i18n');
+                    keyArray.splice(i18nI, 1)
+                    keyArray.map(key => {
+                        const value = action[key]
+                        if ((rolePermissions[roleSection] & value) === value) {
+                            if (!Object.keys(rolePermissionsArray).includes(roleSection)) {
+                                rolePermissionsArray[roleSection] = [];
+                            }
+                            if (!rolePermissionsArray[roleSection].includes(value)) {
+                                rolePermissionsArray[roleSection].push(value)
+                            }
+                        }
+                    })
+
+                })
+            })
+            this.setState({
+                loading: false,
+                sections,
+                permissions: rolePermissionsArray
             })
         } else {
             this.setState({ loading: false })
@@ -114,6 +141,7 @@ class RoleCreation extends Component<Props, State>{
                                         onBlur={formikProps.handleBlur}
                                         onChange={formikProps.handleChange}
                                         isInvalid={Boolean(formikProps.errors.roleName) && Boolean(formikProps.touched.roleName)}
+                                        disabled={this.props.edit}
                                     >
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
@@ -133,6 +161,7 @@ class RoleCreation extends Component<Props, State>{
                                         onBlur={formikProps.handleBlur}
                                         onChange={formikProps.handleChange}
                                         isInvalid={Boolean(formikProps.errors.hQpermission) && Boolean(formikProps.touched.hQpermission)}
+                                        disabled={this.props.edit}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.hQpermission}
@@ -166,7 +195,6 @@ class RoleCreation extends Component<Props, State>{
     }
     async submit() {
         const perms: Array<any> = []
-        console.log(this.state.permissions)
         if (this.state.permissions && Object.keys(this.state.permissions).length > 0) {
             if (!this.props.edit) {
                 this.setState({ loading: true });
@@ -185,7 +213,20 @@ class RoleCreation extends Component<Props, State>{
                     this.setState({ loading: false });
                 }
             } else {
-                console.log('EDITTTT', this.state)
+                this.setState({ loading: true });
+                Object.keys(this.state.permissions).forEach(key => perms.push({ key: key, value: this.state.permissions[key] }))
+                const obj = {
+                    id: this.props.history.location.state.role._id,
+                    permissions: perms
+                }
+                const res = await editRole(obj);
+                if (res.status === 'success') {
+                    this.setState({ loading: false });
+                    Swal.fire("success", local.userRoleEdited).then(() => { this.props.history.push("/manage-accounts") })
+                } else {
+                    Swal.fire("error", local.userRoleEditError, 'error')
+                    this.setState({ loading: false });
+                }
             }
         } else {
             Swal.fire("warning", local.mustSelectPermissions, 'warning')
@@ -196,7 +237,7 @@ class RoleCreation extends Component<Props, State>{
             [`step${this.state.step}`]: values,
             step: this.state.step + 1,
         } as any, () => {
-            if (this.state.step === 2) {
+            if (this.state.step === 2 && !this.props.edit) {
                 this.getPermissions();
             }
         })
