@@ -140,7 +140,9 @@ class DualBox extends Component<Props, State> {
                                                 className={(this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1) ? "list-group-item selected" : "list-group-item"}>
                                                 <Form.Check
                                                     type='checkbox'
+                                                    // readOnly
                                                     id={option._id}
+                                                    onChange={() => this.selectItem(option)}
                                                     label={option.productName}
                                                     checked={this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1}
                                                 />
