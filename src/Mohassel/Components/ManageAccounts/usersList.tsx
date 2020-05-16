@@ -169,7 +169,7 @@ class UsersList extends Component<Props, State> {
               </div>
               <div>
                 <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
