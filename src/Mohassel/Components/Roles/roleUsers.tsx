@@ -15,7 +15,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import '../ManageAccounts/styles.scss';
 
 interface Props {
-    history: Array<string>;
+    history: any;
     role: any;
 };
 interface State {
@@ -70,13 +70,15 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: '',
                 key: "actions",
-                render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+                render: data => <>
+                    <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }}></span>
+                    <span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }}></span>
+                </>
             },
         ]
     }
     componentDidMount() {
-        this.getUsers()
-        this.getUsersCount()
+        this.getUsers();
     }
 
     async getUsers() {
@@ -86,18 +88,7 @@ class RoleUsers extends Component<Props, State> {
         if (res.status === "success") {
             this.setState({
                 data: res.body.data,
-                loading: false
-            })
-        } else {
-            console.log("error")
-            this.setState({ loading: false })
-        }
-    }
-    async getUsersCount() {
-        const res = await getUserCountPerRole(this.props.role._id );
-        if (res.status === "success") {
-            this.setState({
-                roleCount: Number(res.body.message),
+                roleCount: res.body.totalCount,
                 loading: false
             })
         } else {
@@ -147,9 +138,9 @@ class RoleUsers extends Component<Props, State> {
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
                                 <span className="text-muted">{local.noOfUsers} {this.state.roleCount}</span>
                             </div>
-                            <div>
+                            {/* <div>
                                 <Button variant="outline-primary" className="big-button">download pdf</Button>
-                            </div>
+                            </div> */}
                         </div>
                         <hr className="dashed-line" />
                         <Formik

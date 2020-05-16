@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getPermissions, createRole } from '../../Services/APIs/Roles/roles';
+import { getPermissions, createRole, editRole } from '../../Services/APIs/Roles/roles';
 import { Loader } from '../../../Shared/Components/Loader';
 import { step1, roleCreationStep1Validation } from './roleStates'
 import Wizard from '../wizard/Wizard';
@@ -18,7 +18,7 @@ export interface Section {
     actions: Array<any>;
 }
 interface Props {
-    history: Array<string>;
+    history: any;
     edit: boolean;
     application: any;
     test: boolean;
@@ -44,21 +44,64 @@ class RoleCreation extends Component<Props, State>{
             loading: false,
         };
     }
-    componentDidUpdate(prevProps: Props, _prevState: State) {
-        if (prevProps.edit !== this.props.edit) {
-            this.setState({ step1: step1, step: 1, sections: [], loading: false });
+    componentDidMount() {
+        if (this.props.edit) {
+            const role = this.props.history.location.state.role;
+            const step1Edit = { ...this.state.step1 };
+            step1Edit.roleName = role.roleName;
+            step1Edit.hQpermission = !role.hasBranch
+            this.getEditPermissions(role.hasBranch);
+            this.setState({
+                step1: step1Edit
+            })
         }
     }
-    // componentDidMount() {
-    // }
     async getPermissions() {
         this.setState({ loading: true })
         const id = (this.state.step1.hQpermission) ? 'req' : 'requireBranch';
         const res = await getPermissions(id);
         if (res.status === "success") {
+            const sections = res.body.actions;
             this.setState({
                 loading: false,
-                sections: res.body.actions
+                sections,
+            })
+        } else {
+            this.setState({ loading: false })
+        }
+    }
+    async getEditPermissions(hasbranch) {
+        this.setState({ loading: true })
+        const id = (!hasbranch) ? 'req' : 'requireBranch';
+        const res = await getPermissions(id);
+        if (res.status === "success") {
+            const sections = res.body.actions;
+            const rolePermissionsArray = [];
+            const rolePermissions = (this.props.history.location.state.role.permissions) ? this.props.history.location.state.role.permissions : {};
+            Object.keys(rolePermissions).forEach((roleSection) => {
+                const sectionObject = sections.find((section) => section.key === roleSection)
+                sectionObject && sectionObject.actions.map((action, i) => {
+                    const keyArray = Object.keys(action);
+                    const i18nI = keyArray.indexOf('i18n');
+                    keyArray.splice(i18nI, 1)
+                    keyArray.map(key => {
+                        const value = action[key]
+                        if ((rolePermissions[roleSection] & value) === value) {
+                            if (!Object.keys(rolePermissionsArray).includes(roleSection)) {
+                                rolePermissionsArray[roleSection] = [];
+                            }
+                            if (!rolePermissionsArray[roleSection].includes(value)) {
+                                rolePermissionsArray[roleSection].push(value)
+                            }
+                        }
+                    })
+
+                })
+            })
+            this.setState({
+                loading: false,
+                sections,
+                permissions: rolePermissionsArray
             })
         } else {
             this.setState({ loading: false })
@@ -87,9 +130,9 @@ class RoleCreation extends Component<Props, State>{
                     // <UserDataForm {...formikProps} cancle={() => this.cancel()} />
                     <Form onSubmit={formikProps.handleSubmit}>
                         <Col>
-                            <Form.Group as={Col} md="5" controlId="roleName" >
+                            <Form.Group as={Row} controlId="roleName" >
                                 <Form.Label style={{ margin: 0 }}>{local.roleName}</Form.Label>
-                                <Row>
+                                <Col sm={6}>
                                     <Form.Control
                                         type="text"
                                         name="roleName"
@@ -98,12 +141,13 @@ class RoleCreation extends Component<Props, State>{
                                         onBlur={formikProps.handleBlur}
                                         onChange={formikProps.handleChange}
                                         isInvalid={Boolean(formikProps.errors.roleName) && Boolean(formikProps.touched.roleName)}
+                                        disabled={this.props.edit}
                                     >
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.roleName}
                                     </Form.Control.Feedback>
-                                </Row>
+                                </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="hQpermission">
                                 {/* <Col sm={4}/> */}
@@ -117,6 +161,7 @@ class RoleCreation extends Component<Props, State>{
                                         onBlur={formikProps.handleBlur}
                                         onChange={formikProps.handleChange}
                                         isInvalid={Boolean(formikProps.errors.hQpermission) && Boolean(formikProps.touched.hQpermission)}
+                                        disabled={this.props.edit}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.hQpermission}
@@ -148,38 +193,58 @@ class RoleCreation extends Component<Props, State>{
             </div>
         )
     }
-    async submit(){
-        this.setState({ loading: true });
+    async submit() {
         const perms: Array<any> = []
-        Object.keys(this.state.permissions).forEach(key => perms.push({ key: key, value:this.state.permissions[key]}))
-        const obj = {
-            roleName: this.state.step1.roleName,
-            hasBranch: !this.state.step1.hQpermission,
-            permissions: perms
-        }
-        const res = await createRole(obj);
-        if (res.status === 'success') {
-            this.setState({ loading: false });
-            Swal.fire("success", local.userRoleCreated).then(() => { this.props.history.push("/manage-accounts") })
+        if (this.state.permissions && Object.keys(this.state.permissions).length > 0) {
+            if (!this.props.edit) {
+                this.setState({ loading: true });
+                Object.keys(this.state.permissions).forEach(key => perms.push({ key: key, value: this.state.permissions[key] }))
+                const obj = {
+                    roleName: this.state.step1.roleName,
+                    hasBranch: !this.state.step1.hQpermission,
+                    permissions: perms
+                }
+                const res = await createRole(obj);
+                if (res.status === 'success') {
+                    this.setState({ loading: false });
+                    Swal.fire("success", local.userRoleCreated).then(() => { this.props.history.push("/manage-accounts") })
+                } else {
+                    Swal.fire("error", local.userRoleCreationError, 'error')
+                    this.setState({ loading: false });
+                }
+            } else {
+                this.setState({ loading: true });
+                Object.keys(this.state.permissions).forEach(key => perms.push({ key: key, value: this.state.permissions[key] }))
+                const obj = {
+                    id: this.props.history.location.state.role._id,
+                    permissions: perms
+                }
+                const res = await editRole(obj);
+                if (res.status === 'success') {
+                    this.setState({ loading: false });
+                    Swal.fire("success", local.userRoleEdited).then(() => { this.props.history.push("/manage-accounts") })
+                } else {
+                    Swal.fire("error", local.userRoleEditError, 'error')
+                    this.setState({ loading: false });
+                }
+            }
         } else {
-            Swal.fire("error", local.userRoleCreationError, 'error')
-            this.setState({ loading: false });
+            Swal.fire("warning", local.mustSelectPermissions, 'warning')
         }
     }
     submitToStep2 = (values: object) => {
-            this.setState({
-                [`step${this.state.step}`]: values,
-                step: this.state.step + 1,
-            } as any, () => {
-                if (this.state.step === 2) {
-                    this.getPermissions();
-                }
-            })
+        this.setState({
+            [`step${this.state.step}`]: values,
+            step: this.state.step + 1,
+        } as any, () => {
+            if (this.state.step === 2 && !this.props.edit) {
+                this.getPermissions();
+            }
+        })
     }
     previousStep(step: number): void {
         this.setState({
             step: step - 1,
-            // [`step${step}`]: values,
         } as State);
     }
     cancel(): void {
@@ -187,18 +252,18 @@ class RoleCreation extends Component<Props, State>{
             step: 1,
             step1,
         })
-        // this.props.history.push("/");
+        this.props.history.push("/manage-accounts");
     }
     render() {
         return (
             <div>
-                <Loader type="fullsection" open={this.state.loading} />
+                <Loader type="fullscreen" open={this.state.loading} />
 
                 <div style={{ display: "flex", flexDirection: "row", textAlign: 'right' }}>
-                        <Wizard
-                            currentStepNumber={this.state.step - 1}
-                            stepsDescription={[local.userBasicStep1, local.rolesStep2]}
-                        />
+                    <Wizard
+                        currentStepNumber={this.state.step - 1}
+                        stepsDescription={[local.userBasicStep1, local.rolesStep2]}
+                    />
 
                     <div style={{ width: '70%', margin: '40px auto' }}>
                         {this.renderSteps()}

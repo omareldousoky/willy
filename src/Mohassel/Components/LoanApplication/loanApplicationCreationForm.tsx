@@ -540,7 +540,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                         {values.guarantors.map((guarantor, i) =>
                             <CustomerSearch
-                                source={i}
+                                source={i+1}
                                 key={i}
                                 style={{ width: '48%' }}
                                 handleSearch={(query) => props.handleSearch(query, i)}

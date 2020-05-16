@@ -7,6 +7,6 @@ export const step1: any = {
 };
 
 export const roleCreationStep1Validation = Yup.object().shape({
-    roleName: Yup.string().required(local.required),
+    roleName: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     hQpermission: Yup.boolean().required(local.required)
 })
