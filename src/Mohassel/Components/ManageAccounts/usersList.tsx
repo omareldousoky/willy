@@ -28,7 +28,7 @@ interface State {
   selectedBranch: string;
   dateFrom: string;
   dateTo: string;
-  totalCount:number;
+  totalCount: number;
   loading: boolean;
 }
 

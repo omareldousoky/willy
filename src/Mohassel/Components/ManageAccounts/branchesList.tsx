@@ -15,7 +15,6 @@ import './styles.scss';
 
 interface State {
   data: any;
-  totalCount: number;
   size: number;
   from: number;
   searchKeyWord: string;
@@ -33,7 +32,6 @@ class BranchesList extends Component<Props, State> {
     super(props);
     this.state = {
       data: [],
-      totalCount: 0,
       size: 5,
       from: 0,
       searchKeyWord: '',
