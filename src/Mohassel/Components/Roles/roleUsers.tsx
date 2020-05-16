@@ -15,7 +15,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import '../ManageAccounts/styles.scss';
 
 interface Props {
-    history: Array<string>;
+    history: any;
     role: any;
 };
 interface State {
@@ -70,7 +70,10 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: '',
                 key: "actions",
-                render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+                render: data => <>
+                    <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }}></span>
+                    <span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }}></span>
+                </>
             },
         ]
     }

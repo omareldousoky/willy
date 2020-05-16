@@ -22,6 +22,7 @@ interface State {
     filterKey: string;
     checkAll: boolean;
     searchKeyword: string;
+    searchSelectedKeyWord: string;
 }
 class DualBox extends Component<Props, State> {
     constructor(props: Props) {
@@ -33,7 +34,8 @@ class DualBox extends Component<Props, State> {
             selectionArray: [],
             filterKey: '',
             checkAll: false,
-            searchKeyword: ''
+            searchKeyword: '',
+            searchSelectedKeyWord: ''
         }
     }
     static getDerivedStateFromProps(props, state) {
@@ -132,13 +134,12 @@ class DualBox extends Component<Props, State> {
                                 </div>
                                 <div className="scrollable-list">
                                     {this.state.options
-                                        .filter(option => option.productName.includes(this.state.searchKeyword))
+                                        .filter(option => option.productName.toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
                                         .map(option =>
                                             <div key={option._id} onClick={() => this.selectItem(option)}
                                                 className={(this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1) ? "list-group-item selected" : "list-group-item"}>
                                                 <Form.Check
                                                     type='checkbox'
-                                                    onChange={() => this.selectItem(option)}
                                                     id={option._id}
                                                     label={option.productName}
                                                     checked={this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1}
@@ -158,6 +159,19 @@ class DualBox extends Component<Props, State> {
                         <div className="well text-right">
                             <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
+                                <InputGroup style={{ direction: 'ltr' }}>
+                                    <Form.Control
+                                        type="text"
+                                        name="searchSelectedKeyWord"
+                                        data-qc="searchSelectedKeyWord"
+                                        onChange={(e) => this.setState({ searchSelectedKeyWord: e.currentTarget.value })}
+                                        style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+                                        placeholder={local.search}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
                                 <div className="list-group-item delete-all-row" style={{ background: '#FAFAFA' }}>
                                     <span className="text-muted">{local.count}({this.state.selectedOptions.length})</span>
                                     <div onClick={() => this.removeAllFromList()}>
@@ -166,7 +180,9 @@ class DualBox extends Component<Props, State> {
                                     </div>
                                 </div>
                                 <div className="scrollable-list">
-                                    {this.state.selectedOptions.map(option => <li key={option._id}
+                                    {this.state.selectedOptions
+                                        .filter(option => option.productName.toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
+                                        .map(option => <li key={option._id}
                                         className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span>{option.productName}</li>)}
                                 </div>
                             </ul>

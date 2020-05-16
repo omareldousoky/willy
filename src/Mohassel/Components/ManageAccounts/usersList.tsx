@@ -168,7 +168,7 @@ class UsersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfUsers} {this.state.totalCount}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
+                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

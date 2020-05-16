@@ -7,6 +7,7 @@ import DropDownList from '../DropDownList/dropDownList';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 import { getRoles } from '../../Services/APIs/Roles/roles';
+import Form from 'react-bootstrap/Form';
 
 interface Props {
   history: Array<string>;
@@ -14,6 +15,7 @@ interface Props {
 interface State {
   data: any;
   activeRole: number;
+  filterRoles: string;
   loading: boolean;
 };
 
@@ -23,6 +25,7 @@ class RolesList extends Component<Props, State> {
     this.state = {
       data: [],
       loading: false,
+      filterRoles: '',
       activeRole: -1,
     }
   }
@@ -65,24 +68,36 @@ class RolesList extends Component<Props, State> {
                 <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>{local.createNewRole}</Button>
               </div>
             </div>
-            {this.state.data.map((el, index) => {
-              const role = el;
-              return (
-                <Card style={{ margin: '20px 50px', cursor:'pointer' }} key={index} onClick={() => this.props.history.push(`/role-profile`, role)}>
-                  <Card.Body>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <h5 style={{ marginLeft: 50, minWidth: 50 }}>#{index + 1}</h5>
-                        <div style={{ marginLeft: 150, minWidth: 200 }}>
-                          <span className="text-muted">{local.roleName}</span>
-                          <h6>{el.roleName}</h6>
+            {this.state.data.length > 0 && <div className="d-flex flex-row justify-content-center">
+              <Form.Control
+                type="text"
+                data-qc="filterLoanUsage"
+                placeholder={local.search}
+                style={{ marginBottom: 20, width: '60%' }}
+                maxLength={100}
+                value={this.state.filterRoles}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterRoles: e.currentTarget.value })}
+              />
+            </div>}
+            {this.state.data.filter(loanUse => loanUse.roleName.toLocaleLowerCase().includes(this.state.filterRoles.toLocaleLowerCase()))
+              .map((el, index) => {
+                const role = el;
+                return (
+                  <Card style={{ margin: '20px 50px', cursor: 'pointer' }} key={index} onClick={() => this.props.history.push(`/role-profile`, role)}>
+                    <Card.Body>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <h5 style={{ marginLeft: 50, minWidth: 50 }}>#{index + 1}</h5>
+                          <div style={{ marginLeft: 150, minWidth: 200 }}>
+                            <span className="text-muted">{local.roleName}</span>
+                            <h6>{el.roleName}</h6>
+                          </div>
+                          <div>
+                            <span className="text-muted">{local.permissions}</span>
+                            <h6>{el.hasBranch ? local.branchPermissions : local.allPermissions}</h6>
+                          </div>
                         </div>
-                        <div>
-                          <span className="text-muted">{local.permissions}</span>
-                          <h6>{el.hasBranch ? local.branchPermissions : local.allPermissions}</h6>
-                        </div>
-                      </div>
-                      {/* <div style={{ position: 'relative' }}>
+                        {/* <div style={{ position: 'relative' }}>
                         <span style={{ cursor: 'pointer' }} className="fa fa-ellipsis-h" onClick={() => this.setState({ activeRole: index })}></span>
                         {this.state.activeRole === index ? <DropDownList array={[
                           { icon: 'fa fa-eye', name: local.view },
@@ -90,11 +105,11 @@ class RolesList extends Component<Props, State> {
                           { icon: 'fa fa-ban', name: local.disable },
                         ]} /> : null}
                       </div> */}
-                    </div>
-                  </Card.Body>
-                </Card>
-              )
-            })}
+                      </div>
+                    </Card.Body>
+                  </Card>
+                )
+              })}
           </Card.Body>
         </Card>
       </>
