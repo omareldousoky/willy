@@ -131,7 +131,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 reviewedDate: date,
                 undoReviewDate: date,
                 rejectionDate: date,
-                noOfGuarantors:0,
+                noOfGuarantors: 0,
                 guarantors: []
             },
             loading: false,
@@ -194,19 +194,28 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const element = {
-                searchResults: {
-                    results: [],
-                    empty: false
-                },
-                guarantor: {},
-            };
-            const value = (application.body.product.noOfGuarantors)?application.body.product.noOfGuarantors:2;
-            const guarsArr = Array(value).fill(element);
-            application.body.guarantors.map( (guar,i) => {
-                guarsArr[i].guarantor = guar
-                formData.guarantorIds.push(guar._id);
-            })
+            const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
+            const guarsArr: Array<any> = [];
+            for (let i = 0; i < value; i++) {
+                if (application.body.guarantors[i]) {
+                    guarsArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        guarantor: application.body.guarantors[i],
+                    })
+                    formData.guarantorIds.push(application.body.guarantors[i]._id);
+                } else {
+                    guarsArr.push({
+                        searchResults: {
+                            results: [],
+                            empty: false
+                        },
+                        guarantor: {},
+                    })
+                }
+            }
             formData.entryDate = (application.body.entryDate) ? this.getDateString(application.body.entryDate) : '';
             formData.visitationDate = (application.body.visitationDate) ? this.getDateString(application.body.visitationDate) : '';
             formData.usage = (application.body.usage) ? application.body.usage : '';
@@ -364,7 +373,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultGuar.searchResults.results = [];
         defaultGuar.searchResults.empty = false;
         defaultApplication.guarantors[index] = defaultGuar;
-        this.setState({ application: defaultApplication, loading:false });
+        this.setState({ application: defaultApplication, loading: false });
     }
     populateLoanProduct(selectedProductDetails) {
         const defaultApplication = this.state.application;
@@ -425,10 +434,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    async handleStatusChange(intState, intProps) {
+    async handleStatusChange(values, status) {
         this.setState({ loading: true });
-        if (intProps.status === 'review') {
-            const res = await reviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
+        if (status === 'review') {
+            const res = await reviewApplication({ id: this.state.prevId, date: new Date(values.reviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
                 Swal.fire("success", local.reviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
@@ -436,8 +445,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
-        } else if (intProps.status === 'unreview') {
-            const res = await undoreviewApplication({ id: intProps.id, date: new Date(intState.reviewDate).valueOf() });
+        } else if (status === 'unreview') {
+            const res = await undoreviewApplication({ id: this.state.prevId, date: new Date(values.unreviewDate).valueOf() });
             if (res.status === 'success') {
                 this.setState({ loading: false });
                 Swal.fire("success", local.unreviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
@@ -445,8 +454,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 Swal.fire("error", local.statusChangeError, 'error')
                 this.setState({ loading: false });
             }
-        } else if (intProps.status === 'reject') {
-            const res = await rejectApplication({ applicationIds: [intProps.id], rejectionDate: new Date(intState.rejectionDate).valueOf(), rejectionReason: intState.rejectionReason });
+        } else if (status === 'reject') {
+            const res = await rejectApplication({ applicationIds: [this.state.prevId], rejectionDate: new Date(values.rejectionDate).valueOf(), rejectionReason: values.rejectionReason });
             if (res.status === 'success') {
                 this.setState({ loading: false });
                 Swal.fire("success", local.rejectSuccess).then(() => { this.props.history.push("/track-loan-applications") })
@@ -489,7 +498,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 const res = await newApplication(objToSubmit);
                 if (res.status === 'success') {
                     this.setState({ loading: false });
-                    Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/") })
+                    Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
                 } else {
                     Swal.fire("error", local.loanApplicationCreationError, 'error')
                     this.setState({ loading: false });
@@ -499,7 +508,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 const res = await editApplication(objToSubmit, this.state.prevId);
                 if (res.status === 'success') {
                     this.setState({ loading: false });
-                    Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/") })
+                    Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/track-loan-applications") })
                 } else {
                     Swal.fire("error", local.loanApplicationEditError, 'error')
                     this.setState({ loading: false });
@@ -534,7 +543,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             guarantorOne={this.state.guarantor1}
                             guarantorTwo={this.state.guarantor2}
                             viceCustomers={this.state.viceCustomers}
-                            handleStatusChange={(state, props) => this.handleStatusChange(state, props)}
+                            handleStatusChange={(values, status) => this.handleStatusChange(values, status)}
                         />
                     }
                 </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}

@@ -15,6 +15,7 @@ import './styles.scss';
 
 interface State {
   data: any;
+  totalCount: number;
   size: number;
   from: number;
   searchKeyWord: string;
@@ -32,6 +33,7 @@ class BranchesList extends Component<Props, State> {
     super(props);
     this.state = {
       data: [],
+      totalCount: 0,
       size: 5,
       from: 0,
       searchKeyWord: '',
@@ -69,12 +71,12 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.status,
         key: "status",
-        render: data =>  data.status
+        render: data => data.status
       },
       {
         title: local.gender,
         key: "type",
-        render: data =>  data.type
+        render: data => data.type
       },
       {
         title: '',
@@ -101,7 +103,7 @@ class BranchesList extends Component<Props, State> {
       this.setState({ loading: false })
     }
   }
-  submit = async(values) => {
+  submit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
     if (values.dateFrom === "" && values.dateTo === "") {
@@ -142,8 +144,8 @@ class BranchesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfBranches + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button onClick = {()=> {this.props.history.push("/new-branch")}} className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
+                <Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
@@ -196,17 +198,17 @@ class BranchesList extends Component<Props, State> {
                 </Form>
               }
             </Formik>
-            { this.state.data &&
-            <DynamicTable
-              totalCount={this.state.totalCount}
-              mappers={this.mappers}
-              pagination={true}
-              data={this.state.data}
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getBranches());
-              }}
-            />
-  }
+            {this.state.data &&
+              <DynamicTable
+                totalCount={this.state.totalCount}
+                mappers={this.mappers}
+                pagination={true}
+                data={this.state.data}
+                changeNumber={(key: string, number: number) => {
+                  this.setState({ [key]: number } as any, () => this.getBranches());
+                }}
+              />
+            }
           </Card.Body>
         </Card>
       </>

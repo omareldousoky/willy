@@ -168,8 +168,8 @@ class UsersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
+                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
@@ -195,10 +195,10 @@ class UsersList extends Component<Props, State> {
                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
-                    
+
                   </div>
                   <div className="custom-card-body">
-                    <div style={{ display: 'flex', marginLeft: 20,  flex: 1 }}>
+                    <div style={{ display: 'flex', marginLeft: 20, flex: 1 }}>
                       <div className="dropdown-container" style={{ flex: 1 }}>
                         <p className="dropdown-label">{local.employment}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="employment">

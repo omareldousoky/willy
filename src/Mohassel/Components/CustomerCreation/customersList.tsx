@@ -138,7 +138,7 @@ class CustomersList extends Component<Props, State> {
               </div>
               <div>
                 <Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>new customer</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
