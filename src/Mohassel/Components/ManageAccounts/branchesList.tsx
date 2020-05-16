@@ -20,6 +20,7 @@ interface State {
   searchKeyWord: string;
   dateFrom: string;
   dateTo: string;
+  totalCount: number;
   loading: boolean;
 }
 interface Props {
@@ -36,6 +37,7 @@ class BranchesList extends Component<Props, State> {
       searchKeyWord: '',
       dateFrom: '',
       dateTo: '',
+      totalCount: 0,
       loading: false,
     }
     this.mappers = [
@@ -91,6 +93,7 @@ class BranchesList extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
+        totalCount: res.body.totalCount,
         loading: false
       })
     } else {
@@ -136,7 +139,7 @@ class BranchesList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
                 <Button onClick = {()=> {this.props.history.push("/new-branch")}} className="big-button" style={{ marginLeft: 20 }}>new branch</Button>
@@ -195,6 +198,7 @@ class BranchesList extends Component<Props, State> {
             </Formik>
             { this.state.data &&
             <DynamicTable
+              totalCount={this.state.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.state.data}

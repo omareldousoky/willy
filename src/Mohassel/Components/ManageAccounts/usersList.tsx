@@ -28,6 +28,7 @@ interface State {
   selectedBranch: string;
   dateFrom: string;
   dateTo: string;
+  totalCount:number;
   loading: boolean;
 }
 
@@ -45,6 +46,7 @@ class UsersList extends Component<Props, State> {
       selectedBranch: '',
       dateFrom: '',
       dateTo: '',
+      totalCount: 0,
       loading: false,
 
     }
@@ -114,6 +116,7 @@ class UsersList extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
+        totalCount: res.body.totalCount,
         loading: false
       })
     } else {
@@ -162,7 +165,7 @@ class UsersList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                <span className="text-muted">{local.noOfUsers}</span>
+                <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
                 <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
@@ -232,6 +235,7 @@ class UsersList extends Component<Props, State> {
               }
             </Formik>
             <DynamicTable
+              totalCount={this.state.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.state.data}

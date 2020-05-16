@@ -125,7 +125,7 @@ export class MapContainer extends Component<Props, State> {
                         <Marker position={{ lat: this.state.lat, lng: this.state.lng }} />
                     </Map>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer style={{zIndex: 3}}>
                     <Button variant="secondary" onClick={this.props.handleClose}>{local.cancel}</Button>
                     <Button variant="primary" onClick={() => this.props.save({ lat: this.state.lat, lng: this.state.lng })}>{local.save}</Button>
                 </Modal.Footer>
@@ -135,5 +135,5 @@ export class MapContainer extends Component<Props, State> {
 }
 
 export default GoogleApiWrapper({
-    apiKey: process.env.REACT_APP_GOOGLE_MAP_KEY||''
+    apiKey:'AIzaSyCN0Bs-4cEeYX8S0SloJridmD5jgy93DHY'
 })(MapContainer);

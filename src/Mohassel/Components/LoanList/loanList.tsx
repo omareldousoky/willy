@@ -8,12 +8,18 @@ import DynamicTable from '../DynamicTable/dynamicTable';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import AsyncSelect from 'react-select/async';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
 interface Props {
   history: Array<any>;
 };
+interface LoanOfficer {
+  _id: string;
+  username: string;
+}
 interface State {
   data: any;
   size: number;
@@ -26,6 +32,8 @@ interface State {
   dateTo: string;
   loading: boolean;
   totalCount: number;
+  loanOfficers: Array<LoanOfficer>;
+  representative: LoanOfficer;
 }
 
 class LoanList extends Component<Props, State> {
@@ -44,10 +52,13 @@ class LoanList extends Component<Props, State> {
       dateTo: '',
       loading: false,
       totalCount: 0,
+      loanOfficers: [],
+      representative: {_id: '', username: ''}
+
     }
     this.mappers = [
       {
-        title: local.customerName ,
+        title: local.customerName,
         key: "customerName",
         render: data => <div onClick={() => this.props.history.push('/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
@@ -64,12 +75,12 @@ class LoanList extends Component<Props, State> {
       {
         title: local.representative,
         key: "representative",
-        render: data => ""
+        render: data => data.application.customer.representative
       },
       {
         title: local.loanIssuanceDate,
         key: "loanIssuanceDate",
-        render: data => new Date(data.application.issueDate).toISOString().slice(0,10)
+        render: data => new Date(data.application.issueDate).toISOString().slice(0, 10)
       },
     ]
   }
@@ -95,6 +106,15 @@ class LoanList extends Component<Props, State> {
   submit = (values) => {
     console.log(values)
   }
+  getLoanOfficers = async (inputValue: string) => {
+    const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
+    if (res.status === "success") {
+      this.setState({ loanOfficers: res.body.data });
+      return res.body.data;
+    } else {
+      console.log('errors', res)
+    }
+  }
   render() {
     return (
       <>
@@ -104,7 +124,7 @@ class LoanList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                <span className="text-muted">{local.noOfUsers}</span>
+                <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -172,6 +192,17 @@ class LoanList extends Component<Props, State> {
                   <option value={10}>10</option>
                 </Form.Control>
               </div>
+              {/* <AsyncSelect
+                name="representative"
+                data-qc="representative"
+                value={this.state.loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
+                onBlur={handleBlur}
+                onChange={(id) => setFieldValue("representative", id)}
+                getOptionLabel={(option) => option.username}
+                getOptionValue={(option) => option._id}
+                loadOptions={this.getLoanOfficers}
+                cacheOptions defaultOptions
+              /> */}
             </div>
             <DynamicTable
               totalCount={this.state.totalCount}

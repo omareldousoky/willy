@@ -25,6 +25,7 @@ interface State {
     roleCount: number;
     searchKeyword: string;
     dateFrom: string;
+    totalCount: number;
     loading: boolean;
 }
 
@@ -39,6 +40,7 @@ class RoleUsers extends Component<Props, State> {
             roleCount: 0,
             searchKeyword: '',
             dateFrom: '',
+            totalCount: 0,
             loading: false,
         }
         this.mappers = [
@@ -129,7 +131,8 @@ class RoleUsers extends Component<Props, State> {
         if (res.status === "success") {
             this.setState({
                 loading: false,
-                data: res.body.data
+                data: res.body.data,
+                totalCount: res.body.totalCount
             })
         } else {
             this.setState({ loading: false });
@@ -190,6 +193,7 @@ class RoleUsers extends Component<Props, State> {
                         </Formik>
                         <DynamicTable
                             mappers={this.mappers}
+                            totalCount={this.state.totalCount}
                             pagination={true}
                             data={this.state.data}
                             changeNumber={(key: string, number: number) => {

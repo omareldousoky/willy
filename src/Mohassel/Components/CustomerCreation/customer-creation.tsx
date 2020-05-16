@@ -7,6 +7,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
+import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
 import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
@@ -165,10 +166,11 @@ class CustomerCreation extends Component<Props, State>{
   }
   submit = (values: object) => {
     if (this.state.step < 3) {
+      console.log(values)
       this.setState({
         [`step${this.state.step}`]: values,
         step: this.state.step + 1,
-      } as any);
+      } as any, ()=> console.log('state', this.state.step2));
     } else {
       this.setState({ step3: values, loading: true } as any)
       const objToSubmit: Customer = {
@@ -176,11 +178,13 @@ class CustomerCreation extends Component<Props, State>{
         customerBusiness: { ...this.state.step2 },
         customerExtraDetails: { ...this.state.step3 }
       };
-      this.createCustomer(objToSubmit);
+      this.createEditCustomer(objToSubmit);
     }
   }
-  async createCustomer(obj: Customer) {
+  async createEditCustomer(obj: Customer) {
+    console.log(obj)
     const objToSubmit = { ...obj.customerInfo, ...obj.customerBusiness, ...obj.customerExtraDetails };
+    console.log(objToSubmit)  
     objToSubmit.birthDate = new Date(objToSubmit.birthDate).valueOf();
     objToSubmit.nationalIdIssueDate = new Date(objToSubmit.nationalIdIssueDate).valueOf();
     objToSubmit.customerAddressLatLongNumber.lat === 0 && objToSubmit.customerAddressLatLongNumber.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber.lat},${objToSubmit.customerAddressLatLongNumber.lng}`;
@@ -190,14 +194,26 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
     objToSubmit.representative = objToSubmit.representative._id;
-    const res = await createCustomer(objToSubmit);
-    if (res.status === 'success') {
-      this.setState({ loading: false });
-      Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+    if(this.props.edit){
+      const res = await editCustomer(objToSubmit,this.state.selectedCustomer._id);
+      if (res.status === 'success') {
+        this.setState({ loading: false });
+        Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+      } else {
+        Swal.fire("error", local.customerCreationError)
+        this.setState({ loading: false });
+      }
     } else {
-      Swal.fire("error", local.customerCreationError)
-      this.setState({ loading: false });
+      const res = await createCustomer(objToSubmit);
+      if (res.status === 'success') {
+        this.setState({ loading: false });
+        Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+      } else {
+        Swal.fire("error", local.customerCreationError)
+        this.setState({ loading: false });
+      }
     }
+    
   }
   previousStep(values, step: number): void {
     this.setState({

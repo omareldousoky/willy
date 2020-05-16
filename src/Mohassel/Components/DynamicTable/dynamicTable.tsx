@@ -8,14 +8,17 @@ interface Props {
   mappers: Array<any>;
   pagination: boolean;
   data: Array<any>;
-  totalCount?: number;
+  totalCount: number;
   changeNumber?: (key: string, number: number) => void | undefined;
 }
 
 const DynamicTable = (props: Props) => {
-  console.log(props)
   const [page, changePage] = useState(0);
   const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 5 : props.data.length);
+  const totalPages: Array<number> = [];
+  for (let index = 1; index <= Math.ceil(props.totalCount / rowsPerPage); index++) {
+    totalPages.push(index)
+  }
   return (
     <>
       <Table striped hover style={{ textAlign: 'right' }}>
@@ -63,10 +66,10 @@ const DynamicTable = (props: Props) => {
               onClick={() => {
                 if (page !== 0) {
                   changePage(page - 1);
-                  props.changeNumber && props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
+                  props.changeNumber && props.changeNumber('from', (page * rowsPerPage - rowsPerPage));
                 }
               }}>{local.previous}</div>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(number => {
+            {totalPages.map(number => {
               return (
                 <div key={number}
                   className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
@@ -78,10 +81,13 @@ const DynamicTable = (props: Props) => {
                 </div>
               )
             })}
-            <div className="pagination-next-prev-enabled" onClick={() => {
-              changePage(page + 1);
-              props.changeNumber && props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
-            }}>{local.next}</div>
+            <div className={page + 1 !== Math.ceil(props.totalCount / rowsPerPage) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
+              onClick={() => {
+                if (page + 1 !== Math.ceil(props.totalCount / rowsPerPage)) {
+                  changePage(page + 1);
+                  props.changeNumber && props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
+                }
+              }}>{local.next}</div>
           </div>
         </div>
         : null}

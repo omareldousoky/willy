@@ -273,14 +273,14 @@ class PostponeInstallments extends Component<Props, State>{
                     <Row>
                         <h5>{local.installmentsTableBeforeRescheduling}</h5>
                     </Row>
-                    <DynamicTable pagination={false} data={this.props.application.installmentsObject.installments} mappers={this.mappers} />
+                    <DynamicTable totalCount={0} pagination={false} data={this.props.application.installmentsObject.installments} mappers={this.mappers} />
                 </div>
                 {this.state.installmentsAfterRescheduling.length > 0 &&
                     <div style={{ margin: '10px 0' }}>
                         <Row>
                             <h5>{local.installmentsTableAfterRescheduling}</h5>
                         </Row>
-                        <DynamicTable pagination={false} data={this.state.installmentsAfterRescheduling} mappers={this.mappers} />
+                        <DynamicTable totalCount={0} pagination={false} data={this.state.installmentsAfterRescheduling} mappers={this.mappers} />
                     </div>
                 }
                 {!this.props.test && <Button disabled={this.state.noOfInstallments === 0} onClick={() => this.applyChanges()}>{local.save}</Button>}

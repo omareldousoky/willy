@@ -7,12 +7,12 @@ import AsyncSelect from 'react-select/async';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import * as local from '../../../Shared/Assets/ar.json';
 
-interface LoanOfficers {
+interface LoanOfficer {
     _id: string;
     username: string;
 }
 export const StepThreeForm = (props: any) => {
-    const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficers>>([]);
+    const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficer>>([]);
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
         if(res.status === "success"){
