@@ -193,7 +193,7 @@ class CustomerCreation extends Component<Props, State>{
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
         this.setState({ loading: false });
-        Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+        Swal.fire("", local.customerEdited, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
       } else {
         Swal.fire("error", local.customerCreationError)
         this.setState({ loading: false });
@@ -202,7 +202,7 @@ class CustomerCreation extends Component<Props, State>{
       const res = await createCustomer(objToSubmit);
       if (res.status === 'success') {
         this.setState({ loading: false });
-        Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+        Swal.fire("", local.customerCreated, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
       } else {
         Swal.fire("error", local.customerCreationError)
         this.setState({ loading: false });
@@ -268,7 +268,7 @@ class CustomerCreation extends Component<Props, State>{
   renderDocuments() {
     return (
       <DocumentsUpload
-        customerId={this.state.selectedCustomer._id}
+        customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
       />
