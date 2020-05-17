@@ -382,6 +382,14 @@
     "totalPayment": "إجمالي المدفوع",
     "feesPaid":"المصاريف المسدده",
     "principalPaid":"الاصل المسدد",
-    "totalPaid": "مسدد"
-
+    "totalPaid": "مسدد",
+    "loanApplications": "طلبات القروض",
+    "issuedLoans": "قروض مصدرة",
+    "createCalculationMethod": "إنشاء طريقة حساب",
+    "testCalculationMethod":"تجربة طريقة حساب",
+    "createLoanProduct": "نوع قرض جديد",
+    "assignProductToBranch": "إتاحة القرض للفروع",
+    "createLoanApplication": "طلب قرض جديد",
+    "bulkLoanApplicationsApproval": "موافقة علي طلبات القروض",
+    "searchForBranch": "إبحث عن فرع"
 }

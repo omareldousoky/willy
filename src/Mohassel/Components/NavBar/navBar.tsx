@@ -78,7 +78,7 @@ class NavBar extends Component<Props, State> {
             data-qc="searchKeyWord"
             onChange={(e) => this.setState({ searchKeyWord: e.currentTarget.value })}
             style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-            placeholder={local.userSearchPlaceholder}
+            placeholder={local.searchForBranch}
           />
           <InputGroup.Append>
             <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
@@ -162,17 +162,17 @@ class NavBar extends Component<Props, State> {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
-              {<Can I='view' a='Customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{'Customers'}</Nav.Link></Can>}
-              {<Can I='create' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>Create Calculation Method</Nav.Link></Can>}
-              {<Can I='test' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>Test Calculation Method</Nav.Link></Can>}
-              {<Can I='create' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>Create Loan Product</Nav.Link></Can>}
-              {<Can I='assignToBranch' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>Assign Products To Branch</Nav.Link></Can>}
-              {<Can I='create' a='Application'><Nav.Link onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>Create Loan Application</Nav.Link></Can>}
-              {<Can I='view' a='Application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>Track Loan Applications</Nav.Link></Can>}
-              {<Can I='bulkApprove' a='Application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>Bulk Loan Applications Approval</Nav.Link></Can>}
-              {<Can I='create' a='LoanUsage'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>Loan Uses</Nav.Link></Can>}
-              <Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>Manage Accounts</Nav.Link>
-              <Nav.Link onClick={() => this.props.history.push('/loans')}>Issued Loans</Nav.Link>
+              {<Can I='view' a='Customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
+              {<Can I='create' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>}
+              {<Can I='test' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>}
+              {<Can I='create' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>}
+              {<Can I='assignToBranch' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
+              {<Can I='create' a='Application'><Nav.Link onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Nav.Link></Can>}
+              {<Can I='view' a='Application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
+              {<Can I='bulkApprove' a='Application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
+              {<Can I='create' a='LoanUsage'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
+              <Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>{local.manageAccounts}</Nav.Link>
+              <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>
 
               {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
