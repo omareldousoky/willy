@@ -382,6 +382,8 @@
     "totalPayment": "إجمالي المدفوع",
     "feesPaid":"المصاريف المسدده",
     "principalPaid":"الاصل المسدد",
-    "totalPaid": "مسدد"
+    "totalPaid": "مسدد",
+    "branchNameInavlid": "إسم الفرع يجب أن يكون من حروف فقط",
+    "governorateNameInavlid": "المحافظة لا يمكن أن تحتوي على أرقام"
 
 }

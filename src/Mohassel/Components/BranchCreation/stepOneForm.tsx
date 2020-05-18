@@ -1,83 +1,90 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import './createBranch.scss';
-import { Loader } from '../../../Shared/Components/Loader';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
-import { BasicValues, BasicErrors,BasicTouched } from './branchCreationInterfaces';
+import { BasicValues, BasicErrors, BasicTouched } from './branchCreationInterfaces';
 
- interface Props {
-     values: BasicValues;
-     handleSubmit: any;
-     handleChange: any;
-     handleBlur: any;
-     setFieldValue: any;
-     cancel: any;
-     errors: BasicErrors;
-     touched: BasicTouched;
- }
+interface Props {
+    values: BasicValues;
+    handleSubmit: any;
+    handleChange: any;
+    handleBlur: any;
+    setFieldValue: any;
+    cancel: any;
+    errors: BasicErrors;
+    touched: BasicTouched;
+}
 const StepOneForm = (props: Props) => {
     const [mapState, openCloseMap] = useState(false);
     const [activeState, setActive] = useState(true);
     const [inactiveState, setInactive] = useState(false);
     return (
-        <Form 
-        className={'branch-data-form'}
-        onSubmit = {props.handleSubmit}
+        <Form
+            className={'branch-data-form'}
+            onSubmit={props.handleSubmit}
         >
-              {mapState && <Map show={mapState}
-        handleClose={() => openCloseMap(false)}
-        save={props.values.branchAddressLatLong}
-        location={props.values.branchAddressLatLong}
-        header={local.customerHomeAddressLocationTitle}
-      />}
+            {mapState && <Map show={mapState}
+                handleClose={() => openCloseMap(false)}
+                save={(branchAddressLatLong: {lat: number ; lng: number})=>{props.setFieldValue('branchAddressLatLong',branchAddressLatLong);openCloseMap(false)}}
+                location={props.values.branchAddressLatLong}
+                header={local.customerHomeAddressLocationTitle}
+            />}
             <Row>
                 <Col>
-            <Form.Group
-                className={'branch-data-group'}
-                controlId={'name'}
-            >
-                <Form.Label
-                    className={'branch-data-label'}
-                >{`${local.branchName}*`}
-                </Form.Label>
-                <Form.Control
-                    placeholder={local.branchName}
-                    type={"text"}
-                    name={"name"}
-                    data-qc={"name"}
-                    value={props.values.name}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    isInvalid={(props.errors.name && props.touched.name) as boolean}
-                />
-            </Form.Group>
-            </Col>
-            <Col>
-            <Form.Group
-              className={'branch-data-group'}
-              controlId={'governorate'}
-            >
-             <Form.Label
-             className={'branch-data-label'}
-             >
-                 {`${local.governorate}*`}
-             </Form.Label>
-             <Form.Control 
-              placeholder= {local.governorate}
-              type={"text"}
-              name={"governorate"}
-              data-qc={"governorate"}
-              value={props.values.governorate}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
-              isInvalid={(props.errors.governorate && props.touched.governorate) as boolean}
-             />
-            </Form.Group>
-            </Col>
+                    <Form.Group
+                        className={'branch-data-group'}
+                        controlId={'name'}
+                    >
+                        <Form.Label
+                            className={'branch-data-label'}
+                        >{`${local.branchName}*`}
+                        </Form.Label>
+                        <Form.Control
+                            placeholder={local.branchName}
+                            type={"text"}
+                            name={"name"}
+                            data-qc={"name"}
+                            value={props.values.name}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.name && props.touched.name) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.name}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group
+                        className={'branch-data-group'}
+                        controlId={'governorate'}
+                    >
+                        <Form.Label
+                            className={'branch-data-label'}
+                        >
+                            {`${local.governorate}*`}
+                        </Form.Label>
+                        <Form.Control
+                            placeholder={local.governorate}
+                            type={"text"}
+                            name={"governorate"}
+                            data-qc={"governorate"}
+                            value={props.values.governorate}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.governorate && props.touched.governorate) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.governorate}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
             </Row>
             <Col
                 className={'branch-data-group'}
@@ -87,12 +94,12 @@ const StepOneForm = (props: Props) => {
                 >{`${local.branchOnMap}`}
                 </div>
                 <Button
-                   className ={'map-btn'}
+                    className={'map-btn'}
                     name={"branchAddressLatLong"}
                     data-qc={"branchAddressLatLong"}
-                    onClick = {()=>openCloseMap(true)}
-        
-    ><span><img alt={'location'}  src = {require('../../Assets/activeLocation.svg')}/> {local.branchOnMap} </span></Button>
+                    onClick={() => openCloseMap(true)}
+
+                ><span><img alt={'location'} src={require('../../Assets/activeLocation.svg')} /> {local.branchOnMap} </span></Button>
             </Col>
             <Row>
                 <Col>
@@ -102,7 +109,7 @@ const StepOneForm = (props: Props) => {
                     >
                         <Form.Label
                             className={'branch-data-label'}
-                        >{`${local.branchAddress}`}
+                        >{`${local.branchAddress}*`}
                         </Form.Label>
                         <Form.Control
                             placeholder={local.branchAddress}
@@ -127,7 +134,7 @@ const StepOneForm = (props: Props) => {
                     >
                         <Form.Label
                             className={'branch-data-label'}
-                        >{`${local.postalCode}*`}
+                        >{local.postalCode}
                         </Form.Label>
                         <Form.Control
                             type={"text"}
@@ -149,80 +156,80 @@ const StepOneForm = (props: Props) => {
             </Row>
             <Row>
                 <Col>
-                <Form.Group  className={'branch-data-group'}>
-                    <Form.Label  className={'branch-data-label'}>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
                             {local.mobilePhoneNumber}
-                    </Form.Label>
-                    <Form.Control
-                    type={"text"}
-                    name={"phoneNumber"}
-                    placeholder={local.mobilePhoneNumber}
-                    data-qc={"phoneNumber"}
-                    value={props.values.phoneNumber}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    isInvalid={(props.errors.phoneNumber && props.touched.phoneNumber) as boolean}
-                     />
-                     <Form.Control.Feedback
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"phoneNumber"}
+                            placeholder={local.mobilePhoneNumber}
+                            data-qc={"phoneNumber"}
+                            value={props.values.phoneNumber}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.phoneNumber && props.touched.phoneNumber) as boolean}
+                        />
+                        <Form.Control.Feedback
                             type="invalid">
                             {props.errors.phoneNumber}
                         </Form.Control.Feedback>
-                </Form.Group>
+                    </Form.Group>
                 </Col>
                 <Col>
-                <Form.Group  className={'branch-data-group'}>
-                    <Form.Label  className={'branch-data-label'}>
-                        {local.faxNumber}
-                    </Form.Label>
-                    <Form.Control 
-                     type={"text"}
-                     name={"faxNumber"}
-                     placeholder={local.faxNumber}
-                     data-qc={"faxNumber"}
-                     value={props.values.faxNumber}
-                     onChange={props.handleChange}
-                     onBlur={props.handleBlur}
-                     isInvalid={(props.errors.faxNumber && props.touched.faxNumber) as boolean}
-                    />
-                    <Form.Control.Feedback
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                            {local.faxNumber}
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"faxNumber"}
+                            placeholder={local.faxNumber}
+                            data-qc={"faxNumber"}
+                            value={props.values.faxNumber}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.faxNumber && props.touched.faxNumber) as boolean}
+                        />
+                        <Form.Control.Feedback
                             type="invalid">
                             {props.errors.faxNumber}
                         </Form.Control.Feedback>
-                </Form.Group>
+                    </Form.Group>
                 </Col>
             </Row>
-            <Form.Group 
-             className={'branch-data-group'}
-           >
+            <Form.Group
+                className={'branch-data-group'}
+            >
                 <Form.Label
-                className= {'branch-data-label'}
+                    className={'branch-data-label'}
                 >{local.branchState}</Form.Label>
-              <Row style={{margin:"1rem"}}> 
-            <Form.Check 
-             type={'radio'} 
-             label={local.activeBranch} 
-             value ={'active'} checked={activeState} 
-             onChange = {props.handleChange}
-             onClick = {(e: any)=>{
-                 setActive(true);
-                 setInactive(false)
-                 props.setFieldValue('status',e.target.value);
-             }}
-             />
-            <Form.Check 
-            type={'radio'} 
-            label={local.inActiveBranch}
-             value ={'inactive'}
-              checked = {inactiveState}
-              onChange = {props.handleChange}
-              onClick = {(e: any)=>{
-                setActive(false);
-                setInactive(true)
-                props.setFieldValue('status',e.target.value);
-            }}
+                <Row style={{ margin: "1rem" }}>
+                    <Form.Check
+                        type={'radio'}
+                        label={local.activeBranch}
+                        value={'active'} checked={activeState}
+                        onChange={props.handleChange}
+                        onClick={(e: any) => {
+                            setActive(true);
+                            setInactive(false)
+                            props.setFieldValue('status', e.target.value);
+                        }}
+                    />
+                    <Form.Check
+                        type={'radio'}
+                        label={local.inActiveBranch}
+                        value={'inactive'}
+                        checked={inactiveState}
+                        onChange={props.handleChange}
+                        onClick={(e: any) => {
+                            setActive(false);
+                            setInactive(true)
+                            props.setFieldValue('status', e.target.value);
+                        }}
 
-              />
-              </Row> 
+                    />
+                </Row>
             </Form.Group>
             <Form.Group
                 as={Row}
