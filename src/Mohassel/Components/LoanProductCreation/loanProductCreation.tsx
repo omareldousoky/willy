@@ -97,9 +97,12 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
-    submit = async (values: object) => {
+    submit = async (values: any) => {
         this.setState({ loading: true });
-        const obj = values
+        const obj = {...values}
+        if(obj.mustEnterGuarantor === false){
+            obj.noOfGuarantors = 0;
+        }
         const res = await createProduct(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });

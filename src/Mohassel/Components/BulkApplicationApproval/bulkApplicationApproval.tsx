@@ -213,7 +213,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                   })}
               </tbody>
             </Table>
-            <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>Approve</Button>
+                <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>{local.approve}</Button>
           </div>
           : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>

@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import {step1,branchCreationValidationStepOne} from './branchCreationInitialState';
+import { Loader } from '../../../Shared/Components/Loader';
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json'
 import { createBranch } from '../../Services/APIs/Branch/createBranch';
@@ -76,6 +77,7 @@ interface Props {
     render() {
         return (
             <div>
+                <Loader type ="fullscreen" open={this.state.loading}/>
                 <BackButton title={local.newBranch}/>
                 <Container>
                 <Card>

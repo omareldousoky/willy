@@ -43,7 +43,7 @@ export const CustomerCardView = (props: Props) => {
     return (
         <div style={{textAlign:'right'}}>
             <CustomerLoanDetailsBoxView application={props.application} />
-            <DynamicTable pagination={false} data={props.application.installmentsObject.installments} mappers={mappers} />
+            <DynamicTable totalCount={0} pagination={false} data={props.application.installmentsObject.installments} mappers={mappers} />
         </div>
     )
 }

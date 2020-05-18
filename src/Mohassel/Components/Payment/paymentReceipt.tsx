@@ -54,7 +54,7 @@ const PaymentReceipt = (props: any) => {
               <Form.Label column sm={6} className="info">{props.receiptData.customer.customerName}</Form.Label>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column sm={3} className="title">{local.principal}</Form.Label>
+              <Form.Label column sm={3} className="title">{local.installmentType}</Form.Label>
               <Form.Label column sm={6} className="info">{props.receiptData.principal}</Form.Label>
             </Form.Group>
             <Form.Group as={Row}>

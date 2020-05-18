@@ -20,6 +20,7 @@ interface State {
   searchKeyWord: string;
   dateFrom: string;
   dateTo: string;
+  totalCount: number;
   loading: boolean;
 }
 interface Props {
@@ -36,6 +37,7 @@ class CustomersList extends Component<Props, State> {
       searchKeyWord: '',
       dateFrom: '',
       dateTo: '',
+      totalCount: 0,
       loading: false,
     }
     this.mappers = [
@@ -86,6 +88,7 @@ class CustomersList extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
+        totalCount: res.body.totalCount,
         loading: false
       })
     } else {
@@ -131,11 +134,11 @@ class CustomersList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
-                <span className="text-muted">{local.noOfCustomers}</span>
+                <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
                 <Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>new customer</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
@@ -209,6 +212,7 @@ class CustomersList extends Component<Props, State> {
             </Formik>
             {this.state.data &&
               <DynamicTable
+                totalCount={this.state.totalCount}
                 mappers={this.mappers}
                 pagination={true}
                 data={this.state.data}

@@ -28,6 +28,7 @@ interface State {
   selectedBranch: string;
   dateFrom: string;
   dateTo: string;
+  totalCount: number;
   loading: boolean;
 }
 
@@ -45,6 +46,7 @@ class UsersList extends Component<Props, State> {
       selectedBranch: '',
       dateFrom: '',
       dateTo: '',
+      totalCount: 0,
       loading: false,
 
     }
@@ -114,6 +116,7 @@ class UsersList extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
+        totalCount: res.body.totalCount,
         loading: false
       })
     } else {
@@ -162,11 +165,11 @@ class UsersList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                <span className="text-muted">{local.noOfUsers}</span>
+                <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>new user</Button>
-                <Button variant="outline-primary" className="big-button">download pdf</Button>
+                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
@@ -192,10 +195,10 @@ class UsersList extends Component<Props, State> {
                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
-                    
+
                   </div>
                   <div className="custom-card-body">
-                    <div style={{ display: 'flex', marginLeft: 20,  flex: 1 }}>
+                    <div style={{ display: 'flex', marginLeft: 20, flex: 1 }}>
                       <div className="dropdown-container" style={{ flex: 1 }}>
                         <p className="dropdown-label">{local.employment}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="employment">
@@ -232,6 +235,7 @@ class UsersList extends Component<Props, State> {
               }
             </Formik>
             <DynamicTable
+              totalCount={this.state.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.state.data}
