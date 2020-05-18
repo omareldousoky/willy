@@ -152,7 +152,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                             disabled={!values.rounding}>
                             <option value="principal">تقريب الأصل فقط</option>
                             <option value="fees">تقريب المصاريف فقط</option>
-                            <option value="prinicpalAndFees">تقريب الأصل و المصاريف</option>
+                            <option value="principalAndFees">تقريب الأصل و المصاريف</option>
                             <option value="installmentAndPrincipal">تقريب إجمالى قيمه القسط و الأصل</option>
                             <option value="installmentAndFees">تقريب إجمالى قيمه القسط و المصاريف</option>
                             <option value="installment">تقريب إجمالى قيمه القسط فقط</option>
