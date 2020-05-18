@@ -78,6 +78,7 @@ class LoanProfile extends Component<Props, State>{
                 header: local.reschedulingTest,
                 stringKey: 'loanReschedulingTest'
             };
+            if (application.body.status === "paid") tabsToRender.push(customerCardTab)
             if (application.body.status === "issued") tabsToRender.push(...[customerCardTab, paymentTab, reschedulingTab, reschedulingTestTab])
             this.setState({
                 application: application.body,
