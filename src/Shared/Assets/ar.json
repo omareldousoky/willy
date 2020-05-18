@@ -398,5 +398,8 @@
     "welcomeToMohassel": "اهلا بك في المحصل",
     "chooseRepresentative": "اختر المندوب",
     "chooseBranch": "اختر الفرع",
-    "issued": "مصدر"
+    "issued": "مصدر",
+    "branchNameInavlid": "إسم الفرع يجب أن يكون من حروف فقط",
+    "governorateNameInavlid": "المحافظة لا يمكن أن تحتوي على أرقام"
+
 }
