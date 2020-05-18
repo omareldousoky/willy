@@ -78,11 +78,12 @@ steps:
     repo: fintech/${DRONE_REPO_NAME}/login
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     region: us-east-1
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=http://api.${DRONE_BRANCH}.halan.io
-      - REACT_APP_MOHASSEL_URL=http://mohassel.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LOGIN_URL=http://login.${DRONE_BRANCH}.halan.io
-      - REACT_APP_GOOGLE_MAP_KEY=${REACT_APP_GOOGLE_MAP_KEY}
+      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -108,11 +109,12 @@ steps:
     dockerfile: Docker/mohassel.Dockerfile
     repo: fintech/${DRONE_REPO_NAME}/mohassel
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
     build_args:
-      - REACT_APP_BASE_URL=http://api.${DRONE_BRANCH}.halan.io
-      - REACT_APP_MOHASSEL_URL=http://mohassel.${DRONE_BRANCH}.halan.io
-      - REACT_APP_LOGIN_URL=http://login.${DRONE_BRANCH}.halan.io
-      - REACT_APP_GOOGLE_MAP_KEY=${REACT_APP_GOOGLE_MAP_KEY}
+      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
