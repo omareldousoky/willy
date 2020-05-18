@@ -5,21 +5,17 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import { withRouter } from 'react-router-dom';
 import DynamicTable from '../DynamicTable/dynamicTable';
+import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import AsyncSelect from 'react-select/async';
+import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
 interface Props {
   history: Array<any>;
 };
-interface LoanOfficer {
-  _id: string;
-  username: string;
-}
 interface State {
   data: any;
   size: number;
@@ -32,8 +28,7 @@ interface State {
   dateTo: string;
   loading: boolean;
   totalCount: number;
-  loanOfficers: Array<LoanOfficer>;
-  representative: LoanOfficer;
+  statusFilter: string;
 }
 
 class LoanList extends Component<Props, State> {
@@ -47,14 +42,12 @@ class LoanList extends Component<Props, State> {
       searchKeyWord: '',
       selectedRole: '',
       selectedEmployment: '',
-      selectedBranch: '',
+      selectedBranch: JSON.parse(getCookie('branches'))[0],
       dateFrom: '',
       dateTo: '',
       loading: false,
       totalCount: 0,
-      loanOfficers: [],
-      representative: {_id: '', username: ''}
-
+      statusFilter: '',
     }
     this.mappers = [
       {
@@ -82,16 +75,29 @@ class LoanList extends Component<Props, State> {
         key: "loanIssuanceDate",
         render: data => new Date(data.application.issueDate).toISOString().slice(0, 10)
       },
+      {
+        title: local.status,
+        key: "status",
+        render: data => this.getStatus(data.application.status)
+      },
     ]
   }
   componentDidMount() {
     this.getLoans()
   }
+  getStatus(status: string) {
+    switch (status) {
+      case 'paid':
+        return <div className="status-chip paid">{local.late}</div>
+      case 'issued':
+        return <div className="status-chip unpaid">{local.issued}</div>
+      default: return null;
+    }
+  }
 
   async getLoans() {
     this.setState({ loading: true })
-    const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchLoan({ size: this.state.size, from: this.state.from, branchId: branchId });
+    const res = await searchLoan({ size: this.state.size, from: this.state.from, branchId: this.state.selectedBranch });
     if (res.status === "success") {
       this.setState({
         data: res.body.applications,
@@ -103,16 +109,38 @@ class LoanList extends Component<Props, State> {
       this.setState({ loading: false })
     }
   }
-  submit = (values) => {
-    console.log(values)
-  }
-  getLoanOfficers = async (inputValue: string) => {
-    const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
-    if (res.status === "success") {
-      this.setState({ loanOfficers: res.body.data });
-      return res.body.data;
+  submit = async (values) => {
+    this.setState({ loading: true })
+    console.log(this.state)
+    let obj = {}
+    if (values.dateFrom === "" && values.dateTo === "") {
+      obj = {
+        size: this.state.size,
+        from: this.state.from,
+        branchId: this.state.selectedBranch,
+        name: this.state.searchKeyWord,
+        status: this.state.statusFilter
+      }
     } else {
-      console.log('errors', res)
+      obj = {
+        fromDate: new Date(values.dateFrom).setHours(this.state.from, 0, 0, 0).valueOf(),
+        toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
+        size: this.state.size,
+        from: 0,
+        branchId: this.state.selectedBranch,
+        name: this.state.searchKeyWord,
+        status: this.state.statusFilter
+      }
+    }
+    const res = await searchLoan(obj);
+    if (res.status === "success") {
+      this.setState({
+        loading: false,
+        data: res.body.applications
+      })
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('', local.searchError, 'error');
     }
   }
   render() {
@@ -123,12 +151,13 @@ class LoanList extends Component<Props, State> {
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
+                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.state.totalCount})`}</span>
               </div>
             </div>
             <hr className="dashed-line" />
             <Formik
+              enableReinitialize
               initialValues={this.state}
               onSubmit={this.submit}
               // validationSchema={}
@@ -142,7 +171,7 @@ class LoanList extends Component<Props, State> {
                         type="text"
                         name="searchKeyWord"
                         data-qc="searchKeyWord"
-                        onChange={formikProps.handleChange}
+                        onChange={(e) => { this.setState({ searchKeyWord: e.currentTarget.value }); formikProps.handleChange }}
                         style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                         placeholder={local.userSearchPlaceholder}
                       />
@@ -158,7 +187,7 @@ class LoanList extends Component<Props, State> {
                         type="date"
                         name="dateFrom"
                         data-qc="dateFrom"
-                        onChange={formikProps.handleChange}
+                        onChange={(e) => { this.setState({ dateFrom: e.currentTarget.value }); formikProps.handleChange }}
                       >
                       </Form.Control>
                       <span>{local.to}</span>
@@ -168,7 +197,7 @@ class LoanList extends Component<Props, State> {
                         name="dateTo"
                         data-qc="dateTo"
                         min={formikProps.values.dateFrom}
-                        onChange={formikProps.handleChange}
+                        onChange={(e) => { this.setState({ dateTo: e.currentTarget.value }); formikProps.handleChange }}
                         disabled={!Boolean(formikProps.values.dateFrom)}
                       >
                       </Form.Control>
@@ -179,30 +208,15 @@ class LoanList extends Component<Props, State> {
             </Formik>
             <div className="custom-card-body">
               <div className="dropdown-container" style={{ flex: 2, marginLeft: 20 }}>
-                <p className="dropdown-label">{local.oneBranch}</p>
-                <Form.Control as="select" className="dropdown-select" data-qc="branch">
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
+                <p className="dropdown-label">{local.status}</p>
+                <Form.Control as="select" className="dropdown-select" data-qc="branch" value={this.state.statusFilter} onChange={(e) => this.setState({ statusFilter: e.currentTarget.value })}>
+                  <option value=""></option>
+                  <option value='paid'>{local.paid}</option>
+                  <option value='issued'>{local.issued}</option>
                 </Form.Control>
               </div>
-              <div className="dropdown-container" style={{ flex: 2 }}>
-                <p className="dropdown-label">{local.representative}</p>
-                <Form.Control as="select" className="dropdown-select" data-qc="representative">
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                </Form.Control>
-              </div>
-              {/* <AsyncSelect
-                name="representative"
-                data-qc="representative"
-                value={this.state.loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
-                onBlur={handleBlur}
-                onChange={(id) => setFieldValue("representative", id)}
-                getOptionLabel={(option) => option.username}
-                getOptionValue={(option) => option._id}
-                loadOptions={this.getLoanOfficers}
-                cacheOptions defaultOptions
-              /> */}
+              <BranchesDropDown onSelectBranch={(branch) => { this.setState({ selectedBranch: branch._id }, () => this.submit(this.state)) }} />
+              {/* <LoanOfficersDropDown onSelectLoanOfficer={(loanOfficer: LoanOfficer)=> console.log(loanOfficer)}/> */}
             </div>
             <DynamicTable
               totalCount={this.state.totalCount}

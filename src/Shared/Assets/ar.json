@@ -386,11 +386,17 @@
     "totalPaid": "مسدد",
     "loanApplications": "طلبات القروض",
     "issuedLoans": "قروض مصدرة",
+    "noOfIssuedLoans": "عدد القروض المصدرة",
     "createCalculationMethod": "إنشاء طريقة حساب",
     "testCalculationMethod":"تجربة طريقة حساب",
     "createLoanProduct": "نوع قرض جديد",
     "assignProductToBranch": "إتاحة القرض للفروع",
     "createLoanApplication": "طلب قرض جديد",
     "bulkLoanApplicationsApproval": "موافقة علي طلبات القروض",
-    "searchForBranch": "إبحث عن فرع"
+    "searchForBranch": "إبحث عن فرع",
+    "approve": "موافقة",
+    "welcomeToMohassel": "اهلا بك في المحصل",
+    "chooseRepresentative": "اختر المندوب",
+    "chooseBranch": "اختر الفرع",
+    "issued": "مصدر"
 }

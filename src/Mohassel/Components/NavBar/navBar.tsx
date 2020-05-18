@@ -105,7 +105,7 @@ class NavBar extends Component<Props, State> {
               )
             })}
         </div>
-            {this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults(): null}
+        {this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
@@ -116,7 +116,7 @@ class NavBar extends Component<Props, State> {
     )
   }
   renderNoResults() {
-    return(
+    return (
       <div className="no-branches-container">
         <img alt="no-branches-found" src={require('../../Assets/noBranchesFound.svg')} />
         <h4>{local.noResults}</h4>
@@ -153,11 +153,11 @@ class NavBar extends Component<Props, State> {
                 </div>
                 <img alt="drop-down-arrow" src={require('../../Assets/dropDownArrow.svg')} />
               </div>
-                {this.state.openBranchList ? this.renderBranchList() : null}
+              {this.state.openBranchList ? this.renderBranchList() : null}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
+        {this.state.selectedBranch._id && <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -183,7 +183,7 @@ class NavBar extends Component<Props, State> {
                     </NavDropdown> */}
             </Nav>
           </Navbar.Collapse>
-        </Navbar>
+        </Navbar>}
       </>
     )
   }
