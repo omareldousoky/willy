@@ -15,12 +15,12 @@ import './styles.scss';
 
 interface State {
   data: any;
-  totalCount: number;
   size: number;
   from: number;
   searchKeyWord: string;
   dateFrom: string;
   dateTo: string;
+  totalCount: number;
   loading: boolean;
 }
 interface Props {
@@ -32,12 +32,12 @@ class BranchesList extends Component<Props, State> {
     super(props);
     this.state = {
       data: [],
-      totalCount: 0,
       size: 5,
       from: 0,
       searchKeyWord: '',
       dateFrom: '',
       dateTo: '',
+      totalCount: 0,
       loading: false,
     }
     this.mappers = [
@@ -139,7 +139,7 @@ class BranchesList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches} {this.state.totalCount}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
                 <Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button>
@@ -198,6 +198,7 @@ class BranchesList extends Component<Props, State> {
             </Formik>
             {this.state.data &&
               <DynamicTable
+                totalCount={this.state.totalCount}
                 mappers={this.mappers}
                 pagination={true}
                 data={this.state.data}

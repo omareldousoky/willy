@@ -282,7 +282,7 @@ class Payment extends Component<Props, State>{
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable pagination={false} data={this.props.installments} mappers={this.mappers}  />
+        <DynamicTable totalCount={0}  pagination={false} data={this.props.installments} mappers={this.mappers}  />
         <div className="payment-amount-container">
           <h5>{local.requiredAmount}</h5>
           <h2>{this.getRequiredAmount()}{(this.props.currency).toUpperCase()}</h2>

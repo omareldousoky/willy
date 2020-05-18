@@ -15,6 +15,7 @@ interface Props {
 interface State {
   data: any;
   activeRole: number;
+  totalCount: number;
   filterRoles: string;
   loading: boolean;
 };
@@ -24,6 +25,7 @@ class RolesList extends Component<Props, State> {
     super(props);
     this.state = {
       data: [],
+      totalCount: 0,
       loading: false,
       filterRoles: '',
       activeRole: -1,
@@ -46,6 +48,7 @@ class RolesList extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         data: res.body.roles,
+        totalCount: res.body.roles.length,
         loading: false
       })
     } else {
@@ -62,7 +65,7 @@ class RolesList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.roles}</Card.Title>
-                <span className="text-muted">{local.noOfRoles} {this.state.data.length}</span>
+                <span className="text-muted">{local.noOfRoles + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
                 <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>{local.createNewRole}</Button>

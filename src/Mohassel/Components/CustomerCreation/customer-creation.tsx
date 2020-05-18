@@ -6,7 +6,9 @@ import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
+import cloneDeep from 'lodash.clonedeep';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
+import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
 import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
@@ -88,14 +90,14 @@ interface State {
     businessSpeciality: string;
     businessLicenseNumber: string;
     businessLicenseIssuePlace: string;
-    businessLicenseIssueDate: string;
+    businessLicenseIssueDate: any;
     commercialRegisterNumber: string;
     industryRegisterNumber: string;
     taxCardNumber: string;
   };
   step3: {
     geographicalDistribution: string;
-    representative: string;
+    representative: any;
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
@@ -142,8 +144,8 @@ class CustomerCreation extends Component<Props, State>{
       const customerInfo = { ...res.body };
       const customerBusiness = { ...res.body };
       const customerExtraDetails = { ...res.body };
-      const customerAddressLatLongNumber = { lat: Number(res.body.customerAddressLatLong.split(',')[0]), lng: Number(res.body.customerAddressLatLong.split(',')[1]) }
-      const businessAddressLatLongNumber = { lat: Number(res.body.businessAddressLatLong.split(',')[0]), lng: Number(res.body.businessAddressLatLong.split(',')[1]) }
+      const customerAddressLatLongNumber = res.body.customerAddressLatLong ? { lat: Number(res.body.customerAddressLatLong.split(',')[0]), lng: Number(res.body.customerAddressLatLong.split(',')[1]) } : { lat: 0, lng: 0 };
+      const businessAddressLatLongNumber = res.body.businessAddressLatLong ? { lat: Number(res.body.businessAddressLatLong.split(',')[0]), lng: Number(res.body.businessAddressLatLong.split(',')[1]) } : { lat: 0, lng: 0 };
       customerInfo.customerAddressLatLongNumber = customerAddressLatLongNumber;
       customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
       customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
@@ -171,32 +173,40 @@ class CustomerCreation extends Component<Props, State>{
       } as any);
     } else {
       this.setState({ step3: values, loading: true } as any)
-      const objToSubmit: Customer = {
-        customerInfo: { ...this.state.step1 },
-        customerBusiness: { ...this.state.step2 },
-        customerExtraDetails: { ...this.state.step3 }
-      };
-      this.createCustomer(objToSubmit);
+      this.createEditCustomer();
     }
   }
-  async createCustomer(obj: Customer) {
-    const objToSubmit = { ...obj.customerInfo, ...obj.customerBusiness, ...obj.customerExtraDetails };
+  async createEditCustomer() {
+    let objToSubmit;
+    if (this.props.edit) objToSubmit = cloneDeep(this.state.step1, this.state.step2, this.state.step3);
+    else objToSubmit = { ...this.state.step1, ...this.state.step2, ...this.state.step3 };
     objToSubmit.birthDate = new Date(objToSubmit.birthDate).valueOf();
     objToSubmit.nationalIdIssueDate = new Date(objToSubmit.nationalIdIssueDate).valueOf();
-    objToSubmit.customerAddressLatLongNumber.lat === 0 && objToSubmit.customerAddressLatLongNumber.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber.lat},${objToSubmit.customerAddressLatLongNumber.lng}`;
-    objToSubmit.businessAddressLatLongNumber.lat === 0 && objToSubmit.businessAddressLatLongNumber.lng === 0 ? objToSubmit.businessAddressLatLong = '' : objToSubmit.businessAddressLatLong = `${objToSubmit.businessAddressLatLongNumber.lat},${objToSubmit.businessAddressLatLongNumber.lng}`;
+    objToSubmit.customerAddressLatLongNumber?.lat === 0 && objToSubmit.customerAddressLatLongNumber?.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber?.lat},${objToSubmit.customerAddressLatLongNumber?.lng}`;
+    this.state.step2.businessAddressLatLongNumber?.lat === 0 && this.state.step2.businessAddressLatLongNumber?.lng === 0 ? objToSubmit.businessAddressLatLong = '' : objToSubmit.businessAddressLatLong = `${this.state.step2.businessAddressLatLongNumber?.lat},${this.state.step2.businessAddressLatLongNumber?.lng}`;
     objToSubmit.businessLicenseIssueDate = new Date(objToSubmit.businessLicenseIssueDate).valueOf();
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
     objToSubmit.representative = objToSubmit.representative._id;
-    const res = await createCustomer(objToSubmit);
-    if (res.status === 'success') {
-      this.setState({ loading: false });
-      Swal.fire("success", local.customerCreated).then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+    if (this.props.edit) {
+      const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
+      if (res.status === 'success') {
+        this.setState({ loading: false });
+        Swal.fire("", local.customerEdited, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+      } else {
+        Swal.fire("error", local.customerCreationError)
+        this.setState({ loading: false });
+      }
     } else {
-      Swal.fire("error", local.customerCreationError)
-      this.setState({ loading: false });
+      const res = await createCustomer(objToSubmit);
+      if (res.status === 'success') {
+        this.setState({ loading: false });
+        Swal.fire("", local.customerCreated, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+      } else {
+        Swal.fire("error", local.customerCreationError)
+        this.setState({ loading: false });
+      }
     }
   }
   previousStep(values, step: number): void {
@@ -258,7 +268,7 @@ class CustomerCreation extends Component<Props, State>{
   renderDocuments() {
     return (
       <DocumentsUpload
-        customerId={this.state.customerId}
+        customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
       />
