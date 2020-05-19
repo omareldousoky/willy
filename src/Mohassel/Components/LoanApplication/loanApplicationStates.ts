@@ -95,16 +95,18 @@ export const LoanApplicationValidation = Yup.object().shape({
     representativeFees: Yup.number().min(0, "Can't be less than 0").required(local.required),
     stamps: Yup.number().min(0, "Can't be less than 0").required(local.required),
     adminFees: Yup.number().min(0, "Can't be less than 0").required(local.required),
-    entryDate: Yup.date().test(
-        "Min Date", "Can't Select a future date",
-        (value: any) => { return value ? new Date(value).valueOf() <= new Date().setHours(0, 0, 0, 0) : true }
-    ).required(local.required),
+    entryDate: Yup.date().required(local.required),
+    // .test(
+    //     "Min Date", "Can't Select a future date",
+    //     (value: any) => { return value ? new Date(value).valueOf() <= new Date().setHours(0, 0, 0, 0) : true }
+    // )
     usage: Yup.string().required(local.required),
     enquirorId: Yup.string().required(local.required),
-    visitationDate: Yup.date().test(
-        "Min Date", "Select a future date",
-        (value: any) => { return value ? new Date(value).valueOf() >= new Date().setHours(0, 0, 0, 0) : true }
-    ).required(local.required),
+    visitationDate: Yup.date().required(local.required),
+    // .test(
+    //     "Min Date", "Select a future date",
+    //     (value: any) => { return value ? new Date(value).valueOf() >= new Date().setHours(0, 0, 0, 0) : true }
+    // )
     viceCustomers: Yup.array().of(
         Yup.object().shape({
             name: Yup.string(),

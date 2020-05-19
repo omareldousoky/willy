@@ -121,3 +121,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background-color: #7dc356;
   color: #fff;
 }
+.full-width{
+  width: 100%;
+}

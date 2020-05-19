@@ -280,22 +280,22 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="InAdvanceType">
+            <Form.Group as={Row} controlId="inAdvanceType">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceType}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="select"
-                        name="InAdvanceType"
-                        data-qc="InAdvanceType"
-                        value={values.InAdvanceType}
+                        name="inAdvanceType"
+                        data-qc="inAdvanceType"
+                        value={values.inAdvanceType}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        isInvalid={errors.InAdvanceType && touched.InAdvanceType}
+                        isInvalid={errors.inAdvanceType && touched.inAdvanceType}
                     >
                         <option value='cut'>تستقطع من المصاريف</option>
                         <option value='uncut'>لا تستقطع من المصاريف</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
-                        {errors.InAdvanceType}
+                        {errors.inAdvanceType}
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>

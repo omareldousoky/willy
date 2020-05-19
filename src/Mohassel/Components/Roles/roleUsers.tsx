@@ -15,7 +15,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import '../ManageAccounts/styles.scss';
 
 interface Props {
-    history: Array<string>;
+    history: any;
     role: any;
 };
 interface State {
@@ -25,6 +25,7 @@ interface State {
     roleCount: number;
     searchKeyword: string;
     dateFrom: string;
+    totalCount: number;
     loading: boolean;
 }
 
@@ -39,6 +40,7 @@ class RoleUsers extends Component<Props, State> {
             roleCount: 0,
             searchKeyword: '',
             dateFrom: '',
+            totalCount: 0,
             loading: false,
         }
         this.mappers = [
@@ -70,13 +72,15 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: '',
                 key: "actions",
-                render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+                render: data => <>
+                    <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }}></span>
+                    <span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }}></span>
+                </>
             },
         ]
     }
     componentDidMount() {
-        this.getUsers()
-        this.getUsersCount()
+        this.getUsers();
     }
 
     async getUsers() {
@@ -86,18 +90,7 @@ class RoleUsers extends Component<Props, State> {
         if (res.status === "success") {
             this.setState({
                 data: res.body.data,
-                loading: false
-            })
-        } else {
-            console.log("error")
-            this.setState({ loading: false })
-        }
-    }
-    async getUsersCount() {
-        const res = await getUserCountPerRole(this.props.role._id );
-        if (res.status === "success") {
-            this.setState({
-                roleCount: Number(res.body.message),
+                roleCount: res.body.totalCount,
                 loading: false
             })
         } else {
@@ -129,7 +122,8 @@ class RoleUsers extends Component<Props, State> {
         if (res.status === "success") {
             this.setState({
                 loading: false,
-                data: res.body.data
+                data: res.body.data,
+                totalCount: res.body.totalCount
             })
         } else {
             this.setState({ loading: false });
@@ -147,9 +141,9 @@ class RoleUsers extends Component<Props, State> {
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
                                 <span className="text-muted">{local.noOfUsers} {this.state.roleCount}</span>
                             </div>
-                            <div>
+                            {/* <div>
                                 <Button variant="outline-primary" className="big-button">download pdf</Button>
-                            </div>
+                            </div> */}
                         </div>
                         <hr className="dashed-line" />
                         <Formik
@@ -190,6 +184,7 @@ class RoleUsers extends Component<Props, State> {
                         </Formik>
                         <DynamicTable
                             mappers={this.mappers}
+                            totalCount={this.state.totalCount}
                             pagination={true}
                             data={this.state.data}
                             changeNumber={(key: string, number: number) => {

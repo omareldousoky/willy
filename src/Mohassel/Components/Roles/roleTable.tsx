@@ -32,11 +32,11 @@ class RoleTable extends Component<Props, State> {
         super(props);
         this.state = {
             permissions: {},
-            sections: props.sections,
+            sections: [],
         }
     }
     static getDerivedStateFromProps(props, state) {
-        return { sections: props.sections }
+        return { sections: props.sections, permissions: props.permissions }
     }
     check(e, parent, val) {
         const perms = { ...this.state.permissions }
@@ -80,19 +80,14 @@ class RoleTable extends Component<Props, State> {
         return perms
     }
     isChecked(objectKey, actionVal, fieldKey, action) {
-        //Manual Select
-        if (this.state.permissions[objectKey] && this.state.permissions[objectKey].includes(actionVal) && this.props.updatePerms) {
+        const section = this.state.sections.find(obj => obj.key === objectKey);
+        const actionValue: SectionAction = section?.actions.find(action => action.i18n.en === fieldKey);
+        //Manual Select 
+        if (this.props.updatePerms && this.state.permissions[objectKey] && this.state.permissions[objectKey].includes(actionVal)) {
             return true
         }
-        //Step function 
-        else if (this.props.updatePerms && this.props.permissions && this.props.permissions[objectKey] && this.props.permissions[objectKey].includes(actionVal)) {
-            return true
-        }
-        //View function
         else if (!this.props.updatePerms) {
-            const section = this.state.sections.find(obj => obj.key === objectKey)
-            const actionValue: SectionAction = section?.actions.find(action => action.i18n.en === fieldKey);
-            if ((this.props.permissions[objectKey] & actionValue[action]) === actionValue[action]) {
+            if (this.props.permissions && Object.keys(this.props.permissions).length > 0 && (this.props.permissions[objectKey] & actionValue[action]) === actionValue[action]) {
                 return true
             }
         }
@@ -126,10 +121,10 @@ class RoleTable extends Component<Props, State> {
                         <thead style={lowerTableHead}>
                             <tr>
                                 <th style={{ width: '30%', borderBottom: 'none', fontSize: 14 }}>{obj.i18n.ar}</th>
-                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'create')} disabled={!this.props.updatePerms}></Form.Check>}</th>
-                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'get')} disabled={!this.props.updatePerms}></Form.Check>}</th>
-                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'update')} disabled={!this.props.updatePerms}></Form.Check>}</th>
-                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'delete')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && obj.actions.find(action => (action.create)) && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'create')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && obj.actions.find(action => (action.get)) && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'get')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && obj.actions.find(action => (action.update)) && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'update')} disabled={!this.props.updatePerms}></Form.Check>}</th>
+                                <th style={{ width: '10%', borderBottom: 'none' }}>{this.props.updatePerms && obj.actions.find(action => (action.delete)) && <Form.Check type='checkbox' onClick={(e) => this.checkAll(e.currentTarget.checked, obj.key, 'delete')} disabled={!this.props.updatePerms}></Form.Check>}</th>
                                 <th style={{ width: '30%', borderBottom: 'none' }}></th>
                             </tr>
                         </thead>
@@ -137,10 +132,10 @@ class RoleTable extends Component<Props, State> {
                             {obj.actions.map((action, i) => {
                                 return <tr key={i}>
                                     <td style={{ width: '30%', fontSize: 12 }}>{action.i18n.ar}</td>
-                                    <td style={{ width: '10%' }}>{(action.create) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.create, action.i18n.en, 'create')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.create)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
-                                    <td style={{ width: '10%' }}>{(action.get) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.get, action.i18n.en, 'get')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.get)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
-                                    <td style={{ width: '10%' }}>{(action.update) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.update, action.i18n.en, 'update')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.update)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
-                                    <td style={{ width: '10%' }}>{(action.delete) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.delete, action.i18n.en, 'delete')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)} disabled={!this.props.updatePerms}></Form.Check> : 'x'}</td>
+                                    <td style={{ width: '10%' }}>{(action.create) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.create, action.i18n.en, 'create')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.create)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
+                                    <td style={{ width: '10%' }}>{(action.get) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.get, action.i18n.en, 'get')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.get)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
+                                    <td style={{ width: '10%' }}>{(action.update) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.update, action.i18n.en, 'update')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.update)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
+                                    <td style={{ width: '10%' }}>{(action.delete) ? <Form.Check type='checkbox' checked={this.isChecked(obj.key, action.delete, action.i18n.en, 'delete')} onChange={(e) => this.check(e.currentTarget.checked, obj.key, action.delete)} disabled={!this.props.updatePerms}></Form.Check> : ''}</td>
                                     <td style={{ width: '30%' }}></td>
                                 </tr>
                             }
