@@ -8,6 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 interface Props {
     options: any;
     selected: any;
+    labelKey:string;
     onChange: any;
     filterKey: string;
     rightHeader?: string;
@@ -67,7 +68,7 @@ class DualBox extends Component<Props, State> {
     addToSelectedList() {
         let options = [...this.state.options];
         this.state.selectionArray.forEach(el => {
-            options = options.filter(item => item.productName !== el.productName);
+            options = options.filter(item => item[this.props.labelKey] !== el[this.props.labelKey]);
         })
         const newList = [...this.state.selectedOptions, ...this.state.selectionArray];
         this.props.onChange(newList);
@@ -134,17 +135,17 @@ class DualBox extends Component<Props, State> {
                                 </div>
                                 <div className="scrollable-list">
                                     {this.state.options
-                                        .filter(option => option.productName.toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
+                                        .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
                                         .map(option =>
                                             <div key={option._id} onClick={() => this.selectItem(option)}
-                                                className={(this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1) ? "list-group-item selected" : "list-group-item"}>
+                                                className={(this.state.selectionArray.findIndex((item) => item[this.props.labelKey] === option[this.props.labelKey]) > -1) ? "list-group-item selected" : "list-group-item"}>
                                                 <Form.Check
                                                     type='checkbox'
                                                     // readOnly
                                                     id={option._id}
                                                     onChange={() => this.selectItem(option)}
-                                                    label={option.productName}
-                                                    checked={this.state.selectionArray.findIndex((item) => item.productName === option.productName) > -1}
+                                                    label={option[this.props.labelKey]}
+                                                    checked={this.state.selectionArray.findIndex((item) => item[this.props.labelKey] === option[this.props.labelKey]) > -1}
                                                 />
                                             </div>
                                         )}
@@ -183,9 +184,9 @@ class DualBox extends Component<Props, State> {
                                 </div>
                                 <div className="scrollable-list">
                                     {this.state.selectedOptions
-                                        .filter(option => option.productName.toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
+                                        .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
                                         .map(option => <li key={option._id}
-                                        className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span>{option.productName}</li>)}
+                                        className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span>{option[this.props.labelKey]}</li>)}
                                 </div>
                             </ul>
                         </div>
