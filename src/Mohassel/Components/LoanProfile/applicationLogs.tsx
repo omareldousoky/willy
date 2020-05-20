@@ -8,30 +8,32 @@ interface Props {
 
 interface State {
     loading: boolean;
+    data: any;
 }
 
 class Logs extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false
+            loading: false,
+            data: []
         }
     }
     componentDidMount() {
         this.getLogs(this.props.id)
     }
     async getLogs(id) {
-        // this.setState({ loading: true })
-        // const res = await getApplicationLogs(id);
-        // if (res.status === "success") {
-        //   this.setState({
-        //     data: res.body.applications,
-        //     loading: false
-        //   })
-        // } else {
-        //   console.log("error")
-        //   this.setState({ loading: false })
-        // }
+        this.setState({ loading: true })
+        const res = await getApplicationLogs(id);
+        if (res.status === "success") {
+          this.setState({
+            data: res.body.applications,
+            loading: false
+          })
+        } else {
+          console.log("error")
+          this.setState({ loading: false })
+        }
     }
     render() {
         return (

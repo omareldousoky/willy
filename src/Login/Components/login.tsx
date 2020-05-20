@@ -39,18 +39,19 @@ class Login extends React.PureComponent<Props, State> {
       data: data
 
     }).then(succ => {
-      this.setCookie(succ.data.Token,JSON.stringify(succ.data.Branches),JSON.stringify(succ.data.Roles), JSON.stringify(succ.data.validBranches));
+      this.setCookie(succ.data.Token,JSON.stringify(succ.data.Branches),JSON.stringify(succ.data.Roles), JSON.stringify(succ.data.validBranches), succ.data.clientPermissions);
       window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
       swal.fire('', local.loginError, 'error');
     })
   }
-  setCookie(token: string, branches: string, roles: string, validbranches: string) {
+  setCookie(token: string, branches: string, roles: string, validbranches: string, clientPermissions: string) {
     //;domain=.halan.io
-    document.cookie = "token=" + token + ";domain=.halan.io;path=/;";
-    document.cookie = "branches="+ branches +";domain=.halan.io;path=/;";
-    document.cookie = "roles="+ roles +";domain=.halan.io;path=/;";
-    document.cookie = "validbranches="+ validbranches +";domain=.halan.io;path=/;";
+    document.cookie = "token=" + token + ";path=/;";
+    document.cookie = "branches="+ branches +";path=/;";
+    document.cookie = "roles="+ roles +";path=/;";
+    document.cookie = "validbranches="+ validbranches +";path=/;";
+    document.cookie = "clientpermissions="+ clientPermissions +";path=/;";
   }
   render() {
     return (
