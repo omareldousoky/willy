@@ -31,7 +31,7 @@ const StepOneForm = (props: Props) => {
                 handleClose={() => openCloseMap(false)}
                 save={(branchAddressLatLong: {lat: number ; lng: number})=>{props.setFieldValue('branchAddressLatLong',branchAddressLatLong);openCloseMap(false)}}
                 location={props.values.branchAddressLatLong}
-                header={local.customerHomeAddressLocationTitle}
+                header={local.branchOnMap}
             />}
             <Row>
                 <Col>
