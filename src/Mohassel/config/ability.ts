@@ -14,10 +14,8 @@ const roles = JSON.parse(getCookie('roles'))
 function defineRulesFor(auth) {
     const { can, rules } = new AbilityBuilder<Ability>(Ability);
     const perms = JSON.parse(getCookie('clientpermissions'));
-    console.log(perms, Object.keys(perms))
     Object.keys(perms).forEach(key => {
         const name = key.split('/')[1]
-        console.log(name)
         perms[key].forEach(action => {
             can(action,name)
         })
@@ -59,7 +57,6 @@ function defineRulesFor(auth) {
     //     can('filterByBranch','Application')
     //     can('create','Branch')
     // }
-    console.log(rules)
     return rules
 }
 //for all roles:
