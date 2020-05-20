@@ -76,7 +76,7 @@ class TrackLoanApplications extends Component<Props, State>{
     const obj = {
       branchId: branchId[0],
       from: 0,
-      size: 30
+      size: 100
     };
     const res = await searchApplication(obj);
     if (res.status === "success") {
@@ -240,7 +240,7 @@ class TrackLoanApplications extends Component<Props, State>{
               <th>{local.applicationStatus}</th>
               <th>{local.productName}</th>
               <th>{local.loanPrinciple}</th>
-              <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -257,6 +257,8 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td>{englishToArabic(loanItem.application.status).text}</td>
                     <td>{loanItem.application.product.productName}</td>
                     <td>{loanItem.application.principal || 0}</td>
+                    <td>{this.getActionFromStatus(loanItem)}</td>
+
                   </tr>
                 )
               })}

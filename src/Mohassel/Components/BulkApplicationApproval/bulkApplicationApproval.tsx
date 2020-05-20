@@ -51,7 +51,7 @@ interface State {
   searchResults: Array<LoanItem>;
   uniqueLoanOfficers: Array<string>;
   filteredLoanOfficer: string;
-  selectedReviewedLoans: Array<string>;
+  selectedReviewedLoans: Array<LoanItem>;
   loading: boolean;
   showModal: boolean;
 }
@@ -96,27 +96,29 @@ class BulkApplicationApproval extends Component<Props, State>{
     this.setState({ loading: true, filteredBranch: e });
     const res = await searchApplication({ branchId: e.value, size: 50 });
     if (res.status === "success") {
-      this.setState({ loading: false, searchResults: res.body.applications ? res.body.applications : [] });
+      this.setState({ loading: false, searchResults: res.body.applications ? res.body.applications.filter(loanItem => loanItem.application.status === "reviewed") : [] });
     } else {
       this.setState({ loading: false });
       Swal.fire('', local.searchError, 'error');
     }
   }
-  addRemoveItemFromChecked(id: string) {
-    if (this.state.selectedReviewedLoans.includes(id)) {
+  addRemoveItemFromChecked(loan: LoanItem) {
+    if (this.state.selectedReviewedLoans.findIndex(loanItem=> loanItem.id == loan.id ) > -1) {
+      console.log("in if", loan)
       this.setState({
-        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(el => el !== id),
+        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(el => el.id !== loan.id),
       })
     } else {
+      console.log("else", loan)
       this.setState({
-        selectedReviewedLoans: [...this.state.selectedReviewedLoans, id],
+        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
       })
     }
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.id);
-      this.setState({ selectedReviewedLoans: newselectedReviewedLoans })
+      // const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.id);
+      this.setState({ selectedReviewedLoans: this.state.searchResults })
     } else this.setState({ selectedReviewedLoans: [] })
   }
   handleSubmit = async (values) => {
@@ -124,7 +126,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     const obj = {
       approvalDate: new Date(values.approvalDate).valueOf(),
       fundSource: values.fundSource,
-      applicationIds: this.state.selectedReviewedLoans
+      applicationIds: this.state.selectedReviewedLoans.map(loan => loan.id)
     }
     const res = await bulkApproval(obj);
     if (res.status === "success") {
@@ -189,7 +191,6 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
-                  .filter(loanItem => loanItem.application.status === "reviewed")
                   // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
                   .map((loanItem, index) => {
                     return (
@@ -204,8 +205,8 @@ class BulkApplicationApproval extends Component<Props, State>{
                         <td></td>
                         <td>
                           <FormCheck type='checkbox'
-                            checked={this.state.selectedReviewedLoans.includes(loanItem.id)}
-                            onChange={() => this.addRemoveItemFromChecked(loanItem.id)}>
+                            checked={this.state.selectedReviewedLoans.includes(loanItem)}
+                            onChange={() => this.addRemoveItemFromChecked(loanItem)}>
                           </FormCheck>
                         </td>
                       </tr>
@@ -218,7 +219,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '' }}
+            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans:this.state.selectedReviewedLoans }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur
