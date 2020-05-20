@@ -93,9 +93,8 @@ class UsersList extends Component<Props, State> {
 
     const res = await setUserActivation(req);
     if (res.status === 'success') {
-      await this.getUsers();
-      Swal.fire("success", `${data.username} is ${req.status} now`)
-
+      this.setState({ loading: false });
+      Swal.fire("success", `${data.username} is ${req.status} now`).then(() => this.getUsers())
     } else {
       this.setState({ loading: false })
       Swal.fire("error");

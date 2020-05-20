@@ -240,20 +240,6 @@ class TrackLoanApplications extends Component<Props, State>{
               <th>{local.applicationStatus}</th>
               <th>{local.productName}</th>
               <th>{local.loanPrinciple}</th>
-              <th>
-                <Form.Control as="select"
-                  type="select"
-                  name="issuingBank"
-                  data-qc="issuingBank"
-                  value={this.state.filteredLoanOfficer}
-                  onChange={(e) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
-                >
-                  <option value="">{local.loanOfficer}</option>
-                  {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {
-                    return <option key={index} value={loanOfficer}>{loanOfficer}</option>
-                  })}
-                </Form.Control>
-              </th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -271,8 +257,6 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td>{englishToArabic(loanItem.application.status).text}</td>
                     <td>{loanItem.application.product.productName}</td>
                     <td>{loanItem.application.principal || 0}</td>
-                    <td></td>
-                    <td>{this.getActionFromStatus(loanItem)}</td>
                   </tr>
                 )
               })}
