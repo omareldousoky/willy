@@ -60,7 +60,7 @@ class Logs extends Component<Props, State> {
         const res = await getApplicationLogs(id);
         if (res.status === "success") {
             this.setState({
-                data: res.body.data,
+                data: res.body.data?res.body.data:[],
                 loading: false
             })
         } else {
@@ -72,17 +72,10 @@ class Logs extends Component<Props, State> {
         return (
             <>
                 <Loader type="fullsection" open={this.state.loading} />
-                {this.state.data.length > 0 &&
+                {this.state.data.length > 0 ?
                     <DynamicTable totalCount={0} pagination={false} data={this.state.data} mappers={mappers} />
-
-                // this.state.data.map((log, i) =>
-                // <div key={i} className='d-flex justify-content-between'>
-                //     <p>{log.action}</p>
-                //     <p>{log.authorId}</p>
-                //     <p>{log.authorName}</p>
-                //     <p>{log.createdAt}</p>
-                //     <p>{log.customerId}</p>
-                // </div>)
+                    :
+                <p style={{textAlign: 'center'}}>{local.noLogsFound}</p>
                 }
             </>
         )

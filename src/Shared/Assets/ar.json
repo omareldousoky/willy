@@ -406,5 +406,6 @@
     "authorId":"كود ألقائم به",
     "createdAt":"تاريخ",
     "customerId":"كود العميل",
-    "customerBranchId":"كود فرع العميل"
+    "customerBranchId":"كود فرع العميل",
+    "noLogsFound":"سجل فارغ"
 }
