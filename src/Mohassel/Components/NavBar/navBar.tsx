@@ -162,17 +162,17 @@ class NavBar extends Component<Props, State> {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
-              {<Can I='view' a='Customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
-              {<Can I='create' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>}
-              {<Can I='test' a='CalculationMethod'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>}
-              {<Can I='create' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>}
-              {<Can I='assignToBranch' a='LoanProduct'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
-              {<Can I='create' a='Application'><Nav.Link onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Nav.Link></Can>}
-              {<Can I='view' a='Application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
-              {<Can I='bulkApprove' a='Application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
-              {<Can I='create' a='LoanUsage'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
-              <Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>{local.manageAccounts}</Nav.Link>
-              <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>
+              {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
+              {<Can I='createCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>}
+              {<Can I='testCalculate' a='product'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>}
+              {<Can I='createLoanProduct' a='product'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>}
+              {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
+              {<Can I='assignProductToCustomer' a='application'><Nav.Link onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Nav.Link></Can>}
+              {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
+              {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
+              {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
+              {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
+              {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
 
               {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
