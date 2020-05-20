@@ -12,6 +12,7 @@ import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import * as local from '../../../Shared/Assets/ar.json';
+import Can from '../../config/Can';
 import './styles.scss';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 
@@ -168,7 +169,7 @@ class UsersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button>
+                <Can I='createUser' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

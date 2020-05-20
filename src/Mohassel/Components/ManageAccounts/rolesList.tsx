@@ -7,6 +7,7 @@ import DropDownList from '../DropDownList/dropDownList';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 import { getRoles } from '../../Services/APIs/Roles/roles';
+import Can from '../../config/Can';
 import Form from 'react-bootstrap/Form';
 
 interface Props {
@@ -68,7 +69,7 @@ class RolesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfRoles + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>{local.createNewRole}</Button>
+              <Can I='createRoles' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>{local.createNewRole}</Button></Can>
               </div>
             </div>
             {this.state.data.length > 0 && <div className="d-flex flex-row justify-content-center">

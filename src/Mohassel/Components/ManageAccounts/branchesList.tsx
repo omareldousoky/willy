@@ -9,6 +9,7 @@ import DynamicTable from '../DynamicTable/dynamicTable';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
+import Can from '../../config/Can';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import './styles.scss';
@@ -142,7 +143,7 @@ class BranchesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfBranches + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button>
+              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
