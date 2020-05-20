@@ -15,7 +15,7 @@ export const StepThreeForm = (props: any) => {
     const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficer>>([]);
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
-        if(res.status === "success"){
+        if (res.status === "success") {
             setLoanOfficers(res.body.data);
             return res.body.data;
         } else {
@@ -50,20 +50,21 @@ export const StepThreeForm = (props: any) => {
             <Form.Group as={Row} controlId="representative">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.representative}*`}</Form.Label>
                 <Col sm={6}>
-                    <AsyncSelect
-                        name="representative"
-                        data-qc="representative"
-                        value={loanOfficers?.find(loanOfficer => loanOfficer._id ===values.representative)}
-                        onBlur={handleBlur}
-                        onChange={(id) => setFieldValue("representative", id)}
-                        getOptionLabel={(option) => option.username}
-                        getOptionValue={(option) => option._id}
-                        loadOptions={getLoanOfficers}
-                        cacheOptions defaultOptions
-                    />
-                    <Form.Control.Feedback type="invalid">
+                        <AsyncSelect
+                            className={errors.representative? "error": ""}
+                            name="representative"
+                            data-qc="representative"
+                            value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative._id)}
+                            onBlur={handleBlur}
+                            onChange={(id) => setFieldValue("representative", id)}
+                            getOptionLabel={(option) => option.username}
+                            getOptionValue={(option) => option._id}
+                            loadOptions={getLoanOfficers}
+                            cacheOptions defaultOptions
+                        />
+                    <div style={{width: '100%',marginTop: '0.25rem',fontSize: '80%',color: '#d51b1b'}}>
                         {errors.representative}
-                    </Form.Control.Feedback>
+                    </div>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="applicationDate">
