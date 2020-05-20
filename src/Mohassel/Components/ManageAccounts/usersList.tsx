@@ -112,7 +112,7 @@ class UsersList extends Component<Props, State> {
   async getUsers() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId });
+    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId, sort: "createdAt", order: "desc" });
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
