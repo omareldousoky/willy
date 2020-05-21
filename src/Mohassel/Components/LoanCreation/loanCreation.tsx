@@ -176,9 +176,9 @@ class LoanCreation extends Component<Props, State> {
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
-              <th>{local.loanApplicationId}</th>
+              <th>{local.installmentNumber}</th>
               <th>{local.installmentType}</th>
-              <th>{local.principal}</th>
+              <th>{local.principalInstallment}</th>
               <th>{local.fees}</th>
               <th>{local.paymentDate}</th>
             </tr>

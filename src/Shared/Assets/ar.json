@@ -414,6 +414,8 @@
     "customerId":"كود العميل",
     "customerBranchId":"كود فرع العميل",
     "noLogsFound":"سجل فارغ",
-    "onlyNumbers": "يجب أن يحتوي على أرقام فقط"
-
+    "onlyNumbers": "يجب أن يحتوي على أرقام فقط",
+    "withInterest":"بفائده",
+    "postponementInterest":"فائده التاجيل",
+    "payWhere":"طريقه دفع الفائده"
 }

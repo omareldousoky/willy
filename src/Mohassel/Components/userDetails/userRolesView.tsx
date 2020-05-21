@@ -32,7 +32,7 @@ export default class UserRolesView extends Component<Props, State> {
     }
     async getAllPermissions() {
         this.setState({ loading: true })
-        const id = (this.state.selectedRole?.hasBranch) ? 'requireBranch' : 'req';
+        const id = (this.state.selectedRole?.hasBranch) ? 'branch' : 'hq';
         const res = await getPermissions(id);
         if (res.status === "success") {
             this.setState({
