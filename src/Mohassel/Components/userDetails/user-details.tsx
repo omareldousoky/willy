@@ -65,8 +65,7 @@ class UserDetails extends Component<Props, State> {
     
       }
     setUserDetails(data: any): UserDateValues {
-        const user: UserDateValues = data.user;
-        console.log(user);
+        const user: UserDateValues = data.user
         user.branches = data.branches?.map((branch) => { return branch.name });
         user.roles =  data.roles;
         return user;
@@ -82,7 +81,7 @@ class UserDetails extends Component<Props, State> {
             })
         } else {
             this.setState({ isLoading: false });
-            Swal.fire("erroe", local.userDetialsError);
+            Swal.fire("error", local.userDetialsError);
         }
     }
       componentDidMount() {

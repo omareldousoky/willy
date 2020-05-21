@@ -74,7 +74,7 @@ class UserCreation extends Component<Props, State> {
             step2.roles.push({ label: role.roleName, value: role._id, hasBranch: role.hasBranch });
         }),
             res.body.branches?.forEach(branch => {
-                step2.branches?.push({ label: branch.name, value: branch._id });
+                step2.branches?.push({ branchName: branch.name? branch.name : 'HQ', _id: branch._id });
             })
         this.setState({ step1, step2 })
     }
@@ -102,7 +102,7 @@ class UserCreation extends Component<Props, State> {
         }
         if (RolesAndBranches[1].status === 'success') {
             RolesAndBranches[1].body.data.data.forEach(branch => {
-                labeldBranches.push({ value: branch._id, label: branch.name })
+                labeldBranches.push({ _id: branch._id, branchName: branch.name? branch.name: 'HQ' })
             })
             this.setState({
                 branchesLabeled: labeldBranches,
@@ -196,7 +196,7 @@ class UserCreation extends Component<Props, State> {
             const labeledRoles = this.state.step2.roles;
             const branches: string[] | undefined = labeledBranches?.map(
                 (branch) => {
-                    return branch.value;
+                    return branch.branchName;
                 }
             );
 
@@ -254,23 +254,14 @@ class UserCreation extends Component<Props, State> {
     }
     renderStepTwo(): any {
         return (
-            <Formik
-                enableReinitialize
-                initialValues={this.state.step2}
-                onSubmit={this.submit}
-                validationSchema={userCreationValidationStepTwo}
-                validateOnBlur
-                validateOnChange
-            >
-                {(formikProps) =>
+          
                     <UserRolesAndPermisonsFrom
-                        {...formikProps}
+                        handleSubmit = {this.submit}
+                        values={this.state.step2}
                         userRolesOptions={this.state.rolesLabeled}
                         userBranchesOptions={this.state.branchesLabeled}
                         previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)}
                     />
-                }
-            </Formik>
         );
     }
     renderSteps() {

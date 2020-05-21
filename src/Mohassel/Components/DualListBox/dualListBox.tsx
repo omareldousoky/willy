@@ -8,7 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 interface Props {
     options: any;
     selected: any;
-    labelKey:string;
+    labelKey: string;
     onChange: any;
     filterKey: string;
     rightHeader?: string;
@@ -39,17 +39,32 @@ class DualBox extends Component<Props, State> {
             searchSelectedKeyWord: ''
         }
     }
+
+
     static getDerivedStateFromProps(props, state) {
-        if ((props.filterKey !== state.filterKey)) {
+        if(props.filterKey === 'noKey'){
+            if(props.filterKey!== state.filterKey) {
+            return{
+              filterKey: props.filterKey,
+              options: props.options,
+              selectedOptions: props.selected
+            }
+        }
+        } 
+        else if (props.filterKey !== state.filterKey) {
             const selectedIds = props.selected.map(item => item._id);
+           
             return {
                 filterKey: props.filterKey,
                 options: props.options.filter(item => !selectedIds.includes(item._id)),
                 selectedOptions: props.selected
             }
+        
+        
         }
         return null;
     }
+        
     componentDidUpdate(prevProps) {
         if (this.props.filterKey !== prevProps.filterKey) {
             this.setState({ filterKey: this.props.filterKey })
@@ -136,7 +151,7 @@ class DualBox extends Component<Props, State> {
                                 <div className="scrollable-list">
                                     {this.state.options
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
-                                        .map(option =>
+                                        .map(option =>           
                                             <div key={option._id} onClick={() => this.selectItem(option)}
                                                 className={(this.state.selectionArray.findIndex((item) => item[this.props.labelKey] === option[this.props.labelKey]) > -1) ? "list-group-item selected" : "list-group-item"}>
                                                 <Form.Check
