@@ -23,6 +23,7 @@ interface State {
   dateTo: string;
   totalCount: number;
   loading: boolean;
+  selectedBranch: any;
 }
 interface Props {
   history: any;
@@ -40,6 +41,7 @@ class CustomersList extends Component<Props, State> {
       dateTo: '',
       totalCount: 0,
       loading: false,
+      selectedBranch: {}
     }
     this.mappers = [
       {
@@ -144,6 +146,7 @@ class CustomersList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Formik
+              enableReinitialize
               initialValues={this.state}
               onSubmit={this.submit}
               // validationSchema={}
@@ -203,7 +206,7 @@ class CustomersList extends Component<Props, State> {
                           <option value={10}>10</option>
                         </Form.Control>
                       </div>
-                      <BranchesDropDown />
+                      {/* <BranchesDropDown onSelectBranch={(branch) => {this.setState({selectedBranch: branch}); console.log(branch)}}/> */}
                     </div>
                   </div>
 

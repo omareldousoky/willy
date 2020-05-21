@@ -11,7 +11,7 @@ import {
     step2,
     userCreationValidationStepOne,
     editUserValidationStepOne,
-    userCreationValidationStepTwo,
+
 } from './userFromInitialState';
 import {
     Values,
@@ -196,7 +196,7 @@ class UserCreation extends Component<Props, State> {
             const labeledRoles = this.state.step2.roles;
             const branches: string[] | undefined = labeledBranches?.map(
                 (branch) => {
-                    return branch.branchName;
+                    return branch._id;
                 }
             );
 
