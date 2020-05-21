@@ -76,7 +76,7 @@ class TrackLoanApplications extends Component<Props, State>{
     const obj = {
       branchId: branchId[0],
       from: 0,
-      size: 30
+      size: 100
     };
     const res = await searchApplication(obj);
     if (res.status === "success") {
@@ -133,21 +133,21 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   getActionFromStatus(loan: LoanItem) {
     if (loan.application.status === 'approved') {
-      return <Can I='create' a='Loan'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "create" })}>{local.createLoan}</Button></Can>
+      return <Can I='createLoan' a='application'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "create" })}>{local.createLoan}</Button></Can>
     } else if (loan.application.status === 'created') {
-      return <Can I='issue' a='Loan'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "issue" })}>{local.issueLoan}</Button></Can>
+      return <Can I='issueLoan' a='application'><Button onClick={() => this.props.history.push('/create-loan', { id: loan.id, type: "issue" })}>{local.issueLoan}</Button></Can>
     } else if (loan.application.status === 'reviewed') {
       return (
         <div>
-          <Can I='unReview' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
-          <Can I='reject' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
+          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
+          <Can I='rejectLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
         </div>
       )
     } else if (loan.application.status === 'underReview') {
       return (
         <div>
-          <Can I='review' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
-          <Can I='edit' a='Application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
+          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
+          <Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push(`/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
         </div>
       )
     }
@@ -240,21 +240,7 @@ class TrackLoanApplications extends Component<Props, State>{
               <th>{local.applicationStatus}</th>
               <th>{local.productName}</th>
               <th>{local.loanPrinciple}</th>
-              <th>
-                <Form.Control as="select"
-                  type="select"
-                  name="issuingBank"
-                  data-qc="issuingBank"
-                  value={this.state.filteredLoanOfficer}
-                  onChange={(e) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
-                >
-                  <option value="">{local.loanOfficer}</option>
-                  {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {
-                    return <option key={index} value={loanOfficer}>{loanOfficer}</option>
-                  })}
-                </Form.Control>
-              </th>
-              <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -271,8 +257,8 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td>{englishToArabic(loanItem.application.status).text}</td>
                     <td>{loanItem.application.product.productName}</td>
                     <td>{loanItem.application.principal || 0}</td>
-                    <td></td>
                     <td>{this.getActionFromStatus(loanItem)}</td>
+
                   </tr>
                 )
               })}

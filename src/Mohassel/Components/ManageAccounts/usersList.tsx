@@ -12,6 +12,7 @@ import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import * as local from '../../../Shared/Assets/ar.json';
+import Can from '../../config/Can';
 import './styles.scss';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 
@@ -92,9 +93,8 @@ class UsersList extends Component<Props, State> {
 
     const res = await setUserActivation(req);
     if (res.status === 'success') {
-      await this.getUsers();
-      Swal.fire("success", `${data.username} is ${req.status} now`)
-
+      this.setState({ loading: false });
+      Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
     } else {
       this.setState({ loading: false })
       Swal.fire("error");
@@ -106,13 +106,13 @@ class UsersList extends Component<Props, State> {
       <>
         <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
         <span onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
-        <span onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
+        <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
     );
   }
   async getUsers() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId });
+    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId, sort: "createdAt", order: "desc" });
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
@@ -168,7 +168,7 @@ class UsersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button>
+                <Can I='createUser' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

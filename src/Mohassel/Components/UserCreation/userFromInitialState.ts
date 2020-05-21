@@ -1,6 +1,10 @@
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
 import { Values, RolesBranchesValues } from './userCreationinterfaces';
+import { timeToDateyyymmdd } from '../../Services/utils';
+
+const date: number =  new Date().valueOf();
+const today = timeToDateyyymmdd(date);
 
 export const step1: Values = {
     name: '',
@@ -11,7 +15,7 @@ export const step1: Values = {
     gender: '',
     nationalIdIssueDate:'',
     mobilePhoneNumber: '',
-    hiringDate: 0,
+    hiringDate: today,
     password: '',
     confirmPassword: '',
 }
@@ -50,14 +54,16 @@ export const wizardStepsArr = [
         completed: false,
     }
 ]
+
+
 const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 export const userCreationValidationStepOne = Yup.object().shape({
-    name: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    username: Yup.string().trim().max(100, local.maxLength100).required(local.required),
+    name: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
+    username: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    mobilePhoneNumber: Yup.string().min(11, local.minLength11),
-    hiringDate: Yup.string().required() ,
+    mobilePhoneNumber: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).min(11, local.minLength11).max(11,local.maxLength11),
+    hiringDate: Yup.string().required(local.required),
     nationalId: Yup.number()
         .when('nationalIdChecker', {
             is: true,
@@ -75,15 +81,15 @@ export const userCreationValidationStepOne = Yup.object().shape({
     ).required(local.required),
     password: Yup.string().required(local.required),
     confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], local.confrimPasswordCheck),
+        .oneOf([Yup.ref('password'), null], local.confrimPasswordCheck).required(local.required),
 
 })
 export const editUserValidationStepOne = Yup.object().shape({
-    name: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    username: Yup.string().trim().max(100, local.maxLength100).required(local.required),
+    name: Yup.string().trim().max(100, local.maxLength100).matches(/^[^a-z]*[a-z].*$/,local.containLetterError).required(local.required),
+    username: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    mobilePhoneNumber: Yup.string().min(11, local.minLength11),
-    hiringDate: Yup.string().required() ,
+    mobilePhoneNumber: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).min(11, local.minLength11).max(11, local.maxLength11),
+    hiringDate: Yup.string().required(local.required) ,
     nationalId: Yup.number()
         .when('nationalIdChecker', {
             is: true,

@@ -40,8 +40,8 @@ export interface Errors {
 }
 
 export interface RolesBranchesValues {
-    roles:  {label: string; value: string;hasBranch?: boolean}[];
-    branches?: {label: string; value: string}[];
+    roles:  {label: string; value: string; hasBranch?: boolean}[];
+    branches?: {_id: string; branchName: string}[];
 }
 export interface UserInfo {
     name: string;
