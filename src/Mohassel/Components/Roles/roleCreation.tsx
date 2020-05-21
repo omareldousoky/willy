@@ -58,7 +58,7 @@ class RoleCreation extends Component<Props, State>{
     }
     async getPermissions() {
         this.setState({ loading: true })
-        const id = (this.state.step1.hQpermission) ? 'req' : 'requireBranch';
+        const id = (this.state.step1.hQpermission) ? 'hq' : 'branch';
         const res = await getPermissions(id);
         if (res.status === "success") {
             const sections = res.body.actions;
