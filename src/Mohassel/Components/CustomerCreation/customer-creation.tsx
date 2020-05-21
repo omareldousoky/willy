@@ -118,7 +118,7 @@ class CustomerCreation extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 1,
+      step: 3,
       step1: step1,
       step2: step2,
       step3: step3,

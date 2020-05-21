@@ -93,9 +93,8 @@ class UsersList extends Component<Props, State> {
 
     const res = await setUserActivation(req);
     if (res.status === 'success') {
-      this.setState({loading:false})
-      Swal.fire("success", `${data.username} is ${req.status} now`).then(()=> { this.getUsers()})
-
+      this.setState({ loading: false });
+      Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
     } else {
       this.setState({ loading: false })
       Swal.fire("error");
@@ -113,7 +112,7 @@ class UsersList extends Component<Props, State> {
   async getUsers() {
     this.setState({ loading: true })
     const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId });
+    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId, sort: "createdAt", order: "desc" });
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
