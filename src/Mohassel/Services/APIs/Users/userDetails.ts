@@ -4,7 +4,6 @@ export const getUserDetails = async (id: string) => {
     const url = process.env.REACT_APP_BASE_URL +`/user?id=${id}`;
     try {
          const res = await axios.get(url);
-           console.log(res.data)
          return {status: "success", body: res.data}
         
     } catch (error) {
