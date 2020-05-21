@@ -93,8 +93,8 @@ class UsersList extends Component<Props, State> {
 
     const res = await setUserActivation(req);
     if (res.status === 'success') {
-      await this.getUsers();
-      Swal.fire("success", `${data.username} is ${req.status} now`)
+      this.setState({loading:false})
+      Swal.fire("success", `${data.username} is ${req.status} now`).then(()=> { this.getUsers()})
 
     } else {
       this.setState({ loading: false })
@@ -107,7 +107,7 @@ class UsersList extends Component<Props, State> {
       <>
         <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
         <span onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
-        <span onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
+        <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
     );
   }
   async getUsers() {

@@ -75,7 +75,7 @@ export default class UserRolesView extends Component<Props, State> {
         <div className={'columnContianer'}><div className={'subTitle'}>{local.permissions} </div><div>{this.state.selectedRole?.hasBranch? local.branches : local.headquarters}</div></div>
                         </div>
                     </Card.Body>
-                </Card>
+                </Card>      
             </>
         );
     }
