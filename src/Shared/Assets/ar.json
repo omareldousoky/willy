@@ -418,5 +418,8 @@
     "approvalDateShouldNotBeSmallerThanReviewedDate": "تاريخ القبول يجب أن يكون بعد تاريخ المراجعة",
     "guarantorCode": " كود الضامن",
     "area": "المنطقة",
-    "telephone": "رقم التليفون"
+    "telephone": "رقم التليفون",
+    "withInterest":"بفائده",
+    "postponementInterest":"فائده التاجيل",
+    "payWhere":"طريقه دفع الفائده"
 }
