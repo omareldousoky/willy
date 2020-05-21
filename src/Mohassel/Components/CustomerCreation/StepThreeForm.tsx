@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import AsyncSelect from 'react-select/async';
+import { getGeoDivision } from '../../Services/APIs/configApis/config'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import * as local from '../../../Shared/Assets/ar.json';
+import { Loader } from '../../../Shared/Components/Loader';
 
+interface GeoDivision {
+    majorGeoDivisionName: {ar: string};
+    majorGeoDivisionLegacyCode: number;
+}
 interface LoanOfficer {
     _id: string;
     username: string;
 }
 export const StepThreeForm = (props: any) => {
+    const [loading, setLoading] = useState(false);
     const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficer>>([]);
+    const [geoDivisions, setgeoDivisions] = useState<Array<GeoDivision>>([{
+        majorGeoDivisionName: {ar: ''},
+        majorGeoDivisionLegacyCode: 0
+    }])
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
         if (res.status === "success") {
@@ -23,9 +34,21 @@ export const StepThreeForm = (props: any) => {
             return [];
         }
     }
+    useEffect(() => {
+        getConfig();
+    }, [])
+    async function getConfig() {
+        setLoading(true);
+        const resGeo = await getGeoDivision();
+        if (resGeo.status === "success") {
+            setLoading(false);
+            setgeoDivisions(resGeo.body.geoDivisions)
+        } else setLoading(false);
+    }
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
         <Form onSubmit={handleSubmit}>
+            <Loader open={loading} type="fullscreen"/>
             <Form.Group as={Row} controlId="geographicalDistribution">
                 <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.geographicalDistribution}*`}</Form.Label>
                 <Col sm={6}>
@@ -39,8 +62,9 @@ export const StepThreeForm = (props: any) => {
                         isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                     >
                         <option value="" disabled></option>
-                        <option value="geographicalDistribution1">geographicalDistribution1</option>
-                        <option value="geographicalDistribution2">geographicalDistribution2</option>
+                        {geoDivisions.map((geoDivision, index) => {
+                            return <option key={index} value={geoDivision.majorGeoDivisionLegacyCode} >{geoDivision.majorGeoDivisionName.ar}</option>
+                        })}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.geographicalDistribution}

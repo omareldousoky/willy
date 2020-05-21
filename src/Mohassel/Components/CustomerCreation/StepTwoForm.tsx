@@ -1,16 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Map from '../Map/map';
+import { getGovernorates, getBusinessSectors } from '../../Services/APIs/configApis/config'
 import * as local from '../../../Shared/Assets/ar.json';
+import { Loader } from '../../../Shared/Components/Loader';
 
+interface Village {
+    villageName: { ar: string };
+    villageLegacyCode: number;
+}
+interface District {
+    districtName: { ar: string };
+    districtLegacyCode: number;
+    villages: Array<Village>
+}
+interface Governorate {
+    governorateName: { ar: string };
+    governorateLegacyCode: number;
+    districts: Array<District>;
+}
+interface Specialty {
+    businessSpecialtyName: { ar: string };
+    legacyCode: number;
+}
+interface Activities {
+    i18n: { ar: string };
+    legacyCode: number;
+    specialties: Array<Specialty>
+}
+interface BusinessSector {
+    i18n: { ar: string };
+    legacyCode: number;
+    activities: Array<Activities>
+}
 export const StepTwoForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     const [mapState, openCloseMap] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [businessSectors, setBusinessSectors] = useState<Array<BusinessSector>>([{
+        i18n: { ar: '' }, legacyCode: 0,
+        activities: [{
+            i18n: { ar: '' }, legacyCode: 0,
+            specialties: [{ businessSpecialtyName: { ar: '' }, legacyCode: 0 }]
+        }
+        ]
+    }]);
+    const [governorates, setGovernorates] = useState<Array<Governorate>>([{
+        governorateName: { ar: '' }, governorateLegacyCode: 0,
+        districts: [{
+            districtName: { ar: '' }, districtLegacyCode: 0,
+            villages: [{ villageName: { ar: '' }, villageLegacyCode: 0 }]
+        }
+        ]
+    }]);
+    useEffect(() => {
+        getConfig();
+    }, []);
+    async function getConfig() {
+        setLoading(true);
+        const resGov = await getGovernorates();
+        if (resGov.status === "success") {
+            setGovernorates(resGov.body.governorates)
+        } else console.log(resGov.error)
+
+        const resBS = await getBusinessSectors();
+        if (resBS.status === "success") {
+            setLoading(false);
+            setBusinessSectors(resBS.body.sectors)
+        } else setLoading(false);
+    }
     return (
         <Form onSubmit={handleSubmit}>
+            <Loader open={loading} type="fullscreen" />
             {mapState && <Map show={mapState}
                 handleClose={() => openCloseMap(false)}
                 save={(businessAddressLatLong: { lat: number; lng: number }) => { setFieldValue('businessAddressLatLongNumber', businessAddressLatLong); openCloseMap(false) }}
@@ -67,8 +131,9 @@ export const StepTwoForm = (props: any) => {
                         isInvalid={errors.governorate && touched.governorate}
                     >
                         <option value="" disabled></option>
-                        <option value="cairo">cairo</option>
-                        <option value="alex">alex</option>
+                        {governorates.map((governorate, index) => {
+                            return <option key={index} value={governorate.governorateLegacyCode} >{governorate.governorateName.ar}</option>
+                        })}
                     </Form.Control>
                 </Col>
             </Form.Group>
@@ -82,11 +147,13 @@ export const StepTwoForm = (props: any) => {
                         value={values.district}
                         onBlur={handleBlur}
                         onChange={handleChange}
+                        disabled={!values.governorate}
                         isInvalid={errors.district && touched.district}
                     >
                         <option value="" disabled></option>
-                        <option value="nasrCity">Nasr City</option>
-                        <option value="zamalek">Zamalek</option>
+                        {governorates.find(gov => gov.governorateLegacyCode === Number(values.governorate))?.districts.map((district, index) => {
+                            return <option key={index} value={district.districtLegacyCode} >{district.districtName.ar}</option>
+                        })}
                     </Form.Control>
                 </Col>
             </Form.Group>
@@ -100,12 +167,15 @@ export const StepTwoForm = (props: any) => {
                         value={values.village}
                         onBlur={handleBlur}
                         onChange={handleChange}
+                        disabled={!values.district}
                         isInvalid={errors.village && touched.village}
-
                     >
                         <option value="" disabled></option>
-                        <option value="village1">village1</option>
-                        <option value="village2">village2</option>
+                        {governorates.find(gov => gov.governorateLegacyCode === Number(values.governorate))?.districts
+                            .find(district => district.districtLegacyCode === Number(values.district))?.villages
+                            .map((village, index) => {
+                                return <option key={index} value={village.villageLegacyCode} >{village.villageName.ar}</option>
+                            })}
                     </Form.Control>
                 </Col>
             </Form.Group>
@@ -186,8 +256,9 @@ export const StepTwoForm = (props: any) => {
                         isInvalid={errors.businessSector && touched.businessSector}
                     >
                         <option value="" disabled></option>
-                        <option value="businessSector1">businessSector1</option>
-                        <option value="businessSector2">businessSector2</option>
+                        {businessSectors?.map((businessSector, index) => {
+                            return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
+                        })}
                     </Form.Control>
                 </Col>
             </Form.Group>
@@ -199,13 +270,16 @@ export const StepTwoForm = (props: any) => {
                         name="businessActivity"
                         data-qc="businessActivity"
                         value={values.businessActivity}
+                        disabled={!values.businessSector}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.businessActivity && touched.businessActivity}
                     >
                         <option value="" disabled></option>
-                        <option value="businessActivity1">businessActivity1</option>
-                        <option value="businessActivity2">businessActivity2</option>
+                        {businessSectors.find(businessSector => businessSector.legacyCode === Number(values.businessSector))?.activities
+                            .map((activity, index) => {
+                                return <option key={index} value={activity.legacyCode} >{activity.i18n.ar}</option>
+                            })}
                     </Form.Control>
                 </Col>
             </Form.Group>
@@ -217,13 +291,17 @@ export const StepTwoForm = (props: any) => {
                         name="businessSpeciality"
                         data-qc="businessSpeciality"
                         value={values.businessSpeciality}
+                        disabled={!values.businessActivity}
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        isInvalid={errors.businessSpeciality && touched.businessSpeciality} 
+                        isInvalid={errors.businessSpeciality && touched.businessSpeciality}
                     >
                         <option value="" disabled></option>
-                        <option value="businessSpeciality1">businessSpeciality1</option>
-                        <option value="businessSpeciality2">businessSpeciality2</option>
+                        {businessSectors.find(businessSector => businessSector.legacyCode === Number(values.businessSector))?.activities
+                            .find(activity => activity.legacyCode === Number(values.businessActivity))?.specialties
+                            .map((speciality, index) => {
+                                return <option key={index} value={speciality.legacyCode} >{speciality.businessSpecialtyName.ar}</option>
+                            })}
                     </Form.Control>
                 </Col>
             </Form.Group>
@@ -280,9 +358,9 @@ export const StepTwoForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.businessLicenseIssueDate && touched.businessLicenseIssueDate}
                     />
-                <Form.Control.Feedback type="invalid">
-                    {errors.businessLicenseIssueDate}
-                </Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.businessLicenseIssueDate}
+                    </Form.Control.Feedback>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="commercialRegisterNumber">
@@ -354,7 +432,7 @@ export const StepTwoForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Button style={{ float: 'right' }} onClick={()=> previousStep(values)} data-qc="previous">{local.previous}</Button>
+            <Button style={{ float: 'right' }} onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
             <Button type="submit" data-qc="next">{local.next}</Button>
         </Form>
     )
