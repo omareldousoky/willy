@@ -62,7 +62,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
     name: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     username: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    mobilePhoneNumber: Yup.string().trim().min(11, local.minLength11).max(11,local.maxLength11),
+    mobilePhoneNumber: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).min(11, local.minLength11).max(11,local.maxLength11),
     hiringDate: Yup.string().required(local.required),
     nationalId: Yup.number()
         .when('nationalIdChecker', {
@@ -88,7 +88,7 @@ export const editUserValidationStepOne = Yup.object().shape({
     name: Yup.string().trim().max(100, local.maxLength100).matches(/^[^a-z]*[a-z].*$/,local.containLetterError).required(local.required),
     username: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
-    mobilePhoneNumber: Yup.string().min(11, local.minLength11).max(11, local.maxLength11),
+    mobilePhoneNumber: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).min(11, local.minLength11).max(11, local.maxLength11),
     hiringDate: Yup.string().required(local.required) ,
     nationalId: Yup.number()
         .when('nationalIdChecker', {
