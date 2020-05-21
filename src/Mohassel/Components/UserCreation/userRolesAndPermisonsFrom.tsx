@@ -8,17 +8,29 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Select from 'react-select';
 import {theme} from '../../../theme';
 import {RolesBranchesValues} from './userCreationinterfaces';
+import DualBox from '../DualListBox/dualListBox';
+import Swal from 'sweetalert2';
 
 interface Props{
     values: RolesBranchesValues;
     userRolesOptions: Array<object>;
     userBranchesOptions: Array<object>;
     handleSubmit: any;
-    handleBlur: any;
-    handleChange: any;
+    handleBlur?: any;
+    handleChange?: any;
     previousStep: any;
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any;
 }
+  const isHasBranch = (roles: Array<any>): boolean => {
+     let rolesState = false ;
+       roles?.map(role=> {
+        console.log(role)
+        if(role.hasBranch===true){
+       rolesState  =true;
+          return;
+        }
+      }) 
+     return rolesState;
+  }
 const style = {
     control: base => ({
         ...base,
@@ -61,11 +73,22 @@ const style = {
       })
     };
 
+  
 const UserRolesAndPermisonsFrom = (props: Props) => {
-  const [hasBranch, setHasBranch] = useState(false);
-const customFilterOption = (option, rawInput) => {
+  
+  const [hasBranch, setHasBranch] = useState(()=>isHasBranch(props.values.roles));
+  const [roles, setRoles] = useState(props.values.roles);
+  const [showRolesError,setShowRolesError] = useState(false);
 
- 
+  const  handleRolesChange = () =>{
+    if(!props.values.roles || props.values.roles.length===0) {
+      setShowRolesError(true);
+    } else {
+      setShowRolesError(false);
+    }
+   
+  }
+const customFilterOption = (option, rawInput) => {
   if(option.label) {
   const words = rawInput.split(' ');
   return words.reduce(
@@ -74,7 +97,7 @@ const customFilterOption = (option, rawInput) => {
   );
   }
 };
-    
+
     return (
         <Form
             className="user-role-form"
@@ -95,26 +118,29 @@ const customFilterOption = (option, rawInput) => {
                     placeholder={<span style={{width:'100%',padding:"5px", margin:"5px"}}><img style={{float:"right"}} alt="search-icon" src={require('../../Assets/searchIcon.svg')}/> {local.searchByUserRole}</span>}
                     name="roles"
                     data-qc="roles"
-                    onChange= {
-                        (event: any) => { props.setFieldValue('roles', event)
-                        setHasBranch(false);
-                           event?.map(e=> {
-                            if(e.hasBranch===true) {
-                             setHasBranch(true);
-                                 return true;
-                            }
-                          } )
-                       if(!hasBranch || !props.values.roles.length) {
-                         props.setFieldValue('branches', '');
+                    onChange= { 
+                        (event: any) => { 
+                          
+                          props.values.roles = event ;
+                          setRoles(event);
+                         setHasBranch(isHasBranch(event))
+                       if(!hasBranch){
+                         props.values.branches = [];
+      
                        }
+                       handleRolesChange();
                       }
 
                     }
+                    value = {roles}
                     onBlur={props.handleBlur}
-                    value={props.values.roles}
                     options = {props.userRolesOptions}
                 />
+            { showRolesError &&
+         <div style={{color:'red',fontSize:'15px',margin:'10px' }}>{local.rolesIsRequired}</div> }
            </Form.Group>
+
+        {hasBranch &&
        <Form.Group
         className={'user-role-group'}
         controlId={'branches'}
@@ -122,24 +148,18 @@ const customFilterOption = (option, rawInput) => {
            <Form.Label
             className={'user-role-label'}
            >{local.branch}</Form.Label>
-
-           <Select
-                   styles={style}
-                    isMulti
-                    isSearchable = {true}
-                    filterOption = {customFilterOption}
-                    placeholder={<span style={{width:'100%',padding:"5px", margin:"5px"}}><img style={{float:"right"}} alt="search-icon" src={require('../../Assets/searchIcon.svg')}/> {local.searchByBranchName}</span>}
-                    name="branches"
-                    data-qc="branches"
-                    onChange= {
-                        (event: any) => { props.setFieldValue('branches', event)}
-                    }
-                    onBlur={props.handleBlur}
-                    value={props.values.branches}
-                    options = {props.userBranchesOptions}
-                    isDisabled = {!hasBranch}
-            />
+            <DualBox
+            labelKey={"branchName"}
+            filterKey={'noKey'}
+            selected = {props.values.branches}
+            onChange={
+              (list)=>{  props.values.branches = list;} } 
+            rightHeader={local.allBranches}
+            leftHeader = {local.selectedBranches}
+            options = {props.userBranchesOptions}
+             />
        </Form.Group>
+}
        <Form.Group 
             as={Row}
             >
@@ -151,7 +171,7 @@ const customFilterOption = (option, rawInput) => {
                       >{local.previous}</Button>
                 </Col>
                 <Col>
-                    <Button  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="submit" data-qc="submit">{local.submit}</Button>
+                    <Button disabled ={showRolesError|| props.values.roles.length === 0}  onClick =  {props.handleSubmit}  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="button" data-qc="submit">{local.submit}</Button>
                 </Col>
             </Form.Group>
         </Form>
