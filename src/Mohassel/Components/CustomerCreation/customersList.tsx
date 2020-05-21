@@ -98,7 +98,6 @@ class CustomersList extends Component<Props, State> {
     }
   }
   submit = async (values) => {
-    console.log("values", values)
     this.setState({ loading: true })
     let obj = {}
     if (values.dateFrom === "" && values.dateTo === "") {

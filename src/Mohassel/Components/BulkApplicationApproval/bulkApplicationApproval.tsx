@@ -104,12 +104,10 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   addRemoveItemFromChecked(loan: LoanItem) {
     if (this.state.selectedReviewedLoans.findIndex(loanItem=> loanItem.id == loan.id ) > -1) {
-      console.log("in if", loan)
       this.setState({
         selectedReviewedLoans: this.state.selectedReviewedLoans.filter(el => el.id !== loan.id),
       })
     } else {
-      console.log("else", loan)
       this.setState({
         selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
       })

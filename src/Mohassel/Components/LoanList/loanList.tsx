@@ -88,7 +88,7 @@ class LoanList extends Component<Props, State> {
   getStatus(status: string) {
     switch (status) {
       case 'paid':
-        return <div className="status-chip paid">{local.late}</div>
+        return <div className="status-chip paid">{local.paid}</div>
       case 'issued':
         return <div className="status-chip unpaid">{local.issued}</div>
       default: return null;
@@ -111,7 +111,6 @@ class LoanList extends Component<Props, State> {
   }
   submit = async (values) => {
     this.setState({ loading: true })
-    console.log(this.state)
     let obj = {}
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
