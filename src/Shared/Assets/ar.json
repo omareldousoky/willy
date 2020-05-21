@@ -118,9 +118,10 @@
     "customerHomeAddressLocationTitle": "عنوان منزل العميل علي الخريطة",
     "customerWorkAddressLocationTitle": "عنوان عمل العميل علي الخريطة",
     "required": "مطلوب",
+    "maxLength150": "لا يمكن ان يكون اكثر من 150",
     "maxLength100": "لا يمكن ان يكون اكثر من 100",
     "maxLength10": "لا يمكن ان يكون اكثر من 10",
-    "maxLength11": "لا يمكن ان يكون اكثر من 10",
+    "maxLength11": "لا يمكن ان يكون اكثر من 11",
     "maxLength5": "لا يمكن ان يكون اكثر من 5",
     "nationalIdLengthShouldBe14": "رقم البطاقة يجب ان يكون 14 رقم",
     "dateShouldBeBeforeToday": "التاريخ يجب ان يكون في الماضي",
@@ -405,6 +406,14 @@
     "rolesIsRequired": "يجب إختيار دور للمستخدم ",
     "branchIsRquired": "يجب إختيار فرع للمستخدم",
     "allBranches": "جميع الفروع",
-    "selectedBranches": "الفروع المختارة"
+    "selectedBranches": "الفروع المختارة",
+    "action":"التصرف",
+    "author":"إسم ألقائم به",
+    "authorId":"كود ألقائم به",
+    "createdAt":"تاريخ",
+    "customerId":"كود العميل",
+    "customerBranchId":"كود فرع العميل",
+    "noLogsFound":"سجل فارغ",
+    "onlyNumbers": "يجب أن يحتوي على أرقام فقط"
 
 }

@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
+import {BranchesDropDown} from '../dropDowns/allDropDowns';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -172,7 +173,11 @@ class CustomersList extends Component<Props, State> {
                         type="date"
                         name="dateFrom"
                         data-qc="dateFrom"
-                        onChange={formikProps.handleChange}
+                        value={formikProps.values.dateFrom}
+                        onChange={(e)=> {
+                          formikProps.setFieldValue("dateFrom",e.currentTarget.value);
+                          if(e.currentTarget.value === "") formikProps.setFieldValue("dateTo", "")
+                        }}
                       >
                       </Form.Control>
                       <span>{local.to}</span>
@@ -181,6 +186,7 @@ class CustomersList extends Component<Props, State> {
                         type="date"
                         name="dateTo"
                         data-qc="dateTo"
+                        value={formikProps.values.dateTo}
                         min={formikProps.values.dateFrom}
                         onChange={formikProps.handleChange}
                         disabled={!Boolean(formikProps.values.dateFrom)}
@@ -197,13 +203,7 @@ class CustomersList extends Component<Props, State> {
                           <option value={10}>10</option>
                         </Form.Control>
                       </div>
-                      <div className="dropdown-container" style={{ flex: 1 }}>
-                        <p className="dropdown-label">{local.oneBranch}</p>
-                        <Form.Control as="select" className="dropdown-select" data-qc="employment">
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                        </Form.Control>
-                      </div>
+                      <BranchesDropDown />
                     </div>
                   </div>
 
