@@ -23,7 +23,6 @@ interface Props{
   const isHasBranch = (roles: Array<any>): boolean => {
      let rolesState = false ;
        roles?.map(role=> {
-        console.log(role)
         if(role.hasBranch===true){
        rolesState  =true;
           return;
@@ -81,7 +80,7 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
   const [showRolesError,setShowRolesError] = useState(false);
 
   const  handleRolesChange = () =>{
-    if(!props.values.roles || props.values.roles.length===0) {
+    if(!props.values.roles ) {
       setShowRolesError(true);
     } else {
       setShowRolesError(false);
@@ -153,7 +152,7 @@ const customFilterOption = (option, rawInput) => {
             filterKey={'noKey'}
             selected = {props.values.branches}
             onChange={
-              (list)=>{  props.values.branches = list;} } 
+              (list)=>{  props.values.branches = list} } 
             rightHeader={local.allBranches}
             leftHeader = {local.selectedBranches}
             options = {props.userBranchesOptions}
@@ -171,7 +170,7 @@ const customFilterOption = (option, rawInput) => {
                       >{local.previous}</Button>
                 </Col>
                 <Col>
-                    <Button disabled ={showRolesError|| props.values.roles.length === 0}  onClick =  {props.handleSubmit}  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="button" data-qc="submit">{local.submit}</Button>
+                    <Button disabled ={showRolesError|| !props.values.roles}  onClick =  {props.handleSubmit}  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="button" data-qc="submit">{local.submit}</Button>
                 </Col>
             </Form.Group>
         </Form>
