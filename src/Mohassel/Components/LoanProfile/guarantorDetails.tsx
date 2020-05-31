@@ -30,7 +30,7 @@ export const GuarantorView = (props: Props) => {
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.homeAddress}</p>
+                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.customerHomeAddress}</p>
                     </div>
 
                 </div>
@@ -58,7 +58,7 @@ export const GuarantorTableView = (props: Props) => {
                             <td></td>
                             <td>{guar.customerName}</td>
                             <td>{guar.geographicalDistribution}</td>
-                            <td>{guar.homeAddress}</td>
+                            <td>{guar.customerHomeAddress}</td>
                             <td>{guar.homePhoneNumber}</td>
                         </tr>
                     )}
