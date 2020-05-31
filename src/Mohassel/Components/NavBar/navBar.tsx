@@ -43,11 +43,14 @@ class NavBar extends Component<Props, State> {
   componentDidMount() {
     const branches = JSON.parse(getCookie("validbranches"));
     this.setState({ branches: branches })
-    if (branches.length === 1) {
+    if (branches?.length === 1) {
       this.setState({ selectedBranch: branches[0], branches: branches })
     }
     const token = getCookie('token');
     const tokenData = this.parseJwt(token);
+    if(tokenData.requireBranch === false) {
+      this.setState({branches: [...this.state.branches, {_id: 'hq', name: local.headquarters}], selectedBranch: {_id: 'hq', name: local.headquarters}})
+    }
     if (tokenData.branch !== "") {
       this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
     }
@@ -84,9 +87,8 @@ class NavBar extends Component<Props, State> {
             <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
-        <div className={this.state.branches.length > 5 ? "scrollable" : ""}>
-          {this.state.branches
-            .filter(branch => branch.name.includes(this.state.searchKeyWord))
+        <div className={this.state.branches?.length > 5 ? "scrollable" : ""}>
+          {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord))
             .map((branch, index) => {
               return (
                 <div key={index}>
@@ -105,7 +107,7 @@ class NavBar extends Component<Props, State> {
               )
             })}
         </div>
-        {this.state.branches.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
+        {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
