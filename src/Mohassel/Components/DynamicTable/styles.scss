@@ -24,6 +24,11 @@
         align-items: center;
         margin-left: 30px;
         justify-content: flex-end;
+        .pagination-numbers {
+            display: flex;
+            width: 250px;
+            overflow: hidden;
+        }
         .pagination-next-prev-enabled {
             color: #7dc356;
             font-size: 15px;
@@ -42,7 +47,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 30px;
+            min-width: 30px;
             height: 30px;
             p {
                 margin: 0px;
@@ -52,7 +57,7 @@
             margin: 0px 10px;
             background-color:#7dc356;
             color: #fff;
-            width: 30px;
+            min-width: 30px;
             height: 30px;
             border-radius: 4px;
             display: flex;

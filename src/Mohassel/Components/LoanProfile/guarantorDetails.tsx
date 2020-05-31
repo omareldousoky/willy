@@ -45,11 +45,11 @@ export const GuarantorTableView = (props: Props) => {
             <Table>
                 <thead>
                     <tr>
-                        <th>Guarantor Code</th>
+                        <th>{local.guarantorCode}</th>
                         <th>{local.name}</th>
-                        <th>Area</th>
+                        <th>{local.area}</th>
                         <th>{local.customerHomeAddress}</th>
-                        <th>Telephone</th>
+                        <th>{local.telephone}</th>
                     </tr>
                 </thead>
                 <tbody>
