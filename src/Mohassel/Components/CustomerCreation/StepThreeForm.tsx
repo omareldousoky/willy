@@ -34,9 +34,6 @@ export const StepThreeForm = (props: any) => {
             return [];
         }
     }
-    useEffect(() => {
-        getConfig();
-    }, [])
     async function getConfig() {
         setLoading(true);
         const resGeo = await getGeoDivision();
@@ -45,6 +42,9 @@ export const StepThreeForm = (props: any) => {
             setgeoDivisions(resGeo.body.geoDivisions)
         } else setLoading(false);
     }
+    useEffect(() => {
+        getConfig();
+    }, [])
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
         <Form onSubmit={handleSubmit}>

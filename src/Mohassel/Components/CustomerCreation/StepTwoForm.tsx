@@ -15,7 +15,7 @@ interface Village {
 interface District {
     districtName: { ar: string };
     districtLegacyCode: number;
-    villages: Array<Village>
+    villages: Array<Village>;
 }
 interface Governorate {
     governorateName: { ar: string };
@@ -29,12 +29,12 @@ interface Specialty {
 interface Activities {
     i18n: { ar: string };
     legacyCode: number;
-    specialties: Array<Specialty>
+    specialties: Array<Specialty>;
 }
 interface BusinessSector {
     i18n: { ar: string };
     legacyCode: number;
-    activities: Array<Activities>
+    activities: Array<Activities>;
 }
 export const StepTwoForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
@@ -56,9 +56,6 @@ export const StepTwoForm = (props: any) => {
         }
         ]
     }]);
-    useEffect(() => {
-        getConfig();
-    }, []);
     async function getConfig() {
         setLoading(true);
         const resGov = await getGovernorates();
@@ -72,6 +69,9 @@ export const StepTwoForm = (props: any) => {
             setBusinessSectors(resBS.body.sectors)
         } else setLoading(false);
     }
+    useEffect(() => {
+        getConfig();
+    }, []);
     return (
         <Form onSubmit={handleSubmit}>
             <Loader open={loading} type="fullscreen" />
