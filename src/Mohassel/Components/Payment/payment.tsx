@@ -292,7 +292,7 @@ class Payment extends Component<Props, State>{
           <Button variant="outline-primary" onClick={() => this.setState({ paymentModal: true, modalType: 1 })}>{local.payInstallment}</Button>
         </div>
         {this.state.paymentModal && this.renderModal()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={()=> this.setState({receiptModal: false, payAmount: 0})} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={()=> window.location.reload()} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
       </>
     );
   }

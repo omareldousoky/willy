@@ -183,7 +183,7 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="withInterest">
-                                    <Form.Label style={{ textAlign: 'right' }} column md={4}>with Interest</Form.Label>
+                                    <Form.Label style={{ textAlign: 'right' }} column md={4}>{local.withInterest}</Form.Label>
                                     <Col sm={1}>
                                         <Form.Check
                                             type="checkbox"
@@ -202,7 +202,7 @@ class PostponeInstallments extends Component<Props, State>{
                                 </Form.Group>
 
                                 <Form.Group as={Row} md="5" controlId="postponementInterest">
-                                    <Form.Label column sm={4}>postponementInterest</Form.Label>
+                                    <Form.Label column sm={4}>{local.postponementInterest}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
                                             type="number"
@@ -222,7 +222,7 @@ class PostponeInstallments extends Component<Props, State>{
                                 </Form.Group>
 
                                 <Form.Group as={Row} controlId="payWhere">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>payWhere</Form.Label>
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.payWhere}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control as="select"
                                             name="payWhere"
@@ -244,7 +244,7 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="installmentNumber">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>installmentNumber</Form.Label>
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.installmentNumber}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control as="select"
                                             name="installmentNumber"

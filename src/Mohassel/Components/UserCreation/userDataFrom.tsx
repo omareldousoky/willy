@@ -202,8 +202,7 @@ export const UserDataForm = (props: Props) => {
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.hiringDate && props.touched.hiringDate) as boolean}
-                        >
-                        </Form.Control>
+                        />     
                         <Form.Control.Feedback
                             type="invalid">
                             {props.errors.hiringDate}
@@ -295,7 +294,7 @@ export const UserDataForm = (props: Props) => {
                         name={'confirmPassword'}
                         data-qc={'confirmPassword'}
                         value={props.values.confirmPassword}
-                        placeholder={local.confrimPassword}
+                        placeholder={`${local.confrimPassword}*`}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         disabled={props.edit}
@@ -303,7 +302,7 @@ export const UserDataForm = (props: Props) => {
                     />
                     <Form.Control.Feedback
                         type={'invalid'}
-                    >
+                    >    
                         {props.errors.confirmPassword}
                     </Form.Control.Feedback>
                 </Col>

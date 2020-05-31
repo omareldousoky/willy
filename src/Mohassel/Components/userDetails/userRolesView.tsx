@@ -32,7 +32,7 @@ export default class UserRolesView extends Component<Props, State> {
     }
     async getAllPermissions() {
         this.setState({ loading: true })
-        const id = (this.state.selectedRole?.hasBranch) ? 'requireBranch' : 'req';
+        const id = (this.state.selectedRole?.hasBranch) ? 'branch' : 'hq';
         const res = await getPermissions(id);
         if (res.status === "success") {
             this.setState({
@@ -75,7 +75,7 @@ export default class UserRolesView extends Component<Props, State> {
         <div className={'columnContianer'}><div className={'subTitle'}>{local.permissions} </div><div>{this.state.selectedRole?.hasBranch? local.branches : local.headquarters}</div></div>
                         </div>
                     </Card.Body>
-                </Card>
+                </Card>      
             </>
         );
     }

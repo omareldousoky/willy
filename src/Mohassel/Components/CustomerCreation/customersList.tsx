@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
+import {BranchesDropDown} from '../dropDowns/allDropDowns';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -22,6 +23,7 @@ interface State {
   dateTo: string;
   totalCount: number;
   loading: boolean;
+  selectedBranch: any;
 }
 interface Props {
   history: any;
@@ -39,6 +41,7 @@ class CustomersList extends Component<Props, State> {
       dateTo: '',
       totalCount: 0,
       loading: false,
+      selectedBranch: {}
     }
     this.mappers = [
       {
@@ -73,8 +76,8 @@ class CustomersList extends Component<Props, State> {
       },
       {
         title: '',
-        key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></>
+        key: "actions",//<span className='fa fa-eye icon'></span>
+        render: data => <> <span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></>
       },
     ]
   }
@@ -143,6 +146,7 @@ class CustomersList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Formik
+              enableReinitialize
               initialValues={this.state}
               onSubmit={this.submit}
               // validationSchema={}
@@ -172,7 +176,11 @@ class CustomersList extends Component<Props, State> {
                         type="date"
                         name="dateFrom"
                         data-qc="dateFrom"
-                        onChange={formikProps.handleChange}
+                        value={formikProps.values.dateFrom}
+                        onChange={(e)=> {
+                          formikProps.setFieldValue("dateFrom",e.currentTarget.value);
+                          if(e.currentTarget.value === "") formikProps.setFieldValue("dateTo", "")
+                        }}
                       >
                       </Form.Control>
                       <span>{local.to}</span>
@@ -181,6 +189,7 @@ class CustomersList extends Component<Props, State> {
                         type="date"
                         name="dateTo"
                         data-qc="dateTo"
+                        value={formikProps.values.dateTo}
                         min={formikProps.values.dateFrom}
                         onChange={formikProps.handleChange}
                         disabled={!Boolean(formikProps.values.dateFrom)}
@@ -197,13 +206,7 @@ class CustomersList extends Component<Props, State> {
                           <option value={10}>10</option>
                         </Form.Control>
                       </div>
-                      <div className="dropdown-container" style={{ flex: 1 }}>
-                        <p className="dropdown-label">{local.oneBranch}</p>
-                        <Form.Control as="select" className="dropdown-select" data-qc="employment">
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                        </Form.Control>
-                      </div>
+                      {/* <BranchesDropDown onSelectBranch={(branch) => {this.setState({selectedBranch: branch}); console.log(branch)}}/> */}
                     </div>
                   </div>
 

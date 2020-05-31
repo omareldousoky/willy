@@ -12,6 +12,14 @@ function getCentury(birthCentury: string): string {
             return '';
     }
 }
+function isValidDate(year: number, month: number, day: number) {
+    month = month - 1;
+    const d = new Date(year, month, day);
+    if (d.getFullYear() == year && d.getMonth() == month && d.getDate() == day) {
+        return true;
+    }
+    return false;
+}
 export const getBirthdateFromNationalId = (nationalIdNumber: string): string => {
     const nationalIdNumberTrimmed = nationalIdNumber.substring(0, 7);
     const firstDigitsYear = getCentury(nationalIdNumberTrimmed[0]);
@@ -19,7 +27,8 @@ export const getBirthdateFromNationalId = (nationalIdNumber: string): string => 
     const month = nationalIdNumberTrimmed.substring(3, 5);
     const day = nationalIdNumberTrimmed.substring(5, 7);
     const birthDate = `${year}-${month}-${day}`;
-    if(isNaN(new Date(birthDate).valueOf()) || firstDigitsYear === ''){
+    const dateValid = isValidDate(Number(year), Number(month), Number(day));
+    if (isNaN(new Date(birthDate).valueOf()) || firstDigitsYear === '' || !dateValid) {
         return '1800-01-01';
     }
     return birthDate;
