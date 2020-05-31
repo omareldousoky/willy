@@ -106,7 +106,6 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.representative}</td>
-                    {/* <td>{props.application.customer.representative}</td> */}
                     <td>{officer}</td>
                 </tr>
                 <tr>
