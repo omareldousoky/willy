@@ -50,6 +50,7 @@ export interface Application {
     allowRepresentativeFeesAdjustment: boolean;
     stamps: number;
     allowStampsAdjustment: boolean;
+    allowApplicationFeeAdjustment: boolean;
     adminFees: number;
     allowAdminFeesAdjustment: boolean;
     entryDate: string;
