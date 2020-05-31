@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import * as local from '../../../Shared/Assets/ar.json';
 import { Application } from '../LoanApplication/loanApplicationStates';
@@ -7,12 +7,28 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { englishToArabic } from '../../Services/statusLanguage';
-import { GuarantorTableView } from './guarantorDetails'
+import { GuarantorTableView } from './guarantorDetails';
+import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer'
 interface Props {
     application: any;
 }
+
 //this is used in the application details tab from loanProfile
 export const LoanDetailsTableView = (props: Props) => {
+    const [officer, changeOfficerName] = useState('')
+    async function getOfficerName(id) {
+        const res = await getLoanOfficer(id);
+        if (res.status === "success") {
+            const name = res.body.name
+            changeOfficerName(name)
+        } else {
+            console.log('Err')
+            return ''
+        }
+    }
+    useEffect(() => {
+        getOfficerName(props.application.customer.representative);
+    }, [])
     return (
         <Table striped bordered style={{ textAlign: 'right' }}>
             <tbody>
@@ -90,7 +106,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.representative}</td>
-                    <td>{props.application.representativeId}</td>
+                    <td>{officer}</td>
                 </tr>
                 <tr>
                     <td>{local.enquiror}</td>
@@ -106,6 +122,20 @@ export const LoanDetailsTableView = (props: Props) => {
 }
 //this is used in rescheduling
 export const LoanDetailsBoxView = (props: Props) => {
+    const [officer, changeOfficerName] = useState('')
+    async function getOfficerName(id) {
+        const res = await getLoanOfficer(id);
+        if (res.status === "success") {
+            const name = res.body.name
+            changeOfficerName(name)
+        } else {
+            console.log('Err')
+            return ''
+        }
+    }
+    useEffect(() => {
+        getOfficerName(props.application.customer.representative);
+    }, [])
     return (
         <Form>
             <Form.Row>
@@ -232,7 +262,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.representative}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.representative} </Form.Label>
+                        <Form.Label>{officer} </Form.Label>
                     </Row>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
@@ -249,6 +279,20 @@ export const LoanDetailsBoxView = (props: Props) => {
 }
 // this is used in the customer Card/status
 export const CustomerLoanDetailsBoxView = (props: Props) => {
+    const [officer, changeOfficerName] = useState('')
+    async function getOfficerName(id) {
+        const res = await getLoanOfficer(id);
+        if (res.status === "success") {
+            const name = res.body.name
+            changeOfficerName(name)
+        } else {
+            console.log('Err')
+            return ''
+        }
+    }
+    useEffect(() => {
+        getOfficerName(props.application.customer.representative);
+    }, [])
     return (
         <div>
             <h6>{local.currentLoanInfo}</h6>
@@ -311,7 +355,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                             <Form.Label>{local.representative}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{props.application.representativeId}</Form.Label>
+                            <Form.Label>{officer}</Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>
