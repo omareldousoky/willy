@@ -421,5 +421,6 @@
     "telephone": "رقم التليفون",
     "withInterest":"بفائده",
     "postponementInterest":"فائده التاجيل",
-    "payWhere":"طريقه دفع الفائده"
+    "payWhere":"طريقه دفع الفائده",
+    "newCustomer": "عميل جديد"
 }
