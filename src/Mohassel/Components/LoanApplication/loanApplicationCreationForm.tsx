@@ -79,7 +79,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     disabled
                                 >
                                     <option value="" disabled></option>
-                                    <option value='egp'>EGP</option>
+                                    <option value='egp'>{local.egp}</option>
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.currency}
