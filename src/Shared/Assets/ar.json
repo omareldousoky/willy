@@ -86,7 +86,7 @@
     "inAdvanceType": "طريقه إستخدام النسبه المقدمه",
     "productName": "نوع القرض",
     "calculationFormulaId": "طريقه الحساب",
-    "loanNature": "طبيعة الاقراض",
+    "loanNature": "طبيعة الاقتراض",
     "currency": "اسم العمله",
     "lateDays": "عدد أيام التأخير",
     "allowInterestAdjustment": "السماح بالتعديل عند إدراج طلب القرض",
@@ -421,5 +421,8 @@
     "telephone": "رقم التليفون",
     "withInterest":"بفائده",
     "postponementInterest":"فائده التاجيل",
-    "payWhere":"طريقه دفع الفائده"
+    "payWhere":"طريقه دفع الفائده",
+    "cash":"نقدي",
+    "egp":"الجنيه المصري",
+    "newCustomer": "عميل جديد"
 }

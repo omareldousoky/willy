@@ -140,7 +140,7 @@ class CustomersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>new customer</Button>
+                <Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

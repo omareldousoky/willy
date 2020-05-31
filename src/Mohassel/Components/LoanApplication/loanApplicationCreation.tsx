@@ -111,6 +111,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 allowRepresentativeFeesAdjustment: true,
                 stamps: 0,
                 allowStampsAdjustment: true,
+                allowApplicationFeeAdjustment: true,
                 adminFees: 0,
                 allowAdminFeesAdjustment: true,
                 entryDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
@@ -408,7 +409,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.minInstallment = (selectedProductDetails.minInstallment) ? selectedProductDetails.minInstallment : defaultValues.minInstallment;
         defaultApplication.maxInstallment = (selectedProductDetails.maxInstallment) ? selectedProductDetails.maxInstallment : defaultValues.maxInstallment;
         defaultApplication.noOfGuarantors = (selectedProductDetails.noOfGuarantors) ? selectedProductDetails.noOfGuarantors : defaultValues.noOfGuarantors;
-
+        defaultApplication.allowApplicationFeeAdjustment = selectedProductDetails.allowApplicationFeeAdjustment;
         this.setState({ application: defaultApplication });
     }
     getSelectedLoanProduct = async (id) => {

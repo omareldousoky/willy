@@ -10,3 +10,14 @@ export const searchLoanOfficer = async (data: object) => {
         return { status: "error", error: error.response.data }
     }
 }
+
+export const getLoanOfficer = async (id: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/user/loan-officer?id=${id}`;
+    try {
+        const res = await axios.get(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
