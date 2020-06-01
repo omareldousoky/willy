@@ -11,7 +11,6 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
 import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
-import { getCookie } from '../../Services/getCookie';
 import { DownloadReviewedPdf } from '../PDF/documentExport';
 import Can from '../../config/Can';
 import {englishToArabic} from '../../Services/statusLanguage'
@@ -89,16 +88,13 @@ class TrackLoanApplications extends Component<Props, State>{
   handleSubmit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
-    // const branchId = JSON.parse(getCookie('branches'));
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
-        // branchId: branchId[0],
         size: 20,
         from: 0,
       }
     } else {
       obj = {
-        // branchId: branchId[0],
         fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: 20,

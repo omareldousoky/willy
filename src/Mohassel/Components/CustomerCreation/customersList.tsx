@@ -68,12 +68,12 @@ class CustomersList extends Component<Props, State> {
       {
         title: local.createdBy,
         key: "creationDate",
-        render: data => data.created.by
+        render: data => data.created?.by
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => getDateAndTime(data.created.at)
+        render: data => getDateAndTime(data.created?.at)
       },
       {
         title: '',

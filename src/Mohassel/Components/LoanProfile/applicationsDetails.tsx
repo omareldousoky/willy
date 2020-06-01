@@ -41,6 +41,34 @@ export const LoanDetailsTableView = (props: Props) => {
             return ''
         }
     }
+    function currency(val) {
+        switch (val) {
+            case 'egp':
+                return local.egp
+            default:
+                return ''
+        }
+    }
+    function interestPeriod(val) {
+        switch (val) {
+            case 'yearly':
+                return 'نسبه سنويه'
+            case 'monthly':
+                return 'نسبه شهريه'
+            default:
+                return ''
+        }
+    }
+    function periodType(val) {
+        switch (val) {
+            case 'months':
+                return 'اشهر'
+            case 'days':
+                return 'يوم'
+            default:
+                return ''
+        }
+    }
     useEffect(() => {
         getOfficerName(props.application.customer.representative);
         getLoanUsages()
@@ -50,11 +78,11 @@ export const LoanDetailsTableView = (props: Props) => {
             <tbody>
                 <tr>
                     <td>{local.productName}</td>
-                    <td>{props.application.product.currency}</td>
+                    <td>{currency(props.application.product.currency)}</td>
                 </tr>
                 <tr>
                     <td>{local.currency}</td>
-                    <td>{props.application.product.currency}</td>
+                    <td>{currency(props.application.product.currency)}</td>
                 </tr>
                 <tr>
                     <td>{local.calculationFormulaId}</td>
@@ -62,7 +90,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.interest}</td>
-                    <td>{props.application.product.interest + ' ' + props.application.product.interestPeriod}</td>
+                    <td>{props.application.product.interest + ' ' + interestPeriod(props.application.product.interestPeriod)}</td>
                 </tr>
                 <tr>
                     <td>{local.inAdvanceFees}</td>
@@ -70,7 +98,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.periodLengthEvery}</td>
-                    <td>{props.application.product.periodLength + ' ' + props.application.product.periodType}</td>
+                    <td>{props.application.product.periodLength + ' ' + periodType(props.application.product.periodType)}</td>
                 </tr>
                 <tr>
                     <td>{local.gracePeriod}</td>
