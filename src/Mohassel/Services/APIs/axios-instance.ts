@@ -31,6 +31,14 @@ instance.interceptors.response.use(
     response => response,
     errorResponseHandler
 );
+instance.interceptors.response.use(res => {
+    if (res.config.url?.includes('/auth/context-branch/')) {
+        instance.defaults.headers = { 'Authorization': `Bearer ${res.data.token}` }
+    }
+    return res;
+}, error => {
+    return Promise.reject(error);
+});
 
 
 
