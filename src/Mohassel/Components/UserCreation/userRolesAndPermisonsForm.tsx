@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState } from 'react';
 import './userCreation.scss';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -9,24 +9,24 @@ import Select from 'react-select';
 import {theme} from '../../../theme';
 import {RolesBranchesValues} from './userCreationinterfaces';
 import DualBox from '../DualListBox/dualListBox';
-import Swal from 'sweetalert2';
+import Container from 'react-bootstrap/Container';
 
 interface Props{
     values: RolesBranchesValues;
     userRolesOptions: Array<object>;
     userBranchesOptions: Array<object>;
     handleSubmit: any;
-    handleBlur?: any;
-    handleChange?: any;
     previousStep: any;
 }
+
   const isHasBranch = (roles: Array<any>): boolean => {
      let rolesState = false ;
        roles?.map(role=> {
         if(role.hasBranch===true){
+        
        rolesState  =true;
           return;
-        }
+        } 
       }) 
      return rolesState;
   }
@@ -74,19 +74,21 @@ const style = {
 
   
 const UserRolesAndPermisonsFrom = (props: Props) => {
-  
   const [hasBranch, setHasBranch] = useState(()=>isHasBranch(props.values.roles));
   const [roles, setRoles] = useState(props.values.roles);
+  const [branches, setBranches] = useState(props.values.branches);
   const [showRolesError,setShowRolesError] = useState(false);
-
-  const  handleRolesChange = () =>{
-    if(!props.values.roles ) {
-      setShowRolesError(true);
-    } else {
-      setShowRolesError(false);
-    }
-   
-  }
+  const [showBranchesError,setShowBranchesError] = useState(false);
+ const handleChange = (list) => { 
+   if( hasBranch && list.length === 0) {
+        setShowBranchesError(true);
+   } else {
+     setShowBranchesError(false);
+     setBranches(list)
+     props.values.branches = list;
+   }
+    
+ }
 const customFilterOption = (option, rawInput) => {
   if(option.label) {
   const words = rawInput.split(' ');
@@ -98,9 +100,9 @@ const customFilterOption = (option, rawInput) => {
 };
 
     return (
-        <Form
+        <Container
             className="user-role-form"
-            onSubmit={props.handleSubmit}
+
         >
             <Form.Group
                 className={'user-role-group'}
@@ -125,14 +127,14 @@ const customFilterOption = (option, rawInput) => {
                          setHasBranch(isHasBranch(event))
                        if(!hasBranch){
                          props.values.branches = [];
-      
+                        setShowBranchesError(false);
                        }
-                       handleRolesChange();
+                       setShowRolesError(!props.values.roles || props.values.roles.length===0);
                       }
+                    
 
                     }
                     value = {roles}
-                    onBlur={props.handleBlur}
                     options = {props.userRolesOptions}
                 />
             { showRolesError &&
@@ -147,12 +149,19 @@ const customFilterOption = (option, rawInput) => {
            <Form.Label
             className={'user-role-label'}
            >{local.branch}</Form.Label>
+               { showBranchesError &&
+         <div style={{color:'red',fontSize:'15px',margin:'10px' }}>{local.branchIsRquired}</div> }
             <DualBox
             labelKey={"branchName"}
             filterKey={'noKey'}
             selected = {props.values.branches}
             onChange={
-              (list)=>{  props.values.branches = list} } 
+              (list)=>{
+               handleChange(list);
+
+              }
+
+            } 
             rightHeader={local.allBranches}
             leftHeader = {local.selectedBranches}
             options = {props.userBranchesOptions}
@@ -170,10 +179,15 @@ const customFilterOption = (option, rawInput) => {
                       >{local.previous}</Button>
                 </Col>
                 <Col>
-                    <Button disabled ={showRolesError|| !props.values.roles}  onClick =  {props.handleSubmit}  className= {'btn-submit-next'} style={{ float :'left',width:'60%' }} type="button" data-qc="submit">{local.submit}</Button>
+                    <Button 
+                    disabled ={showRolesError|| roles.length === 0 || (hasBranch && branches.length === 0)|| showBranchesError }   
+                    className= {'btn-submit-next'} style={{ float :'left',width:'60%' }}
+                     type="button"  
+                     onClick = {props.handleSubmit}
+                     data-qc="submit">{local.submit}</Button>
                 </Col>
             </Form.Group>
-        </Form>
+        </Container>
                   
     )
 }

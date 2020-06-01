@@ -127,7 +127,7 @@ class UsersList extends Component<Props, State> {
       obj = {
         size: this.state.size,
         from: this.state.from,
-        name: values.searchKeyword
+        username: values.searchKeyword
       }
     } else {
       obj = {
@@ -135,7 +135,7 @@ class UsersList extends Component<Props, State> {
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: this.state.size,
         from: this.state.from,
-        name: values.searchKeyword
+        username: values.searchKeyword
       }
     }
     const res = await searchUsers(obj);
