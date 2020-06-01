@@ -85,7 +85,6 @@ class RoleUsers extends Component<Props, State> {
 
     async getUsers() {
         this.setState({ loading: true })
-        // const branchId = JSON.parse(getCookie('branches'))[0]
         const res = await searchUsers({ size: this.state.size, from: this.state.from, roleId: this.props.role._id });
         if (res.status === "success") {
             this.setState({
@@ -101,10 +100,8 @@ class RoleUsers extends Component<Props, State> {
     submit = async (values) => {
         this.setState({ loading: true })
         let obj = {}
-        // const branchId = JSON.parse(getCookie('branches'));
         if (values.dateFrom === "") {
             obj = {
-                // branchId: branchId[0],
                 size: this.state.size,
                 from: this.state.from,
             }

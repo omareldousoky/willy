@@ -56,7 +56,8 @@ export interface Application {
     entryDate: string;
     usage: string;
     representative: string;
-    enquirorId: string;
+    representativeName: string;
+    enquirorId: any;
     visitationDate: string;
     guarantorIds: Array<string>;
     viceCustomers: Array<Vice>;
