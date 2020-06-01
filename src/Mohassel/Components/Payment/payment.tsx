@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
+import Select from 'react-select';
 // import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
@@ -47,6 +48,7 @@ interface State {
   earlyPaymentFees: number;
   requiredAmount: number;
   paymentState: number;
+  installmentsToBePaid: Array<number>;
 }
 
 class Payment extends Component<Props, State>{
@@ -66,6 +68,7 @@ class Payment extends Component<Props, State>{
       earlyPaymentFees: 0,
       requiredAmount: 0,
       paymentState: 1,
+      installmentsToBePaid: []
     }
     this.mappers = [
       {
@@ -316,7 +319,7 @@ class Payment extends Component<Props, State>{
           <div style={{width: '100%', padding: 20}}>
             <Formik
               enableReinitialize
-              initialValues={{ ...this.state, requiredAmount: this.getRequiredAmount() }}
+              initialValues={{ ...this.state }}
               onSubmit={this.handleSubmit}
               validationSchema={paymentValidation}
               validateOnBlur
@@ -325,40 +328,31 @@ class Payment extends Component<Props, State>{
               {(formikProps) =>
                 <Form onSubmit={formikProps.handleSubmit}>
                   <Form.Group as={Row}>
-                    <Form.Group as={Col} controlId="payAmount">
+                    <Form.Group as={Col} controlId="installmentsToBePaid">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.installmentsToBePaid}`}</Form.Label>
                       <Col>
-                        <Form.Control
-                          type="number"
-                          name="payAmount"
-                          data-qc="payAmount"
-                          value={formikProps.values.payAmount.toString()}
+                        <Select
+                          isMulti
+                          name="installmentsToBePaid"
+                          data-qc="installmentsToBePaid"
+                          // value={formikProps.values.payAmount.toString()}
                           onBlur={formikProps.handleBlur}
                           onChange={formikProps.handleChange}
                           isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
                         >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payAmount}
-                        </Form.Control.Feedback>
+                        </Select>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Col} controlId="payAmount">
+                    <Form.Group as={Col} controlId="requiredAmount">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.requiredAmount}`}</Form.Label>
                       <Col>
                         <Form.Control
                           type="number"
-                          name="payAmount"
-                          data-qc="payAmount"
-                          value={formikProps.values.payAmount.toString()}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                          name="requiredAmount"
+                          value={this.getRequiredAmount()}
+                          disabled
                         >
                         </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payAmount}
-                        </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                   </Form.Group>
@@ -381,21 +375,21 @@ class Payment extends Component<Props, State>{
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Col} controlId="payAmount">
+                    <Form.Group as={Col} controlId="truthDate">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
                       <Col>
                         <Form.Control
-                          type="number"
-                          name="payAmount"
-                          data-qc="payAmount"
-                          value={formikProps.values.payAmount.toString()}
+                          type="date"
+                          name="truthDate"
+                          data-qc="truthDate"
+                          value={formikProps.values.truthDate}
                           onBlur={formikProps.handleBlur}
                           onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                          isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
                         >
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payAmount}
+                          {formikProps.errors.truthDate}
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
