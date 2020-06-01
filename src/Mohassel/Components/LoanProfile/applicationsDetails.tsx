@@ -8,7 +8,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
-import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+
 interface Props {
     application: any;
 }
@@ -16,6 +18,8 @@ interface Props {
 //this is used in the application details tab from loanProfile
 export const LoanDetailsTableView = (props: Props) => {
     const [officer, changeOfficerName] = useState('')
+    const [loanUse, changeUse] = useState('')
+
     async function getOfficerName(id) {
         const res = await getLoanOfficer(id);
         if (res.status === "success") {
@@ -26,8 +30,20 @@ export const LoanDetailsTableView = (props: Props) => {
             return ''
         }
     }
+    async function getLoanUsages() {
+        const res = await getLoanUsage();
+        if (res.status === "success") {
+            const uses = res.body.usages
+            const value = uses.find(use => use.id === props.application.usage).name
+            changeUse(value)
+        } else {
+            console.log('Err')
+            return ''
+        }
+    }
     useEffect(() => {
         getOfficerName(props.application.customer.representative);
+        getLoanUsages()
     }, [])
     return (
         <Table striped bordered style={{ textAlign: 'right' }}>
@@ -102,7 +118,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.usage}</td>
-                    <td>{props.application.usage}</td>
+                    <td>{loanUse}</td>
                 </tr>
                 <tr>
                     <td>{local.representative}</td>
@@ -110,7 +126,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.enquiror}</td>
-                    <td>{props.application.enquirorId}</td>
+                    <td>{officer}</td>
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>
