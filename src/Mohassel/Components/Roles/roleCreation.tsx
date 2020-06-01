@@ -72,7 +72,7 @@ class RoleCreation extends Component<Props, State>{
     }
     async getEditPermissions(hasbranch) {
         this.setState({ loading: true })
-        const id = (!hasbranch) ? 'req' : 'requireBranch';
+        const id = (!hasbranch) ? 'hq' : 'branch';
         const res = await getPermissions(id);
         if (res.status === "success") {
             const sections = res.body.actions;
