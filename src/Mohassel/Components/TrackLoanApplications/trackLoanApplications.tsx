@@ -72,9 +72,7 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   async componentDidMount() {
     this.setState({ loading: true })
-    // const branchId = JSON.parse(getCookie('branches'))
     const obj = {
-      // branchId: branchId[0],
       from: 0,
       size: 100
     };

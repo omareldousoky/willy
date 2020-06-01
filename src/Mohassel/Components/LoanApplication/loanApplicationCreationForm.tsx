@@ -478,7 +478,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     isInvalid={errors.usage && touched.usage}
                                 >
                                     <option value="" disabled></option>
-                                    <option value="finance">Finance</option>
+                                    {props.loanUsage.map((usage)=><option key={usage.id} value={usage.id}>{usage.name}</option>)}
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.usage}

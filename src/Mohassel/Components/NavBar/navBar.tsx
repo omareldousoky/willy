@@ -42,15 +42,14 @@ class NavBar extends Component<Props, State> {
   }
   componentDidMount() {
     const branches = JSON.parse(getCookie("validbranches"));
-    this.setState({ branches: branches })
     if (branches?.length === 1) {
       this.setState({ selectedBranch: branches[0], branches: branches })
     }
     const token = getCookie('token');
     const tokenData = this.parseJwt(token);
-    if(tokenData?.requireBranch === false) {
-      this.setState({branches: [...this.state.branches, {_id: 'hq', name: local.headquarters}], selectedBranch: {_id: 'hq', name: local.headquarters}})
-    }
+    if (tokenData?.requireBranch === false && branches) {
+      this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
+    } else this.setState({ branches })
     if (tokenData.branch !== "") {
       this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
     }
@@ -174,7 +173,7 @@ class NavBar extends Component<Props, State> {
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
               {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
-              {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
+              {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
 
               {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
