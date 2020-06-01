@@ -278,8 +278,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ products: [], loading: true })
         const branchId = JSON.parse(getCookie('branches'));
         const products = await getProductsByBranch(branchId);
-        // console.log(products2)
-        // const products = await getProducts();
         if (products.status === 'success') {
             this.setState({
                 products: products.body.data.productIds,
@@ -516,6 +514,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             pushPayment: obj.pushPayment,
             noOfInstallments: obj.noOfInstallments,
             principal: obj.principal,
+            applicationFee: obj.applicationFee,
             individualApplicationFee: obj.individualApplicationFee,
             applicationFeePercent: obj.applicationFeePercent,
             applicationFeeType: obj.applicationFeeType,
