@@ -7,7 +7,6 @@ import { Formik } from 'formik';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import { getCookie } from '../../Services/getCookie';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
@@ -26,7 +25,6 @@ interface State {
   searchKeyword: string;
   selectedRole: string;
   selectedEmployment: string;
-  selectedBranch: string;
   dateFrom: string;
   dateTo: string;
   totalCount: number;
@@ -44,7 +42,6 @@ class UsersList extends Component<Props, State> {
       searchKeyword: '',
       selectedRole: '',
       selectedEmployment: '',
-      selectedBranch: '',
       dateFrom: '',
       dateTo: '',
       totalCount: 0,
@@ -111,8 +108,7 @@ class UsersList extends Component<Props, State> {
   }
   async getUsers() {
     this.setState({ loading: true })
-    const branchId = JSON.parse(getCookie('branches'))[0]
-    const res = await searchUsers({ size: this.state.size, from: this.state.from, branchId: branchId, sort: "createdAt", order: "desc" });
+    const res = await searchUsers({ size: this.state.size, from: this.state.from, sort: "createdAt", order: "desc" });
     if (res.status === "success") {
       this.setState({
         data: res.body.data,
@@ -127,17 +123,14 @@ class UsersList extends Component<Props, State> {
   submit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
-    // const branchId = JSON.parse(getCookie('branches'));
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
-        // branchId: branchId[0],
         size: this.state.size,
         from: this.state.from,
         name: values.searchKeyword
       }
     } else {
       obj = {
-        // branchId: branchId[0],
         fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: this.state.size,
