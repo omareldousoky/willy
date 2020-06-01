@@ -42,15 +42,14 @@ class NavBar extends Component<Props, State> {
   }
   componentDidMount() {
     const branches = JSON.parse(getCookie("validbranches"));
-    this.setState({ branches: branches })
     if (branches?.length === 1) {
       this.setState({ selectedBranch: branches[0], branches: branches })
     }
     const token = getCookie('token');
     const tokenData = this.parseJwt(token);
-    if(tokenData?.requireBranch === false) {
-      this.setState({branches: [...this.state.branches, {_id: 'hq', name: local.headquarters}], selectedBranch: {_id: 'hq', name: local.headquarters}})
-    }
+    if(tokenData?.requireBranch === false && branches) {
+      this.setState({branches: [...branches, {_id: 'hq', name: local.headquarters}], selectedBranch: {_id: 'hq', name: local.headquarters}})
+    } else this.setState({branches})
     if (tokenData.branch !== "") {
       this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
     }
@@ -127,6 +126,8 @@ class NavBar extends Component<Props, State> {
     )
   }
   render() {
+    console.log(this.state.branches)
+
     return (
       <>
         <Loader type="fullscreen" open={this.state.loading} />
