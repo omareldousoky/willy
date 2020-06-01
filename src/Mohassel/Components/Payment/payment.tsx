@@ -4,9 +4,11 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 // import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
+import PaymentReceipt from './paymentReceipt';
 import { Loader } from '../../../Shared/Components/Loader';
 import { paymentValidation } from './paymentValidation';
 import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarlyPayment';
@@ -15,7 +17,6 @@ import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
-import PaymentReceipt from './paymentReceipt';
 
 interface Installment {
   id: number;
@@ -45,6 +46,7 @@ interface State {
   remainingPrincipal: number;
   earlyPaymentFees: number;
   requiredAmount: number;
+  paymentState: number;
 }
 
 class Payment extends Component<Props, State>{
@@ -63,6 +65,7 @@ class Payment extends Component<Props, State>{
       remainingPrincipal: 0,
       earlyPaymentFees: 0,
       requiredAmount: 0,
+      paymentState: 0,
     }
     this.mappers = [
       {
@@ -156,7 +159,7 @@ class Payment extends Component<Props, State>{
       }
     } else {
       const res = await earlyPayment(this.props.applicationId, this.state.requiredAmount);
-      this.setState({payAmount: res.body.requiredAmount})
+      this.setState({ payAmount: res.body.requiredAmount })
       if (res.status === 'success') {
         this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
         // Swal.fire("", "early payment done", "success")
@@ -186,7 +189,7 @@ class Payment extends Component<Props, State>{
           this.state.modalType === 1 ?
             <Formik
               enableReinitialize
-              initialValues={{...this.state, requiredAmount: this.getRequiredAmount()}}
+              initialValues={{ ...this.state, requiredAmount: this.getRequiredAmount() }}
               onSubmit={this.handleSubmit}
               validationSchema={paymentValidation}
               validateOnBlur
@@ -278,21 +281,150 @@ class Payment extends Component<Props, State>{
       </Modal >
     )
   }
+  renderPaymentMethods() {
+    switch (this.state.paymentState) {
+      case 0: return (
+        <Card className="payment-menu">
+          <div className="payment-info">
+            <h6 >{local.requiredAmount}</h6>
+            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{local.forInstallments}</h6>
+            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{local.dateOfPayment}</h6>
+            <h6>{this.getRequiredAmount()}</h6>
+          </div>
+          <div className="verticalLine"></div>
+          <div className="payment-icons-container">
+            <div className="payment-icon">
+              <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+              <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
+            </div>
+            <div className="payment-icon">
+              <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
+              <Button onClick={() => this.setState({ paymentState: 2 })} variant="primary">{local.earlyPayment}</Button>
+            </div>
+          </div>
+        </Card>
+      )
+      case 1: return (
+        <Card className="payment-menu">
+          <div className="payment-info" style={{ textAlign: 'center' }}>
+            <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.setState({ paymentState: 0 })}> <span className="fa fa-long-arrow-alt-right"> {local.payInstallment}</span></h6>
+          </div>
+          <div className="verticalLine"></div>
+          <div style={{width: '100%', padding: 20}}>
+            <Formik
+              enableReinitialize
+              initialValues={{ ...this.state, requiredAmount: this.getRequiredAmount() }}
+              onSubmit={this.handleSubmit}
+              validationSchema={paymentValidation}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) =>
+                <Form onSubmit={formikProps.handleSubmit}>
+                  <Form.Group as={Row}>
+                    <Form.Group as={Col} controlId="payAmount">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.installmentsToBePaid}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="number"
+                          name="payAmount"
+                          data-qc="payAmount"
+                          value={formikProps.values.payAmount.toString()}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="payAmount">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.requiredAmount}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="number"
+                          name="payAmount"
+                          data-qc="payAmount"
+                          value={formikProps.values.payAmount.toString()}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Group as={Col} controlId="payAmount">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="number"
+                          name="payAmount"
+                          data-qc="payAmount"
+                          value={formikProps.values.payAmount.toString()}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="payAmount">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="number"
+                          name="payAmount"
+                          data-qc="payAmount"
+                          value={formikProps.values.payAmount.toString()}
+                          onBlur={formikProps.handleBlur}
+                          onChange={formikProps.handleChange}
+                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                  </Form.Group>
+                </Form>
+              }
+            </Formik>
+          </div>
+        </Card>
+      )
+      default: return null;
+    }
+  }
   render() {
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable totalCount={0}  pagination={false} data={this.props.installments} mappers={this.mappers}  />
-        <div className="payment-amount-container">
+        <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
+        {/* <div className="payment-amount-container">
           <h5>{local.requiredAmount}</h5>
           <h2>{this.getRequiredAmount()}{(this.props.currency).toUpperCase()}</h2>
         </div>
         <div className="payment-buttons-container">
           <Button variant="outline-primary" onClick={() => this.handleClickEarlyPayment()}>{local.earlyPayment}</Button>
           <Button variant="outline-primary" onClick={() => this.setState({ paymentModal: true, modalType: 1 })}>{local.payInstallment}</Button>
-        </div>
+        </div> */}
+        {this.renderPaymentMethods()}
         {this.state.paymentModal && this.renderModal()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={()=> window.location.reload()} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => window.location.reload()} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
       </>
     );
   }

@@ -14,6 +14,42 @@
         text-align: center;
     }
 }
+.payment-menu {
+    flex-direction: row;
+    & .payment-info {
+        text-align: right;
+        padding: 40px 20px 25px 50px;
+        & h6:nth-child(odd){
+            color: #2a3390;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        & h6:nth-child(even){
+            color: #7dc356;
+            margin-bottom: 15px;
+        }
+        & img {
+            margin-bottom: 20px;
+        }
+    }
+    & .payment-icons-container {
+        display: flex;
+        margin: auto;
+        width: 100%;
+        justify-content: space-evenly;
+        & .payment-icon {
+            display: flex;
+            flex-direction: column;
+            & img {
+                margin-bottom: 20px;
+            }
+        }
+    }
+    
+}
+.verticalLine{
+    border-left: 1px dashed #e5e5e5;
+}
 
 .payment-buttons-container {
     display: flex;

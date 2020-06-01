@@ -424,5 +424,8 @@
     "payWhere":"طريقه دفع الفائده",
     "cash":"نقدي",
     "egp":"الجنيه المصري",
-    "newCustomer": "عميل جديد"
+    "newCustomer": "عميل جديد",
+    "forInstallments": "عن الأقساط",
+    "installmentsToBePaid": "الأقساط المراد سدادها",
+    "amountCollectedFromCustomer": "القيمة المحصلة من العميل"
 }
