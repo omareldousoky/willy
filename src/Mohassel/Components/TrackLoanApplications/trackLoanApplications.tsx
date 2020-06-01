@@ -72,9 +72,9 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   async componentDidMount() {
     this.setState({ loading: true })
-    const branchId = JSON.parse(getCookie('branches'))
+    // const branchId = JSON.parse(getCookie('branches'))
     const obj = {
-      branchId: branchId[0],
+      // branchId: branchId[0],
       from: 0,
       size: 100
     };
@@ -91,16 +91,16 @@ class TrackLoanApplications extends Component<Props, State>{
   handleSubmit = async (values) => {
     this.setState({ loading: true })
     let obj = {}
-    const branchId = JSON.parse(getCookie('branches'));
+    // const branchId = JSON.parse(getCookie('branches'));
     if (values.dateFrom === "" && values.dateTo === "") {
       obj = {
-        branchId: branchId[0],
+        // branchId: branchId[0],
         size: 20,
         from: 0,
       }
     } else {
       obj = {
-        branchId: branchId[0],
+        // branchId: branchId[0],
         fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
         toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
         size: 20,
