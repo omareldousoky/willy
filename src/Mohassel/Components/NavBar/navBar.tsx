@@ -69,7 +69,7 @@ class NavBar extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({ loading: false, selectedBranch: branch })
       document.cookie = "token=" + res.body.token + ";path=/;";
-      // const tokenData = this.parseJwt(res.body.token);
+      window.location.reload();
     } else console.log(res)
   }
   renderBranchList() {
