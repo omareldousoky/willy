@@ -400,7 +400,7 @@
     "chooseRepresentative": "اختر المندوب",
     "chooseBranch": "اختر الفرع",
     "issued": "مصدر",
-    "branchNameInavlid": "إسم الفرع يجب أن يكون من حروف فقط",
+    "branchNameInavlid": "إسم الفرع يجب أن يحتوي  على حروف ",
     "governorateNameInavlid": "المحافظة لا يمكن أن تحتوي على أرقام",
     "containLetterError": "يجب أن يحتوي على أحرف",
     "rolesIsRequired": "يجب إختيار دور للمستخدم ",
