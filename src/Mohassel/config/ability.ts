@@ -20,7 +20,6 @@ function defineRulesFor(auth) {
             can(action,name)
         })
     })
-    console.log(rules)
     return rules
 }
 ability.update(defineRulesFor(roles));

@@ -21,6 +21,7 @@ import { Location } from '../LoanCreation/loanCreation';
 import { reviewApplication, undoreviewApplication, rejectApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import { getCookie } from '../../Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+import { getLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 interface Props {
     history: any;
     location: Location;
@@ -122,6 +123,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     .split("T")[0],
                 usage: '',
                 representative: '',
+                representativeName: '',
                 enquirorId: '',
                 visitationDate: new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
                     .toISOString()
@@ -335,7 +337,21 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
         )
     }
+    async getOfficerName(id) {
+        const res = await getLoanOfficer(id);
+        const defaultApplication = this.state.application;
+        if (res.status === "success") {
+            const name = res.body.name
+            defaultApplication.representativeName = name
+        } else {
+            defaultApplication.representativeName = id;
+        }
+        this.setState({
+            application: defaultApplication
+        })
+    }
     populateCustomer(response) {
+        this.getOfficerName(response.representative);
         const defaultApplication = this.state.application;
         defaultApplication.customerName = response.customerName;
         defaultApplication.nationalId = response.nationalId;
@@ -511,7 +527,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             entryDate: new Date(obj.entryDate).valueOf(),
             usage: obj.usage,
             representative: obj.representative,
-            enquirorId: obj.enquirorId,
+            enquirorId: obj.enquirorId._id,
             visitationDate: new Date(obj.visitationDate).valueOf(),
             viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
         }
