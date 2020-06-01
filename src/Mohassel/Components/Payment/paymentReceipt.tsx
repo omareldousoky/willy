@@ -32,7 +32,6 @@ const PaymentReceipt = (props: any) => {
             <div key={index} className="receipt-container">
               <div className="receipt-header">
                 <h5>{local.tasaheelName}</h5>
-                <h5>{JSON.parse(getCookie('validbranches')).find(branch => branch._id === receiptData.branchId)?.name}</h5>
                 <h5>{local.paymentReceipt}</h5>
               </div>
               <div className="receipt-content">

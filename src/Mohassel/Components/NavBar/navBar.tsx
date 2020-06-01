@@ -47,8 +47,10 @@ class NavBar extends Component<Props, State> {
     }
     const token = getCookie('token');
     const tokenData = this.parseJwt(token);
-    if (tokenData?.requireBranch === false && branches) {
-      this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
+    if (tokenData?.requireBranch === false) {
+      if (branches) {
+        this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
+      } else this.setState({ branches: [...this.state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
     } else this.setState({ branches })
     if (tokenData.branch !== "") {
       this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
@@ -67,7 +69,7 @@ class NavBar extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({ loading: false, selectedBranch: branch })
       document.cookie = "token=" + res.body.token + ";path=/;";
-      // const tokenData = this.parseJwt(res.body.token);
+      window.location.reload();
     } else console.log(res)
   }
   renderBranchList() {
