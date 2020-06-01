@@ -58,7 +58,7 @@ export const LoanProductCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.loanNature && touched.loanNature}
                     >
-                        <option value='cash'>Cash</option>
+                        <option value='cash'>{local.cash}</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.loanNature}
@@ -76,7 +76,7 @@ export const LoanProductCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.currency && touched.currency}
                     >
-                        <option value='egp'>EGP</option>
+                        <option value='egp'>{local.egp}</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.currency}

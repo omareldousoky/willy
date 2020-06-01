@@ -79,7 +79,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     disabled
                                 >
                                     <option value="" disabled></option>
-                                    <option value='egp'>EGP</option>
+                                    <option value='egp'>{local.egp}</option>
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.currency}
@@ -295,6 +295,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     isInvalid={errors.applicationFee && touched.applicationFee}
+                                    disabled={!values.allowApplicationFeeAdjustment}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.applicationFee}
@@ -312,6 +313,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     isInvalid={errors.individualApplicationFee && touched.individualApplicationFee}
+                                    disabled={!values.allowApplicationFeeAdjustment}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.individualApplicationFee}
@@ -329,6 +331,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     isInvalid={errors.applicationFeePercent && touched.applicationFeePercent}
+                                    disabled={!values.allowApplicationFeeAdjustment}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.applicationFeePercent}
@@ -342,6 +345,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     isInvalid={errors.applicationFeeType && touched.applicationFeeType}
+                                    disabled={!values.allowApplicationFeeAdjustment}
                                 >
                                     <option value="" disabled></option>
                                     <option value='principal'>نسبة من قيمة القرض</option>
@@ -364,6 +368,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     isInvalid={errors.applicationFeePercentPerPerson && touched.applicationFeePercentPerPerson}
+                                    disabled={!values.allowApplicationFeeAdjustment}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.applicationFeePercentPerPerson}
@@ -377,6 +382,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     isInvalid={errors.applicationFeePercentPerPersonType && touched.applicationFeePercentPerPersonType}
+                                    disabled={!values.allowApplicationFeeAdjustment}
                                 >
                                     <option value="" disabled></option>
                                     <option value='principal'>نسبة من قيمة القرض</option>

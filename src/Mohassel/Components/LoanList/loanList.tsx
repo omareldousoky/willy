@@ -42,7 +42,7 @@ class LoanList extends Component<Props, State> {
       searchKeyWord: '',
       selectedRole: '',
       selectedEmployment: '',
-      selectedBranch: JSON.parse(getCookie('branches'))[0],
+      selectedBranch: '',
       dateFrom: '',
       dateTo: '',
       loading: false,
@@ -196,7 +196,7 @@ class LoanList extends Component<Props, State> {
                         name="dateTo"
                         data-qc="dateTo"
                         min={formikProps.values.dateFrom}
-                        onChange={(e) => { this.setState({ dateTo: e.currentTarget.value }); formikProps.handleChange }}
+                        onChange={(e) => { this.setState({ dateTo: e.currentTarget.value }, () => this.submit(this.state)); formikProps.handleChange }}
                         disabled={!Boolean(formikProps.values.dateFrom)}
                       >
                       </Form.Control>
@@ -208,7 +208,7 @@ class LoanList extends Component<Props, State> {
             <div className="custom-card-body">
               <div className="dropdown-container" style={{ flex: 2, marginLeft: 20 }}>
                 <p className="dropdown-label">{local.status}</p>
-                <Form.Control as="select" className="dropdown-select" data-qc="branch" value={this.state.statusFilter} onChange={(e) => this.setState({ statusFilter: e.currentTarget.value })}>
+                <Form.Control as="select" className="dropdown-select" data-qc="branch" value={this.state.statusFilter} onChange={(e) => {this.setState({ statusFilter: e.currentTarget.value }, () => this.submit(this.state)) }}>
                   <option value=""></option>
                   <option value='paid'>{local.paid}</option>
                   <option value='issued'>{local.issued}</option>

@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import {BranchesDropDown} from '../dropDowns/allDropDowns';
+import Can from '../../config/Can';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -23,6 +24,7 @@ interface State {
   dateTo: string;
   totalCount: number;
   loading: boolean;
+  selectedBranch: any;
 }
 interface Props {
   history: any;
@@ -40,6 +42,7 @@ class CustomersList extends Component<Props, State> {
       dateTo: '',
       totalCount: 0,
       loading: false,
+      selectedBranch: {}
     }
     this.mappers = [
       {
@@ -65,17 +68,17 @@ class CustomersList extends Component<Props, State> {
       {
         title: local.createdBy,
         key: "creationDate",
-        render: data => data.created.by
+        render: data => data.created?.by
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => getDateAndTime(data.created.at)
+        render: data => getDateAndTime(data.created?.at)
       },
       {
         title: '',
         key: "actions",//<span className='fa fa-eye icon'></span>
-        render: data => <> <span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></>
+        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></Can></>
       },
     ]
   }
@@ -138,12 +141,13 @@ class CustomersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>new customer</Button>
+              <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
             <Formik
+              enableReinitialize
               initialValues={this.state}
               onSubmit={this.submit}
               // validationSchema={}
@@ -203,7 +207,7 @@ class CustomersList extends Component<Props, State> {
                           <option value={10}>10</option>
                         </Form.Control>
                       </div>
-                      <BranchesDropDown />
+                      {/* <BranchesDropDown onSelectBranch={(branch) => {this.setState({selectedBranch: branch}); console.log(branch)}}/> */}
                     </div>
                   </div>
 
