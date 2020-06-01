@@ -65,7 +65,7 @@ class Payment extends Component<Props, State>{
       remainingPrincipal: 0,
       earlyPaymentFees: 0,
       requiredAmount: 0,
-      paymentState: 0,
+      paymentState: 1,
     }
     this.mappers = [
       {

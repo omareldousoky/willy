@@ -36,7 +36,7 @@ class LoanProfile extends Component<Props, State>{
         this.state = {
             prevId: '',
             application: {},
-            activeTab: 'loanDetails',
+            activeTab: 'loanPayments',
             tabsArray: [],
             loading: false,
         };
