@@ -45,7 +45,7 @@ const App = () => {
                         <Route path="/new-loan-product" render={(props) => <Can I='createLoanProduct' a='product'><LoanProductCreation /></Can>} />
                         <Route path="/assign-branch-products" render={(props) => <Can I='assignProductToBranch' a='product'> <AssignProductToBranch {...props} /> </Can>} />
                         <Route path="/new-loan-application" render={(props) => <Can I='assignProductToCustomer' a='application'><LoanApplicationCreation {...props} edit={false} /> </Can>} />
-                        <Route path="/edit-loan-application" render={(props) => <Can I='assignProductToCustomer' a='application'><LoanApplicationCreation {...props} edit={true} /> </Can>} />
+                        <Route path="/edit-loan-application" render={(props) => <LoanApplicationCreation {...props} edit={true} />} />
                         <Route path="/track-loan-applications" render={(props) => <Can I='getLoanApplication' a='application'><TrackLoanApplications /></Can>} />
                         <Route path="/create-loan" render={(props) => <Can I='createLoan' a='application'><LoanCreation {...props} /></Can>} />
                         <Route path="/loan-uses" render={(props) => <Can I='loanUsage' a='config'><LoanUses /></Can>} />
