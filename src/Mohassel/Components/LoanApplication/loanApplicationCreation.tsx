@@ -264,7 +264,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loanUsage: [], loading: true })
         const usage = await getLoanUsage();
         if (usage.status === 'success') {
-            console.log(usage)
             this.setState({
                 loanUsage: usage.body.usages,
                 loading: false
