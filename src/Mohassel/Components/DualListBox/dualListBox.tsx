@@ -42,22 +42,23 @@ class DualBox extends Component<Props, State> {
 
 
     static getDerivedStateFromProps(props, state) {
-        if(props.filterKey === 'noKey'){
-            if(props.filterKey!== state.filterKey) {
-            return{
-              filterKey: props.filterKey,
-              options: props.options,
-              selectedOptions: props.selected
-            }
-        }
-        } 
-        else if (props.filterKey !== state.filterKey) {
+    
+          if (props.filterKey !== state.filterKey) {
+              if(props.selected.length>0){
             const selectedIds = props.selected.map(item => item._id);
            
             return {
                 filterKey: props.filterKey,
                 options: props.options.filter(item => !selectedIds.includes(item._id)),
                 selectedOptions: props.selected
+            } 
+        }
+            else {
+                return {
+                filterKey: props.filterKey,
+                options: props.options,
+                selectedOptions: props.selected
+                }
             }
         
         
@@ -70,6 +71,7 @@ class DualBox extends Component<Props, State> {
             this.setState({ filterKey: this.props.filterKey })
         }
     }
+
     selectItem = (option) => {
         const arr: Array<any> = this.state.selectionArray;
         if (!arr.includes(option)) {
@@ -94,10 +96,13 @@ class DualBox extends Component<Props, State> {
         })
     }
     removeItemFromList(option) {
+        const newList =  this.state.selectedOptions.filter(item => item._id !== option._id);
+        this.props.onChange(newList);
         this.setState({
-            selectedOptions: this.state.selectedOptions.filter(item => item._id !== option._id),
+            selectedOptions: newList,
             options: [...this.state.options, option]
         })
+
     }
     selectAllOptions() {
         if (this.state.checkAll) {
@@ -113,6 +118,7 @@ class DualBox extends Component<Props, State> {
         }
     }
     removeAllFromList() {
+     this.props.onChange([]);
         this.setState({
             options: [...this.state.options, ...this.state.selectedOptions],
             selectedOptions: []

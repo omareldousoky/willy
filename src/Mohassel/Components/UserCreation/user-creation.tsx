@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { UserDataForm } from './userDataFrom';
+import { UserDataForm } from './userDataForm';
 import { withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
 import Swal from 'sweetalert2';
@@ -7,19 +7,18 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import {
-    step1,
-    step2,
+    initialStep1,
+    initialStep2,
     userCreationValidationStepOne,
     editUserValidationStepOne,
-    userCreationValidationStepTwo,
-} from './userFromInitialState';
+} from './userFormInitialState';
 import {
     Values,
     User,
     RolesBranchesValues,
     UserInfo,
 } from './userCreationinterfaces';
-import UserRolesAndPermisonsFrom from './userRolesAndPermisonsFrom';
+import UserRolesAndPermisonsFrom from './userRolesAndPermisonsForm';
 import './userCreation.scss';
 import { getUserRolesAndBranches } from '../../Services/APIs/User-Creation/getUserRolesAndBranches'
 import { createUser } from '../../Services/APIs/User-Creation/createUser';
@@ -46,8 +45,8 @@ class UserCreation extends Component<Props, State> {
         this.state = {
             step: 1,
             loading: false,
-            step1: step1,
-            step2: step2,
+            step1: initialStep1,
+            step2: initialStep2,
             branchesLabeled: [],
             rolesLabeled: [],
         }
@@ -55,7 +54,7 @@ class UserCreation extends Component<Props, State> {
     async getUser() {
         const _id = this.props.history.location.state.details;
         const res = await getUserDetails(_id);
-        const step1: Values = {
+        const step1Data: Values = {
             name: res.body.user.name,
             username: res.body.user.username,
             nationalId: res.body.user.nationalId,
@@ -69,14 +68,14 @@ class UserCreation extends Component<Props, State> {
             confirmPassword: '',
 
         }
-        const step2: RolesBranchesValues = { roles: [], branches: [] }
+        const step2data: RolesBranchesValues = { roles: [], branches: [] }
         res.body.roles?.forEach(role => {
-            step2.roles.push({ label: role.roleName, value: role._id, hasBranch: role.hasBranch });
+            step2data.roles.push({ label: role.roleName, value: role._id, hasBranch: role.hasBranch });
         }),
             res.body.branches?.forEach(branch => {
-                step2.branches?.push({ branchName: branch.name? branch.name : 'HQ', _id: branch._id });
+                step2data.branches?.push({ branchName: branch.name? branch.name : 'HQ', _id: branch._id });
             })
-        this.setState({ step1, step2 })
+        this.setState({ step1:step1Data, step2:step2data })
     }
     async getUserRolePermissions () {
         const RolesAndBranches = await getUserRolesAndBranches();
@@ -114,27 +113,21 @@ class UserCreation extends Component<Props, State> {
 
     }
       componentDidMount() {
-       
         if (this.props.edit) {
            this.setState({loading: true}, () => this.getUser())
+        }  else {
+
         }
+            
         this.setState({ loading: true },()=>this.getUserRolePermissions())
     }
-    componentDidUpdate(prevProps: Props, _prevState: State) {
-        if (prevProps.edit !== this.props.edit) {
-            this.setState({
-                step: 1,
-                step1,
-                step2,
-            })
-        }
-    }
+  
 
     cancel(): void {
         this.setState({
             step: 1,
-            step1,
-            step2,
+            step1:initialStep1,
+            step2: initialStep2,
         })
         this.props.history.push("/");
     }
@@ -156,12 +149,13 @@ class UserCreation extends Component<Props, State> {
     }
     async createUser(userObj: User) {
         const user = this.prepareUser(userObj);
+
+        this.props.history.push("/manage-accounts");
         this.setState({ loading: true });
         const res = await createUser({user});
         if (res.status === 'success') {
-            this.setState({ loading: false });
             Swal.fire("success", local.userCreated).then(() => {
-                this.props.history.push("/");
+                this.props.history.push("/manage-accounts");
             });
         } else {
             Swal.fire("error", local.userCreationError)
@@ -176,7 +170,8 @@ class UserCreation extends Component<Props, State> {
         if (res.status === 'success') {
             this.setState({ loading: false });
             Swal.fire("success", local.userEdited).then(() => {
-                this.props.history.push("/");
+                this.props.history.push("/manage-accounts");
+
             });
         } else {
             Swal.fire("error", local.userCreationError)
@@ -194,9 +189,9 @@ class UserCreation extends Component<Props, State> {
             this.setState({ step2: values } as any)
             const labeledBranches = this.state.step2.branches;
             const labeledRoles = this.state.step2.roles;
-            const branches: string[] | undefined = labeledBranches?.map(
+            const branches: string[] = labeledBranches.map(
                 (branch) => {
-                    return branch.branchName;
+                    return branch._id;
                 }
             );
 
@@ -218,6 +213,7 @@ class UserCreation extends Component<Props, State> {
             }
         }
     }
+
     getUserInfo(): UserInfo {
         const user = this.state.step1;
         return {
@@ -235,6 +231,12 @@ class UserCreation extends Component<Props, State> {
             emailAddress: "",
 
         }
+    }
+
+    componentWillUnmount() {
+        
+        initialStep2.roles = [];
+        initialStep2.branches = [];
     }
     renderStepOne(): any {
         return (
