@@ -17,6 +17,7 @@ import { LoanDetailsTableView } from './applicationsDetails';
 import { GuarantorView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard';
 import Rescheduling from '../Rescheduling/rescheduling';
+import ability from '../../config/ability';
 interface State {
     prevId: string;
     application: any;
@@ -79,7 +80,12 @@ class LoanProfile extends Component<Props, State>{
                 stringKey: 'loanReschedulingTest'
             };
             if (application.body.status === "paid") tabsToRender.push(customerCardTab)
-            if (application.body.status === "issued") tabsToRender.push(...[customerCardTab, paymentTab, reschedulingTab, reschedulingTestTab])
+            if (application.body.status === "issued") {
+                tabsToRender.push(customerCardTab)
+                if(ability.can('payInstallment','application')) tabsToRender.push(paymentTab)
+                if(ability.can('pushInstallment','application')) tabsToRender.push(reschedulingTab)
+                if(ability.can('pushInstallment','application')) tabsToRender.push(reschedulingTestTab)
+            }
             this.setState({
                 application: application.body,
                 tabsArray: tabsToRender
