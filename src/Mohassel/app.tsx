@@ -23,7 +23,7 @@ import Can from './config/Can';
 import UserDetails from './Components/userDetails/user-details';
 import CreateBranch from './Components/BranchCreation/create-branch';
 import CustomersList from './Components/CustomerCreation/customersList';
-
+import ability from './config/ability';
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
     if (getCookie('token') === '') {
@@ -51,7 +51,7 @@ const App = () => {
                         <Route path="/loan-uses" render={(props) => <Can I='loanUsage' a='config'><LoanUses /></Can>} />
                         <Route path="/bulk-approvals" render={(props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>} />
                         <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
-                        <Route path="/loan-profile" render={(props) => <Can I='getLoanApplication' a='application'> <LoanProfile {...props} /></Can>} />
+                        <Route path="/loan-profile" render={(props) =>(ability.can('getLoanApplication','application') || ability.can('getIssuedLoan','application'))?<LoanProfile {...props} />:null} />
                         <Route path="/loans" render={(props) =><Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>}/>
                         <Route exact path = "/new-user" render={(props)=> <Can I='createUser' a= 'user'><UserCreation  {...props} edit={false} /></Can> }></Route>
                         <Route exact path = "/edit-user" render={(props)=> <Can I='getUser' a= 'user'><UserCreation  {...props} edit={true} /></Can> }></Route>

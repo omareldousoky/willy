@@ -71,7 +71,7 @@ class NavBar extends Component<Props, State> {
       if(branch._id === 'hq' ){ 
         document.cookie = "selectedbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
       } else document.cookie = "selectedbranch=" + branch._id + ";path=/;";
-      window.location.reload();
+      this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
   }
