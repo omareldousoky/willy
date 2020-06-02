@@ -48,7 +48,6 @@ class Login extends React.PureComponent<Props, State> {
   setCookie(token: string, branches: string, roles: string, validbranches: string, clientPermissions: string) {
     //;domain=.halan.io
     document.cookie = "token=" + token + ";domain=.halan.io;path=/;";
-    document.cookie = "branches="+ branches +";domain=.halan.io;path=/;";
     document.cookie = "roles="+ roles +";domain=.halan.io;path=/;";
     document.cookie = "validbranches="+ validbranches +";domain=.halan.io;path=/;";
     document.cookie = "clientpermissions="+ clientPermissions +";domain=.halan.io;path=/;";
