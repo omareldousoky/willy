@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface State {
-    selectedRole?: Role;
+    selectedRole: Role;
     rolesLabels: string[];
     loading: boolean;
     allSections: Array<Section>;
@@ -23,7 +23,7 @@ export default class UserRolesView extends Component<Props, State> {
         super(props);
         this.state = {
             selectedRole: this.props.roles[0],
-            rolesLabels: [],
+            rolesLabels: this.props.roles.map((role)=>{return role.roleName}),
             allSections: [],
             loading:false,
             
@@ -44,19 +44,18 @@ export default class UserRolesView extends Component<Props, State> {
         }
     }
     handleClick = async (index: number) => {
-        this.setState({ selectedRole: this.props.roles[index] });
-        await this.getAllPermissions();
+       
+        this.setState({ selectedRole: this.props.roles[index] }, () => this.getAllPermissions());
+         
 
     };
    
      componentDidMount(){
-        this.setState({
-            rolesLabels: this.props.roles.map((role)=>{return role.roleName},()=> {
-                this.getAllPermissions()
-            })
-        })
+  
+         this.getAllPermissions() 
 
     }
+
     roleCard() {
         return (
             <>
@@ -93,7 +92,7 @@ export default class UserRolesView extends Component<Props, State> {
                 <div className="d-flex">
                         <span style={{ padding: "5px", margin: " 30px 30px 10px 0px", fontSize: 14, fontWeight:'bold' }}><img style={{ float: "right", margin:'0px 5px' }} alt="search-icon" src={require('../../Assets/permissions-inactive.svg')} /> {local.permissions}</span>
                     </div>
-                    <RoleTable sections={this.state.allSections} permissions={this.state.selectedRole?.permissions} />
+                    <RoleTable sections={this.state.allSections} permissions={this.state.selectedRole.permissions} />
             </>
         )
     }

@@ -67,13 +67,12 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      this.setState({ loading: false, selectedBranch: branch })
       document.cookie = "token=" + res.body.token + ";path=/;";
       if(branch._id === 'hq' ){ 
         document.cookie = "selectedbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
       } else document.cookie = "selectedbranch=" + branch._id + ";path=/;";
-
       window.location.reload();
+      this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
   }
   renderBranchList() {
