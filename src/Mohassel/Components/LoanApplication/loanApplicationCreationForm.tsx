@@ -11,23 +11,7 @@ import InfoBox from '../userInfoBox';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import AsyncSelect from 'react-select/async';
 
-interface LoanOfficer {
-    _id: string;
-    username: string;
-}
 export const LoanApplicationCreationForm = (props: any) => {
-    const [loading, setLoading] = useState(false);
-    const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficer>>([]);
-    const getLoanOfficers = async (inputValue: string) => {
-        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
-        if (res.status === "success") {
-            setLoanOfficers(res.body.data);
-            return res.body.data;
-        } else {
-            setLoanOfficers([]);
-            return [];
-        }
-    }
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
         <>
@@ -519,19 +503,18 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Form.Group as={Row} controlId="enquirorId">
                             <Form.Label column sm={4}>{local.enquiror}</Form.Label>
                             <Col sm={6}>
-                                <AsyncSelect
+                                <Form.Control as="select"
                                     type="select"
                                     name="enquirorId"
                                     data-qc="enquirorId"
                                     onBlur={handleBlur}
                                     isInvalid={errors.enquirorId && touched.enquirorId}
-                                    value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.enquirorId)}
-                                    onChange={(id) => setFieldValue("enquirorId", id)}
-                                    getOptionLabel={(option) => option.username}
-                                    getOptionValue={(option) => option._id}
-                                    loadOptions={getLoanOfficers}
-                                    cacheOptions defaultOptions
-                                />
+                                    value={values.enquirorId}
+                                    onChange={handleChange}
+                                >
+                                    <option value="" disabled></option>
+                                    {props.loanOfficers.map((officer) => <option key={officer._id} value={officer._id} >{officer.name}</option>)}
+                                </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.enquirorId}
                                 </Form.Control.Feedback>
