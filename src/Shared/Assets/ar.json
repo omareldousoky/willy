@@ -426,6 +426,7 @@
     "egp":"الجنيه المصري",
     "newCustomer": "عميل جديد",
     "forInstallments": "عن الأقساط",
-    "installmentsToBePaid": "الأقساط المراد سدادها",
-    "amountCollectedFromCustomer": "القيمة المحصلة من العميل"
+    "installmentToBePaid": "القسط المراد سداده",
+    "amountCollectedFromCustomer": "القيمة المحصلة من العميل",
+    "installmentsRemaining": "الأقساط المتبقية"
 }
