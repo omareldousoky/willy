@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import {BranchesDropDown} from '../dropDowns/allDropDowns';
+import Can from '../../config/Can';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -67,17 +68,17 @@ class CustomersList extends Component<Props, State> {
       {
         title: local.createdBy,
         key: "creationDate",
-        render: data => data.created.by
+        render: data => data.created?.by
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => getDateAndTime(data.created.at)
+        render: data => getDateAndTime(data.created?.at)
       },
       {
         title: '',
         key: "actions",//<span className='fa fa-eye icon'></span>
-        render: data => <> <span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></>
+        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></Can></>
       },
     ]
   }
@@ -140,7 +141,7 @@ class CustomersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button>
+              <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

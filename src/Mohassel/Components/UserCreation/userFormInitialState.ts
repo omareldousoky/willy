@@ -6,7 +6,7 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 const date: number =  new Date().valueOf();
 const today = timeToDateyyymmdd(date);
 
-export const step1: Values = {
+export const initialStep1: Values = {
     name: '',
     username: '',
     nationalId: '',
@@ -36,7 +36,7 @@ export const userBranchesOptions = [
     { label: '2الجيزة', value: '8' },
     { label: '2القاهرة', value: '9' },
 ];
-export const step2: RolesBranchesValues = {
+export const initialStep2: RolesBranchesValues = {
     roles: [],
     branches: [],
 
@@ -59,8 +59,8 @@ export const wizardStepsArr = [
 const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 export const userCreationValidationStepOne = Yup.object().shape({
-    name: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
-    username: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
+    name: Yup.string().trim().matches(/[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,local.containLetterError).max(100, local.maxLength100).required(local.required),
+    username: Yup.string().trim().matches(/[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     mobilePhoneNumber: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).min(11, local.minLength11).max(11,local.maxLength11),
     hiringDate: Yup.string().required(local.required),
@@ -85,8 +85,8 @@ export const userCreationValidationStepOne = Yup.object().shape({
 
 })
 export const editUserValidationStepOne = Yup.object().shape({
-    name: Yup.string().trim().max(100, local.maxLength100).matches(/^[^a-z]*[a-z].*$/,local.containLetterError).required(local.required),
-    username: Yup.string().trim().matches(/^[^a-z]*[a-z].*$/,local.containLetterError).max(100, local.maxLength100).required(local.required),
+    name: Yup.string().trim().max(100, local.maxLength100).matches(/[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,local.containLetterError).required(local.required),
+    username: Yup.string().trim().matches(/[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,local.containLetterError).max(100, local.maxLength100).required(local.required),
     hrCode: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     mobilePhoneNumber: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).min(11, local.minLength11).max(11, local.maxLength11),
     hiringDate: Yup.string().required(local.required) ,
@@ -106,20 +106,4 @@ export const editUserValidationStepOne = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
     ).required(local.required),
 })
-export const userCreationValidationStepTwo = Yup.object().shape({
-    roles: Yup.array().of(
-        Yup.object().shape({
-            lable: Yup.string(),
-            value: Yup.string(),
-            hasBranch: Yup.boolean()
-        })
-    ).min(1),
-    branches: Yup.array().of(
-        Yup.object().shape({
-            label: Yup.string(),
-            value: Yup.string(),
-        })
-    ),
-})
-
 

@@ -8,7 +8,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
-import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer'
+import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+
 interface Props {
     application: any;
 }
@@ -16,6 +18,8 @@ interface Props {
 //this is used in the application details tab from loanProfile
 export const LoanDetailsTableView = (props: Props) => {
     const [officer, changeOfficerName] = useState('')
+    const [loanUse, changeUse] = useState('')
+
     async function getOfficerName(id) {
         const res = await getLoanOfficer(id);
         if (res.status === "success") {
@@ -26,19 +30,59 @@ export const LoanDetailsTableView = (props: Props) => {
             return ''
         }
     }
+    async function getLoanUsages() {
+        const res = await getLoanUsage();
+        if (res.status === "success") {
+            const uses = res.body.usages
+            const value = uses.find(use => use.id === props.application.usage).name
+            changeUse(value)
+        } else {
+            console.log('Err')
+            return ''
+        }
+    }
+    function currency(val) {
+        switch (val) {
+            case 'egp':
+                return local.egp
+            default:
+                return ''
+        }
+    }
+    function interestPeriod(val) {
+        switch (val) {
+            case 'yearly':
+                return 'نسبه سنويه'
+            case 'monthly':
+                return 'نسبه شهريه'
+            default:
+                return ''
+        }
+    }
+    function periodType(val) {
+        switch (val) {
+            case 'months':
+                return 'اشهر'
+            case 'days':
+                return 'يوم'
+            default:
+                return ''
+        }
+    }
     useEffect(() => {
         getOfficerName(props.application.customer.representative);
+        getLoanUsages()
     }, [])
     return (
         <Table striped bordered style={{ textAlign: 'right' }}>
             <tbody>
                 <tr>
                     <td>{local.productName}</td>
-                    <td>{props.application.product.currency}</td>
+                    <td>{currency(props.application.product.currency)}</td>
                 </tr>
                 <tr>
                     <td>{local.currency}</td>
-                    <td>{props.application.product.currency}</td>
+                    <td>{currency(props.application.product.currency)}</td>
                 </tr>
                 <tr>
                     <td>{local.calculationFormulaId}</td>
@@ -46,7 +90,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.interest}</td>
-                    <td>{props.application.product.interest + ' ' + props.application.product.interestPeriod}</td>
+                    <td>{props.application.product.interest + ' ' + interestPeriod(props.application.product.interestPeriod)}</td>
                 </tr>
                 <tr>
                     <td>{local.inAdvanceFees}</td>
@@ -54,7 +98,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.periodLengthEvery}</td>
-                    <td>{props.application.product.periodLength + ' ' + props.application.product.periodType}</td>
+                    <td>{props.application.product.periodLength + ' ' + periodType(props.application.product.periodType)}</td>
                 </tr>
                 <tr>
                     <td>{local.gracePeriod}</td>
@@ -102,7 +146,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.usage}</td>
-                    <td>{props.application.usage}</td>
+                    <td>{loanUse}</td>
                 </tr>
                 <tr>
                     <td>{local.representative}</td>
@@ -110,7 +154,7 @@ export const LoanDetailsTableView = (props: Props) => {
                 </tr>
                 <tr>
                     <td>{local.enquiror}</td>
-                    <td>{props.application.enquirorId}</td>
+                    <td>{officer}</td>
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>

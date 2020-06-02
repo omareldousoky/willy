@@ -8,15 +8,18 @@ import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import StatusHelper from './statusHelper';
 import InfoBox from '../userInfoBox';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import AsyncSelect from 'react-select/async';
+
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
         <>
-        <Form style={{ textAlign: 'right' }} onSubmit={handleSubmit}>
-            <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                <InfoBox values={values} />
-                <div style={{ width: '100%', margin: '20px 0' }}>
-                    <h5>{local.loanInfo}</h5>
+            <Form style={{ textAlign: 'right' }} onSubmit={handleSubmit}>
+                <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
+                    <InfoBox values={values} />
+                    <div style={{ width: '100%', margin: '20px 0' }}>
+                        <h5>{local.loanInfo}</h5>
                         <Form.Group as={Row} controlId="productID">
                             <Form.Label column sm={4}>{local.productName}</Form.Label>
                             <Col sm={6}>
@@ -478,7 +481,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     isInvalid={errors.usage && touched.usage}
                                 >
                                     <option value="" disabled></option>
-                                    <option value="finance">Finance</option>
+                                    {props.loanUsage.map((usage) => <option key={usage.id} value={usage.id}>{usage.name}</option>)}
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.usage}
@@ -492,15 +495,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     type="string"
                                     name="representative"
                                     data-qc="representative"
-                                    value={values.representative}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    isInvalid={errors.representative && touched.representative}
+                                    value={values.representativeName}
                                     disabled
                                 />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.representative}
-                                </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="enquirorId">
@@ -510,13 +507,13 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     type="select"
                                     name="enquirorId"
                                     data-qc="enquirorId"
-                                    value={values.enquirorId}
                                     onBlur={handleBlur}
-                                    onChange={handleChange}
                                     isInvalid={errors.enquirorId && touched.enquirorId}
+                                    value={values.enquirorId}
+                                    onChange={handleChange}
                                 >
                                     <option value="" disabled></option>
-                                    <option value="4321234">WillyEnq</option>
+                                    {props.loanOfficers.map((officer) => <option key={officer._id} value={officer._id} >{officer.name}</option>)}
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.enquirorId}
@@ -540,81 +537,81 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
-                </div>
-                {values.noOfGuarantors > 0 && <div style={{ width: '100%', margin: '20px 0' }}>
-                    <h5>{local.guarantorInfo}</h5>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                        {values.guarantors.map((guarantor, i) =>
-                            <CustomerSearch
-                                source={i+1}
-                                key={i}
-                                style={{ width: '48%' }}
-                                handleSearch={(query) => props.handleSearch(query, i)}
-                                searchResults={guarantor.searchResults}
-                                selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
-                                selectedCustomer={guarantor.guarantor}
-                                removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
-                            />
-                        )}
                     </div>
-                </div>}
-                <div style={{ width: '100%', margin: '20px 0' }}>
-                    <h5>{local.viceCustomersInfo}</h5>
-                    <FieldArray
-                        name="viceCustomers"
-                        render={arrayHelpers => (
-                            <div>
-                                {values.viceCustomers.length > 0 && values.viceCustomers.map((customer, index) => (
-                                    <div key={index}>
-                                        {/* <Field name={`viceCustomers[${index}].name`} /> */}
-                                        <Form.Group as={Row} controlId="name">
-                                            <Form.Label column sm={4}>{local.name}</Form.Label>
-                                            <Col sm={6}>
-                                                <Form.Control
-                                                    type="text"
-                                                    name={`viceCustomers[${index}].name`}
-                                                    data-qc="name"
-                                                    value={values.viceCustomers[index].name}
-                                                    onBlur={handleBlur}
-                                                    onChange={handleChange}
-                                                />
-                                                {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].name && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
-                                                    {errors.viceCustomers[index].name}
-                                                </Form.Control.Feedback>}
-                                            </Col>
-                                        </Form.Group>
-                                        <Form.Group as={Row} controlId="phoneNumber">
-                                            <Form.Label column sm={4}>{local.phoneNumber}</Form.Label>
-                                            <Col sm={6}>
-                                                <Form.Control
-                                                    type="text"
-                                                    name={`viceCustomers.${index}.phoneNumber`}
-                                                    data-qc="phoneNumber"
-                                                    value={values.viceCustomers[index].phoneNumber}
-                                                    onBlur={handleBlur}
-                                                    onChange={handleChange}
-                                                />
-                                                {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].phoneNumber && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
-                                                    {errors.viceCustomers[index].phoneNumber}
-                                                </Form.Control.Feedback>}
-                                            </Col>
-                                        </Form.Group>
-                                        {index !== 0 && <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>}
-                                    </div>
-                                ))}
-                                {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <button
-                                    type="button"
-                                    onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</button>}
-                            </div>
-                        )}
-                    />
-                </div>
-            </fieldset>
-            {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{(values.state === 'under_review') ? local.submit : local.edit}</Button>}
-        </Form >
-         {!(values.state === 'edit' || values.state === 'under_review') && <div style={{  margin: '20px 0', border: '1px solid black', padding: 10, borderRadius: 4 }}>
-         <StatusHelper status={values.state} id={values.id} handleStatusChange={(values, status) => { props.handleStatusChange(values, status) }} application={values} />
-     </div>}
-     </>
+                    {values.noOfGuarantors > 0 && <div style={{ width: '100%', margin: '20px 0' }}>
+                        <h5>{local.guarantorInfo}</h5>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+                            {values.guarantors.map((guarantor, i) =>
+                                <CustomerSearch
+                                    source={i + 1}
+                                    key={i}
+                                    style={{ width: '48%' }}
+                                    handleSearch={(query) => props.handleSearch(query, i)}
+                                    searchResults={guarantor.searchResults}
+                                    selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
+                                    selectedCustomer={guarantor.guarantor}
+                                    removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
+                                />
+                            )}
+                        </div>
+                    </div>}
+                    <div style={{ width: '100%', margin: '20px 0' }}>
+                        <h5>{local.viceCustomersInfo}</h5>
+                        <FieldArray
+                            name="viceCustomers"
+                            render={arrayHelpers => (
+                                <div>
+                                    {values.viceCustomers.length > 0 && values.viceCustomers.map((customer, index) => (
+                                        <div key={index}>
+                                            {/* <Field name={`viceCustomers[${index}].name`} /> */}
+                                            <Form.Group as={Row} controlId="name">
+                                                <Form.Label column sm={4}>{local.name}</Form.Label>
+                                                <Col sm={6}>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name={`viceCustomers[${index}].name`}
+                                                        data-qc="name"
+                                                        value={values.viceCustomers[index].name}
+                                                        onBlur={handleBlur}
+                                                        onChange={handleChange}
+                                                    />
+                                                    {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].name && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                        {errors.viceCustomers[index].name}
+                                                    </Form.Control.Feedback>}
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} controlId="phoneNumber">
+                                                <Form.Label column sm={4}>{local.phoneNumber}</Form.Label>
+                                                <Col sm={6}>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name={`viceCustomers.${index}.phoneNumber`}
+                                                        data-qc="phoneNumber"
+                                                        value={values.viceCustomers[index].phoneNumber}
+                                                        onBlur={handleBlur}
+                                                        onChange={handleChange}
+                                                    />
+                                                    {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].phoneNumber && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                        {errors.viceCustomers[index].phoneNumber}
+                                                    </Form.Control.Feedback>}
+                                                </Col>
+                                            </Form.Group>
+                                            {index !== 0 && <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>}
+                                        </div>
+                                    ))}
+                                    {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <button
+                                        type="button"
+                                        onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</button>}
+                                </div>
+                            )}
+                        />
+                    </div>
+                </fieldset>
+                {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{(values.state === 'under_review') ? local.submit : local.edit}</Button>}
+            </Form >
+            {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ margin: '20px 0', border: '1px solid black', padding: 10, borderRadius: 4 }}>
+                <StatusHelper status={values.state} id={values.id} handleStatusChange={(values, status) => { props.handleStatusChange(values, status) }} application={values} />
+            </div>}
+        </>
     )
 }

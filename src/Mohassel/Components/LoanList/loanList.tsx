@@ -42,7 +42,7 @@ class LoanList extends Component<Props, State> {
       searchKeyWord: '',
       selectedRole: '',
       selectedEmployment: '',
-      selectedBranch: JSON.parse(getCookie('branches'))[0],
+      selectedBranch: '',
       dateFrom: '',
       dateTo: '',
       loading: false,
