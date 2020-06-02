@@ -49,14 +49,15 @@ const App = () => {
                         <Route path="/loan-uses" render={(props) => <Can I='create' a='LoanUsage'><LoanUses /></Can>} />
                         <Route path="/bulk-approvals" render={(props) => <Can I='bulkApprove' a='Application'> <BulkApplicationApproval /></Can>} />
                         <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
-                        <Route path="/loan-profile" render={(props) => <Can I='view' a='Application'> <LoanProfile {...props} /></Can>} />
-                        <Route path="/loans" render={(props) => <LoanList {...props} />}/>
-                        <Route exact path = "/new-user" render={(props)=> <Can I='create' a= 'User'><UserCreation  {...props} edit={false} /></Can> }></Route>
-                        <Route exact path = "/edit-user" render={(props)=> <Can I='edit' a= 'User'><UserCreation  {...props} edit={true} /></Can> }></Route>
-                        <Route path="/new-role" render={(props) => <RoleCreation {...props} />}/>
-                        <Route path="/role-profile" render={(props) => <RoleProfile {...props} />}/>
-                        <Route exact path="/user-details"  render={(props)=> <UserDetails {...props}/>} />
-                        <Route exact path = "/new-branch"  render={(props)=> <Can I='create' a='Branch'><CreateBranch {...props} /></Can>}/>
+                        <Route path="/loan-profile" render={(props) => <Can I='getLoanApplication' a='application'> <LoanProfile {...props} /></Can>} />
+                        <Route path="/loans" render={(props) =><Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>}/>
+                        <Route exact path = "/new-user" render={(props)=> <Can I='createUser' a= 'user'><UserCreation  {...props} edit={false} /></Can> }></Route>
+                        <Route exact path = "/edit-user" render={(props)=> <Can I='getUser' a= 'user'><UserCreation  {...props} edit={true} /></Can> }></Route>
+                        <Route path="/new-role" render={(props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false}/></Can>}/>
+                        <Route path="/edit-role" render={(props) => <Can I='getRoles' a='user'><RoleCreation {...props} edit={true}/></Can>}/>
+                        <Route path="/role-profile" render={(props) => <Can I='getRoles' a='user'><RoleProfile {...props} /></Can>}/>
+                        <Route exact path="/user-details"  render={(props)=> <Can I='getUser' a= 'user'><UserDetails {...props}/></Can>} />
+                        <Route exact path = "/new-branch"  render={(props)=> <Can I='createBranch' a='branch'><CreateBranch {...props} /></Can>}/>
                     </Switch>
                 </div>
             </BrowserRouter>

@@ -18,7 +18,10 @@ import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import { Location } from '../LoanCreation/loanCreation';
 import { reviewApplication, undoreviewApplication, rejectApplication } from '../../Services/APIs/loanApplication/stateHandler';
-
+import { getCookie } from '../../Services/getCookie';
+import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 interface Props {
     history: any;
     location: Location;
@@ -55,6 +58,8 @@ interface State {
     guarantor2Res: Results;
     formulas: Array<Formula>;
     products: Array<object>;
+    loanUsage: Array<object>;
+    loanOfficers: Array<object>;
     guarantor1: any;
     guarantor2: any;
     viceCustomers: Array<Vice>;
@@ -141,6 +146,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 empty: false
             },
             formulas: [],
+            loanUsage: [],
+            loanOfficers: [],
             products: [],
             guarantor1Res: {
                 results: [],
@@ -181,6 +188,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     setappStats() {
         this.getProducts();
         this.getFormulas();
+        this.getLoanUsage();
+        this.getLoanOfficers();
         if (this.state.prevId.length > 0) {
             this.getAppByID(this.state.prevId)
         } else {
@@ -252,17 +261,48 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    async getProducts() {
-        this.setState({ products: [], loading: true })
-        const products = await getProducts();
-        if (products.status === 'success') {
+    async getLoanUsage() {
+        this.setState({ loanUsage: [], loading: true })
+        const usage = await getLoanUsage();
+        if (usage.status === 'success') {
             this.setState({
-                products: products.body.data.data,
+                loanUsage: usage.body.usages.filter(usage => usage.activated),
                 loading: false
             })
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
+        }
+    }
+    async getLoanOfficers() {
+        this.setState({ loanOfficers: [], loading: true })
+        const res = await searchLoanOfficer({ from: 0, size: 100 });
+        if (res.status === "success") {
+            this.setState({
+                loanOfficers: res.body.data.filter(officer => officer.status === 'active'),
+                loading: false
+            });
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
+    }
+    async getProducts() {
+        this.setState({ products: [], loading: true })
+        const branchId = getCookie('selectedbranch');
+        if (branchId.length > 0) {
+            const products = await getProductsByBranch(branchId);
+            if (products.status === 'success') {
+                this.setState({
+                    products: products.body.data.productIds,
+                    loading: false
+                })
+            } else {
+                Swal.fire('', local.searchError, 'error');
+                this.setState({ loading: false });
+            }
+        } else {
+            Swal.fire('', local.selectBranch, 'error');
         }
     }
     handleSearch = async (query) => {
@@ -534,6 +574,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         <LoanApplicationCreationForm {...formikProps}
                             formulas={this.state.formulas}
                             products={this.state.products}
+                            loanOfficers={this.state.loanOfficers}
                             getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
                             handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
                             selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}

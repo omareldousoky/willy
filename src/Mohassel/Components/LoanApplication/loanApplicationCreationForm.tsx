@@ -8,6 +8,9 @@ import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import StatusHelper from './statusHelper';
 import InfoBox from '../userInfoBox';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import AsyncSelect from 'react-select/async';
+
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
@@ -510,7 +513,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     isInvalid={errors.enquirorId && touched.enquirorId}
                                 >
                                     <option value="" disabled></option>
-                                    <option value="4321234">WillyEnq</option>
+                                    {props.loanOfficers.map((officer) => <option key={officer._id} value={officer._id} >{officer.name}</option>)}
                                 </Form.Control>
                                 <Form.Control.Feedback type="invalid">
                                     {errors.enquirorId}

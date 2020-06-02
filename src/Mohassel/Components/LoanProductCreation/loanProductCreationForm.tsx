@@ -550,6 +550,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     isInvalid={errors.spreadApplicationFee && touched.spreadApplicationFee}
+                                    disabled
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.spreadApplicationFee}
