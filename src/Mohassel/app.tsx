@@ -52,7 +52,7 @@ const App = () => {
                         <Route path="/bulk-approvals" render={(props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>} />
                         <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
                         <Route path="/loan-profile" render={(props) => <Can I='getLoanApplication' a='application'> <LoanProfile {...props} /></Can>} />
-                        <Route path="/loans" render={(props) =><Can I='getLoanApplication' a='application'> <LoanList {...props} /></Can>}/>
+                        <Route path="/loans" render={(props) =><Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>}/>
                         <Route exact path = "/new-user" render={(props)=> <Can I='createUser' a= 'user'><UserCreation  {...props} edit={false} /></Can> }></Route>
                         <Route exact path = "/edit-user" render={(props)=> <Can I='getUser' a= 'user'><UserCreation  {...props} edit={true} /></Can> }></Route>
                         <Route path="/new-role" render={(props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false}/></Can>}/>
