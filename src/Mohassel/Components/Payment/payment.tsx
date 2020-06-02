@@ -309,7 +309,12 @@ class Payment extends Component<Props, State>{
           </div>
         </Card>
       )
-      case 1: return (
+      case 1: 
+      const options = [];
+      this.props.installments.forEach(installment => {
+        options.push({value: installment.id, label: installment.id})
+      })
+      return (
         <Card className="payment-menu">
           <div className="payment-info" style={{ textAlign: 'center' }}>
             <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
@@ -336,9 +341,10 @@ class Payment extends Component<Props, State>{
                           name="installmentsToBePaid"
                           data-qc="installmentsToBePaid"
                           // value={formikProps.values.payAmount.toString()}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                          options={options}
+                          // onBlur={formikProps.handleBlur}
+                          // onChange={formikProps.handleChange}
+                          // isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
                         >
                         </Select>
                       </Col>
