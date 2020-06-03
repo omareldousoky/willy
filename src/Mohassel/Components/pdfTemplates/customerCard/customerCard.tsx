@@ -1,6 +1,9 @@
 import React from 'react';
 import './customerCard.scss';
-const CustomerCardPDF = () => {
+import * as local from '../../../../Shared/Assets/ar.json';
+
+const CustomerCardPDF = (props) => {
+    console.log('props', props)
     return (
         <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
             <table>
@@ -33,7 +36,7 @@ const CustomerCardPDF = () => {
                     <tr>
                         <td> المجموعه
 					<div className="frame">٠٠٦/٠٠١١٩٩٤</div>
-                            <div className="frame">مني نور الدين عباس مبروك</div>
+                            <div className="frame">{props.data.customer.customerName}</div>
                         </td>
                         <td> التاريخ
 					<div className="frame">٢٠٢٠/٠٥/٠٥</div>
@@ -49,14 +52,14 @@ const CustomerCardPDF = () => {
             <table>
                 <tbody>
                     <tr>
-                        <td>قيمة التمويل <div className="frame">٥٢٠٠٠</div>
+                        <td>قيمة التمويل <div className="frame">{props.data.principle}</div>
                         </td>
-                        <td>فترة السداد <div className="frame">كل ١٥ يوم</div>
+                        <td>فترة السداد <div className="frame">كل {props.data.product.periodLength} {local[props.data.product.periodType]}</div>
                         </td>
-                        <td>عدد الاقساط <div className="frame">٢٤</div>
+                        <td>عدد الاقساط <div className="frame">{props.data.installmentsObject.installments.length}</div>
                         </td>
                         <td>فترة السماح
-					<div className="frame">٠</div>
+					<div className="frame">{props.data.product.gracePeriod}</div>
                             <div className="frame">شراء بضاعه وخدمات</div>
                         </td>
                     </tr>
@@ -71,88 +74,16 @@ const CustomerCardPDF = () => {
                         <th>القيمه</th>
                         <th style={{ width: "40%" }}>ملاحظات</th>
                     </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
+                    {props.data.installmentsObject.installments.map(installment => {
+                        return (<tr key={installment.id}>
+                            <td>{installment.id}</td>
+                            <td>{new Date(installment.dateOfPayment).toISOString().slice(0, 10)}</td>
+                            <td>{installment.installmentResponse}</td>
+                            <td></td>
+                        </tr>)
+                    })}
                 </tbody>
             </table>
-
-
             <table className="tablestyle" style={{ border: "1px black solid" }}>
                 <tbody>
                     <tr>
@@ -200,7 +131,7 @@ const CustomerCardPDF = () => {
 
                 </tbody>
             </table>
-            <div style={{textAlign: 'right'}}>
+            <div style={{ textAlign: 'right' }}>
                 <div className="bold frame title2">
                     <u>تعليمات خاصه بالسداد</u>
                 </div>

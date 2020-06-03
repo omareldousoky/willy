@@ -126,6 +126,7 @@ class LoanProfile extends Component<Props, State>{
                     <div className="print-none">
                         <div className="d-flex justify-content-between">
                             <h3>{local.loanDetails}</h3>
+                                <Button onClick={() => {this.setState({print : true}, () => window.print())}}>print</Button>
                             <div>
                                 <span style={{ display: 'flex', padding: 10, borderRadius: 30, backgroundColor: englishToArabic(this.state.application.status).color }}>
                                     <p style={{ margin: 0, color: 'white' }}>{englishToArabic(this.state.application.status).text}</p>
@@ -147,10 +148,9 @@ class LoanProfile extends Component<Props, State>{
                                 {this.renderContent()}
                             </div>
                         </Card>
-                        <Button onClick={() => {this.setState({print : true}, () => window.print())}}>print</Button>
                     </div>
                 }
-            {this.state.print && <CustomerCardPDF/>}
+            {this.state.print && <CustomerCardPDF data={this.state.application}/>}
             </Container>
         )
     }
