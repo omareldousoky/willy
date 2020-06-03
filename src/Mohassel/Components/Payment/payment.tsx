@@ -15,6 +15,7 @@ import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarl
 import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
 import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
+import Can from '../../config/Can';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
@@ -193,7 +194,7 @@ class Payment extends Component<Props, State>{
   getInstallmentsRemaining() {
     const installmentsRemaining: Array<number> = [];
     this.props.installments.forEach(installment => {
-      if(installment.status !== 'paid')
+      if (installment.status !== 'paid')
         installmentsRemaining.push(installment.id);
     })
     return installmentsRemaining.toString();
@@ -216,10 +217,12 @@ class Payment extends Component<Props, State>{
               <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
               <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
             </div>
-            <div className="payment-icon">
-              <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
-              <Button onClick={() => this.handleClickEarlyPayment()} variant="primary">{local.earlyPayment}</Button>
-            </div>
+            <Can I='payEarly' a='application'>
+              <div className="payment-icon">
+                <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
+                <Button onClick={() => this.handleClickEarlyPayment()} variant="primary">{local.earlyPayment}</Button>
+              </div>
+            </Can>
           </div>
         </Card>
       )
