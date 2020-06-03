@@ -47,7 +47,8 @@ const App = () => {
                         <Route path="/new-loan-application" render={(props) => <Can I='assignProductToCustomer' a='application'><LoanApplicationCreation {...props} edit={false} /> </Can>} />
                         <Route path="/edit-loan-application" render={(props) => <LoanApplicationCreation {...props} edit={true} />} />
                         <Route path="/track-loan-applications" render={(props) => <Can I='getLoanApplication' a='application'><TrackLoanApplications /></Can>} />
-                        <Route path="/create-loan" render={(props) => <Can I='createLoan' a='application'><LoanCreation {...props} /></Can>} />
+                        <Route path="/create-loan" render={(props) => (ability.can( 'createLoan', 'application') || ability.can('issueLoan','application'))?<LoanCreation {...props} /> : null} />
+
                         <Route path="/loan-uses" render={(props) => <Can I='loanUsage' a='config'><LoanUses /></Can>} />
                         <Route path="/bulk-approvals" render={(props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>} />
                         <Route path="/manage-accounts" render={(props) => <ManageAccounts />} />
