@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import CustomerCreation from './Components/CustomerCreation/customer-creation';
 import UserCreation from './Components/UserCreation/user-creation';
@@ -26,6 +26,9 @@ import CustomersList from './Components/CustomerCreation/customersList';
 import ability from './config/ability';
 const App = () => {
     // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
+    useEffect(() => {
+        console.log('go')
+    }, [])
     if (getCookie('token') === '') {
         window.location.href = process.env.REACT_APP_LOGIN_URL || ''
         return <></>
