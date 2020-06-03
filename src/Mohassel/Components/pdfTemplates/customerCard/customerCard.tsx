@@ -52,7 +52,7 @@ const CustomerCardPDF = (props) => {
             <table>
                 <tbody>
                     <tr>
-                        <td>قيمة التمويل <div className="frame">{props.data.principle}</div>
+                        <td>قيمة التمويل <div className="frame">{props.data.principal}</div>
                         </td>
                         <td>فترة السداد <div className="frame">كل {props.data.product.periodLength} {local[props.data.product.periodType]}</div>
                         </td>
