@@ -1,6 +1,6 @@
 import React from 'react';
 import './customerCard.scss';
-const CustomerCard = () => {
+const CustomerCardPDF = () => {
     return (
         <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
             <table>
@@ -233,4 +233,4 @@ const CustomerCard = () => {
     )
 }
 
-export default CustomerCard;
+export default CustomerCardPDF;

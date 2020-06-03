@@ -18,7 +18,7 @@ import { GuarantorView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard';
 import Rescheduling from '../Rescheduling/rescheduling';
 import ability from '../../config/ability';
-import CustomerCard from '../pdfTemplates/customerCard/customerCard';
+import CustomerCardPDF from '../pdfTemplates/customerCard/customerCard';
 import Button from 'react-bootstrap/Button';
 interface State {
     prevId: string;
@@ -150,7 +150,7 @@ class LoanProfile extends Component<Props, State>{
                         <Button onClick={() => {this.setState({print : true}, () => window.print())}}>print</Button>
                     </div>
                 }
-            {this.state.print && <CustomerCard/>}
+            {this.state.print && <CustomerCardPDF/>}
             </Container>
         )
     }
