@@ -191,7 +191,7 @@ class Payment extends Component<Props, State>{
     }
   }
   getInstallmentsRemaining() {
-    const installmentsRemaining: Array<Number> = [];
+    const installmentsRemaining: Array<number> = [];
     this.props.installments.forEach(installment => {
       if(installment.status !== 'paid')
         installmentsRemaining.push(installment.id);
