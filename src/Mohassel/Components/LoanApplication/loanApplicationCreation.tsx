@@ -22,6 +22,7 @@ import { reviewApplication, undoreviewApplication, rejectApplication } from '../
 import { getCookie } from '../../Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { parseJwt } from '../../Services/utils';
 interface Props {
     history: any;
     location: Location;
@@ -291,9 +292,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async getProducts() {
         this.setState({ products: [], loading: true })
-        const branchId = getCookie('selectedbranch');
-        if (branchId.length > 0) {
-            const products = await getProductsByBranch(branchId);
+        const token = getCookie('token');
+        const tokenData = parseJwt(token);
+        if (tokenData?.requireBranch === true) {
+            const products = await getProductsByBranch(tokenData.branch);
             if (products.status === 'success') {
                 this.setState({
                     products: products.body.data.productIds,
