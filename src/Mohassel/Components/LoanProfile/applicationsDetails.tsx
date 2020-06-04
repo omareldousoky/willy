@@ -10,6 +10,7 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
+import { beneficiaryType, currency, interestPeriod, periodType } from  '../../Services/utils';
 
 interface Props {
     application: any;
@@ -41,34 +42,6 @@ export const LoanDetailsTableView = (props: Props) => {
             return ''
         }
     }
-    function currency(val) {
-        switch (val) {
-            case 'egp':
-                return local.egp
-            default:
-                return ''
-        }
-    }
-    function interestPeriod(val) {
-        switch (val) {
-            case 'yearly':
-                return 'نسبه سنويه'
-            case 'monthly':
-                return 'نسبه شهريه'
-            default:
-                return ''
-        }
-    }
-    function periodType(val) {
-        switch (val) {
-            case 'months':
-                return 'اشهر'
-            case 'days':
-                return 'يوم'
-            default:
-                return ''
-        }
-    }
     useEffect(() => {
         getOfficerName(props.application.customer.representative);
         getLoanUsages()
@@ -77,8 +50,8 @@ export const LoanDetailsTableView = (props: Props) => {
         <Table striped bordered style={{ textAlign: 'right' }}>
             <tbody>
                 <tr>
-                    <td>{local.productName}</td>
-                    <td>{currency(props.application.product.currency)}</td>
+                    <td>{local.customerType}</td>
+                    <td>{beneficiaryType(props.application.product.beneficiaryType)}</td>
                 </tr>
                 <tr>
                     <td>{local.currency}</td>
