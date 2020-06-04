@@ -138,7 +138,7 @@ class Payment extends Component<Props, State>{
     // const todaysDate = new Date("2020-06-30").valueOf();
     const todaysDate = new Date().valueOf();
     let total = 0;
-    let installments: Array<number> = [];
+    const installments: Array<number> = [];
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
         if (installment.status !== "paid")
