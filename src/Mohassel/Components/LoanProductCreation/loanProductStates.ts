@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 
 export const LoanProductValidation = Yup.object().shape({
     productName: Yup.string().required('required!'),
+    beneficiaryType: Yup.string().required('required!'),
     calculationFormulaId: Yup.string().required('required!'),
     periodLength: Yup.number().integer('Must be int').min(1, "Can't be less than 1").required('required!'),
     noOfInstallments: Yup.number().integer('Must be int').min(Yup.ref('minInstallment'), "Can't be less than minimum").max(Yup.ref('maxInstallment'), "Can't be more than maximum").required('required!'),

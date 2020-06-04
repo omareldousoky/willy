@@ -26,6 +26,28 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
+            <Form.Group as={Row} controlId="beneficiaryType">
+                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.customerType}</Form.Label>
+                <Col sm={6}>
+                    <Form.Control as="select"
+                        name="beneficiaryType"
+                        data-qc="beneficiaryType"
+                        value={values.beneficiaryType}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        isInvalid={errors.beneficiaryType && touched.beneficiaryType}
+                        disabled
+                    >
+                        <option value=''></option>
+                        <option value='individual'>{local.individual}</option>
+                        <option value='group'>{local.group}</option>
+
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.beneficiaryType}
+                    </Form.Control.Feedback>
+                </Col>
+            </Form.Group>
             <Form.Group as={Row} controlId="calculationFormulaId">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.calculationFormulaId}</Form.Label>
                 <Col sm={6}>
@@ -711,23 +733,23 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Row} controlId="noOfGuarantors">
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfGuarantors}</Form.Label>
-                        <Col sm={6}>
-                            <Form.Control
-                                type="number"
-                                name="noOfGuarantors"
-                                data-qc="noOfGuarantors"
-                                value={values.noOfGuarantors}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.noOfGuarantors && touched.noOfGuarantors}
-                                disabled={!values.mustEnterGuarantor}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.noOfGuarantors}
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
+                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfGuarantors}</Form.Label>
+                    <Col sm={6}>
+                        <Form.Control
+                            type="number"
+                            name="noOfGuarantors"
+                            data-qc="noOfGuarantors"
+                            value={values.noOfGuarantors}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.noOfGuarantors && touched.noOfGuarantors}
+                            disabled={!values.mustEnterGuarantor}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.noOfGuarantors}
+                        </Form.Control.Feedback>
+                    </Col>
+                </Form.Group>
                 <Form.Group as={Row} controlId='guarantorGuaranteesMultiple'>
                     <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
                     <Form.Check
