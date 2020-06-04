@@ -9,12 +9,6 @@ function subjectName(item) {
     return item.__type
 }
 const ability = new Ability([], { subjectName });
-store.subscribe(() => {
-    if (store.getState().auth.loading === false) {
-        const clientPermissions = store.getState().auth.clientPermissions
-        ability.update(defineRulesFor(clientPermissions));
-    }
-});
 function defineRulesFor(clientPermissions) {
     const { can, rules } = new AbilityBuilder<Ability>(Ability);
     Object.keys(clientPermissions).forEach(key => {
@@ -25,5 +19,11 @@ function defineRulesFor(clientPermissions) {
     })
     return rules
 }
+store.subscribe(() => {
+    if (store.getState().auth.loading === false) {
+        const clientPermissions = store.getState().auth.clientPermissions
+        ability.update(defineRulesFor(clientPermissions));
+    }
+});
 
 export default ability;

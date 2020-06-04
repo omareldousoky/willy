@@ -73,7 +73,7 @@ const App = (props) => {
     }
 };
 
-let mapMethodsToProps = dispatch => {
+const mapMethodsToProps = dispatch => {
     return {
         getAuthData: () => dispatch(getAuthData())
     };
