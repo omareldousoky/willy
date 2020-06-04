@@ -8,9 +8,6 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
 import { CardNavBar, Tab } from '../HeaderWithCards/headerWithCards'
-import UsersList from '../ManageAccounts/usersList';
-import { getCookie } from '../../Services/getCookie';
-
 import Logs from './applicationLogs';
 import Card from 'react-bootstrap/Card';
 import { LoanDetailsTableView } from './applicationsDetails';

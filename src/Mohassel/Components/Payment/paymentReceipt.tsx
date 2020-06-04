@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
-import { getCookie } from '../../Services/getCookie'
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 

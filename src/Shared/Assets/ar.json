@@ -425,5 +425,9 @@
     "cash":"نقدي",
     "egp":"الجنيه المصري",
     "newCustomer": "عميل جديد",
+    "forInstallments": "عن الأقساط",
+    "installmentToBePaid": "القسط المراد سداده",
+    "amountCollectedFromCustomer": "القيمة المحصلة من العميل",
+    "installmentsRemaining": "الأقساط المتبقية",
     "days": "ايام"
 }

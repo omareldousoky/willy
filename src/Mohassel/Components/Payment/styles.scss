@@ -1,18 +1,43 @@
-.payment-amount-container {
-    border-radius: 40px;
-    border: 1px black solid;
-    margin: 50px auto;
-    height: 200px;
-    width: 60%;
-    h5 {
-        margin: 50px 100px 10px 0px;
+.payment-menu {
+    flex-direction: row;
+    & .payment-info {
         text-align: right;
+        padding: 40px 20px 25px 50px;
+        & h6:nth-child(odd){
+            color: #2a3390;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        & h6:nth-child(even){
+            color: #7dc356;
+            margin-bottom: 15px;
+        }
+        & img {
+            margin-bottom: 20px;
+        }
     }
-    h2 {
-        color: #7dc356;
-        font-weight: bolder;
-        text-align: center;
+    & .payment-icons-container {
+        display: flex;
+        margin: auto;
+        width: 100%;
+        justify-content: space-evenly;
+        & .payment-icon {
+            display: flex;
+            flex-direction: column;
+            & img {
+                margin-bottom: 20px;
+            }
+        }
     }
+    & .payments-buttons-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px 15px;
+    }
+    
+}
+.verticalLine{
+    border-left: 1px dashed #e5e5e5;
 }
 
 .payment-buttons-container {
