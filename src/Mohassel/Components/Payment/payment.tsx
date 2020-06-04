@@ -64,7 +64,7 @@ class Payment extends Component<Props, State>{
       earlyPaymentFees: 0,
       requiredAmount: 0,
       paymentState: 0,
-      installmentNumber: -1
+      installmentNumber: -1,
     }
     this.mappers = [
       {
@@ -138,13 +138,15 @@ class Payment extends Component<Props, State>{
     // const todaysDate = new Date("2020-06-30").valueOf();
     const todaysDate = new Date().valueOf();
     let total = 0;
+    const installments: Array<number> = [];
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
         if (installment.status !== "paid")
           total = total + installment.installmentResponse - installment.totalPaid;
+          installments.push(installment.id);
       } else return total;
     })
-    return total;
+    return {total: total, installments: installments};
   }
   handleSubmit = async (values) => {
     this.setState({ loadingFullScreen: true })
@@ -205,11 +207,11 @@ class Payment extends Component<Props, State>{
         <Card className="payment-menu">
           <div className="payment-info">
             <h6 >{local.requiredAmount}</h6>
-            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{this.getRequiredAmount().total}</h6>
             <h6>{local.forInstallments}</h6>
-            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{this.getRequiredAmount().installments.toString()}</h6>
             <h6>{local.dateOfPayment}</h6>
-            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{}</h6>
           </div>
           <div className="verticalLine"></div>
           <div className="payment-icons-container">
@@ -252,7 +254,10 @@ class Payment extends Component<Props, State>{
                           <Form.Control as="select"
                             name="installmentNumber"
                             data-qc="installmentNumber"
-                            onChange={formikProps.handleChange}
+                            onChange={(event) => {
+                              formikProps.setFieldValue('installmentNumber', event.currentTarget.value);
+                              formikProps.setFieldValue('requiredAmount', this.props.installments.find(installment => installment.id === Number(event.currentTarget.value))?.installmentResponse);
+                            }}
                           >
                             <option value={-1}></option>
                             {this.props.installments.map(installment => {
@@ -268,7 +273,7 @@ class Payment extends Component<Props, State>{
                           <Form.Control
                             type="number"
                             name="requiredAmount"
-                            value={this.getRequiredAmount()}
+                            value={formikProps.values.requiredAmount || this.getRequiredAmount().total}
                             disabled
                           >
                           </Form.Control>
