@@ -1,3 +1,5 @@
+import * as local from '../../Shared/Assets/ar.json';
+
 export const timeToDate = (timeStampe: number): any =>{
   if(timeStampe>0){
     const date = new Date(timeStampe).toLocaleDateString();
@@ -28,3 +30,41 @@ export function parseJwt(token: string) {
     return null;
   }
 };
+export  function beneficiaryType(val: string){
+  switch (val) {
+      case 'individual':
+          return local.individual
+      case 'group':
+          return local.group
+      default:
+          return ''
+  }
+}
+export function currency(val: string) {
+  switch (val) {
+      case 'egp':
+          return local.egp
+      default:
+          return ''
+  }
+}
+export function interestPeriod(val: string) {
+  switch (val) {
+      case 'yearly':
+          return 'نسبه سنويه'
+      case 'monthly':
+          return 'نسبه شهريه'
+      default:
+          return ''
+  }
+}
+export function periodType(val: string) {
+  switch (val) {
+      case 'months':
+          return 'اشهر'
+      case 'days':
+          return 'يوم'
+      default:
+          return ''
+  }
+}

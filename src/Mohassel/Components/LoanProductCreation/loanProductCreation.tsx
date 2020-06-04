@@ -27,6 +27,7 @@ class LoanProductCreation extends Component<Props, State>{
         this.state = {
             product: {
                 productName: '',
+                beneficiaryType: 'individual',
                 calculationFormulaId: '',
                 loanNature: 'cash',
                 currency: 'egp',

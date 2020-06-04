@@ -429,5 +429,7 @@
     "installmentToBePaid": "القسط المراد سداده",
     "amountCollectedFromCustomer": "القيمة المحصلة من العميل",
     "installmentsRemaining": "الأقساط المتبقية",
-    "days": "ايام"
+    "individual":"فردي",
+    "group":"مجموعة",
+    "days": "ايام",
 }

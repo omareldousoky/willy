@@ -14,9 +14,11 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { DownloadReviewedPdf } from '../PDF/documentExport';
 import Can from '../../config/Can';
 import {englishToArabic} from '../../Services/statusLanguage'
+import { beneficiaryType } from '../../Services/utils';
 interface Product {
   productName: string;
   loanNature: string;
+  beneficiaryType: string;
 }
 interface CustomerInfo {
   customerName: string;
@@ -244,7 +246,7 @@ class TrackLoanApplications extends Component<Props, State>{
               .map((loanItem, index) => {
                 return (
                   <tr key={index}>
-                    <td></td>
+                    <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
                     <td onClick={()=>this.goToLoan(loanItem.id)}>{loanItem.id}</td>
                     <td>{loanItem.application.customer.customerName}</td>
                     <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
