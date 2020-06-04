@@ -6,7 +6,6 @@ import { Formik } from 'formik';
 import { withRouter } from 'react-router-dom';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
-import { getCookie } from '../../Services/getCookie';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import Swal from 'sweetalert2';
