@@ -10,6 +10,7 @@ import Can from '../../config/Can';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCookie } from '../../Services/getCookie';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
+import store from '../../redux/store';
 import './styles.scss';
 
 interface Props {
@@ -41,20 +42,24 @@ class NavBar extends Component<Props, State> {
     }
   }
   componentDidMount() {
-    const branches = JSON.parse(getCookie("validbranches"));
-    if (branches?.length === 1) {
-      this.setState({ selectedBranch: branches[0], branches: branches })
-    }
-    const token = getCookie('token');
-    const tokenData = this.parseJwt(token);
-    if (tokenData?.requireBranch === false) {
-      if (branches) {
-        this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
-      } else this.setState({ branches: [...this.state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
-    } else this.setState({ branches })
-    if (tokenData.branch !== "") {
-      this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
-    }
+    store.subscribe(() => {
+      if (store.getState().auth.loading === false) {
+        const branches = store.getState().auth.validBranches;
+        if (branches?.length === 1) {
+          this.setState({ selectedBranch: branches[0], branches: branches })
+        }
+        const token = getCookie('token');
+        const tokenData = this.parseJwt(token);
+        if (tokenData?.requireBranch === false) {
+          if (branches) {
+            this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
+          } else this.setState({ branches: [...this.state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
+        } else this.setState({ branches })
+        if (tokenData.branch !== "") {
+          this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
+        }
+      }
+    });
   }
   parseJwt(token: string) {
     try {
@@ -68,7 +73,7 @@ class NavBar extends Component<Props, State> {
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
       document.cookie = "token=" + res.body.token + ";path=/;";
-      if(branch._id === 'hq' ){ 
+      if (branch._id === 'hq') {
         document.cookie = "selectedbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
       } else document.cookie = "selectedbranch=" + branch._id + ";path=/;";
       this.props.history.push('/');
@@ -115,9 +120,6 @@ class NavBar extends Component<Props, State> {
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "roles=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "validbranches=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "clientpermissions=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             document.cookie = "selectedbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
           }}>{local.logOut}</Button>
