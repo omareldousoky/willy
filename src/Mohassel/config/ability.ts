@@ -1,5 +1,5 @@
 import { Ability, AbilityBuilder } from "@casl/ability";
-import { getCookie } from '../Services/getCookie';
+import store from '../redux/store';
 
 // Defines how to detect object's type
 function subjectName(item) {
@@ -9,19 +9,21 @@ function subjectName(item) {
     return item.__type
 }
 const ability = new Ability([], { subjectName });
-const roles = JSON.parse(getCookie('roles'))
-
-function defineRulesFor(auth) {
+function defineRulesFor(clientPermissions) {
     const { can, rules } = new AbilityBuilder<Ability>(Ability);
-    const perms = JSON.parse(getCookie('clientpermissions'));
-    Object.keys(perms).forEach(key => {
+    Object.keys(clientPermissions).forEach(key => {
         const name = key.split('/')[1]
-        perms[key].forEach(action => {
+        clientPermissions[key].forEach(action => {
             can(action,name)
         })
     })
     return rules
 }
-ability.update(defineRulesFor(roles));
+store.subscribe(() => {
+    if (store.getState().auth.loading === false) {
+        const clientPermissions = store.getState().auth.clientPermissions
+        ability.update(defineRulesFor(clientPermissions));
+    }
+});
 
 export default ability;
