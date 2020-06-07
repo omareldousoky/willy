@@ -1,0 +1,99 @@
+@media print {
+    customer-card-attachments-print {
+        font-size: 10px;
+        font-weight: bold;
+        max-width: 700px;
+
+        & .single {
+            display: inline-grid;
+            width: 100%;
+            grid-template-columns: 100%;
+            justify-items: right;
+            align-items: right;
+            padding-bottom: 3px;
+        }
+
+        & .double {
+            display: inline-grid;
+            width: 100%;
+            /* grid-template-rows: 50% 50%; */
+            grid-template-columns: 50% 50%;
+            /* grid-gap: 3px; */
+            justify-items: right;
+            align-items: right;
+            padding-bottom: 5px;
+        }
+
+        & .triple {
+            display: inline-grid;
+            width: 100%;
+            /* grid-template-rows: 33% 33% 33%; */
+            grid-template-columns: 33% 33% 33%;
+            /* grid-gap: 3px; */
+            justify-items: right;
+            align-items: right;
+            padding-bottom: 5px;
+        }
+
+        & .quadruple {
+            display: inline-grid;
+            width: 100%;
+            /* grid-template-rows: 25% 25% 25% 25%; */
+            grid-template-columns: 25% 25% 25% 25%;
+            /* grid-gap: 3px; */
+            justify-items: right;
+            align-items: right;
+            padding-bottom: 5px;
+        }
+
+        & .head,
+        .client,
+        .first_guarantor,
+        .second_guarantor,
+        .endorsement,
+        .sign {
+            border: 1px black solid;
+            padding: 10px;
+        }
+
+        & .head {
+            text-align: center;
+        }
+
+        & .endorsement {
+            text-align: center;
+            line-height: 2em;
+        }
+
+        & .head,
+        .title {
+            font-size: 12px;
+        }
+
+        & .headtitle {
+            font-size: 14px;
+            font-weight: bolder;
+        }
+
+        & .head table {
+            width: 100%;
+        }
+
+        & .value {
+            display: inline-block;
+            text-align: right;
+        }
+
+        & .property {
+            border: 1px solid black;
+            padding: 2px;
+        }
+    }
+}
+
+@media screen {
+    .customer-card-attachments-print {
+        max-width: 700px;
+        display: none;
+    }
+}

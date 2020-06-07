@@ -11,9 +11,9 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
 import { searchApplicationValidation } from './searchApplicationValidation';
 import * as local from '../../../Shared/Assets/ar.json';
-import { DownloadReviewedPdf } from '../PDF/documentExport';
+import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications';
 import Can from '../../config/Can';
-import {englishToArabic} from '../../Services/statusLanguage'
+import { englishToArabic } from '../../Services/statusLanguage'
 import { beneficiaryType } from '../../Services/utils';
 interface Product {
   productName: string;
@@ -52,6 +52,7 @@ interface State {
   filteredLoanOfficer: string;
   selectedReviewedLoans: Array<LoanItem>;
   loading: boolean;
+  print: boolean;
 }
 interface Props {
   history: any;
@@ -69,6 +70,7 @@ class TrackLoanApplications extends Component<Props, State>{
       searchResults: [],
       uniqueLoanOfficers: [],
       selectedReviewedLoans: [],
+      print: false
     }
   }
   async componentDidMount() {
@@ -149,118 +151,123 @@ class TrackLoanApplications extends Component<Props, State>{
     }
     else return null;
   }
-  goToLoan(id){
-    this.props.history.push('/loan-profile',{id:id})
+  goToLoan(id) {
+    this.props.history.push('/loan-profile', { id: id })
   }
   render() {
     const reviewedResults = (this.state.searchResults) ? this.state.searchResults.filter(result => result.application.status === "reviewed") : [];
     return (
       <Container>
-        <Loader open={this.state.loading} type="fullscreen" />
-        <Formik
-          initialValues={this.state}
-          onSubmit={this.handleSubmit}
-          validationSchema={searchApplicationValidation}
-          validateOnBlur
-          validateOnChange
-        >{(formikProps) =>
-          <Form onSubmit={formikProps.handleSubmit} style={{ display: 'flex', alignItems: 'flex-end' }}>
-            <Form.Group as={Col} controlId="searchKeyword" style={{ flex: 2 }}>
-              <Form.Label style={{ textAlign: 'right' }} column>{`${local.searchByNameOrNationalId}*`}</Form.Label>
-              <Form.Control
-                type="text"
-                name="searchKeyword"
-                data-qc="searchKeyword"
-                value={formikProps.values.searchKeyword}
-                onChange={formikProps.handleChange}
-                onBlur={formikProps.handleBlur}
-                isInvalid={Boolean(formikProps.errors.searchKeyword) && Boolean(formikProps.touched.searchKeyword)}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formikProps.errors.searchKeyword}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group as={Col} controlId="dateFrom" style={{ flex: 1 }}>
-              <Form.Label style={{ textAlign: 'right' }} column >{local.dateFrom}</Form.Label>
-              <Form.Control
-                type="date"
-                data-qc="dateFrom"
-                value={formikProps.values.dateFrom}
-                onChange={(e)=> {
-                  formikProps.setFieldValue("dateFrom",e.currentTarget.value);
-                  if(e.currentTarget.value === "") formikProps.setFieldValue("dateTo", "")
-                }}
-                onBlur={formikProps.handleBlur}
-                isInvalid={Boolean(formikProps.errors.dateFrom) && Boolean(formikProps.touched.dateFrom)}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formikProps.errors.dateFrom}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group controlId="dateTo" style={{ flex: 1, marginLeft: 10 }}>
-              <Form.Label style={{ textAlign: 'right' }} column >{local.dateTo}</Form.Label>
-              <Form.Control
-                type="date"
-                data-qc="dateTo"
-                value={formikProps.values.dateTo}
-                min={formikProps.values.dateFrom}
-                onChange={formikProps.handleChange}
-                onBlur={formikProps.handleBlur}
-                isInvalid={Boolean(formikProps.errors.dateTo) && Boolean(formikProps.touched.dateTo)}
-                disabled={!Boolean(formikProps.values.dateFrom)}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formikProps.errors.dateTo}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group>
-            </Form.Group>
-            <Button type="submit">{local.search}</Button>
-          </Form >
-          }
-        </Formik>
-        <div style={{ textAlign: 'center' }}>
-          <span className={this.state.filters.includes('underReview') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('underReview')}>{local.underReview}</span>
-          <span className={this.state.filters.includes('reviewed') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('reviewed')}>{local.reviewed}</span>
-          <span className={this.state.filters.includes('rejected') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('rejected')}>{local.rejected}</span>
-          <span className={this.state.filters.includes('approved') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('approved')}>{local.approved}</span>
-          <span className={this.state.filters.includes('created') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('created')}>{local.created}</span>
-        </div>
-        <Table striped bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>{local.customerType}</th>
-              <th>{local.loanApplicationId}</th>
-              <th>{local.customerName}</th>
-              <th>{local.loanAppCreationDate}</th>
-              <th>{local.applicationStatus}</th>
-              <th>{local.productName}</th>
-              <th>{local.loanPrinciple}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.searchResults && this.state.searchResults
-              // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
-              .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.application.status) : loanItem)
-              .map((loanItem, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
-                    <td onClick={()=>this.goToLoan(loanItem.id)}>{loanItem.id}</td>
-                    <td>{loanItem.application.customer.customerName}</td>
-                    <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>
-                    <td>{englishToArabic(loanItem.application.status).text}</td>
-                    <td>{loanItem.application.product.productName}</td>
-                    <td>{loanItem.application.principal || 0}</td>
-                    <td>{this.getActionFromStatus(loanItem)}</td>
+        <div className="print-none">
+          <Loader open={this.state.loading} type="fullscreen" />
+          <Formik
+            initialValues={this.state}
+            onSubmit={this.handleSubmit}
+            validationSchema={searchApplicationValidation}
+            validateOnBlur
+            validateOnChange
+          >{(formikProps) =>
+            <Form onSubmit={formikProps.handleSubmit} style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <Form.Group as={Col} controlId="searchKeyword" style={{ flex: 2 }}>
+                <Form.Label style={{ textAlign: 'right' }} column>{`${local.searchByNameOrNationalId}*`}</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="searchKeyword"
+                  data-qc="searchKeyword"
+                  value={formikProps.values.searchKeyword}
+                  onChange={formikProps.handleChange}
+                  onBlur={formikProps.handleBlur}
+                  isInvalid={Boolean(formikProps.errors.searchKeyword) && Boolean(formikProps.touched.searchKeyword)}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {formikProps.errors.searchKeyword}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} controlId="dateFrom" style={{ flex: 1 }}>
+                <Form.Label style={{ textAlign: 'right' }} column >{local.dateFrom}</Form.Label>
+                <Form.Control
+                  type="date"
+                  data-qc="dateFrom"
+                  value={formikProps.values.dateFrom}
+                  onChange={(e) => {
+                    formikProps.setFieldValue("dateFrom", e.currentTarget.value);
+                    if (e.currentTarget.value === "") formikProps.setFieldValue("dateTo", "")
+                  }}
+                  onBlur={formikProps.handleBlur}
+                  isInvalid={Boolean(formikProps.errors.dateFrom) && Boolean(formikProps.touched.dateFrom)}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {formikProps.errors.dateFrom}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="dateTo" style={{ flex: 1, marginLeft: 10 }}>
+                <Form.Label style={{ textAlign: 'right' }} column >{local.dateTo}</Form.Label>
+                <Form.Control
+                  type="date"
+                  data-qc="dateTo"
+                  value={formikProps.values.dateTo}
+                  min={formikProps.values.dateFrom}
+                  onChange={formikProps.handleChange}
+                  onBlur={formikProps.handleBlur}
+                  isInvalid={Boolean(formikProps.errors.dateTo) && Boolean(formikProps.touched.dateTo)}
+                  disabled={!Boolean(formikProps.values.dateFrom)}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {formikProps.errors.dateTo}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+              </Form.Group>
+              <Button type="submit">{local.search}</Button>
+            </Form >
+            }
+          </Formik>
+          <div style={{ textAlign: 'center' }}>
+            <span className={this.state.filters.includes('underReview') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('underReview')}>{local.underReview}</span>
+            <span className={this.state.filters.includes('reviewed') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('reviewed')}>{local.reviewed}</span>
+            <span className={this.state.filters.includes('rejected') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('rejected')}>{local.rejected}</span>
+            <span className={this.state.filters.includes('approved') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('approved')}>{local.approved}</span>
+            <span className={this.state.filters.includes('created') ? "chip chip-active" : "chip"} onClick={() => this.toggleChip('created')}>{local.created}</span>
+          </div>
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>{local.customerType}</th>
+                <th>{local.loanApplicationId}</th>
+                <th>{local.customerName}</th>
+                <th>{local.loanAppCreationDate}</th>
+                <th>{local.applicationStatus}</th>
+                <th>{local.productName}</th>
+                <th>{local.loanPrinciple}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.searchResults && this.state.searchResults
+                // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
+                .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.application.status) : loanItem)
+                .map((loanItem, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
+                      <td onClick={() => this.goToLoan(loanItem.id)}>{loanItem.id}</td>
+                      <td>{loanItem.application.customer.customerName}</td>
+                      <td>{(loanItem.application.entryDate) ? new Date(loanItem.application.entryDate).toISOString().slice(0, 10) : ''}</td>
+                      <td>{englishToArabic(loanItem.application.status).text}</td>
+                      <td>{loanItem.application.product.productName}</td>
+                      <td>{loanItem.application.principal || 0}</td>
+                      <td>{this.getActionFromStatus(loanItem)}</td>
 
-                  </tr>
-                )
-              })}
-          </tbody>
-        </Table>
-        {reviewedResults.length > 0 && <DownloadReviewedPdf data={reviewedResults} />}
+                    </tr>
+                  )
+                })}
+            </tbody>
+          </Table>
+          {reviewedResults.length > 0 &&
+            <Button onClick={() => { this.setState({ print: true }, () => window.print()) }}>print</Button>
+          }
+        </div>
+        {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} />}
       </Container>
     )
   }
