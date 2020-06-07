@@ -63,6 +63,7 @@ class NavBar extends Component<Props, State> {
     });
   }
   async goToBranch(branch: Branch) {
+    document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
