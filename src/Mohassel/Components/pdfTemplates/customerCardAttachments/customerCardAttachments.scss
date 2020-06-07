@@ -1,9 +1,7 @@
 @media print {
-    customer-card-attachments-print {
+    .customer-card-attachments-print {
         font-size: 10px;
         font-weight: bold;
-        max-width: 700px;
-
         & .single {
             display: inline-grid;
             width: 100%;
@@ -92,7 +90,7 @@
 }
 
 @media screen {
-    .customer-card-attachments-print {
+    .. {
         max-width: 700px;
         display: none;
     }
