@@ -70,8 +70,10 @@
         }
     }
 }
-th:first-child,td:first-child{
+.table {
+    & th:first-child,td:first-child{
     padding-right: 50px;
+    }
 }
 span.icon {
     margin-left: 20px;

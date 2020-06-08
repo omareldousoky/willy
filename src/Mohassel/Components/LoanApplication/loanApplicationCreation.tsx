@@ -294,7 +294,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ products: [], loading: true })
         const token = getCookie('token');
         const tokenData = parseJwt(token);
-        if (tokenData?.requireBranch === true) {
+        if (tokenData.requireBranch === true) {
             const products = await getProductsByBranch(tokenData.branch);
             if (products.status === 'success') {
                 this.setState({
