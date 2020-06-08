@@ -3,14 +3,6 @@ import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 
 const TestCalculateFormulaPDF = (props) => {
-    function getTotal(key) {
-        let total = 0;
-        props.data.result?.output.forEach(installment => {
-            total = total + installment[key];
-        });
-        if(isNaN(total)) return ''
-        else return total;
-    }
     return (
         <div className="test-calculate-formula" dir="rtl" lang="ar">
             <table className="margin" >
@@ -54,9 +46,9 @@ const TestCalculateFormulaPDF = (props) => {
                     })}
                     <tr>
                         <td>الإجمالي</td>
-                        <td>{getTotal('installmentResponse')}</td>
-                        <td>{getTotal('principalInstallment')}</td>
-                        <td>{getTotal('feesInstallment')}</td>
+                        <td>{props.data.result?.sum.installmentSum}</td>
+                        <td>{props.data.result?.sum.principal}</td>
+                        <td>{props.data.result?.sum.feesSum}</td>
                         <td></td>
                     </tr>
                 </tbody>
