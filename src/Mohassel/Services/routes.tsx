@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 
 import * as React from 'react';
 import CustomerCreation from '../Components/CustomerCreation/customer-creation';
@@ -18,68 +19,70 @@ import LoanList from '../Components/LoanList/loanList';
 import RoleCreation from '../Components/Roles/roleCreation';
 import RoleProfile from '../Components/Roles/roleProfile';
 import { Landing } from '../Components/Landing/landing';
-import { getCookie } from './getCookie';
 import Can from '../config/Can';
 import UserDetails from '../Components/userDetails/user-details';
 import CreateBranch from '../Components/BranchCreation/create-branch';
 import CustomersList from '../Components/CustomerCreation/customersList';
 import ability from '../config/ability';
 import * as local from '../../Shared/Assets/ar.json';
+import { generateAppRoutes } from './utils';
 
-export const routes = [
+ const appRoutes = [
 {
   path: "/",
+  label: local.mohassel,
   component: Landing,
-} , {
+routes: [ 
+{
     path: "/customers",
     label: local.customers,
-render: (props)=> {<Can I='getCustomer' a='customer'><CustomersList {...props} /></Can>},
+    render: (props)=> <Can I='getCustomer' a='customer'><CustomersList {...props} /></Can>,
     routes: [
-      {
+    {
       path: "/new-customer",
       label: local.newCustomer,
-      render: (props) => {<Can I='createCustomer' a='customer'><CustomerCreation {...props} edit={false} /></Can>} , 
+      render: (props) => <Can I='createCustomer' a='customer'><CustomerCreation {...props} edit={false} /></Can> , 
     },
     {
       path: "/edit-customer",
       label: local.editCustomer,
-      render: (props) => {<Can I='updateCustomer' a='customer'><CustomerCreation {...props} edit={true} /> </Can>},
+      render: (props) => <Can I='updateCustomer' a='customer'><CustomerCreation {...props} edit={true} /> </Can>,
     }
   ]
 },
 {
   path: "/new-formula",
   label: local.createCalculationMethod,
-  render: (props) => {<Can I='createCalculationFormula' a='product'><FormulaCreation /></Can>},
+  render: (props) => <Can I='createCalculationFormula' a='product'><FormulaCreation /></Can>,
 },
 {
   path: "/test-formula",
-  render : (props) => {<Can I='testCalculate' a='product'><FormulaTest {...props} /></Can>},
+  render : (props) => <Can I='testCalculate' a='product'><FormulaTest {...props} /></Can>,
 }, 
 {
   path: "/new-loan-product",
   label: local.createLoanProduct,
-  render : (props) => {<Can I='createLoanProduct' a='product'><LoanProductCreation /></Can>},
+  render : (props) => <Can I='createLoanProduct' a='product'><LoanProductCreation /></Can>,
 },
  {
   path: "/track-loan-applications",
   label: local.loanApplications,
-  render: (props) => {<Can I='getLoanApplication' a='application'><TrackLoanApplications /></Can>},
+  render: (props) => <Can I='getLoanApplication' a='application'><TrackLoanApplications /></Can>,
   routes: [
     {
       path: "/edit-loan-application",
       label: local.editLoan ,
-      render: (props) => {(props) => <LoanApplicationCreation {...props} edit={true} />},
+      render: (props) => (props) => <LoanApplicationCreation {...props} edit={true} />,
     } ,
     {
       path: "/create-loan",
       label: local.createLoan, 
-      render: (props) => {(ability.can( 'createLoan', 'application') || ability.can('issueLoan','application'))?<LoanCreation {...props} /> : null},
+      render: (props) => (ability.can( 'createLoan', 'application') || ability.can('issueLoan','application'))?<LoanCreation {...props} /> : null,
     } , 
     {
       path: "/loan-profile",
       label: local.loanDetails,
-      render: (props) => {(ability.can('getLoanApplication','application') || ability.can('getIssuedLoan','application'))?<LoanProfile {...props} />:null},
+      render: (props) => (ability.can('getLoanApplication','application') || ability.can('getIssuedLoan','application'))?<LoanProfile {...props} />:null,
 
     }
 ]
@@ -87,22 +90,26 @@ render: (props)=> {<Can I='getCustomer' a='customer'><CustomersList {...props} /
 {
   path: "/loan-uses" ,
   label: local.loanUses,
-  render: (props) => {<Can I='loanUsage' a='config'><LoanUses /></Can>}
+  render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
 },
 {
   path: "/bulk-approvals",
   label: local.bulkLoanApplicationsApproval,
-  render: (props) => {<Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>}
+  render: (props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>
 }, 
 {
    path: "/manage-accounts",
    label: local.manageAccounts,
-   render: (props) => {<ManageAccounts />},
+   render: (props) => <ManageAccounts />,
 
 }, {
   path: "/loans",
   label: local.issuedLoans,
-  render: (props) => {<Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>}
+  render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>
 
 }
+]
+}
 ];
+
+export const  routes = generateAppRoutes(appRoutes);
