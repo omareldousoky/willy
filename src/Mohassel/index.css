@@ -128,3 +128,15 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .error div{ 
   border-color: #d51b1b;
 }
+
+.customer-form-label {
+  margin-right: 0px;
+  padding-right: 0px;
+  float: right;
+  text-align: right;
+}
+
+.place-holder-color::placeholder {
+  color: #7dc356;
+  text-decoration: underline;
+}

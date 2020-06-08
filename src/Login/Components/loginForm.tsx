@@ -42,7 +42,7 @@ export const LoginForm = (props: any) => {
                         {errors.password}
                     </Form.Control.Feedback>
             </Form.Group>
-            <Button type="submit" style={{alignSelf: 'flex-end'}}>{local.login}</Button>
+            <Button type="submit" data-qc="submit" style={{alignSelf: 'flex-end'}}>{local.login}</Button>
         </Form >
         </Container>
 
