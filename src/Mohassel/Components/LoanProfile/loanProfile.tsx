@@ -84,7 +84,7 @@ class LoanProfile extends Component<Props, State>{
             if (application.body.status === "paid") tabsToRender.push(customerCardTab)
             if (application.body.status === "issued") {
                 tabsToRender.push(customerCardTab)
-                if(ability.can('payInstallment','application')) tabsToRender.push(paymentTab)
+                if(ability.can('payInstallment','application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
                 if(ability.can('pushInstallment','application')) tabsToRender.push(reschedulingTab)
                 if(ability.can('pushInstallment','application')) tabsToRender.push(reschedulingTestTab)
             }
