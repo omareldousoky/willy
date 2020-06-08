@@ -429,6 +429,9 @@
     "installmentToBePaid": "القسط المراد سداده",
     "amountCollectedFromCustomer": "القيمة المحصلة من العميل",
     "installmentsRemaining": "الأقساط المتبقية",
+    "individual":"فردي",
+    "group":"مجموعة",
+    "installmentsRemaining": "الأقساط المتبقية",
     "editCustomer": "تعديل العميل",
     "mohassel": "المحصل"
 }

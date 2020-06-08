@@ -1,5 +1,7 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { connect } from "react-redux";
+import { getAuthData } from './redux/auth/actions';
 import CustomerCreation from './Components/CustomerCreation/customer-creation';
 import UserCreation from './Components/UserCreation/user-creation';
 import FormulaCreation from './Components/LoanFormulaCreation/loanFormulaCreation';
@@ -24,11 +26,12 @@ import UserDetails from './Components/userDetails/user-details';
 import CreateBranch from './Components/BranchCreation/create-branch';
 import CustomersList from './Components/CustomerCreation/customersList';
 import ability from './config/ability';
-
 import {routes} from './Services/routes'
 import WithBreadcrumbs from './Components/navigation/withBreadcrumbs';
-const App = () => {
-    // localStorage.setItem('baseURL', process.env.REACT_APP_BASE_URL);
+const App = (props) => {
+    useEffect(() => {
+        props.getAuthData();
+    }, []);
     if (getCookie('token') === '') {
         window.location.href = process.env.REACT_APP_LOGIN_URL || ''
         return <></>
@@ -54,4 +57,12 @@ const App = () => {
     }
 };
 
-export default App;
+const mapMethodsToProps = dispatch => {
+    return {
+        getAuthData: () => dispatch(getAuthData())
+    };
+};
+export default connect(
+    null,
+    mapMethodsToProps
+)(App);
