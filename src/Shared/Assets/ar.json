@@ -432,5 +432,6 @@
     "individual":"فردي",
     "group":"مجموعة",
     "expired": "منتهية الصلاحية",
-    "days": "ايام"
+    "days": "ايام",
+    "downloadPDF": "تنزيل PDF"
 }

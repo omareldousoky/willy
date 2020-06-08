@@ -64,7 +64,7 @@ const LoanContract = (props) => {
                                         </tr>
 
                                         <tr style={{ textAlign: 'left' }}>
-                                            <td colSpan={4}>"طرف أول - مقرض"</td>
+                                            <td colSpan={4}>&quot;طرف أول - مقرض&quot;</td>
                                         </tr>
 
                                         <tr>
@@ -99,7 +99,7 @@ const LoanContract = (props) => {
                                         </tr>
 
                                         <tr style={{ textAlign: 'left' }}>
-                                            <td colSpan={4}>"طرف ثان - مقترض"</td>
+                                            <td colSpan={4}>&quot;طرف ثان - مقترض&quot;</td>
                                         </tr>
 
                                         <tr>
@@ -136,7 +136,7 @@ const LoanContract = (props) => {
                                         </tr>
 
                                         <tr style={{ textAlign: 'left' }}>
-                                            <td colSpan={4}>"طرف ثالث - ضامن متضامن"</td>
+                                            <td colSpan={4}>&quot;طرف ثالث - ضامن متضامن&quot;</td>
                                         </tr>
 
                                         <tr>
@@ -173,7 +173,7 @@ const LoanContract = (props) => {
                                         </tr>
 
                                         <tr style={{ textAlign: 'left' }}>
-                                            <td colSpan={4}>"طرف رابع - ضامن متضامن"</td>
+                                            <td colSpan={4}>&quot;clطرف رابع - ضامن متضامن&quot;cl</td>
                                         </tr>
 
                                     </tbody>

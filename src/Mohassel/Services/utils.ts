@@ -74,3 +74,15 @@ export function ageCalculate(val) {
   const years = Math.floor((dateNow.getTime() - val) / MS_PER_YEAR);
   return years
 }
+
+export function checkIssueDate(issueDate) {
+  const date = new Date(issueDate).valueOf();
+  const endOfDay: Date = new Date();
+  endOfDay.setHours(23, 59, 59, 59);
+  const diffTime = Math.abs(endOfDay.valueOf() - date);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+  //2555 = 7 years
+  if(diffDays > 2555){
+    return local.expired;
+  } else return '';
+}

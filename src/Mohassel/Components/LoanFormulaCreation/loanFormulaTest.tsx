@@ -3,13 +3,12 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { FormulaTestClass, loanFormulaTestValidation } from './loanCreationInitialStates';
 import { LoanFormulaTestForm } from './loanFormulaTestForm';
+import TestCalculateFormulaPDF from '../pdfTemplates/testCalculateFormula/testCalculateFormula';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { testFormula } from '../../Services/APIs/LoanFormula/testFormula';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import { View } from '../PDF/documentView';
-import { DownloadPdf } from '../PDF/documentExport';
 import Button from 'react-bootstrap/Button';
 
 interface Props {
@@ -85,7 +84,8 @@ class FormulaTest extends Component<Props, State>{
     }
     render() {
         return (
-            <Container>
+            <>
+            <Container className="print-none">
                 <Loader open={this.state.loading} type="fullscreen" />
                 <Formik
                     initialValues={this.state.formula}
@@ -98,10 +98,10 @@ class FormulaTest extends Component<Props, State>{
                         <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
                     }
                 </Formik>
-                {Object.keys(this.state.result).length > 0 && <Button onClick={() => window.print()}>View PDF</Button>}
-                {/* {Object.keys(this.state.result).length > 0 && <DownloadPdf data={this.state.result} />} */}
-                {/* {Object.keys(this.state.result).length > 0 && <View data={this.state.result} />} */}
+                {Object.keys(this.state.result).length > 0 && <Button style={{marginTop: 10}} onClick={() => window.print()}>{local.downloadPDF}</Button>}
             </Container>
+            <TestCalculateFormulaPDF data={this.state.result}/>
+            </>
         )
     }
 }
