@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
+import {checkIssueDate} from '../../Services/utils';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -118,8 +119,8 @@ export const StepOneForm = (props: any) => {
             onChange={handleChange}
             isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
           />
-          <Form.Control.Feedback type="invalid">
-            {errors.nationalIdIssueDate}
+          <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !==""? {display: 'block'}: {}}>
+            {errors.nationalIdIssueDate || checkIssueDate(values.nationalIdIssueDate)}
           </Form.Control.Feedback>
         </Col>
       </Form.Group>
