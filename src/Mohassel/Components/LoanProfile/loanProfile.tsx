@@ -48,6 +48,7 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getAppByID(id) {
+        this.setState({loading: true});
         const application = await getApplication(id);
         if (application.status === 'success') {
             const tabsToRender = [
@@ -89,7 +90,8 @@ class LoanProfile extends Component<Props, State>{
             }
             this.setState({
                 application: application.body,
-                tabsArray: tabsToRender
+                tabsArray: tabsToRender,
+                loading: false
             })
         } else {
             Swal.fire('', 'fetch error', 'error')
@@ -105,7 +107,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} />
+                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} refreshPayment={() => this.getAppByID(this.state.application._id)}/>
             case 'customerCard':
                 return <CustomerCardView application={this.state.application} />
             case 'loanRescheduling':
