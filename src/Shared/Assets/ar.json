@@ -431,5 +431,6 @@
     "installmentsRemaining": "الأقساط المتبقية",
     "individual":"فردي",
     "group":"مجموعة",
-    "expired": "منتهية الصلاحية"
+    "expired": "منتهية الصلاحية",
+    "days": "ايام"
 }

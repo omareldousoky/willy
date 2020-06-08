@@ -45,6 +45,10 @@ class Login extends React.PureComponent<Props, State> {
       swal.fire('', local.loginError, 'error');
     })
   }
+  setCookie(token: string, branches: string, roles: string, validbranches: string, clientPermissions: string) {
+    //;domain=.halan.io
+    document.cookie = "token=" + token + ";path=/;";
+  }
   render() {
     return (
       <div className="login-parent">
