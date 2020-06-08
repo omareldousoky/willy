@@ -215,10 +215,12 @@ class Payment extends Component<Props, State>{
           </div>
           <div className="verticalLine"></div>
           <div className="payment-icons-container">
-            <div className="payment-icon">
-              <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-              <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
-            </div>
+            <Can I='payInstallment' a='application'>
+              <div className="payment-icon">
+                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+                <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
+              </div>
+            </Can>
             <Can I='payEarly' a='application'>
               <div className="payment-icon">
                 <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />

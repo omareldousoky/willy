@@ -44,6 +44,13 @@ const TestCalculateFormulaPDF = (props) => {
                             </tr>
                         )
                     })}
+                    <tr>
+                        <td>الإجمالي</td>
+                        <td>{props.data.result?.sum.installmentSum}</td>
+                        <td>{props.data.result?.sum.principal}</td>
+                        <td>{props.data.result?.sum.feesSum}</td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
