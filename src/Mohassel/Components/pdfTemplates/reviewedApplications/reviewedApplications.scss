@@ -1,0 +1,73 @@
+@media print {
+    .print-none {
+        display: none;
+    }
+
+    .reviewed-applications-print {
+        font-size: 8px;
+        font-weight: bold;
+
+        & ol {
+            list-style: arabic-indic;
+        }
+
+        & li {
+            line-height: 20px;
+        }
+
+        & th {
+            background-color: lightgrey;
+            -webkit-print-color-adjust: exact;
+        }
+
+        & tbody,
+        .title {
+            text-align: center;
+        }
+
+        & table {
+            width: 100%;
+            /* border-collapse: collapse; */
+        }
+
+        & .title {
+            font-size: 10px;
+        }
+
+        & .titlestyle {
+            width: 50%;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+
+        & .titlebackground {
+            background-color: darkgray;
+            -webkit-print-color-adjust: exact;
+        }
+
+        & .titleborder {
+            border: 1.5px solid black;
+        }
+
+        & .tablestyle {
+            margin-bottom: 10px;
+        }
+
+        & .overall {
+            width: 50%;
+            float: left;
+        }
+
+        & .overall tbody td {
+            border: 1px solid black;
+        }
+    }
+}
+
+@media screen {
+    .reviewed-applications-print {
+        max-width: 700px;
+        display: none;
+    }
+}

@@ -431,6 +431,9 @@
     "installmentsRemaining": "الأقساط المتبقية",
     "individual":"فردي",
     "group":"مجموعة",
+    "expired": "منتهية الصلاحية",
+    "days": "ايام",
+    "downloadPDF": "تنزيل PDF",
     "installmentsRemaining": "الأقساط المتبقية",
     "editCustomer": "تعديل العميل",
     "mohassel": "المحصل"
