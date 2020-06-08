@@ -5,7 +5,7 @@ import swal from 'sweetalert2';
 import { LoginForm } from './loginForm';
 import { loginCred, loginCredValidation } from './loginState';
 import * as local from '../../Shared/Assets/ar.json';
-
+import { setToken } from '../../Shared/token';
 interface User {
   username: string;
   password: string;
@@ -39,15 +39,11 @@ class Login extends React.PureComponent<Props, State> {
       data: data
 
     }).then(succ => {
-      this.setCookie(succ.data.Token,JSON.stringify(succ.data.Branches),JSON.stringify(succ.data.Roles), JSON.stringify(succ.data.validBranches), succ.data.clientPermissions);
+      setToken(succ.data.Token);
       window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
       swal.fire('', local.loginError, 'error');
     })
-  }
-  setCookie(token: string, branches: string, roles: string, validbranches: string, clientPermissions: string) {
-    //;domain=.halan.io
-    document.cookie = "token=" + token + ";domain=.halan.io;path=/;";
   }
   render() {
     return (
