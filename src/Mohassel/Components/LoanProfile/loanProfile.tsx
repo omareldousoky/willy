@@ -17,6 +17,7 @@ import Rescheduling from '../Rescheduling/rescheduling';
 import ability from '../../config/ability';
 import CustomerCardPDF from '../pdfTemplates/customerCard/customerCard';
 import Button from 'react-bootstrap/Button';
+import { withRouter } from 'react-router-dom';
 interface State {
     prevId: string;
     application: any;
@@ -154,4 +155,4 @@ class LoanProfile extends Component<Props, State>{
         )
     }
 }
-export default LoanProfile
+export default withRouter(LoanProfile);
