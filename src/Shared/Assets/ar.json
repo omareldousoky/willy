@@ -430,5 +430,6 @@
     "amountCollectedFromCustomer": "القيمة المحصلة من العميل",
     "installmentsRemaining": "الأقساط المتبقية",
     "individual":"فردي",
-    "group":"مجموعة"
+    "group":"مجموعة",
+    "expired": "منتهية الصلاحية"
 }

@@ -77,7 +77,19 @@ export const customerCreationValidationStepOne = Yup.object().shape({
     nationalIdIssueDate: Yup.string().test(
         "Max Date", local.dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }
-    ).required(local.required),
+    )
+    // .test(
+    //     "Expired", local.expired,
+    //     (value: any) => {
+    //         const date = new Date(value).valueOf();
+    //         const diffTime = Math.abs(endOfDay.valueOf() - date);
+    //         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    //         console.log(diffDays)
+    //         //2555 = 7 years
+    //         return (diffDays < 2555)
+    //     }
+    // )
+    .required(local.required),
     customerHomeAddress: Yup.string().trim().max(500, "Can't be more than 500 characters").required(local.required),
     homePostalCode: Yup.string().min(5, local.minLength5),
     homePhoneNumber: Yup.string().min(10, local.minLength10),

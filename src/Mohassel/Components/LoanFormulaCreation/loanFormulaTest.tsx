@@ -10,6 +10,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { View } from '../PDF/documentView';
 import { DownloadPdf } from '../PDF/documentExport';
+import Button from 'react-bootstrap/Button';
 
 interface Props {
     title: string;
@@ -68,7 +69,7 @@ class FormulaTest extends Component<Props, State>{
     }
     submit = async (values: FormulaTestClass) => {
         this.setState({ loading: true });
-        const obj = {...values};
+        const obj = { ...values };
         const date = new Date(obj.loanStartDate).valueOf();
         obj.loanStartDate = date;
         const formula = this.state.formulas.find(formula => formula._id === values.calculationFormulaId)
@@ -97,8 +98,9 @@ class FormulaTest extends Component<Props, State>{
                         <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
                     }
                 </Formik>
-                {Object.keys(this.state.result).length > 0 && <DownloadPdf data={this.state.result} />}
-                {Object.keys(this.state.result).length > 0 && <View data={this.state.result} />}
+                {Object.keys(this.state.result).length > 0 && <Button onClick={() => window.print()}>View PDF</Button>}
+                {/* {Object.keys(this.state.result).length > 0 && <DownloadPdf data={this.state.result} />} */}
+                {/* {Object.keys(this.state.result).length > 0 && <View data={this.state.result} />} */}
             </Container>
         )
     }

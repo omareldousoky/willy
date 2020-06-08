@@ -126,8 +126,8 @@ export const UserDataForm = (props: Props) => {
                 <Col sm={3}>
                     <Form.Group controlId="gender">
                         <Form.Label className={'user-data-label'}>{`${local.gender}*`}</Form.Label>
-                        <Form.Control
-                            type="text"
+                        <Form.Control as="select"
+                            type="select"
                             name="gender"
                             data-qc="gender"
                             placeholder={`${local.example}:${local.female}`}
@@ -137,6 +137,9 @@ export const UserDataForm = (props: Props) => {
                             isInvalid={(props.errors.gender && props.touched.gender) as boolean}
                             disabled
                         >
+                            <option value="" disabled></option>
+                            <option value="male">{local.male}</option>
+                            <option value="female">{local.female}</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {props.errors.gender}
