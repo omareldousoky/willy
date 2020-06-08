@@ -82,7 +82,8 @@ routes: [
     {
       path: "/loan-profile",
       label: local.loanDetails,
-      render: (props) => (ability.can('getLoanApplication','application') || ability.can('getIssuedLoan','application'))?<LoanProfile {...props} />:null,
+      render: (props) => (ability.can('getLoanApplication','application') || ability.can('getIssuedLoan','application'))?<LoanProfile {...props} />: null,
+
 
     }
 ]
