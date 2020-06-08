@@ -13,7 +13,7 @@ import { parseJwt } from '../../Services/utils';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
 import store from '../../redux/store';
 import './styles.scss';
-
+import { setToken } from  '../../../Shared/token';
 interface Props {
   history: any;
 }
@@ -67,7 +67,7 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = "token=" + res.body.token + ";path=/;";
+      setToken(res.body.token);
       this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
