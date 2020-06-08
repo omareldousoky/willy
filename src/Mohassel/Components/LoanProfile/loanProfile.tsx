@@ -15,12 +15,15 @@ import { GuarantorView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard';
 import Rescheduling from '../Rescheduling/rescheduling';
 import ability from '../../config/ability';
+import CustomerCardPDF from '../pdfTemplates/customerCard/customerCard';
+import Button from 'react-bootstrap/Button';
 interface State {
     prevId: string;
     application: any;
     activeTab: string;
     tabsArray: Array<Tab>;
     loading: boolean;
+    print: boolean;
 }
 
 interface Props {
@@ -37,6 +40,7 @@ class LoanProfile extends Component<Props, State>{
             activeTab: 'loanDetails',
             tabsArray: [],
             loading: false,
+            print: false,
         };
     }
     componentDidMount() {
@@ -44,6 +48,7 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getAppByID(id) {
+        this.setState({loading: true});
         const application = await getApplication(id);
         if (application.status === 'success') {
             const tabsToRender = [
@@ -85,7 +90,8 @@ class LoanProfile extends Component<Props, State>{
             }
             this.setState({
                 application: application.body,
-                tabsArray: tabsToRender
+                tabsArray: tabsToRender,
+                loading: false
             })
         } else {
             Swal.fire('', 'fetch error', 'error')
@@ -101,7 +107,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} />
+                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} refreshPayment={() => this.getAppByID(this.state.application._id)}/>
             case 'customerCard':
                 return <CustomerCardView application={this.state.application} />
             case 'loanRescheduling':
@@ -116,9 +122,10 @@ class LoanProfile extends Component<Props, State>{
         return (
             <Container>
                 {Object.keys(this.state.application).length > 0 &&
-                    <div>
+                    <div className="print-none">
                         <div className="d-flex justify-content-between">
                             <h3>{local.loanDetails}</h3>
+                                <Button onClick={() => {this.setState({print : true}, () => window.print())}}>print</Button>
                             <div>
                                 <span style={{ display: 'flex', padding: 10, borderRadius: 30, backgroundColor: englishToArabic(this.state.application.status).color }}>
                                     <p style={{ margin: 0, color: 'white' }}>{englishToArabic(this.state.application.status).text}</p>
@@ -142,6 +149,7 @@ class LoanProfile extends Component<Props, State>{
                         </Card>
                     </div>
                 }
+            {this.state.print && <CustomerCardPDF data={this.state.application}/>}
             </Container>
         )
     }

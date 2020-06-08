@@ -1,0 +1,46 @@
+@media screen, print {
+    .test-calculate-formula {
+        font-size: 9px;
+        font-weight: bold;
+        & tbody, .title {
+            text-align: center;
+        }
+
+        & table {
+            width: 100%;
+            /* border-collapse: collapse; */
+        }
+
+
+        & .title2 {
+            font-size: 16px;
+        }
+
+
+        & .titleborder {
+            border: 1.5px solid black;
+        }
+
+        & .margin {
+            margin: 10px;
+        }
+        & .table-content {
+            margin: 10px;
+            & th, td {
+                border: 1px solid black;
+            }
+        }
+
+        & .frame {
+            border: 0.5px solid black;
+            padding: 2px;
+            display: inline-block;
+        }
+        }
+}
+@media screen {
+    .test-calculate-formula {
+        max-width: 700px;
+        display: none;
+    }
+}
