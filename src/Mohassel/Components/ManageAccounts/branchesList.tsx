@@ -13,7 +13,8 @@ import Can from '../../config/Can';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import './styles.scss';
-
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 interface State {
   data: any;
   size: number;
@@ -27,6 +28,7 @@ interface State {
 interface Props {
   history: any;
 }
+
 class BranchesList extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props) {
@@ -134,6 +136,11 @@ class BranchesList extends Component<Props, State> {
   render() {
     return (
       <>
+        <HeaderWithCards
+      header={local.manageAccounts}
+      array = {manageAccountsArray}
+      active = {2}
+      />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
