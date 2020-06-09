@@ -135,7 +135,7 @@ class BranchesList extends Component<Props, State> {
   }
   render() {
     return (
-      <>
+      <div>
         <HeaderWithCards
       header={local.manageAccounts}
       array = {manageAccountsArray}
@@ -217,7 +217,7 @@ class BranchesList extends Component<Props, State> {
             }
           </Card.Body>
         </Card>
-      </>
+      </div>
     )
   }
 }

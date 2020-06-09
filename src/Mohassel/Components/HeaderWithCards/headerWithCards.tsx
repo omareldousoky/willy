@@ -26,15 +26,15 @@ class HeaderWithCards extends React.Component <Props> {
         <Nav>
         {this.props.array.map((item, index) => {
           return (
-            <NavLink  key={index} to = {item.path}  style={{ textDecoration: 'none' }} >
             <div key={index} className={index === this.props.active ?"card-item active":"card-item"}>
+              <NavLink  key={index} to = {item.path}  style={{ textDecoration: 'none' }} >
               <img alt="icon" src={index === this.props.active ? require(`../../Assets/${item.icon}-active.svg`) : require(`../../Assets/${item.icon}-inactive.svg`)} />
               <div style={{margin: 'auto 0px'}}>
                 <h5>{item.header}</h5>
                 <p>{item.desc}</p>
               </div>
-            </div>
              </NavLink>
+            </div>
         
           )
         })}
