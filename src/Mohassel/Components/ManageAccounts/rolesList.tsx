@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import DropDownList from '../DropDownList/dropDownList';
 import * as local from '../../../Shared/Assets/ar.json';
-import './styles.scss';
 import { getRoles } from '../../Services/APIs/Roles/roles';
 import Can from '../../config/Can';
 import Form from 'react-bootstrap/Form';

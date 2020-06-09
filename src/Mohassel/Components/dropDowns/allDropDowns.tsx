@@ -7,9 +7,19 @@ import * as local from '../../../Shared/Assets/ar.json';
 export const LoanOfficersDropDown = (props) => {
     // const [loanOfficers, setLoanOfficers] = useState();
     // const [searchKeyWord, changeSearchKeyWord] = useState("");
-    const getLoanOfficers = async(searchKeyWord) =>{
-        const res = await searchLoanOfficer({from: 0, size: 100, name: searchKeyWord});
-        if(res.status === "success"){
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            border: 'none',
+            boxShadow: 'none',
+            '&:hover': {
+                border: 'none',
+            }
+        })
+    }
+    const getLoanOfficers = async (searchKeyWord) => {
+        const res = await searchLoanOfficer({ from: 0, size: 100, name: searchKeyWord });
+        if (res.status === "success") {
             return res.body.data;
         } else {
             return [];
@@ -19,13 +29,14 @@ export const LoanOfficersDropDown = (props) => {
         <div className="dropdown-container" style={{ flex: 2 }}>
             <p className="dropdown-label">{local.representative}</p>
             <AsyncSelect
+                styles={customStyles}
                 className="full-width"
                 name="representative"
                 data-qc="representative"
                 placeholder={local.chooseRepresentative}
                 // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
                 // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
-                onChange={(loanOfficer)=> props.onSelectLoanOfficer(loanOfficer)}
+                onChange={(loanOfficer) => props.onSelectLoanOfficer(loanOfficer)}
                 getOptionLabel={(option) => option.username}
                 getOptionValue={(option) => option._id}
                 loadOptions={getLoanOfficers}
@@ -36,25 +47,36 @@ export const LoanOfficersDropDown = (props) => {
 }
 
 export const BranchesDropDown = (props) => {
-    const getBranches = async(searchKeyWord) =>{
-        const res = await searchBranches({from: 0, size: 100, name: searchKeyWord});
-        if(res.status === "success"){
-            return res.body.data;
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            border: 'none',
+            boxShadow: 'none',
+            '&:hover': {
+                border: 'none',
+            }
+        })
+    }
+    const getBranches = async (searchKeyWord) => {
+        const res = await searchBranches({ from: 0, size: 100, name: searchKeyWord });
+        if (res.status === "success") {
+            return [{ name: local.allBranches, _id: '' }, ...res.body.data];
         } else {
             return [];
         }
     }
     return (
-        <div className="dropdown-container" style={{ flex: 2 }}>
+        <div className="dropdown-container" style={{ flex: 2, paddingLeft: 0 }}>
             <p className="dropdown-label">{local.oneBranch}</p>
             <AsyncSelect
+                styles={customStyles}
                 className="full-width"
                 name="branches"
                 data-qc="branches"
                 placeholder={local.chooseBranch}
                 // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
                 // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
-                onChange={(branch)=> props.onSelectBranch(branch)}
+                onChange={(branch) => props.onSelectBranch(branch)}
                 getOptionLabel={(option) => option.name}
                 getOptionValue={(option) => option._id}
                 loadOptions={getBranches}

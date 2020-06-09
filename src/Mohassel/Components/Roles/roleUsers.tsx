@@ -1,32 +1,24 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Form from 'react-bootstrap/Form';
-import { Formik } from 'formik';
 import { withRouter } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import { getCookie } from '../../Services/getCookie';
-import { getUserCountPerRole } from "../../Services/APIs/Roles/roles";
 import { Loader } from '../../../Shared/Components/Loader';
-import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import * as local from '../../../Shared/Assets/ar.json';
-import '../ManageAccounts/styles.scss';
+import Search from '../Search/search';
+import { connect } from 'react-redux';
+import { search } from '../../redux/search/actions';
 
 interface Props {
     history: any;
-    role: any;
-};
-interface State {
+    _id: string;
     data: any;
-    size: number;
-    from: number;
-    roleCount: number;
-    searchKeyword: string;
-    dateFrom: string;
     totalCount: number;
     loading: boolean;
+    search: (data) => void;
+};
+interface State {
+    size: number;
+    from: number;
 }
 
 class RoleUsers extends Component<Props, State> {
@@ -34,14 +26,8 @@ class RoleUsers extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            data: [],
             size: 5,
             from: 0,
-            roleCount: 0,
-            searchKeyword: '',
-            dateFrom: '',
-            totalCount: 0,
-            loading: false,
         }
         this.mappers = [
             {
@@ -84,106 +70,30 @@ class RoleUsers extends Component<Props, State> {
     }
 
     async getUsers() {
-        this.setState({ loading: true })
-        const res = await searchUsers({ size: this.state.size, from: this.state.from, roleId: this.props.role._id });
-        if (res.status === "success") {
-            this.setState({
-                data: res.body.data,
-                roleCount: res.body.totalCount,
-                loading: false
-            })
-        } else {
-            console.log("error")
-            this.setState({ loading: false })
-        }
-    }
-    submit = async (values) => {
-        this.setState({ loading: true })
-        let obj = {}
-        if (values.dateFrom === "") {
-            obj = {
-                size: this.state.size,
-                from: this.state.from,
-            }
-        } else {
-            obj = {
-                fromDate: new Date(values.dateFrom).setHours(0, 0, 0, 0).valueOf(),
-                size: this.state.size,
-                from: this.state.from,
-            }
-        }
-        if (isNaN(Number(values.searchKeyword))) obj = { ...obj, name: values.searchKeyword }
-        else obj = { ...obj, nationalId: values.searchKeyword }
-        obj = { ...obj, roleId: this.props.role._id }
-        const res = await searchUsers(obj);
-        if (res.status === "success") {
-            this.setState({
-                loading: false,
-                data: res.body.data,
-                totalCount: res.body.totalCount
-            })
-        } else {
-            this.setState({ loading: false });
-            Swal.fire('', local.searchError, 'error');
-        }
+        this.props.search({ size: this.state.size, from: this.state.from, roleId: this.props._id, url: 'user' });
     }
     render() {
         return (
             <>
                 <Card style={{ margin: '20px 50px' }}>
-                    <Loader type="fullsection" open={this.state.loading} />
+                    <Loader type="fullsection" open={this.props.loading} />
                     <Card.Body style={{ padding: 0 }}>
                         <div className="custom-card-header">
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                                <span className="text-muted">{local.noOfUsers} {this.state.roleCount}</span>
+                                <span className="text-muted">{local.noOfUsers} {this.props.totalCount}</span>
                             </div>
                             {/* <div>
                                 <Button variant="outline-primary" className="big-button">download pdf</Button>
                             </div> */}
                         </div>
                         <hr className="dashed-line" />
-                        <Formik
-                            initialValues={this.state}
-                            onSubmit={this.submit}
-                            validateOnBlur
-                            validateOnChange>
-                            {(formikProps) =>
-                                <Form onSubmit={formikProps.handleSubmit}>
-                                    <div className="custom-card-body">
-                                        <InputGroup style={{ direction: 'ltr', marginLeft: 20, flex: 1 }}>
-                                            <Form.Control
-                                                type="text"
-                                                name="searchKeyword"
-                                                data-qc="searchKeyword"
-                                                onChange={formikProps.handleChange}
-                                                style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-                                                placeholder={local.userSearchPlaceholder}
-                                            />
-                                            <InputGroup.Append>
-                                                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                                            </InputGroup.Append>
-                                        </InputGroup>
-                                        <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
-                                            <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{local.creationDate}</p>
-                                            <Form.Control
-                                                style={{ marginLeft: 20, border: 'none' }}
-                                                type="date"
-                                                name="dateFrom"
-                                                data-qc="dateFrom"
-                                                onChange={formikProps.handleChange}
-                                            >
-                                            </Form.Control>
-                                        </div>
-                                    </div>
-                                </Form>
-                            }
-                        </Formik>
+                        <Search searchKeys={['keyword', 'dateFromTo']} url="user" from={this.state.from} size={this.state.size} />
                         <DynamicTable
                             mappers={this.mappers}
-                            totalCount={this.state.totalCount}
+                            totalCount={this.props.totalCount}
                             pagination={true}
-                            data={this.state.data}
+                            data={this.props.data}
                             changeNumber={(key: string, number: number) => {
                                 this.setState({ [key]: number } as any, () => this.getUsers());
                             }}
@@ -195,4 +105,17 @@ class RoleUsers extends Component<Props, State> {
     }
 }
 
-export default withRouter(RoleUsers);
+const addSearchToProps = dispatch => {
+    return {
+      search: data => dispatch(search(data)),
+    };
+  };
+  const mapStateToProps = state => {
+    return {
+      data: state.search.data,
+      totalCount: state.search.totalCount,
+      loading: state.loading
+    };
+  };
+
+export default connect(mapStateToProps, addSearchToProps)(withRouter(RoleUsers));

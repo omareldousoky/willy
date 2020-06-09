@@ -32,7 +32,7 @@ const DynamicTable = (props: Props) => {
       <Table striped hover style={{ textAlign: 'right' }}>
         <thead>
           <tr>
-            {props.mappers.map((mapper, index: number) => {
+            {props.mappers?.map((mapper, index: number) => {
               return <th key={index}>{mapper.title}</th>
             })}
           </tr>
@@ -40,10 +40,10 @@ const DynamicTable = (props: Props) => {
         <tbody>
           {props.data
             // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((item, index: number) => {
+            ?.map((item, index: number) => {
               return (
                 <tr key={index}>
-                  {props.mappers.map((mapper, index: number) => {
+                  {props.mappers?.map((mapper, index: number) => {
                     return (
                       <td key={index}>
                         {(mapper.render || (data => data[mapper.key]))(item, index)}
@@ -56,7 +56,7 @@ const DynamicTable = (props: Props) => {
         </tbody>
       </Table>
       {props.pagination ?
-        <div className="footer-container" style={{marginBottom: 200}}>
+        <div className="footer-container" style={{marginBottom: 20, marginRight: 30}}>
           <div className="dropdown-container">
             <p className="dropdown-label">{local.show}</p>
             <Form.Control as="select" className="dropdown-select" onChange={(event) => {

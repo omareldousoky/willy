@@ -25,6 +25,7 @@ import Can from './config/Can';
 import UserDetails from './Components/userDetails/user-details';
 import CreateBranch from './Components/BranchCreation/create-branch';
 import CustomersList from './Components/CustomerCreation/customersList';
+import './index.scss';
 const App = (props) => {
     useEffect(() => {
         props.getAuthData();
