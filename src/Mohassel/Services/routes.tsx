@@ -10,7 +10,6 @@ import LoanApplicationCreation from '../Components/LoanApplication/loanApplicati
 import AssignProductToBranch from '../Components/Branch/assignProductToBranch';
 import TrackLoanApplications from '../Components/TrackLoanApplications/trackLoanApplications';
 import LoanCreation from '../Components/LoanCreation/loanCreation';
-import NavBar from '../Components/NavBar/navBar';
 import LoanUses from '../Components/LoanUses/loanUses';
 import BulkApplicationApproval from '../Components/BulkApplicationApproval/bulkApplicationApproval';
 import LoanProfile from '../Components/LoanProfile/loanProfile';
@@ -65,11 +64,18 @@ routes: [
   label: local.createLoanProduct,
   render : (props) => <Can I='createLoanProduct' a='product'><LoanProductCreation /></Can>,
 },
+{
+  path: "/new-loan-application",
+  label: local.createLoanProduct,
+  render :(props) => <Can I='assignProductToCustomer' a='application'><LoanApplicationCreation {...props} edit={false} /> </Can>
+
+},
  {
   path: "/track-loan-applications",
   label: local.loanApplications,
   render: (props) => <Can I='getLoanApplication' a='application'><TrackLoanApplications /></Can>,
   routes: [
+  
     {
       path: "/edit-loan-application",
       label: local.editLoan ,
@@ -171,8 +177,13 @@ routes: [
   render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>
 
 }
-]
+, {
+  path: "/assign-branch-products",
+  label: local.assignProductToBranch,
+  render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductToBranch {...props} /> </Can>,
 }
+]
+} 
 ];
 
 export const  routes = generateAppRoutes(appRoutes);
