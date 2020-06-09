@@ -155,17 +155,14 @@ export const StepOneForm = (props: any) => {
             <Form.Label className="customer-form-label">{local.customerHomeAddressLocationTitle}</Form.Label>
             <Form.Control
               type="text"
-              name="homePostalCode"
-              data-qc="homePostalCode"
-              className="place-holder-color"
-              placeholder={values.customerAddressLatLongNumber.lat !== 0 && values.customerAddressLatLongNumber.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
-              style={{ cursor: 'pointer' }}
+              name="customerHomeAddressLocation"
+              data-qc="customerHomeAddressLocation"
+              style={{ cursor: 'pointer', color: '#7dc356', textDecoration: 'underline' }}
+              value = {values.customerAddressLatLongNumber.lat !== 0 && values.customerAddressLatLongNumber.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
               // value={values.customerHomeAddressLocationTitle}
               onClick={() => openCloseMap(true)}
             />
-            {console.log("el ", values)}
           </Form.Group>
-          {/* <Button onClick={() => openCloseMap(true)}>{local.customerHomeAddressLocationTitle}</Button> */}
         </Col>
         <Col sm={6}>
           <Form.Group controlId="homePostalCode">
