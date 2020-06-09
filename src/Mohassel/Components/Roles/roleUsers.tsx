@@ -73,8 +73,8 @@ class RoleUsers extends Component<Props, State> {
                 title: '',
                 key: "actions",
                 render: data => <>
-                    <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }}></span>
-                    <span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }}></span>
+                    <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }}></span>
+                    <span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }}></span>
                 </>
             },
         ]

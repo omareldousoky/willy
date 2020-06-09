@@ -96,7 +96,7 @@ class UserDetails extends Component<Props, State> {
                 <span className={'fa icon'}>
                 <div
                     className={'iconConatiner fa icon'}
-                    onClick={() => { this.props.history.push({pathname:"/edit-user",state: { details: id }}) }}
+                    onClick={() => { this.props.history.push({pathname:"/manage-accounts/users/edit-user",state: { details: id }}) }}
                 >
                     <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
                     {local.edit}</div>

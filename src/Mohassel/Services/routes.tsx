@@ -107,17 +107,60 @@ routes: [
      {
        path: "/roles",
        label : local.roles,
-       render: (props) => <RolesList {...props} />
+       render: (props) => <RolesList {...props} />,
+       routes: [
+         {
+         path: "/new-role",
+         label: local.createNewRole,
+         render:(props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
+         },
+         {
+           path: "/edit-role",
+           label : local.editRole,
+           render:(props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={true} /></Can>,
+         },
+         {
+           path: "/role-profile",
+           label: local.roleDetails,
+           render:(props) => <Can I='getRoles' a='user'><RoleProfile {...props} /></Can>,
+         }
+       ]
      },
      {
        path: "/users",
        label : local.users,
-       render: (props) => <UsersList  {...props} />
+       render: (props) => <UsersList  {...props} />,
+       routes: [
+         {
+           path:"/new-user",
+           label: local.newUser,
+           render: (props) => <Can I='createUser' a='user'><UserCreation  {...props} edit={false} /></Can>
+
+         } ,
+         {
+           path: "/edit-user",
+           label: local.editUser,
+           render: (props) => <Can I='getUser' a='user'><UserCreation  {...props} edit={true} /></Can>,
+         } ,
+         {
+           path: "/user-details",
+           label:  local.userDetails,
+           render: (props) => <Can I='getUser' a='user'><UserDetails {...props} /></Can>,
+         }
+       ]
       },
       {
         path: "/branches", 
         label: local.branches,
-        render: (props) => <BranchesList {...props} />
+        render: (props) => <BranchesList {...props} />,
+        routes: [
+          {
+            path: "/new-branch",
+            label: local.newBranch,
+            render: (props) => <Can I='createBranch' a='branch'><CreateBranch {...props} /></Can>
+            
+          }
+        ]
       }
 
    ]

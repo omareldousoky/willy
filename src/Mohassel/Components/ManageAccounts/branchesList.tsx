@@ -150,7 +150,7 @@ class BranchesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfBranches + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
+              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

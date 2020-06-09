@@ -434,7 +434,9 @@
     "expired": "منتهية الصلاحية",
     "days": "ايام",
     "downloadPDF": "تنزيل PDF",
-    "installmentsRemaining": "الأقساط المتبقية",
+    "newUser": "مستخدم جديد",
+    "editUser": "تعديل المستخدم",
     "editCustomer": "تعديل العميل",
+    "editRole": "تعديل دور المستخدم",
     "mohassel": "المحصل"
 }
