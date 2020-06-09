@@ -14,6 +14,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import './styles.scss';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 
 interface Props {
   history: any;
@@ -101,8 +103,8 @@ class UsersList extends Component<Props, State> {
   renderIcons(data: any) {
     return (
       <>
-        <span onClick={() => { this.props.history.push({ pathname: "/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
-        <span onClick={() => { this.props.history.push({ pathname: "/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
+        <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
+        <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
         <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
     );
   }
@@ -151,7 +153,12 @@ class UsersList extends Component<Props, State> {
   }
   render() {
     return (
-      <>
+      <div>
+     <HeaderWithCards
+      header={local.manageAccounts}
+      array = {manageAccountsArray}
+      active = {1}
+      />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -161,7 +168,7 @@ class UsersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfUsers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-                <Can I='createUser' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-user')}>{local.createNewUser}</Button></Can>
+                <Can I='createUser' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/manage-accounts/users/new-user')}>{local.createNewUser}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
@@ -238,7 +245,7 @@ class UsersList extends Component<Props, State> {
             />
           </Card.Body>
         </Card>
-      </>
+      </div>
     )
   }
 }

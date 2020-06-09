@@ -78,7 +78,7 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",//<span className='fa fa-eye icon'></span>
-        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/edit-customer", { id: data._id })}></span></Can></>
+        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/customers/edit-customer", { id: data._id })}></span></Can></>
       },
     ]
   }
@@ -141,7 +141,7 @@ class CustomersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-              <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
+              <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/customers/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
