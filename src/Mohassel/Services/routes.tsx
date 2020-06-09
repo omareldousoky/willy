@@ -13,17 +13,18 @@ import LoanCreation from '../Components/LoanCreation/loanCreation';
 import NavBar from '../Components/NavBar/navBar';
 import LoanUses from '../Components/LoanUses/loanUses';
 import BulkApplicationApproval from '../Components/BulkApplicationApproval/bulkApplicationApproval';
-import ManageAccounts from '../Components/ManageAccounts/manageAccounts';
 import LoanProfile from '../Components/LoanProfile/loanProfile';
 import LoanList from '../Components/LoanList/loanList';
 import RoleCreation from '../Components/Roles/roleCreation';
 import RoleProfile from '../Components/Roles/roleProfile';
+import UsersList from '../Components/ManageAccounts/usersList';
+import BranchesList from '../Components/ManageAccounts/branchesList';
+import RolesList from '../Components/ManageAccounts/rolesList';
 import { Landing } from '../Components/Landing/landing';
 import Can from '../config/Can';
 import UserDetails from '../Components/userDetails/user-details';
 import CreateBranch from '../Components/BranchCreation/create-branch';
 import CustomersList from '../Components/CustomerCreation/customersList';
-import ability from '../config/ability';
 import * as local from '../../Shared/Assets/ar.json';
 import { generateAppRoutes } from './utils';
 
@@ -101,7 +102,25 @@ routes: [
 {
    path: "/manage-accounts",
    label: local.manageAccounts,
-   render: (props) => <ManageAccounts />,
+   render: (props) => <RolesList {...props} />,
+   routes : [
+     {
+       path: "/roles",
+       label : local.roles,
+       render: (props) => <RolesList {...props} />
+     },
+     {
+       path: "/users",
+       label : local.users,
+       render: (props) => <UsersList  {...props} />
+      },
+      {
+        path: "/branches", 
+        label: local.branches,
+        render: (props) => <BranchesList {...props} />
+      }
+
+   ]
 
 }, {
   path: "/loans",

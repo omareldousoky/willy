@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CardNavBar, Tab } from '../HeaderWithCards/headerWithCards'
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Swal from 'sweetalert2';
 import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';

@@ -9,6 +9,8 @@ import './styles.scss';
 import { getRoles } from '../../Services/APIs/Roles/roles';
 import Can from '../../config/Can';
 import Form from 'react-bootstrap/Form';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 
 interface Props {
   history: Array<string>;
@@ -60,6 +62,11 @@ class RolesList extends Component<Props, State> {
   render() {
     return (
       <>
+      <HeaderWithCards
+      header={local.manageAccounts}
+      array = {manageAccountsArray}
+      active = {0}
+      />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>

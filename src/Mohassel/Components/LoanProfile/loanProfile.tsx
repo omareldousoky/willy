@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
-import { CardNavBar, Tab } from '../HeaderWithCards/headerWithCards'
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs';
 import Card from 'react-bootstrap/Card';
 import { LoanDetailsTableView } from './applicationsDetails';

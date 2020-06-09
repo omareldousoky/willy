@@ -14,6 +14,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import './styles.scss';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 
 interface Props {
   history: any;
@@ -152,6 +154,11 @@ class UsersList extends Component<Props, State> {
   render() {
     return (
       <>
+     <HeaderWithCards
+      header={local.manageAccounts}
+      array = {manageAccountsArray}
+      active = {1}
+      />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
