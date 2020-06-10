@@ -127,7 +127,7 @@ class DualBox extends Component<Props, State> {
     render() {
         return (
             <div className="container" style={{ marginTop: 20 }}>
-                <div className="row">
+                <div className="row-nowrap">
                     <div className="dual-list list-left col-md-5">
                         <div className="well text-right">
                             <h6>{this.props.rightHeader}</h6>

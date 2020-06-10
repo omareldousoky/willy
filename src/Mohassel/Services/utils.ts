@@ -86,3 +86,54 @@ export function checkIssueDate(issueDate) {
     return local.expired;
   } else return '';
 }
+
+
+export const combinePaths = (parent, child) =>
+  `${parent.replace(/\/$/, "")}/${child.replace(/^\//, "")}`;
+
+export const buildPaths = (routes, parentPath = "") =>
+  routes.map(route => {
+    const path = combinePaths(parentPath, route.path);
+
+    return {
+      ...route,
+      path,
+      ...(route.routes && { routes: buildPaths(route.routes, path) })
+    };
+  });
+
+
+export const setupParents = (routes, parentRoute = {}) =>
+  routes.map(route => {
+    const withParent = {
+      ...route,
+      ...(parentRoute && { parent: parentRoute })
+    };
+
+    return {
+      ...withParent,
+      ...(withParent.routes && {
+        routes: setupParents(withParent.routes, withParent)
+      })
+    };
+  });
+
+
+export const flattenRoutes = routes =>
+  routes
+    .map(route => [route.routes ? flattenRoutes(route.routes) : [], route])
+    .flat(Infinity);
+
+
+export const generateAppRoutes = routes => {
+  return flattenRoutes(setupParents(buildPaths(routes)));
+};
+
+
+export const pathTo = route => {
+  if (!route.parent) {
+    return [route];
+  }
+
+  return [...pathTo(route.parent), route];
+};
