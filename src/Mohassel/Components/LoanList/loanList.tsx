@@ -13,6 +13,7 @@ interface Props {
   data: any;
   totalCount: number;
   loading: boolean;
+  searchFilters: any;
   search: (data) => void;
 };
 interface State {
@@ -75,7 +76,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan' });
   }
   render() {
     return (
@@ -116,7 +117,8 @@ const mapStateToProps = state => {
   return {
     data: state.search.applications,
     totalCount: state.search.totalCount,
-    loading: state.loading
+    loading: state.loading,
+    searchFilters: state.searchFilters
   };
 };
 

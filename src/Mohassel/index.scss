@@ -128,6 +128,18 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   border-color: #d51b1b;
 }
 
+.customer-form-label {
+  margin-right: 0px;
+  padding-right: 0px;
+  display: block;
+  text-align: right;
+  font-size: 16px;
+}
+
+.place-holder-color::placeholder {
+  color: #7dc356;
+  text-decoration: underline;
+}
 .custom-card-header {
   display: flex;
   justify-content: space-between;

@@ -73,5 +73,10 @@ export const search = (obj) => {
             }
         default: return null;
     }
+}
 
+export const searchFilters = (obj) => {
+    return (dispatch) => {
+        dispatch({ type: 'SET_SEARCH_FILTERS', payload: obj })
+    }
 }

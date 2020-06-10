@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
 
 interface InitialFormikState {
@@ -22,8 +22,10 @@ interface Props {
   size: number;
   from: number;
   url: string;
+  roleId?: string;
   searchKeys: Array<string>;
   search: (data) => void;
+  searchFilters: (data) => void;
 }
 class Search extends Component<Props, {}> {
   constructor(props) {
@@ -33,12 +35,15 @@ class Search extends Component<Props, {}> {
     }
   }
   submit = async (values) => {
-    const obj = { ...values, ...{ from: this.props.from } };
+    const obj = { ...values, ...{ from: this.props.from }};
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
     if (obj.hasOwnProperty('toDate'))
       obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 59).valueOf();
+    if(this.props.roleId)
+      obj.roleId = this.props.roleId;
     obj.from = 0;
+    this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url })
   }
   getInitialState() {
@@ -205,6 +210,7 @@ class Search extends Component<Props, {}> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    searchFilters: data => dispatch(searchFilters(data))
   };
 };
 
