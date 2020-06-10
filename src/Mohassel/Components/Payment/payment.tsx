@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -34,6 +33,7 @@ interface Props {
   installments: Array<Installment>;
   currency: string;
   applicationId: string;
+  refreshPayment: () => void;
 }
 interface State {
   receiptModal: boolean;
@@ -215,10 +215,12 @@ class Payment extends Component<Props, State>{
           </div>
           <div className="verticalLine"></div>
           <div className="payment-icons-container">
-            <div className="payment-icon">
-              <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-              <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
-            </div>
+            <Can I='payInstallment' a='application'>
+              <div className="payment-icon">
+                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+                <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
+              </div>
+            </Can>
             <Can I='payEarly' a='application'>
               <div className="payment-icon">
                 <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
@@ -442,7 +444,7 @@ class Payment extends Component<Props, State>{
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
         <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
         {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => window.location.reload()} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
       </>
     );
   }

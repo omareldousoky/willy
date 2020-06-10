@@ -13,7 +13,7 @@ import { parseJwt } from '../../Services/utils';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
 import store from '../../redux/store';
 import './styles.scss';
-
+import { setToken } from  '../../../Shared/token';
 interface Props {
   history: any;
 }
@@ -63,10 +63,11 @@ class NavBar extends Component<Props, State> {
     });
   }
   async goToBranch(branch: Branch) {
+    document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = "token=" + res.body.token + ";path=/;";
+      setToken(res.body.token);
       this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
@@ -173,7 +174,7 @@ class NavBar extends Component<Props, State> {
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
-              {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
+              {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
 
               {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">

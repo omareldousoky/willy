@@ -7,6 +7,7 @@ import './userCreation.scss'
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
+import {checkIssueDate} from '../../Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
@@ -126,8 +127,8 @@ export const UserDataForm = (props: Props) => {
                 <Col sm={3}>
                     <Form.Group controlId="gender">
                         <Form.Label className={'user-data-label'}>{`${local.gender}*`}</Form.Label>
-                        <Form.Control
-                            type="text"
+                        <Form.Control as="select"
+                            type="select"
                             name="gender"
                             data-qc="gender"
                             placeholder={`${local.example}:${local.female}`}
@@ -137,6 +138,9 @@ export const UserDataForm = (props: Props) => {
                             isInvalid={(props.errors.gender && props.touched.gender) as boolean}
                             disabled
                         >
+                            <option value="" disabled></option>
+                            <option value="male">{local.male}</option>
+                            <option value="female">{local.female}</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {props.errors.gender}
@@ -155,8 +159,8 @@ export const UserDataForm = (props: Props) => {
                     onChange={props.handleChange}
                     isInvalid={(props.errors.nationalIdIssueDate && props.touched.nationalIdIssueDate) as boolean}
                 />
-                <Form.Control.Feedback type="invalid">
-                    {props.errors.nationalIdIssueDate}
+                <Form.Control.Feedback type="invalid" style={checkIssueDate(props.values.nationalIdIssueDate) !==""? {display: 'block'}: {}}>
+                    {props.errors.nationalIdIssueDate || checkIssueDate(props.values.nationalIdIssueDate)}
                 </Form.Control.Feedback>
             </Form.Group>
             <Row>
