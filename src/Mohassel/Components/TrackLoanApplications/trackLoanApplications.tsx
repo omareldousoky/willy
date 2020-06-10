@@ -41,6 +41,7 @@ interface Props {
   data: any;
   totalCount: number;
   loading: boolean;
+  searchFilters: any;
   search: (data) => void;
 };
 class TrackLoanApplications extends Component<Props, State>{
@@ -89,7 +90,7 @@ class TrackLoanApplications extends Component<Props, State>{
     this.getApplications();
   }
   getApplications() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' });
   }
   getStatus(status: string) {
     switch (status) {
@@ -172,7 +173,8 @@ const mapStateToProps = state => {
   return {
     data: state.search.applications,
     totalCount: state.search.totalCount,
-    loading: state.loading
+    loading: state.loading,
+    searchFilters: state.searchFilters
   };
 };
 
