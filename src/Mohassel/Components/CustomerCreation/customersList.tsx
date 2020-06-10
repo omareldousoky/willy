@@ -20,6 +20,7 @@ interface Props {
   data: any;
   totalCount: number;
   loading: boolean;
+  searchFilters: any;
   search: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
@@ -72,7 +73,7 @@ class CustomersList extends Component<Props, State> {
     this.getCustomers();
   }
   getCustomers() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer' });
   }
   render() {
     return (
@@ -116,7 +117,8 @@ const mapStateToProps = state => {
   return {
     data: state.search.data,
     totalCount: state.search.totalCount,
-    loading: state.loading
+    loading: state.loading,
+    searchFilters: state.searchFilters
   };
 };
 

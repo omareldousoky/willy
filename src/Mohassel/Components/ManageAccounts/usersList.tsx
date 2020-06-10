@@ -21,6 +21,7 @@ interface Props {
   data: any;
   totalCount: number;
   loading: boolean;
+  searchFilters: any;
   search: (data) => void;
   setLoading: (data) => void;
 };
@@ -96,7 +97,7 @@ class UsersList extends Component<Props, State> {
     );
   }
   async getUsers() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'user' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user' });
   }
   render() {
     return (
@@ -148,7 +149,8 @@ const mapStateToProps = state => {
   return {
     data: state.search.data,
     totalCount: state.search.totalCount,
-    loading: state.loading
+    loading: state.loading,
+    searchFilters: state.searchFilters
   };
 };
 
