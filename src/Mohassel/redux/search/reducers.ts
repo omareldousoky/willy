@@ -7,3 +7,12 @@ export const searchReducer = (state= {}, action) => {
             return state;
     }
 }
+
+export const searchFiltersReducer = (state= {}, action) => {
+    switch (action.type) {
+        case 'SET_SEARCH_FILTERS': 
+            return {...state, ...action.payload};
+        default:
+            return state;
+    }
+}
