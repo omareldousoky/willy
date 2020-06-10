@@ -11,6 +11,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Swal from 'sweetalert2';
+import { withRouter } from 'react-router-dom';
 export interface Section {
     _id: string;
     key: string;
@@ -273,4 +274,4 @@ class RoleCreation extends Component<Props, State>{
         )
     }
 }
-export default RoleCreation;
+export default withRouter(RoleCreation);

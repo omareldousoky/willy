@@ -8,6 +8,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { getRoles } from '../../Services/APIs/Roles/roles';
 import Can from '../../config/Can';
 import Form from 'react-bootstrap/Form';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 
 interface Props {
   history: Array<string>;
@@ -58,7 +60,12 @@ class RolesList extends Component<Props, State> {
   }
   render() {
     return (
-      <>
+      <div>
+      <HeaderWithCards
+      header={local.manageAccounts}
+      array = {manageAccountsArray}
+      active = {0}
+      />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -68,7 +75,7 @@ class RolesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfRoles + ` (${this.state.totalCount})`}</span>
               </div>
               <div>
-              <Can I='createRoles' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/new-role')}>{local.createNewRole}</Button></Can>
+              <Can I='createRoles' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/manage-accounts/roles/new-role')}>{local.createNewRole}</Button></Can>
               </div>
             </div>
             {this.state.data.length > 0 && <div className="d-flex flex-row justify-content-center">
@@ -86,7 +93,7 @@ class RolesList extends Component<Props, State> {
               .map((el, index) => {
                 const role = el;
                 return (
-                  <Card style={{ margin: '20px 50px', cursor: 'pointer' }} key={index} onClick={() => this.props.history.push(`/role-profile`, role)}>
+                  <Card style={{ margin: '20px 50px', cursor: 'pointer' }} key={index} onClick={() => this.props.history.push(`/manage-accounts/roles/role-profile`, role)}>
                     <Card.Body>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -115,7 +122,7 @@ class RolesList extends Component<Props, State> {
               })}
           </Card.Body>
         </Card>
-      </>
+      </div>
     )
   }
 }

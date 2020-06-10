@@ -163,3 +163,33 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       cursor: pointer;
   }
 }
+
+.breadcrumbs {
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  text-align: right;
+  color: #6e6e6e;
+
+}
+
+
+.breadcrumbs .item {
+  display: inline-block;
+  margin: 5px 10px;
+  
+  
+}
+
+.breadcrumbs  .item:first-child::before {
+  display: none;
+}
+
+.breadcrumbs .item::before {
+  font-family: fontAwesome;
+  font-weight: normal;
+  font-size: 10px;
+  content: "\f104";
+  color: #afafaf;
+  margin: 0 12px;
+}

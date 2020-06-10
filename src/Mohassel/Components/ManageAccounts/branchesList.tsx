@@ -11,6 +11,9 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search } from '../../redux/search/actions';
 
+import './styles.scss';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 interface State {
   size: number;
   from: number;
@@ -22,6 +25,7 @@ interface Props {
   loading: boolean;
   search: (data) => void;
 }
+
 class BranchesList extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props) {
@@ -82,7 +86,12 @@ class BranchesList extends Component<Props, State> {
   }
   render() {
     return (
-      <>
+      <div>
+        <HeaderWithCards
+      header={local.manageAccounts}
+      array = {manageAccountsArray}
+      active = {2}
+      />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -92,7 +101,7 @@ class BranchesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount})`}</span>
               </div>
               <div>
-              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
+              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
@@ -111,7 +120,7 @@ class BranchesList extends Component<Props, State> {
             }
           </Card.Body>
         </Card>
-      </>
+      </div>
     )
   }
 }

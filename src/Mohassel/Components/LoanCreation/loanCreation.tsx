@@ -14,7 +14,7 @@ import { createLoan } from '../../Services/APIs/createIssueLoan/createLoan';
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import { withRouter } from 'react-router-dom';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -254,4 +254,4 @@ class LoanCreation extends Component<Props, State> {
   }
 }
 
-export default LoanCreation;
+export default  withRouter(LoanCreation);
