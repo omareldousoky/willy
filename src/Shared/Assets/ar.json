@@ -25,6 +25,8 @@
     "ruralUrban": "حضري / ريفي",
     "rural": "ريفي",
     "urban": "حضري",
+    "chooseCustomerAddress": "تحديد مكان المنزل على الخريطة",
+    "addressChosen": "تم تحديد المكان علي الخريطة",
     "businessPostalCode": "الرقم البريدي للعمل",
     "businessPhoneNumber": "تليفون العمل",
     "businessSector": "قطاع العمل",

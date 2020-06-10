@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
+import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
-import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import cloneDeep from 'lodash.clonedeep';
+import Wizard from '../wizard/Wizard';
+import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
 import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
@@ -292,20 +292,16 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
-        <>
-          <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
-            <Tab eventKey={1} title={local.mainInfo}>
-            </Tab>
-            <Tab eventKey={2} title={local.workInfo}>
-            </Tab>
-            <Tab eventKey={3} title={local.differentInfo}>
-            </Tab>
-            <Tab eventKey={4} title={local.documents}>
-            </Tab>
-          </Tabs>
-          {this.renderSteps()}
-        </>
-      </Container>
+        <Card>
+          <div style={{ display: "flex", flexDirection: "row" }} >
+            <Wizard currentStepNumber={this.state.step - 1}
+              stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}></Wizard>
+            <Card.Body>
+              {this.renderSteps()}
+            </Card.Body>
+          </div>
+        </Card>
+      </Container >
     )
   }
 }
