@@ -109,14 +109,14 @@ class RoleProfile extends Component<Props, State>{
                     <RoleTable sections={this.state.allSections} permissions={this.state.role.permissions} />
                 </div>
             case 'roleUsers':
-                return <RoleUsers role={this.state.role} />
+                return <RoleUsers {...this.state.role} />
             default:
                 return null
         }
     }
     render() {
         return (
-            <Container>
+            <div style={{padding: 20}}>
                 {Object.keys(this.state.role).length > 0 &&
                     <div>
                         <div className="d-flex justify-content-between align-items-center">
@@ -139,7 +139,7 @@ class RoleProfile extends Component<Props, State>{
                         </Card>
                     </div>
                 }
-            </Container>
+            </div>
         )
     }
 }

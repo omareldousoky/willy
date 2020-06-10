@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getAuthData } from './redux/auth/actions';
 import NavBar from './Components/NavBar/navBar';
 import { getCookie } from './Services/getCookie';
+import './index.scss';
 import {routes} from './Services/routes'
 import WithBreadcrumbs from './Components/navigation/withBreadcrumbs';
 const App = (props) => {
