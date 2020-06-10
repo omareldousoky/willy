@@ -32,7 +32,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.customerName,
         key: "customerName",
-        render: data => <div onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
+        render: data => <div style={{cursor: 'pointer'}} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
         title: local.customerCode,
