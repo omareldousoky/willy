@@ -10,8 +10,6 @@ import { withRouter } from 'react-router-dom';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search } from '../../redux/search/actions';
-
-import './styles.scss';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
 interface State {
