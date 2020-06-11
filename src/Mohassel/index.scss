@@ -17,6 +17,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 }
 
 .row-nowrap{
+  display: flex;
   flex-wrap: nowrap !important;
 }
 

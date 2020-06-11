@@ -11,7 +11,7 @@ import Can from '../../config/Can';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 import { loading } from '../../redux/loading/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
@@ -24,6 +24,7 @@ interface Props {
   searchFilters: any;
   search: (data) => void;
   setLoading: (data) => void;
+  setSearchFilters: (data) => void;
 };
 interface State {
   size: number;
@@ -74,6 +75,9 @@ class UsersList extends Component<Props, State> {
   componentDidMount() {
     this.getUsers()
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
     this.props.setLoading(true);
@@ -96,7 +100,7 @@ class UsersList extends Component<Props, State> {
         <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
     );
   }
-  async getUsers() {
+  getUsers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user' });
   }
   render() {
@@ -142,7 +146,8 @@ class UsersList extends Component<Props, State> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
-    setLoading: data => dispatch(loading(data))
+    setLoading: data => dispatch(loading(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {
