@@ -6,7 +6,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 
 interface Props {
   history: Array<any>;
@@ -15,6 +15,7 @@ interface Props {
   loading: boolean;
   searchFilters: any;
   search: (data) => void;
+  setSearchFilters: (data) => void;
 };
 interface State {
   size: number;
@@ -46,11 +47,6 @@ class LoanList extends Component<Props, State> {
         render: data => data.application.product.productName
       },
       {
-        title: local.representative,
-        key: "representative",
-        render: data => data.application.customer.representative
-      },
-      {
         title: local.loanIssuanceDate,
         key: "loanIssuanceDate",
         render: data => new Date(data.application.issueDate).toISOString().slice(0, 10)
@@ -64,6 +60,9 @@ class LoanList extends Component<Props, State> {
   }
   componentDidMount() {
     this.getLoans()
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   getStatus(status: string) {
     switch (status) {
@@ -111,6 +110,7 @@ class LoanList extends Component<Props, State> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {

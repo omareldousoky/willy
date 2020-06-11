@@ -77,6 +77,9 @@ export const search = (obj) => {
 
 export const searchFilters = (obj) => {
     return (dispatch) => {
-        dispatch({ type: 'SET_SEARCH_FILTERS', payload: obj })
+        if (Object.keys(obj).length === 0)
+            dispatch({ type: 'RESET_SEARCH_FILTERS', payload: obj })
+        else
+            dispatch({ type: 'SET_SEARCH_FILTERS', payload: obj })
     }
 }
