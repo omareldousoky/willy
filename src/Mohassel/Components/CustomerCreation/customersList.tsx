@@ -5,7 +5,7 @@ import DynamicTable from '../DynamicTable/dynamicTable';
 import Can from '../../config/Can';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -22,6 +22,7 @@ interface Props {
   loading: boolean;
   searchFilters: any;
   search: (data) => void;
+  setSearchFilters: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
   mappers: { title: string; key: string; render: (data: any) => void }[]
@@ -72,6 +73,9 @@ class CustomersList extends Component<Props, State> {
   componentDidMount() {
     this.getCustomers();
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
   getCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer' });
   }
@@ -111,6 +115,7 @@ class CustomersList extends Component<Props, State> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {

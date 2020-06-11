@@ -6,7 +6,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 
 interface Props {
     history: any;
@@ -16,6 +16,7 @@ interface Props {
     loading: boolean;
     searchFilters: any;
     search: (data) => void;
+    setSearchFilters: (data) => void;
 };
 interface State {
     size: number;
@@ -69,6 +70,9 @@ class RoleUsers extends Component<Props, State> {
     componentDidMount() {
         this.getUsers();
     }
+    componentWillUnmount() {
+        this.props.setSearchFilters({})
+    }
 
     getUsers() {
         this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, roleId: this.props._id, url: 'user' });
@@ -109,6 +113,7 @@ class RoleUsers extends Component<Props, State> {
 const addSearchToProps = dispatch => {
     return {
       search: data => dispatch(search(data)),
+      setSearchFilters: data => dispatch(searchFilters(data)),
     };
   };
   const mapStateToProps = state => {
