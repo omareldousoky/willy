@@ -59,6 +59,8 @@ class Search extends Component<Props, {}> {
           initialState.status = '';
         case 'branch':
           initialState.branchId = '';
+        case 'status-application':
+          initialState.status = '';
       }
     })
     return initialState;
@@ -132,32 +134,32 @@ class Search extends Component<Props, {}> {
                 if (searchKey === 'governorate') {
                   return (
                     <Col key={index} sm={6}>
-                        <div className="dropdown-container" style={{ marginTop: 20}}>
-                          <p className="dropdown-label">{local.governorate}</p>
-                          <Form.Control as="select" className="dropdown-select" data-qc="governorate" onChange={formikProps.handleChange}>
-                            <option value={5} data-qc={5}>5</option>
-                            <option value={10} data-qc={10}>10</option>
-                          </Form.Control>
-                        </div>
+                      <div className="dropdown-container" style={{ marginTop: 20 }}>
+                        <p className="dropdown-label">{local.governorate}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="governorate" onChange={formikProps.handleChange}>
+                          <option value={5} data-qc={5}>5</option>
+                          <option value={10} data-qc={10}>10</option>
+                        </Form.Control>
+                      </div>
                     </Col>
                   )
                 }
                 if (searchKey === 'employment') {
                   return (
-                    <Col key={index} sm={6} style={{ marginTop: 20}}>
-                        <div className="dropdown-container">
-                          <p className="dropdown-label">{local.employment}</p>
-                          <Form.Control as="select" className="dropdown-select" data-qc="employment" onChange={formikProps.handleChange}>
-                            <option value={5} data-qc={5}>5</option>
-                            <option value={10} data-qc={10}>10</option>
-                          </Form.Control>
-                        </div>
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.employment}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="employment" onChange={formikProps.handleChange}>
+                          <option value={5} data-qc={5}>5</option>
+                          <option value={10} data-qc={10}>10</option>
+                        </Form.Control>
+                      </div>
                     </Col>
                   )
                 }
                 if (searchKey === 'status') {
                   return (
-                    <Col key={index} sm={6} style={{ marginTop: 20}}>
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
                         <p className="dropdown-label">{local.status}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
@@ -169,16 +171,33 @@ class Search extends Component<Props, {}> {
                     </Col>
                   )
                 }
+                if (searchKey === 'status-application') {
+                  return (
+                  <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                    <div className="dropdown-container">
+                      <p className="dropdown-label">{local.status}</p>
+                      <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                        <option value="" data-qc="all">{local.all}</option>
+                        <option value='underReview' data-qc='underReview'>{local.underReview}</option>
+                        <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                        <option value='approved' data-qc='approved'>{local.approved}</option>
+                        <option value='created' data-qc='created'>{local.created}</option>
+                        <option value='rejected' data-qc='rejected'>{local.rejected}</option>
+                      </Form.Control>
+                    </div>
+                  </Col>
+                  )
+                }
                 if (searchKey === 'branch') {
                   return (
-                    <Col key={index} sm={6} style={{ marginTop: 20}}>
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <BranchesDropDown onSelectBranch={(branch) => { formikProps.setFieldValue('branchId', branch._id) }} />
                     </Col>
                   )
                 }
               })}
               <Col>
-                <Button type="submit" style={{width: 100, marginTop: 20}}>{local.search}</Button>
+                <Button type="submit" style={{ width: 180, height: 50, marginTop: 20 }}>{local.search}</Button>
               </Col>
             </Row>
           </Form>
