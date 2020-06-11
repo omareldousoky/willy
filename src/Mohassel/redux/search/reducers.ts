@@ -12,6 +12,8 @@ export const searchFiltersReducer = (state= {}, action) => {
     switch (action.type) {
         case 'SET_SEARCH_FILTERS': 
             return {...state, ...action.payload};
+        case 'RESET_SEARCH_FILTERS': 
+            return {};
         default:
             return state;
     }

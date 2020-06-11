@@ -7,7 +7,7 @@ import Can from '../../config/Can';
 import Card from 'react-bootstrap/Card';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import Search from '../Search/search';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
 
@@ -43,6 +43,7 @@ interface Props {
   loading: boolean;
   searchFilters: any;
   search: (data) => void;
+  setSearchFilters: (data) => void;
 };
 class TrackLoanApplications extends Component<Props, State>{
   mappers: { title: string; key: string; render: (data: any) => void }[]
@@ -86,8 +87,11 @@ class TrackLoanApplications extends Component<Props, State>{
       },
     ]
   }
-  async componentDidMount() {
+  componentDidMount() {
     this.getApplications();
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' });
@@ -167,6 +171,7 @@ class TrackLoanApplications extends Component<Props, State>{
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {
