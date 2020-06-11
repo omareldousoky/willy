@@ -185,7 +185,7 @@
     "reviewed": "رُجعت",
     "approved": "موافق عليها",
     "rejected": "مرفوضة",
-    "created": "إنشاء",
+    "create": "إنشاء",
     "createLoan": "إنشاء قرض",
     "issueLoan": "إصدار قرض",
     "reviewLoan": "مراجعة قرض",
@@ -441,5 +441,8 @@
     "editUser": "تعديل المستخدم",
     "editCustomer": "تعديل العميل",
     "editRole": "تعديل دور المستخدم",
-    "mohassel": "المحصل"
+    "mohassel": "المحصل",
+    "noOfApplications": "عدد طلبات القروض",
+    "created": "تم الإنشاء",
+    "changeState": "تغيير الحالة"
 }
