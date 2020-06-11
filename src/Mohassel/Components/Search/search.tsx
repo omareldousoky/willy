@@ -59,7 +59,6 @@ class Search extends Component<Props, State> {
     }
   }
   submit = async (values) => {
-    console.log('val', values)
     const obj = { ...values, ...{ from: this.props.from } };
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
