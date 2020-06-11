@@ -128,7 +128,7 @@ export const StepTwoForm = (props: any) => {
                             name="customerWorkAddressLocation"
                             data-qc="customerWorkAddressLocation"
                             style={{ cursor: 'pointer', color: '#7dc356', textDecoration: 'underline' }}
-                            value={values.businessAddressLatLongNumber.lat !== 0 && values.businessAddressLatLongNumber.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
+                            value={values.businessAddressLatLongNumber?.lat !== 0 && values.businessAddressLatLongNumber?.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
                             onClick={() => openCloseMap(true)}
                         />
                     </Form.Group>
@@ -191,8 +191,7 @@ export const StepTwoForm = (props: any) => {
                         >
                             <option value="" disabled></option>
                             {governorates.find(gov => gov.governorateLegacyCode === Number(values.governorate))?.districts
-                                .find(district => district.districtLegacyCode === Number(values.district))?.villages
-                                .map((village, index) => {
+                                .find(district => district.districtLegacyCode === Number(values.district))?.villages?.map((village, index) => {
                                     return <option key={index} value={village.villageLegacyCode} >{village.villageName.ar}</option>
                                 })}
                         </Form.Control>
@@ -345,8 +344,7 @@ export const StepTwoForm = (props: any) => {
                         >
                             <option value="" disabled></option>
                             {businessSectors.find(businessSector => businessSector.legacyCode === Number(values.businessSector))?.activities
-                                .find(activity => activity.legacyCode === Number(values.businessActivity))?.specialties
-                                .map((speciality, index) => {
+                                .find(activity => activity.legacyCode === Number(values.businessActivity))?.specialties?.map((speciality, index) => {
                                     return <option key={index} value={speciality.legacyCode} >{speciality.businessSpecialtyName.ar}</option>
                                 })}
                         </Form.Control>
