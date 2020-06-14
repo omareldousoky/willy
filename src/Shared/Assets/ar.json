@@ -374,8 +374,11 @@
     "branchAddress":"عنوان الفرع", 
     "postalCode":"الرقم البريدي",
     "newBranch":"فرع جديد",
+    "editBranch": "تعديل فرع",
     "branchCreated":"تم إنشاء الفرع بنجاح",
+    "branchUpdated":"تم تعديل الفرع بنجاح",
     "branchCreationError":"حدث خطأ ،لم يتم إنشاء الفرع",
+    "branchUpdateError": "حدث خطأ ،لم يتم تعديل الفرع",
     "branchState": "حالة الفرع",
     "activeBranch": "نشط",
     "inActiveBranch":"غير نشط",
@@ -441,5 +444,7 @@
     "editUser": "تعديل المستخدم",
     "editCustomer": "تعديل العميل",
     "editRole": "تعديل دور المستخدم",
-    "mohassel": "المحصل"
+    "mohassel": "المحصل",
+    "licenseNumber": "رقم الترخيص",
+    "licenseDate":"تاريخ الترخيص"
 }

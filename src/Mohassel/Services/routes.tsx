@@ -84,7 +84,7 @@ routes: [
     {
       path: "/create-loan",
       label: local.createLoan, 
-      render: (props) => <LoanCreation {...props} />,
+      render: (props) => <LoanCreation {...props} edit={false} />,
     } , 
     {
       path: "/loan-profile",
@@ -108,12 +108,12 @@ routes: [
 {
    path: "/manage-accounts",
    label: local.manageAccounts,
-   render: (props) => <RolesList {...props} />,
+   render: (props) => <Can I='createRoles' a='user'><RolesList {...props} /></Can>,
    routes : [
      {
        path: "/roles",
        label : local.roles,
-       render: (props) => <RolesList {...props} />,
+       render: (props) => <Can I='createRoles' a='user'><RolesList {...props} /> </Can>,
        routes: [
          {
          path: "/new-role",
@@ -135,7 +135,7 @@ routes: [
      {
        path: "/users",
        label : local.users,
-       render: (props) => <UsersList  {...props} />,
+       render: (props) =><Can I='createUser' a='user'> <UsersList  {...props} /></Can>,
        routes: [
          {
            path:"/new-user",
@@ -158,14 +158,20 @@ routes: [
       {
         path: "/branches", 
         label: local.branches,
-        render: (props) => <BranchesList {...props} />,
+        render: (props) => <Can I = 'createBranch' a='branch'> <BranchesList {...props} /> </Can>,
         routes: [
           {
             path: "/new-branch",
             label: local.newBranch,
-            render: (props) => <Can I='createBranch' a='branch'><CreateBranch {...props} /></Can>
+            render: (props) => <Can I='createBranch' a='branch'><CreateBranch {...props} edit= {false} /></Can>
             
-          }
+          },
+          {
+            path: "/edit-branch",
+            label: local.editBranch,
+            render: (props) => <Can I='createBranch' a='branch'><CreateBranch {...props} edit= {true} /></Can>
+            
+          },
         ]
       }
 

@@ -137,15 +137,15 @@ class TrackLoanApplications extends Component<Props, State>{
     } else if (loan.application.status === 'reviewed') {
       return (
         <div>
-          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
-          <Can I='rejectLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
+          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
+          <Can I='rejectLoanApplication' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
         </div>
       )
     } else if (loan.application.status === 'underReview') {
       return (
         <div>
-          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
-          <Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
+          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
+          <Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
         </div>
       )
     }
