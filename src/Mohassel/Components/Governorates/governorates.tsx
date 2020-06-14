@@ -5,6 +5,8 @@ import { getGovernorates } from '../../Services/APIs/configApis/config'
 import Select from 'react-select';
 import {theme} from '../../../theme';
 import { Loader } from '../../../Shared/Components/Loader';
+import Swal from 'sweetalert2';
+import * as local from '../../../Shared/Assets/ar.json';
 interface Village {
     villageName: { ar: string };
     villageLegacyCode: number;
@@ -64,7 +66,12 @@ export default class Governorates extends  React.Component<Props,State>  {
 
           })
           this.setState({governoratesOptions:options});
-        } 
+        }  else {
+            this.setState({
+                governorate: {label: this.props.values.governorate , value: 0}
+            })
+            Swal.fire("error", local.governoratesError)
+        }
       this.setState({loading:false});
 
     }

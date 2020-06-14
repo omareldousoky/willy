@@ -446,5 +446,6 @@
     "editRole": "تعديل دور المستخدم",
     "mohassel": "المحصل",
     "licenseNumber": "رقم الترخيص",
-    "licenseDate":"تاريخ الترخيص"
+    "licenseDate":"تاريخ الترخيص",
+    "governoratesError": "حدث خطأ في إسترجاع المحافظات"
 }
