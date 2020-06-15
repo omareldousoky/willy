@@ -444,5 +444,6 @@
     "mohassel": "المحصل",
     "noOfApplications": "عدد طلبات القروض",
     "created": "تم الإنشاء",
-    "changeState": "تغيير الحالة"
+    "changeState": "تغيير الحالة",
+    "noResultsFound": "لم يتم العثور على نتائج"
 }
