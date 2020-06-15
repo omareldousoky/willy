@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../Services/utils.js';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 export const step1: any = {
     customerName: '',
