@@ -34,14 +34,15 @@ const BranchDetailsView = (props: Props) => {
             </div>
             <Table striped bordered hover >
                 <tbody>
-                    <tr><td style={header}>{local.creationDate}</td><td style={cell}>{timeToDate(data.created.at)}</td></tr>
+                    <tr><td style={header}>{local.creationDate}</td><td style={cell}>{data.created? timeToDate(data.created.at) : null}</td></tr>
                     <tr><td style={header}>{local.branchCode}</td><td style={cell}>{data.branchCode}</td></tr>
-                    <tr><td style={header}>{local.oneBranch}</td><td style={cell}> {data.governorate}-{data.name}</td></tr>
+                    <tr><td style={header}>{local.oneBranch}</td><td style={cell}>{data.name}</td></tr>
+                    <tr><td style={header}>{local.governorate}</td><td style={cell}> {data.governorate}</td></tr>
                     <tr><td style={header}>{local.branchAddress}</td><td style={cell}>{data.address}</td></tr>
                     <tr><td style={header}>{local.mobilePhoneNumber}</td><td style={cell}>{data.phoneNumber}</td></tr>
                     <tr><td style={header}>{local.faxNumber}</td><td style={cell}>{data.faxNumber}</td></tr>
                     <tr><td style={header}>{local.status}</td><td style={cell}>{data.status}</td></tr>
-
+                    <tr><td style={header}>{local.lonasTypes}</td><td style={cell}><Labels  labelsTextArr={data.products} /></td></tr>
                 </tbody>
 
             </Table>

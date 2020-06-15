@@ -42,7 +42,13 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.oneBranch,
         key: "branch",
-        render: data => data.governorate + "-" + data.name
+        render: data =>  data.name
+      },
+      {
+        title: local.governorate,
+        key: "governorate",
+        render: data =>  data.governorate
+
       },
       {
         title: local.noOfUsers,
@@ -57,7 +63,7 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => getDateAndTime(data.created.at)
+        render: data => data.created ? getDateAndTime(data.created.at) : null
       },
       {
         title: local.status,

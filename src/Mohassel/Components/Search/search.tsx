@@ -23,6 +23,7 @@ interface Props {
   from: number;
   url: string;
   roleId?: string;
+  hqBranchIdRequest?: string;
   searchKeys: Array<string>;
   search: (data) => void;
   searchFilters: (data) => void;
@@ -44,7 +45,7 @@ class Search extends Component<Props, {}> {
       obj.roleId = this.props.roleId;
     obj.from = 0;
     this.props.searchFilters(obj);
-    this.props.search({ ...obj, size: this.props.size, url: this.props.url })
+    this.props.search({ ...obj, size: this.props.size, url: this.props.url , branchId: this.props.hqBranchIdRequest  })
   }
   getInitialState() {
     const initialState: InitialFormikState = {};

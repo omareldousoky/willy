@@ -13,9 +13,12 @@ import UsersList from '../ManageAccounts/usersList';
 import CustomersList from '../CustomerCreation/customersList';
 import TrackLoanApplications from '../TrackLoanApplications/trackLoanApplications';
 import LoanList from '../LoanList/loanList';
+import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
+import { Loader } from '../../../Shared/Components/Loader';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
+    loading: boolean;
     step: number;
     branch: any;
 }
@@ -30,19 +33,15 @@ const tabs = [
         title: local.users,
     },
     {
-        eventKey: 3,
-        title: local.lonasTypes,
-    },
-    {
-        eventKey:4,
+        eventKey:3,
         title: local.customers,
     },
     {
-        eventKey: 5,
+        eventKey: 4,
         title:local.loanApplications,
     },
     {
-        eventKey: 6,
+        eventKey: 5,
         title: local.issuedLoans, 
     }
 
@@ -74,16 +73,18 @@ interface State {
                 branchCode:0,
                 governorate:'',
                 status:'',
+                products: [],
             },
         }
     }
 
     async getBranch() {
         const _id = this.props.history.location.state.details;
+        const products = await this.getProductsByBranch(_id);
         await this.props.getBranchById(_id);
         if(this.props.branch.status === "success") {
             this.setState({
-                data: this.props.branch.body.data,
+                data: {...this.props.branch.body.data, products},
                 _id,
             })
         }
@@ -92,15 +93,26 @@ interface State {
     componentDidMount() {
         this.getBranch();
     }
+    async getProductsByBranch(_id: string) {
+        const branchsProducts = await getProductsByBranch(_id);
+         if (branchsProducts.status === 'success') {
+
+                const products = branchsProducts.body.data.productIds ? branchsProducts.body.data.productIds.map((product => product.productName)) : [];
+               return products;
+        }
+         else {
+             return [];
+         }
+    }
     renderTabs() {
         switch(this.state.step){
             case 1:
                 return(<BranchDetailsView data = {this.state.data} />);
              case 2: return ( <UsersList {...{branchId: this.state._id , withHeader: false} }
                  />)
-             case 4:   return (<CustomersList {...{branchId: this.state._id}} />)
-             case 5: return (<TrackLoanApplications {...{branchId: this.state._id}} />)
-             case 6: return (<LoanList {...{branchId: this.state._id}}/>)
+             case 3:   return (<CustomersList {...{branchId: this.state._id}} />)
+             case 4: return (<TrackLoanApplications {...{branchId: this.state._id}} />)
+             case 5: return (<LoanList {...{branchId: this.state._id}}/>)
              default: return null;   
         }
     }
@@ -122,6 +134,7 @@ interface State {
     render() {
         return (
             <>
+             <Loader type="fullscreen" open={this.props.loading}  />
             <div className={'rowContainer'}>
                 <BackButton title={local.branchDetails} />
                 {this.renderEditIcon()}

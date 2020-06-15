@@ -11,4 +11,5 @@ export interface  BranchBasicsView {
     branchCode: number;
     governorate: string;
     status: string;
+    products: string[];
 }

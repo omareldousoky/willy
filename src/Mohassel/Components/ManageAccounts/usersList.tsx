@@ -59,7 +59,7 @@ class UsersList extends Component<Props, State> {
       {
         title: local.createdBy,
         key: "createdBy",
-        render: data => data.created.by
+        render: data => data.created? data.created.by : null
       },
       {
         title: local.creationDate,
@@ -124,7 +124,7 @@ class UsersList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} url="user" from={this.state.from} size={this.state.size} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
               totalCount={this.props.totalCount}
