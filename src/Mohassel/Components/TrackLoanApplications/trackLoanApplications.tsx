@@ -56,6 +56,7 @@ interface State {
 }
 interface Props {
   history: any;
+  branchId?: string;
 };
 class TrackLoanApplications extends Component<Props, State>{
   constructor(props) {
@@ -107,7 +108,7 @@ class TrackLoanApplications extends Component<Props, State>{
     }
     if (isNaN(Number(values.searchKeyword))) obj = { ...obj, name: values.searchKeyword }
     else obj = { ...obj, nationalId: values.searchKeyword }
-    const res = await searchApplication(obj);
+    const res = await searchApplication({...obj, branchId: this.props.branchId});
     if (res.status === "success") {
       this.setState({
         loading: false,

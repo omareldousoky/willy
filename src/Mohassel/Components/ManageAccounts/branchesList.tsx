@@ -67,7 +67,9 @@ class BranchesList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span>
+        render: data => <><span 
+        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}
+        className='fa fa-eye icon'></span>
          <span
           onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}
           className='fa fa-pencil-alt icon'></span></>

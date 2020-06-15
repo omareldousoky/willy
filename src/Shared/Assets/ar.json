@@ -372,6 +372,7 @@
     "branchName": "إسم الفرع",
     "branchOnMap": "تحديد عنوان الفرع على الخريطة",
     "branchAddress":"عنوان الفرع", 
+    "branchDetails": "تفاصيل الفرع",
     "postalCode":"الرقم البريدي",
     "newBranch":"فرع جديد",
     "editBranch": "تعديل فرع",
@@ -447,5 +448,7 @@
     "mohassel": "المحصل",
     "licenseNumber": "رقم الترخيص",
     "licenseDate":"تاريخ الترخيص",
-    "governoratesError": "حدث خطأ في إسترجاع المحافظات"
+    "governoratesError": "حدث خطأ في إسترجاع المحافظات",
+    "basicInfo":"بيانات اساسية",
+    "lonasTypes":"انواع القروض"
 }

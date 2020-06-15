@@ -24,6 +24,8 @@ interface Props {
   searchFilters: any;
   search: (data) => void;
   setLoading: (data) => void;
+  branchId?: string;
+  withHeader: boolean;
 };
 interface State {
   size: number;
@@ -72,6 +74,7 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
+    console.log('branchId', this.props.branchId)
     this.getUsers()
   }
   async handleActivationClick(data: any) {
@@ -97,16 +100,17 @@ class UsersList extends Component<Props, State> {
     );
   }
   async getUsers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
     return (
       <div>
+        {this.props.withHeader &&
      <HeaderWithCards
       header={local.manageAccounts}
       array = {manageAccountsArray}
       active = {1}
-      />
+        /> }
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>

@@ -26,7 +26,7 @@ import CreateBranch from '../Components/BranchCreation/create-branch';
 import CustomersList from '../Components/CustomerCreation/customersList';
 import * as local from '../../Shared/Assets/ar.json';
 import { generateAppRoutes } from './utils';
-
+import BranchDetails from '../Components/BranchDetails/branch-details';
  const appRoutes = [
 {
   path: "/",
@@ -135,7 +135,7 @@ routes: [
      {
        path: "/users",
        label : local.users,
-       render: (props) =><Can I='createUser' a='user'> <UsersList  {...props} /></Can>,
+       render: (props) =><Can I='createUser' a='user'> <UsersList  {...props} withHeader={true} /></Can>,
        routes: [
          {
            path:"/new-user",
@@ -171,7 +171,11 @@ routes: [
             label: local.editBranch,
             render: (props) => <Can I='createBranch' a='branch'><CreateBranch {...props} edit= {true} /></Can>
             
-          },
+          }, {
+            path: "/branch-details",
+            label: local.branchDetails,
+            render: (props) => <Can I = 'getBranch' a='branch'><BranchDetails {...props}/> </Can>
+          }
         ]
       }
 

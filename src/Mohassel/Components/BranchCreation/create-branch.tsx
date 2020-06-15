@@ -140,7 +140,7 @@ interface Props {
     }
 }
 
-const addCreateBranchToProps = dispatch =>{
+const addBranchToProps = dispatch =>{
     return {
         createNewBranch: branch => dispatch(createNewBranch(branch)),
         getBranchById:  (_id) => dispatch(getBranchById(_id)),
@@ -155,4 +155,4 @@ const mapStateToProps = (state) => {
  }
 }
 
-export default connect(mapStateToProps, addCreateBranchToProps) (withRouter(CreateBranch));
+export default connect(mapStateToProps, addBranchToProps) (withRouter(CreateBranch));
