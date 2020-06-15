@@ -7,7 +7,7 @@ import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
-import { timeToDateyyymmdd } from '../../Services/utils.js';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 const PaymentReceipt = (props: any) => {
   function download() {

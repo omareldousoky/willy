@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import PostponeInstallments from './postponeInstallments';
-import { timeToDateyyymmdd } from '../../Services/utils.js';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Props {
     test: boolean;
