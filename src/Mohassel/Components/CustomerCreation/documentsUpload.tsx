@@ -274,7 +274,7 @@ class DocumentsUpload extends Component<Props, State>{
           <h4 style={{ textAlign: 'right' }}>{local.additionalPapers}</h4>
           {this.renderContainer('additionalPapers')}
         </div>
-        <Button disabled style={{ float: 'right', marginBottom: 30 }} onClick={() => this.props.previousStep()} data-qc="previous">{local.previous}</Button>
+        {/* <Button disabled style={{ float: 'right', marginBottom: 30 }} onClick={() => this.props.previousStep()} data-qc="previous">{local.previous}</Button> */}
       </>
     )
   }

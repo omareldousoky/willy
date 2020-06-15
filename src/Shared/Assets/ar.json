@@ -185,7 +185,7 @@
     "reviewed": "رُجعت",
     "approved": "موافق عليها",
     "rejected": "مرفوضة",
-    "created": "إنشاء",
+    "create": "إنشاء",
     "createLoan": "إنشاء قرض",
     "issueLoan": "إصدار قرض",
     "reviewLoan": "مراجعة قرض",
@@ -450,5 +450,8 @@
     "licenseDate":"تاريخ الترخيص",
     "governoratesError": "حدث خطأ في إسترجاع المحافظات",
     "basicInfo":"بيانات اساسية",
-    "lonasTypes":"انواع القروض"
+    "lonasTypes":"انواع القروض",
+    "noOfApplications": "عدد طلبات القروض",
+    "created": "تم الإنشاء",
+    "changeState": "تغيير الحالة"
 }

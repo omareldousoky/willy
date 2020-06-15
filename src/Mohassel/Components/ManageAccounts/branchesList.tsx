@@ -9,7 +9,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
 interface State {
@@ -23,6 +23,7 @@ interface Props {
   loading: boolean;
   searchFilters: any;
   search: (data) => void;
+  setSearchFilters: (data) => void;
 }
 
 class BranchesList extends Component<Props, State> {
@@ -63,7 +64,7 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => data.created ? getDateAndTime(data.created.at) : null
+        render: data => data.created? getDateAndTime(data.created.at) : ''
       },
       {
         title: local.status,
@@ -85,7 +86,9 @@ class BranchesList extends Component<Props, State> {
   componentDidMount() {
     this.getBranches()
   }
-
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
   getBranches() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' });
   }
@@ -133,6 +136,7 @@ class BranchesList extends Component<Props, State> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {

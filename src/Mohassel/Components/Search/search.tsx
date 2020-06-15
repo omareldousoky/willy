@@ -9,6 +9,10 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { search, searchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
+import { parseJwt } from '../../Services/utils';
+import { getCookie } from '../../Services/getCookie';
+import { getGovernorates } from '../../Services/APIs/configApis/config';
+import { loading } from '../../redux/loading/actions';
 
 interface InitialFormikState {
   name?: string;
@@ -27,21 +31,41 @@ interface Props {
   searchKeys: Array<string>;
   search: (data) => void;
   searchFilters: (data) => void;
+  setLoading: (data) => void;
 }
-class Search extends Component<Props, {}> {
+interface State {
+  governorates: Array<any>;
+}
+class Search extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-
+      governorates: [],
+    }
+  }
+  componentDidMount() {
+    if (this.props.url === 'customer') {
+      this.getGov();
+    }
+  }
+  async getGov() {
+    const res = await getGovernorates();
+    this.props.setLoading(true);
+    if (res.status === 'success') {
+      this.setState({ governorates: res.body.governorates });
+      this.props.setLoading(false);
+    } else {
+      this.props.setLoading(false);
+      console.log("Error getting governorates")
     }
   }
   submit = async (values) => {
-    const obj = { ...values, ...{ from: this.props.from }};
+    const obj = { ...values, ...{ from: this.props.from } };
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
     if (obj.hasOwnProperty('toDate'))
       obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 59).valueOf();
-    if(this.props.roleId)
+    if (this.props.roleId)
       obj.roleId = this.props.roleId;
     obj.from = 0;
     this.props.searchFilters(obj);
@@ -53,16 +77,25 @@ class Search extends Component<Props, {}> {
       switch (searchkey) {
         case 'keyword':
           initialState.name = '';
-          break;
         case 'governorate':
           initialState.governorate = '';
         case 'status':
           initialState.status = '';
         case 'branch':
           initialState.branchId = '';
+        case 'status-application':
+          initialState.status = '';
       }
     })
     return initialState;
+  }
+  viewBranchDropdown() {
+    const token = getCookie('token');
+    const tokenData = parseJwt(token);
+    if (this.props.url === 'application') {
+      if (tokenData?.requireBranch === false) return true;
+      else return false;
+    } else return true;
   }
   render() {
     return (
@@ -133,32 +166,35 @@ class Search extends Component<Props, {}> {
                 if (searchKey === 'governorate') {
                   return (
                     <Col key={index} sm={6}>
-                        <div className="dropdown-container" style={{ marginTop: 20}}>
-                          <p className="dropdown-label">{local.governorate}</p>
-                          <Form.Control as="select" className="dropdown-select" data-qc="governorate" onChange={formikProps.handleChange}>
-                            <option value={5} data-qc={5}>5</option>
-                            <option value={10} data-qc={10}>10</option>
-                          </Form.Control>
-                        </div>
+                      <div className="dropdown-container" style={{ marginTop: 20 }}>
+                        <p className="dropdown-label">{local.governorate}</p>
+                        <Form.Control as="select" name="governorate" className="dropdown-select" data-qc="governorate" onChange={formikProps.handleChange}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          {this.state.governorates.map((governorate, index) => {
+                            return (<option key={index} value={governorate.governorateName.ar} data-qc={governorate.governorateName.ar}>
+                              {governorate.governorateName.ar}</option>)
+                          })}
+                        </Form.Control>
+                      </div>
                     </Col>
                   )
                 }
                 if (searchKey === 'employment') {
                   return (
-                    <Col key={index} sm={6} style={{ marginTop: 20}}>
-                        <div className="dropdown-container">
-                          <p className="dropdown-label">{local.employment}</p>
-                          <Form.Control as="select" className="dropdown-select" data-qc="employment" onChange={formikProps.handleChange}>
-                            <option value={5} data-qc={5}>5</option>
-                            <option value={10} data-qc={10}>10</option>
-                          </Form.Control>
-                        </div>
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.employment}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="employment" onChange={formikProps.handleChange}>
+                          <option value={5} data-qc={5}>5</option>
+                          <option value={10} data-qc={10}>10</option>
+                        </Form.Control>
+                      </div>
                     </Col>
                   )
                 }
                 if (searchKey === 'status') {
                   return (
-                    <Col key={index} sm={6} style={{ marginTop: 20}}>
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
                         <p className="dropdown-label">{local.status}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
@@ -170,16 +206,33 @@ class Search extends Component<Props, {}> {
                     </Col>
                   )
                 }
-                if (searchKey === 'branch') {
+                if (searchKey === 'status-application') {
                   return (
-                    <Col key={index} sm={6} style={{ marginTop: 20}}>
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          <option value='underReview' data-qc='underReview'>{local.underReview}</option>
+                          <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                          <option value='approved' data-qc='approved'>{local.approved}</option>
+                          <option value='created' data-qc='created'>{local.created}</option>
+                          <option value='rejected' data-qc='rejected'>{local.rejected}</option>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'branch' && this.viewBranchDropdown()) {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <BranchesDropDown onSelectBranch={(branch) => { formikProps.setFieldValue('branchId', branch._id) }} />
                     </Col>
                   )
                 }
               })}
               <Col>
-                <Button type="submit" style={{width: 100, marginTop: 20}}>{local.search}</Button>
+                <Button type="submit" style={{ width: 180, height: 50, marginTop: 20 }}>{local.search}</Button>
               </Col>
             </Row>
           </Form>
@@ -192,7 +245,8 @@ class Search extends Component<Props, {}> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
-    searchFilters: data => dispatch(searchFilters(data))
+    searchFilters: data => dispatch(searchFilters(data)),
+    setLoading: data => dispatch(loading(data))
   };
 };
 

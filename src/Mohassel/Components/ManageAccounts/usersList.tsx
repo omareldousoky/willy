@@ -11,10 +11,11 @@ import Can from '../../config/Can';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
-import { search } from '../../redux/search/actions';
+import { search, searchFilters } from '../../redux/search/actions';
 import { loading } from '../../redux/loading/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Props {
   history: any;
@@ -24,6 +25,7 @@ interface Props {
   searchFilters: any;
   search: (data) => void;
   setLoading: (data) => void;
+  setSearchFilters: (data) => void;
   branchId?: string;
   withHeader: boolean;
 };
@@ -51,11 +53,11 @@ class UsersList extends Component<Props, State> {
         key: "name",
         render: data => data.name
       },
-      // {
-      //   title: local.employment,
-      //   key: "employment",
-      //   render: data => "employment"
-      // },
+      {
+        title: local.employment,
+        key: "employment",
+        render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
+      },
       {
         title: local.createdBy,
         key: "createdBy",
@@ -75,6 +77,9 @@ class UsersList extends Component<Props, State> {
   }
   componentDidMount() {
     this.getUsers()
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
@@ -98,7 +103,7 @@ class UsersList extends Component<Props, State> {
         <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
     );
   }
-  async getUsers() {
+  getUsers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
@@ -145,7 +150,8 @@ class UsersList extends Component<Props, State> {
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
-    setLoading: data => dispatch(loading(data))
+    setLoading: data => dispatch(loading(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
   };
 };
 const mapStateToProps = state => {

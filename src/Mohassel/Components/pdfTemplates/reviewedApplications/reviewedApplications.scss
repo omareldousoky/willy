@@ -6,6 +6,7 @@
     .reviewed-applications-print {
         font-size: 8px;
         font-weight: bold;
+    	page-break-after: always;
 
         & ol {
             list-style: arabic-indic;

@@ -1,6 +1,7 @@
 import React from 'react';
 import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../../Services/utils';
 
 const TestCalculateFormulaPDF = (props) => {
     return (
@@ -40,7 +41,7 @@ const TestCalculateFormulaPDF = (props) => {
                                 <td>{installment.installmentResponse ? installment.installmentResponse : 0}</td>
                                 <td>{installment.principalInstallment ? installment.principalInstallment : 0}</td>
                                 <td>{installment.feesInstallment ? installment.feesInstallment : 0}</td>
-                                <td>{new Date(installment.dateOfPayment).toISOString().slice(0, 10)}</td>
+                                <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
                             </tr>
                         )
                     })}
