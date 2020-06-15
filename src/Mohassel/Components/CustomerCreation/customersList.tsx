@@ -21,6 +21,7 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  branchId: string;
   search: (data) => void;
   setSearchFilters: (data) => void;
 }
@@ -77,7 +78,7 @@ class CustomersList extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
   }
   render() {
     return (
@@ -95,7 +96,7 @@ class CustomersList extends Component<Props, State> {
             </div>
           </div>
           <hr className="dashed-line" />
-          <Search searchKeys={['keyword', 'dateFromTo', 'governorate']} url="customer" from={this.state.from} size={this.state.size} />
+          <Search searchKeys={['keyword', 'dateFromTo', 'governorate']} url="customer" from={this.state.from} size={this.state.size}  hqBranchIdRequest = {this.props.branchId}/>
           {this.props.data &&
             <DynamicTable
               totalCount={this.props.totalCount}

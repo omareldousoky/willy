@@ -35,7 +35,7 @@ class Labels extends Component<Props,State>  {
    render() {
 
     return (
-        <div style={{display:"flex",flexDirection:'row'}}>
+        <div style={{display:"flex",flexDirection:'row', flexWrap:'wrap'}}>
             { this.props.labelsTextArr?.map((labelText,index)=>{
                 return (
                     <div 
