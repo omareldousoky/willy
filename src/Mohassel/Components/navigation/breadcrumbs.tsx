@@ -4,7 +4,7 @@ import { pathTo } from "../../Services/utils";
 
 const Breadcrumbs = ({ route }) => {
   return (
-  <nav className="breadcrumbs">
+  <nav className="breadcrumbs print-none">
     {pathTo(route).map((crumb, index, breadcrumbs) => (
       crumb.path &&
       <div key={index} className="item">

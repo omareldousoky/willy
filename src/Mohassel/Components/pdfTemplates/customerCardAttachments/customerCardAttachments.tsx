@@ -1,6 +1,7 @@
 import React from 'react';
 import './customerCardAttachments.scss';
 const CustomerCardAttachments = (props) => {
+     console.log(props);
     return (
         <div className="customer-card-attachments-print" style={{direction: "rtl"}} lang="ar">
             <div className="head">
@@ -28,7 +29,7 @@ const CustomerCardAttachments = (props) => {
 
                 <div className="double">
                     <div className="title">اسم العميل :
-				<div className="value">نجلاء محمد فتحي محمود عفيفي</div>
+				<div className="value">{props.data.customer.customerName}</div>
                     </div>
 
                     <div className="title">الرقم القومى :

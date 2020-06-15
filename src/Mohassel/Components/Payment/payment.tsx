@@ -15,6 +15,7 @@ import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
 import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
 import Can from '../../config/Can';
+import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
@@ -33,6 +34,7 @@ interface Props {
   installments: Array<Installment>;
   currency: string;
   applicationId: string;
+  application: any;
   refreshPayment: () => void;
 }
 interface State {
@@ -441,10 +443,14 @@ class Payment extends Component<Props, State>{
   render() {
     return (
       <>
-        <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
-        {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        <div className="print-none">
+          <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
+          <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
+          <Button onClick= {()=> window.print()}>print</Button>
+          {this.renderPaymentMethods()}
+          {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        </div>
+        <EarlyPaymentPDF application={this.props.application}/>
       </>
     );
   }

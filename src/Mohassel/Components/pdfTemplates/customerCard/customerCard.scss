@@ -7,6 +7,8 @@
 			font-size: 9px;
 			font-weight: bold;
 			margin: 8px;
+			page-break-after: always;
+			
 			& ol {
 				list-style: arabic-indic;
 				text-align: right;
