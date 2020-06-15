@@ -5,6 +5,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 export const step1: BasicValues = {
     branchAddressLatLong: {lat: 0, lng: 0}, 
+    licenseDate: '',
+    licenseNumber: '',
     name: '',
     governorate: '',
     status: 'active',
@@ -21,5 +23,7 @@ export const branchCreationValidationStepOne = Yup.object().shape({
     faxNumber: Yup.string().min(10, local.minLength10).max(11,local.maxLength11),
     address: Yup.string().trim().max(150, local.maxLength150).required(local.required),
     postalCode: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).max(5,local.maxLength5),
+    licenseDate: Yup.string().trim().required(local.required),
+    licenseNumber: Yup.string().trim().required(local.required),
     status: Yup.string().trim().oneOf(["active","inactive"])
 })

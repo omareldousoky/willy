@@ -43,7 +43,13 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.oneBranch,
         key: "branch",
-        render: data => data.governorate + "-" + data.name
+        render: data =>  data.name
+      },
+      {
+        title: local.governorate,
+        key: "governorate",
+        render: data =>  data.governorate
+
       },
       {
         title: local.noOfUsers,
@@ -58,7 +64,7 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => getDateAndTime(data.created.at)
+        render: data => data.created? getDateAndTime(data.created.at) : ''
       },
       {
         title: local.status,
@@ -66,14 +72,14 @@ class BranchesList extends Component<Props, State> {
         render: data => data.status
       },
       {
-        title: local.gender,
-        key: "type",
-        render: data => data.type
-      },
-      {
         title: '',
         key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+        render: data => <><span 
+        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}
+        className='fa fa-eye icon'></span>
+         <span
+          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}
+          className='fa fa-pencil-alt icon'></span></>
       },
     ]
   }

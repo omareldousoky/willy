@@ -10,6 +10,7 @@ import Search from '../Search/search';
 import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Product {
   productName: string;
@@ -44,6 +45,7 @@ interface Props {
   searchFilters: any;
   search: (data) => void;
   setSearchFilters: (data) => void;
+  branchId?: string;
 };
 class TrackLoanApplications extends Component<Props, State>{
   mappers: { title: string; key: string; render: (data: any) => void }[]
@@ -73,7 +75,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.loanIssuanceDate,
         key: "loanIssuanceDate",
-        render: data => new Date(data.application.entryDate).toISOString().slice(0, 10)
+        render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.loanStatus,
@@ -147,7 +149,7 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} url="application" from={this.state.from} size={this.state.size} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} url="application" from={this.state.from} size={this.state.size}  hqBranchIdRequest= {this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}

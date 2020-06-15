@@ -5,6 +5,7 @@ print {
         font-size: 12px;
         line-height: 1.5em;
         margin: 8px;
+    	page-break-after: always;
         & .headtitle {
             font-size: 14px;
             font-weight: bolder;
@@ -115,7 +116,7 @@ print {
 @media screen {
     .loan-contract {
         max-width: 624px;
-        // display: none;
+        display: none;
         & .main {
             border: 1px black solid;
             padding: 30px;

@@ -15,6 +15,7 @@ import { search, searchFilters } from '../../redux/search/actions';
 import { loading } from '../../redux/loading/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Props {
   history: any;
@@ -25,6 +26,8 @@ interface Props {
   search: (data) => void;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;
+  branchId?: string;
+  withHeader: boolean;
 };
 interface State {
   size: number;
@@ -50,15 +53,15 @@ class UsersList extends Component<Props, State> {
         key: "name",
         render: data => data.name
       },
-      // {
-      //   title: local.employment,
-      //   key: "employment",
-      //   render: data => "employment"
-      // },
+      {
+        title: local.employment,
+        key: "employment",
+        render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
+      },
       {
         title: local.createdBy,
         key: "createdBy",
-        render: data => data.created.by
+        render: data => data.created? data.created.by : null
       },
       {
         title: local.creationDate,
@@ -101,16 +104,17 @@ class UsersList extends Component<Props, State> {
     );
   }
   getUsers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
     return (
       <div>
+        {this.props.withHeader &&
      <HeaderWithCards
       header={local.manageAccounts}
       array = {manageAccountsArray}
       active = {1}
-      />
+        /> }
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -125,7 +129,7 @@ class UsersList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} url="user" from={this.state.from} size={this.state.size} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
               totalCount={this.props.totalCount}
