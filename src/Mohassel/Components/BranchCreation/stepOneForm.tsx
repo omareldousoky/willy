@@ -3,10 +3,12 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Governorates from '../Governorates/governorates'
 import './createBranch.scss';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { BasicValues, BasicErrors, BasicTouched } from './branchCreationInterfaces';
+
 
 interface Props {
     values: BasicValues;
@@ -69,20 +71,11 @@ const StepOneForm = (props: Props) => {
                         >
                             {`${local.governorate}*`}
                         </Form.Label>
-                        <Form.Control
-                            placeholder={local.governorate}
-                            type={"text"}
-                            name={"governorate"}
-                            data-qc={"governorate"}
-                            value={props.values.governorate}
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            isInvalid={(props.errors.governorate && props.touched.governorate) as boolean}
+
+                        <Governorates 
+                         values = {props.values}
+                
                         />
-                        <Form.Control.Feedback
-                            type="invalid">
-                            {props.errors.governorate}
-                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
             </Row>
@@ -194,6 +187,50 @@ const StepOneForm = (props: Props) => {
                         <Form.Control.Feedback
                             type="invalid">
                             {props.errors.faxNumber}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                            {`${local.licenseNumber}*`}
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"licenseNumber"}
+                            placeholder={local.licenseNumber}
+                            data-qc={"licenseNumber"}
+                            value={props.values.licenseNumber}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.licenseNumber && props.touched.licenseNumber) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.licenseNumber}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                            {`${local.licenseDate}*`}
+                        </Form.Label>
+                        <Form.Control
+                            type={"date"}
+                            name={"licenseDate"}
+                            placeholder={local.licenseDate}
+                            data-qc={"licenseDate"}
+                            value={props.values.licenseDate}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.licenseDate && props.touched.licenseDate) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.licenseDate}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
