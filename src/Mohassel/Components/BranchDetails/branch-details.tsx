@@ -51,6 +51,7 @@ interface State {
     step: number;
     data: BranchBasicsView;
     _id: string;
+    productsLoading: boolean;
 }
 
  class BranchDetails extends Component<Props ,State> {
@@ -75,6 +76,7 @@ interface State {
                 status:'',
                 products: [],
             },
+            productsLoading: false,
         }
     }
 
@@ -94,15 +96,20 @@ interface State {
         this.getBranch();
     }
     async getProductsByBranch(_id: string) {
+        this.setState({productsLoading: true})
         const branchsProducts = await getProductsByBranch(_id);
          if (branchsProducts.status === 'success') {
 
                 const products = branchsProducts.body.data.productIds ? branchsProducts.body.data.productIds.map((product => product.productName)) : [];
-               return products;
+                this.setState({productsLoading: false});
+                return products;
+               
         }
          else {
+            this.setState({productsLoading: false});
              return [];
          }
+       
     }
     renderTabs() {
         switch(this.state.step){
@@ -134,12 +141,13 @@ interface State {
     render() {
         return (
             <>
-             <Loader type="fullscreen" open={this.props.loading}  />
+            
             <div className={'rowContainer'}>
                 <BackButton title={local.branchDetails} />
                 {this.renderEditIcon()}
             </div>
             <Card  className={'card'}>
+            <Loader type="fullscreen" open={this.props.loading || this.state.productsLoading}  />
             <Tabs activeKey={this.state.step}  id="branch-tabs-details" style={{ margin: 0 }} onSelect={(key: string) => this.setState({ step: Number(key) })} >
                  {
                      tabs.map((tab , index) =>  {
