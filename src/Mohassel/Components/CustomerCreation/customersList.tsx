@@ -21,6 +21,7 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  branchId: string;
   search: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
@@ -73,7 +74,7 @@ class CustomersList extends Component<Props, State> {
     this.getCustomers();
   }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
   }
   render() {
     return (

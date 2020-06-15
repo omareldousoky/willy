@@ -80,7 +80,7 @@ class TrackLoanApplications extends Component<Props, State>{
       from: 0,
       size: 100
     };
-    const res = await searchApplication(obj);
+    const res = await searchApplication({...obj,  branchId: this.props.branchId });
     if (res.status === "success") {
       this.setState({
         loading: false,

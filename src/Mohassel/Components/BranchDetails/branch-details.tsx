@@ -10,6 +10,9 @@ import BackButton from '../BackButton/back-button';
 import {getBranchById} from '../../redux/branch/actions';
 import { BranchBasicsView } from './branchDetailsInterfaces';
 import UsersList from '../ManageAccounts/usersList';
+import CustomersList from '../CustomerCreation/customersList';
+import TrackLoanApplications from '../TrackLoanApplications/trackLoanApplications';
+import LoanList from '../LoanList/loanList';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
@@ -95,6 +98,9 @@ interface State {
                 return(<BranchDetailsView data = {this.state.data} />);
              case 2: return ( <UsersList {...{branchId: this.state._id , withHeader: false} }
                  />)
+             case 4:   return (<CustomersList {...{branchId: this.state._id}} />)
+             case 5: return (<TrackLoanApplications {...{branchId: this.state._id}} />)
+             case 6: return (<LoanList {...{branchId: this.state._id}}/>)
              default: return null;   
         }
     }

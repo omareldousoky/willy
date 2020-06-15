@@ -74,7 +74,6 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    console.log('branchId', this.props.branchId)
     this.getUsers()
   }
   async handleActivationClick(data: any) {
