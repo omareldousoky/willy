@@ -7,6 +7,7 @@ print {
         direction: rtl;
         text-align: right;
         margin: 8px;
+        page-break-after: always;
         & .headtitle {
             font-size: 14px;
             font-weight: bolder;
@@ -16,8 +17,8 @@ print {
             width: 100%;
             text-align: center;
         }
-        & div.divFooter {
-            position: fixed;
+        & .divFooter {
+            position: absolute;
             bottom: 0;
         }
         & .bottomborder {

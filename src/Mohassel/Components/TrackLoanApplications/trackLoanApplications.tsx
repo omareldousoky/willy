@@ -10,6 +10,7 @@ import Search from '../Search/search';
 import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Product {
   productName: string;
@@ -73,7 +74,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.loanIssuanceDate,
         key: "loanIssuanceDate",
-        render: data => new Date(data.application.entryDate).toISOString().slice(0, 10)
+        render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.loanStatus,

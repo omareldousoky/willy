@@ -15,8 +15,10 @@ import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
 import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
 import Can from '../../config/Can';
+import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Installment {
   id: number;
@@ -33,6 +35,7 @@ interface Props {
   installments: Array<Installment>;
   currency: string;
   applicationId: string;
+  application: any;
   refreshPayment: () => void;
 }
 interface State {
@@ -57,7 +60,7 @@ class Payment extends Component<Props, State>{
       receiptModal: false,
       receiptData: {},
       payAmount: 0,
-      truthDate: new Date().toISOString().slice(0, 10),
+      truthDate: timeToDateyyymmdd(0),
       loading: false,
       loadingFullScreen: false,
       remainingPrincipal: 0,
@@ -105,7 +108,7 @@ class Payment extends Component<Props, State>{
       {
         title: local.dateOfPayment,
         key: "dateOfPayment",
-        render: data => new Date(data.dateOfPayment).toISOString().slice(0, 10)
+        render: data => timeToDateyyymmdd(data.dateOfPayment)
       },
       {
         title: local.installmentStatus,
@@ -441,10 +444,14 @@ class Payment extends Component<Props, State>{
   render() {
     return (
       <>
-        <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
-        {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        <div className="print-none">
+          <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
+          <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
+          {/* <Button onClick= {()=> window.print()}>print</Button> */}
+          {this.renderPaymentMethods()}
+          {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        </div>
+        <EarlyPaymentPDF application={this.props.application}/>
       </>
     );
   }

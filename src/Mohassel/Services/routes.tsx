@@ -79,7 +79,7 @@ routes: [
     {
       path: "/edit-loan-application",
       label: local.editLoan ,
-      render: (props) => (props) => <LoanApplicationCreation {...props} edit={true} />,
+      render: (props) => <LoanApplicationCreation {...props} edit={true} />,
     } ,
     {
       path: "/create-loan",

@@ -7,6 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Props {
   history: Array<any>;
@@ -34,7 +35,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.customerName,
         key: "customerName",
-        render: data => <div style={{cursor: 'pointer'}} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
         title: local.customerCode,
@@ -49,7 +50,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanIssuanceDate,
         key: "loanIssuanceDate",
-        render: data => new Date(data.application.issueDate).toISOString().slice(0, 10)
+        render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,

@@ -149,7 +149,7 @@ export const StepTwoForm = (props: any) => {
                         >
                             <option value="" disabled></option>
                             {governorates.map((governorate, index) => {
-                                return <option key={index} value={governorate.governorateLegacyCode} >{governorate.governorateName.ar}</option>
+                                return <option key={index} value={governorate.governorateName.ar} >{governorate.governorateName.ar}</option>
                             })}
                         </Form.Control>
                     </Form.Group>
@@ -168,8 +168,8 @@ export const StepTwoForm = (props: any) => {
                             isInvalid={errors.district && touched.district}
                         >
                             <option value="" disabled></option>
-                            {governorates.find(gov => gov.governorateLegacyCode === Number(values.governorate))?.districts.map((district, index) => {
-                                return <option key={index} value={district.districtLegacyCode} >{district.districtName.ar}</option>
+                            {governorates.find(gov => gov.governorateName.ar === values.governorate)?.districts.map((district, index) => {
+                                return <option key={index} value={district.districtName.ar} >{district.districtName.ar}</option>
                             })}
                         </Form.Control>
                     </Form.Group>
@@ -190,9 +190,9 @@ export const StepTwoForm = (props: any) => {
                             isInvalid={errors.village && touched.village}
                         >
                             <option value="" disabled></option>
-                            {governorates.find(gov => gov.governorateLegacyCode === Number(values.governorate))?.districts
-                                .find(district => district.districtLegacyCode === Number(values.district))?.villages?.map((village, index) => {
-                                    return <option key={index} value={village.villageLegacyCode} >{village.villageName.ar}</option>
+                            {governorates.find(gov => gov.governorateName.ar === values.governorate)?.districts
+                                .find(district => district.districtName.ar === values.district)?.villages?.map((village, index) => {
+                                    return <option key={index} value={village.villageName.ar} >{village.villageName.ar}</option>
                                 })}
                         </Form.Control>
                     </Form.Group>
@@ -205,36 +205,25 @@ export const StepTwoForm = (props: any) => {
                                 style={{ display: 'inline-block' }}
                                 type="radio"
                                 data-qc="rural"
+                                checked={values.ruralUrban === "rural"}
                                 value="rural"
                                 label={local.rural}
                                 name="ruralUrban"
                                 id="ruralUrban"
-                                onClick={handleChange}
+                                onClick={(e) => setFieldValue("ruralUrban", e.currentTarget.value)}
                             />
                             <Form.Check
                                 style={{ display: 'inline-block' }}
                                 type="radio"
                                 data-qc="urban"
+                                checked={values.ruralUrban === "urban"}
                                 value="urban"
                                 label={local.urban}
                                 name="ruralUrban"
                                 id="ruralUrban"
-                                onClick={handleChange}
+                                onClick={(e) => setFieldValue("ruralUrban", e.currentTarget.value)}
                             />
                         </div>
-                        {/* <Form.Control as="select"
-                            type="select"
-                            name="ruralUrban"
-                            data-qc="ruralUrban"
-                            value={values.ruralUrban}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            isInvalid={errors.ruralUrban && touched.ruralUrban}
-                        >
-                            <option value="" disabled></option>
-                            <option value="rural" data-qc="rural">{local.rural}</option>
-                            <option value="urban" data-qc="urban">{local.urban}</option>
-                        </Form.Control> */}
                     </Form.Group>
                 </Col>
             </Row>
