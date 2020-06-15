@@ -64,7 +64,7 @@ export const StepThreeForm = (props: any) => {
                         >
                             <option value="" disabled></option>
                             {geoDivisions.map((geoDivision, index) => {
-                                return <option key={index} value={geoDivision.majorGeoDivisionLegacyCode} >{geoDivision.majorGeoDivisionName.ar}</option>
+                                return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
                             })}
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
@@ -81,7 +81,7 @@ export const StepThreeForm = (props: any) => {
                             className={errors.representative ? "error" : ""}
                             name="representative"
                             data-qc="representative"
-                            value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative._id)}
+                            value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
                             onBlur={handleBlur}
                             onChange={(id) => setFieldValue("representative", id)}
                             getOptionLabel={(option) => option.username}

@@ -16,6 +16,11 @@ import { CustomerCardView } from './customerCard';
 import Rescheduling from '../Rescheduling/rescheduling';
 import ability from '../../config/ability';
 import CustomerCardPDF from '../pdfTemplates/customerCard/customerCard';
+import CashReceiptPDF from '../pdfTemplates/cashReceipt/cashReceipt';
+import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/customerCardAttachments';
+import TotalWrittenChecksPDF from '../pdfTemplates/totalWrittenChecks/totalWrittenChecks';
+import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement';
+import LoanContract from '../pdfTemplates/loanContract/loanContract';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 interface State {
@@ -108,7 +113,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} refreshPayment={() => this.getAppByID(this.state.application._id)}/>
+                return <Payment application={this.state.application} installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} refreshPayment={() => this.getAppByID(this.state.application._id)}/>
             case 'customerCard':
                 return <CustomerCardView application={this.state.application} />
             case 'loanRescheduling':
@@ -150,7 +155,15 @@ class LoanProfile extends Component<Props, State>{
                         </Card>
                     </div>
                 }
-            {this.state.print && <CustomerCardPDF data={this.state.application}/>}
+                {this.state.print &&
+                    <>
+                        <CashReceiptPDF data={this.state.application} />
+                        <CustomerCardPDF data={this.state.application} />
+                        <CustomerCardAttachments data={this.state.application} />
+                        <TotalWrittenChecksPDF data={this.state.application} />
+                        <FollowUpStatementPDF data={this.state.application} />
+                        <LoanContract data={this.state.application} />
+                    </>}
             </Container>
         )
     }

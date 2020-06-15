@@ -50,11 +50,11 @@ class UsersList extends Component<Props, State> {
         key: "name",
         render: data => data.name
       },
-      // {
-      //   title: local.employment,
-      //   key: "employment",
-      //   render: data => "employment"
-      // },
+      {
+        title: local.employment,
+        key: "employment",
+        render: data => data.hiringDate? new Date(data.hiringDate).toISOString().slice(0,10): ''
+      },
       {
         title: local.createdBy,
         key: "createdBy",
@@ -125,7 +125,7 @@ class UsersList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} url="user" from={this.state.from} size={this.state.size} />
+            <Search searchKeys={['keyword', 'dateFromTo']} url="user" from={this.state.from} size={this.state.size} />
 
             <DynamicTable
               totalCount={this.props.totalCount}

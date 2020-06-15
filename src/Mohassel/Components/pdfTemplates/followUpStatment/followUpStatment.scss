@@ -2,6 +2,8 @@
     .follow-up-statment {
         font-size: 9px;
         font-weight: bold;
+        page-break-after: always;
+        
         & tbody, .title {
             text-align: center;
         }
