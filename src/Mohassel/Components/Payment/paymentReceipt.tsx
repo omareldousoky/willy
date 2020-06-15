@@ -7,6 +7,7 @@ import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { timeToDateyyymmdd } from '../../Services/utils.js';
 
 const PaymentReceipt = (props: any) => {
   function download() {
@@ -36,7 +37,7 @@ const PaymentReceipt = (props: any) => {
               <div className="receipt-content">
                 <Form.Group as={Row}>
                   <Form.Label column sm={3} className="title">{local.date}</Form.Label>
-                  <Form.Label column sm={6} className="info">{new Date(receiptData.date).toISOString().slice(0, 10)}</Form.Label>
+                  <Form.Label column sm={6} className="info">{timeToDateyyymmdd(receiptData.date)}</Form.Label>
                 </Form.Group>
                 <Form.Group as={Row}>
                   <Form.Label column sm={3} className="title">{local.receiptNumber}</Form.Label>

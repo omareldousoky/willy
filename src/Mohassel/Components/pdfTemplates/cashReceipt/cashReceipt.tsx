@@ -1,6 +1,7 @@
 import React from 'react';
 import './cashReceipt.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../../Services/utils';
 
 const CashReceipt = (props) => {
     console.log('props', props)
@@ -28,7 +29,7 @@ const CashReceipt = (props) => {
 
                 <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                 <div>  تحريرا في
-			<span>{ new Date().toISOString().slice(0,10)}</span>
+			<span>{ timeToDateyyymmdd(0) }</span>
                 </div>
                 <div>استلمت انا / {props.data.customer.customerName}، مبلغ {props.data.principal} جنيه’ فقط أربعون ألف جنيه مصري فقط لا غير من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>

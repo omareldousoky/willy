@@ -18,6 +18,7 @@ import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 import { englishToArabic }  from '../../Services/statusLanguage';
+import { timeToDateyyymmdd } from '../../Services/utils';
 interface Branch {
   label: string;
   value: string;
@@ -137,9 +138,9 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   dateSlice(date){
     if(!date){
-      return new Date().toISOString().slice(0, 10)
+      return timeToDateyyymmdd(0)
     }else{
-      return new Date(date).toISOString().slice(0, 10)
+      return timeToDateyyymmdd(date)
     }
   }
   render() {

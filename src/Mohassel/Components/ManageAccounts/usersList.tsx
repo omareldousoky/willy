@@ -15,6 +15,7 @@ import { search, searchFilters } from '../../redux/search/actions';
 import { loading } from '../../redux/loading/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Props {
   history: any;
@@ -53,7 +54,7 @@ class UsersList extends Component<Props, State> {
       {
         title: local.employment,
         key: "employment",
-        render: data => data.hiringDate? new Date(data.hiringDate).toISOString().slice(0,10): ''
+        render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
       },
       {
         title: local.createdBy,

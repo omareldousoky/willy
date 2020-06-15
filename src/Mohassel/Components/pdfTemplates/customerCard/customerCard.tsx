@@ -1,6 +1,7 @@
 import React from 'react';
 import './customerCard.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../../Services/utils';
 
 const CustomerCardPDF = (props) => {
     console.log('props', props)
@@ -77,7 +78,7 @@ const CustomerCardPDF = (props) => {
                     {props.data.installmentsObject.installments.map(installment => {
                         return (<tr key={installment.id}>
                             <td>{installment.id}</td>
-                            <td>{new Date(installment.dateOfPayment).toISOString().slice(0, 10)}</td>
+                            <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
                             <td>{installment.installmentResponse}</td>
                             <td></td>
                         </tr>)

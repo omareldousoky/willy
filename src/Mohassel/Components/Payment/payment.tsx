@@ -18,6 +18,7 @@ import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Installment {
   id: number;
@@ -59,7 +60,7 @@ class Payment extends Component<Props, State>{
       receiptModal: false,
       receiptData: {},
       payAmount: 0,
-      truthDate: new Date().toISOString().slice(0, 10),
+      truthDate: timeToDateyyymmdd(0),
       loading: false,
       loadingFullScreen: false,
       remainingPrincipal: 0,
@@ -107,7 +108,7 @@ class Payment extends Component<Props, State>{
       {
         title: local.dateOfPayment,
         key: "dateOfPayment",
-        render: data => new Date(data.dateOfPayment).toISOString().slice(0, 10)
+        render: data => timeToDateyyymmdd(data.dateOfPayment)
       },
       {
         title: local.installmentStatus,

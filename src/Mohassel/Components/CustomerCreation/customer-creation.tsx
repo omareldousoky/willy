@@ -4,7 +4,6 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash.clonedeep';
 import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
@@ -16,6 +15,7 @@ import { StepThreeForm } from './StepThreeForm';
 import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface CustomerInfo {
   birthDate: number;
@@ -144,9 +144,9 @@ class CustomerCreation extends Component<Props, State>{
       const customerInfo = {
         customerName: res.body.customerName,
         nationalId: res.body.nationalId,
-        birthDate: new Date(res.body.birthDate).toISOString().slice(0, 10),
+        birthDate: timeToDateyyymmdd(res.body.birthDate),
         gender: res.body.gender,
-        nationalIdIssueDate: new Date(res.body.nationalIdIssueDate).toISOString().slice(0, 10),
+        nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
         homePostalCode: res.body.homePostalCode,
         customerHomeAddress: res.body.customerHomeAddress,
         customerAddressLatLong: res.body.customerAddressLatLong,
@@ -179,7 +179,7 @@ class CustomerCreation extends Component<Props, State>{
         businessSpeciality: res.body.businessSpeciality,
         businessLicenseNumber: res.body.businessLicenseNumber,
         businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
-        businessLicenseIssueDate: new Date(res.body.businessLicenseIssueDate).toISOString().slice(0, 10),
+        businessLicenseIssueDate: timeToDateyyymmdd(res.body.businessLicenseIssueDate),
         commercialRegisterNumber: res.body.commercialRegisterNumber,
         industryRegisterNumber: res.body.industryRegisterNumber,
         taxCardNumber: res.body.taxCardNumber,
@@ -187,22 +187,13 @@ class CustomerCreation extends Component<Props, State>{
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,
         representative: res.body.representative,
-        applicationDate: new Date(res.body.applicationDate).toISOString().slice(0, 10),
+        applicationDate: timeToDateyyymmdd(res.body.applicationDate),
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
         accountNumber: res.body.accountNumber,
         accountBranch: res.body.accountBranch,
         comments: res.body.comments,
       };
-
-      // const customerAddressLatLongNumber = res.body.customerAddressLatLong ? { lat: Number(res.body.customerAddressLatLong.split(',')[0]), lng: Number(res.body.customerAddressLatLong.split(',')[1]) } : { lat: 0, lng: 0 };
-      // const businessAddressLatLongNumber = res.body.businessAddressLatLong ? { lat: Number(res.body.businessAddressLatLong.split(',')[0]), lng: Number(res.body.businessAddressLatLong.split(',')[1]) } : { lat: 0, lng: 0 };
-      // customerInfo.customerAddressLatLongNumber = customerAddressLatLongNumber;
-      // customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
-      // customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
-      // customerBusiness.businessAddressLatLongNumber = businessAddressLatLongNumber;
-      // customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
-      // customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
       this.setState({
         loading: false,
         selectedCustomer: res.body,

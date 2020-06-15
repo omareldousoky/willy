@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import PostponeInstallments from './postponeInstallments';
+import { timeToDateyyymmdd } from '../../Services/utils.js';
 
 interface Props {
     test: boolean;
@@ -42,7 +43,7 @@ class Rescheduling extends Component<Props, State>{
             {
                 title: local.dateOfPayment,
                 key: "dateOfPayment",
-                render: data => new Date(data.dateOfPayment).toISOString().slice(0, 10)
+                render: data => timeToDateyyymmdd(data.dateOfPayment)
             },
             {
                 title: local.loanStatus,

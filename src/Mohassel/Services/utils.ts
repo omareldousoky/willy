@@ -6,21 +6,10 @@ export const timeToDate = (timeStampe: number): any => {
     return date;
   } else return '';
 }
-export const timeToDateyyymmdd = (timeStampe: number): any => {
-  if (timeStampe > 0) {
-    const date = new Date(timeStampe);
-    let month = '' + (date.getMonth() + 1);
-    let day = '' + date.getDate();
-    const year = date.getFullYear();
-
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-
-    return [year, month, day].join('-');
-
-  } else return '';
+export const timeToDateyyymmdd = (timeStamp: number): any => {
+  if (timeStamp > 0) 
+      return new Date(timeStamp).toISOString().slice(0, 10)
+   else return new Date().toISOString().slice(0, 10);
 }
 
 export function parseJwt(token: string) {

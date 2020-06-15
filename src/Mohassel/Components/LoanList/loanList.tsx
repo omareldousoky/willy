@@ -7,6 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Props {
   history: Array<any>;
@@ -49,7 +50,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanIssuanceDate,
         key: "loanIssuanceDate",
-        render: data => data.application.issueDate ? new Date(data.application.issueDate).toISOString().slice(0, 10) : ''
+        render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,
