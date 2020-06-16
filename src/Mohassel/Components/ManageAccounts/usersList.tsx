@@ -129,7 +129,7 @@ class UsersList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'employment']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
               totalCount={this.props.totalCount}

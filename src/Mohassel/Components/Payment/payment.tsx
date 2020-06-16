@@ -244,7 +244,7 @@ class Payment extends Component<Props, State>{
             <div style={{ width: '100%', padding: 20 }}>
               <Formik
                 enableReinitialize
-                initialValues={{ ...this.state }}
+                initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
                 onSubmit={this.handleSubmit}
                 validationSchema={paymentValidation}
                 validateOnBlur
@@ -344,7 +344,7 @@ class Payment extends Component<Props, State>{
           <div style={{ width: '100%', padding: 20 }}>
             <Formik
               enableReinitialize
-              initialValues={{ ...this.state }}
+              initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
               onSubmit={this.handleSubmit}
               validationSchema={paymentValidation}
               validateOnBlur
