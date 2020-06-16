@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -16,8 +15,10 @@ import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
 import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
 import Can from '../../config/Can';
+import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Installment {
   id: number;
@@ -34,6 +35,8 @@ interface Props {
   installments: Array<Installment>;
   currency: string;
   applicationId: string;
+  application: any;
+  refreshPayment: () => void;
 }
 interface State {
   receiptModal: boolean;
@@ -57,14 +60,14 @@ class Payment extends Component<Props, State>{
       receiptModal: false,
       receiptData: {},
       payAmount: 0,
-      truthDate: new Date().toISOString().slice(0, 10),
+      truthDate: timeToDateyyymmdd(0),
       loading: false,
       loadingFullScreen: false,
       remainingPrincipal: 0,
       earlyPaymentFees: 0,
       requiredAmount: 0,
       paymentState: 0,
-      installmentNumber: -1
+      installmentNumber: -1,
     }
     this.mappers = [
       {
@@ -105,7 +108,7 @@ class Payment extends Component<Props, State>{
       {
         title: local.dateOfPayment,
         key: "dateOfPayment",
-        render: data => new Date(data.dateOfPayment).toISOString().slice(0, 10)
+        render: data => timeToDateyyymmdd(data.dateOfPayment)
       },
       {
         title: local.installmentStatus,
@@ -138,13 +141,15 @@ class Payment extends Component<Props, State>{
     // const todaysDate = new Date("2020-06-30").valueOf();
     const todaysDate = new Date().valueOf();
     let total = 0;
+    const installments: Array<number> = [];
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
         if (installment.status !== "paid")
           total = total + installment.installmentResponse - installment.totalPaid;
+          installments.push(installment.id);
       } else return total;
     })
-    return total;
+    return {total: total, installments: installments};
   }
   handleSubmit = async (values) => {
     this.setState({ loadingFullScreen: true })
@@ -205,18 +210,20 @@ class Payment extends Component<Props, State>{
         <Card className="payment-menu">
           <div className="payment-info">
             <h6 >{local.requiredAmount}</h6>
-            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{this.getRequiredAmount().total}</h6>
             <h6>{local.forInstallments}</h6>
-            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{this.getRequiredAmount().installments.toString()}</h6>
             <h6>{local.dateOfPayment}</h6>
-            <h6>{this.getRequiredAmount()}</h6>
+            <h6>{}</h6>
           </div>
           <div className="verticalLine"></div>
           <div className="payment-icons-container">
-            <div className="payment-icon">
-              <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-              <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
-            </div>
+            <Can I='payInstallment' a='application'>
+              <div className="payment-icon">
+                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+                <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
+              </div>
+            </Can>
             <Can I='payEarly' a='application'>
               <div className="payment-icon">
                 <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
@@ -252,7 +259,10 @@ class Payment extends Component<Props, State>{
                           <Form.Control as="select"
                             name="installmentNumber"
                             data-qc="installmentNumber"
-                            onChange={formikProps.handleChange}
+                            onChange={(event) => {
+                              formikProps.setFieldValue('installmentNumber', event.currentTarget.value);
+                              formikProps.setFieldValue('requiredAmount', this.props.installments.find(installment => installment.id === Number(event.currentTarget.value))?.installmentResponse);
+                            }}
                           >
                             <option value={-1}></option>
                             {this.props.installments.map(installment => {
@@ -268,7 +278,7 @@ class Payment extends Component<Props, State>{
                           <Form.Control
                             type="number"
                             name="requiredAmount"
-                            value={this.getRequiredAmount()}
+                            value={formikProps.values.requiredAmount || this.getRequiredAmount().total}
                             disabled
                           >
                           </Form.Control>
@@ -434,10 +444,14 @@ class Payment extends Component<Props, State>{
   render() {
     return (
       <>
-        <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
-        {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => window.location.reload()} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        <div className="print-none">
+          <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
+          <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
+          {/* <Button onClick= {()=> window.print()}>print</Button> */}
+          {this.renderPaymentMethods()}
+          {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        </div>
+        <EarlyPaymentPDF application={this.props.application}/>
       </>
     );
   }

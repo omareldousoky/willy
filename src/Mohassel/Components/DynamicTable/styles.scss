@@ -1,23 +1,5 @@
 .footer-container {
     display: flex;
-    .dropdown-container {
-        display: flex;
-        border: 1px #e5e5e5 solid;
-        margin-right: 30px;
-        border-radius: 5px;
-        padding-left: 10px;
-        .dropdown-label {
-            text-align: center;
-            margin: 0px;
-            background: #E5E5E5;
-            padding: 10px 15px;
-        }
-        .dropdown-select {
-            height: auto;
-            border: 0px;
-            cursor: pointer;
-        }
-    }
     .pagination-container {
         flex: 1;
         display: flex;
@@ -70,8 +52,10 @@
         }
     }
 }
-th:first-child,td:first-child{
+.table {
+    & th:first-child,td:first-child{
     padding-right: 50px;
+    }
 }
 span.icon {
     margin-left: 20px;

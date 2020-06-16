@@ -55,8 +55,31 @@
     color: #fff;
     font-size: 14px;
     font-weight: bold;
-    width: 90px;
+    width: 100px;
     height: 25px;
+    &.outline {
+        background-color: #fff;
+    }
+    &.under-review {
+        border: 1px solid #ed7600;
+        color: #ed7600;
+    }
+    &.created {
+        border: 1px solid #2a3390;
+        color: #2a3390;
+    }
+    &.reviewed {
+        border: 1px solid #edb600;
+        color: #edb600;
+    }
+    &.approved {
+        border: 1px solid #009bed;
+        color: #009bed;
+    }
+    &.rejected {
+        border: 1px solid #d51b1b;
+        color: #d51b1b;
+    }
     &.late {
         background-color: #d51b1b;
     }

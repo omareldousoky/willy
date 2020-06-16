@@ -14,7 +14,8 @@ import { createLoan } from '../../Services/APIs/createIssueLoan/createLoan';
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
-
+import { withRouter } from 'react-router-dom';
+import { timeToDateyyymmdd } from '../../Services/utils';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -57,8 +58,8 @@ class LoanCreation extends Component<Props, State> {
       id: '',
       type: '',
       approvalDate: '',
-      loanCreationDate: new Date().toISOString().slice(0, 10),
-      loanIssuanceDate: new Date().toISOString().slice(0, 10),
+      loanCreationDate: timeToDateyyymmdd(0),
+      loanIssuanceDate: timeToDateyyymmdd(0),
       loading: false,
       customerData: {
         id: '',
@@ -169,7 +170,7 @@ class LoanCreation extends Component<Props, State> {
               <td>{this.state.customerData.gracePeriod}</td>
               <td>{this.state.customerData.status}</td>
               <td>{this.state.customerData.productName}</td>
-              <td>{new Date(this.state.customerData.entryDate).toISOString().slice(0, 10)}</td>
+              <td>{timeToDateyyymmdd(this.state.customerData.entryDate)}</td>
             </tr>
           </tbody>
         </Table>
@@ -191,7 +192,7 @@ class LoanCreation extends Component<Props, State> {
                   <td>{installment.installmentResponse ? installment.installmentResponse.toFixed(2) : 0}</td>
                   <td>{installment.principalInstallment ? installment.principalInstallment.toFixed(2) : 0}</td>
                   <td>{installment.feesInstallment ? installment.feesInstallment.toFixed(2) : 0}</td>
-                  <td>{new Date(installment.dateOfPayment).toISOString().slice(0, 10)}</td>
+                  <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
                 </tr>
               )
             })}
@@ -254,4 +255,4 @@ class LoanCreation extends Component<Props, State> {
   }
 }
 
-export default LoanCreation;
+export default  withRouter(LoanCreation);

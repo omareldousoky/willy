@@ -104,7 +104,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="periodLength">
+            <Form.Group as={Row} controlId="periodLength" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLengthEvery}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
@@ -188,7 +188,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="interest">
+            <Form.Group as={Row} controlId="interest" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.interest}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
@@ -267,7 +267,7 @@ export const LoanProductCreationForm = (props: any) => {
                     {errors.allowInterestAdjustment}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Row} controlId="inAdvanceFees">
+            <Form.Group as={Row} controlId="inAdvanceFees" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
@@ -320,7 +320,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="stamps">
+            <Form.Group as={Row} controlId="stamps" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.stamps}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
@@ -353,7 +353,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="representativeFees">
+            <Form.Group as={Row} controlId="representativeFees" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.representativeFees}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
@@ -386,7 +386,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="adminFees">
+            <Form.Group as={Row} controlId="adminFees" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.adminFees}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
@@ -453,7 +453,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="minPrincipal">
+            <Form.Group as={Row} controlId="minPrincipal" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.minPrincipal}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
@@ -485,7 +485,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="minInstallment">
+            <Form.Group as={Row} controlId="minInstallment" className="row-nowrap">
                 <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.minInstallment}</Form.Label>
                 <Col sm={4}>
                     <Form.Control

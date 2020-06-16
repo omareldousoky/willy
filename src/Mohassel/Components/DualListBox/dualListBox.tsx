@@ -138,7 +138,7 @@ class DualBox extends Component<Props, State> {
     render() {
         return (
             <div className="container" style={{ marginTop: 20 }}>
-                <div className={this.props.direction === "horizontal" ? "row" : "d-flex flex-column justify-content-center"}>
+                <div className={this.props.direction === "horizontal" ? "row-nowrap" : "d-flex flex-column justify-content-center"}>
                     <div className={this.props.direction === "horizontal" ? 'dual-list list-left col-md-5' : 'dual-list list-left'}>
                         <div className="well text-right">
                             <h6>{this.props.rightHeader}</h6>
