@@ -67,7 +67,6 @@ class Search extends Component<Props, State> {
     }
   }
   submit = async (values) => {
-    console.log(values)
     const obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
     delete obj.keyword;
     if (obj.hasOwnProperty('fromDate'))
