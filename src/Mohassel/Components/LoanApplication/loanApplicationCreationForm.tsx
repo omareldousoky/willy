@@ -279,7 +279,6 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        {console.log(values)}
                         {(values.beneficiaryType === "group") && <Row>
                             <Col style={{ border: '1px solid #e5e5e5', backgroundColor: '#f8f8f8', padding: 10 }}>
                                 <p style={{ margin: '10px 0px', color: '#2a3390' }}>{local.individualLoanPrinciple}</p>
