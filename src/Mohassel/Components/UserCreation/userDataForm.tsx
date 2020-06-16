@@ -256,6 +256,7 @@ export const UserDataForm = (props: Props) => {
                     value={props.values.username}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
+                    disabled = {props.edit}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />
                 <Form.Control.Feedback
