@@ -454,5 +454,6 @@
     "noOfApplications": "عدد طلبات القروض",
     "created": "تم الإنشاء",
     "changeState": "تغيير الحالة",
-    "noResultsFound": "لم يتم العثور على نتائج"
+    "noResultsFound": "لم يتم العثور على نتائج",
+    "code": "الكود"
 }

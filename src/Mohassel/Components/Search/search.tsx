@@ -19,6 +19,7 @@ import { loading } from '../../redux/loading/actions';
 
 interface InitialFormikState {
   name?: string;
+  keyword?: string;
   fromDate?: string;
   toDate?: string;
   governorate?: string;
@@ -66,8 +67,8 @@ class Search extends Component<Props, State> {
     }
   }
   submit = async (values) => {
-    const obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.name? values.name: values[this.state.dropDownValue]};
-    if(this.state.dropDownValue !== 'name') delete obj.name;
+    const obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
+    delete obj.keyword;
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
     if (obj.hasOwnProperty('toDate'))
@@ -83,7 +84,7 @@ class Search extends Component<Props, State> {
     this.props.searchKeys.forEach(searchkey => {
       switch (searchkey) {
         case 'keyword':
-          initialState.name = '';
+          initialState.keyword = '';
         case 'governorate':
           initialState.governorate = '';
         case 'status':
@@ -108,7 +109,7 @@ class Search extends Component<Props, State> {
     switch(key) {
       case 'name': return local.name;
       case 'nationalId': return local.nationalId;
-      case 'code': return local.customerId;
+      case 'code': return local.code;
       default: return '';
     }
   }
@@ -131,11 +132,12 @@ class Search extends Component<Props, State> {
                       <InputGroup style={{ direction: 'ltr' }}>
                         <FormControl
                           type="text"
-                          name={this.state.dropDownValue}
+                          name="keyword"
                           data-qc="searchKeyword"
                           onChange={formikProps.handleChange}
                           style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                           placeholder={local.searchByNameOrNationalId}
+                          value={formikProps.values.keyword}
                         />
                         <InputGroup.Append>
                           <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
