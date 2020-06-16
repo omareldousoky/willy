@@ -386,7 +386,7 @@
     "customers": "العملاء",
     "noOfCustomers": "عدد العملاء",
     "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
-    "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من المبلغ المطلوب",
+    "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من قيمة القرض",
     "totalPayment": "إجمالي المدفوع",
     "feesPaid":"المصاريف المسدده",
     "principalPaid":"الاصل المسدد",
@@ -453,5 +453,6 @@
     "lonasTypes":"انواع القروض",
     "noOfApplications": "عدد طلبات القروض",
     "created": "تم الإنشاء",
-    "changeState": "تغيير الحالة"
+    "changeState": "تغيير الحالة",
+    "noResultsFound": "لم يتم العثور على نتائج"
 }

@@ -20,7 +20,7 @@ const DynamicTable = (props: Props) => {
     totalPages.push(index)
   }
   function getArrayOfNumbers() {
-    const length = page + 5 >= totalPages.length? totalPages.length: page +5;
+    const length = page + 5 >= totalPages.length ? totalPages.length : page + 5;
     const output: Array<number> = [];
     for (let index = page + 1; index <= length; index++) {
       output.push(index)
@@ -29,18 +29,17 @@ const DynamicTable = (props: Props) => {
   }
   return (
     <>
-      <Table striped hover style={{ textAlign: 'right' }}>
-        <thead>
-          <tr>
-            {props.mappers?.map((mapper, index: number) => {
-              return <th key={index}>{mapper.title}</th>
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {props.data
-            // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            ?.map((item, index: number) => {
+      {props.data?.length ?
+        <Table striped hover style={{ textAlign: 'right' }}>
+          <thead>
+            <tr>
+              {props.mappers?.map((mapper, index: number) => {
+                return <th key={index}>{mapper.title}</th>
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {props.data.map((item, index: number) => {
               return (
                 <tr key={index}>
                   {props.mappers?.map((mapper, index: number) => {
@@ -53,10 +52,16 @@ const DynamicTable = (props: Props) => {
                 </tr>
               )
             })}
-        </tbody>
-      </Table>
-      {props.pagination ?
-        <div className="footer-container" style={{marginBottom: 20, marginRight: 30}}>
+          </tbody>
+        </Table>
+        :
+        <div style={{textAlign: 'center', marginBottom: 40}}>
+          <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+          <h4>{local.noResultsFound}</h4>
+        </div>
+      }
+      {props.pagination && props.data?.length ?
+        <div className="footer-container" style={{ marginBottom: 20, marginRight: 30 }}>
           <div className="dropdown-container">
             <p className="dropdown-label">{local.show}</p>
             <Form.Control as="select" className="dropdown-select" onChange={(event) => {
@@ -77,19 +82,19 @@ const DynamicTable = (props: Props) => {
                   props.changeNumber && props.changeNumber('from', (page * rowsPerPage - rowsPerPage));
                 }
               }}>{local.previous}</div>
-              <div className="pagination-numbers">
-            {getArrayOfNumbers().map(number => {
-              return (
-                <div key={number}
-                  className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
-                  onClick={() => {
-                    changePage(number - 1);
-                    props.changeNumber && props.changeNumber('from', (number - 1) * rowsPerPage)
-                  }}>
-                  <p>{number}</p>
-                </div>
-              )
-            })}
+            <div className="pagination-numbers">
+              {getArrayOfNumbers().map(number => {
+                return (
+                  <div key={number}
+                    className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
+                    onClick={() => {
+                      changePage(number - 1);
+                      props.changeNumber && props.changeNumber('from', (number - 1) * rowsPerPage)
+                    }}>
+                    <p>{number}</p>
+                  </div>
+                )
+              })}
             </div>
             <div className={page + 1 !== Math.ceil(props.totalCount / rowsPerPage) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
               onClick={() => {
