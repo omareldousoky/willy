@@ -77,7 +77,7 @@ class Search extends Component<Props, State> {
       obj.roleId = this.props.roleId;
     obj.from = 0;
     this.props.searchFilters(obj);
-    this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest })
+    this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
   getInitialState() {
     const initialState: InitialFormikState = {};
@@ -100,6 +100,7 @@ class Search extends Component<Props, State> {
   viewBranchDropdown() {
     const token = getCookie('token');
     const tokenData = parseJwt(token);
+    if(this.props.hqBranchIdRequest) return false;
     if (this.props.url === 'application') {
       if (tokenData?.requireBranch === false) return true;
       else return false;
