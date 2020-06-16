@@ -30,49 +30,6 @@ interface Props{
       }) 
      return rolesState;
   }
-const style = {
-    control: base => ({
-        ...base,
-        "&:hover": { borderColor: theme.colors.primary }, // border style on hover
-        border: `1px solid ${theme.colors.veryLightGray}`, // default border color
-        boxShadow: "none" // no box-shadow
-      }),
-      menu: (base, state) => ({
-        ...base,
-        border: `1px solid ${theme.colors.veryLightGray}`,
-      }),
-      menuList: base => ({
-        ...base,
-        backgroundColor: theme.colors.basicBackground,
-      }),
-      //#a3a3a3
-      multiValue: base => ({
-        ...base,
-        backgroundColor: theme.colors.veryLightGray,
-        color: "#a3a3a3",
-        borderRadius: "20px"
-      }),
-      multiValueRemove: base => ({
-        ...base,
-        "&:hover": {
-          backgroundColor: theme.colors.primaryLight,
-          color:theme.colors.primary,
-        }
-      }),
-      multiValueLabel: base => ({
-          ...base,
-          color: theme.colors.blackText,
-      }),
-      option: (base, state) => ({
-        ...base,
-        color: theme.colors.blackText,
-        "&:hover": { backgroundColor: theme.colors.primaryLight },
-        backgroundColor: state.isFocused ? theme.colors.basicBackground : "inhert",
-        "&:active": { backgroundColor: theme.colors.primary }
-      })
-    };
-
-  
 const UserRolesAndPermisonsFrom = (props: Props) => {
   const [hasBranch, setHasBranch] = useState(()=>isHasBranch(props.values.roles));
   const [roles, setRoles] = useState(props.values.roles);
@@ -112,7 +69,7 @@ const customFilterOption = (option, rawInput) => {
                   className={'user-role-label'}
                 >{local.selectUserPermision}</Form.Label>
                 <Select
-                styles={style}
+                styles={theme.selectStyle}
                     isMulti
                     isSearchable = {true}
                     filterOption = {customFilterOption}
