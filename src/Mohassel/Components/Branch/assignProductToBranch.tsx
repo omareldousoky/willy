@@ -125,7 +125,6 @@ class AssignProductToBranch extends Component<Props, State>{
                     {this.state.products.length > 0 &&
                         <DualBox
                             labelKey = {"productName"}
-                            direction={"horizontal"}
                             options={this.state.products}
                             selected={this.state.selectedBranchProducts}
                             onChange={(list) => this.handleChange(list)}

@@ -148,7 +148,6 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
             <div style={{ color: 'red', fontSize: '15px', margin: '10px' }}>{local.branchIsRquired}</div>}
           <DualBox
             labelKey={"branchName"}
-            direction={"horizontal"}
             filterKey={'noKey'}
             selected={props.values.branches}
             onChange={

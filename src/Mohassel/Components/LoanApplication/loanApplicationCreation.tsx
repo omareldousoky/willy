@@ -833,7 +833,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
                             <DualBox
                                 labelKey={"customerName"}
-                                direction={""}
+                                vertical
                                 search={(key) => this.searchCustomers(key)}
                                 options={this.filterCustomersByBusinessSector()}
                                 selected={this.state.selectedCustomers}

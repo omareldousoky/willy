@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
     options: any;
-    direction: string;
+    vertical?: boolean;
     selected: any;
     labelKey: string;
     onChange: any;
@@ -137,9 +137,9 @@ class DualBox extends Component<Props, State> {
     }
     render() {
         return (
-            <div className="container" style={{ marginTop: 20 }}>
-                <div className={this.props.direction === "horizontal" ? "row-nowrap" : "d-flex flex-column justify-content-center"}>
-                    <div className={this.props.direction === "horizontal" ? 'dual-list list-left col-md-5' : 'dual-list list-left'}>
+            <div className="container" style={{ marginTop: 20, textAlign: 'right' }}>
+                <div className={!this.props.vertical ? "row-nowrap" : "d-flex flex-column justify-content-center"}>
+                    <div className={!this.props.vertical ? 'dual-list list-left col-md-5' : 'dual-list list-left'}>
                         <div className="well text-right">
                             <h6>{this.props.rightHeader}</h6>
                             <ul className="list-group">
@@ -188,10 +188,10 @@ class DualBox extends Component<Props, State> {
                     </div>
                     <div className="list-button">
                         <Button className="btn btn-default btn-md" style={{ height: 45, width: 95, margin: '20px 0px' }} disabled={this.state.selectionArray.length < 1} onClick={() => this.addToSelectedList()}>
-                            {local.add}<span className={this.props.direction === "horizontal" ? "fa fa-arrow-left" : "fa fa-arrow-down"}></span>
+                            {local.add}<span className={!this.props.vertical ? "fa fa-arrow-left" : "fa fa-arrow-down"}></span>
                         </Button>
                     </div>
-                    <div className={this.props.direction === "horizontal" ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
+                    <div className={!this.props.vertical ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
                         <div className="well text-right">
                             <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
@@ -219,7 +219,7 @@ class DualBox extends Component<Props, State> {
                                     {this.state.selectedOptions
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
                                         .map(option => <li key={option._id}
-                                            className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span><span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon'></span>}</li>)}
+                                            className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span><span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon' style={{ float: 'left' }}></span>}</li>)}
                                 </div>
                             </ul>
                         </div>
