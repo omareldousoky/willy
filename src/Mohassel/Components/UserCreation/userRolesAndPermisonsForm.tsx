@@ -107,7 +107,7 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
             className={'user-role-label'}
           >{local.selectUserPermision}</Form.Label>
           <Select
-            styles={style}
+            styles={theme.selectStyle}
             isMulti
             isSearchable={true}
             filterOption={customFilterOption}
