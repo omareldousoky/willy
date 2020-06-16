@@ -150,7 +150,7 @@ class TrackLoanApplications extends Component<Props, State>{
               {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size}  hqBranchIdRequest= {this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}
