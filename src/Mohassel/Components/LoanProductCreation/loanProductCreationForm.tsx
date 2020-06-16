@@ -36,7 +36,6 @@ export const LoanProductCreationForm = (props: any) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isInvalid={errors.beneficiaryType && touched.beneficiaryType}
-                        disabled
                     >
                         <option value=''></option>
                         <option value='individual'>{local.individual}</option>

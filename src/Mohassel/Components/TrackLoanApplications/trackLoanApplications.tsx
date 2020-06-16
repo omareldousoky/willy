@@ -157,6 +157,7 @@ class TrackLoanApplications extends Component<Props, State>{
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
+        {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit}
@@ -244,9 +245,10 @@ class TrackLoanApplications extends Component<Props, State>{
               // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
               .filter(loanItem => this.state.filters.length ? this.state.filters.includes(loanItem.application.status) : loanItem)
               .map((loanItem, index) => {
+                console.log(loanItem.application.product.beneficiaryType)
                 return (
                   <tr key={index}>
-                    <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
+                    <td>{loanItem.application.product.beneficiaryType?beneficiaryType(loanItem.application.product.beneficiaryType):''}</td>
                     <td onClick={()=>this.goToLoan(loanItem.id)}>{loanItem.id}</td>
                     <td>{loanItem.application.customer.customerName}</td>
                     <td>{(loanItem.application.entryDate)?new Date(loanItem.application.entryDate).toISOString().slice(0, 10):''}</td>

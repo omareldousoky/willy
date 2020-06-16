@@ -178,6 +178,7 @@
     "loanAppCreationDate": "تاريخ الطلب",
     "applicationStatus": "حالة الطلب",
     "loanPrinciple": "أصل القرض",
+    "individualLoanPrinciple":"قيمة القرض المطلوب لكل عميل",
     "loanOfficer": "المندوب",
     "underReview": "تحت التحرير",
     "reviewed": "رُجعت",
@@ -430,5 +431,10 @@
     "amountCollectedFromCustomer": "القيمة المحصلة من العميل",
     "installmentsRemaining": "الأقساط المتبقية",
     "individual":"فردي",
-    "group":"مجموعة"
+    "group":"مجموعة",
+    "customersDetails":"بيانات العملاء",
+    "customersSelection":"اختيار العملاء",
+    "allCustomers":"جميع العملاء",
+    "selectedCustomers":"العملاء المختارين",
+    "groupLeaderName":"اسم قائد المجموعة"
 }

@@ -7,12 +7,15 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
     options: any;
+    direction: string;
     selected: any;
     labelKey: string;
     onChange: any;
     filterKey: string;
     rightHeader?: string;
     leftHeader?: string;
+    search?: Function;
+    viewSelected?: Function;
 }
 
 interface State {
@@ -42,30 +45,28 @@ class DualBox extends Component<Props, State> {
 
 
     static getDerivedStateFromProps(props, state) {
-    
-          if (props.filterKey !== state.filterKey) {
-              if(props.selected.length>0){
-            const selectedIds = props.selected.map(item => item._id);
-           
-            return {
-                filterKey: props.filterKey,
-                options: props.options.filter(item => !selectedIds.includes(item._id)),
-                selectedOptions: props.selected
-            } 
-        }
-            else {
+        if (props.filterKey !== state.filterKey || props.options !== state.options) {
+            if (props.selected.length > 0) {
+                const selectedIds = props.selected.map(item => item._id);
+
                 return {
-                filterKey: props.filterKey,
-                options: props.options,
-                selectedOptions: props.selected
+                    filterKey: props.filterKey,
+                    options: props.options.filter(item => !selectedIds.includes(item._id)),
+                    selectedOptions: props.selected
                 }
             }
-        
-        
+            else {
+                return {
+                    filterKey: props.filterKey,
+                    options: props.options,
+                    selectedOptions: props.selected
+                }
+            }
+
         }
         return null;
     }
-        
+
     componentDidUpdate(prevProps) {
         if (this.props.filterKey !== prevProps.filterKey) {
             this.setState({ filterKey: this.props.filterKey })
@@ -74,7 +75,7 @@ class DualBox extends Component<Props, State> {
 
     selectItem = (option) => {
         const arr: Array<any> = this.state.selectionArray;
-        if (!arr.includes(option)) {
+        if (!arr.find((element) => option._id === element._id)) {
             arr.push(option)
         } else {
             const index = arr.indexOf(option);
@@ -96,7 +97,7 @@ class DualBox extends Component<Props, State> {
         })
     }
     removeItemFromList(option) {
-        const newList =  this.state.selectedOptions.filter(item => item._id !== option._id);
+        const newList = this.state.selectedOptions.filter(item => item._id !== option._id);
         this.props.onChange(newList);
         this.setState({
             selectedOptions: newList,
@@ -118,17 +119,27 @@ class DualBox extends Component<Props, State> {
         }
     }
     removeAllFromList() {
-     this.props.onChange([]);
+        this.props.onChange([]);
         this.setState({
             options: [...this.state.options, ...this.state.selectedOptions],
             selectedOptions: []
         })
     }
+    handleSearch(e) {
+        this.setState({ searchKeyword: e.currentTarget.value }, () => {
+            if (this.props.search) {
+                this.props.search(this.state.searchKeyword)
+            }
+        })
+    }
+    viewSelected(id) {
+        if (this.props.viewSelected) { this.props.viewSelected(id) }
+    }
     render() {
         return (
             <div className="container" style={{ marginTop: 20 }}>
-                <div className="row">
-                    <div className="dual-list list-left col-md-5">
+                <div className={this.props.direction === "horizontal" ? "row" : "d-flex flex-column justify-content-center"}>
+                    <div className={this.props.direction === "horizontal" ? 'dual-list list-left col-md-5' : 'dual-list list-left'}>
                         <div className="well text-right">
                             <h6>{this.props.rightHeader}</h6>
                             <ul className="list-group">
@@ -137,7 +148,7 @@ class DualBox extends Component<Props, State> {
                                         type="text"
                                         name="searchKeyWord"
                                         data-qc="searchKeyWord"
-                                        onChange={(e) => this.setState({ searchKeyword: e.currentTarget.value })}
+                                        onChange={(e) => this.handleSearch(e)}
                                         style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                                         placeholder={local.search}
                                     />
@@ -157,29 +168,30 @@ class DualBox extends Component<Props, State> {
                                 <div className="scrollable-list">
                                     {this.state.options
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
-                                        .map(option =>           
-                                            <div key={option._id} onClick={() => this.selectItem(option)}
-                                                className={(this.state.selectionArray.findIndex((item) => item[this.props.labelKey] === option[this.props.labelKey]) > -1) ? "list-group-item selected" : "list-group-item"}>
+                                        .map(option => {
+                                            return <div key={option._id} onClick={() => this.selectItem(option)}
+                                                className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected" : "list-group-item"}>
                                                 <Form.Check
                                                     type='checkbox'
                                                     // readOnly
                                                     id={option._id}
                                                     onChange={() => this.selectItem(option)}
                                                     label={option[this.props.labelKey]}
-                                                    checked={this.state.selectionArray.findIndex((item) => item[this.props.labelKey] === option[this.props.labelKey]) > -1}
+                                                    checked={this.state.selectionArray.find((item) => item._id === option._id)}
                                                 />
                                             </div>
+                                        }
                                         )}
                                 </div>
                             </ul>
                         </div>
                     </div>
                     <div className="list-button">
-                        <Button className="btn btn-default btn-md" style={{ height: 45, width: 95 }} disabled={this.state.selectionArray.length < 1} onClick={() => this.addToSelectedList()}>
-                            {local.add}<span className="fa fa-arrow-left"></span>
+                        <Button className="btn btn-default btn-md" style={{ height: 45, width: 95, margin: '20px 0px' }} disabled={this.state.selectionArray.length < 1} onClick={() => this.addToSelectedList()}>
+                            {local.add}<span className={this.props.direction === "horizontal" ? "fa fa-arrow-left" : "fa fa-arrow-down"}></span>
                         </Button>
                     </div>
-                    <div className="dual-list list-right col-md-5">
+                    <div className={this.props.direction === "horizontal" ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
                         <div className="well text-right">
                             <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
@@ -207,7 +219,7 @@ class DualBox extends Component<Props, State> {
                                     {this.state.selectedOptions
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
                                         .map(option => <li key={option._id}
-                                        className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span>{option[this.props.labelKey]}</li>)}
+                                            className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span><span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon'></span>}</li>)}
                                 </div>
                             </ul>
                         </div>
