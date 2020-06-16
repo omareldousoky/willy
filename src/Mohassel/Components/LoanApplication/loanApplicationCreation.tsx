@@ -3,35 +3,37 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
 import { RouteProps } from 'react-router';
+import Swal from 'sweetalert2';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+import * as local from '../../../Shared/Assets/ar.json';
 import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
-import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
-import { getProducts, getProduct } from '../../Services/APIs/loanProduct/getProduct';
+import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication, editApplication } from '../../Services/APIs/loanApplication/newApplication';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
-import * as local from '../../../Shared/Assets/ar.json';
-import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import { Location } from '../LoanCreation/loanCreation';
 import { reviewApplication, undoreviewApplication, rejectApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import { getCookie } from '../../Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { parseJwt } from '../../Services/utils';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Wizard from '../wizard/Wizard';
-import Col from 'react-bootstrap/Col';
+import { parseJwt, beneficiaryType } from '../../Services/utils';
+import { getBusinessSectors } from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm';
 import DualBox from '../DualListBox/dualListBox';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 import InfoBox from '../userInfoBox';
+import CustomerSearch from '../CustomerSearch/customerSearchTable';
+import Wizard from '../wizard/Wizard';
+import { BusinessSector } from '../CustomerCreation/StepTwoForm';
 interface Props {
     history: any;
     location: Location;
@@ -40,6 +42,10 @@ interface Props {
 interface Formula {
     name: string;
     _id: string;
+}
+interface LoanOfficer {
+    _id: string;
+    username: string;
 }
 export interface Customer {
     _id?: string;
@@ -67,15 +73,18 @@ interface State {
     loading: boolean;
     selectedCustomer: Customer;
     selectedGroupLeader: string;
+    selectedLoanOfficer: string;
+    selectedBusinessSector: string;
     searchResults: Results;
     guarantor1Res: Results;
     guarantor2Res: Results;
     formulas: Array<Formula>;
     products: Array<object>;
     loanUsage: Array<object>;
-    loanOfficers: Array<object>;
+    loanOfficers: Array<LoanOfficer>;
     branchCustomers: Array<object>;
     selectedCustomers: Array<Customer>;
+    businessSectors: Array<BusinessSector>;
     guarantor1: any;
     guarantor2: any;
     viceCustomers: Array<Vice>;
@@ -172,6 +181,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             loading: false,
             selectedCustomer: {},
             selectedGroupLeader: '',
+            selectedLoanOfficer: '',
             searchResults: {
                 results: [],
                 empty: false
@@ -181,6 +191,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             loanOfficers: [],
             products: [],
             branchCustomers: [],
+            businessSectors: [],
+            selectedBusinessSector: '',
             selectedCustomers: [],
             searchGroupCustomerKey: '',
             guarantor1Res: {
@@ -237,6 +249,23 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const application = await getApplication(id);
         if (application.status === 'success') {
             const formData = this.state.application;
+            if (application.body.product.beneficiaryType === 'group') {
+                this.getBusinessSectors();
+                const selectedCustomers: Customer[] = [];
+                application.body.group.individualsInGroup.forEach(customer => {
+                    selectedCustomers.push(customer.customer)
+                    if (customer.Type === 'leader') {
+                        this.setState({
+                            selectedGroupLeader: customer.customer._id,
+                            selectedBusinessSector: customer.customer.businessSector,
+                            selectedLoanOfficer: customer.customer.representative
+                        })
+                    }
+                })
+                this.setState({
+                    selectedCustomers
+                })
+            }
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
             const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
@@ -273,7 +302,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.undoReviewDate = application.body.undoReviewDate;
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
-
+            formData.individualDetails = application.body.group.individualsInGroup
             this.setState({
                 selectedCustomer: application.body.customer,
                 customerType: application.body.product.beneficiaryType,
@@ -304,6 +333,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         if (usage.status === 'success') {
             this.setState({
                 loanUsage: usage.body.usages.filter(usage => usage.activated),
+                loading: false
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
+    }
+    async getBusinessSectors() {
+        this.setState({ businessSectors: [], loading: true })
+        const sectors = await getBusinessSectors();
+        if (sectors.status === 'success') {
+            this.setState({
+                businessSectors: sectors.body.sectors,
                 loading: false
             })
         } else {
@@ -345,10 +387,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         let query = {}
         if (key && key.length > 0) {
             this.setState({ loading: true, searchGroupCustomerKey: key });
-            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch }
+            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
         } else {
             this.setState({ loading: true });
-            query = { from: 0, size: 50, branchId: this.tokenData.branch }
+            query = { from: 0, size: 50, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
         }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
@@ -375,7 +417,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     handleSearchGuarantors = async (query, index) => {
         const obj = {
             name: query,
-            // sameBranch: true,
             from: 0,
             size: 30,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
@@ -419,8 +460,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
     }
     populateCustomer(response) {
-        this.getOfficerName(response.representative);
         const defaultApplication = this.state.application;
+        this.getOfficerName(response.representative);
         defaultApplication.customerName = response.customerName;
         defaultApplication.nationalId = response.nationalId;
         defaultApplication.birthDate = this.getDateString(response.birthDate);
@@ -517,6 +558,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.noOfGuarantors = (selectedProductDetails.noOfGuarantors) ? selectedProductDetails.noOfGuarantors : defaultValues.noOfGuarantors;
         defaultApplication.allowApplicationFeeAdjustment = selectedProductDetails.allowApplicationFeeAdjustment;
         defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType;
+        if (selectedProductDetails.beneficiaryType === 'group' && this.state.step === 1) { this.searchCustomers() }
         this.setState({ application: defaultApplication });
     }
     getSelectedLoanProduct = async (id) => {
@@ -595,7 +637,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             application: defaultApplication
         }, () => {
             if (type === 'group') {
-                this.searchCustomers()
+                this.getBusinessSectors()
             }
         })
     }
@@ -605,15 +647,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         } else {
             const obj = { ...values }
             const individualsToSend: { id?: string; amount: number; type: string }[] = []
-            obj.individualDetails.forEach(customer => {
+            let principalToSend = 0;
+            obj.individualDetails && obj.individualDetails.forEach(customer => {
                 const obj = {
                     id: customer.customer._id,
                     amount: customer.amount,
                     type: customer.type
                 }
+                principalToSend += customer.amount
                 individualsToSend.push(obj)
             })
-            console.log(individualsToSend)
+            if (obj.beneficiaryType !== 'group') {
+                principalToSend = obj.principal
+            }
             const objToSubmit = {
                 customerId: obj.customerID,
                 guarantorIds: obj.guarantorIds,
@@ -623,7 +669,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 gracePeriod: obj.gracePeriod,
                 pushPayment: obj.pushPayment,
                 noOfInstallments: obj.noOfInstallments,
-                principal: obj.principal,
+                principal: principalToSend,
                 applicationFee: obj.applicationFee,
                 individualApplicationFee: obj.individualApplicationFee,
                 applicationFeePercent: obj.applicationFeePercent,
@@ -636,13 +682,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 entryDate: new Date(obj.entryDate).valueOf(),
                 usage: obj.usage,
                 representative: obj.representative,
-                enquirorId: obj.enquirorId._id,
+                enquirorId: obj.enquirorId,
                 visitationDate: new Date(obj.visitationDate).valueOf(),
                 individualDetails: individualsToSend,
                 viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
             }
 
-            console.log(values, objToSubmit)
             if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
                 Swal.fire("error", local.selectTwoGuarantors, 'error')
             } else {
@@ -672,18 +717,15 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     step(key) {
         let currentStep = this.state.step
-        if (this.state.step === 2 && key === 'forward' && this.state.customerType === 'group') {
-            console.log(this.state.application)
-        } else {
-            if (this.state.step < 3 && key === 'forward') {
-                currentStep++
-            } else if (this.state.step >= 1 && key === 'backward') {
-                currentStep--
-            }
-            this.setState({
-                step: currentStep,
-            })
+        if (this.state.step < 3 && key === 'forward') {
+            currentStep++
+        } else if (this.state.step >= 1 && key === 'backward') {
+            currentStep--
         }
+        this.setState({
+            step: currentStep,
+        })
+
     }
     handleGroupChange(customers) {
         if (customers.length === 0) {
@@ -702,11 +744,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             customersTemp.push(obj)
         })
         defaultApplication.individualDetails = customersTemp;
-        console.log(customers, customersTemp, defaultApplication)
         this.setState({
             selectedCustomers: customers,
             application: defaultApplication
         })
+    }
+    filterCustomersByBusinessSector() {
+        const branchCustomers = this.state.branchCustomers;
+        if (this.state.selectedBusinessSector === "لا ينطبق" || this.state.selectedBusinessSector === "") {
+            return branchCustomers
+        } else {
+            return branchCustomers.filter((customer: Customer) => customer.businessSector === this.state.selectedBusinessSector)
+        }
     }
     async viewCustomer(id) {
         this.setState({ loading: true });
@@ -725,7 +774,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     setGroupLeader(id) {
         const defaultApplication = this.state.application;
         defaultApplication.individualDetails.forEach(member => {
-            console.log(member.customer._id, id)
             if (member.customer._id === id) {
                 member.type = 'leader'
             } else {
@@ -738,70 +786,94 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
     }
     renderStepOne() {
-        if (this.state.customerType === 'individual') {
-            return (
-                <Col>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-                        <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
-                    </div>
-                    <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '100px 0px' }}>
-                        <Button
-                            className={'btn-cancel-prev'} style={{ width: '20%' }}
-                            onClick={() => { this.props.history.push("/track-loan-applications"); }}
-                        >{local.cancel}</Button>
-                        <Button className={'btn-submit-next'} style={{ float: 'left', width: '20%' }} onClick={() => this.step('forward')} data-qc="next">{local.next}</Button>
-
-                    </div>
-                </Col>
-            )
-        }
-        else {
-            return (
-                <div className="d-flex flex-column justify-content-center w-100" >
-                    <div style={{ textAlign: 'right' }}>
+        return (
+            <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
+                {(this.state.customerType === 'individual') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
+                    <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
+                </div> :
+                    <div>
                         <h4>{local.customersSelection}</h4>
-                    </div>
-                    <div style={{ marginTop: 10, marginBottom: 10 }}>
-                        <DualBox
-                            labelKey={"customerName"}
-                            direction={""}
-                            search={(key) => this.searchCustomers(key)}
-                            options={this.state.branchCustomers}
-                            selected={this.state.selectedCustomers}
-                            onChange={(list) => this.handleGroupChange(list)}
-                            filterKey={this.state.searchGroupCustomerKey}
-                            rightHeader={local.allCustomers}
-                            leftHeader={local.selectedCustomers}
-                            viewSelected={(id) => this.viewCustomer(id)}
-                        />
-                        {this.state.selectedCustomers.length <= 7 && this.state.selectedCustomers.length >= 3 ? <Form.Group controlId="leaderSelector" style={{ textAlign: 'right', margin: 'auto', width: '60%' }}>
-                            <Form.Label>{local.groupLeaderName}</Form.Label>
-                            <Form.Control as="select"
-                                name="selectedGroupLeader"
-                                data-qc="selectedGroupLeader"
-                                value={this.state.selectedGroupLeader}
-                                onChange={(event) => {
-                                    this.setGroupLeader(event.currentTarget.value)
-                                }}
-                            >
-                                <option value="" disabled></option>
-                                {this.state.selectedCustomers.map((customer, i) =>
-                                    <option key={i} value={customer._id}>{customer.customerName}</option>
-                                )}
-                            </Form.Control>
-                        </Form.Group> : <span>Select customers</span>}
-                    </div>
-                    <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '100px 0px' }}>
-                        <Button
-                            className={'btn-cancel-prev'} style={{ width: '20%' }}
-                            onClick={() => { this.props.history.push("/track-loan-applications"); }}
-                        >{local.cancel}</Button>
-                        <Button className={'btn-submit-next'} disabled={this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3} style={{ float: 'left', width: '20%' }} onClick={() => this.step('forward')} data-qc="next">{local.next}</Button>
+                        <div style={{ marginTop: 10, marginBottom: 10 }}>
+                            <Form.Group controlId="loanOfficer" style={{ margin: 'auto', width: '60%' }}>
+                                <Form.Label>{local.loanOfficer}</Form.Label>
+                                <Form.Control as="select"
+                                    name="loanOfficer"
+                                    data-qc="loanOfficer"
+                                    value={this.state.selectedLoanOfficer}
+                                    disabled={this.state.selectedCustomers.length > 0}
+                                    onChange={(event) => {
+                                        this.setState({ selectedLoanOfficer: event.currentTarget.value }, () => { this.searchCustomers() })
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.loanOfficers.map((officer) =>
+                                        <option key={officer._id} value={officer._id}>{officer.username}</option>
+                                    )}
+                                </Form.Control>
+                            </Form.Group>
 
+                            <Form.Group controlId="businessSector" style={{ margin: 'auto', width: '60%' }}>
+                                <Form.Label>{local.businessSector}</Form.Label>
+                                <Form.Control as="select"
+                                    name="businessSector"
+                                    data-qc="businessSector"
+                                    value={this.state.selectedBusinessSector}
+                                    disabled={this.state.selectedCustomers.length > 0}
+                                    onChange={(event) => {
+                                        this.setState({ selectedBusinessSector: event.currentTarget.value })
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.businessSectors.map((businessSector, index) => {
+                                        return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
+                                    })}
+                                </Form.Control>
+                            </Form.Group>
+                        </div>
+                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
+                            <DualBox
+                                labelKey={"customerName"}
+                                direction={""}
+                                search={(key) => this.searchCustomers(key)}
+                                options={this.filterCustomersByBusinessSector()}
+                                selected={this.state.selectedCustomers}
+                                onChange={(list) => this.handleGroupChange(list)}
+                                filterKey={this.state.searchGroupCustomerKey}
+                                rightHeader={local.allCustomers}
+                                leftHeader={local.selectedCustomers}
+                                viewSelected={(id) => this.viewCustomer(id)}
+                            />
+                            {this.state.selectedCustomers.length <= 7 && this.state.selectedCustomers.length >= 3 ? <Form.Group controlId="leaderSelector" style={{ margin: 'auto', width: '60%' }}>
+                                <Form.Label>{local.groupLeaderName}</Form.Label>
+                                <Form.Control as="select"
+                                    name="selectedGroupLeader"
+                                    data-qc="selectedGroupLeader"
+                                    value={this.state.selectedGroupLeader}
+                                    onChange={(event) => {
+                                        this.setGroupLeader(event.currentTarget.value)
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.selectedCustomers.map((customer, i) =>
+                                        <option key={i} value={customer._id}>{customer.customerName}</option>
+                                    )}
+                                </Form.Control>
+                            </Form.Group> : <span>Select customers</span>
+                            }
+                        </div>
+                        }
                     </div>
+                }
+                <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '100px 0px' }}>
+                    <Button
+                        className={'btn-cancel-prev'} style={{ width: '20%' }}
+                        onClick={() => { this.props.history.push("/track-loan-applications"); }}
+                    >{local.cancel}</Button>
+                    <Button className={'btn-submit-next'} disabled={(this.state.customerType === 'group' && (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) || (this.state.customerType === 'individual' && (Object.keys(this.state.selectedCustomer).length === 0))} style={{ float: 'left', width: '20%' }} onClick={() => this.step('forward')} data-qc="next">{local.next}</Button>
+
                 </div>
-            )
-        }
+            </div>
+        )
     }
     renderStepTwo() {
         return (

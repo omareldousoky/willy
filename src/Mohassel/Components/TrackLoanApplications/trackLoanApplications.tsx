@@ -141,13 +141,13 @@ class TrackLoanApplications extends Component<Props, State>{
       <>
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
-          {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
                 <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount})`}</span>
               </div>
+              {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
             </div>
             <hr className="dashed-line" />
             <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
