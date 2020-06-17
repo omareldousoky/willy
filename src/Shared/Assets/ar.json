@@ -438,7 +438,7 @@
     "individual":"فردي",
     "group":"مجموعة",
     "expired": "منتهية الصلاحية",
-    "days": "ايام",
+    "day": "يوم",
     "downloadPDF": "تنزيل PDF",
     "all": "الكل",
     "newUser": "مستخدم جديد",
@@ -453,5 +453,10 @@
     "lonasTypes":"انواع القروض",
     "noOfApplications": "عدد طلبات القروض",
     "created": "تم الإنشاء",
-    "changeState": "تغيير الحالة"
+    "changeState": "تغيير الحالة",
+    "month": "شهر",
+    "first": "الأول",
+    "second": "الثاني",
+    "third": "الثالث",
+    "fourth": "الرابع"
 }

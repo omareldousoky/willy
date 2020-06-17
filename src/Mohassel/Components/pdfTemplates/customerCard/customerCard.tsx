@@ -1,7 +1,7 @@
 import React from 'react';
 import './customerCard.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const CustomerCardPDF = (props) => {
     console.log('props', props)
@@ -21,7 +21,7 @@ const CustomerCardPDF = (props) => {
                         <td style={{ fontSize: "8px" }}>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
                     </tr>
                     <tr>
-                        <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
+                        <td>{timeToArabicDate(0, true)}</td>
                         <td className="title2 bold"><u>كارت العميل</u></td>
                         <td></td>
                     </tr>
@@ -40,10 +40,10 @@ const CustomerCardPDF = (props) => {
                             <div className="frame">{props.data.customer.customerName}</div>
                         </td>
                         <td> التاريخ
-					<div className="frame">٢٠٢٠/٠٥/٠٥</div>
+					<div className="frame">{timeToArabicDate(0, false)}</div>
                         </td>
                         <td> المندوب
-					<div className="frame">ايمان مصطفي عبده ابراهيم</div>
+					<div className="frame">{props.data.customer.representative}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -53,15 +53,15 @@ const CustomerCardPDF = (props) => {
             <table>
                 <tbody>
                     <tr>
-                        <td>قيمة التمويل <div className="frame">{props.data.principal}</div>
+                        <td>قيمة التمويل <div className="frame">{numbersToArabic(props.data.principal)}</div>
                         </td>
-                        <td>فترة السداد <div className="frame">كل {props.data.product.periodLength} {local[props.data.product.periodType]}</div>
+                        <td>فترة السداد <div className="frame">كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}</div>
                         </td>
-                        <td>عدد الاقساط <div className="frame">{props.data.installmentsObject.installments.length}</div>
+                        <td>عدد الاقساط <div className="frame">{numbersToArabic(props.data.installmentsObject.installments.length)}</div>
                         </td>
                         <td>فترة السماح
-					<div className="frame">{props.data.product.gracePeriod}</div>
-                            <div className="frame">شراء بضاعه وخدمات</div>
+					<div className="frame">{numbersToArabic(props.data.product.gracePeriod)}</div>
+                            <div className="frame">{props.data.customer.businessSector}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -77,9 +77,9 @@ const CustomerCardPDF = (props) => {
                     </tr>
                     {props.data.installmentsObject.installments.map(installment => {
                         return (<tr key={installment.id}>
-                            <td>{installment.id}</td>
-                            <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
-                            <td>{installment.installmentResponse}</td>
+                            <td>{numbersToArabic(installment.id)}</td>
+                            <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                            <td>{numbersToArabic(installment.installmentResponse)}</td>
                             <td></td>
                         </tr>)
                     })}

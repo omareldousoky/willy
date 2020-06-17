@@ -14,11 +14,11 @@ import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarl
 import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
 import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
+import { timeToDateyyymmdd } from '../../Services/utils';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
-import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Installment {
   id: number;
