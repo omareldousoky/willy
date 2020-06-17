@@ -6,7 +6,6 @@ import { RouteProps } from 'react-router';
 import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -22,7 +21,6 @@ import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication, editApplication } from '../../Services/APIs/loanApplication/newApplication';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import { Location } from '../LoanCreation/loanCreation';
-import { reviewApplication, undoreviewApplication, rejectApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import { getCookie } from '../../Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
@@ -79,7 +77,7 @@ interface State {
     guarantor1Res: Results;
     guarantor2Res: Results;
     formulas: Array<Formula>;
-    products: Array<object>;
+    products: Array<any>;
     loanUsage: Array<object>;
     loanOfficers: Array<LoanOfficer>;
     branchCustomers: Array<object>;
@@ -598,37 +596,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             application: defaultApplication
         })
     }
-    async handleStatusChange(values, status) {
-        this.setState({ loading: true });
-        if (status === 'review') {
-            const res = await reviewApplication({ id: this.state.prevId, date: new Date(values.reviewDate).valueOf() });
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.reviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
-            } else {
-                Swal.fire("error", local.statusChangeError, 'error')
-                this.setState({ loading: false });
-            }
-        } else if (status === 'unreview') {
-            const res = await undoreviewApplication({ id: this.state.prevId, date: new Date(values.unreviewDate).valueOf() });
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.unreviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
-            } else {
-                Swal.fire("error", local.statusChangeError, 'error')
-                this.setState({ loading: false });
-            }
-        } else if (status === 'reject') {
-            const res = await rejectApplication({ applicationIds: [this.state.prevId], rejectionDate: new Date(values.rejectionDate).valueOf(), rejectionReason: values.rejectionReason });
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.rejectSuccess).then(() => { this.props.history.push("/track-loan-applications") })
-            } else {
-                Swal.fire("error", local.statusChangeError, 'error')
-                this.setState({ loading: false });
-            }
-        }
-    }
     setCustomerType(type) {
         const defaultApplication = this.state.application;
         defaultApplication.beneficiaryType = type;
@@ -687,7 +654,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 individualDetails: individualsToSend,
                 viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
             }
-
             if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
                 Swal.fire("error", local.selectTwoGuarantors, 'error')
             } else {
@@ -889,7 +855,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationForm {...formikProps}
                         formulas={this.state.formulas}
                         loanUsage={this.state.loanUsage}
-                        products={this.state.products}
+                        products={this.state.products.filter(product => product.beneficiaryType ===  this.state.customerType)}
                         loanOfficers={this.state.loanOfficers}
                         step={(key) => this.step(key)}
                         getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}

@@ -47,12 +47,15 @@
     "accountBranch": "الفرع التابع له رقم الحساب",
     "comments": "ملاحظات",
     "mainInfo": "البيانات الاساسية",
+    "mainGroupInfo":"بيانات العملاء الاساسية",
     "workInfo": "بيانات العمل",
     "loanInfo": "بيانات طلب القرض",
     "currentLoanInfo":"بيانات القرض الحالي",
     "loanDetails":"تفاصيل القرض",
     "guarantorInfo": "بيانات الضامن",
     "guarantor": "الضامن",
+    "guarantorName":"إسم الضامن",
+    "address":"العنوان",
     "differentInfo": "بيانات متفرقة",
     "viceCustomersInfo": "بيانات من ينوبوا عن العميل",
     "male": "ذكر",
@@ -460,5 +463,6 @@
     "noOfApplications": "عدد طلبات القروض",
     "created": "تم الإنشاء",
     "changeState": "تغيير الحالة",
-    "noResultsFound": "لم يتم العثور على نتائج"
+    "noResultsFound": "لم يتم العثور على نتائج",
+    "loanStatusChange":"تعديل حالة القرض"
 }

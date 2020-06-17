@@ -16,7 +16,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.guarantorInfo}</h5>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                            {console.log(values)}
                             {values.guarantors.map((guarantor, i) =>
                                 <CustomerSearch
                                     source={i + 1}

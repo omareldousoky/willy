@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import { Field, FieldArray } from 'formik';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import * as local from '../../../Shared/Assets/ar.json';
-import CustomerSearch from '../CustomerSearch/customerSearchTable';
-import StatusHelper from './statusHelper';
-import InfoBox from '../userInfoBox';
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import AsyncSelect from 'react-select/async';
+import * as local from '../../../Shared/Assets/ar.json'
 import InputGroup from 'react-bootstrap/InputGroup';
 
 export const LoanApplicationCreationForm = (props: any) => {
@@ -633,9 +627,6 @@ export const LoanApplicationCreationForm = (props: any) => {
                     <Button type="button" className='btn-submit-next' style={{ float: 'left', width: '20%' }} onClick={handleSubmit}>{values.beneficiaryType=== "group"?local.submit:local.next}</Button>
                 </div>
             </Form >
-            {/* {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ margin: '20px 0', border: '1px solid black', padding: 10, borderRadius: 4 }}>
-                <StatusHelper status={values.state} id={values.id} handleStatusChange={(values, status) => { props.handleStatusChange(values, status) }} application={values} />
-            </div>} */}
         </>
     )
 }
