@@ -444,6 +444,7 @@
     "newUser": "مستخدم جديد",
     "editUser": "تعديل المستخدم",
     "editCustomer": "تعديل العميل",
+    "duplicateUsernameMessage": "إسم المستخدم موجود بالفعل لمستخدم أخر",
     "editRole": "تعديل دور المستخدم",
     "mohassel": "المحصل",
     "licenseNumber": "رقم الترخيص",

@@ -10,6 +10,7 @@ import Can from '../../config/Can';
 import {checkIssueDate} from '../../Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
+import {checkUsernameDuplicates} from '../../Services/APIs/User-Creation/checkUsernameDup';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 interface Props {
     values: Values;
@@ -254,7 +255,17 @@ export const UserDataForm = (props: Props) => {
                     name={"username"}
                     data-qc={"username"}
                     value={props.values.username}
-                    onChange={props.handleChange}
+                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                        props.setFieldValue('username',event.currentTarget.value );
+                        setLoading(true);
+                        const res = await checkUsernameDuplicates(event.currentTarget.value);
+                          
+                        if (res.status === 'success') {
+                            setLoading(false);
+                            props.setFieldValue('usernameChecker', res.body.Exists);
+                        } else setLoading(false);
+                
+                }}
                     onBlur={props.handleBlur}
                     disabled = {props.edit}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
@@ -263,6 +274,11 @@ export const UserDataForm = (props: Props) => {
                     type="invalid">
                     {props.errors.username}
                 </Form.Control.Feedback>
+                <Col sm={1}>
+                            <Col sm={1}>
+                                <Loader type="inline" open={loading} />
+                            </Col>
+                        </Col>
             </Form.Group>
             <Form.Group as={Row}
                 className={'user-data-group'}
