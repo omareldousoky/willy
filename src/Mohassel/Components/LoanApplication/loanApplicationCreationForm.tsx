@@ -122,8 +122,8 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         disabled={!values.allowInterestAdjustment}
                                     >
                                         <option value="" disabled></option>
-                                        <option value='yearly'>نسبه سنويه</option>
-                                        <option value='monthly'>نسبه شهريه</option>
+                                        <option value='yearly'>{local.yearlyInnterestPeriod}</option>
+                                        <option value='monthly'>{local.monthlyInnterestPeriod}</option>
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.interestPeriod}
@@ -167,9 +167,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         disabled
                                     >
                                         <option value="" disabled></option>
-                                        <option value='principal'>نسبة من قيمة القرض</option>
-                                        <option value='monthly'>شهري</option>
-                                        <option value='yearly'>سنوي</option>
+                                        <option value='principal'>{local.inAdvanceFromPrinciple}</option>
+                                        <option value='monthly'>{local.inAdvanceFromMonthly}</option>
+                                        <option value='yearly'>{local.inAdvanceFromYearly}</option>
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.inAdvanceFrom}
@@ -188,8 +188,8 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         disabled
                                     >
                                         <option value="" disabled></option>
-                                        <option value='cut'>تستقطع من المصاريف</option>
-                                        <option value='uncut'>لا تستقطع من المصاريف</option>
+                                        <option value='cut'>{local.inAdvanceFeesCut}</option>
+                                        <option value='uncut'>{local.inAdvanceFeesUncut}</option>
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.inAdvanceType}
@@ -228,8 +228,8 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         disabled
                                     >
                                         <option value="" disabled></option>
-                                        <option value='months'>شهر</option>
-                                        <option value='days'>يوم</option>
+                                        <option value='months'>{local.month}</option>
+                                        <option value='days'>{local.day}</option>
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.periodType}
@@ -415,9 +415,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             disabled={!values.allowApplicationFeeAdjustment}
                                         >
                                             <option value="" disabled></option>
-                                            <option value='principal'>نسبة من قيمة القرض</option>
-                                            <option value='monthly'>شهري</option>
-                                            <option value='yearly'>سنوي</option>
+                                            <option value='principal'>{local.inAdvanceFromPrinciple}</option>
+                                            <option value='monthly'>{local.inAdvanceFromMonthly}</option>
+                                            <option value='yearly'>{local.inAdvanceFromYearly}</option>
                                         </Form.Control>
                                         <Form.Control.Feedback type="invalid">
                                             {errors.applicationFeeType}
@@ -463,9 +463,9 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             disabled={!values.allowApplicationFeeAdjustment}
                                         >
                                             <option value="" disabled></option>
-                                            <option value='principal'>نسبة من قيمة القرض</option>
-                                            <option value='monthly'>شهري</option>
-                                            <option value='yearly'>سنوي</option>
+                                            <option value='principal'>{local.inAdvanceFromPrinciple}</option>
+                                            <option value='monthly'>{local.inAdvanceFromMonthly}</option>
+                                            <option value='yearly'>{local.inAdvanceFromYearly}</option>
                                         </Form.Control>
                                         <Form.Control.Feedback type="invalid">
                                             {errors.applicationFeePercentPerPersonType}

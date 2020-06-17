@@ -465,5 +465,14 @@
     "changeState": "تغيير الحالة",
     "noResultsFound": "لم يتم العثور على نتائج",
     "loanStatusChange":"تعديل حالة القرض",
-    "code": "الكود"
+    "code": "الكود",
+    "yearlyInnterestPeriod":"نسبه سنويه",
+    "monthlyInnterestPeriod":"نسبه شهريه",
+    "inAdvanceFeesCut":"تستقطع من المصاريف",
+    "inAdvanceFeesUncut":"لا تستقطع من المصاريف",
+    "inAdvanceFromPrinciple":"نسبة من قيمة القرض",
+    "inAdvanceFromMonthly":"شهري",
+    "inAdvanceFromYearly":"سنوي",
+    "month":"شهر",
+    "day":"يوم"
 }
