@@ -124,7 +124,7 @@ class AssignProductToBranch extends Component<Props, State>{
                     </Form.Group>
                     {this.state.products.length > 0 &&
                         <DualBox
-                        labelKey = {"productName"}
+                            labelKey = {"productName"}
                             options={this.state.products}
                             selected={this.state.selectedBranchProducts}
                             onChange={(list) => this.handleChange(list)}
