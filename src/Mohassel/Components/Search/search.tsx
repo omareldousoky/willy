@@ -7,6 +7,9 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import FormControl from 'react-bootstrap/FormControl';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { search, searchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import { parseJwt } from '../../Services/utils';
@@ -16,6 +19,7 @@ import { loading } from '../../redux/loading/actions';
 
 interface InitialFormikState {
   name?: string;
+  keyword?: string;
   fromDate?: string;
   toDate?: string;
   governorate?: string;
@@ -29,18 +33,21 @@ interface Props {
   roleId?: string;
   hqBranchIdRequest?: string;
   searchKeys: Array<string>;
+  dropDownKeys?: Array<string>;
   search: (data) => void;
   searchFilters: (data) => void;
   setLoading: (data) => void;
 }
 interface State {
   governorates: Array<any>;
+  dropDownValue: string;
 }
 class Search extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
       governorates: [],
+      dropDownValue: 'name'
     }
   }
   componentDidMount() {
@@ -60,7 +67,8 @@ class Search extends Component<Props, State> {
     }
   }
   submit = async (values) => {
-    const obj = { ...values, ...{ from: this.props.from } };
+    const obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
+    delete obj.keyword;
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
     if (obj.hasOwnProperty('toDate'))
@@ -69,14 +77,14 @@ class Search extends Component<Props, State> {
       obj.roleId = this.props.roleId;
     obj.from = 0;
     this.props.searchFilters(obj);
-    this.props.search({ ...obj, size: this.props.size, url: this.props.url , branchId: this.props.hqBranchIdRequest  })
+    this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
   getInitialState() {
     const initialState: InitialFormikState = {};
     this.props.searchKeys.forEach(searchkey => {
       switch (searchkey) {
         case 'keyword':
-          initialState.name = '';
+          initialState.keyword = '';
         case 'governorate':
           initialState.governorate = '';
         case 'status':
@@ -92,10 +100,19 @@ class Search extends Component<Props, State> {
   viewBranchDropdown() {
     const token = getCookie('token');
     const tokenData = parseJwt(token);
+    if(this.props.hqBranchIdRequest) return false;
     if (this.props.url === 'application') {
       if (tokenData?.requireBranch === false) return true;
       else return false;
     } else return true;
+  }
+  getArValue(key: string){
+    switch(key) {
+      case 'name': return local.name;
+      case 'nationalId': return local.nationalId;
+      case 'code': return local.code;
+      default: return '';
+    }
   }
   render() {
     return (
@@ -113,18 +130,32 @@ class Search extends Component<Props, State> {
                 if (searchKey === 'keyword') {
                   return (
                     <Col key={index} sm={6}>
-                      <InputGroup style={{ direction: 'ltr', flex: 1, marginLeft: 20 }}>
-                        <Form.Control
+                      <InputGroup style={{ direction: 'ltr' }}>
+                        <FormControl
                           type="text"
-                          name="name"
-                          data-qc="name"
+                          name="keyword"
+                          data-qc="searchKeyword"
                           onChange={formikProps.handleChange}
                           style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                           placeholder={local.searchByNameOrNationalId}
+                          value={formikProps.values.keyword}
                         />
                         <InputGroup.Append>
                           <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                         </InputGroup.Append>
+                        {this.props.dropDownKeys && this.props.dropDownKeys.length?
+                        <DropdownButton
+                          as={InputGroup.Append}
+                          variant="outline-secondary"
+                          title={this.getArValue(this.state.dropDownValue)}
+                          id="input-group-dropdown-2"
+                          data-qc="search-dropdown"
+                        >
+                          {this.props.dropDownKeys.map((key, index) =>
+                            <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({dropDownValue: key})}>{this.getArValue(key)}</Dropdown.Item>
+                            )}
+                        </DropdownButton>
+                        : null }
                       </InputGroup>
                     </Col>
                   );

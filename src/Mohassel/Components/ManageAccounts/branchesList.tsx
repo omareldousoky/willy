@@ -114,7 +114,7 @@ class BranchesList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo']} url="branch" from={this.state.from} size={this.state.size} />
+            <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'code']} url="branch" from={this.state.from} size={this.state.size} />
             {this.props.data &&
               <DynamicTable
                 totalCount={this.props.totalCount}

@@ -3,7 +3,7 @@ import './styles.scss';
 
 export interface Tab {
     icon?: string;
-    header: string;
+    header?: string;
     desc?: string;
     stringKey?: string;
   }
