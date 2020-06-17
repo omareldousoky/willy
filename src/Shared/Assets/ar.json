@@ -464,5 +464,6 @@
     "created": "تم الإنشاء",
     "changeState": "تغيير الحالة",
     "noResultsFound": "لم يتم العثور على نتائج",
-    "loanStatusChange":"تعديل حالة القرض"
+    "loanStatusChange":"تعديل حالة القرض",
+    "code": "الكود"
 }

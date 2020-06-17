@@ -14,8 +14,11 @@ import { contextBranch } from '../../Services/APIs/Login/contextBranch';
 import store from '../../redux/store';
 import './styles.scss';
 import { setToken } from  '../../../Shared/token';
+import { connect } from 'react-redux';
+import {Auth} from '../../redux/auth/types'
 interface Props {
   history: any;
+  auth: Auth;
 }
 interface Branch {
   _id: string;
@@ -42,25 +45,17 @@ class NavBar extends Component<Props, State> {
       loading: false
     }
   }
-  componentDidMount() {
-    store.subscribe(() => {
-      if (store.getState().auth.loading === false) {
-        const branches = store.getState().auth.validBranches;
-        if (branches?.length === 1) {
-          this.setState({ selectedBranch: branches[0], branches: branches })
-        }
-        const token = getCookie('token');
-        const tokenData = parseJwt(token);
-        if (tokenData?.requireBranch === false) {
-          if (branches) {
-            this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
-          } else this.setState({ branches: [...this.state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
-        } else this.setState({ branches })
-        if (tokenData.branch !== "") {
-          this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
-        }
-      }
-    });
+  static getDerivedStateFromProps(props, state) {
+    if(props.auth.loading === false && state.branches.length === 0) {
+      const token = getCookie('token');
+      const tokenData = parseJwt(token);
+      const branches = props.auth.validBranches;
+      if (tokenData?.requireBranch === false) {
+        if (branches) {
+          return{ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
+        } else return{ branches: [...state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
+      } else return {selectedBranch: branches[0], branches: branches}
+    } else return null;
   }
   async goToBranch(branch: Branch) {
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
@@ -175,14 +170,6 @@ class NavBar extends Component<Props, State> {
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
               {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
-
-              {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                    </NavDropdown> */}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
@@ -191,4 +178,10 @@ class NavBar extends Component<Props, State> {
   }
 }
 
-export default withRouter(NavBar);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(NavBar));
