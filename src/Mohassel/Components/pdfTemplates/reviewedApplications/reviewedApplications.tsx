@@ -3,7 +3,6 @@ import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { ageCalculate } from './../../../Services/utils';
 const ReviewedApplicationsPDF = (props) => {
-    console.log('props', props)
     return (
         <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
             <table>

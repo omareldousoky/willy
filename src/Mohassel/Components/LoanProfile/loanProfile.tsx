@@ -21,17 +21,24 @@ import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/cus
 import TotalWrittenChecksPDF from '../pdfTemplates/totalWrittenChecks/totalWrittenChecks';
 import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement';
 import LoanContract from '../pdfTemplates/loanContract/loanContract';
-import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
+import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
+
+interface EarlyPayment {
+    remainingPrincipal?: number;
+    requiredAmount?: number;
+    earlyPaymentFees?: number;
+}
 interface State {
     prevId: string;
     application: any;
     activeTab: string;
     tabsArray: Array<Tab>;
     loading: boolean;
-    print: boolean;
+    print: string;
+    earlyPaymentData: EarlyPayment;
 }
 
 interface Props {
@@ -48,7 +55,8 @@ class LoanProfile extends Component<Props, State>{
             activeTab: 'loanDetails',
             tabsArray: [],
             loading: false,
-            print: false,
+            print: '',
+            earlyPaymentData: {}
         };
     }
     componentDidMount() {
@@ -117,9 +125,9 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment application={this.state.application} installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} refreshPayment={() => this.getAppByID(this.state.application._id)} />
+                return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: {...data} }, () => window.print())} application={this.state.application} installments={this.state.application.installmentsObject.installments} currency={this.state.application.product.currency} applicationId={this.state.application._id} refreshPayment={() => this.getAppByID(this.state.application._id)} />
             case 'customerCard':
-                return <CustomerCardView application={this.state.application} />
+                return <CustomerCardView application={this.state.application} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
             case 'loanRescheduling':
                 return <Rescheduling application={this.state.application} test={false} />
             case 'loanReschedulingTest':
@@ -143,7 +151,7 @@ class LoanProfile extends Component<Props, State>{
                             </div>
                             <div className="d-flex justify-content-end" style={{ width: '50%' }}>
                                 <span style={{ cursor: 'not-allowed',  padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
-                                {this.state.application.status === ("created" || "approved") && <span style={{ cursor: 'pointer', borderRight:'1px solid #e5e5e5', padding:10 }} onClick={() => { this.setState({ print: true }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
+                                {this.state.application.status === "created" || this.state.application.status === "issued" && <span style={{ cursor: 'pointer', borderRight:'1px solid #e5e5e5', padding:10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
                                 {this.state.application.status === 'underReview' && <Can I='assignProductToCustomer' a='application'><span style={{ cursor: 'pointer', borderRight:'1px solid #e5e5e5', padding:10 }} onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.editLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight:'1px solid #e5e5e5', padding:10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'review' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.reviewLoan}</span></Can>}
                                 {this.state.application.status === 'reviewed' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight:'1px solid #e5e5e5', padding:10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.undoLoanReview}</span></Can>}
@@ -170,7 +178,7 @@ class LoanProfile extends Component<Props, State>{
                         </Card>
                     </div>
                 }
-                {this.state.print &&
+                {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
                         <CustomerCardPDF data={this.state.application} />
@@ -179,6 +187,8 @@ class LoanProfile extends Component<Props, State>{
                         <FollowUpStatementPDF data={this.state.application} />
                         <LoanContract data={this.state.application} />
                     </>}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} />}
+                {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} />}
             </Container>
         )
     }

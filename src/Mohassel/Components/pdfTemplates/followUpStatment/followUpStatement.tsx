@@ -4,7 +4,6 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const FollowUpStatment = (props) => {
-    console.log('props', props)
     return (
         <div className="follow-up-statment" dir="rtl" lang="ar">
             <table className="margin" >

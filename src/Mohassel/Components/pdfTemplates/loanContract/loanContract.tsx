@@ -6,8 +6,6 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { numbersToArabic, timeToArabicDate } from '../../../Services/utils';
 
 const LoanContract = (props) => {
-  console.log('props', props)
-
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">

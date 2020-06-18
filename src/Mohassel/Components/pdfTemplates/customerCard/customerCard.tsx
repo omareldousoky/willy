@@ -4,7 +4,6 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const CustomerCardPDF = (props) => {
-    console.log('props', props)
     return (
         <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
             <table>
