@@ -2,7 +2,8 @@
 .dual-list .list-group {
     margin-top: 20px;
     padding-right: 0px;
-    height: 500px;
+    max-height: 500px;
+    min-height: 300px;
     .scrollable-list {
         overflow: auto;
     }

@@ -39,7 +39,7 @@ const UserDetailsView = (props: Props) => {
                     <tr><td style={header}>{local.nationalId}*</td><td style={cell}>{data.nationalId}</td></tr>
                     <tr><td style={header}>{local.birthDate}*</td><td style={cell}>{timeToDate(data.birthDate)}</td></tr>
                     <tr><td style={header}>{local.gender}*</td><td style={cell}>{data.gender}</td></tr>
-                    <tr><td style={header}>{local.nationalIdIssueDate}*</td><td style={cell}>{data.nationalIdIssueDate}</td></tr>
+                    <tr><td style={header}>{local.nationalIdIssueDate}*</td><td style={cell}>{timeToDate(data.nationalIdIssueDate)}</td></tr>
                     <tr><td style={header}>{local.mobilePhoneNumber}</td><td style={cell}>{data.mobilePhoneNumber}</td></tr>
                     <tr><td style={header}>{local.hrCode}*</td><td style={cell}>{data.hrCode}</td></tr>
                     <tr><td style={header}>{local.dateOfHire}*</td><td style={cell}>{timeToDate(data.hiringDate)}</td></tr>

@@ -14,11 +14,11 @@ import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarl
 import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
 import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
+import { timeToDateyyymmdd } from '../../Services/utils';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
-import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface Installment {
   id: number;
@@ -36,6 +36,7 @@ interface Props {
   currency: string;
   applicationId: string;
   application: any;
+  print: (data) => void;
   refreshPayment: () => void;
 }
 interface State {
@@ -342,6 +343,9 @@ class Payment extends Component<Props, State>{
           </div>
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>
+          <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
+          onClick={() => this.props.print({remainingPrincipal: this.state.remainingPrincipal,earlyPaymentFees: this.state.earlyPaymentFees,requiredAmount: this.state.requiredAmount,})}>
+             <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
             <Formik
               enableReinitialize
               initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
@@ -444,14 +448,11 @@ class Payment extends Component<Props, State>{
   render() {
     return (
       <>
-        <div className="print-none">
-          <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-          <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
-          {/* <Button onClick= {()=> window.print()}>print</Button> */}
-          {this.renderPaymentMethods()}
-          {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
-        </div>
-        <EarlyPaymentPDF application={this.props.application}/>
+        <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
+        <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
+        {/* <Button onClick= {()=> window.print()}>print</Button> */}
+        {this.renderPaymentMethods()}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => {this.setState({receiptModal: false}); this.props.refreshPayment()}} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
       </>
     );
   }

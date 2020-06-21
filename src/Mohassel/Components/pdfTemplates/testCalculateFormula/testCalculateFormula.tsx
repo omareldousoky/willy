@@ -1,7 +1,7 @@
 import React from 'react';
 import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const TestCalculateFormulaPDF = (props) => {
     return (
@@ -37,19 +37,19 @@ const TestCalculateFormulaPDF = (props) => {
                     {props.data.result?.output.map(installment => {
                         return (
                             <tr key={installment.id}>
-                                <td>{installment.id}</td>
-                                <td>{installment.installmentResponse ? installment.installmentResponse : 0}</td>
-                                <td>{installment.principalInstallment ? installment.principalInstallment : 0}</td>
-                                <td>{installment.feesInstallment ? installment.feesInstallment : 0}</td>
-                                <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
+                                <td>{numbersToArabic(installment.id)}</td>
+                                <td>{installment.installmentResponse ? numbersToArabic(installment.installmentResponse) : numbersToArabic(0)}</td>
+                                <td>{installment.principalInstallment ? numbersToArabic(installment.principalInstallment) : numbersToArabic(0)}</td>
+                                <td>{installment.feesInstallment ? numbersToArabic(installment.feesInstallment) : numbersToArabic(0)}</td>
+                                <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                             </tr>
                         )
                     })}
                     <tr>
                         <td>الإجمالي</td>
-                        <td>{props.data.result?.sum.installmentSum}</td>
-                        <td>{props.data.result?.sum.principal}</td>
-                        <td>{props.data.result?.sum.feesSum}</td>
+                        <td>{numbersToArabic(props.data.result?.sum.installmentSum)}</td>
+                        <td>{numbersToArabic(props.data.result?.sum.principal)}</td>
+                        <td>{numbersToArabic(props.data.result?.sum.feesSum)}</td>
                         <td></td>
                     </tr>
                 </tbody>

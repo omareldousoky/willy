@@ -7,9 +7,16 @@ export interface Vice {
 }
 interface Guarantor {
     searchResults: Results;
-    guarator: Customer;
+    guarantor: Customer;
+}
+interface GroupMember {
+    customer: Customer;
+    amount: number;
+    type: string;
 }
 export interface Application {
+    beneficiaryType: string;
+    individualDetails: Array<GroupMember>;
     customerID: string;
     customerName: string;
     customerCode: string;
@@ -86,8 +93,24 @@ export const LoanApplicationValidation = Yup.object().shape({
     periodType: Yup.string().required(local.required),
     gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
     pushPayment: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
-    noOfInstallments: Yup.number().integer('Must be int').min(1, "Can't be less than 1").required(local.required),
-    principal: Yup.number().min(Yup.ref('minPrincipal'), 'Value should be greater than min').max(Yup.ref('maxPrincipal'), 'Value should be less than max').required(local.required),
+    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `cant be out of range` + Yup.ref('minInstallment') + 'to' + Yup.ref('maxInstallment'),
+        function (this: any, value: any) {
+            const { minInstallment, maxInstallment } = this.parent
+            if (minInstallment === 0 && maxInstallment === 0) {
+                return true
+            } else {
+                return (value >= minInstallment && value <= maxInstallment)
+            }
+        }).required(local.required),
+    principal: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", `cant be out of range` + Yup.ref('minPrincipal') + 'to' + Yup.ref('maxPrincipal'),
+        function (this: any, value: any) {
+            const { minPrincipal, maxPrincipal } = this.parent
+            if (minPrincipal === 0 && maxPrincipal === 0) {
+                return true
+            } else {
+                return (value >= minPrincipal && value <= maxPrincipal)
+            }
+        }).required('required!'),
     applicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     individualApplicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     applicationFeePercent: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),

@@ -126,3 +126,17 @@ export const pathTo = route => {
 
   return [...pathTo(route.parent), route];
 };
+
+export const numbersToArabic = (input: number | string) => {
+  const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
+  const inputStr = input.toString();
+  return inputStr.replace(/[0-9]/g, (number) => {
+    return id[number]
+  });
+}
+
+export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
+  if (timeStamp > 0)
+    return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleString('ar-EG').slice(0, 12)
+  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleString('ar-EG').slice(0, 12)
+}
