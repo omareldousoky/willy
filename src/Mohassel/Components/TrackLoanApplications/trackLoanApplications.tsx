@@ -10,7 +10,7 @@ import Search from '../Search/search';
 import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 
 interface Product {
   productName: string;
@@ -58,14 +58,19 @@ class TrackLoanApplications extends Component<Props, State>{
     }
     this.mappers = [
       {
+        title: local.customerType,
+        key: "customerType",
+        render: data => beneficiaryType(data.application.product.beneficiaryType)
+      },
+      {
         title: local.customerCode,
         key: "customerCode",
-        render: data => <div style={{cursor: 'pointer'}} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer._id}</div>
+        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer.code : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer.code
       },
       {
         title: local.customerName,
         key: "customerName",
-        render: data => data.application.customer.customerName
+        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer.customerName : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName
       },
       {
         title: local.productName,
@@ -85,7 +90,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: '',
         key: "action",
-        render: data => this.getActionFromStatus(data)
+        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
       },
     ]
   }
@@ -113,28 +118,6 @@ class TrackLoanApplications extends Component<Props, State>{
       default: return null;
     }
   }
-  getActionFromStatus(loan: LoanItem) {
-    if (loan.application.status === 'approved') {
-      return <Can I='createLoan' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: loan.id, type: "create" })}>{local.createLoan}</Button></Can>
-    } else if (loan.application.status === 'created') {
-      return <Can I='issueLoan' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: loan.id, type: "issue" })}>{local.issueLoan}</Button></Can>
-    } else if (loan.application.status === 'reviewed') {
-      return (
-        <div style={{display: 'flex', justifyContent: 'space-between', width: '70%'}}>
-          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'unreview' })}>{local.undoLoanReview}</Button></Can>
-          <Can I='rejectLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'reject' })}>{local.rejectLoan}</Button></Can>
-        </div>
-      )
-    } else if (loan.application.status === 'underReview') {
-      return (
-        <div style={{display: 'flex', justifyContent: 'space-between', width: '70%'}}>
-          <Can I='reviewLoanApplication' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'review' })}>{local.reviewLoan}</Button></Can>
-          <Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push(`/track-loan-applications/edit-loan-application`, { id: loan.id, action: 'edit' })}>{local.editLoan}</Button></Can>
-        </div>
-      )
-    }
-    else return null;
-  }
   render() {
     const reviewedResults = (this.props.data) ? this.props.data.filter(result => result.application.status === "reviewed") : [];
     return (
@@ -147,9 +130,10 @@ class TrackLoanApplications extends Component<Props, State>{
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
                 <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount})`}</span>
               </div>
+              {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size}  hqBranchIdRequest= {this.props.branchId} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}
@@ -162,8 +146,8 @@ class TrackLoanApplications extends Component<Props, State>{
           </Card.Body>
         </Card>
         {reviewedResults.length > 0 &&
-            <Button onClick={() => { this.setState({ print: true }, () => window.print()) }}>print</Button>
-          }
+          <Button onClick={() => { this.setState({ print: true }, () => window.print()) }}>print</Button>
+        }
         {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} />}
       </>
     )

@@ -3,26 +3,35 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
 import { RouteProps } from 'react-router';
+import Swal from 'sweetalert2';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+import * as local from '../../../Shared/Assets/ar.json';
 import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
-import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
-import { getProducts, getProduct } from '../../Services/APIs/loanProduct/getProduct';
+import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication, editApplication } from '../../Services/APIs/loanApplication/newApplication';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
-import * as local from '../../../Shared/Assets/ar.json';
-import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import { Location } from '../LoanCreation/loanCreation';
-import { reviewApplication, undoreviewApplication, rejectApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import { getCookie } from '../../Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { parseJwt } from '../../Services/utils';
+import { parseJwt, beneficiaryType } from '../../Services/utils';
+import { getBusinessSectors } from '../../Services/APIs/configApis/config'
+import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm';
+import DualBox from '../DualListBox/dualListBox';
+import InfoBox from '../userInfoBox';
+import CustomerSearch from '../CustomerSearch/customerSearchTable';
+import Wizard from '../wizard/Wizard';
+import { BusinessSector } from '../CustomerCreation/StepTwoForm';
 interface Props {
     history: any;
     location: Location;
@@ -32,7 +41,12 @@ interface Formula {
     name: string;
     _id: string;
 }
+interface LoanOfficer {
+    _id: string;
+    username: string;
+}
 export interface Customer {
+    _id?: string;
     customerID?: string;
     customerName?: string;
     customerCode?: string;
@@ -51,31 +65,50 @@ export interface Results {
     empty: boolean;
 }
 interface State {
+    step: number;
     application: Application;
+    customerType: string;
     loading: boolean;
     selectedCustomer: Customer;
+    selectedGroupLeader: string;
+    selectedLoanOfficer: string;
+    selectedBusinessSector: string;
     searchResults: Results;
     guarantor1Res: Results;
     guarantor2Res: Results;
     formulas: Array<Formula>;
-    products: Array<object>;
+    products: Array<any>;
     loanUsage: Array<object>;
-    loanOfficers: Array<object>;
+    loanOfficers: Array<LoanOfficer>;
+    branchCustomers: Array<object>;
+    selectedCustomers: Array<Customer>;
+    businessSectors: Array<BusinessSector>;
     guarantor1: any;
     guarantor2: any;
     viceCustomers: Array<Vice>;
     prevId: string;
+    searchGroupCustomerKey: string;
+    showModal: boolean;
+    customerToView: Customer;
 }
 const date = new Date();
 
+
+
 class LoanApplicationCreation extends Component<Props & RouteProps, State>{
+    tokenData: any;
     constructor(props: Props) {
         super(props);
         this.state = this.setInitState();
+        const token = getCookie('token');
+        this.tokenData = parseJwt(token);
     }
     setInitState() {
         return ({
+            step: 1,
             application: {
+                beneficiaryType: '',
+                individualDetails: [],
                 customerID: '',
                 customerName: "",
                 customerCode: '',
@@ -142,8 +175,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 noOfGuarantors: 0,
                 guarantors: []
             },
+            customerType: '',
             loading: false,
             selectedCustomer: {},
+            selectedGroupLeader: '',
+            selectedLoanOfficer: '',
             searchResults: {
                 results: [],
                 empty: false
@@ -152,6 +188,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             loanUsage: [],
             loanOfficers: [],
             products: [],
+            branchCustomers: [],
+            businessSectors: [],
+            selectedBusinessSector: '',
+            selectedCustomers: [],
+            searchGroupCustomerKey: '',
             guarantor1Res: {
                 results: [],
                 empty: false
@@ -166,7 +207,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 name: '',
                 phoneNumber: ''
             }],
-            prevId: ''
+            prevId: '',
+            showModal: false,
+            customerToView: {}
         })
     }
     static getDerivedStateFromProps(props, state) {
@@ -204,6 +247,23 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const application = await getApplication(id);
         if (application.status === 'success') {
             const formData = this.state.application;
+            if (application.body.product.beneficiaryType === 'group') {
+                this.getBusinessSectors();
+                const selectedCustomers: Customer[] = [];
+                application.body.group.individualsInGroup.forEach(customer => {
+                    selectedCustomers.push(customer.customer)
+                    if (customer.Type === 'leader') {
+                        this.setState({
+                            selectedGroupLeader: customer.customer._id,
+                            selectedBusinessSector: customer.customer.businessSector,
+                            selectedLoanOfficer: customer.customer.representative
+                        })
+                    }
+                })
+                this.setState({
+                    selectedCustomers
+                })
+            }
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
             const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
@@ -240,9 +300,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.undoReviewDate = application.body.undoReviewDate;
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
-
+            formData.individualDetails = application.body.group.individualsInGroup
             this.setState({
                 selectedCustomer: application.body.customer,
+                customerType: application.body.product.beneficiaryType,
                 application: formData,
                 loading: false
             })
@@ -277,9 +338,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
+    async getBusinessSectors() {
+        this.setState({ businessSectors: [], loading: true })
+        const sectors = await getBusinessSectors();
+        if (sectors.status === 'success') {
+            this.setState({
+                businessSectors: sectors.body.sectors,
+                loading: false
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
+    }
     async getLoanOfficers() {
         this.setState({ loanOfficers: [], loading: true })
-        const res = await searchLoanOfficer({ from: 0, size: 100 });
+        const res = await searchLoanOfficer({ from: 0, size: 100, branchId: this.tokenData.branch });
         if (res.status === "success") {
             this.setState({
                 loanOfficers: res.body.data.filter(officer => officer.status === 'active'),
@@ -292,10 +366,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async getProducts() {
         this.setState({ products: [], loading: true })
-        const token = getCookie('token');
-        const tokenData = parseJwt(token);
-        if (tokenData.requireBranch === true) {
-            const products = await getProductsByBranch(tokenData.branch);
+        if (this.tokenData.branch.length > 0) {
+            const products = await getProductsByBranch(this.tokenData.branch);
             if (products.status === 'success') {
                 this.setState({
                     products: products.body.data.productIds,
@@ -307,6 +379,23 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
         } else {
             Swal.fire('', local.selectBranch, 'error');
+        }
+    }
+    async searchCustomers(key?: string) {
+        let query = {}
+        if (key && key.length > 0) {
+            this.setState({ loading: true, searchGroupCustomerKey: key });
+            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
+        } else {
+            this.setState({ loading: true });
+            query = { from: 0, size: 50, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
+        }
+        const results = await searchCustomer(query)
+        if (results.status === 'success') {
+            this.setState({ loading: false, branchCustomers: results.body.data });
+        } else {
+            Swal.fire("error", local.searchError, 'error')
+            this.setState({ loading: false });
         }
     }
     handleSearch = async (query) => {
@@ -326,7 +415,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     handleSearchGuarantors = async (query, index) => {
         const obj = {
             name: query,
-            // sameBranch: true,
             from: 0,
             size: 30,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
@@ -370,8 +458,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
     }
     populateCustomer(response) {
-        this.getOfficerName(response.representative);
         const defaultApplication = this.state.application;
+        this.getOfficerName(response.representative);
         defaultApplication.customerName = response.customerName;
         defaultApplication.nationalId = response.nationalId;
         defaultApplication.birthDate = this.getDateString(response.birthDate);
@@ -467,6 +555,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.maxInstallment = (selectedProductDetails.maxInstallment) ? selectedProductDetails.maxInstallment : defaultValues.maxInstallment;
         defaultApplication.noOfGuarantors = (selectedProductDetails.noOfGuarantors) ? selectedProductDetails.noOfGuarantors : defaultValues.noOfGuarantors;
         defaultApplication.allowApplicationFeeAdjustment = selectedProductDetails.allowApplicationFeeAdjustment;
+        defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType;
+        if (selectedProductDetails.beneficiaryType === 'group' && this.state.step === 1) { this.searchCustomers() }
         this.setState({ application: defaultApplication });
     }
     getSelectedLoanProduct = async (id) => {
@@ -492,122 +582,350 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    async handleStatusChange(values, status) {
-        this.setState({ loading: true });
-        if (status === 'review') {
-            const res = await reviewApplication({ id: this.state.prevId, date: new Date(values.reviewDate).valueOf() });
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.reviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
-            } else {
-                Swal.fire("error", local.statusChangeError, 'error')
-                this.setState({ loading: false });
+    addOptionalGuarantor() {
+        const element = {
+            searchResults: {
+                results: [],
+                empty: false
+            },
+            guarantor: {},
+        };
+        const defaultApplication = { ...this.state.application };
+        defaultApplication.guarantors.push(element)
+        this.setState({
+            application: defaultApplication
+        })
+    }
+    setCustomerType(type) {
+        const defaultApplication = this.state.application;
+        defaultApplication.beneficiaryType = type;
+        this.setState({
+            customerType: type,
+            application: defaultApplication
+        }, () => {
+            if (type === 'group') {
+                this.getBusinessSectors()
             }
-        } else if (status === 'unreview') {
-            const res = await undoreviewApplication({ id: this.state.prevId, date: new Date(values.unreviewDate).valueOf() });
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.unreviewSuccess).then(() => { this.props.history.push("/track-loan-applications") })
-            } else {
-                Swal.fire("error", local.statusChangeError, 'error')
-                this.setState({ loading: false });
+        })
+    }
+    submit = async (values: Application) => {
+        if (this.state.step === 2 && this.state.customerType === 'individual') {
+            this.step('forward');
+        } else {
+            const obj = { ...values }
+            const individualsToSend: { id?: string; amount: number; type: string }[] = []
+            let principalToSend = 0;
+            obj.individualDetails && obj.individualDetails.forEach(customer => {
+                const obj = {
+                    id: customer.customer._id,
+                    amount: customer.amount,
+                    type: customer.type
+                }
+                principalToSend += customer.amount
+                individualsToSend.push(obj)
+            })
+            if (obj.beneficiaryType !== 'group') {
+                principalToSend = obj.principal
             }
-        } else if (status === 'reject') {
-            const res = await rejectApplication({ applicationIds: [this.state.prevId], rejectionDate: new Date(values.rejectionDate).valueOf(), rejectionReason: values.rejectionReason });
-            if (res.status === 'success') {
-                this.setState({ loading: false });
-                Swal.fire("success", local.rejectSuccess).then(() => { this.props.history.push("/track-loan-applications") })
+            const objToSubmit = {
+                customerId: obj.customerID,
+                guarantorIds: obj.guarantorIds,
+                productId: obj.productID,
+                interest: obj.interest,
+                interestPeriod: obj.interestPeriod,
+                gracePeriod: obj.gracePeriod,
+                pushPayment: obj.pushPayment,
+                noOfInstallments: obj.noOfInstallments,
+                principal: principalToSend,
+                applicationFee: obj.applicationFee,
+                individualApplicationFee: obj.individualApplicationFee,
+                applicationFeePercent: obj.applicationFeePercent,
+                applicationFeeType: obj.applicationFeeType,
+                applicationFeePercentPerPerson: obj.applicationFeePercentPerPerson,
+                applicationFeePercentPerPersonType: obj.applicationFeePercentPerPersonType,
+                representativeFees: obj.representativeFees,
+                stamps: obj.stamps,
+                adminFees: obj.adminFees,
+                entryDate: new Date(obj.entryDate).valueOf(),
+                usage: obj.usage,
+                representative: obj.representative,
+                enquirorId: obj.enquirorId,
+                visitationDate: new Date(obj.visitationDate).valueOf(),
+                individualDetails: individualsToSend,
+                viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
+            }
+            if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
+                Swal.fire("error", local.selectTwoGuarantors, 'error')
             } else {
-                Swal.fire("error", local.statusChangeError, 'error')
-                this.setState({ loading: false });
+                if (!this.props.edit) {
+                    this.setState({ loading: true });
+                    const res = await newApplication(objToSubmit);
+                    if (res.status === 'success') {
+                        this.setState({ loading: false });
+                        Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
+                    } else {
+                        Swal.fire("error", local.loanApplicationCreationError, 'error')
+                        this.setState({ loading: false });
+                    }
+                } else if (this.props.edit) {
+                    this.setState({ loading: true });
+                    const res = await editApplication(objToSubmit, this.state.prevId);
+                    if (res.status === 'success') {
+                        this.setState({ loading: false });
+                        Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/track-loan-applications") })
+                    } else {
+                        Swal.fire("error", local.loanApplicationEditError, 'error')
+                        this.setState({ loading: false });
+                    }
+                }
             }
         }
     }
-    submit = async (values: Application) => {
-        const obj = { ...values }
-        const objToSubmit = {
-            customerId: obj.customerID,
-            guarantorIds: obj.guarantorIds,
-            productId: obj.productID,
-            interest: obj.interest,
-            interestPeriod: obj.interestPeriod,
-            gracePeriod: obj.gracePeriod,
-            pushPayment: obj.pushPayment,
-            noOfInstallments: obj.noOfInstallments,
-            principal: obj.principal,
-            applicationFee: obj.applicationFee,
-            individualApplicationFee: obj.individualApplicationFee,
-            applicationFeePercent: obj.applicationFeePercent,
-            applicationFeeType: obj.applicationFeeType,
-            applicationFeePercentPerPerson: obj.applicationFeePercentPerPerson,
-            applicationFeePercentPerPersonType: obj.applicationFeePercentPerPersonType,
-            representativeFees: obj.representativeFees,
-            stamps: obj.stamps,
-            adminFees: obj.adminFees,
-            entryDate: new Date(obj.entryDate).valueOf(),
-            usage: obj.usage,
-            representative: obj.representative,
-            enquirorId: obj.enquirorId._id,
-            visitationDate: new Date(obj.visitationDate).valueOf(),
-            viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
+    step(key) {
+        let currentStep = this.state.step
+        if (this.state.step < 3 && key === 'forward') {
+            currentStep++
+        } else if (this.state.step >= 1 && key === 'backward') {
+            currentStep--
         }
-        if (this.state.application.guarantorIds.length === this.state.application.noOfGuarantors) {
-            if (!this.props.edit) {
-                this.setState({ loading: true });
-                const res = await newApplication(objToSubmit);
-                if (res.status === 'success') {
-                    this.setState({ loading: false });
-                    Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
-                } else {
-                    Swal.fire("error", local.loanApplicationCreationError, 'error')
-                    this.setState({ loading: false });
-                }
-            } else if (this.props.edit) {
-                this.setState({ loading: true });
-                const res = await editApplication(objToSubmit, this.state.prevId);
-                if (res.status === 'success') {
-                    this.setState({ loading: false });
-                    Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/track-loan-applications") })
-                } else {
-                    Swal.fire("error", local.loanApplicationEditError, 'error')
-                    this.setState({ loading: false });
-                }
+        this.setState({
+            step: currentStep,
+        })
+
+    }
+    handleGroupChange(customers) {
+        if (customers.length === 0) {
+            this.setState({
+                selectedGroupLeader: ''
+            })
+        }
+        const customersTemp: { customer: Customer; amount: number; type: string }[] = [];
+        const defaultApplication = this.state.application;
+        customers.forEach(customer => {
+            const obj = {
+                customer: customer,
+                amount: 0,
+                type: 'member'
             }
+            customersTemp.push(obj)
+        })
+        defaultApplication.individualDetails = customersTemp;
+        this.setState({
+            selectedCustomers: customers,
+            application: defaultApplication
+        })
+    }
+    filterCustomersByBusinessSector() {
+        const branchCustomers = this.state.branchCustomers;
+        if (this.state.selectedBusinessSector === "لا ينطبق" || this.state.selectedBusinessSector === "") {
+            return branchCustomers
         } else {
-            Swal.fire("error", local.selectTwoGuarantors, 'error')
+            return branchCustomers.filter((customer: Customer) => customer.businessSector === this.state.selectedBusinessSector)
+        }
+    }
+    async viewCustomer(id) {
+        this.setState({ loading: true });
+        const selectedCustomer = await getCustomerByID(id)
+        if (selectedCustomer.status === 'success') {
+            this.setState({
+                customerToView: selectedCustomer.body,
+                loading: false,
+                showModal: true
+            })
+        } else {
+            Swal.fire("error", local.searchError, 'error')
+            this.setState({ loading: false });
+        }
+    }
+    setGroupLeader(id) {
+        const defaultApplication = this.state.application;
+        defaultApplication.individualDetails.forEach(member => {
+            if (member.customer._id === id) {
+                member.type = 'leader'
+            } else {
+                member.type = 'member'
+            }
+        })
+        this.setState({
+            application: defaultApplication,
+            selectedGroupLeader: id
+        })
+    }
+    renderStepOne() {
+        return (
+            <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
+                {(this.state.customerType === 'individual') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
+                    <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
+                </div> :
+                    <div>
+                        <h4>{local.customersSelection}</h4>
+                        <div style={{ marginTop: 10, marginBottom: 10 }}>
+                            <Form.Group controlId="loanOfficer" style={{ margin: 'auto', width: '60%' }}>
+                                <Form.Label>{local.loanOfficer}</Form.Label>
+                                <Form.Control as="select"
+                                    name="loanOfficer"
+                                    data-qc="loanOfficer"
+                                    value={this.state.selectedLoanOfficer}
+                                    disabled={this.state.selectedCustomers.length > 0}
+                                    onChange={(event) => {
+                                        this.setState({ selectedLoanOfficer: event.currentTarget.value }, () => { this.searchCustomers() })
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.loanOfficers.map((officer) =>
+                                        <option key={officer._id} value={officer._id}>{officer.username}</option>
+                                    )}
+                                </Form.Control>
+                            </Form.Group>
+
+                            <Form.Group controlId="businessSector" style={{ margin: 'auto', width: '60%' }}>
+                                <Form.Label>{local.businessSector}</Form.Label>
+                                <Form.Control as="select"
+                                    name="businessSector"
+                                    data-qc="businessSector"
+                                    value={this.state.selectedBusinessSector}
+                                    disabled={this.state.selectedCustomers.length > 0}
+                                    onChange={(event) => {
+                                        this.setState({ selectedBusinessSector: event.currentTarget.value })
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.businessSectors.map((businessSector, index) => {
+                                        return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
+                                    })}
+                                </Form.Control>
+                            </Form.Group>
+                        </div>
+                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
+                            <DualBox
+                                labelKey={"customerName"}
+                                vertical
+                                search={(key) => this.searchCustomers(key)}
+                                options={this.filterCustomersByBusinessSector()}
+                                selected={this.state.selectedCustomers}
+                                onChange={(list) => this.handleGroupChange(list)}
+                                filterKey={this.state.searchGroupCustomerKey}
+                                rightHeader={local.allCustomers}
+                                leftHeader={local.selectedCustomers}
+                                viewSelected={(id) => this.viewCustomer(id)}
+                            />
+                            {this.state.selectedCustomers.length <= 7 && this.state.selectedCustomers.length >= 3 ? <Form.Group controlId="leaderSelector" style={{ margin: 'auto', width: '60%' }}>
+                                <Form.Label>{local.groupLeaderName}</Form.Label>
+                                <Form.Control as="select"
+                                    name="selectedGroupLeader"
+                                    data-qc="selectedGroupLeader"
+                                    value={this.state.selectedGroupLeader}
+                                    onChange={(event) => {
+                                        this.setGroupLeader(event.currentTarget.value)
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.selectedCustomers.map((customer, i) =>
+                                        <option key={i} value={customer._id}>{customer.customerName}</option>
+                                    )}
+                                </Form.Control>
+                            </Form.Group> : <span>Select customers</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                }
+                <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '100px 0px' }}>
+                    <Button
+                        className={'btn-cancel-prev'} style={{ width: '20%' }}
+                        onClick={() => { this.props.history.push("/track-loan-applications"); }}
+                    >{local.cancel}</Button>
+                    <Button className={'btn-submit-next'} disabled={(this.state.customerType === 'group' && (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) || (this.state.customerType === 'individual' && (Object.keys(this.state.selectedCustomer).length === 0))} style={{ float: 'left', width: '20%' }} onClick={() => this.step('forward')} data-qc="next">{local.next}</Button>
+
+                </div>
+            </div>
+        )
+    }
+    renderStepTwo() {
+        return (
+            <Formik
+                initialValues={this.state.application}
+                onSubmit={this.submit}
+                validationSchema={LoanApplicationValidation}
+                validateOnBlur
+                validateOnChange
+                enableReinitialize
+            >
+                {(formikProps) =>
+                    <LoanApplicationCreationForm {...formikProps}
+                        formulas={this.state.formulas}
+                        loanUsage={this.state.loanUsage}
+                        products={this.state.products.filter(product => product.beneficiaryType ===  this.state.customerType)}
+                        loanOfficers={this.state.loanOfficers}
+                        step={(key) => this.step(key)}
+                        getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
+                    />
+                }
+            </Formik>
+        )
+    }
+    renderStepThree() {
+        return (
+            <Formik
+                initialValues={this.state.application}
+                onSubmit={this.submit}
+                validationSchema={LoanApplicationValidation}
+                validateOnBlur
+                validateOnChange
+                enableReinitialize
+            >
+                {(formikProps) =>
+                    <LoanApplicationCreationGuarantorForm {...formikProps}
+                        step={(key) => this.step(key)}
+                        addGuar={() => this.addOptionalGuarantor()}
+                        handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
+                        selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
+                        removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
+                    />
+                }
+            </Formik>
+        )
+    }
+    renderSteps() {
+        switch (this.state.step) {
+            case 1:
+                return this.renderStepOne();
+            case 2:
+                return this.renderStepTwo();
+            case 3:
+                return this.renderStepThree();
+            default: return null;
         }
     }
     render() {
         return (
             <Container>
                 <Loader open={this.state.loading} type="fullscreen" />
-                {(Object.keys(this.state.selectedCustomer).length > 0) ? <Formik
-                    initialValues={this.state.application}
-                    onSubmit={this.submit}
-                    validationSchema={LoanApplicationValidation}
-                    validateOnBlur
-                    validateOnChange
-                    enableReinitialize
-                >
-                    {(formikProps) =>
-                        <LoanApplicationCreationForm {...formikProps}
-                            formulas={this.state.formulas}
-                            loanUsage={this.state.loanUsage}
-                            products={this.state.products}
-                            loanOfficers={this.state.loanOfficers}
-                            getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
-                            handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
-                            selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
-                            removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
-                            searchResults1={this.state.guarantor1Res}
-                            searchResults2={this.state.guarantor2Res}
-                            guarantorOne={this.state.guarantor1}
-                            guarantorTwo={this.state.guarantor2}
-                            viceCustomers={this.state.viceCustomers}
-                            handleStatusChange={(values, status) => this.handleStatusChange(values, status)}
-                        />
+                <Card>
+                    {this.state.customerType === '' ? <div className="d-flex justify-content-center">
+                        <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
+                            <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/individual.svg')} />
+                            <Button onClick={() => this.setCustomerType('individual')}>{local.individual}</Button>
+                        </div>
+                        <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
+                            <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
+                            <Button onClick={() => this.setCustomerType('group')}>{local.group}</Button>
+                        </div>
+                    </div> :
+                        <div style={{ display: "flex", flexDirection: "row" }} >
+                            <Wizard
+                                currentStepNumber={this.state.step - 1}
+                                stepsDescription={(this.state.customerType === 'individual') ? [local.customersDetails, local.loanInfo, local.guarantorInfo] : [local.customersDetails, local.loanInfo]}
+                            />
+                            {this.renderSteps()}
+                        </div>
                     }
-                </Formik> : <CustomerSearch source='loanApplication' style={{ width: '60%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />}
+                </Card>
+                {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
+                    <Modal.Body>
+                        <InfoBox values={this.state.customerToView} />
+                    </Modal.Body>
+                </Modal>}
             </Container>
         )
     }

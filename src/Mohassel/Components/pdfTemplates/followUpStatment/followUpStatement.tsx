@@ -1,9 +1,9 @@
 import React from 'react';
 import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
+import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const FollowUpStatment = (props) => {
-    console.log('props', props)
     return (
         <div className="follow-up-statment" dir="rtl" lang="ar">
             <table className="margin" >
@@ -14,7 +14,7 @@ const FollowUpStatment = (props) => {
                         <td>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
                     </tr>
                     <tr>
-                        <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
+                        <td>{timeToArabicDate(0, true)}</td>
                         <td></td>
                         <td>الاربعاء</td>
                     </tr>
@@ -31,7 +31,7 @@ const FollowUpStatment = (props) => {
                     <tr>
                         <td style={{ textAlign: "right" }}> العميل
 					<div className="frame">٠٠٦/٠٠١١٩٩٤</div>
-                            <div className="frame">مني نور الدين عباس مبروك</div>
+                            <div className="frame">{props.data.customer.customerName}</div>
                         </td>
 
                     </tr>
@@ -47,84 +47,16 @@ const FollowUpStatment = (props) => {
                         <th>القيمه</th>
                         <th style={{ width: "40%" }}>ملاحظات</th>
                     </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
-                        <td>٢٠٢٠/٠٥/٢١</td>
-                        <td>٢٧٦١</td>
-                        <td></td>
-                    </tr>
+                    {props.data.installmentsObject.installments.map((installment, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
+                                <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                                <td>{numbersToArabic(installment.installmentResponse)}</td>
+                                <td></td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </div>

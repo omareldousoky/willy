@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Swal from 'sweetalert2';
+import InfoBox from '../userInfoBox';
 interface Customer {
     birthDate?: any;
     customerName?: string;
@@ -104,7 +105,7 @@ class CustomerSearch extends Component<Props, State>{
                 </div>
                 }
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{ width: '50%' }}><h4>No results</h4></div>}
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && <div style={{ textAlign: 'right', width: '100%' }}>
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{local.guarantor + ` ` + this.props.source}</h5>
                         <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
@@ -131,6 +132,7 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                 </div>
                 }
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox values={this.props.selectedCustomer} />}
             </div>
         )
     }

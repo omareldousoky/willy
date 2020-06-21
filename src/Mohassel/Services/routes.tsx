@@ -13,6 +13,7 @@ import LoanCreation from '../Components/LoanCreation/loanCreation';
 import LoanUses from '../Components/LoanUses/loanUses';
 import BulkApplicationApproval from '../Components/BulkApplicationApproval/bulkApplicationApproval';
 import LoanProfile from '../Components/LoanProfile/loanProfile';
+import LoanStatusChange from '../Components/LoanApplication/loanApplicationStatusChange';
 import LoanList from '../Components/LoanList/loanList';
 import RoleCreation from '../Components/Roles/roleCreation';
 import RoleProfile from '../Components/Roles/roleProfile';
@@ -90,8 +91,11 @@ routes: [
       path: "/loan-profile",
       label: local.loanDetails,
       render: (props) => <LoanProfile {...props} />,
-
-
+    } ,
+    {
+      path: "/loan-status-change",
+      label: local.loanStatusChange,
+      render: (props) => <LoanStatusChange {...props} />,
     }
 ]
 } , 

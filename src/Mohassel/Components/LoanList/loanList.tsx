@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 
 interface Props {
   history: Array<any>;
@@ -34,14 +34,19 @@ class LoanList extends Component<Props, State> {
     }
     this.mappers = [
       {
+        title: local.customerType,
+        key: "customerType",
+        render: data => beneficiaryType(data.application.product.beneficiaryType)
+      },
+      {
         title: local.customerName,
         key: "customerName",
-        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
+        render: data => <div>{data.application.customer.customerName}</div>
       },
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.application.customer._id
+        render: data => data.application.customer.code
       },
       {
         title: local.productName,
@@ -57,6 +62,11 @@ class LoanList extends Component<Props, State> {
         title: local.status,
         key: "status",
         render: data => this.getStatus(data.application.status)
+      },
+      {
+        title: '',
+        key: "action",
+        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
       },
     ]
   }
