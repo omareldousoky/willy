@@ -65,7 +65,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer._id : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer._id
+        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer.code : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer.code
       },
       {
         title: local.customerName,

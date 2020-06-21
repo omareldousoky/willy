@@ -480,5 +480,8 @@
     "inAdvanceFromMonthly":"شهري",
     "inAdvanceFromYearly":"سنوي",
     "month":"شهر",
-    "day":"يوم"
+    "day":"يوم",
+    "changeRepresentative":"تغيير المندوب",
+    "doneMoving": "تم نقل",
+    "customerSuccess": "عميل بنجاح"
 }

@@ -14,6 +14,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { theme } from '../../../theme';
 import UserRolesView from './userRolesView';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
+import CustomersForUser from './customersForUser';
 interface Props {
     history: any;
 }
@@ -117,6 +118,8 @@ class UserDetails extends Component<Props, State> {
                 return (<UserDetailsView data={this.state.data} />);
             case 2:
                 return(<UserRolesView roles ={this.state.data.roles} />);
+            case 3: 
+                return <CustomersForUser id={this.state.data._id} name={this.state.data.name} />
             default:
                 return null;
         }
@@ -133,6 +136,7 @@ class UserDetails extends Component<Props, State> {
                     <Tabs activeKey={this.state.step} id="user-tab-details" style={{ marginBottom: 20, }} onSelect={(key: string) => this.setState({ step: Number(key) })} >
                         <Tab eventKey={1} title={local.userBasicData}></Tab>
                         <Tab eventKey={2} title={local.userRoles}></Tab>
+                        <Tab eventKey={3} title={local.customers}></Tab>
                     </Tabs>
                     <Card.Body>
                         {this.renderTabs()}
