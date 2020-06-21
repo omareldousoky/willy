@@ -31,7 +31,7 @@ interface Activities {
     legacyCode: number;
     specialties: Array<Specialty>;
 }
-interface BusinessSector {
+export interface BusinessSector {
     i18n: { ar: string };
     legacyCode: number;
     activities: Array<Activities>;

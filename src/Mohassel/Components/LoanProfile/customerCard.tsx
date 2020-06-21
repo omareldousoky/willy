@@ -5,6 +5,7 @@ import { getRenderDate } from '../../Services/getRenderDate';
 import { CustomerLoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
 interface Props {
     application: any;
+    print: () => void;
 }
 function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
@@ -61,6 +62,8 @@ export const CustomerCardView = (props: Props) => {
               ]
     return (
         <div style={{textAlign:'right'}}>
+        <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
+          onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
             <CustomerLoanDetailsBoxView application={props.application} />
             <DynamicTable totalCount={0} pagination={false} data={props.application.installmentsObject.installments} mappers={mappers} />
         </div>

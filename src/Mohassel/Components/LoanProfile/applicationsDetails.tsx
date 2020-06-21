@@ -85,10 +85,14 @@ export const LoanDetailsTableView = (props: Props) => {
                     <td>{local.noOfInstallments}</td>
                     <td>{props.application.product.noOfInstallments}</td>
                 </tr>
-                <tr>
+                {props.application.product.beneficiaryType === 'individual' ? <tr>
                     <td>{local.principal}</td>
                     <td>{props.application.principal}</td>
-                </tr>
+                </tr> : props.application.group.individualsInGroup.map((member)=>
+                <tr key={member.customer._id}>
+                    <td>{local.principal} {member.customer.customerName}</td>
+                    <td>{member.amount}</td>
+                </tr>)}
                 <tr>
                     <td>{local.applicationFee}</td>
                     <td>{props.application.product.applicationFee}</td>

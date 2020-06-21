@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 
 interface Props {
   history: Array<any>;
@@ -33,6 +33,11 @@ class LoanList extends Component<Props, State> {
       from: 0,
     }
     this.mappers = [
+      {
+        title: local.customerType,
+        key: "customerType",
+        render: data => beneficiaryType(data.application.product.beneficiaryType)
+      },
       {
         title: local.customerName,
         key: "customerName",

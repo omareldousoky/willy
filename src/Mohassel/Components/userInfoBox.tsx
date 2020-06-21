@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 
 interface Props {
     values: any;
+    noHeader?: boolean;
 };
 
 interface State {
@@ -22,8 +23,8 @@ class InfoBox extends Component<Props, State>{
     render() {
         const values = this.props.values;
         return (
-            <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5' }}>
-                <h5>{local.mainInfo}</h5>
+            <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width:'100%' }}>
+                {!this.props.noHeader && <h5>{local.mainInfo}</h5>}
                 <Form.Row>
                     <Form.Group as={Col} md="4">
                         <Row>
