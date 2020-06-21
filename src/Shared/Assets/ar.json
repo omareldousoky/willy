@@ -483,5 +483,7 @@
     "day":"يوم",
     "changeRepresentative":"تغيير المندوب",
     "doneMoving": "تم نقل",
-    "customerSuccess": "عميل بنجاح"
+    "customerSuccess": "عميل بنجاح",
+    "bankAccount": "الحساب البنكي",
+    "costCenter": " مركز حساب التكلفة"
 }

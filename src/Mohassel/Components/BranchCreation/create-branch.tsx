@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import {createNewBranch, editBranchById , getBranchById} from '../../redux/branch/actions';
 import Swal from 'sweetalert2';
 import { Branch } from '../../Services/interfaces';
+import { timeToDateyyymmdd } from '../../Services/utils';
 interface State {
     step: number;
     step1: BasicValues;
@@ -69,13 +70,14 @@ interface Props {
                 latitude: values.branchAddressLatLong?.lat,
                 name: values.name,
                 governorate: values.governorate,
-                status: values.status,
                 phoneNumber: values.phoneNumber,
                 faxNumber: values.faxNumber,
                 address: values.address,
                 licenseNumber: values.licenseNumber,
-                licenseDate: values.licenseDate,
+                licenseDate:  new Date(values.licenseDate).valueOf(),
                 postalCode: values.postalCode,
+                bankAccount : values.bankAccount,
+                costCenter: values.costCenter,
             }
             return branch;
     }
@@ -93,7 +95,7 @@ interface Props {
     async editBranch (values) {
          const _id = this.props.history.location.state.details;
         const branch = this.prepareBranch(values);
-        await this.props.editBranchById(values,_id);
+        await this.props.editBranchById(branch,_id);
         if(this.props.branch.status === "success") {
             Swal.fire('success', local.branchUpdated);
             this.props.history.goBack();
@@ -105,8 +107,10 @@ interface Props {
         const _id = this.props.history.location.state.details;
         await this.props.getBranchById(_id);
         if(this.props.branch.status === "success") {
+            const branch =  this.props.branch.body.data;
+            branch.licenseDate = timeToDateyyymmdd(this.props.branch.body.data.licenseDate)
             this.setState({
-                step1: this.props.branch.body.data,
+                step1: branch,
             })
         }
 
