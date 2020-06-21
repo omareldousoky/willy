@@ -221,9 +221,8 @@ const StepOneForm = (props: Props) => {
                         <Form.Control
                             type={"date"}
                             name={"licenseDate"}
-                            placeholder={local.licenseDate}
                             data-qc={"licenseDate"}
-                            value={props.values.licenseDate}
+                            value={props.values.licenseDate as string}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.licenseDate && props.touched.licenseDate) as boolean}
@@ -235,39 +234,52 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Form.Group
-                className={'branch-data-group'}
-            >
-                <Form.Label
-                    className={'branch-data-label'}
-                >{local.branchState}</Form.Label>
-                <Row style={{ margin: "1rem" }}>
-                    <Form.Check
-                        type={'radio'}
-                        label={local.activeBranch}
-                        value={'active'} checked={activeState}
-                        onChange={props.handleChange}
-                        onClick={(e: any) => {
-                            setActive(true);
-                            setInactive(false)
-                            props.setFieldValue('status', e.target.value);
-                        }}
-                    />
-                    <Form.Check
-                        type={'radio'}
-                        label={local.inActiveBranch}
-                        value={'inactive'}
-                        checked={inactiveState}
-                        onChange={props.handleChange}
-                        onClick={(e: any) => {
-                            setActive(false);
-                            setInactive(true)
-                            props.setFieldValue('status', e.target.value);
-                        }}
+ 
+            <Row>
+                <Col>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                            {`${local.costCenter}`}
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"costCenter"}
+                            placeholder={local.costCenter}
+                            data-qc={"costCenter"}
+                            value={props.values.costCenter}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.costCenter && props.touched.costCenter) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.costCenter}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                            {`${local.bankAccount}`}
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"bankAccount"}
+                            placeholder={local.bankAccount}
+                            data-qc={"bankAccount"}
+                            value={props.values.bankAccount}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.bankAccount && props.touched.bankAccount) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.bankAccount}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+            </Row>
 
-                    />
-                </Row>
-            </Form.Group>
             <Form.Group
                 as={Row}
                 className={['branch-data-group']}

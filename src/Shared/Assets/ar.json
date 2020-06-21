@@ -456,5 +456,7 @@
     "created": "تم الإنشاء",
     "changeState": "تغيير الحالة",
     "noResultsFound": "لم يتم العثور على نتائج",
-    "code": "الكود"
+    "code": "الكود",
+    "bankAccount": "الحساب البنكي",
+    "costCenter": " مركز حساب التكلفة"
 }
