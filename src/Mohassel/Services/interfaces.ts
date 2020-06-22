@@ -8,9 +8,64 @@ export interface Branch {
     faxNumber?: string;
     address?: string;
     postalCode?: string;
-    licenseDate: number|string;
+    licenseDate: number | string;
     bankAccount: string;
     costCenter: string;
     licenseNumber: string;
+}
 
+export interface Customer {
+    accountBranch?: string;
+    accountNumber?: string;
+    applicationDate?: number;
+    birthDate?: number;
+    branchId?: string;
+    branchName?: string;
+    businessActivity?: string;
+    businessAddress?: string;
+    businessAddressLatLong?: string;
+    businessLicenseIssueDate?: number;
+    businessLicenseIssuePlace?: string;
+    businessLicenseNumber?: string;
+    businessName?: string;
+    businessPhoneNumber?: string;
+    businessPostalCode?: string;
+    businessSector?: string;
+    businessSpeciality?: string;
+    code?: number;
+    comments?: string;
+    commercialRegisterNumber?: string;
+    created?: {
+        by?: string;
+        at?: number;
+        userName?: string;
+    };
+    customerAddressLatLong?: string;
+    customerHomeAddress?: string;
+    customerName?: string;
+    customerWebsite?: string;
+    district?: string;
+    emailAddress?: string;
+    faxNumber?: string;
+    gender?: string;
+    geographicalDistribution?: string;
+    governorate?: string;
+    hasLoan?: boolean;
+    homePhoneNumber?: string;
+    homePostalCode?: string;
+    industryRegisterNumber?: string;
+    key?: number;
+    mobilePhoneNumber?: string;
+    nationalId?: string;
+    nationalIdIssueDate?: number;
+    partTimeEmployeeCount?: number;
+    permanentEmployeeCount?: number;
+    representative?: string;
+    ruralUrban?: string;
+    taxCardNumber?: string;
+    village?: string;
+    allowMultiLoans?: boolean;
+    allowGuarantorLoan?: boolean;
+    allowMultiGuarantee?: boolean;
+    _id?: string;
 }

@@ -28,6 +28,8 @@ import CustomersList from '../Components/CustomerCreation/customersList';
 import * as local from '../../Shared/Assets/ar.json';
 import { generateAppRoutes } from './utils';
 import BranchDetails from '../Components/BranchDetails/branch-details';
+import CustomerProfile from '../Components/CustomerCreation/customerProfile';
+
  const appRoutes = [
 {
   path: "/",
@@ -48,6 +50,11 @@ routes: [
       path: "/edit-customer",
       label: local.editCustomer,
       render: (props) => <Can I='updateCustomer' a='customer'><CustomerCreation {...props} edit={true} /> </Can>,
+    },
+    {
+      path: "/view-customer",
+      label: local.viewCustomer,
+      render: (props) => <Can I='getCustomer' a='customer'><CustomerProfile {...props}/> </Can>,
     }
   ]
 },
