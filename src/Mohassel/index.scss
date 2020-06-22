@@ -227,3 +227,9 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     }
   }
 }
+.modal-header {
+  align-items: center;
+  & .close {
+    margin: 0px;
+  }
+}

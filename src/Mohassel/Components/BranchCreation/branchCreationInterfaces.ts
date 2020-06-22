@@ -9,6 +9,8 @@ export interface BasicValues {
     postalCode?: string;
     licenseDate: number|string;
     licenseNumber: string;
+    bankAccount: string;
+    costCenter: string;
 }
 export interface BasicErrors { 
     name?: string;
@@ -20,6 +22,8 @@ export interface BasicErrors {
     postalCode?: string;
     licenseDate?: string;
     licenseNumber?: string;
+    bankAccount?: string;
+    costCenter?: string;
 }
 
 export interface BasicTouched {
@@ -32,4 +36,6 @@ export interface BasicTouched {
     postalCode?: boolean;
     licenseDate?: boolean;
     licenseNumber?: boolean;
+    bankAccount?: boolean;
+    costCenter?: boolean;
 }

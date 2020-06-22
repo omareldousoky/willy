@@ -8,6 +8,7 @@ import { getGeoDivision } from '../../Services/APIs/configApis/config'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
+import Can from '../../config/Can';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -199,6 +200,52 @@ export const StepThreeForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
+            <Can I="updateNationalId" a="customer" passThrough>
+                {allowed =>
+                    props.edit && allowed &&
+                    <Row>
+                        <Col sm={4}>
+                            <Form.Group>
+                                <Form.Check
+                                    name="allowMultiLoans"
+                                    id="allowMultiLoans"
+                                    data-qc="allowMultiLoans"
+                                    type='checkbox'
+                                    checked={values.allowMultiLoans}
+                                    label={local.allowMultiLoans}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={4}>
+                            <Form.Group>
+                                <Form.Check
+                                    name="allowGuarantorLoan"
+                                    id="allowGuarantorLoan"
+                                    data-qc="allowGuarantorLoan"
+                                    type='checkbox'
+                                    checked={values.allowGuarantorLoan}
+                                    label={local.allowGuarantorLoan}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={4}>
+                            <Form.Group>
+                                <Form.Check
+                                    name="allowMultiGuarantee"
+                                    id="allowMultiGuarantee"
+                                    data-qc="allowMultiGuarantee"
+                                    type='checkbox'
+                                    checked={values.allowMultiGuarantee}
+                                    label={local.allowMultiGuarantee}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                }
+            </Can>
             <Row>
                 <Col sm={12}>
                     <Form.Group controlId="comments">

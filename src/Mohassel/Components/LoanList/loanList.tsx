@@ -41,12 +41,12 @@ class LoanList extends Component<Props, State> {
       {
         title: local.customerName,
         key: "customerName",
-        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
+        render: data => <div>{data.application.customer.customerName}</div>
       },
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.application.customer._id
+        render: data => data.application.customer.code
       },
       {
         title: local.productName,
@@ -62,6 +62,11 @@ class LoanList extends Component<Props, State> {
         title: local.status,
         key: "status",
         render: data => this.getStatus(data.application.status)
+      },
+      {
+        title: '',
+        key: "action",
+        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
       },
     ]
   }
