@@ -478,5 +478,8 @@
     "day":"يوم",
     "changeRepresentative":"تغيير المندوب",
     "doneMoving": "تم نقل",
-    "customerSuccess": "عميل بنجاح"
+    "customerSuccess": "عميل بنجاح",
+    "allowMultiLoans": "عميل يمكنه أخذ اكثر من قرض",
+    "allowGuarantorLoan":"ضامن يمكنه أخذ قرض",
+    "allowMultiGuarantee": "عميل مستفيد من قرض يمكنه ان يصبح ضامنا"
 }
