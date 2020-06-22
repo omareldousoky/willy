@@ -12,7 +12,7 @@ import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
-  history: Array<string | { id: string; }>;
+  history: Array<string | { id: string }>;
   location: {
     state: {
       id: string;
@@ -42,9 +42,17 @@ const CustomerProfile = (props: Props) => {
   const [officer, changeOfficerName] = useState('');
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
-  useEffect(() => {
-    getCustomerDetails();
-  }, []);
+
+  async function getOfficerName(id) {
+    const res = await getLoanOfficer(id);
+    if (res.status === "success") {
+      changeLoading(false);
+      changeOfficerName(res.body.name)
+    } else {
+      changeLoading(false);
+      console.log('Err')
+    }
+  }
   async function getCustomerDetails() {
     changeLoading(true);
     const res = await getCustomerByID(props.location.state.id)
@@ -56,16 +64,10 @@ const CustomerProfile = (props: Props) => {
       console.log("failed to get customer data")
     }
   }
-  async function getOfficerName(id) {
-    const res = await getLoanOfficer(id);
-    if (res.status === "success") {
-        changeLoading(false);
-        changeOfficerName(res.body.name)
-    } else {
-        changeLoading(false);
-        console.log('Err')
-    }
-}
+
+  useEffect(() => {
+    getCustomerDetails();
+  }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
     else return local.female;
