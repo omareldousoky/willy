@@ -66,8 +66,9 @@ class CustomersList extends Component<Props, State> {
       },
       {
         title: '',
-        key: "actions",//<span className='fa fa-eye icon'></span>
-        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={()=> this.props.history.push("/customers/edit-customer", { id: data._id })}></span></Can></>
+        key: "actions",
+        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></span>
+          <span className='fa fa-eye icon' onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></span></Can></>  
       },
     ]
   }
