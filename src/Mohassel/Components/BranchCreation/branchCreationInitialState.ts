@@ -13,6 +13,8 @@ export const step1: BasicValues = {
     phoneNumber: '',
     faxNumber: '',
     address: '',
+    bankAccount: '',
+    costCenter: '',
     postalCode: '',
 }
 

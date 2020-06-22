@@ -37,7 +37,7 @@ class CustomersList extends Component<Props, State> {
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.customerCode
+        render: data => data.code
       },
       {
         title: local.customerName,

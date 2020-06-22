@@ -44,6 +44,9 @@ interface CustomerExtraDetails {
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
   representative: any;
+  allowMultiLoans: boolean;
+  allowGuarantorLoan: boolean;
+  allowMultiGuarantee: boolean;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -108,6 +111,7 @@ interface State {
   customerId: string;
   selectedCustomer: any;
   loading: boolean;
+  hasLoan: boolean;
   searchResults: {
     results: Array<object>;
     empty: boolean;
@@ -124,6 +128,7 @@ class CustomerCreation extends Component<Props, State>{
       step3: step3,
       customerId: '',
       loading: false,
+      hasLoan: false,
       searchResults: {
         results: [],
         empty: false
@@ -193,6 +198,9 @@ class CustomerCreation extends Component<Props, State>{
         accountNumber: res.body.accountNumber,
         accountBranch: res.body.accountBranch,
         comments: res.body.comments,
+        allowMultiLoans: res.body.allowMultiLoans,
+        allowGuarantorLoan: res.body.allowGuarantorLoan,
+        allowMultiGuarantee: res.body.allowMultiGuarantee,
       };
       this.setState({
         loading: false,
@@ -200,6 +208,7 @@ class CustomerCreation extends Component<Props, State>{
         step1: { ...this.state.step1, ...customerInfo },
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
+        hasLoan: res.body.hasLoan
       } as any);
     } else {
       this.setState({ loading: false });
@@ -264,7 +273,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepOneForm {...formikProps} edit={this.props.edit} />
+          <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />
         }
       </Formik>
     )
@@ -298,7 +307,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} />
+          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit}/>
         }
       </Formik>
     )

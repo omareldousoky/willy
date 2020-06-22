@@ -26,15 +26,18 @@ export const StepOneForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="customerName">
             <Form.Label className="customer-form-label" column>{`${local.name}*`}</Form.Label>
-            <Form.Control
-              type="text"
-              name="customerName"
-              data-qc="customerName"
-              value={values.customerName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              isInvalid={errors.customerName && touched.customerName}
-            />
+            <Can I="updateNationalId" a="customer" passThrough>
+              {allowed => <Form.Control
+                type="text"
+                name="customerName"
+                data-qc="customerName"
+                value={values.customerName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={errors.customerName && touched.customerName}
+                disabled={(!allowed && props.edit && props.hasLoan)}
+              />}
+            </Can>
             <Form.Control.Feedback type="invalid">
               {errors.customerName}
             </Form.Control.Feedback>
@@ -45,7 +48,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={5}>
           <Form.Group controlId="nationalId">
             <Form.Label className="customer-form-label">{`${local.nationalId}*`}</Form.Label>
-            <Can I="edit" a="NationalId" passThrough>
+            <Can I="updateNationalId" a="customer" passThrough>
               {allowed => <Form.Control
                 type="text"
                 name="nationalId"

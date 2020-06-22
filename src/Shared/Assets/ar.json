@@ -479,6 +479,12 @@
     "inAdvanceFromPrinciple":"نسبة من قيمة القرض",
     "inAdvanceFromMonthly":"شهري",
     "inAdvanceFromYearly":"سنوي",
-    "month":"شهر",
-    "day":"يوم"
+    "changeRepresentative":"تغيير المندوب",
+    "doneMoving": "تم نقل",
+    "customerSuccess": "عميل بنجاح",
+    "allowMultiLoans": "عميل يمكنه أخذ اكثر من قرض",
+    "allowGuarantorLoan":"ضامن يمكنه أخذ قرض",
+    "allowMultiGuarantee": "عميل مستفيد من قرض يمكنه ان يصبح ضامنا",
+    "bankAccount": "الحساب البنكي",
+    "costCenter": " مركز حساب التكلفة"
 }
