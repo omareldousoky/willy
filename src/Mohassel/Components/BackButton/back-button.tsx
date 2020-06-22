@@ -14,7 +14,7 @@ const buttonStyle: CSSProperties = {
     margin: '1rem',
     justifyContent:'space-between',
     alignItems:'center',
-   
+    cursor: 'pointer'
 }
 const BackButton = (props: Props)  => {
     const history = useHistory();
