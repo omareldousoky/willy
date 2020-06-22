@@ -17,6 +17,7 @@ interface GeoDivision {
 interface LoanOfficer {
     _id: string;
     username: string;
+    name: string;
 }
 export const StepThreeForm = (props: any) => {
     const [loading, setLoading] = useState(false);
@@ -85,7 +86,7 @@ export const StepThreeForm = (props: any) => {
                             value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
                             onBlur={handleBlur}
                             onChange={(id) => setFieldValue("representative", id)}
-                            getOptionLabel={(option) => option.username}
+                            getOptionLabel={(option) => option.name}
                             getOptionValue={(option) => option._id}
                             loadOptions={getLoanOfficers}
                             cacheOptions defaultOptions

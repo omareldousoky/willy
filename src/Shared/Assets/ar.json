@@ -447,7 +447,7 @@
     "selectedCustomers":"العملاء المختارين",
     "groupLeaderName":"اسم قائد المجموعة",
     "expired": "منتهية الصلاحية",
-    "days": "ايام",
+    "day": "يوم",
     "downloadPDF": "تنزيل PDF",
     "all": "الكل",
     "newUser": "مستخدم جديد",
@@ -464,6 +464,11 @@
     "noOfApplications": "عدد طلبات القروض",
     "created": "تم الإنشاء",
     "changeState": "تغيير الحالة",
+    "month": "شهر",
+    "first": "الأول",
+    "second": "الثاني",
+    "third": "الثالث",
+    "fourth": "الرابع",
     "noResultsFound": "لم يتم العثور على نتائج",
     "loanStatusChange":"تعديل حالة القرض",
     "code": "الكود",
@@ -481,5 +486,7 @@
     "customerSuccess": "عميل بنجاح",
     "allowMultiLoans": "عميل يمكنه أخذ اكثر من قرض",
     "allowGuarantorLoan":"ضامن يمكنه أخذ قرض",
-    "allowMultiGuarantee": "عميل مستفيد من قرض يمكنه ان يصبح ضامنا"
+    "allowMultiGuarantee": "عميل مستفيد من قرض يمكنه ان يصبح ضامنا",
+    "bankAccount": "الحساب البنكي",
+    "costCenter": " مركز حساب التكلفة"
 }
