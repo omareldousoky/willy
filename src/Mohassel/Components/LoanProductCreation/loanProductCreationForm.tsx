@@ -8,172 +8,182 @@ import * as local from '../../../Shared/Assets/ar.json';
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
     return (
-        <Form onSubmit={handleSubmit}>
-            <Form.Group as={Row} controlId="productName">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.productName}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control
-                        type="text"
-                        name="productName"
-                        data-qc="productName"
-                        value={values.productName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={errors.productName && touched.productName}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.productName}
-                    </Form.Control.Feedback>
+        <Form onSubmit={handleSubmit} className="data-form">
+            <Row>
+                <Col>
+                    <Form.Group className="data-group" controlId="productName">
+                        <Form.Label className="data-label" >{local.productName}</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="productName"
+                            data-qc="productName"
+                            value={values.productName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.productName && touched.productName}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.productName}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="beneficiaryType">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.customerType}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control as="select"
-                        name="beneficiaryType"
-                        data-qc="beneficiaryType"
-                        value={values.beneficiaryType}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={errors.beneficiaryType && touched.beneficiaryType}
-                    >
-                        <option value=''></option>
-                        <option value='individual'>{local.individual}</option>
-                        <option value='group'>{local.group}</option>
+                <Col>
+                    <Form.Group className="data-group" controlId="beneficiaryType">
+                        <Form.Label className="data-label">{local.customerType}</Form.Label>
+                        <Form.Control as="select"
+                            name="beneficiaryType"
+                            data-qc="beneficiaryType"
+                            value={values.beneficiaryType}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.beneficiaryType && touched.beneficiaryType}
+                        >
+                            <option value=''></option>
+                            <option value='individual'>{local.individual}</option>
+                            <option value='group'>{local.group}</option>
 
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.beneficiaryType}
-                    </Form.Control.Feedback>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.beneficiaryType}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="calculationFormulaId">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.calculationFormulaId}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control as="select"
-                        name="calculationFormulaId"
-                        data-qc="calculationFormulaId"
-                        value={values.calculationFormulaId}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
-                    >
-                        <option value=''></option>
-                        {props.formulas.map((formula, i) =>
-                            <option key={i} value={formula._id}>{formula.name}</option>
-                        )}
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.calculationFormulaId}
-                    </Form.Control.Feedback>
+            </Row>
+            <Row>
+                <Col>
+                    <Form.Group className="data-group" controlId="calculationFormulaId">
+                        <Form.Label className="data-label">{local.calculationFormulaId}</Form.Label>
+                        <Form.Control as="select"
+                            name="calculationFormulaId"
+                            data-qc="calculationFormulaId"
+                            value={values.calculationFormulaId}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
+                        >
+                            <option value=''></option>
+                            {props.formulas.map((formula, i) =>
+                                <option key={i} value={formula._id}>{formula.name}</option>
+                            )}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.calculationFormulaId}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="loanNature">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanNature}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control as="select"
-                        name="loanNature"
-                        data-qc="loanNature"
-                        value={values.loanNature}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={errors.loanNature && touched.loanNature}
-                    >
-                        <option value='cash'>{local.cash}</option>
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.loanNature}
-                    </Form.Control.Feedback>
+                <Col>
+                    <Form.Group className="data-group" controlId="loanNature">
+                        <Form.Label className="data-label">{local.loanNature}</Form.Label>
+                        <Form.Control as="select"
+                            name="loanNature"
+                            data-qc="loanNature"
+                            value={values.loanNature}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.loanNature && touched.loanNature}
+                        >
+                            <option value='cash'>{local.cash}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.loanNature}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="currency">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.currency}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control as="select"
-                        name="currency"
-                        data-qc="currency"
-                        value={values.currency}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={errors.currency && touched.currency}
-                    >
-                        <option value='egp'>{local.egp}</option>
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.currency}
-                    </Form.Control.Feedback>
+            </Row>
+            <Row>
+                <Col>
+                    <Form.Group className="data-group" controlId="currency">
+                        <Form.Label className="data-label">{local.currency}</Form.Label>
+
+                        <Form.Control as="select"
+                            name="currency"
+                            data-qc="currency"
+                            value={values.currency}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.currency && touched.currency}
+                        >
+                            <option value='egp'>{local.egp}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.currency}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="periodLength" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.periodLengthEvery}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control
-                        type="number"
-                        name="periodLength"
-                        data-qc="periodLength"
-                        value={values.periodLength}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={errors.periodLength && touched.periodLength}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.periodLength}
-                    </Form.Control.Feedback>
+                <Col>
+                    <Form.Group className="data-group" controlId="periodLength">
+                        <Form.Label className="data-label">{local.periodLengthEvery}</Form.Label>
+                   <Row  className={"row-nowrap"}>
+                        <Form.Control
+                        style={{margin:"0 20px"}}
+                            type="number"
+                            name="periodLength"
+                            data-qc="periodLength"
+                            value={values.periodLength}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.periodLength && touched.periodLength}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.periodLength}
+                        </Form.Control.Feedback>
+                        <Form.Control as="select"
+                            name="periodType"
+                            data-qc="periodType"
+                            value={values.periodType}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.periodType && touched.periodType}
+                        >
+                            <option value='months'>شهر</option>
+                            <option value='days'>يوم</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.periodType}
+                        </Form.Control.Feedback>
+                        </Row>
+                    </Form.Group>
                 </Col>
-                <Col sm={3}>
-                    <Form.Control as="select"
-                        name="periodType"
-                        data-qc="periodType"
-                        value={values.periodType}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={errors.periodType && touched.periodType}
-                    >
-                        <option value='months'>شهر</option>
-                        <option value='days'>يوم</option>
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.periodType}
-                    </Form.Control.Feedback>
+            </Row>
+            <Row>
+                <Col>
+                    <Form.Group className="data-group" controlId="noOfInstallments">
+                        <Form.Label className="data-label" >{local.noOfInstallments}</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="noOfInstallments"
+                            data-qc="noOfInstallments"
+                            value={values.noOfInstallments}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.noOfInstallments && touched.noOfInstallments}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.noOfInstallments}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="noOfInstallments">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfInstallments}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control
-                        type="number"
-                        name="noOfInstallments"
-                        data-qc="noOfInstallments"
-                        value={values.noOfInstallments}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={errors.noOfInstallments && touched.noOfInstallments}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.noOfInstallments}
-                    </Form.Control.Feedback>
+                <Col>
+                    <Form.Group className="data-group" controlId="lateDays">
+                        <Form.Label className="data-label">{local.lateDays}</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="lateDays"
+                            data-qc="lateDays"
+                            value={values.lateDays}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.lateDays && touched.lateDays}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.lateDays}
+                        </Form.Control.Feedback>
+                    </Form.Group>
                 </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="lateDays">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.lateDays}</Form.Label>
-                <Col sm={6}>
-                    <Form.Control
-                        type="number"
-                        name="lateDays"
-                        data-qc="lateDays"
-                        value={values.lateDays}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={errors.lateDays && touched.lateDays}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.lateDays}
-                    </Form.Control.Feedback>
-                </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="gracePeriod">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.gracePeriod}</Form.Label>
-                <Col sm={6}>
+            </Row>
+            <Form.Group className="data-group" controlId="gracePeriod">
+                <Form.Label className="data-label">{local.gracePeriod}</Form.Label>
+
                     <Form.Control
                         type="number"
                         name="gracePeriod"
@@ -186,11 +196,13 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.gracePeriod}
                     </Form.Control.Feedback>
-                </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="interest" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.interest}</Form.Label>
-                <Col sm={6}>
+            <Row>
+             <Col>
+            <Form.Group className="data-group row-nowrap" controlId="interest">
+                <Col>
+                <Form.Label className="data-label">{local.interest}</Form.Label>
+
                     <Form.Control
                         type="number"
                         name="interest"
@@ -203,9 +215,10 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.interest}
                     </Form.Control.Feedback>
-                </Col>
-                <Col sm={3}>
+                    </Col>
+                    <Col>
                     <Form.Control as="select"
+                        style={{margin:"40px 0"}}
                         name="interestPeriod"
                         data-qc="interestPeriod"
                         value={values.interestPeriod}
@@ -219,10 +232,12 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.interestPeriod}
                     </Form.Control.Feedback>
-                </Col>
+                    </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId='allowInterestAdjustmentTrue'>
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowInterestAdjustment}</Form.Label>
+            </Col>
+            <Col>
+            <Row className="row-nowrap">
+            <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentTrue'>
                 <Form.Check
                     type='checkbox'
                     name='allowInterestAdjustment'
@@ -243,9 +258,9 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Control.Feedback type="invalid">
                     {errors.allowInterestAdjustment}
                 </Form.Control.Feedback>
+                <Form.Label className="data-check-label">{local.allowInterestAdjustment}</Form.Label>
             </Form.Group>
-            <Form.Group as={Row} controlId='allowInterestAdjustmentFalse'>
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.allowInterestAdjustmentFalse}</Form.Label>
+            <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentFalse'>
                 <Form.Check
                     type='checkbox'
                     name='allowInterestAdjustment'
@@ -266,9 +281,14 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Control.Feedback type="invalid">
                     {errors.allowInterestAdjustment}
                 </Form.Control.Feedback>
+                <Form.Label className="data-check-label">{local.allowInterestAdjustmentFalse}</Form.Label>
             </Form.Group>
-            <Form.Group as={Row} controlId="inAdvanceFees" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceFees}</Form.Label>
+            </Row>
+            </Col>
+            </Row>
+            
+            <Form.Group className="data-group row-nowrap" controlId="inAdvanceFees">
+                <Form.Label className="data-label" >{local.inAdvanceFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="number"
@@ -301,8 +321,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="inAdvanceType">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.inAdvanceType}</Form.Label>
+            <Form.Group className="data-group" controlId="inAdvanceType">
+                <Form.Label className="data-label" column sm={4}>{local.inAdvanceType}</Form.Label>
                 <Col sm={6}>
                     <Form.Control as="select"
                         name="inAdvanceType"
@@ -320,8 +340,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="stamps" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.stamps}</Form.Label>
+            <Form.Group className="data-group" controlId="stamps">
+                <Form.Label className="data-label" column sm={4}>{local.stamps}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -336,7 +356,7 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.stamps}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label style={{ textAlign: 'right' }} column md={3}>{local.allowStampsAdjustment}</Form.Label>
+                <Form.Label className="data-label" column md={3}>{local.allowStampsAdjustment}</Form.Label>
                 <Col sm={1}>
                     <Form.Check
                         type="checkbox"
@@ -353,8 +373,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="representativeFees" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.representativeFees}</Form.Label>
+            <Form.Group className="data-group" controlId="representativeFees">
+                <Form.Label className="data-label" column sm={4}>{local.representativeFees}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -369,7 +389,7 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.representativeFees}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label style={{ textAlign: 'right' }} column sm={3}>{local.allowRepresentativeFeesAdjustment}</Form.Label>
+                <Form.Label className="data-label" column sm={3}>{local.allowRepresentativeFeesAdjustment}</Form.Label>
                 <Col sm={1}>
                     <Form.Check
                         type="checkbox"
@@ -386,8 +406,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="adminFees" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.adminFees}</Form.Label>
+            <Form.Group className="data-group" controlId="adminFees">
+                <Form.Label className="data-label" column sm={4}>{local.adminFees}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -402,7 +422,7 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.adminFees}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label style={{ textAlign: 'right' }} column sm={3}>{local.allowAdminFeesAdjustment}</Form.Label>
+                <Form.Label className="data-label" column sm={3}>{local.allowAdminFeesAdjustment}</Form.Label>
                 <Col sm={1}>
                     <Form.Check
                         type="checkbox"
@@ -419,8 +439,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="earlyPaymentFees">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.earlyPaymentFees}</Form.Label>
+            <Form.Group className="data-group" controlId="earlyPaymentFees">
+                <Form.Label className="data-label" column sm={4}>{local.earlyPaymentFees}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="number"
@@ -436,8 +456,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="maxNoOfRestructuring">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.maxNoOfRestructuring}</Form.Label>
+            <Form.Group className="data-group" controlId="maxNoOfRestructuring">
+                <Form.Label className="data-label" column sm={4}>{local.maxNoOfRestructuring}</Form.Label>
                 <Col sm={6}>
                     <Form.Control
                         type="number"
@@ -453,8 +473,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="minPrincipal" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.minPrincipal}</Form.Label>
+            <Form.Group className="data-group" controlId="minPrincipal">
+                <Form.Label className="data-label" column sm={4}>{local.minPrincipal}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -469,7 +489,7 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.minPrincipal}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label style={{ textAlign: 'right' }} column sm={1}>{local.maxPrincipal}</Form.Label>
+                <Form.Label className="data-label" column sm={1}>{local.maxPrincipal}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -485,8 +505,8 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="minInstallment" className="row-nowrap">
-                <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.minInstallment}</Form.Label>
+            <Form.Group className="data-group" controlId="minInstallment" >
+                <Form.Label className="data-label" column sm={4}>{local.minInstallment}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -501,7 +521,7 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.minInstallment}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label style={{ textAlign: 'right' }} column sm={1}>{local.maxInstallment}</Form.Label>
+                <Form.Label className="data-label" column sm={1}>{local.maxInstallment}</Form.Label>
                 <Col sm={4}>
                     <Form.Control
                         type="number"
@@ -520,8 +540,8 @@ export const LoanProductCreationForm = (props: any) => {
             <Col style={{ border: '1px solid black', borderRadius: '9px', margin: '10px 0 10px 0' }}>
                 <Row>
                     <Col>
-                        <Form.Group as={Row} sm={4} controlId="applicationFee">
-                            <Form.Label style={{ textAlign: 'right' }} column sm={6}>{local.applicationFee}</Form.Label>
+                        <Form.Group className="data-group" sm={4} controlId="applicationFee">
+                            <Form.Label className="data-label" column sm={6}>{local.applicationFee}</Form.Label>
                             <Col sm={6}>
                                 <Form.Control
                                     type="number"
@@ -539,8 +559,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group as={Row} sm={8} controlId='allowApplicationFeeAdjustment'>
-                            <Form.Label style={{ textAlign: 'right' }} column sm={7}>{local.allowApplicationFeeAdjustment}</Form.Label>
+                        <Form.Group className="data-group" sm={8} controlId='allowApplicationFeeAdjustment'>
+                            <Form.Label className="data-label" column sm={7}>{local.allowApplicationFeeAdjustment}</Form.Label>
                             <Col sm={1}>
                                 <Form.Check
                                     type='checkbox'
@@ -559,8 +579,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group as={Row} sm={8} controlId='spreadApplicationFee'>
-                            <Form.Label style={{ textAlign: 'right' }} column sm={7}>{local.spreadApplicationFee}</Form.Label>
+                        <Form.Group className="data-group" controlId='spreadApplicationFee'>
+                            <Form.Label className="data-label" column sm={7}>{local.spreadApplicationFee}</Form.Label>
                             <Col sm={1}>
                                 <Form.Check
                                     type='checkbox'
@@ -580,8 +600,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Form.Group as={Row} controlId="individualApplicationFee">
-                    <Form.Label style={{ textAlign: 'right' }} column md={4}>{local.individualApplicationFee}</Form.Label>
+                <Form.Group className="data-group" controlId="individualApplicationFee">
+                    <Form.Label className="data-label" column md={4}>{local.individualApplicationFee}</Form.Label>
                     <Col md={8}>
                         <Form.Control
                             type="number"
@@ -597,8 +617,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId="applicationFeePercent">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercent}</Form.Label>
+                <Form.Group className="data-group" controlId="applicationFeePercent">
+                    <Form.Label className="data-label" column sm={4}>{local.applicationFeePercent}</Form.Label>
                     <Col sm={4}>
                         <Form.Control
                             type="number"
@@ -631,8 +651,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId="applicationFeePercentPerPerson">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
+                <Form.Group className="data-group" controlId="applicationFeePercentPerPerson">
+                    <Form.Label className="data-label" column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
                     <Col sm={4}>
                         <Form.Control
                             type="number"
@@ -667,8 +687,8 @@ export const LoanProductCreationForm = (props: any) => {
                 </Form.Group>
             </Col>
             <Col style={{ border: '2px solid black', borderRadius: '9px' }}>
-                <Form.Group as={Row} controlId='loanImpactPrincipal'>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanImpactPrincipal}</Form.Label>
+                <Form.Group className="data-group" controlId='loanImpactPrincipal'>
+                    <Form.Label className="data-label" column sm={4}>{local.loanImpactPrincipal}</Form.Label>
                     <Form.Check
                         type='checkbox'
                         name='loanImpactPrincipal'
@@ -690,8 +710,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.loanImpactPrincipal}
                     </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Row} controlId='loanImpactPrincipal'>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.loanImpactPrincipal2}</Form.Label>
+                <Form.Group className="data-group" controlId='loanImpactPrincipal'>
+                    <Form.Label className="data-label" column sm={4}>{local.loanImpactPrincipal2}</Form.Label>
                     <Form.Check
                         type='checkbox'
                         name='loanImpactPrincipal'
@@ -715,8 +735,8 @@ export const LoanProductCreationForm = (props: any) => {
                 </Form.Group>
             </Col>
             {values.beneficiaryType !== 'group' && <Col>
-                <Form.Group as={Row} controlId='mustEnterGuarantor'>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.mustEnterGuarantor}</Form.Label>
+                <Form.Group className="data-group" controlId='mustEnterGuarantor'>
+                    <Form.Label className="data-label" column sm={4}>{local.mustEnterGuarantor}</Form.Label>
                     <Form.Check
                         type='checkbox'
                         name='mustEnterGuarantor'
@@ -731,8 +751,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.mustEnterGuarantor}
                     </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Row} controlId="noOfGuarantors">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.noOfGuarantors}</Form.Label>
+                <Form.Group className="data-group" controlId="noOfGuarantors">
+                    <Form.Label className="data-label" column sm={4}>{local.noOfGuarantors}</Form.Label>
                     <Col sm={6}>
                         <Form.Control
                             type="number"
@@ -749,8 +769,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId='guarantorGuaranteesMultiple'>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
+                <Form.Group className="data-group" controlId='guarantorGuaranteesMultiple'>
+                    <Form.Label className="data-label" column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
                     <Form.Check
                         type='checkbox'
                         name='guarantorGuaranteesMultiple'
