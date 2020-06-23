@@ -287,8 +287,9 @@ export const LoanProductCreationForm = (props: any) => {
             </Col>
             </Row>
             
-            <Form.Group className="data-group row-nowrap" controlId="inAdvanceFees">
+            <Form.Group className="data-group" controlId="inAdvanceFees">
                 <Form.Label className="data-label" >{local.inAdvanceFees}</Form.Label>
+                <Row className="row-nowrap">
                 <Col sm={6}>
                     <Form.Control
                         type="number"
@@ -320,10 +321,10 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.inAdvanceFrom}
                     </Form.Control.Feedback>
                 </Col>
+                </Row>
             </Form.Group>
             <Form.Group className="data-group" controlId="inAdvanceType">
-                <Form.Label className="data-label" column sm={4}>{local.inAdvanceType}</Form.Label>
-                <Col sm={6}>
+                <Form.Label className="data-label">{local.inAdvanceType}</Form.Label>
                     <Form.Control as="select"
                         name="inAdvanceType"
                         data-qc="inAdvanceType"
@@ -338,11 +339,11 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.inAdvanceType}
                     </Form.Control.Feedback>
-                </Col>
             </Form.Group>
             <Form.Group className="data-group" controlId="stamps">
                 <Form.Label className="data-label" column sm={4}>{local.stamps}</Form.Label>
-                <Col sm={4}>
+                <Row className='row-nowrap'>
+                <Col>
                     <Form.Control
                         type="number"
                         name="stamps"
@@ -356,8 +357,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.stamps}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label className="data-label" column md={3}>{local.allowStampsAdjustment}</Form.Label>
-                <Col sm={1}>
+                <Col>
+                <Row style={{padding:"0 20px"}}>
                     <Form.Check
                         type="checkbox"
                         name="allowStampsAdjustment"
@@ -371,11 +372,16 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.allowStampsAdjustment}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label">{local.allowStampsAdjustment}</Form.Label>
+                    </Row>
                 </Col>
+                </Row>
             </Form.Group>
+          
             <Form.Group className="data-group" controlId="representativeFees">
-                <Form.Label className="data-label" column sm={4}>{local.representativeFees}</Form.Label>
-                <Col sm={4}>
+             <Form.Label className="data-label">{local.representativeFees}</Form.Label>
+            <Row className='row-nowrap'>
+            <Col>
                     <Form.Control
                         type="number"
                         name="representativeFees"
@@ -389,8 +395,9 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.representativeFees}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label className="data-label" column sm={3}>{local.allowRepresentativeFeesAdjustment}</Form.Label>
-                <Col sm={1}>
+                
+                <Col>
+                <Row style={{padding:"0 20px"}}>
                     <Form.Check
                         type="checkbox"
                         name="allowRepresentativeFeesAdjustment"
@@ -404,11 +411,15 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.allowRepresentativeFeesAdjustment}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label">{local.allowRepresentativeFeesAdjustment}</Form.Label>
+                </Row>
                 </Col>
+            </Row>
             </Form.Group>
             <Form.Group className="data-group" controlId="adminFees">
-                <Form.Label className="data-label" column sm={4}>{local.adminFees}</Form.Label>
-                <Col sm={4}>
+                <Form.Label className="data-label">{local.adminFees}</Form.Label>
+                <Row className="row-nowrap">
+                <Col>
                     <Form.Control
                         type="number"
                         name="adminFees"
@@ -422,8 +433,9 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.adminFees}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label className="data-label" column sm={3}>{local.allowAdminFeesAdjustment}</Form.Label>
-                <Col sm={1}>
+               
+                <Col>
+                <Row style={{padding:"0 20px"}}>
                     <Form.Check
                         type="checkbox"
                         name="allowAdminFeesAdjustment"
@@ -437,11 +449,15 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.allowAdminFeesAdjustment}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label" >{local.allowAdminFeesAdjustment}</Form.Label>
+                    </Row>
                 </Col>
+                </Row>
             </Form.Group>
+            <Row>
+                <Col>
             <Form.Group className="data-group" controlId="earlyPaymentFees">
-                <Form.Label className="data-label" column sm={4}>{local.earlyPaymentFees}</Form.Label>
-                <Col sm={6}>
+                <Form.Label className="data-label">{local.earlyPaymentFees}</Form.Label>
                     <Form.Control
                         type="number"
                         name="earlyPaymentFees"
@@ -454,11 +470,12 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.earlyPaymentFees}
                     </Form.Control.Feedback>
-                </Col>
             </Form.Group>
+            </Col>
+            <Col>
             <Form.Group className="data-group" controlId="maxNoOfRestructuring">
-                <Form.Label className="data-label" column sm={4}>{local.maxNoOfRestructuring}</Form.Label>
-                <Col sm={6}>
+                <Form.Label className="data-label" >{local.maxNoOfRestructuring}</Form.Label>
+           
                     <Form.Control
                         type="number"
                         name="maxNoOfRestructuring"
@@ -471,11 +488,13 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.maxNoOfRestructuring}
                     </Form.Control.Feedback>
-                </Col>
             </Form.Group>
+            </Col>
+            </Row>
             <Form.Group className="data-group" controlId="minPrincipal">
-                <Form.Label className="data-label" column sm={4}>{local.minPrincipal}</Form.Label>
-                <Col sm={4}>
+                <Form.Label className="data-label">{local.minPrincipal}</Form.Label>
+                <Row className={'row-nowrap'}> 
+                <Col >
                     <Form.Control
                         type="number"
                         name="minPrincipal"
@@ -489,8 +508,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.minPrincipal}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label className="data-label" column sm={1}>{local.maxPrincipal}</Form.Label>
-                <Col sm={4}>
+                <Form.Label className="data-label">{local.maxPrincipal}</Form.Label>
+                <Col >
                     <Form.Control
                         type="number"
                         name="maxPrincipal"
@@ -504,10 +523,12 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.maxPrincipal}
                     </Form.Control.Feedback>
                 </Col>
+                </Row>
             </Form.Group>
             <Form.Group className="data-group" controlId="minInstallment" >
-                <Form.Label className="data-label" column sm={4}>{local.minInstallment}</Form.Label>
-                <Col sm={4}>
+                <Form.Label className="data-label">{local.minInstallment}</Form.Label>
+                <Row className="row-nowrap">
+                <Col >
                     <Form.Control
                         type="number"
                         name="minInstallment"
@@ -521,8 +542,8 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.minInstallment}
                     </Form.Control.Feedback>
                 </Col>
-                <Form.Label className="data-label" column sm={1}>{local.maxInstallment}</Form.Label>
-                <Col sm={4}>
+                <Form.Label className="data-label" >{local.maxInstallment}</Form.Label>
+                <Col >
                     <Form.Control
                         type="number"
                         name="maxInstallment"
@@ -536,13 +557,14 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.maxInstallment}
                     </Form.Control.Feedback>
                 </Col>
+                </Row>
             </Form.Group>
             <Col style={{ border: '1px solid black', borderRadius: '9px', margin: '10px 0 10px 0' }}>
                 <Row>
                     <Col>
-                        <Form.Group className="data-group" sm={4} controlId="applicationFee">
-                            <Form.Label className="data-label" column sm={6}>{local.applicationFee}</Form.Label>
-                            <Col sm={6}>
+                        <Form.Group className="data-group"  controlId="applicationFee">
+                            <Form.Label className="data-label">{local.applicationFee}</Form.Label>
+                          
                                 <Form.Control
                                     type="number"
                                     name="applicationFee"
@@ -555,13 +577,12 @@ export const LoanProductCreationForm = (props: any) => {
                                 <Form.Control.Feedback type="invalid">
                                     {errors.applicationFee}
                                 </Form.Control.Feedback>
-                            </Col>
+                       
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group className="data-group" sm={8} controlId='allowApplicationFeeAdjustment'>
-                            <Form.Label className="data-label" column sm={7}>{local.allowApplicationFeeAdjustment}</Form.Label>
-                            <Col sm={1}>
+                        <Form.Group className="data-check-group row-nowrap" controlId='allowApplicationFeeAdjustment'>
+              
                                 <Form.Check
                                     type='checkbox'
                                     name='allowApplicationFeeAdjustment'
@@ -575,13 +596,11 @@ export const LoanProductCreationForm = (props: any) => {
                                 <Form.Control.Feedback type="invalid">
                                     {errors.allowApplicationFeeAdjustment}
                                 </Form.Control.Feedback>
-                            </Col>
+                                <Form.Label className="data-check-label" >{local.allowApplicationFeeAdjustment}</Form.Label>
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group className="data-group" controlId='spreadApplicationFee'>
-                            <Form.Label className="data-label" column sm={7}>{local.spreadApplicationFee}</Form.Label>
-                            <Col sm={1}>
+                        <Form.Group className="data-check-group row-nowrap" controlId='spreadApplicationFee'>
                                 <Form.Check
                                     type='checkbox'
                                     name='spreadApplicationFee'
@@ -596,13 +615,12 @@ export const LoanProductCreationForm = (props: any) => {
                                 <Form.Control.Feedback type="invalid">
                                     {errors.spreadApplicationFee}
                                 </Form.Control.Feedback>
-                            </Col>
+                                <Form.Label className="data-check-label" >{local.spreadApplicationFee}</Form.Label>    
                         </Form.Group>
                     </Col>
                 </Row>
                 <Form.Group className="data-group" controlId="individualApplicationFee">
-                    <Form.Label className="data-label" column md={4}>{local.individualApplicationFee}</Form.Label>
-                    <Col md={8}>
+                    <Form.Label className="data-label">{local.individualApplicationFee}</Form.Label>
                         <Form.Control
                             type="number"
                             name="individualApplicationFee"
@@ -615,11 +633,11 @@ export const LoanProductCreationForm = (props: any) => {
                         <Form.Control.Feedback type="invalid">
                             {errors.individualApplicationFee}
                         </Form.Control.Feedback>
-                    </Col>
                 </Form.Group>
                 <Form.Group className="data-group" controlId="applicationFeePercent">
-                    <Form.Label className="data-label" column sm={4}>{local.applicationFeePercent}</Form.Label>
-                    <Col sm={4}>
+                    <Form.Label className="data-label" >{local.applicationFeePercent}</Form.Label>
+                    <Row className="row-nowrap" >
+                    <Col>
                         <Form.Control
                             type="number"
                             name="applicationFeePercent"
@@ -633,7 +651,7 @@ export const LoanProductCreationForm = (props: any) => {
                             {errors.applicationFeePercent}
                         </Form.Control.Feedback>
                     </Col>
-                    <Col sm={4}>
+                    <Col>
                         <Form.Control as="select"
                             name="applicationFeeType"
                             data-qc="applicationFeeType"
@@ -650,10 +668,12 @@ export const LoanProductCreationForm = (props: any) => {
                             {errors.applicationFeeType}
                         </Form.Control.Feedback>
                     </Col>
+                    </Row>
                 </Form.Group>
                 <Form.Group className="data-group" controlId="applicationFeePercentPerPerson">
-                    <Form.Label className="data-label" column sm={4}>{local.applicationFeePercentPerPerson}</Form.Label>
-                    <Col sm={4}>
+                    <Form.Label className="data-label">{local.applicationFeePercentPerPerson}</Form.Label>
+                    <Row className="row-nowrap">
+                    <Col>
                         <Form.Control
                             type="number"
                             name="applicationFeePercentPerPerson"
@@ -667,7 +687,7 @@ export const LoanProductCreationForm = (props: any) => {
                             {errors.applicationFeePercentPerPerson}
                         </Form.Control.Feedback>
                     </Col>
-                    <Col sm={4}>
+                    <Col>
                         <Form.Control as="select"
                             name="applicationFeePercentPerPersonType"
                             data-qc="applicationFeePercentPerPersonType"
@@ -684,13 +704,15 @@ export const LoanProductCreationForm = (props: any) => {
                             {errors.applicationFeePercentPerPersonType}
                         </Form.Control.Feedback>
                     </Col>
+                </Row>
                 </Form.Group>
             </Col>
-            <Col style={{ border: '2px solid black', borderRadius: '9px' }}>
-                <Form.Group className="data-group" controlId='loanImpactPrincipal'>
-                    <Form.Label className="data-label" column sm={4}>{local.loanImpactPrincipal}</Form.Label>
+            <Col style={{ border: '2px solid black', borderRadius: '9px',  }}>
+            <Row>
+                <Col>
+                <Form.Group className="data-check-group row-nowrap" controlId='loanImpactPrincipal'>
                     <Form.Check
-                        type='checkbox'
+                        type='radio'
                         name='loanImpactPrincipal'
                         data-qc='loanImpactPrincipal'
                         value={values.loanImpactPrincipal}
@@ -709,11 +731,13 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.loanImpactPrincipal}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label">{local.loanImpactPrincipal}</Form.Label>
                 </Form.Group>
-                <Form.Group className="data-group" controlId='loanImpactPrincipal'>
-                    <Form.Label className="data-label" column sm={4}>{local.loanImpactPrincipal2}</Form.Label>
+                </Col>
+                <Col>
+                <Form.Group className="data-check-group row-nowrap" controlId='loanImpactPrincipal'>
                     <Form.Check
-                        type='checkbox'
+                        type='radio'
                         name='loanImpactPrincipal'
                         data-qc='loanImpactPrincipal'
                         value={values.loanImpactPrincipal}
@@ -732,11 +756,16 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.loanImpactPrincipal}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label">{local.loanImpactPrincipal2}</Form.Label>
                 </Form.Group>
-            </Col>
-            {values.beneficiaryType !== 'group' && <Col>
-                <Form.Group className="data-group" controlId='mustEnterGuarantor'>
-                    <Form.Label className="data-label" column sm={4}>{local.mustEnterGuarantor}</Form.Label>
+                </Col>
+            </Row>
+            {values.beneficiaryType !== 'group' && 
+            <Col>
+                <Row>
+                <Col>
+                <Form.Group className="data-check-group row-nowrap" controlId='mustEnterGuarantor'>
+                   
                     <Form.Check
                         type='checkbox'
                         name='mustEnterGuarantor'
@@ -750,27 +779,12 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.mustEnterGuarantor}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label">{local.mustEnterGuarantor}</Form.Label>
                 </Form.Group>
-                <Form.Group className="data-group" controlId="noOfGuarantors">
-                    <Form.Label className="data-label" column sm={4}>{local.noOfGuarantors}</Form.Label>
-                    <Col sm={6}>
-                        <Form.Control
-                            type="number"
-                            name="noOfGuarantors"
-                            data-qc="noOfGuarantors"
-                            value={values.noOfGuarantors}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={errors.noOfGuarantors && touched.noOfGuarantors}
-                            disabled={!values.mustEnterGuarantor}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.noOfGuarantors}
-                        </Form.Control.Feedback>
-                    </Col>
-                </Form.Group>
-                <Form.Group className="data-group" controlId='guarantorGuaranteesMultiple'>
-                    <Form.Label className="data-label" column sm={4}>{local.guarantorGuaranteesMultiple}</Form.Label>
+                </Col>
+                <Col>
+                <Form.Group className="data-check-group row-nowrap" controlId='guarantorGuaranteesMultiple'>
+                  
                     <Form.Check
                         type='checkbox'
                         name='guarantorGuaranteesMultiple'
@@ -784,9 +798,43 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Control.Feedback type="invalid">
                         {errors.guarantorGuaranteesMultiple}
                     </Form.Control.Feedback>
+                    <Form.Label className="data-check-label">{local.guarantorGuaranteesMultiple}</Form.Label>
                 </Form.Group>
+                </Col>
+              </Row>  
+              <Form.Group className="data-group" controlId="noOfGuarantors">
+                    <Form.Label className="data-label">{local.noOfGuarantors}</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="noOfGuarantors"
+                            data-qc="noOfGuarantors"
+                            value={values.noOfGuarantors}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.noOfGuarantors && touched.noOfGuarantors}
+                            disabled={!values.mustEnterGuarantor}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.noOfGuarantors}
+                        </Form.Control.Feedback>
+                </Form.Group>
+           
             </Col>}
-            <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
+            </Col>
+            <Form.Group
+                as={Row}
+                className={['branch-data-group']}
+            >
+                <Col >
+                    <Button
+                        className={'btn-cancel-prev'} style={{ width: '60%' }}
+                        onClick={() => { props.cancel() }}
+                    >{local.cancel}</Button>
+                </Col>
+                <Col>
+                    <Button className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="submit">{local.submit}</Button>
+                </Col>
+            </Form.Group>
         </Form >
     )
 }
