@@ -55,20 +55,23 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={12}>
                     <Form.Group controlId="geographicalDistribution">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
-                        <Form.Control as="select"
-                            type="select"
-                            name="geographicalDistribution"
-                            data-qc="geographicalDistribution"
-                            value={values.geographicalDistribution}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
-                        >
-                            <option value="" disabled></option>
-                            {geoDivisions.map((geoDivision, index) => {
-                                return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
-                            })}
-                        </Form.Control>
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control as="select"
+                                type="select"
+                                name="geographicalDistribution"
+                                data-qc="geographicalDistribution"
+                                value={values.geographicalDistribution}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
+                            >
+                                <option value="" disabled></option>
+                                {geoDivisions.map((geoDivision, index) => {
+                                    return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
+                                })}
+                            </Form.Control>}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.geographicalDistribution}
                         </Form.Control.Feedback>
@@ -79,18 +82,21 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="representative">
                         <Form.Label className="customer-form-label">{`${local.representative}*`}</Form.Label>
-                        <AsyncSelect
-                            className={errors.representative ? "error" : ""}
-                            name="representative"
-                            data-qc="representative"
-                            value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
-                            onBlur={handleBlur}
-                            onChange={(id) => setFieldValue("representative", id)}
-                            getOptionLabel={(option) => option.name}
-                            getOptionValue={(option) => option._id}
-                            loadOptions={getLoanOfficers}
-                            cacheOptions defaultOptions
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <AsyncSelect
+                                className={errors.representative ? "error" : ""}
+                                name="representative"
+                                data-qc="representative"
+                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
+                                onBlur={handleBlur}
+                                onChange={(id) => setFieldValue("representative", id)}
+                                getOptionLabel={(option) => option.name}
+                                getOptionValue={(option) => option._id}
+                                loadOptions={getLoanOfficers}
+                                isDisabled={(!allowed && props.hasLoan)}
+                                cacheOptions defaultOptions
+                            />}
+                        </Can>
                         <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
                             {errors.representative}
                         </div>
@@ -99,15 +105,18 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="applicationDate">
                         <Form.Label className="customer-form-label">{`${local.applicationDate}*`}</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="applicationDate"
-                            data-qc=""
-                            value={values.applicationDate}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            isInvalid={errors.applicationDate && touched.applicationDate}
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control
+                                type="date"
+                                name="applicationDate"
+                                data-qc=""
+                                value={values.applicationDate}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.applicationDate && touched.applicationDate}
+                            />}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.applicationDate}
                         </Form.Control.Feedback>
@@ -118,20 +127,23 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="permanentEmployeeCount">
                         <Form.Label className="customer-form-label">{local.permanentEmployeeCount}</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="permanentEmployeeCount"
-                            data-qc="permanentEmployeeCount"
-                            value={values.permanentEmployeeCount}
-                            onBlur={handleBlur}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                const re = /^\d*$/;
-                                if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                    setFieldValue('permanentEmployeeCount', event.currentTarget.value)
-                                }
-                            }}
-                            isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control
+                                type="text"
+                                name="permanentEmployeeCount"
+                                data-qc="permanentEmployeeCount"
+                                value={values.permanentEmployeeCount}
+                                onBlur={handleBlur}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    const re = /^\d*$/;
+                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                        setFieldValue('permanentEmployeeCount', event.currentTarget.value)
+                                    }
+                                }}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
+                            />}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.permanentEmployeeCount}
                         </Form.Control.Feedback>
@@ -140,20 +152,23 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="partTimeEmployeeCount">
                         <Form.Label className="customer-form-label">{local.partTimeEmployeeCount}</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="partTimeEmployeeCount"
-                            data-qc="partTimeEmployeeCount"
-                            value={values.partTimeEmployeeCount}
-                            onBlur={handleBlur}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                const re = /^\d*$/;
-                                if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                    setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
-                                }
-                            }}
-                            isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control
+                                type="text"
+                                name="partTimeEmployeeCount"
+                                data-qc="partTimeEmployeeCount"
+                                value={values.partTimeEmployeeCount}
+                                onBlur={handleBlur}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    const re = /^\d*$/;
+                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                        setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
+                                    }
+                                }}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
+                            />}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.partTimeEmployeeCount}
                         </Form.Control.Feedback>
@@ -164,20 +179,23 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="accountNumber">
                         <Form.Label className="customer-form-label">{local.accountNumber}</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="accountNumber"
-                            data-qc="accountNumber"
-                            value={values.accountNumber}
-                            onBlur={handleBlur}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                const re = /^\d*$/;
-                                if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                    setFieldValue('accountNumber', event.currentTarget.value)
-                                }
-                            }}
-                            isInvalid={errors.accountNumber && touched.accountNumber}
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control
+                                type="text"
+                                name="accountNumber"
+                                data-qc="accountNumber"
+                                value={values.accountNumber}
+                                onBlur={handleBlur}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    const re = /^\d*$/;
+                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                        setFieldValue('accountNumber', event.currentTarget.value)
+                                    }
+                                }}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.accountNumber && touched.accountNumber}
+                            />}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.accountNumber}
                         </Form.Control.Feedback>
@@ -186,14 +204,17 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="accountBranch">
                         <Form.Label className="customer-form-label">{local.accountBranch}</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="accountBranch"
-                            data-qc="accountBranch"
-                            value={values.accountBranch}
-                            onChange={handleChange}
-                            isInvalid={errors.accountBranch && touched.accountBranch}
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control
+                                type="text"
+                                name="accountBranch"
+                                data-qc="accountBranch"
+                                value={values.accountBranch}
+                                onChange={handleChange}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.accountBranch && touched.accountBranch}
+                            />}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.accountBranch}
                         </Form.Control.Feedback>
@@ -212,6 +233,7 @@ export const StepThreeForm = (props: any) => {
                                     data-qc="allowMultiLoans"
                                     type='checkbox'
                                     checked={values.allowMultiLoans}
+                                    value={values.allowMultiLoans}
                                     label={local.allowMultiLoans}
                                     onChange={handleChange}
                                 />
@@ -225,6 +247,7 @@ export const StepThreeForm = (props: any) => {
                                     data-qc="allowGuarantorLoan"
                                     type='checkbox'
                                     checked={values.allowGuarantorLoan}
+                                    value={values.allowGuarantorLoan}
                                     label={local.allowGuarantorLoan}
                                     onChange={handleChange}
                                 />
@@ -238,6 +261,7 @@ export const StepThreeForm = (props: any) => {
                                     data-qc="allowMultiGuarantee"
                                     type='checkbox'
                                     checked={values.allowMultiGuarantee}
+                                    value={values.allowMultiGuarantee}
                                     label={local.allowMultiGuarantee}
                                     onChange={handleChange}
                                 />
@@ -250,14 +274,17 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={12}>
                     <Form.Group controlId="comments">
                         <Form.Label className="customer-form-label">{local.comments}</Form.Label>
-                        <Form.Control as="textarea"
-                            rows={3}
-                            name="comments"
-                            data-qc="comments"
-                            value={values.comments}
-                            onChange={handleChange}
-                            isInvalid={errors.comments && touched.comments}
-                        />
+                        <Can I="updateNationalId" a="customer" passThrough>
+                            {allowed => <Form.Control as="textarea"
+                                rows={3}
+                                name="comments"
+                                data-qc="comments"
+                                value={values.comments}
+                                onChange={handleChange}
+                                disabled={(!allowed && props.hasLoan)}
+                                isInvalid={errors.comments && touched.comments}
+                            />}
+                        </Can>
                         <Form.Control.Feedback type="invalid">
                             {errors.comments}
                         </Form.Control.Feedback>
