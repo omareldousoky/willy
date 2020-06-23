@@ -290,7 +290,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} />
+          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan}/>
         }
       </Formik>
     )
@@ -307,7 +307,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit}/>
+          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan}/>
         }
       </Formik>
     )
