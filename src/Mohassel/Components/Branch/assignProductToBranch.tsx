@@ -129,7 +129,7 @@ class AssignProductToBranch extends Component<Props, State>{
                             selected={this.state.selectedBranchProducts}
                             onChange={(list) => this.handleChange(list)}
                             filterKey={this.state.branch._id}
-                            rightHeader={local.loanProducts}
+                            rightHeader={local.availableLoanProducts}
                             leftHeader={local.loanProductsForBranch}
                         />
                     }
