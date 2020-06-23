@@ -92,7 +92,7 @@ class FormulaTest extends Component<Props, State>{
                 <BackButton title={local.testCalculationMethod} />
                 <Container className="print-none">
                     <Loader open={this.state.loading} type="fullscreen" />
-                    <Card style={{ padding: 20, textAlign:'right' }}>
+                    <Card style={{ textAlign:'right' }}>
                         {Object.keys(this.state.result).length === 0 ? <Formik
                             initialValues={this.state.formula}
                             onSubmit={this.submit}
@@ -128,7 +128,7 @@ class FormulaTest extends Component<Props, State>{
                                         })}
                                     </tbody>
                                 </Table>
-                                <div className="d-flex justify-content-between">
+                                <div className="d-flex justify-content-between" style={{ padding: 50, backgroundColor: '#f7fff2'}}>
                                     <div>
                                         <h5>{local.noOfInstallments}</h5>
                                         <span>{this.state.result.result.output.length}</span>

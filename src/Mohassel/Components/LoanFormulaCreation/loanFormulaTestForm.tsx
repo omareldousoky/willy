@@ -8,7 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 export const LoanFormulaTestForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
     return (
-        <Form style={{ textAlign: 'right' }} onSubmit={handleSubmit}>
+        <Form style={{ padding: 20, textAlign: 'right' }} onSubmit={handleSubmit}>
             <Row>
                 <Col sm={12}>
                     <Form.Group controlId="calculationFormulaId">
