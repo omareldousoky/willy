@@ -95,7 +95,7 @@ const CustomerCardPDF = (props) => {
                     </tr>
                     {props.data.guarantors.map((guarantor, index) => {
                         return (
-                            <tr>
+                            <tr key={index}>
                                 <td>{numbersToArabic(guarantor.code)}</td>
                                 <td>{guarantor.customerName}</td>
                                 <td>{guarantor.district}</td>
