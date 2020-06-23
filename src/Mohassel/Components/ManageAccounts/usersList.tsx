@@ -66,7 +66,7 @@ class UsersList extends Component<Props, State> {
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => data.created.at ? getDateAndTime(data.created.at) : ''
+        render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
       },
       {
         title: '',
