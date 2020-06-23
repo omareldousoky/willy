@@ -231,6 +231,10 @@ class Payment extends Component<Props, State>{
                 <Button onClick={() => this.handleClickEarlyPayment()} variant="primary">{local.earlyPayment}</Button>
               </div>
             </Can>
+            <div className="payment-icon">
+                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+                <Button onClick={() => this.setState({ paymentState: 1 })} variant="primary">{local.payInstallment}</Button>
+              </div>
           </div>
         </Card>
       )
