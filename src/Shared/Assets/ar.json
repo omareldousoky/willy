@@ -517,5 +517,10 @@
     "allowGuarantorLoan":"ضامن يمكنه أخذ قرض",
     "allowMultiGuarantee": "عميل مستفيد من قرض يمكنه ان يصبح ضامنا",
     "bankAccount": "الحساب البنكي",
-    "costCenter": " مركز حساب التكلفة"
+    "costCenter": " مركز حساب التكلفة",
+    "test":"تجربة",
+    "sumValue":"إجمالي القيمة",
+    "sumPrinciple":"إجمالي القيمة الاساسية",
+    "sumFees":"إجمالي المصاريف"
+    
 }
