@@ -35,7 +35,8 @@ const CustomerCardAttachments = (props) => {
               <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
             </tr>
             <tr>
-              <td>فرع : الغربية - زفتى</td>
+              {console.log(props)}
+              <td>فرع : {props.branchDetails.name}</td>
             </tr>
           </tbody>
         </table>
@@ -123,7 +124,7 @@ const CustomerCardAttachments = (props) => {
 				<div className="value">-----------------------------</div>
           </div>
           <div>طبيعه النشاط :
-				<div className="value">{props.data.businessSector + "-" + props.data.businessActivity + "-" + props.data.businessSpeciality}
+				<div className="value">{props.data.customer.businessSector + "-" + props.data.customer.businessActivity + "-" + props.data.customer.businessSpeciality}
             </div>
           </div>
         </div>
@@ -136,7 +137,7 @@ const CustomerCardAttachments = (props) => {
 
         <div className="triple">
           <div>رقم السجل التجارى :
-				<div className="value">{props.data.businessLicenseNumber}</div>
+				<div className="value">{numbersToArabic(props.data.customer.businessLicenseNumber)}</div>
           </div>
           <div>تاريخ القيد
 				<div className="value">---------------------</div>
@@ -156,7 +157,7 @@ const CustomerCardAttachments = (props) => {
         </div>
         <div className="double">
           <div>مبلغ التمويل :
-				<div className="value">{props.data.principal}</div>
+				<div className="value">{numbersToArabic(props.data.principal)}</div>
           </div>
           <div>الغرض من التمويل :
 				<div className="value">-----------------------------</div>
