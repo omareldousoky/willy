@@ -1,9 +1,34 @@
 import React from 'react';
 import './earlyPayment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
+import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const EarlyPaymentPDF = (props) => {
-    console.log('props', props)
+    function getStatus(status: string){
+        switch(status){
+            case 'paid': return local.paid;
+            case 'unpaid': return local.unpaid;
+            case 'partiallyPaid': return local.partiallyPaid;
+            case 'late': return local.late;
+            case 'cancelled': return local.cancelled;
+            default: return '';
+        }
+    }
+    function getSum(key: string){
+        let max = 0;
+        props.data.installmentsObject.installments.forEach(installment => {
+            max = max + installment[key];
+        })
+        return max;
+    }
+    function getInstallmentsRemaining() {
+        const installmentsRemaining: Array<number> = [];
+        props.data.installmentsObject.installments.forEach(installment => {
+          if (installment.status !== 'paid')
+            installmentsRemaining.push(installment.id);
+        })
+        return numbersToArabic(installmentsRemaining.toString());
+      }
     return (
         <div className="early-payment-print" style={{ direction: "rtl" }} lang="ar">
             <table>
@@ -15,7 +40,7 @@ const EarlyPaymentPDF = (props) => {
                         <td className="title bold">الدقهليه - المنزله</td>
                     </tr>
                     <tr>
-                        <td>15:17:26 &emsp; 2020/06/14</td>
+                        <td>{timeToArabicDate(0, true)}</td>
                         <td className="title2 bold"><u>السداد المعجل</u></td>
                         <td>1/1</td>
                     </tr>
@@ -25,14 +50,14 @@ const EarlyPaymentPDF = (props) => {
                 <tbody>
                     <tr>
                         <td> العميل
-					<div className="frame">076/0022648</div>
-                            <div className="frame">السيد السيد العربي محمد عبد الصبيحي</div>
+					<div className="frame">{props.data.customer.code}</div>
+                            <div className="frame">{props.data.customer.customerName}</div>
                         </td>
                         <td> التاريخ
-					<div className="frame">2020/06/14</div>
+					<div className="frame">{timeToArabicDate(0, false)}</div>
                         </td>
                         <td> المندوب
-					<div className="frame">احمد محمد محمد عوضين على</div>
+					<div className="frame">{props.data.customer.representative}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -42,15 +67,15 @@ const EarlyPaymentPDF = (props) => {
             <table>
                 <tbody>
                     <tr>
-                        <td>تاريخ الحساب <div className="frame">2020/6/14</div>
+                        <td>تاريخ الحساب <div className="frame">{timeToArabicDate(0, false)}</div>
                         </td>
-                        <td>فترة السداد <div className="frame">شهري</div>
+                        <td>فترة السداد <div className="frame">{props.data.product.periodType}</div>
                         </td>
-                        <td>عدد الاقساط <div className="frame">18</div>
+                        <td>عدد الاقساط <div className="frame">{numbersToArabic(props.data.installmentsObject.installments.length)}</div>
                         </td>
                         <td>فترة السماح
-					<div className="frame">0</div>
-                            <div className="frame">شراء بضاعه وخدمات</div>
+					<div className="frame">{numbersToArabic(props.data.product.gracePeriod)}</div>
+                            <div className="frame">{props.data.customer.businessSector}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -80,7 +105,7 @@ const EarlyPaymentPDF = (props) => {
                     <tr>
                         <th className="border">القسط</th>
                         <th className="border">تاريخ الآستحقاق</th>
-                        <th className="border">القسط</th>
+                        <th className="border"> قيمة القسط</th>
                         <th className="border">المصاريف</th>
                         <th className="border">قيمه مسدده</th>
                         <th className="border">مصاريف مسدده</th>
@@ -89,199 +114,33 @@ const EarlyPaymentPDF = (props) => {
                         <th className="border">ايام التأخير</th>
                         <th className="border">الملاحظات</th>
                     </tr>
-                    <tr>
-                        <td>076/0022648/001/1</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>266.00</td>
-                        <td>707.00</td>
-                        <td>266.00</td>
-                        <td>مسدد</td>
-                        <td>2020/06/14</td>
-                        <td>-30</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/2</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/3</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/4</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/5</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/6</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/7</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/8</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/9</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/10</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/11</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/12</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/13</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/14</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>076/0022648/001/15</td>
-                        <td>2020/07/14</td>
-                        <td>707.00</td>
-                        <td>255.00</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>غير مسدد</td>
-                        <td></td>
-                        <td>0</td>
-                        <td></td>
-                    </tr>
-
-
+                    {props.data.installmentsObject.installments.map((installment, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{numbersToArabic(installment.id)}</td>
+                                <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                                <td>{numbersToArabic(installment.principalInstallment)}</td>
+                                <td>{numbersToArabic(installment.feesInstallment)}</td>
+                                <td>{numbersToArabic(installment.principalPaid)}</td>
+                                <td>{numbersToArabic(installment.feesPaid)}</td>
+                                <td>{getStatus(installment.status)}</td>
+                                <td>{timeToArabicDate(installment.paidAt, false)}</td>
+                                <td>{Math.round((installment.paidAt-installment.dateOfPayment)/(1000*60*60*24))> 0? numbersToArabic(Math.round((installment.paidAt-installment.dateOfPayment))): ''}</td>
+                                <td></td>
+                            </tr>
+                        )
+                    })}
                     <tr>
                         <td></td>
                         <th>الإجمالي</th>
-                        <td className="border">12726.00</td>
-                        <td className="border">2726.00</td>
-                        <td className="border">707.00</td>
-                        <td className="border">266.00</td>
+                        <td className="border">{numbersToArabic(props.data.installmentsObject.totalInstallments.principal)}</td>
+                        <td className="border">{numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)}</td>
+                        <td className="border">{numbersToArabic(getSum('principalPaid'))}</td>
+                        <td className="border">{numbersToArabic(getSum('feesPaid'))}</td>
                         <th className="border">ايام التأخير</th>
-                        <td className="border">0</td>
+                        <td className="border"></td>
                         <th className="border">ايام التبكير</th>
-                        <td className="border">0</td>
+                        <td className="border"></td>
                     </tr>
                 </tbody>
             </table>
@@ -302,19 +161,19 @@ const EarlyPaymentPDF = (props) => {
                     </tr>
                     <tr>
                         <th>الرصيد</th>
-                        <td className="border">12019.00</td>
-                        <td className="border">2460.00</td>
-                        <td className="border">9559.00</td>
+                        <td className="border">{numbersToArabic(props.earlyPaymentData.requiredAmount)}</td>
+                        <td className="border">{numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum - getSum('feesPaid'))}</td>
+                        <td className="border">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
                         <td></td>
                         <td></td>
                         <th className="border">الخصم</th>
-                        <td className="border">1982</td>
+                        <td className="border">{numbersToArabic((props.data.installmentsObject.totalInstallments.feesSum - getSum('feesPaid'))-(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal))}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <th className="border">اقساط يجب سدادها</th>
                         <th className="border">الرصيد الأصل</th>
-                        <th className="border">5%</th>
+                        <th className="border">{numbersToArabic(props.data.product.earlyPaymentFees)}%</th>
                         <th className="border">إجمالي السداد المعجل</th>
                         <td></td>
                         <td></td>
@@ -322,10 +181,10 @@ const EarlyPaymentPDF = (props) => {
                     </tr>
                     <tr>
                         <th>السداد المعجل</th>
-                        <td className="border">0.00</td>
-                        <td className="border">9559.00</td>
-                        <td className="border">478</td>
-                        <td className="border">10037</td>
+                        <td className="border">{getInstallmentsRemaining()}</td>
+                        <td className="border">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
+                        <td className="border">{numbersToArabic(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal)}</td>
+                        <td className="border">{numbersToArabic(props.earlyPaymentData.requiredAmount - (props.data.installmentsObject.totalInstallments.feesSum - getSum('feesPaid'))-(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal))}</td>
                         <td></td>
                         <td></td>
                         <td></td>

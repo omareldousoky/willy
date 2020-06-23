@@ -77,6 +77,11 @@ class LoanList extends Component<Props, State> {
         key: "status",
         render: data => this.getStatus(data.application.status)
       },
+      {
+        title: '',
+        key: "action",
+        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+      },
     ]
   }
   componentDidMount() {

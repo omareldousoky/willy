@@ -1,10 +1,8 @@
 import React from 'react';
 import './cashReceipt.scss';
-import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../../Services/utils';
+import { numbersToArabic, timeToArabicDate } from '../../../Services/utils';
 
 const CashReceipt = (props) => {
-    console.log('props', props)
     return (
         <div className="cash-receipt" lang="ar">
             <div>
@@ -29,9 +27,9 @@ const CashReceipt = (props) => {
 
                 <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                 <div>  تحريرا في
-			<span>{ timeToDateyyymmdd(0) }</span>
+			<span>{' ' + timeToArabicDate(0, false) + ' ' }</span>
                 </div>
-                <div>استلمت انا / {props.data.customer.customerName}، مبلغ {props.data.principal} جنيه’ فقط أربعون ألف جنيه مصري فقط لا غير من شركة
+                <div>استلمت انا / {props.data.customer.customerName}، مبلغ {numbersToArabic(props.data.principal)} جنيه’ من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
                 <table>
                     <tbody>

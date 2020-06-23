@@ -129,7 +129,7 @@ class UserCreation extends Component<Props, State> {
             step1:initialStep1,
             step2: initialStep2,
         })
-        this.props.history.push("/");
+        this.props.history.goBack();
     }
     previousStep(values, step: number): void {
         this.setState({
@@ -149,13 +149,11 @@ class UserCreation extends Component<Props, State> {
     }
     async createUser(userObj: User) {
         const user = this.prepareUser(userObj);
-
-        this.props.history.push("/manage-accounts");
         this.setState({ loading: true });
         const res = await createUser({user});
         if (res.status === 'success') {
             Swal.fire("success", local.userCreated).then(() => {
-                this.props.history.push("/manage-accounts");
+                this.props.history.goBack();
             });
         } else {
             Swal.fire("error", local.userCreationError)
@@ -170,7 +168,7 @@ class UserCreation extends Component<Props, State> {
         if (res.status === 'success') {
             this.setState({ loading: false });
             Swal.fire("success", local.userEdited).then(() => {
-                this.props.history.push("/manage-accounts");
+                this.props.history.goBack();
 
             });
         } else {

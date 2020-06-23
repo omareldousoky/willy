@@ -76,6 +76,7 @@ class Search extends Component<Props, State> {
     if (this.props.roleId)
       obj.roleId = this.props.roleId;
     obj.from = 0;
+    if(obj.code) obj.code = Number(obj.code);
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
