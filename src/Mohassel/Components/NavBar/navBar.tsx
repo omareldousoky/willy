@@ -13,9 +13,9 @@ import { parseJwt } from '../../Services/utils';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
 import store from '../../redux/store';
 import './styles.scss';
-import { setToken } from  '../../../Shared/token';
+import { setToken } from '../../../Shared/token';
 import { connect } from 'react-redux';
-import {Auth} from '../../redux/auth/types'
+import { Auth } from '../../redux/auth/types'
 interface Props {
   history: any;
   auth: Auth;
@@ -46,15 +46,15 @@ class NavBar extends Component<Props, State> {
     }
   }
   static getDerivedStateFromProps(props, state) {
-    if(props.auth.loading === false && state.branches.length === 0) {
+    if (props.auth.loading === false && state.branches.length === 0) {
       const token = getCookie('token');
       const tokenData = parseJwt(token);
       const branches = props.auth.validBranches;
       if (tokenData?.requireBranch === false) {
         if (branches) {
-          return{ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
-        } else return{ branches: [...state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
-      } else return {selectedBranch: branches[0], branches: branches}
+          return { branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
+        } else return { branches: [...state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
+      } else return { selectedBranch: branches[0], branches: branches }
     } else return null;
   }
   async goToBranch(branch: Branch) {
@@ -161,9 +161,10 @@ class NavBar extends Component<Props, State> {
             <Nav style={{display:'flex' , flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
-              {<Can I='createCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>}
-              {<Can I='testCalculate' a='product'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>}
-              {<Can I='createLoanProduct' a='product'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>}
+              {/* {<Can I='createCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>} */}
+              {/* {<Can I='testCalculate' a='product'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>} */}
+              {/* {<Can I='createLoanProduct' a='product'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>} */}
+              {<Can I='getLoanProduct' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can>}
               {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}

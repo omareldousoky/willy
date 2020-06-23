@@ -65,12 +65,12 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer.code : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer.code
+        render: data => (data.application.product.beneficiaryType === 'individual' ? data.application.customer._id : <div style={{ display: 'flex', flexDirection: 'column' }}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer._id}</span>)}</div>)
       },
       {
         title: local.customerName,
         key: "customerName",
-        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer.customerName : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName
+        render: data => (data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName : <div style={{ display: 'flex', flexDirection: 'column' }}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer.customerName}</span>)}</div>)
       },
       {
         title: local.productName,
@@ -122,7 +122,7 @@ class TrackLoanApplications extends Component<Props, State>{
     const reviewedResults = (this.props.data) ? this.props.data.filter(result => result.application.status === "reviewed") : [];
     return (
       <>
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="print-none" style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -130,7 +130,10 @@ class TrackLoanApplications extends Component<Props, State>{
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
                 <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount})`}</span>
               </div>
-              {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
+              <div>
+                {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
+                <Button disabled={reviewedResults.length === 0} style={{ marginRight: 10 }} onClick={() => { this.setState({ print: true }, () => window.print()) }}>{local.downloadPDF}</Button>
+              </div>
             </div>
             <hr className="dashed-line" />
             <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
@@ -145,9 +148,6 @@ class TrackLoanApplications extends Component<Props, State>{
             />
           </Card.Body>
         </Card>
-        {reviewedResults.length > 0 &&
-          <Button onClick={() => { this.setState({ print: true }, () => window.print()) }}>print</Button>
-        }
         {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} />}
       </>
     )

@@ -39,6 +39,7 @@ interface State {
         rejectionDate: any;
         reviewedDate: any;
     };
+    loanOfficer: string;
 }
 const today = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split("T")[0]
 class StatusHelper extends Component<Props, State>{
@@ -97,7 +98,8 @@ class StatusHelper extends Component<Props, State>{
                 rejectionReason: '',
                 rejectionDate: today,
                 reviewedDate: this.props.application.reviewedDate
-            }
+            },
+            loanOfficer: ''
         }
     }
     handleStatusChange = (values: object) => {
@@ -112,7 +114,7 @@ class StatusHelper extends Component<Props, State>{
                 {this.props.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.props.application.customer} /> :
                     <GroupInfoBox group={this.props.application.group} />
                 }
-                <LoanDetailsTableView application={this.props.application} />
+                <LoanDetailsTableView application={this.props.application} setLoanOfficer={(name)=> this.setState({loanOfficer: name})}/>
                 {this.props.application.product.beneficiaryType === 'individual' && <Table>
                     <thead>
                         <tr>

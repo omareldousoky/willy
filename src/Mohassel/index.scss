@@ -233,3 +233,9 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     margin: 0px;
   }
 }
+
+.horizontal-table {
+  & tr td:first-child {
+    width: 300px;
+  }
+}
