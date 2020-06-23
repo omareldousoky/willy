@@ -65,12 +65,12 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer._id : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer._id
+        render: data => (data.application.product.beneficiaryType === 'individual' ? data.application.customer._id : <div style={{ display: 'flex' , flexDirection: 'column'}}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer._id}</span>)}</div>)
       },
       {
         title: local.customerName,
         key: "customerName",
-        render: data => Object.keys(data.application.customer).length > 0 ? data.application.customer.customerName : data.application.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName
+      render: data =>  (data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName : <div style={{ display: 'flex' , flexDirection: 'column'}}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer.customerName}</span>)}</div>)
       },
       {
         title: local.productName,
@@ -130,7 +130,7 @@ class TrackLoanApplications extends Component<Props, State>{
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
                 <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount})`}</span>
               </div>
-              {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
+              {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
             </div>
             <hr className="dashed-line" />
             <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />

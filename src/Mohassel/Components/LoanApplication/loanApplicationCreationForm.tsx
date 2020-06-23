@@ -515,7 +515,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="adminFees">
-                                    <Form.Label column sm={6}>{local.adminFees}</Form.Label>
+                                    <Form.Label column sm={10}>{local.adminFees}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="adminFees"

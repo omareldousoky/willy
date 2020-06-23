@@ -7,9 +7,9 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp > 0) 
-      return new Date(timeStamp).toISOString().slice(0, 10)
-   else return new Date().toISOString().slice(0, 10);
+  if (timeStamp > 0)
+    return new Date(timeStamp).toISOString().slice(0, 10)
+  else return new Date().toISOString().slice(0, 10);
 }
 
 export function parseJwt(token: string) {
@@ -47,6 +47,16 @@ export function interestPeriod(val: string) {
       return ''
   }
 }
+export function interestType(val: string) {
+  switch (val) {
+    case 'flat':
+      return local.interestTypeFlat
+    case 'reducing':
+      return local.interestTypeReducing
+    default:
+      return ''
+  }
+}
 export function periodType(val: string) {
   switch (val) {
     case 'months':
@@ -57,8 +67,48 @@ export function periodType(val: string) {
       return ''
   }
 }
+export function installmentType(val: string) {
+  switch (val) {
+    case 'principalAndFees':
+      return local.installmentTypePrincipalAndFees
+    case 'feesFirst':
+      return local.installmentTypeFeesFirst
+    default:
+      return ''
+  }
+}
+export function roundDirection(val: string) {
+  switch (val) {
+    case 'up':
+      return local.roundUp
+    case 'down':
+      return local.roundDown
+    default:
+      return ''
+  }
+}
+export function roundWhat(val: string) {
+  switch (val) {
+    case 'principal':
+      return local.roundPrincipal
+    case 'fees':
+      return local.roundFees
+    case 'principalAndFees':
+      return local.roundPrincipalAndFees
+    case 'installmentAndPrincipal':
+      return local.roundInstallmentAndPrincipal
+    case 'installmentAndFees':
+      return local.roundInstallmentAndFees
+    case 'installment':
+      return local.roundInstallment
+    case 'principalAndTotalFees':
+      return local.roundPrincipalAndTotalFees
+    default:
+      return ''
+  }
+}
 export function ageCalculate(val) {
-  const dateNow =  new Date();
+  const dateNow = new Date();
   const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2425;
   const years = Math.floor((dateNow.getTime() - val) / MS_PER_YEAR);
   return years
@@ -69,9 +119,9 @@ export function checkIssueDate(issueDate) {
   const endOfDay: Date = new Date();
   endOfDay.setHours(23, 59, 59, 59);
   const diffTime = Math.abs(endOfDay.valueOf() - date);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   //2555 = 7 years
-  if(diffDays > 2555){
+  if (diffDays > 2555) {
     return local.expired;
   } else return '';
 }

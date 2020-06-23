@@ -37,8 +37,8 @@ export const LoanFormulaCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.interestType && touched.interestType}
                     >
-                        <option value="flat">مصاريف متساويه محسوبه من إجمالى أصل القرض</option>
-                        <option value="reducing">مصاريف متناقصه محسوبه من المتبقى من أصل القرض</option>
+                        <option value="flat">{local.interestTypeFlat}</option>
+                        <option value="reducing">{local.interestTypeReducing}</option>
                         {/* <option value="3">مصاريف متساوية محولة الي مصاريف متناقصه</option> */}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
@@ -57,8 +57,8 @@ export const LoanFormulaCreationForm = (props: any) => {
                         onChange={handleChange}
                         isInvalid={errors.installmentType && touched.installmentType}
                     >
-                        <option value="principalAndFees">تتضمن أصل و مصاريف</option>
-                        <option value="feesFirst">أقساط بالمصاريف فقط اولا ثم بعد ذلك الأصل</option>
+                        <option value="principalAndFees">{local.installmentTypePrincipalAndFees}</option>
+                        <option value="feesFirst">{local.installmentTypeFeesFirst}</option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.installmentType}
@@ -113,8 +113,8 @@ export const LoanFormulaCreationForm = (props: any) => {
                             isInvalid={errors.roundDirection && touched.roundDirection}
                             disabled={!values.rounding}
                         >
-                            <option value="down">تقريب للإصغر</option>
-                            <option value="up">تقريب للأكبر</option>
+                            <option value="down">{local.roundDown}</option>
+                            <option value="up">{local.roundUp}</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {errors.roundDirection}
@@ -150,13 +150,13 @@ export const LoanFormulaCreationForm = (props: any) => {
                             onChange={handleChange}
                             isInvalid={errors.roundWhat && touched.roundWhat}
                             disabled={!values.rounding}>
-                            <option value="principal">تقريب الأصل فقط</option>
-                            <option value="fees">تقريب المصاريف فقط</option>
-                            <option value="principalAndFees">تقريب الأصل و المصاريف</option>
-                            <option value="installmentAndPrincipal">تقريب إجمالى قيمه القسط و الأصل</option>
-                            <option value="installmentAndFees">تقريب إجمالى قيمه القسط و المصاريف</option>
-                            <option value="installment">تقريب إجمالى قيمه القسط فقط</option>
-                            <option value="principalAndTotalFees">تقريب الأصل وإجمالى قيمه المصاريف</option>
+                            <option value="principal">{local.roundPrincipal}</option>
+                            <option value="fees">{local.roundFees}</option>
+                            <option value="principalAndFees">{local.roundPrincipalAndFees}</option>
+                            <option value="installmentAndPrincipal">{local.roundInstallmentAndPrincipal}</option>
+                            <option value="installmentAndFees">{local.roundInstallmentAndFees}</option>
+                            <option value="installment">{local.roundInstallment}</option>
+                            <option value="principalAndTotalFees">{local.roundPrincipalAndTotalFees}</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {errors.roundWhat}
