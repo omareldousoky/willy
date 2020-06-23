@@ -178,11 +178,13 @@ export const pathTo = route => {
 };
 
 export const numbersToArabic = (input: number | string) => {
-  const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
-  const inputStr = input.toString();
-  return inputStr.replace(/[0-9]/g, (number) => {
-    return id[number]
-  });
+  if (input) {
+    const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
+    const inputStr = input.toString();
+    return inputStr.replace(/[0-9]/g, (number) => {
+      return id[number]
+    });
+  } else return '';
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
