@@ -37,9 +37,11 @@ interface Props {
     location: Location;
     edit: boolean;
 };
-interface Formula {
+export interface Formula {
     name: string;
     _id: string;
+    interest_type: string;
+    
 }
 interface LoanOfficer {
     _id: string;

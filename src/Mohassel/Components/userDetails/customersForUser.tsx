@@ -78,7 +78,6 @@ class CustomersForUser extends Component<Props, State> {
   async submit() {
     this.setState({ loading: true, openModal: false });
     const res = await moveCustomerToOfficer({ user: this.props.id, newUser: this.state.selectedLO._id, customers: this.state.selectedCustomers.map(customer => customer._id) });
-    console.log('asf', this.state)
     if (res.status === "success") {
       this.setState({ loading: false })
       Swal.fire("", `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`, "success").then(() => this.getCoustomersForUser());

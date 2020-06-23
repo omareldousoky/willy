@@ -49,7 +49,7 @@ const TestCalculateFormulaPDF = (props) => {
                         <td>الإجمالي</td>
                         <td>{numbersToArabic(props.data.result?.sum.installmentSum)}</td>
                         <td>{numbersToArabic(props.data.result?.sum.principal)}</td>
-                        <td>{numbersToArabic(props.data.result?.sum.feesSum)}</td>
+                        <td>{numbersToArabic((props.data.result?.sum.feesSum)?props.data.result?.sum.feesSum:0)}</td>
                         <td></td>
                     </tr>
                 </tbody>
