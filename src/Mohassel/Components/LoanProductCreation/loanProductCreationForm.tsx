@@ -714,7 +714,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Form.Group>
             </Col>
-            <Col>
+            {values.beneficiaryType !== 'group' && <Col>
                 <Form.Group as={Row} controlId='mustEnterGuarantor'>
                     <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.mustEnterGuarantor}</Form.Label>
                     <Form.Check
@@ -765,7 +765,7 @@ export const LoanProductCreationForm = (props: any) => {
                         {errors.guarantorGuaranteesMultiple}
                     </Form.Control.Feedback>
                 </Form.Group>
-            </Col>
+            </Col>}
             <Button type="button" style={{ margin: 10 }} onClick={handleSubmit}>{local.submit}</Button>
         </Form >
     )

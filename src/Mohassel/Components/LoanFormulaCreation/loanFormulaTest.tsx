@@ -10,6 +10,10 @@ import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Table from 'react-bootstrap/Table';
+import { timeToDateyyymmdd } from '../../Services/utils';
+import BackButton from '../BackButton/back-button';
 
 interface Props {
     title: string;
@@ -18,7 +22,7 @@ interface State {
     formula: FormulaTestClass;
     loading: boolean;
     formulas: Array<Formula>;
-    result: object;
+    result: any;
 }
 interface Formula {
     name: string;
@@ -85,22 +89,71 @@ class FormulaTest extends Component<Props, State>{
     render() {
         return (
             <>
-            <Container className="print-none">
-                <Loader open={this.state.loading} type="fullscreen" />
-                <Formik
-                    initialValues={this.state.formula}
-                    onSubmit={this.submit}
-                    validationSchema={loanFormulaTestValidation}
-                    validateOnBlur
-                    validateOnChange
-                >
-                    {(formikProps) =>
-                        <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
-                    }
-                </Formik>
-                {Object.keys(this.state.result).length > 0 && <Button style={{marginTop: 10}} onClick={() => window.print()}>{local.downloadPDF}</Button>}
-            </Container>
-            <TestCalculateFormulaPDF data={this.state.result}/>
+                <span className="print-none">
+                    <BackButton  title={local.testCalculationMethod} />
+                </span>
+                <Container className="print-none">
+                    <Loader open={this.state.loading} type="fullscreen" />
+                    <Card style={{ textAlign: 'right' }}>
+                        {Object.keys(this.state.result).length === 0 ? <Formik
+                            initialValues={this.state.formula}
+                            onSubmit={this.submit}
+                            validationSchema={loanFormulaTestValidation}
+                            validateOnBlur
+                            validateOnChange
+                        >
+                            {(formikProps) =>
+                                <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
+                            }
+                        </Formik> : <div>
+                                <Table striped style={{ textAlign: 'right' }}>
+                                    <thead>
+                                        <tr>
+                                            <th>{local.installmentNumber}</th>
+                                            <th>{local.installmentType}</th>
+                                            <th>{local.principalInstallment}</th>
+                                            <th>{local.fees}</th>
+                                            <th>{local.paymentDate}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.result.result.output && this.state.result.result.output.map((installment, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{installment.id}</td>
+                                                    <td>{installment.installmentResponse ? installment.installmentResponse.toFixed(2) : 0}</td>
+                                                    <td>{installment.principalInstallment ? installment.principalInstallment.toFixed(2) : 0}</td>
+                                                    <td>{installment.feesInstallment ? installment.feesInstallment.toFixed(2) : 0}</td>
+                                                    <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                                <div className="d-flex justify-content-between" style={{ padding: 50, backgroundColor: '#f7fff2' }}>
+                                    <div>
+                                        <h5>{local.noOfInstallments}</h5>
+                                        <span>{this.state.result.result.output.length}</span>
+                                    </div>
+                                    <div>
+                                        <h5>{local.sumValue}</h5>
+                                        <span>{this.state.result.result.sum.installmentSum}</span>
+                                    </div>
+                                    <div>
+                                        <h5>{local.sumPrinciple}</h5>
+                                        <span>{this.state.result.result.sum.principal}</span>
+                                    </div>
+                                    <div>
+                                        <h5>{local.sumFees}</h5>
+                                        <span>{this.state.result.result.sum.feesSum ? this.state.result.result.sum.feesSum : 0}</span>
+                                    </div>
+                                    <div className="d-flex justify-content-end" ><Button style={{ marginTop: 10 }} onClick={() => window.print()}>{local.downloadPDF}</Button></div>
+                                </div>
+                            </div>
+                        }
+                    </Card>
+                </Container>
+                {Object.keys(this.state.result).length > 0 && <TestCalculateFormulaPDF data={this.state.result} />}
             </>
         )
     }

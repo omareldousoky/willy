@@ -41,12 +41,26 @@ class LoanList extends Component<Props, State> {
       {
         title: local.customerName,
         key: "customerName",
-        render: data => <div>{data.application.customer.customerName}</div>
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer.customerName}</span>)}
+            </div>)
+          }
+        </div>
+        // <div style={{ cursor: 'pointer', width:50, height:50 }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.application.customer.code
+        render: data => <div>
+        {(data.application.product.beneficiaryType === 'individual' ? data.application.customer._id :
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer._id}</span>)}
+          </div>)
+        }
+      </div>
+        // data => data.application.customer._id
       },
       {
         title: local.productName,
@@ -87,7 +101,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan' ,branchId: this.props.branchId});
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId });
   }
   render() {
     return (
@@ -102,7 +116,7 @@ class LoanList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} dropDownKeys={['name', 'nationalId', 'code']} url="loan" from={this.state.from} size={this.state.size} hqBranchIdRequest = {this.props.branchId} />
+            <Search searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} dropDownKeys={['name', 'nationalId', 'code']} url="loan" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}
