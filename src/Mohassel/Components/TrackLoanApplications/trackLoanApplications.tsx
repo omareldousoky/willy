@@ -122,7 +122,7 @@ class TrackLoanApplications extends Component<Props, State>{
     const reviewedResults = (this.props.data) ? this.props.data.filter(result => result.application.status === "reviewed") : [];
     return (
       <>
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="print-none" style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -146,7 +146,7 @@ class TrackLoanApplications extends Component<Props, State>{
           </Card.Body>
         </Card>
         {reviewedResults.length > 0 &&
-          <Button onClick={() => { this.setState({ print: true }, () => window.print()) }}>print</Button>
+          <Button className="print-none" onClick={() => { this.setState({ print: true }, () => window.print()) }}>print</Button>
         }
         {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} />}
       </>
