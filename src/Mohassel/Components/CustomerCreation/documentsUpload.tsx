@@ -51,11 +51,13 @@ class DocumentsUpload extends Component<Props, State>{
       const res = await getCustomerDocuments(this.props.customerId);
       if (res.status === "success") {
         this.setState({ loading: [] })
-        Object.keys(res.body.docs).forEach(element => {
-          this.setState({
-            [element]: res.body.docs[element]
-          } as State)
-        })
+        if(res.body.docs){
+          Object.keys(res.body.docs).forEach(element => {
+            this.setState({
+              [element]: res.body.docs[element]
+            } as State)
+          })
+      }
       } else {
         this.setState({ loading: [] })
         Swal.fire("", "error in getting customer documents", "error");

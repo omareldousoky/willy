@@ -15,9 +15,13 @@ import { beneficiaryType, currency, interestPeriod, periodType } from  '../../Se
 interface Props {
     application: any;
 }
+interface LoanDetailsProps {
+    application: any;
+    setLoanOfficer: (name: string) => void;
+}
 
 //this is used in the application details tab from loanProfile
-export const LoanDetailsTableView = (props: Props) => {
+export const LoanDetailsTableView = (props: LoanDetailsProps) => {
     const [officer, changeOfficerName] = useState('')
     const [loanUse, changeUse] = useState('')
 
@@ -25,6 +29,7 @@ export const LoanDetailsTableView = (props: Props) => {
         const res = await getLoanOfficer(id);
         if (res.status === "success") {
             const name = res.body.name
+            props.setLoanOfficer(name)
             changeOfficerName(name)
         } else {
             console.log('Err')
