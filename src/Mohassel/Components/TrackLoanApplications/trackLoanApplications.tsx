@@ -63,9 +63,9 @@ class TrackLoanApplications extends Component<Props, State>{
         render: data => beneficiaryType(data.application.product.beneficiaryType)
       },
       {
-        title: local.customerCode,
-        key: "customerCode",
-        render: data => (data.application.product.beneficiaryType === 'individual' ? data.application.customer._id : <div style={{ display: 'flex', flexDirection: 'column' }}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer._id}</span>)}</div>)
+        title: local.applicationCode,
+        key: "applicationCode",
+        render: data => data.application.applicationCode
       },
       {
         title: local.customerName,

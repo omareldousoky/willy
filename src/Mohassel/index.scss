@@ -288,3 +288,13 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     cursor: pointer;
   }
 }
+.swal-table {
+  width: 100%;
+  border: 1px #7dc356 solid;
+  & th{
+    color: #7dc356;
+  }
+  & td {
+    background-color: #f7fff2;
+  }
+}

@@ -196,7 +196,6 @@ class Payment extends Component<Props, State>{
       if(this.props.manualPaymentEditId === ''){
       const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber);
       if (res.status === 'success') {
-        console.log(res)
         this.setState({ loadingFullScreen: false, payAmount: values.payAmount });
         Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
       } else {
@@ -263,10 +262,12 @@ class Payment extends Component<Props, State>{
                 <Button disabled={this.props.application.status === 'pending'} onClick={() => this.handleClickEarlyPayment()} variant="primary">{local.earlyPayment}</Button>
               </div>
             </Can>
-            <div className="payment-icon">
-              <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-              <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(3)} variant="primary">{local.manualPayment}</Button>
-            </div>
+            <Can I='payInstallment' a='application'>
+              <div className="payment-icon">
+                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+                <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(3)} variant="primary">{local.manualPayment}</Button>
+              </div>
+            </Can>
           </div>
         </Card>
       )
