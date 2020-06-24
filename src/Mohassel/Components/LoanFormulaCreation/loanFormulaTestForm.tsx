@@ -11,7 +11,7 @@ export const LoanFormulaTestForm = (props: any) => {
         <Form style={{ padding: 20, textAlign: 'right' }} onSubmit={handleSubmit}>
             <Row>
                 <Col sm={12}>
-                    <Form.Group controlId="calculationFormulaId">
+                    <Form.Group className="data-group" controlId="calculationFormulaId">
                         <Form.Label column sm={8}>{local.calculationFormulaId}</Form.Label>
                         <Form.Control as="select"
                             name="calculationFormulaId"
@@ -34,7 +34,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="principal">
+                    <Form.Group className="data-group" controlId="principal">
                         <Form.Label column sm={8}>{local.principal}</Form.Label>
                         <Form.Control
                             type="number"
@@ -51,7 +51,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
-                    <Form.Group controlId="pushPayment">
+                    <Form.Group className="data-group" controlId="pushPayment">
                         <Form.Label column sm={8}>{local.pushPayment}</Form.Label>
                         <Form.Control
                             type="number"
@@ -70,7 +70,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="noOfInstallments">
+                    <Form.Group className="data-group" controlId="noOfInstallments">
                         <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.noOfInstallments}</Form.Label>
                         <Form.Control
                             type="number"
@@ -87,7 +87,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
-                    <Form.Group controlId="gracePeriod">
+                    <Form.Group className="data-group" controlId="gracePeriod">
                         <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.gracePeriod}</Form.Label>
                         <Form.Control
                             type="number"
@@ -106,7 +106,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="periodLength">
+                    <Form.Group className="data-group" controlId="periodLength">
                         <Form.Label column sm={8}>{local.periodLengthEvery}</Form.Label>
                         <Form.Control
                             type="number"
@@ -123,7 +123,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={6} className="d-flex align-items-end">
-                    <Form.Group controlId="periodType" style={{ width: '100%' }}>
+                    <Form.Group className="data-group" controlId="periodType" style={{ width: '100%' }}>
                         <Form.Control as="select"
                             name="periodType"
                             data-qc="periodType"
@@ -143,7 +143,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="interest">
+                    <Form.Group className="data-group" controlId="interest">
                         <Form.Label column sm={8}>{local.interest}</Form.Label>
                         <Form.Control
                             type="number"
@@ -160,7 +160,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={6} className="d-flex align-items-end">
-                    <Form.Group controlId="interestPeriod" style={{ width: '100%' }}>
+                    <Form.Group className="data-group" controlId="interestPeriod" style={{ width: '100%' }}>
                         <Form.Control as="select"
                             name="interestPeriod"
                             data-qc="interestPeriod"
@@ -180,7 +180,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="adminFees">
+                    <Form.Group className="data-group" controlId="adminFees">
                         <Form.Label column sm={8}>{local.adminFees}</Form.Label>
                         <Form.Control
                             type="number"
@@ -197,7 +197,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
-                    <Form.Group controlId="loanStartDate">
+                    <Form.Group className="data-group" controlId="loanStartDate">
                         <Form.Label column sm={8}>{local.loanStartDate}</Form.Label>
                         <Form.Control
                             type="date"
@@ -216,7 +216,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="pushHolidays">
+                    <Form.Group className="data-group" controlId="pushHolidays">
                         <Form.Label column sm={8}>{local.pushHolidays}</Form.Label>
                         <Form.Control as="select"
                             name="pushHolidays"
@@ -235,7 +235,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={3}>
-                    <Form.Group controlId="inAdvanceFees">
+                    <Form.Group className="data-group" controlId="inAdvanceFees">
                         <Form.Label column sm={12}>{local.inAdvanceFees}</Form.Label>
                         <Form.Control
                             type="number"
@@ -252,7 +252,7 @@ export const LoanFormulaTestForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col sm={3} className="d-flex align-items-end">
-                    <Form.Group controlId="inAdvanceFrom" style={{ width: '100%' }}>
+                    <Form.Group className="data-group" controlId="inAdvanceFrom" style={{ width: '100%' }}>
                         <Form.Control as="select"
                             name="inAdvanceFrom"
                             data-qc="inAdvanceFrom"
@@ -273,7 +273,7 @@ export const LoanFormulaTestForm = (props: any) => {
             </Row>
             <Row>
                 <Col sm={12}>
-                    <Form.Group controlId="inAdvanceType">
+                    <Form.Group className="data-group" controlId="inAdvanceType">
                         <Form.Label column sm={12}>{local.inAdvanceType}</Form.Label>
                         <Form.Control as="select"
                             name="inAdvanceType"
