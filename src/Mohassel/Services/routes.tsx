@@ -53,7 +53,7 @@ const appRoutes = [
           {
             path: "/edit-customer",
             label: local.editCustomer,
-            render: (props) => <Can I='updateCustomer' a='customer'><CustomerCreation {...props} edit={true} /> </Can>,
+            render: (props) => <CustomerCreation {...props} edit={true} />,
           }
         ]
       },
