@@ -245,7 +245,7 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                             </div>
-                            <div className="d-flex justify-content-end" style={{ width: '50%' }}>
+                            <div className="d-flex justify-content-end" style={{ width: '75%' }}>
                                 <span style={{ cursor: 'not-allowed', padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
                                 {this.state.application.status === 'issued' && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span>}
                                 {(this.state.application.status === "created" || this.state.application.status === "issued" || this.state.application.status === "pending") && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
