@@ -242,8 +242,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 }
 .data-form{
   text-align: right;
-  width: 80%;
-
 }
 .data-group{
   padding: 20px 10px;
@@ -289,5 +287,15 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     font-size: 12px;
     border-radius: 6px;
     cursor: pointer;
+  }
+}
+.swal-table {
+  width: 100%;
+  border: 1px #7dc356 solid;
+  & th{
+    color: #7dc356;
+  }
+  & td {
+    background-color: #f7fff2;
   }
 }

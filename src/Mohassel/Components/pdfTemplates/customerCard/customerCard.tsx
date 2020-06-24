@@ -60,7 +60,7 @@ const CustomerCardPDF = (props) => {
                         </td>
                         <td>فترة السماح
 					<div className="frame">{numbersToArabic(props.data.product.gracePeriod)}</div>
-                            <div className="frame">{props.data.customer.businessSector}</div>
+                            <div className="frame">{props.data.customer.businessActivity}</div>
                         </td>
                     </tr>
                 </tbody>
