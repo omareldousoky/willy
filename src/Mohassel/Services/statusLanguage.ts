@@ -14,6 +14,8 @@ export const englishToArabic = (status: string) => {
       return { text: 'أصدرت', color: '#7dc356' };
     case 'paid':
       return { text: 'مدفوع', color: '#7dc356' };
+    case 'pending': 
+      return { text: 'قيد التحقيق', color: '#edb600'}
     default: return {};
   }
 }
