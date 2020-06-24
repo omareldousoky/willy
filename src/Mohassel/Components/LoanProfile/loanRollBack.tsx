@@ -28,7 +28,6 @@ class LoanRollBack extends Component<Props, State>{
     }
     componentDidMount() {
         const appId = this.props.history.location.state.id;
-        console.log(appId)
         this.getAppRollableActionsByID(appId)
     }
     async getAppRollableActionsByID(id) {
