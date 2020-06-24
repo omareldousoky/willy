@@ -12,7 +12,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
     title: string;
-    history: Array<string>;
+    history: any ;
 
 };
 interface State {
@@ -98,6 +98,9 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    cancel(){
+        this.props.history.goBack();
+    }
     submit = async (values: any) => {
         this.setState({ loading: true });
         const obj = {...values}
@@ -125,7 +128,7 @@ class LoanProductCreation extends Component<Props, State>{
                     validateOnChange
                 >
                     {(formikProps) =>
-                        <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} />
+                        <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} cancel = {()=> this.cancel()}/>
                     }
                 </Formik>
             </Container>

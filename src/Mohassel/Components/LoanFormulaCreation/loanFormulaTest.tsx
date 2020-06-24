@@ -132,20 +132,20 @@ class FormulaTest extends Component<Props, State>{
                                 </Table>
                                 <div className="d-flex justify-content-between" style={{ padding: 50, backgroundColor: '#f7fff2' }}>
                                     <div>
-                                        <h5>{local.noOfInstallments}</h5>
-                                        <span>{this.state.result.result.output.length}</span>
+                                        <h4 style={{ color: '#2a3390' }}>{local.noOfInstallments}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.output.length}</span>
                                     </div>
                                     <div>
-                                        <h5>{local.sumValue}</h5>
-                                        <span>{this.state.result.result.sum.installmentSum}</span>
+                                        <h4 style={{ color: '#2a3390' }}>{local.sumValue}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.sum.installmentSum}</span>
                                     </div>
                                     <div>
-                                        <h5>{local.sumPrinciple}</h5>
-                                        <span>{this.state.result.result.sum.principal}</span>
+                                        <h4 style={{ color: '#2a3390' }}>{local.sumPrinciple}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.sum.principal}</span>
                                     </div>
                                     <div>
-                                        <h5>{local.sumFees}</h5>
-                                        <span>{this.state.result.result.sum.feesSum ? this.state.result.result.sum.feesSum : 0}</span>
+                                        <h4 style={{ color: '#2a3390' }}>{local.sumFees}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.sum.feesSum ? this.state.result.result.sum.feesSum : 0}</span>
                                     </div>
                                     <div className="d-flex justify-content-end" ><Button style={{ marginTop: 10 }} onClick={() => window.print()}>{local.downloadPDF}</Button></div>
                                 </div>
