@@ -32,7 +32,7 @@ import { generateAppRoutes } from './utils';
 import BranchDetails from '../Components/BranchDetails/branch-details';
 import GroupMemberSeperation from '../Components/LoanApplication/groupMemberSeperation';
 import ViewFormula from '../Components/LoanFormulaCreation/calculationFormulaView';
-
+import ViewProduct from '../Components/LoanProductCreation/loanProductView';
 const appRoutes = [
   {
     path: "/",
@@ -119,11 +119,11 @@ const appRoutes = [
                 label: local.createLoanProduct,
                 render: (props) => <Can I='createLoanProduct' a='product'><LoanProductCreation {...props} /></Can>,
               },
-              // {
-              //   path: "/view-product",
-              //   label: local.calculationFormulaId,
-              //   render: (props) => <ViewFormula {...props} />,
-              // }
+              {
+                path: "/view-product",
+                label: local.productName,
+                render: (props) => <ViewProduct {...props} />,
+              }
             ]
           },
           {

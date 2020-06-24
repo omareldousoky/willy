@@ -239,6 +239,32 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     width: 300px;
   }
 }
+.data-form{
+  text-align: right;
+  width: 80%;
+
+}
+.data-group{
+  padding: 20px 10px;
+
+}
+
+.data-label{
+  font-weight: bold; 
+  margin: 10px 0;
+  font-size: 14px;
+}
+.data-check-label{
+  font-weight: bold; 
+  font-size: 14px;
+}
+.selected-check{
+  color: #7dc356;
+}
+.data-check-group{
+  padding: 20px 10px;
+  margin: 40px 0;
+}
 .warning-container {
   border: 1px solid #edb600;
   color: #edb600;
