@@ -6,6 +6,7 @@ import { uploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocu
 import { getCustomerDocuments } from '../../Services/APIs/Customer-Creation/getDocuments';
 import { deleteDocument } from '../../Services/APIs/Customer-Creation/deleteDocument';
 import * as local from '../../../Shared/Assets/ar.json';
+import DocumentUploader from '../documentUploader/documentUploader';
 
 interface Document {
   key: string;
@@ -66,6 +67,7 @@ class DocumentsUpload extends Component<Props, State>{
   }
   triggerInputFile(name: string) {
     const limit = this.getImagesLimit(name);
+    console.log( "eh",this[`fileInput${name}`])
     if (this.state[name].length < limit) {
       this[`fileInput${name}`].current?.click()
     }
@@ -257,6 +259,23 @@ class DocumentsUpload extends Component<Props, State>{
   }
   render() {
     return (
+    //   <>
+    //     <DocumentUploader
+    //     documentType = {{
+    //         pages: 2,
+    //         type: 'Customer',
+    //         name: 'national paper',
+    //         paperType: "A4",
+    //         updatable: true,
+    //         active: true,
+    //     }}
+    //     uploadDocumentFun = {uploadDocument}
+    //     deleteDocumentFun = {deleteDocument}
+    //     keyName = "customerId"
+    //     keyId = {this.props.customerId}
+    //      />
+    //  </>
+
       <>
         <div style={{ marginBottom: 30 }}>
           <h4 style={{ textAlign: 'right' }}>{local.nationalIdPhoto}</h4>
