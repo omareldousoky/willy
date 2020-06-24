@@ -69,3 +69,23 @@ export interface Customer {
     allowMultiGuarantee?: boolean;
     _id?: string;
 }
+
+export interface Action {
+    loanBranchId: string;
+    action: string;
+    actualDate: number;
+    groupID: string;
+    installmentSerial: number;
+    loanId: string;
+    officer: string;
+    transactionAmount: number;
+    truthDate: number;
+    _id: string;
+}
+export interface PendingActions {
+    receiptNumber?: string;
+    transactions?: Array<Action>;
+    beneficiaryId?: string;
+    _id?: string;
+}
+

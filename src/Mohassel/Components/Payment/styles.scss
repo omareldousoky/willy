@@ -95,6 +95,10 @@
     &.cancelled {
         background-color: gray;
     }
+    &.pending {
+        background-color: #edb600;
+        color: #fff;
+    }
 }
 .receipt-modal {
     .modal-content {
