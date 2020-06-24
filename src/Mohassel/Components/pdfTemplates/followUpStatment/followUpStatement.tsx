@@ -1,7 +1,7 @@
 import React from 'react';
 import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Services/utils';
 
 const FollowUpStatment = (props) => {
     return (
@@ -9,14 +9,14 @@ const FollowUpStatment = (props) => {
             <table className="margin" >
                 <tbody>
                     <tr>
-                        <td>الغربية - زفتى</td>
+                        <td>{props.branchDetails.name} - {props.data.customer.governorate}</td>
                         <td></td>
                         <td>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
                     </tr>
                     <tr>
                         <td>{timeToArabicDate(0, true)}</td>
                         <td></td>
-                        <td>الاربعاء</td>
+                        <td>{dayToArabic(new Date().getDay())}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -30,7 +30,7 @@ const FollowUpStatment = (props) => {
                 <tbody>
                     <tr>
                         <td style={{ textAlign: "right" }}> العميل
-					<div className="frame">٠٠٦/٠٠١١٩٩٤</div>
+					<div className="frame">{props.data.customer.code}</div>
                             <div className="frame">{props.data.customer.customerName}</div>
                         </td>
 
@@ -50,7 +50,7 @@ const FollowUpStatment = (props) => {
                     {props.data.installmentsObject.installments.map((installment, index) => {
                         return (
                             <tr key={index}>
-                                <td>٠٠٦/٠٠١١٩٩٤/٠٠٧/١</td>
+                                <td>{numbersToArabic(installment.id)}</td>
                                 <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>

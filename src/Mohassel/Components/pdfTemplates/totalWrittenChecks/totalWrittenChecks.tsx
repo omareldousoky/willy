@@ -1,6 +1,7 @@
 import React from 'react';
 import './totalWrittenChecks.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
+import { numbersToArabic } from '../../../Services/utils';
 
 const TotalWrittenChecks = (props) => {
     return (
@@ -9,10 +10,10 @@ const TotalWrittenChecks = (props) => {
                 <div>شركة تساهيل للتمويل متناهي الصغر ش. م. م.</div>
                 <div className="title">ايصال استلام مبلغ نقدى علي سبيل الامانه</div>
                 <div>استلمت انا الموقع ادناه / {props.data.customer.customerName}</div>
-                <div>بطاقه رقم قومي: {props.data.customer.nationalId}</div>
+                <div>بطاقه رقم قومي: {numbersToArabic(props.data.customer.nationalId)}</div>
                 <div>والمقيم في: {props.data.customer.customerHomeAddress}</div>
                 <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
-                <div>مبلغاً وقدره {props.data.principal} جنيه </div>
+                <div>مبلغاً وقدره {numbersToArabic(props.data.principal)} جنيه </div>
                 <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الأفريقي الدولي فرع مدينه نصر</div>
                 <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائننا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
 			الفعل ولا تبرأ ذمتي الا بإستلام هذا الايصال</div>
