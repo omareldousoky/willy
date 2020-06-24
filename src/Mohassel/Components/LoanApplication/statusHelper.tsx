@@ -115,7 +115,7 @@ class StatusHelper extends Component<Props, State>{
                     <GroupInfoBox group={this.props.application.group} />
                 }
                 <LoanDetailsTableView application={this.props.application} setLoanOfficer={(name)=> this.setState({loanOfficer: name})}/>
-                {this.props.application.product.beneficiaryType === 'individual' && <Table>
+                {this.props.application.product.beneficiaryType === 'individual' && this.props.application.guarantors.length > 0 && <Table>
                     <thead>
                         <tr>
                             <th>{local.guarantorCode}</th>

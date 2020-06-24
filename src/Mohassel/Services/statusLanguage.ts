@@ -6,6 +6,8 @@ export const englishToArabic = (status: string) => {
       return { text: 'رُجعت', color: '#edb600' };
     case 'rejected':
       return { text: 'مرفوضة', color: '#d51b1b' };
+    case 'canceled':
+      return { text: 'ملغى', color: '#d51b1b' };
     case 'approved':
       return { text: 'موافق عليها', color: '#009bed' };
     case 'created':
@@ -14,8 +16,8 @@ export const englishToArabic = (status: string) => {
       return { text: 'أصدرت', color: '#7dc356' };
     case 'paid':
       return { text: 'مدفوع', color: '#7dc356' };
-    case 'pending': 
-      return { text: 'قيد التحقيق', color: '#edb600'}
+    case 'pending':
+      return { text: 'قيد التحقيق', color: '#edb600' }
     default: return {};
   }
 }
