@@ -531,6 +531,7 @@
     "sumFees":"إجمالي المصاريف",
     "number": "رقم",
     "installmentPaymentConfirmation": "تأكيد سداد قسط",
-    "confirmPayment": "تآكيد سداد"
+    "confirmPayment": "تآكيد سداد",
+    "applicationCode": "كود طلب القرض"
     
 }

@@ -89,12 +89,14 @@ class LoanList extends Component<Props, State> {
         return <div className="status-chip paid">{local.paid}</div>
       case 'issued':
         return <div className="status-chip unpaid">{local.issued}</div>
+      case 'pending':
+        return <div className="status-chip pending">{local.pending}</div>
       default: return null;
     }
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
   }
   render() {
     return (
