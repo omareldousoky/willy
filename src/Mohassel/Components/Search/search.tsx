@@ -233,6 +233,7 @@ class Search extends Component<Props, State> {
                           <option value="" data-qc="all">{local.all}</option>
                           <option value='paid' data-qc='paid'>{local.paid}</option>
                           <option value='issued' data-qc='issued'>{local.issued}</option>
+                          <option value='pending' data-qc='pending'>{local.pending}</option>
                         </Form.Control>
                       </div>
                     </Col>

@@ -540,6 +540,10 @@
     "rollbackSuccess":"تم إعادة القرض للحالة السابقة",
     "rollbackError":"حصل خطا في إعادة القرض للحالة السابقة",
     "applicationCancelSuccess":"تم إلغاء طلب القرض بنجاح",
-    "applicationCancelError":"حصل خطا في إلغاء طلب القرض"
+    "applicationCancelError":"حصل خطا في إلغاء طلب القرض",
+    "number": "رقم",
+    "installmentPaymentConfirmation": "تأكيد سداد قسط",
+    "confirmPayment": "تآكيد سداد",
+    "applicationCode": "كود طلب القرض"
     
 }
