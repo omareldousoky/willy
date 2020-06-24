@@ -40,9 +40,6 @@ class RolesList extends Component<Props, State> {
   resetActiveRole() {
     this.setState({ activeRole: -1 });
   }
-  // componentWillUnmount() {
-  //   document.body.removeEventListener('click', () => this.resetActiveRole());
-  // }
 
   async getRoles() {
     this.setState({ loading: true })

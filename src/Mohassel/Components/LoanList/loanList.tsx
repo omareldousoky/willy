@@ -80,9 +80,6 @@ class LoanList extends Component<Props, State> {
   componentDidMount() {
     this.getLoans()
   }
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
   getStatus(status: string) {
     switch (status) {
       case 'paid':
@@ -96,7 +93,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
   }
   render() {
     return (
