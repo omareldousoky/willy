@@ -10,6 +10,7 @@ import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
+import ability from '../../config/ability';
 
 interface State {
   size: number;
@@ -67,19 +68,16 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <>  <Can I='updateCustomer' a='customer'><span className='fa fa-pencil-alt icon' onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></span>
-          <span className='fa fa-eye icon' onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></span></Can></>  
+        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <span className='fa fa-pencil-alt icon' onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></span>: null}
+          <Can I='getCustomer' a='customer'><span className='fa fa-eye icon' onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></span></Can></>  
       },
     ]
   }
   componentDidMount() {
     this.getCustomers();
   }
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
   }
   render() {
     return (

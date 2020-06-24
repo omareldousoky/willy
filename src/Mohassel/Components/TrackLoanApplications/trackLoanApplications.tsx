@@ -97,11 +97,8 @@ class TrackLoanApplications extends Component<Props, State>{
   componentDidMount() {
     this.getApplications();
   }
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
   getApplications() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application' });
   }
   getStatus(status: string) {
     switch (status) {

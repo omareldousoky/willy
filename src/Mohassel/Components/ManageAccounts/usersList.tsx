@@ -78,9 +78,6 @@ class UsersList extends Component<Props, State> {
   componentDidMount() {
     this.getUsers()
   }
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
     this.props.setLoading(true);
@@ -104,7 +101,7 @@ class UsersList extends Component<Props, State> {
     );
   }
   getUsers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
     return (
