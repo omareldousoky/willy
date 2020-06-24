@@ -7,7 +7,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import { Customer } from './loanApplicationCreation';
+import { Customer } from '../LoanApplication/loanApplicationCreation';
 import BackButton from '../BackButton/back-button';
 import Button from 'react-bootstrap/Button';
 import { removeMemberFromGroup } from '../../Services/APIs/loanApplication/removeMemberFromGroup';

@@ -30,3 +30,13 @@ export const rejectApplication = async (data: any) => {
         return { status: "error", error: error.response.data }
     }
 }
+export const cancelApplication = async (id: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/cancel/${id}`;
+    try {
+        const res = await axios.put(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
