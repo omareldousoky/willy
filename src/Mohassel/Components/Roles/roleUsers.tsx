@@ -70,12 +70,8 @@ class RoleUsers extends Component<Props, State> {
     componentDidMount() {
         this.getUsers();
     }
-    componentWillUnmount() {
-        this.props.setSearchFilters({})
-    }
-
     getUsers() {
-        this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, roleId: this.props._id, url: 'user' });
+        this.props.search({ size: this.state.size, from: this.state.from, roleId: this.props._id, url: 'user' });
     }
     render() {
         return (
