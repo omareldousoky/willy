@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import { DocumentType } from '../../Services/interfaces';
 import {documentType, documentTypeCreationValidation} from './documnetTypeinitialState';
 import {createDocumentsType} from '../../Services/APIs/encodingFiles/createDocumentType';
+import {editDocumentsType} from '../../Services/APIs/encodingFiles/editDocumentType';
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 interface Props {
@@ -25,7 +26,28 @@ class DocumentTypeCreation extends Component<Props,State> {
                 loading: false,
             }
   }
-  
+
+  getDocumentType() {
+    const documentTypeFromH = this.props.history.location.state.documentType;
+    this.setState({documentType: documentTypeFromH});
+}
+
+    componentDidMount() {
+        if(this.props.edit) {
+            this.getDocumentType();
+        }
+    }
+    async updateDocument(values) {
+        const res =  await editDocumentsType(values);
+        this.setState({loading:false})
+        if(res.status === "success") {
+            Swal.fire('success', local.documentTypeEditSuccessMessage);
+            this.props.history.goBack();
+        } else {
+            Swal.fire('error', local.documentTypeEditErrorMessage);
+        }
+    }
+    
    async createDocument (values) {
        const res =  await createDocumentsType(values);
        this.setState({loading:false})
@@ -42,6 +64,7 @@ class DocumentTypeCreation extends Component<Props,State> {
           loading:true,
       })
      if(this.props.edit) {
+         this.updateDocument(values);
 
      } else {
          this.createDocument(values);

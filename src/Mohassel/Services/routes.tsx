@@ -72,6 +72,11 @@ const appRoutes = [
               path: "/create-encoding-files",
               label: local.createEncodingFiles,
               render: (props) =>  <Can I='createCustomer' a='customer'><DocumentTypeCreation {...props} edit={false} /> </Can>
+            },
+            {
+              path: "/edit-encoding-files",
+              label: local.createEncodingFiles,
+              render: (props) =>  <Can I='updateCustomer' a='customer'><DocumentTypeCreation {...props} edit={true} /> </Can>
             }
           ]
         }
