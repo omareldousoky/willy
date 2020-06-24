@@ -32,6 +32,8 @@ import { generateAppRoutes } from './utils';
 import BranchDetails from '../Components/BranchDetails/branch-details';
 import GroupMemberSeperation from '../Components/LoanApplication/groupMemberSeperation';
 import ViewFormula from '../Components/LoanFormulaCreation/calculationFormulaView';
+import EncodingFiles from '../Components/Tools/encodingFiles';
+import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 
 const appRoutes = [
   {
@@ -55,6 +57,25 @@ const appRoutes = [
             render: (props) => <Can I='updateCustomer' a='customer'><CustomerCreation {...props} edit={true} /> </Can>,
           }
         ]
+      },
+      {
+        path: "/tools",
+        label: local.tools,
+        render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+        routes: [{
+          path: "/encoding-files",
+          label: local.encodingFiles,
+          render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+          routes:[
+            {
+              path: "/create-encoding-files",
+              label: local.createEncodingFiles,
+              render: (props) =>  <Can I='createCustomer' a='customer'><DocumentTypeCreation {...props}/> </Can>
+            }
+          ]
+        }
+        ]
+
       },
       {
         path: "/track-loan-applications",

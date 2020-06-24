@@ -521,6 +521,14 @@
     "test":"تجربة",
     "sumValue":"إجمالي القيمة",
     "sumPrinciple":"إجمالي القيمة الاساسية",
-    "sumFees":"إجمالي المصاريف"
-    
+    "sumFees":"إجمالي المصاريف",
+    "tools":"أدوات",
+    "encodingFiles":"ملفات تكويد",
+    "getDocumentsTypesError": "حدث خطأ في إسترجاع ملفات التكويد حاول مرة أخري",
+    "numOfPages":"عدد الصفحات",
+    "updatable":"السماح بالتعديل",
+    "documentFor":"مستند خاص ببيانات",
+    "createEncodingFiles": "إنشاء ملفات تكويد",
+    "editEncodingFiles":"تعديل ملفات تكويد",
+    "documentName": "إسم المستند"
 }
