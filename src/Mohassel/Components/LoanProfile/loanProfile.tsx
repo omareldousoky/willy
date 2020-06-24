@@ -32,6 +32,7 @@ import { PendingActions } from '../../Services/interfaces';
 import { timeToDateyyymmdd } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
+import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -208,6 +209,29 @@ class LoanProfile extends Component<Props, State>{
         window.scrollTo(0, document.body.scrollHeight);
         this.setState({ activeTab: 'loanPayments', manualPaymentEditId: this.state.pendingActions._id ? this.state.pendingActions?._id : '' });
     }
+    cancelApplication() {
+        Swal.fire({
+            title: local.areYouSure,
+            text: `${local.applicationWillBeCancelled}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.cancelApplication
+        }).then(async (result) => {
+            if (result.value) {
+                this.setState({ loading: true });
+                const res = await cancelApplication(this.props.history.location.state.id);
+                if (res.status === "success") {
+                    this.setState({ loading: false })
+                    Swal.fire('', local.applicationCancelSuccess, 'success').then(() => window.location.reload());
+                } else {
+                    this.setState({ loading: false })
+                    Swal.fire('', local.applicationCancelError, 'error');
+                }
+            }
+        })
+    }
     render() {
         return (
             <Container>
@@ -231,6 +255,9 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'reviewed' && <Can I='rejectLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'reject' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rejectLoan}</span></Can>}
                                 {this.state.application.status === 'created' && <Can I='issueLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.issueLoan}</span></Can>}
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
+                                {this.state.application.status === 'underReview' && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span>}
+                                {this.state.application.status !== 'canceled' && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
+
                             </div>
                         </div>
                         {this.state.application.status === "pending" ?
