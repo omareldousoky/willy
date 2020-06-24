@@ -6,9 +6,9 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 const DocumentTypeCreationForm = (props: any) => {
     return (
-       <Form onSubmit = {props.handleSubmit}>
-           <Form.Group>
-           <Form.Label>{local.documentName}</Form.Label>
+       <Form className = "data-form" onSubmit = {props.handleSubmit}>
+           <Form.Group className ="data-group">
+           <Form.Label className="data-label">{local.documentName}</Form.Label>
            <Form.Control 
            type="text"
            onChange = {props.handleChange}
