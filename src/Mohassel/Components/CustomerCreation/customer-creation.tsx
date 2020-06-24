@@ -340,10 +340,10 @@ class CustomerCreation extends Component<Props, State>{
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
         <Card>
-          <div style={{ display: "flex", flexDirection: "row" }} >
+          <div style={{ display: "flex", flexDirection: "row", }} >
             <Wizard currentStepNumber={this.state.step - 1}
               stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}></Wizard>
-            <Card.Body>
+            <Card.Body style={{width:"80%"}} >
               {this.renderSteps()}
             </Card.Body>
           </div>

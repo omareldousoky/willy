@@ -545,6 +545,7 @@
     "documentTypeCreationErrorMessage":"حدث خطأ ولم يتم إنشاء ملف التكويد",
     "documentTypeEditSuccessMessage": "تم تعديل ملف التكويد ",
     "documentTypeEditErrorMessage":"حدث خطأ ولم يتم تعديل ملف التكويد",
-    "numOfFiles": "عدد الملفات"
+    "numOfFiles": "عدد الملفات",
+    "numOfUploadedImages":"عدد الصور المحملة"
 
 }

@@ -3,18 +3,21 @@ import { DocumentType } from '../../Services/interfaces'
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import Spinner from 'react-bootstrap/Spinner';
+interface Document {
+  key: string;
+  url: string | ArrayBuffer | null;
+}
+
 interface Props {
  documentType: DocumentType;
  uploadDocumentFun: any;
  deleteDocumentFun: any;
  keyName: string;
  keyId: string;
+ edit: boolean;
+ uploadedImageFile: Array<Document>;
 }
 
-interface Document {
-    key: string;
-    url: string | ArrayBuffer | null;
-}
 
 interface  State {
  loading: boolean;
@@ -23,6 +26,7 @@ interface  State {
 }
  class DocumentUploader extends Component<Props , State> {
     private fileInput: React.RefObject<HTMLInputElement>;
+    private dragEventCounter = 0;
     constructor(props) {
         super(props);
         this.fileInput = React.createRef();
@@ -32,13 +36,23 @@ interface  State {
             imagesFiles: [],
         }
     }
+    static getDerivedStateFromProps(props, state) {
+      if (props.edit && props.uploadedImageFile !== state.imagesFiles) {
+             console.log("props.uploadedImageFile" ,props.uploadedImageFile);
+              return {
+                imagesFiles: props.uploadedImageFile,
+              }
+  
 
-    private dragEventCounter = 0;
-    triggerInputFile(name: string) {
+      }
+      return null;
+  }
+
+    triggerInputFile() {
     
         const limit = this.props.documentType.pages;
         if (this.state.imagesFiles.length < limit) {
-            console.log('ff',this[`fileInput`]);
+  
           this[`fileInput`].current?.click()
         }
       }
@@ -117,6 +131,26 @@ interface  State {
       this.setState({ loading: false});
     }
   }
+  async deleteDocument(event, name: string, key: number) {
+    this.overrideEventDefaults(event);
+    this.setState({ loading: true});
+    const data = {
+      [this.props.keyName]: this.props.keyId,
+      docName: name,
+      key: this.state.imagesFiles[key].key
+    }
+    const res = await this.props.deleteDocumentFun(data);
+    if (res.status === "success") {
+      this.setState({
+        imagesFiles: this.state.imagesFiles.filter((_el, index) => index !== key),
+        loading: false,
+      })
+    } 
+    else {
+      this.setState({ loading: false});
+      Swal.fire("", local.deleteError, "error")
+    }
+  }
       dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
         this.overrideEventDefaults(event);
         this.dragEventCounter = 0;
@@ -164,7 +198,7 @@ interface  State {
       renderPhotoByName(key: number, name: string) {
         return (
           <div key={key} className="document-upload-container">
-            <div data-qc="delete-document" className="delete-document" onClick={(e) => this.props.deleteDocumentFun(e, name, key)}>
+            <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument(e, name, key)}>
               <span className="fa fa-trash">{local.delete}</span>
             </div>
             <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={ this.state.imagesFiles[key].url as string } key={key} alt="" />
@@ -173,9 +207,11 @@ interface  State {
       }
     renderContainer(name: string) {
         return (
-          <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#f5f5f5', cursor: this.state.imagesFiles.length === this.props.documentType.pages ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4 }}
+          <div style={{ display: 'flex', 
+            flexWrap:"wrap",
+           justifyContent: 'center', backgroundColor: '#f5f5f5',cursor: this.state.imagesFiles.length === this.props.documentType.pages ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4 }}
             data-qc={`upload-${name}`}
-            onClick={() => this.triggerInputFile(name)}
+            onClick={() => this.triggerInputFile()}
             onDrag={this.overrideEventDefaults}
             onDragStart={this.overrideEventDefaults}
             onDragEnd={this.overrideEventDefaults}
@@ -199,7 +235,10 @@ interface  State {
     render() {
         return (
             <div style={{ marginBottom: 30 }}>
+              <div style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
             <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}</h4>
+            <small style={{color:"#6e6e6e",fontSize:"12px"}}>{`${local.numOfUploadedImages}(${this.state.imagesFiles.length}/${this.props.documentType.pages})`}</small>
+            </div>
             {this.renderContainer(this.props.documentType.name)}
           </div>
         )
