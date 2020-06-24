@@ -1,9 +1,8 @@
 import React from 'react';
 import './loanContract.scss';
 import * as Barcode from 'react-barcode';
-
 import * as local from '../../../../Shared/Assets/ar.json';
-import { numbersToArabic, timeToArabicDate } from '../../../Services/utils';
+import { numbersToArabic, timeToArabicDate, dayToArabic } from '../../../Services/utils';
 
 const LoanContract = (props) => {
   return (
@@ -41,14 +40,10 @@ const LoanContract = (props) => {
 
                 <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
                 <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
-                <div>انه في يوم الثلاثاء الموافق ٢٠٢٠/٠٥/٠٥</div>
-                <div>حرر هذا العقد في فرع الغربيه - زفتي الكائن في: شارع الموافي من شارع الجمهوريه أمام
-                مدرسه النهضه بين كلا من
+                <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(0, false)}</div>
+                <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
 							:-</div>
-
-
                 <table className="stakeholders">
-
                   <tbody>
                     <tr>
                       <td colSpan={4}>
@@ -156,7 +151,7 @@ const LoanContract = (props) => {
                   بالتمويل
 								متناهي الصغر ..</div>
                   <div>
-                    وقد تقدم الطرف الثاني صاحب نشاط خدمي - {props.data.customer.businessSector} بطلب للحصول علي قرض من فرع
+                    وقد تقدم الطرف الثاني صاحب نشاط خدمي - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
                     الغربيه - زفتي الكائن
                     شارع الموافي من شارع الجمهوريه أمام مدرسة النهضه لحاجته للسيوله النقديه يخصص
                     استخدامه في
@@ -423,8 +418,8 @@ const LoanContract = (props) => {
 
                 <div>
                   <div className="title_last">
-                    <Barcode value="110610002452001"/>
-                    <div>110610002452001</div>
+                    <Barcode value={props.data.applicationCode}/>
+                    <div>{props.data.applicationCode}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
 
@@ -436,10 +431,10 @@ const LoanContract = (props) => {
 
                 <div>نقر نحن الموقعون ادناه:</div>
                 <div>الاسم <div style={{ display: 'inline-block', width: '150px' }}></div> الموظف بشركة تساهيل للتمويل
-							المتناهي الصغر فرع:الغربيه - زفتي</div>
+							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.customer.governorate}</div>
                 <div>بوظيفة</div>
                 <div>الاسم <div style={{ display: 'inline-block', width: '150px' }}></div> الموظف بشركة تساهيل للتمويل
-							المتناهي الصغر فرع:الغربيه - زفتي</div>
+							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.customer.governorate}</div>
                 <div>بوظيفة</div>
                 <div>بأن توقيع كل من العميل والضامن المدرجين بالجدول تم امامي وان جميع بيانات ايصالات
                 الامانه الخاصه بهم صحيحة
@@ -460,7 +455,7 @@ const LoanContract = (props) => {
                     <tr>
                       <td>١</td>
                       <td>{props.data.customer.customerName}</td>
-                      <td>٦١/٢٤٥٢</td>
+                      <td>{props.data.customer.code}</td>
                     </tr>
                     {props.data.guarantors.map((guarantor, index) => {
                       return (
@@ -505,7 +500,7 @@ const LoanContract = (props) => {
                         <div>أقر انا العميل/ {props.data.customer.customerName}</div>
                       </td>
                       <td>
-                        <div><b>الكود</b> &emsp; ٦١/٢٤٥٢</div>
+                        <div><b>الكود</b> &emsp; {props.data.customer.code}</div>
                       </td>
                     </tr>
                     <tr>
@@ -518,10 +513,10 @@ const LoanContract = (props) => {
                     </tr>
                     <tr>
                       <td>
-                        <div>نوع النشاط/ {props.data.customer.businessSector}</div>
+                        <div>نوع النشاط/ {props.data.customer.businessActivity}</div>
                       </td>
                       <td>
-                        <div>الفرع/ الغربيه - زفتي</div>
+                        <div>الفرع/ {props.branchDetails.name} - {props.data.customer.governorate}</div>
                       </td>
                     </tr>
                   </tbody>
@@ -567,14 +562,14 @@ const LoanContract = (props) => {
               <div className="main">
                 <div className="last">
                   <div className="title_last">
-                    <Barcode value="110610002452001"/>
-                    <div>110610002452001</div>
+                    <Barcode value={props.data.applicationCode}/>
+                    <div>{props.data.applicationCode}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                    <Barcode value="110610002452001"/>
-                    <div>110610002452001</div>
+                    <Barcode value={props.data.applicationCode}/>
+                    <div>{props.data.applicationCode}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
                   </div>

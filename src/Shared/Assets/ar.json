@@ -528,6 +528,9 @@
     "test":"تجربة",
     "sumValue":"إجمالي القيمة",
     "sumPrinciple":"إجمالي القيمة الاساسية",
-    "sumFees":"إجمالي المصاريف"
+    "sumFees":"إجمالي المصاريف",
+    "number": "رقم",
+    "installmentPaymentConfirmation": "تأكيد سداد قسط",
+    "confirmPayment": "تآكيد سداد"
     
 }
