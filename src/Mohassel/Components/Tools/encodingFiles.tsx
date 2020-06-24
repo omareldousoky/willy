@@ -10,18 +10,11 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { withRouter } from 'react-router-dom';
+import {DocumentType} from '../../Services/interfaces'
 interface Props {
     history: any;
 }
-interface DocumentType {
-    id: string;
-    pages: number;
-    type: string;
-    paperType: string;
-    active: boolean;
-    name: string;
-    updatable: boolean;
-}
+
 interface State {
     documentTypes: DocumentType[];
     loading: boolean;
@@ -35,9 +28,9 @@ class EncodingFiles extends Component<Props, State> {
                 pages: 0,
                 type: "",
                 paperType: "",
-                active: false,
                 name: "",
-                updatable: false
+                active: true,
+                updatable: true,
             }],
             loading: false,
         }

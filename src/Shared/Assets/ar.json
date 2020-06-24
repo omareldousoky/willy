@@ -537,5 +537,10 @@
     "documentFor":"مستند خاص ببيانات",
     "createEncodingFiles": "إنشاء ملفات تكويد",
     "editEncodingFiles":"تعديل ملفات تكويد",
-    "documentName": "إسم المستند"
+    "documentName": "إسم المستند",
+    "numOfDocuments": "عدد المستندات",
+    "minNumOfPages1": " يجب ألا يقل عدد الصفحات عن 1",
+    "documentTypeCreationSuccessMessage": "تم إنشاء ملف تكويد جديد",
+    "documentTypeCreationErrorMessage":"حدث خطأ ولم يتم إنشاء ملف التكويد"
+
 }

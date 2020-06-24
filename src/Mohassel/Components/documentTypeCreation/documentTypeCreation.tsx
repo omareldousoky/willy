@@ -4,20 +4,75 @@ import Container from 'react-bootstrap/Container';
 import DocumentTypeCreationForm from './documentTypeCreationForm'
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
+import { DocumentType } from '../../Services/interfaces';
+import {documentType, documentTypeCreationValidation} from './documnetTypeinitialState';
+import {createDocumentsType} from '../../Services/APIs/encodingFiles/createDocumentType';
+import Swal from 'sweetalert2';
+import * as local from '../../../Shared/Assets/ar.json';
 interface Props {
     history: any;
     edit: boolean;
 }
-class DocumentTypeCreation extends Component<Props> {
+interface State {
+    documentType: DocumentType;
+    loading: boolean;
+}
+class DocumentTypeCreation extends Component<Props,State> {
+  constructor(props: Props){
+            super(props);
+            this.state = {
+                documentType,
+                loading: false,
+            }
+  }
+  
+   async createDocument (values) {
+       const res =  await createDocumentsType(values);
+       this.setState({loading:false})
+       if(res.status === "success") {
+           Swal.fire('success', local.documentTypeCreationSuccessMessage);
+           this.props.history.goBack();
+       } else {
+           Swal.fire('error', local.documentTypeCreationErrorMessage);
+       }
+   }
+     submit= (values) => {
+      this.setState({
+          documentType: values,
+          loading:true,
+      })
+     if(this.props.edit) {
 
+     } else {
+         this.createDocument(values);
+     }
+    
 
+  }
+  cancel(){
+        this.setState({
+            documentType,
+        })
+        this.props.history.goBack();
+  }
     render() {
         return (
             <div>
                 <Container>
                     <Card>
                         <Card.Body>
-                            <DocumentTypeCreationForm />
+                            <Formik
+                                enableReinitialize
+                                initialValues={this.state.documentType}
+                                validationSchema={documentTypeCreationValidation}
+                                onSubmit={this.submit}
+                                validateOnChange
+                                validateOnBlur
+                             >
+                              {(formikProps)=>
+                            <DocumentTypeCreationForm {...formikProps} edit={this.props.edit} cancel ={()=>this.cancel()}/>
+                                  }
+                            </Formik>
                         </Card.Body>
                     </Card>
                 </Container>
