@@ -193,7 +193,7 @@ export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string =
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleString('ar-EG').slice(0, 12)
 }
 
-export const dayToArabic = (index: number) : string => {
-  const weekday = ['الأحد','الإثنين', 'الثلاثاء', 'الأربعاء','الخميس', 'الجمعة', 'السبت'];
+export const dayToArabic = (index: number): string => {
+  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   return weekday[index];
 }

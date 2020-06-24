@@ -262,10 +262,12 @@ class Payment extends Component<Props, State>{
                 <Button disabled={this.props.application.status === 'pending'} onClick={() => this.handleClickEarlyPayment()} variant="primary">{local.earlyPayment}</Button>
               </div>
             </Can>
-            <div className="payment-icon">
-              <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-              <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(3)} variant="primary">{local.manualPayment}</Button>
-            </div>
+            <Can I='payInstallment' a='application'>
+              <div className="payment-icon">
+                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+                <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(3)} variant="primary">{local.manualPayment}</Button>
+              </div>
+            </Can>
           </div>
         </Card>
       )

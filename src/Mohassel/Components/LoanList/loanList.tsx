@@ -44,23 +44,16 @@ class LoanList extends Component<Props, State> {
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer.customerName}</span>)}
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
             </div>)
           }
         </div>
         // <div style={{ cursor: 'pointer', width:50, height:50 }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
-        title: local.customerCode,
-        key: "customerCode",
-        render: data => <div>
-        {(data.application.product.beneficiaryType === 'individual' ? data.application.customer._id :
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer._id}</span>)}
-          </div>)
-        }
-      </div>
-        // data => data.application.customer._id
+        title: local.loanCode,
+        key: "loanCode",
+        render: data => data.application.loanApplicationCode
       },
       {
         title: local.productName,

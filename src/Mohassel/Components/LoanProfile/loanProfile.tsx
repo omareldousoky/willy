@@ -174,7 +174,7 @@ class LoanProfile extends Component<Props, State>{
         }
     }
     async approveManualPayment() {
-        let table = document.createElement("table");
+        const table = document.createElement("table");
         table.className = "swal-table";
         table.innerHTML = `<thead><tr><th>${local.receiptNumber}</th><th>${local.truthDate}</th><th>${local.dueDate}</th><th>${local.amount}</th>
                             </thead>
