@@ -12,6 +12,8 @@ export interface Branch {
     bankAccount: string;
     costCenter: string;
     licenseNumber: string;
+    bankName: string;
+    bankAddress: string;
 }
 
 export interface Customer {

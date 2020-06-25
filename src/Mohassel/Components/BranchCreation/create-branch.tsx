@@ -65,20 +65,11 @@ interface Props {
     }
     prepareBranch = (values: BasicValues) => {
 
-            const branch: Branch = {
-                longitude: values.branchAddressLatLong?.lng,
-                latitude: values.branchAddressLatLong?.lat,
-                name: values.name,
-                governorate: values.governorate,
-                phoneNumber: values.phoneNumber,
-                faxNumber: values.faxNumber,
-                address: values.address,
-                licenseNumber: values.licenseNumber,
-                licenseDate:  new Date(values.licenseDate).valueOf(),
-                postalCode: values.postalCode,
-                bankAccount : values.bankAccount,
-                costCenter: values.costCenter,
-            }
+            const branch: Branch =  values;
+            branch.longitude = values.branchAddressLatLong?.lng;
+            branch.latitude = values.branchAddressLatLong?.lat;
+            branch.licenseDate=  new Date(values.licenseDate).valueOf();
+
             return branch;
     }
    async  createBranch (values) {
