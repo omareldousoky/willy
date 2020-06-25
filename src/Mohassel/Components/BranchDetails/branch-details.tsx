@@ -75,6 +75,12 @@ interface State {
                 governorate:'',
                 status:'',
                 products: [],
+                licenseDate:0,
+                licenseNumber:'',
+                bankAccount:'',
+                bankAddress:'',
+                bankName:'',
+                costCenter:'',
             },
             productsLoading: false,
         }
