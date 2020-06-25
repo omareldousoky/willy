@@ -391,6 +391,7 @@
     "noOfCustomers": "عدد العملاء",
     "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
     "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من قيمة القرض",
+    "amountShouldNotbeLessThanReqAmount": "المبلغ يجب ان يكون اكبر من قيمة المطلوبة",
     "totalPayment": "إجمالي المدفوع",
     "feesPaid": "المصاريف المسدده",
     "principalPaid": "الاصل المسدد",

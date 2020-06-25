@@ -21,63 +21,125 @@ const CashReceipt = (props) => {
                     </tbody>
                 </table>
             </div>
+            {props.data.product.beneficiaryType === "individual" ?
+                <>
+                    <div className="bottomborder">
 
-
-            <div className="bottomborder">
-
-                <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
-                <div>  تحريرا في
-			<span>{' ' + timeToArabicDate(0, false) + ' ' }</span>
-                </div>
-                <div>استلمت انا / {props.data.customer.customerName}، مبلغ {numbersToArabic(props.data.principal)} جنيه’ من شركة
+                        <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
+                        <div>  تحريرا في
+			<span>{' ' + timeToArabicDate(0, false) + ' '}</span>
+                        </div>
+                        <div>استلمت انا / {props.data.customer.customerName}، مبلغ {numbersToArabic(props.data.principal)} جنيه’ من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div>توقيع المستلم</div>
-                                <div>الاسم/ {props.data.customer.customerName}</div>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>توقيع المستلم</div>
+                                        <div>الاسم/ {props.data.customer.customerName}</div>
 
-                            </td>
-                            <td>
-                                <div>التوقيع :
+                                    </td>
+                                    <td>
+                                        <div>التوقيع :
 							<div style={{ display: "inline-block" }}>---------------------</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-            <div className="divFooter">
-                <div className="headtitle textcenter"> <u>إقرار</u></div>
-                <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
+                    <div className="divFooter">
+                        <div className="headtitle textcenter"> <u>إقرار</u></div>
+                        <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
 			وتسليم كل عميل مبلغ التمويل الخاص به.</div>
 
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div>توقيع اعضاء لجنة التسليم</div>
-                            </td>
-                            <td>
-                                <div>---------------------</div>
-                            </td>
-                            <td>
-                                <div>---------------------</div>
-                            </td>
-                            <td>
-                                <div>توقيع مدير الفرع :
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>توقيع اعضاء لجنة التسليم</div>
+                                    </td>
+                                    <td>
+                                        <div>---------------------</div>
+                                    </td>
+                                    <td>
+                                        <div>---------------------</div>
+                                    </td>
+                                    <td>
+                                        <div>توقيع مدير الفرع :
 							<div style={{ display: "inline-block" }}>---------------------</div>
-                                </div>
-                            </td>
-                            <td>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+                :
+                props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                    return (
+                        <div key={index}>
+                            <div className="bottomborder">
 
+                                <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
+                                <div>  تحريرا في
+                                    <span>{' ' + timeToArabicDate(0, false) + ' '}</span>
+                                </div>
+                                <div>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {numbersToArabic(individualInGroup.amount)} جنيه’ من شركة
+                                 تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)
+                                </div>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div>توقيع المستلم</div>
+                                                <div>الاسم/ {individualInGroup.customer.customerName}</div>
+
+                                            </td>
+                                            <td>
+                                                <div>التوقيع :
+                                                    <div style={{ display: "inline-block" }}>---------------------</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="divFooter">
+                                <div className="headtitle textcenter"> <u>إقرار</u></div>
+                                <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
+                                وتسليم كل عميل مبلغ التمويل الخاص به.</div>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div>توقيع اعضاء لجنة التسليم</div>
+                                            </td>
+                                            <td>
+                                                <div>---------------------</div>
+                                            </td>
+                                            <td>
+                                                <div>---------------------</div>
+                                            </td>
+                                            <td>
+                                                <div>توقيع مدير الفرع :
+                                                    <div style={{ display: "inline-block" }}>---------------------</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )
+                })
+            }
         </div>
     )
 }
