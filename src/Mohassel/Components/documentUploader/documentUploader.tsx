@@ -38,7 +38,6 @@ interface  State {
     }
     static getDerivedStateFromProps(props, state) {
       if (props.edit && props.uploadedImageFile !== state.imagesFiles) {
-             console.log("props.uploadedImageFile" ,props.uploadedImageFile);
               return {
                 imagesFiles: props.uploadedImageFile,
               }
