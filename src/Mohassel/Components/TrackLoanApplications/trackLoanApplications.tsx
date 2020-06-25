@@ -99,6 +99,7 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   getApplications() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
   }
   getStatus(status: string) {
     switch (status) {
