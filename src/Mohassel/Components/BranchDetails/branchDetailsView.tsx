@@ -41,8 +41,14 @@ const BranchDetailsView = (props: Props) => {
                     <tr><td style={header}>{local.branchAddress}</td><td style={cell}>{data.address}</td></tr>
                     <tr><td style={header}>{local.mobilePhoneNumber}</td><td style={cell}>{data.phoneNumber}</td></tr>
                     <tr><td style={header}>{local.faxNumber}</td><td style={cell}>{data.faxNumber}</td></tr>
-                    <tr><td style={header}>{local.status}</td><td style={cell}>{data.status}</td></tr>
+                    <tr><td style={header}>{local.licenseDate}</td><td style={cell}>{timeToDate(data.licenseDate)}</td></tr>
+                    <tr><td style={header}>{local.licenseNumber}</td><td style={cell}>{data.licenseNumber}</td></tr>
+                    <tr><td style={header}>{local.costCenter}</td><td style={cell}>{data.costCenter}</td></tr>
+                    <tr><td style={header}>{local.bankAccount}</td><td style={cell}>{data.bankAccount}</td></tr>
+                    <tr><td style={header}>{local.bankName}</td><td style={cell}>{data.bankName}</td></tr>
+                    <tr><td style={header}>{local.bankAddress}</td><td style={cell}>{data.bankAddress}</td></tr>
                     <tr><td style={header}>{local.lonasTypes}</td><td style={cell}><Labels  labelsTextArr={data.products} /></td></tr>
+
                 </tbody>
 
             </Table>
