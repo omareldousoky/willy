@@ -9,7 +9,7 @@ import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import PaymentReceipt from './paymentReceipt';
 import { Loader } from '../../../Shared/Components/Loader';
-import { paymentValidation } from './paymentValidation';
+import { paymentValidation, earlyPaymentValidation } from './paymentValidation';
 import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarlyPayment';
 import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
 import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
@@ -17,6 +17,7 @@ import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
 import { manualPayment } from '../../Services/APIs/Payment/manualPayment';
 import { editManualPayment } from '../../Services/APIs/Payment/editManualPayment';
 import { timeToDateyyymmdd } from '../../Services/utils';
+import { PendingActions } from '../../Services/interfaces';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import Can from '../../config/Can';
@@ -41,6 +42,7 @@ interface Props {
   applicationId: string;
   application: any;
   paymentState: number;
+  pendingActions: PendingActions;
   changePaymentState: (data) => void;
   print: (data) => void;
   refreshPayment: () => void;
@@ -68,8 +70,8 @@ class Payment extends Component<Props, State>{
     this.state = {
       receiptModal: false,
       receiptData: {},
-      payAmount: 0,
-      receiptNumber: '',
+      payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
+      receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
       truthDate: timeToDateyyymmdd(0),
       dueDate: timeToDateyyymmdd(0),
       loading: false,
@@ -387,7 +389,7 @@ class Payment extends Component<Props, State>{
               enableReinitialize
               initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
               onSubmit={this.handleSubmit}
-              validationSchema={paymentValidation}
+              validationSchema={earlyPaymentValidation}
               validateOnBlur
               validateOnChange
             >

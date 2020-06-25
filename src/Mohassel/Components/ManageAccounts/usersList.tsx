@@ -101,7 +101,7 @@ class UsersList extends Component<Props, State> {
     );
   }
   getUsers() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
     return (

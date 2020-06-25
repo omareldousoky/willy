@@ -4,6 +4,16 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const CustomerCardPDF = (props) => {
+    function getGov() {
+        if (props.data.product.beneficiaryType === "individual")
+            return props.data.customer.governorate;
+        else return props.data.group.individualsInGroup[0].customer.governorate;
+    }
+    function getCode() {
+        if (props.data.product.beneficiaryType === "individual")
+            props.data.customer.code;
+        else return props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.code;
+    }
     return (
         <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
             <table>
@@ -12,7 +22,7 @@ const CustomerCardPDF = (props) => {
                         <td className="title bold titleborder titlebackground">
                             شركة تساهيل للتمويل متناهي الصغر</td>
                         <td style={{ width: "30%" }}></td>
-                        <td className="title bold">الجيزه - امبابه ثان</td>
+                        <td className="title bold">{props.branchDetails.name} - {getGov()}</td>
                     </tr>
                     <tr>
                         <td className="bold">ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (٢) لسنة ٢٠١٥</td>
@@ -35,7 +45,7 @@ const CustomerCardPDF = (props) => {
                 <tbody>
                     <tr>
                         <td> المجموعه
-					<div className="frame">{numbersToArabic(props.data.customer.code)}</div>
+					<div className="frame">{numbersToArabic(getCode())}</div>
                             <div className="frame">{props.data.customer.customerName}</div>
                         </td>
                         <td> التاريخ
@@ -86,24 +96,48 @@ const CustomerCardPDF = (props) => {
             </table>
             <table className="tablestyle" style={{ border: "1px black solid" }}>
                 <tbody>
-                    <tr>
-                        <th>كود العضو</th>
-                        <th>اسم العضو</th>
-                        <th>المنطقه</th>
-                        <th>العنوان</th>
-                        <th>تليفون</th>
-                    </tr>
-                    {props.data.guarantors.map((guarantor, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{numbersToArabic(guarantor.code)}</td>
-                                <td>{guarantor.customerName}</td>
-                                <td>{guarantor.district}</td>
-                                <td>{guarantor.customerHomeAddress}</td>
-                                <td>{numbersToArabic(guarantor.mobilePhoneNumber)}</td>
-                            </tr>
-                        )
-                    })}
+                    {props.data.product.beneficiaryType === "individual" ?
+                        <tr>
+                            <th>كود الضامن</th>
+                            <th>اسم الضامن</th>
+                            <th>المنطقه</th>
+                            <th>العنوان</th>
+                            <th>تليفون</th>
+                        </tr>
+                        :
+                        <tr>
+                            <th>كود العضو</th>
+                            <th>اسم العضو</th>
+                            <th>المنطقه</th>
+                            <th>العنوان</th>
+                            <th>تليفون</th>
+                        </tr>
+                    }
+                    {props.data.product.beneficiaryType === "individual" ?
+                        props.data.guarantors.map((guarantor, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{numbersToArabic(guarantor.code)}</td>
+                                    <td>{guarantor.customerName}</td>
+                                    <td>{guarantor.district}</td>
+                                    <td>{guarantor.customerHomeAddress}</td>
+                                    <td>{numbersToArabic(guarantor.mobilePhoneNumber)}</td>
+                                </tr>
+                            )
+                        })
+                        :
+                        props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{numbersToArabic(individualInGroup.customer.code)}</td>
+                                    <td>{individualInGroup.customer.customerName}</td>
+                                    <td>{individualInGroup.customer.district}</td>
+                                    <td>{individualInGroup.customer.customerHomeAddress}</td>
+                                    <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber)}</td>
+                                </tr>
+                            )
+                        })
+                    }
                 </tbody>
             </table>
             <div style={{ textAlign: 'right' }}>

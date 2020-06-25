@@ -70,7 +70,10 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerName,
         key: "customerName",
-        render: data => (data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName : <div style={{ display: 'flex', flexDirection: 'column' }}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer.customerName}</span>)}</div>)
+        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
+        </div>
       },
       {
         title: local.productName,
@@ -98,7 +101,7 @@ class TrackLoanApplications extends Component<Props, State>{
     this.getApplications();
   }
   getApplications() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId});
   }
   getStatus(status: string) {
     switch (status) {
