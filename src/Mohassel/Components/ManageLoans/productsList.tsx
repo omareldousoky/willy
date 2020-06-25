@@ -8,30 +8,29 @@ import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
-import { setUserActivation } from '../../Services/APIs/Users/userActivation';
-import Search from '../Search/search';
-import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { loading } from '../../redux/loading/actions';
+
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from './manageLoansInitials';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { Formula } from '../LoanApplication/loanApplicationCreation';
+import Form from 'react-bootstrap/Form';
+import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct';
 
 interface Props {
     history: any;
     data: any;
     totalCount: number;
-    loading: boolean;
     searchFilters: any;
     search: (data) => void;
     setLoading: (data) => void;
     setSearchFilters: (data) => void;
     branchId?: string;
     withHeader: boolean;
+
 };
 interface State {
-    size: number;
-    from: number;
+    loading: boolean;
+    products: Array<Formula>;
+    filterProducts: string;
 }
 
 class LoanProducts extends Component<Props, State> {
@@ -39,34 +38,20 @@ class LoanProducts extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            size: 5,
-            from: 0,
+            loading: false,
+            products: [],
+            filterProducts: ''
         }
         this.mappers = [
-            {
-                title: local.username,
-                key: "username",
-                render: data => data.username
-            },
             {
                 title: local.name,
                 key: "name",
                 render: data => data.name
             },
             {
-                title: local.employment,
-                key: "employment",
-                render: data => data.hiringDate ? timeToDateyyymmdd(data.hiringDate) : ''
-            },
-            {
-                title: local.createdBy,
-                key: "createdBy",
-                render: data => data.created ? data.created.by : null
-            },
-            {
-                title: local.creationDate,
-                key: "creationDate",
-                render: data => data.created.at ? getDateAndTime(data.created.at) : ''
+                title: local.branches,
+                key: "branches",
+                render: data => data.branches
             },
             {
                 title: '',
@@ -76,50 +61,43 @@ class LoanProducts extends Component<Props, State> {
         ]
     }
     componentDidMount() {
-        this.getUsers()
-    }
-    componentWillUnmount() {
-        this.props.setSearchFilters({})
-    }
-    async handleActivationClick(data: any) {
-        const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
-        this.props.setLoading(true);
-
-        const res = await setUserActivation(req);
-        if (res.status === 'success') {
-            this.props.setLoading(false);
-            Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
-        } else {
-            this.props.setLoading(false);
-            Swal.fire("error");
-        }
-
+        this.getProducts()
     }
     renderIcons(data: any) {
         return (
             <>
-                <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
+                <span onClick={() => { this.props.history.push({ pathname: "/manage-loans/loan-products/view-product", state: { id: data.id } }) }} className='fa fa-eye icon'></span>
             </>
         );
     }
-    getUsers() {
-        this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
+    async getProducts() {
+        this.setState({ loading: true });
+        const products = await getDetailedProducts();
+        if (products.status === 'success') {
+            this.setState({
+                products: products.body.data,
+                loading: false
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
     }
     render() {
         return (
             <div>
                 <HeaderWithCards
-                    header={local.loanProducts}
+                    header={local.calculationForumlas}
                     array={manageLoansArray}
                     active={0}
                 />
                 <Card style={{ margin: '20px 50px' }}>
-                    <Loader type="fullsection" open={this.props.loading} />
+                    <Loader type="fullsection" open={this.state.loading} />
                     <Card.Body style={{ padding: 0 }}>
                         <div className="custom-card-header">
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanProducts}</Card.Title>
-                                <span className="text-muted">{local.noOfLoanProducts + ` (${this.props.totalCount})`}</span>
+                                <span className="text-muted">{local.noOfLoanProducts + ` (${this.state.products.length})`}</span>
                             </div>
                             <div>
                                 <Can I='createLoanProduct' a='product'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/manage-loans/loan-products/new-loan-product')}>{local.createLoanProduct}</Button></Can>
@@ -128,15 +106,22 @@ class LoanProducts extends Component<Props, State> {
                         </div>
                         <hr className="dashed-line" />
                         {/* <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} /> */}
-
+                        {this.state.products.length > 0 && <div className="d-flex flex-row justify-content-center">
+                            <Form.Control
+                                type="text"
+                                data-qc="filterProducts"
+                                placeholder={local.search}
+                                style={{ marginBottom: 20, width: '60%' }}
+                                maxLength={100}
+                                value={this.state.filterProducts}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterProducts: e.currentTarget.value })}
+                            />
+                        </div>}
                         <DynamicTable
-                            totalCount={this.props.totalCount}
+                            totalCount={0}
                             mappers={this.mappers}
-                            pagination={true}
-                            data={this.props.data}
-                            changeNumber={(key: string, number: number) => {
-                                this.setState({ [key]: number } as any, () => this.getUsers());
-                            }}
+                            pagination={false}
+                            data={this.state.products.filter(product => product.name.toLocaleLowerCase().includes(this.state.filterProducts.toLocaleLowerCase()))}
                         />
                     </Card.Body>
                 </Card>
@@ -145,20 +130,6 @@ class LoanProducts extends Component<Props, State> {
     }
 }
 
-const addSearchToProps = dispatch => {
-    return {
-        search: data => dispatch(search(data)),
-        setLoading: data => dispatch(loading(data)),
-        setSearchFilters: data => dispatch(searchFilters(data)),
-    };
-};
-const mapStateToProps = state => {
-    return {
-        data: state.search.data,
-        totalCount: state.search.totalCount,
-        loading: state.loading,
-        searchFilters: state.searchFilters
-    };
-};
 
-export default connect(mapStateToProps, addSearchToProps)(withRouter(LoanProducts));
+
+export default withRouter(LoanProducts);

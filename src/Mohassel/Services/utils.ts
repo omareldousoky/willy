@@ -37,6 +37,14 @@ export function currency(val: string) {
       return ''
   }
 }
+export function loanNature(val: string) {
+  switch (val) {
+    case 'cash':
+      return local.cash
+    default:
+      return ''
+  }
+}
 export function interestPeriod(val: string) {
   switch (val) {
     case 'yearly':
@@ -63,6 +71,28 @@ export function periodType(val: string) {
       return 'اشهر'
     case 'days':
       return 'يوم'
+    default:
+      return ''
+  }
+}
+export function inAdvanceFrom(val: string) {
+  switch (val) {
+    case 'principal':
+      return local.inAdvanceFromPrinciple
+    case 'monthly':
+      return local.inAdvanceFromMonthly
+    case 'yearly':
+      return local.inAdvanceFromYearly
+    default:
+      return ''
+  }
+}
+export function inAdvanceType(val: string) {
+  switch (val) {
+    case 'cut':
+      return local.inAdvanceFeesCut
+    case 'uncut':
+      return local.inAdvanceFeesUncut
     default:
       return ''
   }
@@ -191,4 +221,9 @@ export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string =
   if (timeStamp > 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleString('ar-EG').slice(0, 12)
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleString('ar-EG').slice(0, 12)
+}
+
+export const dayToArabic = (index: number): string => {
+  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  return weekday[index];
 }

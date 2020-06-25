@@ -10,7 +10,7 @@ export const LoanFormulaCreationForm = (props: any) => {
     return (
         <Form style={{ textAlign: 'right' }} onSubmit={handleSubmit}>
             <Col sm={12}>
-                <Form.Group controlId="loanCalculationFormulaName">
+                <Form.Group className="data-group" controlId="loanCalculationFormulaName">
                     <Form.Label>{local.loanCalculationFormulaName}</Form.Label>
                     <Form.Control
                         type="text"
@@ -27,7 +27,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                 </Form.Group>
             </Col>
             <Col sm={12}>
-                <Form.Group controlId="interestType">
+                <Form.Group className="data-group" controlId="interestType">
                     <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.interestType}</Form.Label>
                     <Form.Control as="select"
                         name="interestType"
@@ -47,7 +47,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                 </Form.Group>
             </Col>
             <Col sm={12}>
-                <Form.Group controlId="installmentType">
+                <Form.Group className="data-group" controlId="installmentType">
                     <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.installmentType}</Form.Label>
                     <Form.Control as="select"
                         name="installmentType"
@@ -65,7 +65,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Form.Group>
             </Col>
-            <Form.Group as={Row} controlId='gracePeriodFees'>
+            <Form.Group className="data-group" as={Row} controlId='gracePeriodFees'>
                 <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.gracePeriodFees}</Form.Label>
                 <Form.Check
                     type='checkbox'
@@ -80,7 +80,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                     {errors.gracePeriodFees}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Row} controlId='rounding'>
+            <Form.Group className="data-group" as={Row} controlId='rounding'>
                 <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.rounding}</Form.Label>
                 <Form.Check
                     type='checkbox'
@@ -97,7 +97,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                 </Form.Control.Feedback>
             </Form.Group>
             <Col sm={12}>
-                <Form.Group controlId="roundDirection">
+                <Form.Group className="data-group" controlId="roundDirection">
                     <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.roundDirection}</Form.Label>
                     <Form.Control as="select"
                         name="roundDirection"
@@ -117,7 +117,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                 </Form.Group>
             </Col>
             <Col sm={12}>
-                <Form.Group controlId="roundTo">
+                <Form.Group className="data-group" controlId="roundTo">
                     <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.roundTo}</Form.Label>
                     <Form.Control
                         type="number"
@@ -135,7 +135,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                 </Form.Group>
             </Col>
             <Col sm={12}>
-                <Form.Group controlId="roundWhat">
+                <Form.Group className="data-group" controlId="roundWhat">
                     <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.roundWhat}</Form.Label>
                     <Form.Control as="select"
                         name="roundWhat"
@@ -158,7 +158,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                     </Form.Control.Feedback>
                 </Form.Group>
             </Col>
-            <Form.Group as={Row} controlId='equalInstallmentsTrue'>
+            <Form.Group className="data-group" as={Row} controlId='equalInstallmentsTrue'>
                 <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.equalInstallmentsTrue}</Form.Label>
                 <Form.Check
                     type='checkbox'
@@ -175,7 +175,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                     {errors.equalInstallments}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Row} controlId='roundLastInstallment'>
+            <Form.Group className="data-group"as={Row} controlId='roundLastInstallment'>
                 <Form.Label style={{ textAlign: 'right' }} column sm={8}>{local.roundLastInstallment}</Form.Label>
                 <Form.Check
                     type='checkbox'

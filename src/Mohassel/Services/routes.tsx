@@ -30,9 +30,10 @@ import FormulaList from '../Components/ManageLoans/calculationFormulaList';
 import * as local from '../../Shared/Assets/ar.json';
 import { generateAppRoutes } from './utils';
 import BranchDetails from '../Components/BranchDetails/branch-details';
-import GroupMemberSeperation from '../Components/LoanApplication/groupMemberSeperation';
+import GroupMemberSeperation from '../Components/LoanProfile/groupMemberSeperation';
 import ViewFormula from '../Components/LoanFormulaCreation/calculationFormulaView';
-
+import ViewProduct from '../Components/LoanProductCreation/loanProductView';
+import LoanRollBack from '../Components/LoanProfile/loanRollBack';
 const appRoutes = [
   {
     path: "/",
@@ -52,7 +53,7 @@ const appRoutes = [
           {
             path: "/edit-customer",
             label: local.editCustomer,
-            render: (props) => <Can I='updateCustomer' a='customer'><CustomerCreation {...props} edit={true} /> </Can>,
+            render: (props) => <CustomerCreation {...props} edit={true} />,
           }
         ]
       },
@@ -91,6 +92,11 @@ const appRoutes = [
             path: "/loan-status-change",
             label: local.loanStatusChange,
             render: (props) => <LoanStatusChange {...props} />,
+          },
+          {
+            path: "/loan-roll-back",
+            label: local.previousActions,
+            render: (props) => <LoanRollBack {...props} />,
           }
         ]
       },
@@ -119,11 +125,11 @@ const appRoutes = [
                 label: local.createLoanProduct,
                 render: (props) => <Can I='createLoanProduct' a='product'><LoanProductCreation {...props} /></Can>,
               },
-              // {
-              //   path: "/view-product",
-              //   label: local.calculationFormulaId,
-              //   render: (props) => <ViewFormula {...props} />,
-              // }
+              {
+                path: "/view-product",
+                label: local.productName,
+                render: (props) => <ViewProduct {...props} />,
+              }
             ]
           },
           {

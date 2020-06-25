@@ -37,7 +37,7 @@ const EarlyPaymentPDF = (props) => {
                         <th style={{ width: "35%" }} className="title bold border">
                             شركة تساهيل للتمويل متناهي الصغر</th>
                         <td></td>
-                        <td className="title bold">الدقهليه - المنزله</td>
+                        <td className="title bold">{props.branchDetails.name} - {props.data.customer.governorate}</td>
                     </tr>
                     <tr>
                         <td>{timeToArabicDate(0, true)}</td>
@@ -57,7 +57,7 @@ const EarlyPaymentPDF = (props) => {
 					<div className="frame">{timeToArabicDate(0, false)}</div>
                         </td>
                         <td> المندوب
-					<div className="frame">{props.data.customer.representative}</div>
+					<div className="frame">{props.loanOfficer}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -74,8 +74,8 @@ const EarlyPaymentPDF = (props) => {
                         <td>عدد الاقساط <div className="frame">{numbersToArabic(props.data.installmentsObject.installments.length)}</div>
                         </td>
                         <td>فترة السماح
-					<div className="frame">{numbersToArabic(props.data.product.gracePeriod)}</div>
-                            <div className="frame">{props.data.customer.businessSector}</div>
+					        <div className="frame">{numbersToArabic(props.data.product.gracePeriod)}</div>
+                            <div className="frame">{props.data.customer.businessActivity}</div>
                         </td>
                     </tr>
                 </tbody>
