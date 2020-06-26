@@ -87,7 +87,7 @@ const DocumentTypeCreationForm = (props: Props) => {
                     >
                         <Form.Label
                             className={'data-label'}
-                        >{local.updatable}</Form.Label>
+                        >{local.allowUpdate}</Form.Label>
                         <Row style={{ margin: 0 }}>
                             <Form.Check
                                 type={'radio'}

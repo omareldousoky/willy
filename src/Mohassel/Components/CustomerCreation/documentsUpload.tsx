@@ -8,6 +8,7 @@ import {getDocumentsTypes} from '../../Services/APIs/encodingFiles/getDocumentsT
 import { deleteDocument } from '../../Services/APIs/Customer-Creation/deleteDocument';
 import * as local from '../../../Shared/Assets/ar.json';
 import DocumentUploader from '../documentUploader/documentUploader';
+import { Loader } from '../../../Shared/Components/Loader';
 
 interface State {
   loading: boolean;
@@ -57,11 +58,21 @@ class DocumentsUpload extends Component<Props, State>{
       this.setState({ loading: false })
     }
   }
+  prepareCustomerDocuments(customerDocs: any[], name: string){
+    
+      let ImageFiles: any[] = [];
+      customerDocs?.map((doc)=> {
+        ImageFiles = doc.docs;
+      });
+      return ImageFiles;
+  } 
 
 
   render() {
     return (
+
       <>
+      <Loader type="fullscreen"  open ={this.state.loading} />
     {this.state.documentTypes.map((documentType,index) => {
       const ImageFiles = this.state.docsOfImagesFiles.filter(item => item.name === documentType.name );
       return (
@@ -71,11 +82,12 @@ class DocumentsUpload extends Component<Props, State>{
         uploadDocumentFun = {uploadDocument}
         deleteDocumentFun = {deleteDocument}
         edit= {this.props.edit}
-        uploadedImageFile = {ImageFiles}
+        uploadedImageFile = { this.prepareCustomerDocuments(ImageFiles,documentType.name) }
         keyName = "customerId"
         keyId = {this.props.customerId}
          />
       )
+  
       })}
   </>
       

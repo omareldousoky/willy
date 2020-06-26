@@ -551,7 +551,7 @@
     "encodingFilesHQ": "ملفات تكويد المركز الرئيسي",
     "getDocumentsTypesError": "حدث خطأ في إسترجاع ملفات التكويد حاول مرة أخري",
     "numOfPages":"عدد الصفحات",
-    "updatable":"السماح بالتعديل",
+    "allowUpdate":"السماح بالتعديل",
     "documentFor":"مستند خاص ببيانات",
     "createEncodingFiles": "إنشاء ملفات تكويد",
     "editEncodingFiles":"تعديل ملفات تكويد",
@@ -563,6 +563,8 @@
     "documentTypeEditSuccessMessage": "تم تعديل ملف التكويد ",
     "documentTypeEditErrorMessage":"حدث خطأ ولم يتم تعديل ملف التكويد",
     "numOfFiles": "عدد الملفات",
-    "numOfUploadedImages":"عدد الصور المحملة"
+    "numOfUploadedImages":"عدد الصور المحملة",
+    "updatable":"قابله للتعديل",
+    "nonUpdatable":"غير قابله للتعديل"
 
 }

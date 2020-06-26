@@ -37,12 +37,11 @@ interface  State {
         }
     }
     static getDerivedStateFromProps(props, state) {
-      if (props.edit && props.uploadedImageFile !== state.imagesFiles) {
+      if(props.edit && props.uploadedImageFile?.length > 0)
+      if (props.uploadedImageFile !== state.imagesFiles && state.imagesFiles.length==0 ) {
               return {
                 imagesFiles: props.uploadedImageFile,
               }
-  
-
       }
       return null;
   }
@@ -115,7 +114,7 @@ interface  State {
           reader.onloadend = () => {
             const document: Document = {
               key: res.body.message,
-              url: reader.result
+              url: reader.result,
             }
             this.setState({
          imagesFiles: [...this.state.imagesFiles, document]
@@ -235,7 +234,14 @@ interface  State {
         return (
             <div style={{ marginBottom: 30 }}>
               <div style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-            <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}</h4>
+        <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}  <span style= {
+          {
+            margin :"0  10px",
+            fontSize:"14px",
+            color: this.props.documentType.updatable ?  "#7dc356" : "#d51b1b" 
+            
+          }
+        }>{this.props.documentType.updatable? local.updatable : local.nonUpdatable }</span></h4>
             <small style={{color:"#6e6e6e",fontSize:"12px"}}>{`${local.numOfUploadedImages}(${this.state.imagesFiles.length}/${this.props.documentType.pages})`}</small>
             </div>
             {this.renderContainer(this.props.documentType.name)}

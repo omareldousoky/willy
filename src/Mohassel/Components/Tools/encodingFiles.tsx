@@ -81,7 +81,7 @@ class EncodingFiles extends Component<Props, State> {
                                                         <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentType.pages} </div>
                                                     </Col>
                                                     <Col>
-                                                        <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.updatable}</div>
+                                                        <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.allowUpdate}</div>
                                                         <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentType.updatable ? local.yes : local.no} </div>
                                                     </Col>
                                                     <Col>
