@@ -223,6 +223,7 @@
     "andEndsIn": "و تنتهى فى",
     "welcome": "آهلا",
     "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "searchByBranchNameOrCode": "البحث بإسم الفرع أو الكود",
     "dateFrom": "التاريخ من",
     "dateTo": "التاريخ الي",
     "noShow": "عدم حضورهم للصرف",
