@@ -32,6 +32,7 @@ interface Props {
 interface State {
   size: number;
   from: number;
+  manageAccountTabs: any[];
 }
 
 class UsersList extends Component<Props, State> {
@@ -41,6 +42,7 @@ class UsersList extends Component<Props, State> {
     this.state = {
       size: 5,
       from: 0,
+      manageAccountTabs:[],
     }
     this.mappers = [
       {
@@ -76,7 +78,13 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getUsers()
+    
+    this.getUsers();
+    this.setState({
+      manageAccountTabs: manageAccountsArray()
+    })
+    
+    
   }
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
@@ -104,13 +112,14 @@ class UsersList extends Component<Props, State> {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
+
     return (
       <div>
         {this.props.withHeader &&
      <HeaderWithCards
       header={local.manageAccounts}
-      array = {manageAccountsArray}
-      active = {1}
+      array = {this.state.manageAccountTabs}
+      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('users')}
         /> }
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
