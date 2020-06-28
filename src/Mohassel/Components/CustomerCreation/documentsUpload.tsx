@@ -17,8 +17,9 @@ interface State {
 }
 interface Props {
   customerId: string;
-  previousStep: () => void;
+  previousStep?: () => void;
   edit: boolean;
+  view?: boolean;
 }
 class DocumentsUpload extends Component<Props, State>{
   constructor(props) {
@@ -33,7 +34,7 @@ class DocumentsUpload extends Component<Props, State>{
     }
   }
   async componentDidMount() {
-    if (this.props.edit) {
+    if (this.props.edit || this.props.view) {
       this.setState({ loading: true});
       const res = await getCustomerDocuments(this.props.customerId);
       const response = await getDocumentsTypes('customer');
@@ -85,6 +86,7 @@ class DocumentsUpload extends Component<Props, State>{
         uploadedImageFile = { this.prepareCustomerDocuments(ImageFiles,documentType.name) }
         keyName = "customerId"
         keyId = {this.props.customerId}
+        view = {this.props.view}
          />
       )
   

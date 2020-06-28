@@ -9,99 +9,99 @@ interface Document {
 }
 
 interface Props {
- documentType: DocumentType;
- uploadDocumentFun: any;
- deleteDocumentFun: any;
- keyName: string;
- keyId: string;
- edit: boolean;
- uploadedImageFile: Array<Document>;
+  documentType: DocumentType;
+  uploadDocumentFun: any;
+  deleteDocumentFun: any;
+  keyName: string;
+  keyId: string;
+  edit: boolean;
+  view?: boolean;
+  uploadedImageFile: Array<Document>;
 }
 
 
-interface  State {
- loading: boolean;
- dragging: boolean;
- imagesFiles: Array<Document>;
+interface State {
+  loading: boolean;
+  dragging: boolean;
+  imagesFiles: Array<Document>;
 }
- class DocumentUploader extends Component<Props , State> {
-    private fileInput: React.RefObject<HTMLInputElement>;
-    private dragEventCounter = 0;
-    constructor(props) {
-        super(props);
-        this.fileInput = React.createRef();
-        this.state = {
-            loading: false,
-            dragging: false,
-            imagesFiles: [],
-        }
+class DocumentUploader extends Component<Props, State> {
+  private fileInput: React.RefObject<HTMLInputElement>;
+  private dragEventCounter = 0;
+  constructor(props) {
+    super(props);
+    this.fileInput = React.createRef();
+    this.state = {
+      loading: false,
+      dragging: false,
+      imagesFiles: [],
     }
-    static getDerivedStateFromProps(props, state) {
-      if(props.edit && props.uploadedImageFile?.length > 0)
-      if (props.uploadedImageFile !== state.imagesFiles && state.imagesFiles.length==0 ) {
-              return {
-                imagesFiles: props.uploadedImageFile,
-              }
+  }
+  static getDerivedStateFromProps(props, state) {
+    if ((props.edit || props.view) && props.uploadedImageFile?.length > 0 )
+      if (props.uploadedImageFile !== state.imagesFiles && state.imagesFiles.length == 0) {
+        return {
+          imagesFiles: props.uploadedImageFile,
+        }
       }
-      return null;
+    return null;
   }
 
-    triggerInputFile() {
-    
-        const limit = this.props.documentType.pages;
-        if (this.state.imagesFiles.length < limit) {
-  
-          this[`fileInput`].current?.click()
-        }
-      }
-      overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-      };
-      dragenterListener = (event: React.DragEvent<HTMLDivElement>) => {
-        this.overrideEventDefaults(event);
-        this.dragEventCounter++;
-        if (event.dataTransfer.items && event.dataTransfer.items[0]) {
-          this.setState({ dragging: true });
-        } else if (
-          event.dataTransfer.types &&
-          event.dataTransfer.types[0] === "Files"
-        ) {
-          this.setState({ dragging: true });
-        }
-      };
-      dragleaveListener = (event: React.DragEvent<HTMLDivElement>) => {
-        this.overrideEventDefaults(event);
-        this.dragEventCounter--;
-        if (this.dragEventCounter === 0) {
-          this.setState({ dragging: false });
-        }
-      };
-  
-      constructArr(name: string) {
-        const len = this.props.documentType.pages;
-        const arr: number[] = [];
-        for (let i = 0; i < len; i++) {
-          arr.push(i);
-        }
-        return arr;
-      }
-      checkFileType(files: Array<File> | FileList) {
-        const length = files.length;
-        let flag = false;
-        for (let index = 0; index < length; index++) {
-          if (files[index].type === "image/png" || files[index].type === "image/jpeg" || files[index].type === "image/jpg")
-            flag = false;
-          else return true;
-        }
-        return flag;
-      }
+  triggerInputFile() {
+    const limit = this.props.documentType.pages;
+    if (this.state.imagesFiles.length < limit) {
+
+      this[`fileInput`].current?.click()
+    }
+  }
+  overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+  dragenterListener = (event: React.DragEvent<HTMLDivElement>) => {
+    this.overrideEventDefaults(event);
+    this.dragEventCounter++;
+    if (event.dataTransfer.items && event.dataTransfer.items[0]) {
+      this.setState({ dragging: true });
+    } else if (
+      event.dataTransfer.types &&
+      event.dataTransfer.types[0] === "Files"
+    ) {
+      this.setState({ dragging: true });
+    }
+  };
+  dragleaveListener = (event: React.DragEvent<HTMLDivElement>) => {
+    this.overrideEventDefaults(event);
+    this.dragEventCounter--;
+    if (this.dragEventCounter === 0) {
+      this.setState({ dragging: false });
+    }
+  };
+
+  constructArr(name: string) {
+    const len = this.props.documentType.pages;
+    const arr: number[] = [];
+    for (let i = 0; i < len; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }
+  checkFileType(files: Array<File> | FileList) {
+    const length = files.length;
+    let flag = false;
+    for (let index = 0; index < length; index++) {
+      if (files[index].type === "image/png" || files[index].type === "image/jpeg" || files[index].type === "image/jpg")
+        flag = false;
+      else return true;
+    }
+    return flag;
+  }
   async readFiles(files: Array<File> | FileList, name: string) {
     const imagesLimit = this.props.documentType.pages;
     const flag: boolean = this.checkFileType(files)
     if (flag) Swal.fire('', local.invalidFileType, 'error')
     else if (files.length <= imagesLimit && this.state.imagesFiles.length < imagesLimit) {
-      this.setState({ loading: true} );
+      this.setState({ loading: true });
       for (let index = 0; index < files.length; index++) {
         const formData = new FormData();
         formData.append("docName", name);
@@ -117,7 +117,7 @@ interface  State {
               url: reader.result,
             }
             this.setState({
-         imagesFiles: [...this.state.imagesFiles, document]
+              imagesFiles: [...this.state.imagesFiles, document]
             } as any)
           }
           reader.readAsDataURL(file)
@@ -126,12 +126,12 @@ interface  State {
           Swal.fire("", local.documentUploadError, "error")
         }
       }
-      this.setState({ loading: false});
+      this.setState({ loading: false });
     }
   }
   async deleteDocument(event, name: string, key: number) {
     this.overrideEventDefaults(event);
-    this.setState({ loading: true});
+    this.setState({ loading: true });
     const data = {
       [this.props.keyName]: this.props.keyId,
       docName: name,
@@ -143,111 +143,113 @@ interface  State {
         imagesFiles: this.state.imagesFiles.filter((_el, index) => index !== key),
         loading: false,
       })
-    } 
+    }
     else {
-      this.setState({ loading: false});
+      this.setState({ loading: false });
       Swal.fire("", local.deleteError, "error")
     }
   }
-      dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
-        this.overrideEventDefaults(event);
-        this.dragEventCounter = 0;
-        this.setState({ dragging: false });
-        if (event.dataTransfer.files && event.dataTransfer.files[0]) {
-          this.readFiles(event.dataTransfer.files, name);
-        }
-      };
-      handleOnChange = (event, name: string) => {
-        event.preventDefault();
-        const imagesLimit = this.props.documentType.pages;
-        if (event.target.files.length <= imagesLimit && this.state.imagesFiles.length <= imagesLimit) {
-          this.readFiles(event.target.files, name);
-        } else {
-          Swal.fire('', local.numberOfDocumentsError + this.props.documentType.pages, 'error')
-        }
-      }
-      renderLoading() {
-        return (
-          <div className="document-upload-container">
-            <Spinner animation="border"></Spinner>
-          </div>
-        )
-      }
-      renderDropHere(key: number) {
-        return (
-          <div key={key} className="document-upload-container">
-            <h5>Drop here</h5>
-          </div>
-        )
-      }
-      renderUploadPhoto(key: number) {
-        return (
-          <div key={key} className="document-upload-container">
-            <img src={require('../../Assets/uploadDrag.svg')}
-              alt="upload-document"
-            />
-            <div style={{ marginTop: 30 }}>
-              <h5>{local.documentUploadDragDropText}</h5>
-              <h5>{local.documentUploadBrowseFileText}</h5>
-            </div>
-          </div>
-        )
-      }
-      renderPhotoByName(key: number, name: string) {
-        return (
-          <div key={key} className="document-upload-container">
-            <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument(e, name, key)}>
-              <span className="fa fa-trash">{local.delete}</span>
-            </div>
-            <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={ this.state.imagesFiles[key].url as string } key={key} alt="" />
-          </div>
-        )
-      }
-    renderContainer(name: string) {
-        return (
-          <div style={{ display: 'flex', 
-            flexWrap:"wrap",
-           justifyContent: 'center', backgroundColor: '#f5f5f5',cursor: this.state.imagesFiles.length === this.props.documentType.pages ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4 }}
-            data-qc={`upload-${name}`}
-            onClick={() => this.triggerInputFile()}
-            onDrag={this.overrideEventDefaults}
-            onDragStart={this.overrideEventDefaults}
-            onDragEnd={this.overrideEventDefaults}
-            onDragOver={this.overrideEventDefaults}
-            onDragEnter={this.dragenterListener}
-            onDragLeave={this.dragleaveListener}
-            onDrop={(e) => this.dropListener(e, name)}>
-            <input multiple type="file" name="img" style={{ display: 'none' }}
-              accept="image/png,image/jpeg,image/jpg,image/jpeg"
-              ref={this[`fileInput`]} onChange={(e) => this.handleOnChange(e, name)} />
-            {this.state.loading ? this.renderLoading()
+  dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
+    this.overrideEventDefaults(event);
+    this.dragEventCounter = 0;
+    this.setState({ dragging: false });
+    if (event.dataTransfer.files && event.dataTransfer.files[0] && !this.props.view) {
+      this.readFiles(event.dataTransfer.files, name);
+    }
+  };
+  handleOnChange = (event, name: string) => {
+    event.preventDefault();
+    const imagesLimit = this.props.documentType.pages;
+    if (event.target.files.length <= imagesLimit && this.state.imagesFiles.length <= imagesLimit && !this.props.view) {
+      this.readFiles(event.target.files, name);
+    } else {
+      Swal.fire('', local.numberOfDocumentsError + this.props.documentType.pages, 'error')
+    }
+  }
+  renderLoading() {
+    return (
+      <div className="document-upload-container">
+        <Spinner animation="border"></Spinner>
+      </div>
+    )
+  }
+  renderDropHere(key: number) {
+    return (
+      <div key={key} className="document-upload-container">
+        <h5>Drop here</h5>
+      </div>
+    )
+  }
+  renderUploadPhoto(key: number) {
+    return (
+      <div key={key} className="document-upload-container">
+        <img src={this.props.view ? require('../../Assets/imagePlaceholder.svg') : require('../../Assets/uploadDrag.svg')}
+          alt="upload-document"
+        />
+        <div style={{ marginTop: 30 }}>
+          <h5>{this.props.view ? local.documentNotUploadedYet : local.documentUploadDragDropText}</h5>
+          {!this.props.view && <h5>{local.documentUploadBrowseFileText}</h5>}
+        </div>
+      </div>
+    )
+  }
+  renderPhotoByName(key: number, name: string) {
+    return (
+      <div key={key} className="document-upload-container">
+       {!this.props.view && <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument (e, name, key)}>
+          <span className="fa fa-trash">{local.delete}</span>
+        </div>}
+        <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={this.state.imagesFiles[key].url as string} key={key} alt="" />
+      </div>
+    )
+  }
+  renderContainer(name: string) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexWrap: "wrap",
+        justifyContent: 'center', backgroundColor: '#f5f5f5', cursor: this.state.imagesFiles.length === this.props.documentType.pages ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
+      }}
+        data-qc={`upload-${name}`}
+        onClick={() => this.triggerInputFile()}
+        onDrag={this.overrideEventDefaults}
+        onDragStart={this.overrideEventDefaults}
+        onDragEnd={this.overrideEventDefaults}
+        onDragOver={this.overrideEventDefaults}
+        onDragEnter={this.dragenterListener}
+        onDragLeave={this.dragleaveListener}
+        onDrop={(e) => this.dropListener(e, name)}>
+        <input disabled={this.props.view} multiple type="file" name="img" style={{ display: 'none' }}
+          accept="image/png,image/jpeg,image/jpg,image/jpeg"
+          ref={this[`fileInput`]} onChange={(e) => this.handleOnChange(e, name)} />
+        {this.state.loading ? this.renderLoading()
           : this.constructArr(name).map((_value: number, key: number) => {
             if (this.state.imagesFiles[key] === undefined) {
               if (this.state.dragging) return this.renderDropHere(key)
               else return this.renderUploadPhoto(key)
             } else return this.renderPhotoByName(key, name)
           })}
-          </div>
-            ) 
-      }
-    render() {
-        return (
-            <div style={{ marginBottom: 30 }}>
-              <div style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
-        <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}  <span style= {
-          {
-            margin :"0  10px",
-            fontSize:"14px",
-            color: this.props.documentType.updatable ?  "#7dc356" : "#d51b1b" 
-            
-          }
-        }>{this.props.documentType.updatable? local.updatable : local.nonUpdatable }</span></h4>
-            <small style={{color:"#6e6e6e",fontSize:"12px"}}>{`${local.numOfUploadedImages}(${this.state.imagesFiles.length}/${this.props.documentType.pages})`}</small>
-            </div>
-            {this.renderContainer(this.props.documentType.name)}
-          </div>
-        )
-    }
+      </div>
+    )
+  }
+  render() {
+    return (
+      <div style={{ marginBottom: 30 }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}  <span style={
+            {
+              margin: "0  10px",
+              fontSize: "14px",
+              color: this.props.documentType.updatable ? "#7dc356" : "#d51b1b"
+
+            }
+          }>{this.props.documentType.updatable ? local.updatable : local.nonUpdatable}</span></h4>
+          <small style={{ color: "#6e6e6e", fontSize: "12px" }}>{`${local.numOfUploadedImages}(${this.state.imagesFiles.length}/${this.props.documentType.pages})`}</small>
+        </div>
+        {this.renderContainer(this.props.documentType.name)}
+      </div>
+    )
+  }
 }
 
 export default DocumentUploader

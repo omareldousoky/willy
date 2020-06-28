@@ -156,6 +156,7 @@
     "nationalIdPhoto": "صورة بطاقة رقم القومي",
     "documentUploadDragDropText": "اسقاط الملفات هنا للتحميل",
     "documentUploadBrowseFileText": "او اضغط لاختيار الملف",
+    "documentNotUploadedYet": "لم يتم رفع ملف للمستند",
     "receipts": "ايصالات",
     "loanApplication": "استمارة طلب القرض",
     "additionalPapers": "صفحات اضافية",

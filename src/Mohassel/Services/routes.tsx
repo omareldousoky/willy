@@ -36,6 +36,7 @@ import ViewProduct from '../Components/LoanProductCreation/loanProductView';
 import LoanRollBack from '../Components/LoanProfile/loanRollBack';
 import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
+import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 
 const appRoutes = [
   {
@@ -57,6 +58,12 @@ const appRoutes = [
             path: "/edit-customer",
             label: local.editCustomer,
             render: (props) => <CustomerCreation {...props} edit={true} />,
+          }
+          ,
+          {
+            path: "/view-customer",
+            label: local.viewCustomer,
+            render: (props) => <CustomerProfile {...props} />,
           }
         ]
       },
