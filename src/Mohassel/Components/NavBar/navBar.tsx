@@ -161,9 +161,6 @@ class NavBar extends Component<Props, State> {
             <Nav style={{display:'flex' , flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
-              {/* {<Can I='createCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>} */}
-              {/* {<Can I='testCalculate' a='product'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>} */}
-              {/* {<Can I='createLoanProduct' a='product'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>} */}
               {<Can I='getLoanProduct' a='product'><Can I='getCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can></Can>}
               {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
