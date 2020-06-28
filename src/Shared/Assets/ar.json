@@ -548,6 +548,8 @@
     "confirmPayment": "تآكيد سداد",
     "applicationCode": "كود طلب القرض",
     "bankName": "إسم البنك",
-    "bankAddress": "عنوان البنك"
+    "bankAddress": "عنوان البنك",
+    "mustBeinRange":"يجب أن تكون القيمة بين",
+    "and":"و"
     
 }
