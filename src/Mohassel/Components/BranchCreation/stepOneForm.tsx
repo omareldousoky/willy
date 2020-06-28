@@ -239,7 +239,7 @@ const StepOneForm = (props: Props) => {
                 <Col>
                     <Form.Group className={'branch-data-group'}>
                         <Form.Label className={'branch-data-label'}>
-                            {`${local.costCenter}`}
+                            {`${local.costCenter}*`}
                         </Form.Label>
                         <Form.Control
                             type={"text"}
@@ -260,7 +260,7 @@ const StepOneForm = (props: Props) => {
                 <Col>
                     <Form.Group className={'branch-data-group'}>
                         <Form.Label className={'branch-data-label'}>
-                            {`${local.bankAccount}`}
+                            {`${local.bankAccount}*`}
                         </Form.Label>
                         <Form.Control
                             type={"text"}
