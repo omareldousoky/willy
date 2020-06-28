@@ -91,3 +91,12 @@ export interface PendingActions {
     _id?: string;
 }
 
+export interface DocumentType {
+    id?: string;
+    pages: number;
+    type: string;
+    paperType: string;
+    name: string;
+    active: boolean;
+    updatable: boolean;
+}

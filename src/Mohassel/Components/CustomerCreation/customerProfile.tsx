@@ -10,6 +10,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
+import DocumentsUpload from './documentsUpload';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -32,10 +33,10 @@ const tabs: Array<Tab> = [
     header: local.differentInfo,
     stringKey: 'differentInfo'
   },
-  // {
-  //   header: local.documents,
-  //   stringKey: 'documents'
-  // }
+  {
+    header: local.documents,
+    stringKey: 'documents'
+  }
 ]
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
@@ -92,6 +93,7 @@ const CustomerProfile = (props: Props) => {
           active={activeTab}
           selectTab={(stringKey: string) => changeActiveTab(stringKey)}
         />
+        <Card.Body>
         {activeTab === 'mainInfo' && <Table striped bordered style={{ textAlign: 'right' }} className="horizontal-table">
           <tbody>
             <tr>
@@ -260,6 +262,14 @@ const CustomerProfile = (props: Props) => {
             </tr>
           </tbody>
         </Table>}
+        {activeTab === 'documents' &&
+        <DocumentsUpload
+        customerId = {props.location.state.id}
+        edit={false}
+        view={true}
+         />
+        }
+        </Card.Body>
       </Card>
     </>
   )
