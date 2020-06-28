@@ -48,7 +48,7 @@ interface IndividualsInGroup {
 }
 interface Group {
   _id: string;
-  individualsInGroup: Array<IndividualsInGroup>
+  individualsInGroup: Array<IndividualsInGroup>;
 }
 interface LoanItem {
   id: string;
