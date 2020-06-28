@@ -120,7 +120,7 @@ const appRoutes = [
           {
             path: "/remove-member",
             label: local.memberSeperation,
-            render: (props) => <GroupMemberSeperation {...props} />
+            render: (props) => <Can I='splitFromGroup' a='application'><GroupMemberSeperation {...props} /></Can>,
           },
           {
             path: "/loan-status-change",
@@ -130,7 +130,7 @@ const appRoutes = [
           {
             path: "/loan-roll-back",
             label: local.previousActions,
-            render: (props) => <LoanRollBack {...props} />,
+            render: (props) => <Can I='rollback' a='application'><LoanRollBack {...props} /></Can>,
           }
         ]
       },

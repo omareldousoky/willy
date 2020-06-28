@@ -570,5 +570,7 @@
     "updatable":"قابله للتعديل",
     "nonUpdatable":"غير قابله للتعديل",
     "bankName": "إسم البنك",
-    "bankAddress": "عنوان البنك"
+    "bankAddress": "عنوان البنك",
+    "mustBeinRange":"يجب أن تكون القيمة بين",
+    "and":"و"
 }
