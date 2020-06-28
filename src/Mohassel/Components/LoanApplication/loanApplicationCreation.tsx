@@ -41,7 +41,7 @@ export interface Formula {
     name: string;
     _id: string;
     interest_type: string;
-    
+
 }
 interface LoanOfficer {
     _id: string;
@@ -386,10 +386,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     async searchCustomers(key?: string) {
         let query = {}
         if (key && key.length > 0) {
-            this.setState({ loading: true, searchGroupCustomerKey: key });
+            this.setState({ loading: true, searchGroupCustomerKey: key, branchCustomers: [] });
             query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
         } else {
-            this.setState({ loading: true });
+            this.setState({ loading: true, branchCustomers: [] });
             query = { from: 0, size: 50, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
         }
         const results = await searchCustomer(query)
@@ -719,7 +719,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     filterCustomersByBusinessSector() {
         const branchCustomers = this.state.branchCustomers;
-        if (this.state.selectedBusinessSector === "لا ينطبق" || this.state.selectedBusinessSector === "") {
+        if (this.state.selectedBusinessSector === "") {
             return branchCustomers
         } else {
             return branchCustomers.filter((customer: Customer) => customer.businessSector === this.state.selectedBusinessSector)
@@ -770,7 +770,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     value={this.state.selectedLoanOfficer}
                                     disabled={this.state.selectedCustomers.length > 0}
                                     onChange={(event) => {
-                                        this.setState({ selectedLoanOfficer: event.currentTarget.value }, () => { this.searchCustomers() })
+                                        this.setState({ selectedLoanOfficer: event.currentTarget.value })
                                     }}
                                 >
                                     <option value="" disabled></option>
@@ -786,9 +786,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     name="businessSector"
                                     data-qc="businessSector"
                                     value={this.state.selectedBusinessSector}
-                                    disabled={this.state.selectedCustomers.length > 0}
+                                    disabled={(this.state.selectedCustomers.length > 0 || this.state.selectedLoanOfficer.length === 0)}
                                     onChange={(event) => {
-                                        this.setState({ selectedBusinessSector: event.currentTarget.value })
+                                        this.setState({ selectedBusinessSector: event.currentTarget.value }, () => { this.searchCustomers() })
                                     }}
                                 >
                                     <option value="" disabled></option>
@@ -798,7 +798,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 </Form.Control>
                             </Form.Group>
                         </div>
-                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
+                        {this.state.branchCustomers.length > 0 && this.state.selectedBusinessSector.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
@@ -857,7 +857,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationForm {...formikProps}
                         formulas={this.state.formulas}
                         loanUsage={this.state.loanUsage}
-                        products={this.state.products.filter(product => product.beneficiaryType ===  this.state.customerType)}
+                        products={this.state.products.filter(product => product.beneficiaryType === this.state.customerType)}
                         loanOfficers={this.state.loanOfficers}
                         step={(key) => this.step(key)}
                         getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
