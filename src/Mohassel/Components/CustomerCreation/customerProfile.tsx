@@ -81,7 +81,7 @@ const CustomerProfile = (props: Props) => {
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer" style={{ paddingLeft: 30 }}>
         <BackButton title={local.viewCustomer} />
-        <div onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
+        <div style={{cursor: 'pointer'}} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
           <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
           {local.edit}</div>
       </div>

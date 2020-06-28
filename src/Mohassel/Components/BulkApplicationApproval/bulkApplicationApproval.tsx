@@ -18,7 +18,7 @@ import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
 import { englishToArabic }  from '../../Services/statusLanguage';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 interface Branch {
   label: string;
   value: string;
@@ -26,6 +26,7 @@ interface Branch {
 interface Product {
   productName: string;
   loanNature: string;
+  beneficiaryType: string;
 }
 interface Customer {
   customerName: string;
@@ -165,11 +166,10 @@ class BulkApplicationApproval extends Component<Props, State>{
               <thead>
                 <tr>
                   <th>{local.customerType}</th>
-                  <th>{local.loanApplicationId}</th>
+                  <th>{local.productName}</th>
                   <th>{local.customerName}</th>
                   <th>{local.loanAppCreationDate}</th>
                   <th>{local.applicationStatus}</th>
-                  <th>{local.productName}</th>
                   <th>{local.loanPrinciple}</th>
                   <th>
                     <Form.Control as="select"
@@ -194,12 +194,11 @@ class BulkApplicationApproval extends Component<Props, State>{
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
-                        <td></td>
-                        <td>{loanItem.id}</td>
+                        <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
+                        <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
                         <td>{englishToArabic(loanItem.application.status).text}</td>
-                        <td>{loanItem.application.product.productName}</td>
                         <td>{loanItem.application.principal}</td>
                         <td></td>
                         <td>

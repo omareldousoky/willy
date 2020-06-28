@@ -46,19 +46,14 @@ class CustomersList extends Component<Props, State> {
         render: data => data.customerName
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.nationalId
+      },
+      {
         title: local.governorate,
         key: "governorate",
         render: data => data.governorate
-      },
-      {
-        title: local.oneBranch,
-        key: "oneBranch",
-        render: data => data.branchId
-      },
-      {
-        title: local.createdBy,
-        key: "creationDate",
-        render: data => data.created?.by
       },
       {
         title: local.creationDate,

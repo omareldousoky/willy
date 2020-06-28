@@ -171,7 +171,7 @@ class Payment extends Component<Props, State>{
       if (Number(values.installmentNumber) === -1) {
         const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf());
         if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
           // Swal.fire("", "payment done", "success")
         } else {
           this.setState({ loadingFullScreen: false });
@@ -179,7 +179,7 @@ class Payment extends Component<Props, State>{
       } else {
         const res = await payFutureInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), Number(values.installmentNumber));
         if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
           // Swal.fire("", "payment done", "success")
         } else {
           this.setState({ loadingFullScreen: false });
@@ -189,7 +189,7 @@ class Payment extends Component<Props, State>{
       const res = await earlyPayment(this.props.applicationId, values.payAmount);
       this.setState({ payAmount: res.body.requiredAmount })
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
         // Swal.fire("", "early payment done", "success")
       } else {
         this.setState({ loadingFullScreen: false });
@@ -198,7 +198,7 @@ class Payment extends Component<Props, State>{
       if(this.props.manualPaymentEditId === ''){
       const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber);
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false, payAmount: values.payAmount });
+        this.setState({ loadingFullScreen: false });
         Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
       } else {
         this.setState({ loadingFullScreen: false });
@@ -207,7 +207,7 @@ class Payment extends Component<Props, State>{
       const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber);
       if (res.status === 'success') {
         console.log(res)
-        this.setState({ loadingFullScreen: false, payAmount: values.payAmount });
+        this.setState({ loadingFullScreen: false });
         Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
       } else {
         this.setState({ loadingFullScreen: false });
@@ -593,7 +593,7 @@ class Payment extends Component<Props, State>{
         <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
         {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} truthDate={this.state.truthDate} />}
       </>
     );
   }

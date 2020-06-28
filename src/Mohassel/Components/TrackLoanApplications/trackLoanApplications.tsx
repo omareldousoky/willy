@@ -76,13 +76,21 @@ class TrackLoanApplications extends Component<Props, State>{
         </div>
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.nationalId}</span>: null)}
+        </div>
+      },
+      {
         title: local.productName,
         key: "productName",
         render: data => data.application.product.productName
       },
       {
-        title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        title: local.loanCreationDate,
+        key: "loanCreationDate",
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
