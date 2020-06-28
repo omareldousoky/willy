@@ -109,7 +109,7 @@ class TrackLoanApplications extends Component<Props, State>{
     this.getApplications();
   }
   getApplications() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId});
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
   }
   getStatus(status: string) {
     switch (status) {
@@ -144,7 +144,14 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search 
+            searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
+            dropDownKeys={['name', 'nationalId', 'code']} 
+            url="application" 
+            from={this.state.from} 
+            size={this.state.size} 
+            searchPlaceholder = {local.searchByNameOrNationalId}
+            hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}

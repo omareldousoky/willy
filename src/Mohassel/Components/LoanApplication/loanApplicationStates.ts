@@ -102,7 +102,7 @@ export const LoanApplicationValidation = Yup.object().shape({
                 return (value >= minInstallment && value <= maxInstallment)
             }
         }).required(local.required),
-    principal: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", `cant be out of range` + Yup.ref('minPrincipal') + 'to' + Yup.ref('maxPrincipal'),
+    principal: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", `outOfRange`,
         function (this: any, value: any) {
             const { minPrincipal, maxPrincipal } = this.parent
             if (minPrincipal === 0 && maxPrincipal === 0) {
@@ -132,6 +132,11 @@ export const LoanApplicationValidation = Yup.object().shape({
     //     "Min Date", "Select a future date",
     //     (value: any) => { return value ? new Date(value).valueOf() >= new Date().setHours(0, 0, 0, 0) : true }
     // )
+    individualDetails: Yup.array().of(
+        Yup.object().shape({
+            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0")
+        })
+    ),
     viceCustomers: Yup.array().of(
         Yup.object().shape({
             name: Yup.string(),

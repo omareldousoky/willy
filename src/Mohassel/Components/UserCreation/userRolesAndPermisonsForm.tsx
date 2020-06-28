@@ -101,44 +101,6 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
       {hasBranch &&
         <Form.Group
           className={'user-role-group'}
-          controlId='roles'
-        >
-          <Form.Label
-            className={'user-role-label'}
-          >{local.selectUserPermision}</Form.Label>
-          <Select
-            styles={theme.selectStyle}
-            isMulti
-            isSearchable={true}
-            filterOption={customFilterOption}
-            placeholder={<span style={{ width: '100%', padding: "5px", margin: "5px" }}><img style={{ float: "right" }} alt="search-icon" src={require('../../Assets/searchIcon.svg')} /> {local.searchByUserRole}</span>}
-            name="roles"
-            data-qc="roles"
-            onChange={
-              (event: any) => {
-
-                props.values.roles = event;
-                setRoles(event);
-                setHasBranch(isHasBranch(event))
-                if (!hasBranch) {
-                  props.values.branches = [];
-                  setShowBranchesError(false);
-                }
-                setShowRolesError(!props.values.roles || props.values.roles.length === 0);
-              }
-
-
-            }
-            value={roles}
-            options={props.userRolesOptions}
-          />
-          {showRolesError &&
-            <div style={{ color: 'red', fontSize: '15px', margin: '10px' }}>{local.rolesIsRequired}</div>}
-        </Form.Group>
-      }
-      {hasBranch &&
-        <Form.Group
-          className={'user-role-group'}
           controlId={'branches'}
         >
           <Form.Label
@@ -166,7 +128,7 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
       <Form.Group
         as={Row}
       >
-        <Col >
+        <Col>
           <Button
             className={'btn-cancel-prev'} style={{ width: '60%' }}
             data-qc="previous"

@@ -12,6 +12,8 @@ export interface Branch {
     bankAccount: string;
     costCenter: string;
     licenseNumber: string;
+    bankName: string;
+    bankAddress: string;
 }
 
 export interface Customer {
@@ -89,3 +91,12 @@ export interface PendingActions {
     _id?: string;
 }
 
+export interface DocumentType {
+    id?: string;
+    pages: number;
+    type: string;
+    paperType: string;
+    name: string;
+    active: boolean;
+    updatable: boolean;
+}
