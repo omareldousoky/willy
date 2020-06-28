@@ -279,8 +279,6 @@ class UserCreation extends Component<Props, State> {
                 <Loader type="fullscreen" open={this.state.loading} />
                 <Card >
                     <div style={{ display: "flex", flexDirection: "row" }} >
-
-
                             <Wizard
                                 currentStepNumber={this.state.step - 1}
                                 stepsDescription={[local.userBasicStep1, local.userRolesStep2]}
