@@ -15,7 +15,7 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -39,6 +39,8 @@ interface State {
   loading: boolean;
   installmentsData: any;
   approvalDate: string;
+  beneficiaryType: string;
+  application: any;
 }
 export interface Location {
   pathname: string;
@@ -75,7 +77,9 @@ class LoanCreation extends Component<Props, State> {
         entryDate: 0,
         status: '',
       },
-      installmentsData: {}
+      beneficiaryType: '',
+      installmentsData: {},
+      application: {}
     }
   }
   async componentDidMount() {
@@ -91,8 +95,10 @@ class LoanCreation extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         loading: false,
+        application: res.body,
         approvalDate: res.body.approvalDate,
         loanCreationDate: res.body.creationDate? res.body.creationDate: this.state.loanCreationDate,
+        beneficiaryType: res.body.product.beneficiaryType,
         customerData: {
           id: id,
           customerName: res.body.customer.customerName,
@@ -105,7 +111,7 @@ class LoanCreation extends Component<Props, State> {
           periodType: res.body.product.periodType,
           productName: res.body.product.productName,
           entryDate: res.body.entryDate,
-          status: res.body.status,   
+          status: res.body.status,
         }
       })
       if(type === "issue"){
@@ -136,6 +142,10 @@ class LoanCreation extends Component<Props, State> {
       }
     }
   }
+  getStatus(status: string){
+    if(status === "created") return local.created;
+    else return local.approved;
+  }
   render() {
     return (
       <Container>
@@ -143,9 +153,8 @@ class LoanCreation extends Component<Props, State> {
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
-              <th>{local.loanApplicationId}</th>
-              <th>{local.customerName}</th>
               <th>{local.customerType}</th>
+              <th>{local.customerName}</th>
               <th>{local.principal}</th>
               <th>{local.currency}</th>
               <th>{local.noOfInstallments}</th>
@@ -159,16 +168,15 @@ class LoanCreation extends Component<Props, State> {
           </thead>
           <tbody>
             <tr>
-              <td>{this.state.customerData.id}</td>
-              <td>{this.state.customerData.customerName}</td>
-              <td>{this.state.customerData.customerType}</td>
+              <td>{beneficiaryType(this.state.beneficiaryType)}</td>
+              <td>{this.state.beneficiaryType === 'group' ? this.state.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer?.customerName:this.state.customerData.customerName}</td>
               <td>{this.state.customerData.principal}</td>
               <td>{this.state.customerData.currency}</td>
               <td>{this.state.customerData.noOfInstallments}</td>
               <td>{this.state.customerData.periodLength}</td>
               <td>{this.state.customerData.periodType}</td>
               <td>{this.state.customerData.gracePeriod}</td>
-              <td>{this.state.customerData.status}</td>
+              <td>{this.getStatus(this.state.customerData.status)}</td>
               <td>{this.state.customerData.productName}</td>
               <td>{timeToDateyyymmdd(this.state.customerData.entryDate)}</td>
             </tr>

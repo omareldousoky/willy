@@ -42,10 +42,19 @@ interface Application {
   principal: number;
   status: string;
 }
+interface IndividualsInGroup {
+  type: string;
+  customer: Customer;
+}
+interface Group {
+  _id: string;
+  individualsInGroup: Array<IndividualsInGroup>
+}
 interface LoanItem {
   id: string;
   branchId: string;
   application: Application;
+  group: Group;
 }
 interface State {
   branches: Array<Branch>;
@@ -196,7 +205,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                       <tr key={index}>
                         <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
                         <td>{loanItem.application.product.productName}</td>
-                        <td>{loanItem.application.customer.customerName}</td>
+                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName:loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
                         <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.principal}</td>
