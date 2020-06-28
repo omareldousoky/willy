@@ -93,7 +93,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
+    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
   }
   render() {
     return (
@@ -108,7 +108,14 @@ class LoanList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} dropDownKeys={['name', 'nationalId', 'code']} url="loan" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search 
+            searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
+            dropDownKeys={['name', 'nationalId', 'code']}
+            searchPlaceholder = {local.searchByNameOrNationalId}
+             url="loan" 
+             from={this.state.from} 
+             size={this.state.size} 
+             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}

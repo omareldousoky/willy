@@ -1,10 +1,12 @@
 import React from 'react';
-import './loanContract.scss';
+import './loanContractForGroup.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { numbersToArabic, timeToArabicDate, dayToArabic } from '../../../Services/utils';
 
-const LoanContract = (props) => {
+const LoanContractForGroup = (props) => {
+  const leaderName = props.data.group.individualsInGroup.find(individualInGroup => individualInGroup.type === "leader").customer.customerName;
+  console.log(props)
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">
@@ -41,7 +43,7 @@ const LoanContract = (props) => {
                 <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
                 <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
                 <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(0, false)}</div>
-                <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
+                <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
 							:-</div>
                 <table className="stakeholders">
                   <tbody>
@@ -63,82 +65,50 @@ const LoanContract = (props) => {
                     <tr style={{ textAlign: 'left' }}>
                       <td colSpan={4}>&quot;طرف أول - مقرض&quot;</td>
                     </tr>
-
                     <tr>
                       <td>
                         <div>
-                          <b>ثانيا:- السيد :-</b>
-                          <span>{props.data.customer.customerName}</span>
-                        </div>
-                      </td>
-                      <td style={{ width: '30%' }}>
-                        <div>
-                          <b>الكائن:</b>
-                          <span>
-                            {props.data.customer.customerHomeAddress}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <b className="word-break">رقم قومي</b>
-                          <span>
-                            {numbersToArabic(props.data.customer.nationalId)}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <b>تليفون</b>
-                          <div style={{ display: 'inline-block', width: '80px' }}></div>
+                          <b>ثانيا:- مجموعة :-</b>
                         </div>
                       </td>
                     </tr>
-
-                    <tr style={{ textAlign: 'left' }}>
-                      <td colSpan={4}>&quot;طرف ثان - مقترض&quot;</td>
-                    </tr>
-                    {props.data.guarantors.map((guarantor, index) => {
+                    {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                       return (
-                        <>
-                          <tr>
-                            <td>
-                              <div>
-                                <b>ثالثا:- السيد :-</b>
-                                <span>{guarantor.customerName}</span>
-                              </div>
-                            </td>
-                            <td>
-                              <div>
-                                <b>الكائن:</b>
-                                <span>
-                                  {guarantor.customerHomeAddress}
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              <div>
-                                <b className="word-break">رقم قومي</b>
-                                <span>
-                                  {numbersToArabic(guarantor.nationalId)}
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              <div>
-                                <b>تليفون</b>
-                                <span>
-
-                                </span>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr style={{ textAlign: 'left' }}>
-                            <td colSpan={4}>&quot;طرف ثالث - ضامن متضامن&quot;</td>
-                          </tr>
-                        </>
+                        <tr key={index}>
+                          <td>
+                            <div>
+                              <span>{individualInGroup.customer.customerName} {individualInGroup.type === "leader" ? '(رئيس المجموعة)' : ''}</span>
+                            </div>
+                          </td>
+                          <td style={{ width: '30%' }}>
+                            <div>
+                              <b>الكائن:</b>
+                              <span>
+                                {individualInGroup.customer.customerHomeAddress}
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div>
+                              <b className="word-break">رقم قومي</b>
+                              <span>
+                                {numbersToArabic(individualInGroup.customer.nationalId)}
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div>
+                              <b>تليفون</b>
+                              <div style={{ display: 'inline-block', width: '80px' }}></div>
+                            </div>
+                          </td>
+                        </tr>
                       )
                     })}
+
+                    <tr style={{ textAlign: 'left' }}>
+                      <td colSpan={4}>&quot;طرف ثان - مقترضين&quot;</td>
+                    </tr>
                   </tbody>
                 </table>
 
@@ -151,14 +121,13 @@ const LoanContract = (props) => {
                   بالتمويل
 								متناهي الصغر ..</div>
                   <div>
-                    وقد تقدم الطرف الثاني صاحب نشاط خدمي - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
-                    {props.branchDetails.name} - {props.data.customer.governorate} الكائن
-                    {props.branchDetails.address} لحاجته للسيوله النقديه يخصص
+                    وقد تقدم افراض الطرف الثاني بطلب للحصول علي قرض من بطلب للحصول علي قرض من فرع
+                    {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن
+                    {props.branchDetails.address} لحاجتهم للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال
-                    العامل وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
-                    الطرف
-                    الثالث والرابع وقد
+                    العامل وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه
+                    وقد
                     وافقه الطرف الأول علي ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
                     الأطراف
                     بأهليتهم القانونيه
@@ -178,16 +147,46 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثاني</div>
-                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {numbersToArabic(props.data.principal)} جنيه فقط لا غير ويقر
-                  الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم بسداده للطرف الأول وفقا لما هو وارد
-                  بالبند الثالث من هذا
-                  العقد
-							</div>
+                  <div>
+                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {numbersToArabic(props.data.principal)} جنيه فقط لاغير نقداً موزع بينهم على النحو التالي:
+                  </div>
+                  <table className="stakeholders">
+                    <tbody>
+                      {props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>
+                              <div>
+                                <span>{individualInGroup.customer.customerName} </span>
+                              </div>
+                            </td>
+                            <td style={{ width: '30%' }}>
+                              <div>
+                                <b>مبلغ التمويل:</b>
+                                <span>
+                                  {numbersToArabic(individualInGroup.amount)}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <b className="word-break">و ذلك لنشاط</b>
+                                <span>
+                                  {props.data.customer.businessSector + "-" + props.data.customer.businessActivity + "-" + props.data.customer.businessSpeciality}
+                                </span>
+                              </div>
+                            </td>
+
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
                 </section>
 
                 <section>
                   <div className="title">البند الثالث</div>
-                  <div>يلتزم الطرفان الثاني والثالث والرابع ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
+                  <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {numbersToArabic(props.data.principal)} جنيه
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
@@ -204,7 +203,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر الطرفان الثاني والثالث والرابع متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر افراض الطرف الثاني متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
@@ -212,7 +211,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الخامس</div>
-                  <div>يلتزم الأطراف الثاني والثالث والرابع متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                  <div>يلتزم افراض الطرف الثاني متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
                   من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقع يلتزموا بسداد
@@ -239,24 +238,23 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند السابع</div>
-                  <div>في حالة عدم التزام المقترض او الضامنين بأي من التزامتاتهم التعاقديه او القانونيه
+                  <div>في حالة عدم التزام ايا من المقترضين بأي من التزامتاتهم التعاقديه او القانونيه
                   الوارده بهذا العقد
                   وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
                   الأطراف
-                  الثاني والثالث
-                  والرابع مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                  الثاني
+                  مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
-                  للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الأطراف
-                  الثاني أو الثالث أو
-								الرابع أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
+                  للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة الطرف
+                  الثاني بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
                   <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                   <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                   <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>
-                  <div>٧/٣ في حالة تقديم الطرف الثاني أو الثالث أو الرابع بيانات أو معلومات مخالفه للواقع
+                  <div>٧/٣ في حالة تقديم ايا من اطراف الطرف الثاني بيانات أو معلومات مخالفه للواقع
                   او
                   غير سليمه وذلك الي
 								المقرض.</div>
-                  <div>٧/٤ في حاله فقد الطرف الثاني أو الثالث أو الرابع اهليته أو اشهار افلاسه او اعساره
+                  <div>٧/٤ في حاله فقد ايا من اطراف الطرف الثاني اهليته أو اشهار افلاسه او اعساره
                   او
                   وفاته او وضعه تحت
                   الحراسه او توقيع الحجز علي امواله او وضع امواله تحت التحفظ ومنعه من التصرف فيها او
@@ -267,7 +265,7 @@ const LoanContract = (props) => {
                   الممول بالقرض كله
                   او بعضه، او اذا تم التصرف في جزء او كل من المشروعالممول او اذا تم تأجيره للغير.
 							</div>
-                  <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو الثالث أو الرابع علي سداد الاقساط في مواعيدها
+                  <div>٧/٦ في حالة عدم قدرة ايا من اطراف الطرف الثاني علي سداد الاقساط في مواعيدها
                   او
                   توقف اعمال المشروع
 								الممول لاي سبب من الاسباب</div>
@@ -281,19 +279,9 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند التاسع</div>
-                  <div>يقر الطرف الثالث والرابع الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
-                  الثاني
-                  لقيمة هذا القرض من
-                  اصل وعوائد وعمولات وكافة المصروفات المستحقه بموجب هذا العقد وايا من ملحقاته، ويحق
-                  للمقرض
-                  الرجوع عليه بكامل
-                  قيمة المديونيات المستحقه علي هذا القرض، ولا يحق للطرف الثالث او الرابع الدفع
-                  بالتجريد أو
-                  التقسيم أو اي دوافع
-                  اخرى في مواجهة المقرض ويحق للمقرض الرجوع عليه وحده او الرجوع عليه وعلي المقترض
-                  منفردا او
-                  مجتمعين معا بكامل
-								قيمة المديونيات المستحقه له.</div>
+                  <div>يتسري أحكام القانون رقم ١٤١ لسنة ٢٠١٤ بشأن تمويل منتناهي الصغر و لائحته التنفيذية وتعديلاته (إن وجد) على هذا العقد وتعتبر مكمله له وتختص المحاكم الإقتصادية بالفصل في أي نزاع قد ينشأ بخصوص تفسير أو تنفيذ أي بند من بنود هذا العقد
+                  كما تطبق أحكام القوانين السارية بجمهرية مصر العربية في حالة خلو القانون المشار إليه من تنظيم النزاع المطروح على المحكمة
+                  </div>
                 </section>
 
                 <section>
@@ -306,29 +294,8 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الحادي عشر</div>
-                  <div>تسرى احكام القانون رقم ١٤١ لسنة ٢٠١٤ بشأن التمويل متناهي الصغر ولائحته التنفيذيه
-                  وتعديلاته (ان وجد) علي هذا
-                  العقد وتعتبر مكمله له وتختص المحاكم الإقتصاديه بالفصل في اي نزاع قد ينشأ بخصوص تفسير
-                  أو
-                  تنفيذ اي بند من بنود
-								هذا العقد</div>
-                  <div>كما تطبق أحكام القوانين الساريه بجمهورية مصر العربيه في حالة خلو القانون المشار
-                  إليه من
-                  تنظيم النزاع
-								المطروح علي المحكمه.</div>
+                  <div>اتخد كل أطراف العنوان المبين قرين كل منهما يصدر هذا العقد محلاً مختار له وفي حالة تغير أياً منهم لعنوانه يلتزم بأخطار الطرف الاخر بموجب الخطاب المسجل بعلم الوصول وإلا اعتبر إعلانه على العنوان الاول صحيحاً ونافذاً ومنتجاً لكافة اثاره القانونية.</div>
                 </section>
-
-                <section>
-                  <div className="title">البند الثاني عشر</div>
-                  <div>اتخذ كل طرف العنوان المبين قرين كل منهما بصدر هذا العقد محلا مختار له وفي حالة
-                  تغيير
-                  ايا منهم لعنوانه يلتزم
-                  بأخطار الطرف الاخر بموجب خطاب مسجل بعلم الوصول والا اعتبر اعلانه علي العنوان الاول
-                  صحيحا
-                  ونافذا ومنتجا لكافه
-								اثاره القانونيه.</div>
-                </section>
-
 
                 <table className="signature_space">
 
@@ -340,23 +307,20 @@ const LoanContract = (props) => {
                         <div><b>التوقيع:</b></div>
                       </td>
                       <td>
-                        <div><b>الطرف الثاني</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
+                        <div><b>افراد الطرف الثاني</b></div>
                       </td>
+                      <td></td>
+                      <td></td>
+                      {props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                        return (
+                          <td key={index}>
+                            <div><b>الأسم: {individualInGroup.customer.customerName}</b></div>
+                            <div><b>التوقيع:</b></div>
+                          </td>
+                        )
+                      })}
                     </tr>
-                    <tr>
-                      <td>
-                        <div><b>الطرف الثالث</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
-                      </td>
-                      <td>
-                        <div><b>الطرف الرابع</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
-                      </td>
-                    </tr>
+
                   </tbody>
                 </table>
 
@@ -389,19 +353,11 @@ const LoanContract = (props) => {
                         <div>المقرون بما فيه:</div>
                       </td>
                     </tr>
-                    <tr>
-                      <td>
-                        <div>الاسم/ {props.data.customer.customerName}</div>
-                      </td>
-                      <td>
-                        <div>التوقيع:-----------------------</div>
-                      </td>
-                    </tr>
-                    {props.data.guarantors.map((guarantor, index) => {
+                    {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                       return (
                         <tr key={index}>
                           <td>
-                            <div>الاسم/ {guarantor.customerName}</div>
+                            <div>الاسم/ {individualInGroup.customer.customerName}</div>
                           </td>
                           <td>
                             <div>التوقيع:-----------------------</div>
@@ -418,10 +374,10 @@ const LoanContract = (props) => {
 
                 <div>
                   <div className="title_last">
-                    <Barcode value={props.data.applicationCode}/>
+                    <Barcode value={props.data.applicationCode} />
                     <div>{props.data.applicationCode}</div>
                     <div>{timeToArabicDate(0, false)}</div>
-                    <div>{props.data.customer.customerName}</div>
+                    <div>{leaderName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
                   </div>
@@ -431,10 +387,10 @@ const LoanContract = (props) => {
 
                 <div>نقر نحن الموقعون ادناه:</div>
                 <div>الاسم <div style={{ display: 'inline-block', width: '150px' }}></div> الموظف بشركة تساهيل للتمويل
-							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.customer.governorate}</div>
+							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate}</div>
                 <div>بوظيفة</div>
                 <div>الاسم <div style={{ display: 'inline-block', width: '150px' }}></div> الموظف بشركة تساهيل للتمويل
-							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.customer.governorate}</div>
+							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate}</div>
                 <div>بوظيفة</div>
                 <div>بأن توقيع كل من العميل والضامن المدرجين بالجدول تم امامي وان جميع بيانات ايصالات
                 الامانه الخاصه بهم صحيحة
@@ -447,25 +403,20 @@ const LoanContract = (props) => {
                   <thead>
                     <tr>
                       <th><b>م</b></th>
-                      <th><b>اسم العميل / الضامن</b></th>
+                      <th><b>اسم العضو</b></th>
                       <th><b>الكود</b></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>١</td>
-                      <td>{props.data.customer.customerName}</td>
-                      <td>{props.data.customer.code}</td>
-                    </tr>
-                    {props.data.guarantors.map((guarantor, index) => {
+                  {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                       return (
-                        <tr key={index}>
-                          <td>{numbersToArabic(index + 2)}</td>
-                          <td>{guarantor.customerName}</td>
-                          <td>٦١/١٣٨٠٤</td>
-                        </tr>
+                    <tr key={index}>
+                      <td>{numbersToArabic(index + 1)}</td>
+                      <td>{individualInGroup.customer.customerName}</td>
+                      <td>{individualInGroup.customer.code}</td>
+                    </tr>
                       )
-                    })}
+                      })}
                   </tbody>
                 </table>
 
@@ -487,91 +438,19 @@ const LoanContract = (props) => {
                   </tbody>
                 </table>
               </div>
-
-
-              <div className="main">
-                <div className="title">إقرار بإلتزام</div>
-
-                <table>
-
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div>أقر انا العميل/ {props.data.customer.customerName}</div>
-                      </td>
-                      <td>
-                        <div><b>الكود</b> &emsp; {props.data.customer.code}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                    {props.data.guarantors.map((guarantor, index) => {
-                      return (
-                      <td key={index}>
-                        <div>ضامن أول/ {guarantor.customerName}</div>
-                      </td>
-                      )})}
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>نوع النشاط/ {props.data.customer.businessActivity}</div>
-                      </td>
-                      <td>
-                        <div>الفرع/ {props.branchDetails.name} - {props.data.customer.governorate}</div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <div>بأنني قد استلمت تمويل قدره: {props.data.principal} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
-							{timeToArabicDate(0,false)}</div>
-                <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
-                تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات
-							البيع والشراء.</div>
-                <div>لذا وبناء علي رغبتي ارفض عمل اي جدولة للتمويل او تأجيل للاقساط أو الحصول علي فترة سماح
-							لأي اقساط مستحقه طوال فترة التمويل وبأنني ملتزم بسداد الاقساط المسلم لي من الشركه.</div>
-
-
-                <table className="sign">
-                  <tbody>
-                    <tr>
-                      <td colSpan={2}>
-                        <b>المقر بما فيه</b>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>العميل /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>الضامن الأول /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>الضامن الثاني /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
               <div className="main">
                 <div className="last">
                   <div className="title_last">
-                    <Barcode value={props.data.applicationCode}/>
+                    <Barcode value={props.data.applicationCode} />
                     <div>{props.data.applicationCode}</div>
                     <div>{timeToArabicDate(0, false)}</div>
-                    <div>{props.data.customer.customerName}</div>
+                    <div>{leaderName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                    <Barcode value={props.data.applicationCode}/>
+                    <Barcode value={props.data.applicationCode} />
                     <div>{props.data.applicationCode}</div>
                     <div>{timeToArabicDate(0, false)}</div>
-                    <div>{props.data.customer.customerName}</div>
+                    <div>{leaderName}</div>
                   </div>
                 </div>
               </div>
@@ -583,4 +462,4 @@ const LoanContract = (props) => {
   )
 }
 
-export default LoanContract;
+export default LoanContractForGroup;

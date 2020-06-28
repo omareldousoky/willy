@@ -193,17 +193,17 @@ const appRoutes = [
       {
         path: "/manage-accounts",
         label: local.manageAccounts,
-        render: (props) => <Can I='createRoles' a='user'><RolesList {...props} /></Can>,
+        render: (props) => <Can I='getRoles' a='user'><RolesList {...props} /></Can>,
         routes: [
           {
             path: "/roles",
             label: local.roles,
-            render: (props) => <Can I='createRoles' a='user'><RolesList {...props} /> </Can>,
+            render: (props) => <Can I='createRoles' a='user'><RolesList {...props} withHeader={true} /> </Can>,
             routes: [
               {
                 path: "/new-role",
                 label: local.createNewRole,
-                render: (props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
+                render: (props) => <Can I='getRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
               },
               {
                 path: "/edit-role",
@@ -220,7 +220,7 @@ const appRoutes = [
           {
             path: "/users",
             label: local.users,
-            render: (props) => <Can I='createUser' a='user'> <UsersList  {...props} withHeader={true} /></Can>,
+            render: (props) => <Can I='getUser' a='user'> <UsersList  {...props} withHeader={true}  /></Can>,
             routes: [
               {
                 path: "/new-user",
@@ -243,7 +243,7 @@ const appRoutes = [
           {
             path: "/branches",
             label: local.branches,
-            render: (props) => <Can I='createBranch' a='branch'> <BranchesList {...props} /> </Can>,
+            render: (props) => <Can I='getBranch' a='branch'> <BranchesList {...props} withHeader={true}  /> </Can>,
             routes: [
               {
                 path: "/new-branch",

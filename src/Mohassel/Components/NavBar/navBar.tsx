@@ -11,7 +11,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { getCookie } from '../../Services/getCookie';
 import { parseJwt } from '../../Services/utils';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
-import store from '../../redux/store';
+import ability from '../../config/ability';
 import './styles.scss';
 import { setToken } from '../../../Shared/token';
 import { connect } from 'react-redux';
@@ -158,7 +158,7 @@ class NavBar extends Component<Props, State> {
         {this.state.selectedBranch._id && <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav style={{display:'flex' , flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
+            <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
               {/* {<Can I='createCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>} */}
@@ -169,7 +169,9 @@ class NavBar extends Component<Props, State> {
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
-              {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
+              {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
+                : ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
+                  : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
     {<Can I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
             </Nav>

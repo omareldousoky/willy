@@ -224,6 +224,7 @@
     "andEndsIn": "و تنتهى فى",
     "welcome": "آهلا",
     "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "searchByBranchNameOrCode": "البحث بإسم الفرع أو الكود",
     "dateFrom": "التاريخ من",
     "dateTo": "التاريخ الي",
     "noShow": "عدم حضورهم للصرف",
@@ -392,6 +393,7 @@
     "noOfCustomers": "عدد العملاء",
     "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
     "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من قيمة القرض",
+    "amountShouldNotbeLessThanReqAmount": "المبلغ يجب ان يكون اكبر من قيمة المطلوبة",
     "totalPayment": "إجمالي المدفوع",
     "feesPaid": "المصاريف المسدده",
     "principalPaid": "الاصل المسدد",
@@ -566,6 +568,7 @@
     "numOfFiles": "عدد الملفات",
     "numOfUploadedImages":"عدد الصور المحملة",
     "updatable":"قابله للتعديل",
-    "nonUpdatable":"غير قابله للتعديل"
-
+    "nonUpdatable":"غير قابله للتعديل",
+    "bankName": "إسم البنك",
+    "bankAddress": "عنوان البنك"
 }

@@ -11,5 +11,11 @@ export interface  BranchBasicsView {
     branchCode: number;
     governorate: string;
     status: string;
+    licenseDate: number;
+    bankAccount: string;
+    costCenter: string;
+    licenseNumber: string;
+    bankName: string;
+    bankAddress: string;
     products: string[];
 }
