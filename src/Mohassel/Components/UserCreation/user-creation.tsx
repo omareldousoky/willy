@@ -156,9 +156,9 @@ class UserCreation extends Component<Props, State> {
                 this.props.history.goBack();
             });
         } else {
-            Swal.fire("error", local.userCreationError)
-            this.setState({ loading: false });
+            Swal.fire("error", local.userCreationError)    
         }
+        this.setState({ loading: false });
     }
     async editUser(userObj: User) {
         const user = this.prepareUser(userObj);
