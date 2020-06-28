@@ -341,7 +341,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         isInvalid={errors.noOfInstallments && touched.noOfInstallments}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.noOfInstallments}
+                                        {(errors.noOfInstallments === 'outOfRange') ? `${local.mustBeinRange} ` + `${values.minInstallment} ${local.and} ${values.maxInstallment}` : errors.noOfInstallments}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
