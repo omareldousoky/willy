@@ -285,19 +285,27 @@ export const LoanApplicationCreationForm = (props: any) => {
                                                 <Form.Control
                                                     type="number"
                                                     name={`individualDetails[${i}].amount`}
-                                                    data-qc="individualDetails"
+                                                    data-qc="individualDetailsAmount"
                                                     value={values.individualDetails[i].amount}
-                                                    onChange={handleChange}
+                                                    onChange={(e) => {
+                                                        setFieldValue(`individualDetails[${i}].amount`, e.currentTarget.value)
+                                                        let sum = 0;
+                                                        values.individualDetails.forEach((member, index) => sum += (index === i) ? Number(e.currentTarget.value) : Number(member.amount))
+                                                        setFieldValue(`principal`, sum)
+                                                    }}
                                                     onBlur={handleBlur}
-                                                // isInvalid={errors.principal && touched.principal}
+                                                    isInvalid={errors.individualDetails && errors.individualDetails[i] && errors.individualDetails[i].amount && touched.individualDetails && touched.individualDetails[i] && touched.individualDetails[i].amount}
                                                 />
-                                                {/* <Form.Control.Feedback type="invalid">
-                                                    {errors.principal}
-                                                </Form.Control.Feedback> */}
+                                                {errors.individualDetails && errors.individualDetails[i] && errors.individualDetails[i].amount && <Form.Control.Feedback type="invalid">
+                                                    {errors.individualDetails[i].amount}
+                                                </Form.Control.Feedback>}
                                             </Form.Group>
                                         </div>
                                     )
                                 })}
+                                <div style={{ color: 'red', fontSize: '15px', margin: '10px' }}>
+                                    {(errors.principal === 'outOfRange') ? `${local.mustBeinRange} ` + `${values.minPrincipal} ${local.and} ${values.maxPrincipal}` : errors.principal}
+                                </div>
                             </Col>
                         </Row>}
                         {(values.beneficiaryType === "individual") && <Row>
@@ -314,7 +322,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         isInvalid={errors.principal && touched.principal}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.principal}
+                                        {(errors.principal === 'outOfRange') ? `${local.mustBeinRange} ` + `${values.minPrincipal} ${local.and} ${values.maxPrincipal}` : errors.principal}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
@@ -624,7 +632,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                 </fieldset>
                 <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '10px 0px' }}>
                     <Button type='button' className='btn-cancel-prev' style={{ width: '20%' }} onClick={() => { props.step('backward') }}>{local.previous}</Button>
-                    <Button type="button" className='btn-submit-next' style={{ float: 'left', width: '20%' }} onClick={handleSubmit}>{values.beneficiaryType=== "group"?local.submit:local.next}</Button>
+                    <Button type="button" className='btn-submit-next' style={{ float: 'left', width: '20%' }} onClick={handleSubmit}>{values.beneficiaryType === "group" ? local.submit : local.next}</Button>
                 </div>
             </Form >
         </>

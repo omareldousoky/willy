@@ -254,7 +254,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 const selectedCustomers: Customer[] = [];
                 application.body.group.individualsInGroup.forEach(customer => {
                     selectedCustomers.push(customer.customer)
-                    if (customer.Type === 'leader') {
+                    if (customer.type === 'leader') {
                         this.setState({
                             selectedGroupLeader: customer.customer._id,
                             selectedBusinessSector: customer.customer.businessSector,

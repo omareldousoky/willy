@@ -544,6 +544,8 @@
     "number": "رقم",
     "installmentPaymentConfirmation": "تأكيد سداد قسط",
     "confirmPayment": "تآكيد سداد",
-    "applicationCode": "كود طلب القرض"
+    "applicationCode": "كود طلب القرض",
+    "mustBeinRange":"يجب أن تكون القيمة بين",
+    "and":"و"
     
 }
