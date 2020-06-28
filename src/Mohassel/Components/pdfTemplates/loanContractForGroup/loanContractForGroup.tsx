@@ -40,7 +40,7 @@ const LoanContractForGroup = (props) => {
             <td className="report-content-cell" style={{ textAlign: 'right' }}>
               <div className="main">
 
-                <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
+                <div className="headtitle textcenter">عقد تمويل متناهي الصغر (جماعي)</div>
                 <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
                 <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(0, false)}</div>
                 <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
@@ -99,7 +99,7 @@ const LoanContractForGroup = (props) => {
                           <td>
                             <div>
                               <b>تليفون</b>
-                              <div style={{ display: 'inline-block', width: '80px' }}></div>
+                              <div style={{ display: 'inline-block', width: '80px' }}>{individualInGroup.customer.mobilePhoneNumber}</div>
                             </div>
                           </td>
                         </tr>
@@ -172,7 +172,7 @@ const LoanContractForGroup = (props) => {
                               <div>
                                 <b className="word-break">و ذلك لنشاط</b>
                                 <span>
-                                  {props.data.customer.businessSector + "-" + props.data.customer.businessActivity + "-" + props.data.customer.businessSpeciality}
+                                  {individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}
                                 </span>
                               </div>
                             </td>
@@ -196,7 +196,8 @@ const LoanContractForGroup = (props) => {
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه فقط لا غير، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
-                  {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في الغربيه - زفتي أو
+                  {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن
+                    {props.branchDetails.address} أو
                   بأحدي وسائل الدفع
 								الإلكتروني المعتمده من هيئه الرقابه الماليه</div>
                 </section>
