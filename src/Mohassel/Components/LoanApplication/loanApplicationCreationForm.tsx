@@ -288,7 +288,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                                     data-qc="individualDetailsAmount"
                                                     value={values.individualDetails[i].amount}
                                                     onChange={(e) => {
-                                                        setFieldValue(`individualDetails[${i}].amount`, e.currentTarget.value)
+                                                        setFieldValue(`individualDetails[${i}].amount`, Number(e.currentTarget.value))
                                                         let sum = 0;
                                                         values.individualDetails.forEach((member, index) => sum += (index === i) ? Number(e.currentTarget.value) : Number(member.amount))
                                                         setFieldValue(`principal`, sum)
@@ -341,7 +341,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         isInvalid={errors.noOfInstallments && touched.noOfInstallments}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.noOfInstallments}
+                                        {(errors.noOfInstallments === 'outOfRange') ? `${local.mustBeinRange} ` + `${values.minInstallment} ${local.and} ${values.maxInstallment}` : errors.noOfInstallments}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>

@@ -30,9 +30,16 @@ export const GuarantorView = (props: Props) => {
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.customerHomeAddress}</p>
+                        <p style={{ width: '50%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.customerHomeAddress}</p>
                     </div>
-
+                    <div className="d-flex flex-row">
+                        <p>{local.homePhoneNumber}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.homePhoneNumber}</p>
+                    </div>
+                    <div className="d-flex flex-row">
+                        <p>{local.mobilePhoneNumber}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.mobilePhoneNumber}</p>
+                    </div>
                 </div>
             )
                 : <p>No Guarantors</p>}
