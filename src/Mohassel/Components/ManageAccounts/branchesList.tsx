@@ -15,6 +15,7 @@ import { manageAccountsArray } from './manageAccountsInitials';
 interface State {
   size: number;
   from: number;
+  manageAccountTabs: any[];
 }
 interface Props {
   history: any;
@@ -33,6 +34,7 @@ class BranchesList extends Component<Props, State> {
     this.state = {
       size: 5,
       from: 0,
+      manageAccountTabs: [],
     }
     this.mappers = [
       {
@@ -84,18 +86,21 @@ class BranchesList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getBranches()
+    this.getBranches();
+    this.setState({
+      manageAccountTabs: manageAccountsArray()
+    })
   }
   getBranches() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' });
   }
   render() {
     return (
       <div>
-        <HeaderWithCards
+      (<HeaderWithCards
       header={local.manageAccounts}
-      array = {manageAccountsArray}
-      active = {2}
+      array = {this.state.manageAccountTabs}
+      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('branch')}
       />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
@@ -111,7 +116,13 @@ class BranchesList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'code']} url="branch" from={this.state.from} size={this.state.size} />
+            <Search
+            searchKeys={['keyword', 'dateFromTo']} 
+            dropDownKeys={['name', 'code']} 
+            searchPlaceholder={local.searchByBranchNameOrCode}
+            url="branch"
+             from={this.state.from} 
+             size={this.state.size} />
             {this.props.data &&
               <DynamicTable
                 totalCount={this.props.totalCount}

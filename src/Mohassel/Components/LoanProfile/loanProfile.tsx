@@ -24,6 +24,7 @@ import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/cus
 import TotalWrittenChecksPDF from '../pdfTemplates/totalWrittenChecks/totalWrittenChecks';
 import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement';
 import LoanContract from '../pdfTemplates/loanContract/loanContract';
+import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup';
 import { withRouter } from 'react-router-dom';
 import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
@@ -162,7 +163,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanPayments':
                 return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
                     application={this.state.application} installments={this.state.application.installmentsObject.installments}
-                    currency={this.state.application.product.currency} applicationId={this.state.application._id}
+                    currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} />
             case 'customerCard':
                 return <CustomerCardView application={this.state.application} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
@@ -284,7 +285,7 @@ class LoanProfile extends Component<Props, State>{
                                 <Can I='payInstallment' a='application'>
                                     <div style={{ color: '#000', cursor: 'pointer' }} onClick={() => this.editManualPayment()}><span className="fa fa-pencil" style={{ marginLeft: 5 }}></span>{local.edit}</div>
                                 </Can>
-                                <Can I='approveManualPayment' a='application'>
+                                <Can I='approvePendingAction' a='application'>
                                     <div className="submit" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
                                 </Can>
 
@@ -311,11 +312,14 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
-                        <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} />
+                        <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails}/>
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <TotalWrittenChecksPDF data={this.state.application} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails}/>
+                        {this.state.application.product.beneficiaryType === "individual"?
                         <LoanContract data={this.state.application} branchDetails={this.state.branchDetails}/>
+                        : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails}/>
+                    }
                     </>}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}

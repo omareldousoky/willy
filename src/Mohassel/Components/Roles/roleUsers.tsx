@@ -71,7 +71,7 @@ class RoleUsers extends Component<Props, State> {
         this.getUsers();
     }
     getUsers() {
-        this.props.search({ size: this.state.size, from: this.state.from, roleId: this.props._id, url: 'user' });
+        this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, roleId: this.props._id, url: 'user' });
     }
     render() {
         return (
@@ -89,7 +89,14 @@ class RoleUsers extends Component<Props, State> {
                             </div> */}
                         </div>
                         <hr className="dashed-line" />
-                        <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} roleId={this.props._id}/>
+                        <Search 
+                        searchKeys={['keyword', 'dateFromTo']} 
+                        dropDownKeys={['name', 'nationalId']}
+                        searchPlaceholder = {local.searchByNameOrNationalId}
+                         url="user" 
+                         from={this.state.from} 
+                         size={this.state.size} 
+                         roleId={this.props._id}/>
                         <DynamicTable
                             mappers={this.mappers}
                             totalCount={this.props.totalCount}

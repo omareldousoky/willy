@@ -16,6 +16,8 @@ export const step1: BasicValues = {
     bankAccount: '',
     costCenter: '',
     postalCode: '',
+    bankName:'',
+    bankAddress:'',
 }
 
 export const branchCreationValidationStepOne = Yup.object().shape({
@@ -27,5 +29,8 @@ export const branchCreationValidationStepOne = Yup.object().shape({
     postalCode: Yup.string().trim().matches(/^[0-9]*$/,local.onlyNumbers).max(5,local.maxLength5),
     licenseDate: Yup.string().trim().required(local.required),
     licenseNumber: Yup.string().trim().required(local.required),
-    status: Yup.string().trim().oneOf(["active","inactive"])
+    bankAccount: Yup.string().trim().required(local.required),
+    costCenter:  Yup.string().trim().required(local.required),
+    bankName: Yup.string().trim(),
+    bankAddress:  Yup.string().trim(),
 })

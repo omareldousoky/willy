@@ -96,7 +96,7 @@ class CustomersForUser extends Component<Props, State> {
             <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCustomers})`}</span>
           </div>
           <div>
-            <Can I='createCustomer' a='customer'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
+            <Can I='moveOfficerCustomers' a='customer'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
           </div>
         </div>
         <Table striped hover style={{ textAlign: 'right' }}>

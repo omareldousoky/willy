@@ -70,7 +70,10 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerName,
         key: "customerName",
-        render: data => (data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName : <div style={{ display: 'flex', flexDirection: 'column' }}>{data.application.group.individualsInGroup.map(member => <span key={member.customer._id}>{member.customer.customerName}</span>)}</div>)
+        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
+        </div>
       },
       {
         title: local.productName,
@@ -98,7 +101,7 @@ class TrackLoanApplications extends Component<Props, State>{
     this.getApplications();
   }
   getApplications() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
   }
   getStatus(status: string) {
     switch (status) {
@@ -133,7 +136,14 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search 
+            searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
+            dropDownKeys={['name', 'nationalId', 'code']} 
+            url="application" 
+            from={this.state.from} 
+            size={this.state.size} 
+            searchPlaceholder = {local.searchByNameOrNationalId}
+            hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}
