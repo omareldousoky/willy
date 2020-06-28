@@ -11,6 +11,8 @@ export interface BasicValues {
     licenseNumber: string;
     bankAccount: string;
     costCenter: string;
+    bankName: string;
+    bankAddress: string;
 }
 export interface BasicErrors { 
     name?: string;
@@ -24,6 +26,8 @@ export interface BasicErrors {
     licenseNumber?: string;
     bankAccount?: string;
     costCenter?: string;
+    bankName?: string;
+    bankAddress?: string;
 }
 
 export interface BasicTouched {
@@ -38,4 +42,6 @@ export interface BasicTouched {
     licenseNumber?: boolean;
     bankAccount?: boolean;
     costCenter?: boolean;
+    bankName?: boolean;
+    bankAddress?: boolean;
 }

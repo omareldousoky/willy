@@ -280,6 +280,50 @@ const StepOneForm = (props: Props) => {
                 </Col>
             </Row>
 
+            <Row>
+                <Col>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                            {local.bankName}
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"bankName"}
+                            placeholder={local.bankName}
+                            data-qc={"bankName"}
+                            value={props.values.bankName}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.bankName && props.touched.bankName) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.bankName}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group className={'branch-data-group'}>
+                        <Form.Label className={'branch-data-label'}>
+                        {local.bankAddress}
+                        </Form.Label>
+                        <Form.Control
+                            type={"text"}
+                            name={"bankAddress"}
+                            placeholder={local.bankAddress}
+                            data-qc={"bankAddress"}
+                            value={props.values.bankAddress}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            isInvalid={(props.errors.bankAddress && props.touched.bankAddress) as boolean}
+                        />
+                        <Form.Control.Feedback
+                            type="invalid">
+                            {props.errors.bankAddress}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+            </Row>
             <Form.Group
                 as={Row}
                 className={['branch-data-group']}

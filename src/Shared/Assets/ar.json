@@ -391,6 +391,7 @@
     "noOfCustomers": "عدد العملاء",
     "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
     "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من قيمة القرض",
+    "amountShouldNotbeLessThanReqAmount": "المبلغ يجب ان يكون اكبر من قيمة المطلوبة",
     "totalPayment": "إجمالي المدفوع",
     "feesPaid": "المصاريف المسدده",
     "principalPaid": "الاصل المسدد",
@@ -545,6 +546,8 @@
     "installmentPaymentConfirmation": "تأكيد سداد قسط",
     "confirmPayment": "تآكيد سداد",
     "applicationCode": "كود طلب القرض",
+    "bankName": "إسم البنك",
+    "bankAddress": "عنوان البنك",
     "mustBeinRange":"يجب أن تكون القيمة بين",
     "and":"و"
     
