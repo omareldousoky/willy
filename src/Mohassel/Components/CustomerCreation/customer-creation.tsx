@@ -318,7 +318,7 @@ class CustomerCreation extends Component<Props, State>{
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
-        view = {true}
+        view = {false}
       />
     )
   }
