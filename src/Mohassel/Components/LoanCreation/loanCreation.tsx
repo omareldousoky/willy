@@ -253,7 +253,7 @@ class LoanCreation extends Component<Props, State> {
                   </Col>
                 </Form.Group>
               }
-              <Button type="submit">Submit</Button>
+              <Button type="submit">{local.submit}</Button>
             </Form>
           </>
           }
