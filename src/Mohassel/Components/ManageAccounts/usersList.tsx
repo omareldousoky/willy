@@ -56,14 +56,14 @@ class UsersList extends Component<Props, State> {
         render: data => data.name
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.nationalId
+      },
+      {
         title: local.employment,
         key: "employment",
         render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
-      },
-      {
-        title: local.createdBy,
-        key: "createdBy",
-        render: data => data.created? data.created.by : null
       },
       {
         title: local.creationDate,

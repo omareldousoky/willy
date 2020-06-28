@@ -93,7 +93,7 @@ export const LoanApplicationValidation = Yup.object().shape({
     periodType: Yup.string().required(local.required),
     gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
     pushPayment: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
-    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `cant be out of range` + Yup.ref('minInstallment') + 'to' + Yup.ref('maxInstallment'),
+    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `outOfRange`,
         function (this: any, value: any) {
             const { minInstallment, maxInstallment } = this.parent
             if (minInstallment === 0 && maxInstallment === 0) {
