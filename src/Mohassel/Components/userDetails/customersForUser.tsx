@@ -49,7 +49,7 @@ class CustomersForUser extends Component<Props, State> {
   }
   async getCoustomersForUser() {
     this.setState({ loading: true })
-    const res = await searchCustomer({ size: 1000, from: 0, representative: this.props.id })
+    const res = await searchCustomer({ size: 1000, from: 0, representativeId: this.props.id })
     if (res.status === "success") {
       this.setState({
         totalCustomers: res.body.totalCount,
@@ -96,7 +96,7 @@ class CustomersForUser extends Component<Props, State> {
             <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCustomers})`}</span>
           </div>
           <div>
-            <Can I='moveOfficerCustomers' a='customer'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
+            <Can I='moveOfficerCustomers' a='user'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
           </div>
         </div>
         <Table striped hover style={{ textAlign: 'right' }}>

@@ -80,7 +80,7 @@ class FormulaTest extends Component<Props, State>{
     getBranchData() {
         const token = getCookie('token');
         const branchDetails = parseJwt(token);
-        const branchName = store.getState().auth.validBranches.find(branch => branch._id === branchDetails.branch)?.name;
+        const branchName = store.getState().auth.validBranches?.find(branch => branch._id === branchDetails.branch)?.name;
         this.setState({ branchName })
     }
     submit = async (values: FormulaTestClass) => {
