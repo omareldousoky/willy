@@ -34,10 +34,18 @@ class DocumentsUpload extends Component<Props, State>{
     }
   }
   async componentDidMount() {
+    this.setState({ loading: true});
+    const response = await getDocumentsTypes('customer');
+    if(response.status === "success") {
+      this.setState({
+        documentTypes: response.body.documentTypes,
+      })
+       
+    } else {
+      Swal.fire("error", "error in getting customer documents", "error");
+    }
     if (this.props.edit || this.props.view) {
-      this.setState({ loading: true});
       const res = await getCustomerDocuments(this.props.customerId);
-      const response = await getDocumentsTypes('customer');
       if (res.status === "success") {
         if(res.body.docs){
            this.setState({
@@ -47,17 +55,9 @@ class DocumentsUpload extends Component<Props, State>{
       } else {
         Swal.fire("error", "error in getting customer documents", "error");
       }
-      if(response.status === "success") {
-        this.setState({
-          documentTypes: response.body.documentTypes,
-        })
-         
-      } else {
-        Swal.fire("error", "error in getting customer documents", "error");
-      }
-
-      this.setState({ loading: false })
+     
     }
+    this.setState({ loading: false })
   }
   prepareCustomerDocuments(customerDocs: any[], name: string){
     
