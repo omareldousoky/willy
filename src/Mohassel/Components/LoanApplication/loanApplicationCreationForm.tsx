@@ -357,7 +357,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             isInvalid={errors.applicationFee && touched.applicationFee}
-                                            disabled={!values.allowApplicationFeeAdjustment}
+                                            disabled={!values.allowApplicationFeeAdjustment || values.applicationFeePercent > 0}
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.applicationFee}
@@ -377,7 +377,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             isInvalid={errors.individualApplicationFee && touched.individualApplicationFee}
-                                            disabled={!values.allowApplicationFeeAdjustment}
+                                            disabled={!values.allowApplicationFeeAdjustment || values.applicationFeePercentPerPerson > 0}
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.individualApplicationFee}
@@ -390,7 +390,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             <Row>
                                 <Col sm={6}>
                                     <Form.Group controlId="applicationFeePercent">
-                                        <Form.Label column sm={6}>{local.applicationFeePercent}</Form.Label>
+                                        <Form.Label column sm={10}>{local.applicationFeePercent}</Form.Label>
                                         <InputGroup>
                                             <Form.Control
                                                 type="number"
@@ -400,7 +400,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 isInvalid={errors.applicationFeePercent && touched.applicationFeePercent}
-                                                disabled={!values.allowApplicationFeeAdjustment}
+                                                disabled={!values.allowApplicationFeeAdjustment || values.applicationFee > 0}
                                             />
                                             <InputGroup.Prepend>
                                                 <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
@@ -420,7 +420,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             isInvalid={errors.applicationFeeType && touched.applicationFeeType}
-                                            disabled={!values.allowApplicationFeeAdjustment}
+                                            disabled={!values.allowApplicationFeeAdjustment || values.applicationFee > 0}
                                         >
                                             <option value="" disabled></option>
                                             <option value='principal'>{local.inAdvanceFromPrinciple}</option>
@@ -448,7 +448,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 isInvalid={errors.applicationFeePercentPerPerson && touched.applicationFeePercentPerPerson}
-                                                disabled={!values.allowApplicationFeeAdjustment}
+                                                disabled={!values.allowApplicationFeeAdjustment || values.individualApplicationFee > 0}
                                             />
                                             <InputGroup.Prepend>
                                                 <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
@@ -468,7 +468,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             isInvalid={errors.applicationFeePercentPerPersonType && touched.applicationFeePercentPerPersonType}
-                                            disabled={!values.allowApplicationFeeAdjustment}
+                                            disabled={!values.allowApplicationFeeAdjustment || values.individualApplicationFee > 0}
                                         >
                                             <option value="" disabled></option>
                                             <option value='principal'>{local.inAdvanceFromPrinciple}</option>

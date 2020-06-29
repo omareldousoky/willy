@@ -311,7 +311,7 @@ export const StepTwoForm = (props: any) => {
                             >
                                 <option value="" disabled></option>
                                 {businessSectors?.map((businessSector, index) => {
-                                    return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
+                                    return <option key={index} value={businessSector.i18n.ar} >{businessSector.i18n.ar}</option>
                                 })}
                             </Form.Control>}
                         </Can>
@@ -335,9 +335,9 @@ export const StepTwoForm = (props: any) => {
                                 disabled={!values.businessSector || (!allowed && props.hasLoan)}
                             >
                                 <option value="" disabled></option>
-                                {businessSectors.find(businessSector => businessSector.legacyCode === Number(values.businessSector))?.activities
+                                {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
                                     .map((activity, index) => {
-                                        return <option key={index} value={activity.legacyCode} >{activity.i18n.ar}</option>
+                                        return <option key={index} value={activity.i18n.ar} >{activity.i18n.ar}</option>
                                     })}
                             </Form.Control>}
                         </Can>
@@ -359,9 +359,9 @@ export const StepTwoForm = (props: any) => {
                                 disabled={!values.businessActivity || (!allowed && props.hasLoan)}
                             >
                                 <option value="" disabled></option>
-                                {businessSectors.find(businessSector => businessSector.legacyCode === Number(values.businessSector))?.activities
-                                    .find(activity => activity.legacyCode === Number(values.businessActivity))?.specialties?.map((speciality, index) => {
-                                        return <option key={index} value={speciality.legacyCode} >{speciality.businessSpecialtyName.ar}</option>
+                                {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
+                                    .find(activity => activity.i18n.ar === values.businessActivity)?.specialties?.map((speciality, index) => {
+                                        return <option key={index} value={speciality.businessSpecialtyName.ar} >{speciality.businessSpecialtyName.ar}</option>
                                     })}
                             </Form.Control>}
                         </Can>

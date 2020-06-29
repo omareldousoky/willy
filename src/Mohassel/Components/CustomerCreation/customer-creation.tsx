@@ -104,8 +104,6 @@ interface State {
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
-    accountNumber: string;
-    accountBranch: string;
     comments: string;
   };
   customerId: string;
@@ -195,8 +193,6 @@ class CustomerCreation extends Component<Props, State>{
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
-        accountNumber: res.body.accountNumber,
-        accountBranch: res.body.accountBranch,
         comments: res.body.comments,
         allowMultiLoans: res.body.allowMultiLoans,
         allowGuarantorLoan: res.body.allowGuarantorLoan,

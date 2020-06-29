@@ -45,6 +45,7 @@
     "partTimeEmployeeCount": "عدد العمال المؤقتين",
     "accountNumber": "رقم الحساب",
     "accountBranch": "الفرع التابع له رقم الحساب",
+    "duplicateBranchNameMessage": "الإسم موجود بالفعل لفرع أخر",
     "comments": "ملاحظات",
     "mainInfo": "البيانات الاساسية",
     "mainGroupInfo": "بيانات العملاء الاساسية",
@@ -224,6 +225,7 @@
     "andEndsIn": "و تنتهى فى",
     "welcome": "آهلا",
     "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "searchByName": "البحث بالاسم ",
     "searchByBranchNameOrCode": "البحث بإسم الفرع أو الكود",
     "dateFrom": "التاريخ من",
     "dateTo": "التاريخ الي",
@@ -518,7 +520,7 @@
     "customerSuccess": "عميل بنجاح",
     "allowMultiLoans": "عميل يمكنه أخذ اكثر من قرض",
     "allowGuarantorLoan":"ضامن يمكنه أخذ قرض",
-    "allowMultiGuarantee": "عميل مستفيد من قرض يمكنه ان يصبح ضامنا",
+    "allowMultiGuarantee": "ضامن يضمن اكثر من عميل",
     "bankAccount": "الحساب البنكي",
     "costCenter": " مركز حساب التكلفة",
     "manualPayment": "دفع يدوي",
@@ -548,7 +550,6 @@
     "installmentPaymentConfirmation": "تأكيد سداد قسط",
     "confirmPayment": "تآكيد سداد",
     "applicationCode": "كود طلب القرض",
-    "sumFees":"إجمالي المصاريف",
     "tools":"أدوات",
     "encodingFiles":"ملفات تكويد",
     "encodingFilesHQ": "ملفات تكويد المركز الرئيسي",
@@ -572,5 +573,6 @@
     "bankName": "إسم البنك",
     "bankAddress": "عنوان البنك",
     "mustBeinRange":"يجب أن تكون القيمة بين",
-    "and":"و"
+    "and":"و",
+    "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء"
 }
