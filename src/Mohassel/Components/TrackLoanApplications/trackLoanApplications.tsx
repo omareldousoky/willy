@@ -123,6 +123,8 @@ class TrackLoanApplications extends Component<Props, State>{
         return <div className="status-chip outline approved">{local.approved}</div>
       case 'rejected':
         return <div className="status-chip outline rejected">{local.rejected}</div>
+      case 'canceled':
+        return <div className="status-chip outline canceled">{local.cancelled}</div>
       default: return null;
     }
   }

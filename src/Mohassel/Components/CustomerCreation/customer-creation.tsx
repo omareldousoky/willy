@@ -104,8 +104,6 @@ interface State {
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
-    accountNumber: string;
-    accountBranch: string;
     comments: string;
   };
   customerId: string;
@@ -122,7 +120,7 @@ class CustomerCreation extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      step: 1,
+      step: 3,
       step1: step1,
       step2: step2,
       step3: step3,
@@ -195,8 +193,6 @@ class CustomerCreation extends Component<Props, State>{
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
-        accountNumber: res.body.accountNumber,
-        accountBranch: res.body.accountBranch,
         comments: res.body.comments,
         allowMultiLoans: res.body.allowMultiLoans,
         allowGuarantorLoan: res.body.allowGuarantorLoan,
