@@ -45,6 +45,7 @@
     "partTimeEmployeeCount": "عدد العمال المؤقتين",
     "accountNumber": "رقم الحساب",
     "accountBranch": "الفرع التابع له رقم الحساب",
+    "duplicateBranchNameMessage": "الإسم موجود بالفعل لفرع أخر",
     "comments": "ملاحظات",
     "mainInfo": "البيانات الاساسية",
     "mainGroupInfo": "بيانات العملاء الاساسية",
