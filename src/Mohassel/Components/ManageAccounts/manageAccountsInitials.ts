@@ -3,7 +3,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 
 import ability from '../../config/ability'
 
-interface Card{
+export interface Card{
   icon: string;
   header: string;
   desc: string;

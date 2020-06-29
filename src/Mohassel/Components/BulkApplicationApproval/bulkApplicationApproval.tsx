@@ -19,6 +19,7 @@ import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalVali
 import * as local from '../../../Shared/Assets/ar.json';
 import { englishToArabic }  from '../../Services/statusLanguage';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import InputGroup from 'react-bootstrap/InputGroup';
 interface Branch {
   label: string;
   value: string;
@@ -65,6 +66,7 @@ interface State {
   selectedReviewedLoans: Array<LoanItem>;
   loading: boolean;
   showModal: boolean;
+  filterCustomers: string;
 }
 interface Props {
   history: Array<string>;
@@ -81,6 +83,7 @@ class BulkApplicationApproval extends Component<Props, State>{
       selectedReviewedLoans: [],
       loading: false,
       showModal: false,
+      filterCustomers: ''
     }
   }
   async componentDidMount() {
@@ -171,6 +174,17 @@ class BulkApplicationApproval extends Component<Props, State>{
         </div>
         {this.state.searchResults.filter(loanItem => loanItem.application.status === "reviewed").length ?
           <div>
+            <InputGroup style={{ direction: 'ltr', margin: '20px 0px' }}>
+              <Form.Control
+                value={this.state.filterCustomers}
+                style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+                placeholder={local.searchByName}
+                onChange={(e) => this.setState({ filterCustomers: e.currentTarget.value })}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -185,6 +199,7 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
+                  .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>

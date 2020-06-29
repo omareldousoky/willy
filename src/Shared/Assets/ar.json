@@ -45,6 +45,7 @@
     "partTimeEmployeeCount": "عدد العمال المؤقتين",
     "accountNumber": "رقم الحساب",
     "accountBranch": "الفرع التابع له رقم الحساب",
+    "duplicateBranchNameMessage": "الإسم موجود بالفعل لفرع أخر",
     "comments": "ملاحظات",
     "mainInfo": "البيانات الاساسية",
     "mainGroupInfo": "بيانات العملاء الاساسية",
@@ -224,6 +225,7 @@
     "andEndsIn": "و تنتهى فى",
     "welcome": "آهلا",
     "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "searchByName": "البحث بالاسم ",
     "searchByBranchNameOrCode": "البحث بإسم الفرع أو الكود",
     "dateFrom": "التاريخ من",
     "dateTo": "التاريخ الي",
@@ -571,5 +573,6 @@
     "bankName": "إسم البنك",
     "bankAddress": "عنوان البنك",
     "mustBeinRange":"يجب أن تكون القيمة بين",
-    "and":"و"
+    "and":"و",
+    "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء"
 }
