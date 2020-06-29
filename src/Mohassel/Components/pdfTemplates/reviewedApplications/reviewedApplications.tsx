@@ -8,7 +8,6 @@ const ReviewedApplicationsPDF = (props) => {
         props.data.forEach(application => sum += (application.application.principal ? application.application.principal : 0))
         return sum
     }
-    console.log(props)
     return (
         <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
             <table>
@@ -17,7 +16,8 @@ const ReviewedApplicationsPDF = (props) => {
                         <td className="title titleborder titlebackground">
                             شركة تساهيل للتمويل متناهي الصغر</td>
                         <td style={{ width: "30%" }}></td>
-                        <td className="title">الجيزه - امبابه ثان</td>
+                        {/* <td className="title">الجيزه - امبابه ثان</td> */}
+                        <td className="title">{props.branchDetails.name}</td>
                     </tr>
                     <tr>
                         <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
