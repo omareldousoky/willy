@@ -225,6 +225,7 @@
     "andEndsIn": "و تنتهى فى",
     "welcome": "آهلا",
     "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "searchByName": "البحث بالاسم ",
     "searchByBranchNameOrCode": "البحث بإسم الفرع أو الكود",
     "dateFrom": "التاريخ من",
     "dateTo": "التاريخ الي",
