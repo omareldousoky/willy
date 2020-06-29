@@ -34,6 +34,7 @@ interface State {
     loading: boolean;
     formulas: Array<Formula>;
     filterFormulas: string;
+    manageLoansTabs: any[];
 }
 
 class FormulaList extends Component<Props, State> {
@@ -45,7 +46,8 @@ class FormulaList extends Component<Props, State> {
             from: 0,
             loading: false,
             formulas: [],
-            filterFormulas: ''
+            filterFormulas: '',
+            manageLoansTabs: []
         }
         this.mappers = [
             {
@@ -67,6 +69,7 @@ class FormulaList extends Component<Props, State> {
     }
     componentDidMount() {
         this.getFormulas()
+        this.setState({manageLoansTabs: manageLoansArray()})
     }
     renderIcons(data: any) {
         return (
@@ -93,8 +96,8 @@ class FormulaList extends Component<Props, State> {
             <div>
                 <HeaderWithCards
                     header={local.calculationForumlas}
-                    array={manageLoansArray}
-                    active={1}
+                    array={this.state.manageLoansTabs}
+                    active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('calculationForumlas')}
                 />
                 <Card style={{ margin: '20px 50px' }}>
                     <Loader type="fullsection" open={this.state.loading} />
