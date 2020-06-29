@@ -70,21 +70,21 @@ const appRoutes = [
       {
         path: "/tools",
         label: local.tools,
-        render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+        render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
         routes: [{
           path: "/encoding-files",
           label: local.encodingFiles,
-          render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+          render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
           routes:[
             {
               path: "/create-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='createCustomer' a='customer'><DocumentTypeCreation {...props} edit={false} /> </Can>
+              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={false} /> </Can>
             },
             {
               path: "/edit-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='updateCustomer' a='customer'><DocumentTypeCreation {...props} edit={true} /> </Can>
+              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
             }
           ]
         }
