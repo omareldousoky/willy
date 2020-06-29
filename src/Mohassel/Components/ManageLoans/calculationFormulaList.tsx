@@ -4,14 +4,12 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
-
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from './manageLoansInitials';
-import { timeToDateyyymmdd, interestType } from '../../Services/utils';
+import { interestType } from '../../Services/utils';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { Formula } from '../LoanApplication/loanApplicationCreation';
 import Form from 'react-bootstrap/Form';
@@ -95,7 +93,7 @@ class FormulaList extends Component<Props, State> {
         return (
             <div>
                 <HeaderWithCards
-                    header={local.calculationForumlas}
+                    header={local.loanProducts}
                     array={this.state.manageLoansTabs}
                     active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('calculationForumlas')}
                 />
@@ -113,7 +111,6 @@ class FormulaList extends Component<Props, State> {
                             </div>
                         </div>
                         <hr className="dashed-line" />
-                        {/* <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} /> */}
                         {this.state.formulas.length > 0 && <div className="d-flex flex-row justify-content-center">
                             <Form.Control
                                 type="text"

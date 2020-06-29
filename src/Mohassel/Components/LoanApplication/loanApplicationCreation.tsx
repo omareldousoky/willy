@@ -770,7 +770,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 </Form.Control>
                             </Form.Group>
                         </div>
-                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
+                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
@@ -798,7 +798,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                         <option key={i} value={customer._id}>{customer.customerName}</option>
                                     )}
                                 </Form.Control>
-                            </Form.Group> : <span>Select customers</span>
+                                    </Form.Group> : <span>{local.rangeOfGroup}</span>
                             }
                         </div>
                         }
