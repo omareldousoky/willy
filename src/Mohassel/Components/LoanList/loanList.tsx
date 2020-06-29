@@ -41,14 +41,14 @@ class LoanList extends Component<Props, State> {
       {
         title: local.customerName,
         key: "customerName",
-        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
             </div>)
           }
         </div>
-        // <div style={{ cursor: 'pointer', width:50, height:50 }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
+        // <div style={{ cursor: 'pointer', width:50, height:50 }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
         title: local.loanCode,
@@ -73,7 +73,7 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
       },
     ]
   }
