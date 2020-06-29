@@ -113,6 +113,11 @@ const appRoutes = [
             render: (props) => <LoanCreation {...props} edit={false} />,
           },
           {
+            path: "/loan-profile",
+            label: local.loanDetails,
+            render: (props) => <LoanProfile {...props} />,
+          },
+          {
             path: "/remove-member",
             label: local.memberSeperation,
             render: (props) => <Can I='splitFromGroup' a='application'><GroupMemberSeperation {...props} /></Can>,
