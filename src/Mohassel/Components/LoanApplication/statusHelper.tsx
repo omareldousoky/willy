@@ -127,11 +127,11 @@ class StatusHelper extends Component<Props, State>{
                     </thead>
                     <tbody>
                         {this.props.application.guarantors.map(guarantor => <tr key={guarantor._id}>
-                            <td>{guarantor._id}</td>
+                            <td>{guarantor.code}</td>
                             <td>{guarantor.customerName}</td>
                             <td>{guarantor.district}</td>
                             <td>{guarantor.customerHomeAddress}</td>
-                            <td>{guarantor.homePhoneNumber}{guarantor.mobilePhoneNumber}</td>
+                            <td>{guarantor.mobilePhoneNumber}</td>
                         </tr>)}
                     </tbody>
                 </Table>}
