@@ -71,8 +71,8 @@ class DocumentsUpload extends Component<Props, State>{
 
   render() {
     return (
-
       <>
+
       <Loader type="fullscreen"  open ={this.state.loading} />
     {this.state.documentTypes.map((documentType,index) => {
       const ImageFiles = this.state.docsOfImagesFiles.filter(item => item.name === documentType.name );
@@ -91,9 +91,9 @@ class DocumentsUpload extends Component<Props, State>{
       )
   
       })}
-  </>
-      
+    </>  
     );
+
   }
 }
 export default DocumentsUpload;

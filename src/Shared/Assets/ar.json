@@ -567,6 +567,7 @@
     "documentTypeEditErrorMessage":"حدث خطأ ولم يتم تعديل ملف التكويد",
     "numOfFiles": "عدد الملفات",
     "numOfUploadedImages":"عدد الصور المحملة",
+    "numOfInvalidImages": "عدد الصور التالفة",
     "updatable":"قابله للتعديل",
     "nonUpdatable":"غير قابله للتعديل",
     "bankName": "إسم البنك",
