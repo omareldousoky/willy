@@ -72,7 +72,7 @@ class Payment extends Component<Props, State>{
       receiptData: {},
       payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
       receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-      truthDate: timeToDateyyymmdd(0),
+      truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
       dueDate: timeToDateyyymmdd(0),
       loading: false,
       loadingFullScreen: false,
@@ -171,7 +171,7 @@ class Payment extends Component<Props, State>{
       if (Number(values.installmentNumber) === -1) {
         const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf());
         if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
           // Swal.fire("", "payment done", "success")
         } else {
           this.setState({ loadingFullScreen: false });
@@ -179,7 +179,7 @@ class Payment extends Component<Props, State>{
       } else {
         const res = await payFutureInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), Number(values.installmentNumber));
         if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
           // Swal.fire("", "payment done", "success")
         } else {
           this.setState({ loadingFullScreen: false });
@@ -189,31 +189,32 @@ class Payment extends Component<Props, State>{
       const res = await earlyPayment(this.props.applicationId, values.payAmount);
       this.setState({ payAmount: res.body.requiredAmount })
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body, payAmount: values.payAmount });
+        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
         // Swal.fire("", "early payment done", "success")
       } else {
         this.setState({ loadingFullScreen: false });
       }
     } else {
       if(this.props.manualPaymentEditId === ''){
-      const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber);
+      const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false, payAmount: values.payAmount });
+        this.setState({ loadingFullScreen: false });
         Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
       } else {
         this.setState({ loadingFullScreen: false });
       }
     } else {
-      const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber);
+      const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
       if (res.status === 'success') {
         console.log(res)
-        this.setState({ loadingFullScreen: false, payAmount: values.payAmount });
+        this.setState({ loadingFullScreen: false });
         Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
       } else {
         this.setState({ loadingFullScreen: false });
       }
     }
     }
+    this.props.changePaymentState(0);
   }
   async handleClickEarlyPayment() {
     this.props.changePaymentState(2)
@@ -255,7 +256,7 @@ class Payment extends Component<Props, State>{
             <Can I='payInstallment' a='application'>
               <div className="payment-icon">
                 <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-                <Button onClick={() => this.props.changePaymentState(1)} variant="primary">{local.payInstallment}</Button>
+                <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(1)} variant="primary">{local.payInstallment}</Button>
               </div>
             </Can>
             <Can I='payEarly' a='application'>
@@ -395,13 +396,24 @@ class Payment extends Component<Props, State>{
             >
               {(formikProps) =>
                 <Form onSubmit={formikProps.handleSubmit}>
-                  <Form.Group as={Row}>
+                  <Form.Group as={Row} style={{marginTop: 45}}>
                     <Form.Group as={Col} controlId="installmentsRemaining">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.installmentsRemaining}`}</Form.Label>
                       <Col>
                         <Form.Control
                           name="installmentsRemaining"
                           value={this.getInstallmentsRemaining()}
+                          disabled
+                        >
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="installmentsRemaining">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.remainingPrincipal}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          name="installmentsRemaining"
+                          value={this.state.remainingPrincipal}
                           disabled
                         >
                         </Form.Control>
@@ -593,7 +605,7 @@ class Payment extends Component<Props, State>{
         <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
         {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} payAmount={this.state.payAmount} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} truthDate={this.state.truthDate} />}
       </>
     );
   }

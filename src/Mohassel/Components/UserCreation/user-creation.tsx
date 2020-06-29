@@ -156,9 +156,9 @@ class UserCreation extends Component<Props, State> {
                 this.props.history.goBack();
             });
         } else {
-            Swal.fire("error", local.userCreationError)
-            this.setState({ loading: false });
+            Swal.fire("error", local.userCreationError)    
         }
+        this.setState({ loading: false });
     }
     async editUser(userObj: User) {
         const user = this.prepareUser(userObj);
@@ -279,8 +279,6 @@ class UserCreation extends Component<Props, State> {
                 <Loader type="fullscreen" open={this.state.loading} />
                 <Card >
                     <div style={{ display: "flex", flexDirection: "row" }} >
-
-
                             <Wizard
                                 currentStepNumber={this.state.step - 1}
                                 stepsDescription={[local.userBasicStep1, local.userRolesStep2]}

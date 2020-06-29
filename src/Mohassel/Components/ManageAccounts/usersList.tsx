@@ -32,6 +32,7 @@ interface Props {
 interface State {
   size: number;
   from: number;
+  manageAccountTabs: any[];
 }
 
 class UsersList extends Component<Props, State> {
@@ -41,6 +42,7 @@ class UsersList extends Component<Props, State> {
     this.state = {
       size: 5,
       from: 0,
+      manageAccountTabs:[],
     }
     this.mappers = [
       {
@@ -54,14 +56,14 @@ class UsersList extends Component<Props, State> {
         render: data => data.name
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.nationalId
+      },
+      {
         title: local.employment,
         key: "employment",
         render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
-      },
-      {
-        title: local.createdBy,
-        key: "createdBy",
-        render: data => data.created? data.created.by : null
       },
       {
         title: local.creationDate,
@@ -76,7 +78,13 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getUsers()
+    
+    this.getUsers();
+    this.setState({
+      manageAccountTabs: manageAccountsArray()
+    })
+    
+    
   }
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
@@ -96,21 +104,23 @@ class UsersList extends Component<Props, State> {
     return (
       <>
         <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
-        <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
-        <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
+        <Can I="createUser" a="user"><span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span></Can>
+        <Can I="userActivation" a="user"><span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span></Can>
+      </>
     );
   }
   getUsers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
   render() {
+
     return (
       <div>
         {this.props.withHeader &&
      <HeaderWithCards
       header={local.manageAccounts}
-      array = {manageAccountsArray}
-      active = {1}
+      array = {this.state.manageAccountTabs}
+      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('users')}
         /> }
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
@@ -126,7 +136,12 @@ class UsersList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search 
+            searchKeys={['keyword', 'dateFromTo']} 
+            dropDownKeys={['name', 'nationalId']} 
+            searchPlaceholder = {local.searchByNameOrNationalId}
+            url="user" from={this.state.from} size={this.state.size} 
+            hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
               totalCount={this.props.totalCount}

@@ -80,13 +80,21 @@ class TrackLoanApplications extends Component<Props, State>{
           </div>
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.nationalId}</span>: null)}
+        </div>
+      },
+      {
         title: local.productName,
         key: "productName",
         render: data => data.application.product.productName
       },
       {
-        title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        title: local.loanCreationDate,
+        key: "loanCreationDate",
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
@@ -119,6 +127,8 @@ class TrackLoanApplications extends Component<Props, State>{
         return <div className="status-chip outline approved">{local.approved}</div>
       case 'rejected':
         return <div className="status-chip outline rejected">{local.rejected}</div>
+      case 'canceled':
+        return <div className="status-chip outline canceled">{local.cancelled}</div>
       default: return null;
     }
   }
@@ -148,7 +158,14 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} dropDownKeys={['name', 'nationalId', 'code']} url="application" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} />
+            <Search 
+            searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
+            dropDownKeys={['name', 'nationalId', 'code']} 
+            url="application" 
+            from={this.state.from} 
+            size={this.state.size} 
+            searchPlaceholder = {local.searchByNameOrNationalId}
+            hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}

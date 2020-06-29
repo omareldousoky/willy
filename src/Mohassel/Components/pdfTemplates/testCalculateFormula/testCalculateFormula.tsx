@@ -1,7 +1,7 @@
 import React from 'react';
 import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Services/utils';
 
 const TestCalculateFormulaPDF = (props) => {
     return (
@@ -9,14 +9,14 @@ const TestCalculateFormulaPDF = (props) => {
             <table className="margin" >
                 <tbody>
                     <tr>
-                        <td>الغربية - زفتى</td>
+                        <td>{props.branchName}</td>
                         <td></td>
                         <td>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
                     </tr>
                     <tr>
-                        <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
+                        <td>{timeToArabicDate(0,true)}</td>
                         <td></td>
-                        <td>الاربعاء</td>
+                        <td>{dayToArabic(new Date().getDay())}</td>
                     </tr>
                     <tr>
                         <td></td>

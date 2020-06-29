@@ -20,6 +20,7 @@ interface State {
   totalCount: number;
   filterRoles: string;
   loading: boolean;
+  manageAccountTabs: any[];
 };
 
 class RolesList extends Component<Props, State> {
@@ -31,11 +32,16 @@ class RolesList extends Component<Props, State> {
       loading: false,
       filterRoles: '',
       activeRole: -1,
+      manageAccountTabs: [],
     }
   }
   componentDidMount() {
     // document.body.addEventListener('click', () => this.resetActiveRole());
     this.getRoles();
+    this.setState({
+      manageAccountTabs: manageAccountsArray()
+    })
+
   }
   resetActiveRole() {
     this.setState({ activeRole: -1 });
@@ -60,8 +66,8 @@ class RolesList extends Component<Props, State> {
       <div>
       <HeaderWithCards
       header={local.manageAccounts}
-      array = {manageAccountsArray}
-      active = {0}
+      array = {this.state.manageAccountTabs}
+      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('roles')}
       />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />

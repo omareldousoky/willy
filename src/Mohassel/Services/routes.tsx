@@ -34,6 +34,10 @@ import GroupMemberSeperation from '../Components/LoanProfile/groupMemberSeperati
 import ViewFormula from '../Components/LoanFormulaCreation/calculationFormulaView';
 import ViewProduct from '../Components/LoanProductCreation/loanProductView';
 import LoanRollBack from '../Components/LoanProfile/loanRollBack';
+import EncodingFiles from '../Components/Tools/encodingFiles';
+import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
+import CustomerProfile from '../Components/CustomerCreation/customerProfile';
+
 const appRoutes = [
   {
     path: "/",
@@ -55,7 +59,37 @@ const appRoutes = [
             label: local.editCustomer,
             render: (props) => <CustomerCreation {...props} edit={true} />,
           }
+          ,
+          {
+            path: "/view-customer",
+            label: local.viewCustomer,
+            render: (props) => <CustomerProfile {...props} />,
+          }
         ]
+      },
+      {
+        path: "/tools",
+        label: local.tools,
+        render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+        routes: [{
+          path: "/encoding-files",
+          label: local.encodingFiles,
+          render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+          routes:[
+            {
+              path: "/create-encoding-files",
+              label: local.createEncodingFiles,
+              render: (props) =>  <Can I='createCustomer' a='customer'><DocumentTypeCreation {...props} edit={false} /> </Can>
+            },
+            {
+              path: "/edit-encoding-files",
+              label: local.createEncodingFiles,
+              render: (props) =>  <Can I='updateCustomer' a='customer'><DocumentTypeCreation {...props} edit={true} /> </Can>
+            }
+          ]
+        }
+        ]
+
       },
       {
         path: "/track-loan-applications",
@@ -159,17 +193,17 @@ const appRoutes = [
       {
         path: "/manage-accounts",
         label: local.manageAccounts,
-        render: (props) => <Can I='createRoles' a='user'><RolesList {...props} /></Can>,
+        render: (props) => <Can I='getRoles' a='user'><RolesList {...props} /></Can>,
         routes: [
           {
             path: "/roles",
             label: local.roles,
-            render: (props) => <Can I='createRoles' a='user'><RolesList {...props} /> </Can>,
+            render: (props) => <Can I='createRoles' a='user'><RolesList {...props} withHeader={true} /> </Can>,
             routes: [
               {
                 path: "/new-role",
                 label: local.createNewRole,
-                render: (props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
+                render: (props) => <Can I='getRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
               },
               {
                 path: "/edit-role",
@@ -186,7 +220,7 @@ const appRoutes = [
           {
             path: "/users",
             label: local.users,
-            render: (props) => <Can I='createUser' a='user'> <UsersList  {...props} withHeader={true} /></Can>,
+            render: (props) => <Can I='getUser' a='user'> <UsersList  {...props} withHeader={true}  /></Can>,
             routes: [
               {
                 path: "/new-user",
@@ -209,7 +243,7 @@ const appRoutes = [
           {
             path: "/branches",
             label: local.branches,
-            render: (props) => <Can I='createBranch' a='branch'> <BranchesList {...props} /> </Can>,
+            render: (props) => <Can I='getBranch' a='branch'> <BranchesList {...props} withHeader={true}  /> </Can>,
             routes: [
               {
                 path: "/new-branch",
