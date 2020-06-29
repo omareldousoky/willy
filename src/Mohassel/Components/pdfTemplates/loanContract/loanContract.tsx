@@ -90,7 +90,7 @@ const LoanContract = (props) => {
                       <td>
                         <div>
                           <b>تليفون</b>
-                          <div style={{ display: 'inline-block', width: '80px' }}></div>
+                          <div style={{ display: 'inline-block', width: '80px' }}>{props.data.customer.mobilePhoneNumber}</div>
                         </div>
                       </td>
                     </tr>
@@ -107,7 +107,7 @@ const LoanContract = (props) => {
                                 <b>ثالثا:- السيد :-</b>
                                 <span>{guarantor.customerName}</span>
                               </div>
-                            </td>
+                            </td>individualInGroup
                             <td>
                               <div>
                                 <b>الكائن:</b>
@@ -128,7 +128,7 @@ const LoanContract = (props) => {
                               <div>
                                 <b>تليفون</b>
                                 <span>
-
+                                {guarantor.mobilePhoneNumber}
                                 </span>
                               </div>
                             </td>
@@ -197,7 +197,8 @@ const LoanContract = (props) => {
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه فقط لا غير، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
-                  {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في الغربيه - زفتي أو
+                  {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.customer.governorate} الكائن
+                    {props.branchDetails.address} أو
                   بأحدي وسائل الدفع
 								الإلكتروني المعتمده من هيئه الرقابه الماليه</div>
                 </section>
@@ -462,7 +463,7 @@ const LoanContract = (props) => {
                         <tr key={index}>
                           <td>{numbersToArabic(index + 2)}</td>
                           <td>{guarantor.customerName}</td>
-                          <td>٦١/١٣٨٠٤</td>
+                          <td>{numbersToArabic(guarantor.code)}</td>
                         </tr>
                       )
                     })}
@@ -500,7 +501,7 @@ const LoanContract = (props) => {
                         <div>أقر انا العميل/ {props.data.customer.customerName}</div>
                       </td>
                       <td>
-                        <div><b>الكود</b> &emsp; {props.data.customer.code}</div>
+                        <div><b>الكود</b> &emsp; {numbersToArabic(props.data.customer.code)}</div>
                       </td>
                     </tr>
                     <tr>
@@ -522,7 +523,7 @@ const LoanContract = (props) => {
                   </tbody>
                 </table>
 
-                <div>بأنني قد استلمت تمويل قدره: {props.data.principal} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
+                <div>بأنني قد استلمت تمويل قدره: {numbersToArabic(props.data.principal)} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
 							{timeToArabicDate(0,false)}</div>
                 <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
                 تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات

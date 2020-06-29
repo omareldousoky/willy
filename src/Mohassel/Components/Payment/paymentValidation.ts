@@ -23,7 +23,7 @@ export const earlyPaymentValidation = Yup.object().shape({
         )
         .test("Should not exceed Required Amount", local.amountShouldNotExceedReqAmount,
             function (this: any, value: number) {
-                return value <= this.parent.max
+                return value <= this.parent.requiredAmount
             }
         )
         .required(local.required),

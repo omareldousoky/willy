@@ -54,24 +54,9 @@ class BranchesList extends Component<Props, State> {
 
       },
       {
-        title: local.noOfUsers,
-        key: "noOfUsers",
-        render: data => 'noOfUsers'
-      },
-      {
-        title: local.transactions,
-        key: "transactions",
-        render: data => "transactions"
-      },
-      {
         title: local.creationDate,
         key: "creationDate",
         render: data => data.created? getDateAndTime(data.created.at) : ''
-      },
-      {
-        title: local.status,
-        key: "status",
-        render: data => data.status
       },
       {
         title: '',
