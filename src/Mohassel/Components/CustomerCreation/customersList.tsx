@@ -46,19 +46,14 @@ class CustomersList extends Component<Props, State> {
         render: data => data.customerName
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.nationalId
+      },
+      {
         title: local.governorate,
         key: "governorate",
         render: data => data.governorate
-      },
-      {
-        title: local.oneBranch,
-        key: "oneBranch",
-        render: data => data.branchId
-      },
-      {
-        title: local.createdBy,
-        key: "creationDate",
-        render: data => data.created?.by
       },
       {
         title: local.creationDate,
@@ -95,7 +90,13 @@ class CustomersList extends Component<Props, State> {
             </div>
           </div>
           <hr className="dashed-line" />
-          <Search searchKeys={['keyword', 'dateFromTo', 'governorate']} dropDownKeys={['name', 'nationalId', 'code']} url="customer" from={this.state.from} size={this.state.size}  hqBranchIdRequest = {this.props.branchId}/>
+          <Search 
+          searchKeys={['keyword', 'dateFromTo', 'governorate']} 
+          dropDownKeys={['name', 'nationalId', 'code']} 
+          searchPlaceholder ={local.searchByNameOrNationalId}
+          url="customer" 
+          from={this.state.from} size={this.state.size}  
+          hqBranchIdRequest = {this.props.branchId}/>
           {this.props.data &&
             <DynamicTable
               totalCount={this.props.totalCount}

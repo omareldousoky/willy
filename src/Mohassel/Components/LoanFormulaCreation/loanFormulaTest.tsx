@@ -12,8 +12,10 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, parseJwt } from '../../Services/utils';
+import { getCookie } from '../../Services/getCookie';
 import BackButton from '../BackButton/back-button';
+import store from '../../redux/store';
 
 interface Props {
     title: string;
@@ -23,6 +25,7 @@ interface State {
     loading: boolean;
     formulas: Array<Formula>;
     result: any;
+    branchName: string;
 }
 interface Formula {
     name: string;
@@ -54,7 +57,8 @@ class FormulaTest extends Component<Props, State>{
             },
             loading: false,
             formulas: [],
-            result: {}
+            result: {},
+            branchName: ''
         }
     }
     async UNSAFE_componentWillMount() {
@@ -69,6 +73,15 @@ class FormulaTest extends Component<Props, State>{
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
+    }
+    componentDidMount() {
+        this.getBranchData();
+    }
+    getBranchData() {
+        const token = getCookie('token');
+        const branchDetails = parseJwt(token);
+        const branchName = store.getState().auth.validBranches?.find(branch => branch._id === branchDetails.branch)?.name;
+        this.setState({ branchName })
     }
     submit = async (values: FormulaTestClass) => {
         this.setState({ loading: true });
@@ -153,7 +166,7 @@ class FormulaTest extends Component<Props, State>{
                         }
                     </Card>
                 </Container>
-                {Object.keys(this.state.result).length > 0 && <TestCalculateFormulaPDF data={this.state.result} />}
+                {Object.keys(this.state.result).length > 0 && <TestCalculateFormulaPDF data={this.state.result} branchName={this.state.branchName}/>}
             </>
         )
     }

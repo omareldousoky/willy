@@ -31,6 +31,7 @@ interface Props {
   from: number;
   url: string;
   roleId?: string;
+  searchPlaceholder: string;
   hqBranchIdRequest?: string;
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
@@ -138,7 +139,7 @@ class Search extends Component<Props, State> {
                           data-qc="searchKeyword"
                           onChange={formikProps.handleChange}
                           style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-                          placeholder={local.searchByNameOrNationalId}
+                          placeholder={this.props.searchPlaceholder}
                           value={formikProps.values.keyword}
                         />
                         <InputGroup.Append>
@@ -251,6 +252,7 @@ class Search extends Component<Props, State> {
                           <option value='approved' data-qc='approved'>{local.approved}</option>
                           <option value='created' data-qc='created'>{local.created}</option>
                           <option value='rejected' data-qc='rejected'>{local.rejected}</option>
+                          <option value='canceled' data-qc='canceled'>{local.cancelled}</option>
                         </Form.Control>
                       </div>
                     </Col>

@@ -31,9 +31,9 @@ const CustomerCardAttachments = (props) => {
                 <td>ترخيص رقم (٢)</td>
               </tr>
               <tr>
-                <td>رقم السجل التجارى : ٨٤٢٠٩</td>
+                <td>رقم السجل التجارى : {numbersToArabic(props.data.customer.businessLicenseNumber)}</td>
                 <td rowSpan={2} >العنوان : شارع الموافى من شارع الجمهورية أمام مدرسة النهضة</td>
-                <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
+                <td rowSpan={2} >تاريخ القيد بالسجل التجاري: {timeToArabicDate(props.data.customer.businessLicenseIssueDate, false)}</td>
               </tr>
               <tr>
                 <td>فرع : {props.branchDetails.name} - {props.data.customer.governorate}</td>
@@ -305,9 +305,9 @@ const CustomerCardAttachments = (props) => {
                       <td>ترخيص رقم (٢)</td>
                     </tr>
                     <tr>
-                      <td>رقم السجل التجارى : ٨٤٢٠٩</td>
+                      <td>رقم السجل التجارى : {numbersToArabic(individualInGroup.customer.businessLicenseNumber)}</td>
                       <td rowSpan={2} >العنوان : شارع الموافى من شارع الجمهورية أمام مدرسة النهضة</td>
-                      <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
+                      <td rowSpan={2} >تاريخ القيد بالسجل التجاري: {timeToArabicDate(individualInGroup.customer.businessLicenseIssueDate, false)}</td>
                     </tr>
                     <tr>
                       <td>فرع : {props.branchDetails.name} - {individualInGroup.customer.governorate}</td>
