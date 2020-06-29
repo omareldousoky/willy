@@ -162,7 +162,7 @@ const appRoutes = [
               {
                 path: "/view-product",
                 label: local.productName,
-                render: (props) => <ViewProduct {...props} />,
+                render: (props) => <Can I='getLoanProduct' a='product'><ViewProduct {...props} /></Can>,
               }
             ]
           },
@@ -179,7 +179,7 @@ const appRoutes = [
               {
                 path: "/view-formula",
                 label: local.calculationFormulaId,
-                render: (props) => <ViewFormula {...props} />,
+                render: (props) => <Can I='getCalculationFormula' a='product'><ViewFormula {...props} /></Can>,
               }
             ]
           },
@@ -198,12 +198,12 @@ const appRoutes = [
           {
             path: "/roles",
             label: local.roles,
-            render: (props) => <Can I='createRoles' a='user'><RolesList {...props} withHeader={true} /> </Can>,
+            render: (props) => <Can I='getRoles' a='user'><RolesList {...props} withHeader={true} /> </Can>,
             routes: [
               {
                 path: "/new-role",
                 label: local.createNewRole,
-                render: (props) => <Can I='getRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
+                render: (props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
               },
               {
                 path: "/edit-role",

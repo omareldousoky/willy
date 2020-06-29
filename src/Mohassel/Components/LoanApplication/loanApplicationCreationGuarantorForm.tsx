@@ -13,7 +13,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '100%' }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                    <div style={{ width: '100%', margin: '20px 0' }}>
+                    {values.guarantors.length > 0 && <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.guarantorInfo}</h5>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                             {values.guarantors.map((guarantor, i) =>
@@ -30,7 +30,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             )}
                             {/* <Button onClick={()=>props.addGuar()}>+</Button> */}
                         </div>
-                    </div>
+                    </div>}
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.viceCustomersInfo}</h5>
                         <FieldArray

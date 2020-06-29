@@ -4,14 +4,12 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
-
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from './manageLoansInitials';
-import { timeToDateyyymmdd, interestType } from '../../Services/utils';
+import { interestType } from '../../Services/utils';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { Formula } from '../LoanApplication/loanApplicationCreation';
 import Form from 'react-bootstrap/Form';
@@ -34,6 +32,7 @@ interface State {
     loading: boolean;
     formulas: Array<Formula>;
     filterFormulas: string;
+    manageLoansTabs: any[];
 }
 
 class FormulaList extends Component<Props, State> {
@@ -45,7 +44,8 @@ class FormulaList extends Component<Props, State> {
             from: 0,
             loading: false,
             formulas: [],
-            filterFormulas: ''
+            filterFormulas: '',
+            manageLoansTabs: []
         }
         this.mappers = [
             {
@@ -67,6 +67,7 @@ class FormulaList extends Component<Props, State> {
     }
     componentDidMount() {
         this.getFormulas()
+        this.setState({manageLoansTabs: manageLoansArray()})
     }
     renderIcons(data: any) {
         return (
@@ -92,9 +93,9 @@ class FormulaList extends Component<Props, State> {
         return (
             <div>
                 <HeaderWithCards
-                    header={local.calculationForumlas}
-                    array={manageLoansArray}
-                    active={1}
+                    header={local.loanProducts}
+                    array={this.state.manageLoansTabs}
+                    active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('calculationForumlas')}
                 />
                 <Card style={{ margin: '20px 50px' }}>
                     <Loader type="fullsection" open={this.state.loading} />
@@ -110,7 +111,6 @@ class FormulaList extends Component<Props, State> {
                             </div>
                         </div>
                         <hr className="dashed-line" />
-                        {/* <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} /> */}
                         {this.state.formulas.length > 0 && <div className="d-flex flex-row justify-content-center">
                             <Form.Control
                                 type="text"

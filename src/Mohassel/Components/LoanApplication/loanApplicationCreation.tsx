@@ -46,6 +46,7 @@ export interface Formula {
 interface LoanOfficer {
     _id: string;
     username: string;
+    name: string;
 }
 export interface Customer {
     _id?: string;
@@ -74,7 +75,6 @@ interface State {
     selectedCustomer: Customer;
     selectedGroupLeader: string;
     selectedLoanOfficer: string;
-    selectedBusinessSector: string;
     searchResults: Results;
     guarantor1Res: Results;
     guarantor2Res: Results;
@@ -192,7 +192,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             products: [],
             branchCustomers: [],
             businessSectors: [],
-            selectedBusinessSector: '',
             selectedCustomers: [],
             searchGroupCustomerKey: '',
             guarantor1Res: {
@@ -257,7 +256,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     if (customer.type === 'leader') {
                         this.setState({
                             selectedGroupLeader: customer.customer._id,
-                            selectedBusinessSector: customer.customer.businessSector,
                             selectedLoanOfficer: customer.customer.representative
                         })
                     }
@@ -268,7 +266,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
+            const value = application.body.product.noOfGuarantors
             const guarsArr: Array<any> = [];
             for (let i = 0; i < value; i++) {
                 if (application.body.guarantors[i]) {
@@ -717,14 +715,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             application: defaultApplication
         })
     }
-    filterCustomersByBusinessSector() {
-        const branchCustomers = this.state.branchCustomers;
-        if (this.state.selectedBusinessSector === "") {
-            return branchCustomers
-        } else {
-            return branchCustomers.filter((customer: Customer) => customer.businessSector === this.state.selectedBusinessSector)
-        }
-    }
     async viewCustomer(id) {
         this.setState({ loading: true });
         const selectedCustomer = await getCustomerByID(id)
@@ -770,40 +760,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     value={this.state.selectedLoanOfficer}
                                     disabled={this.state.selectedCustomers.length > 0}
                                     onChange={(event) => {
-                                        this.setState({ selectedLoanOfficer: event.currentTarget.value })
+                                        this.setState({ selectedLoanOfficer: event.currentTarget.value }, () => { this.searchCustomers() })
                                     }}
                                 >
                                     <option value="" disabled></option>
                                     {this.state.loanOfficers.map((officer) =>
-                                        <option key={officer._id} value={officer._id}>{officer.username}</option>
+                                        <option key={officer._id} value={officer._id}>{officer.name}</option>
                                     )}
                                 </Form.Control>
                             </Form.Group>
-
-                            <Form.Group controlId="businessSector" style={{ margin: 'auto', width: '60%' }}>
-                                <Form.Label>{local.businessSector}</Form.Label>
-                                <Form.Control as="select"
-                                    name="businessSector"
-                                    data-qc="businessSector"
-                                    value={this.state.selectedBusinessSector}
-                                    disabled={(this.state.selectedCustomers.length > 0 || this.state.selectedLoanOfficer.length === 0)}
-                                    onChange={(event) => {
-                                        this.setState({ selectedBusinessSector: event.currentTarget.value }, () => { this.searchCustomers() })
-                                    }}
-                                >
-                                    <option value="" disabled></option>
-                                    {this.state.businessSectors.map((businessSector, index) => {
-                                        return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
                         </div>
-                        {this.state.branchCustomers.length > 0 && this.state.selectedBusinessSector.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
+                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
                                 search={(key) => this.searchCustomers(key)}
-                                options={this.filterCustomersByBusinessSector()}
+                                options={this.state.branchCustomers}
                                 selected={this.state.selectedCustomers}
                                 onChange={(list) => this.handleGroupChange(list)}
                                 filterKey={this.state.searchGroupCustomerKey}
@@ -826,7 +798,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                         <option key={i} value={customer._id}>{customer.customerName}</option>
                                     )}
                                 </Form.Control>
-                            </Form.Group> : <span>Select customers</span>
+                                    </Form.Group> : <span>{local.rangeOfGroup}</span>
                             }
                         </div>
                         }
