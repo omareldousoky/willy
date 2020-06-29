@@ -15,6 +15,7 @@ import { theme } from '../../../theme';
 import UserRolesView from './userRolesView';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
 import CustomersForUser from './customersForUser';
+import Can from '../../config/Can';
 interface Props {
     history: any;
 }
@@ -94,21 +95,25 @@ class UserDetails extends Component<Props, State> {
         const id = this.props.history.location.state.details;
         return (
             <div className={'rowContainer'}>
-                <span className={'fa icon'}>
-                <div
-                    className={'iconConatiner fa icon'}
-                    onClick={() => { this.props.history.push({pathname:"/manage-accounts/users/edit-user",state: { details: id }}) }}
-                >
-                    <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
-                    {local.edit}</div>
-                 </span>
-                 <span className={'fa icon'}>
-                <div
-                onClick = {async ()=>this.handleActivationClick()}
-                     className={'iconConatiner '}>
-                   {this.state.data.status ==="active" && <img className={'iconImage'} alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />}
-                    {this.state.data.status ==="active" ? local.deactivate : local.activate}</div>
-                 </span>
+                <Can I="createUser" a="user">
+                    <span className={'fa icon'}>
+                        <div
+                            className={'iconConatiner fa icon'}
+                            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: id } }) }}
+                        >
+                            <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
+                            {local.edit}</div>
+                    </span>
+                </Can>
+                <Can I="userActivation" a="user">
+                    <span className={'fa icon'}>
+                        <div
+                            onClick={async () => this.handleActivationClick()}
+                            className={'iconConatiner '}>
+                            {this.state.data.status === "active" && <img className={'iconImage'} alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />}
+                            {this.state.data.status === "active" ? local.deactivate : local.activate}</div>
+                    </span>
+                </Can>
             </div>
         );
     }

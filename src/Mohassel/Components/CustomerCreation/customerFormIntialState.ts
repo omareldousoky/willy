@@ -54,8 +54,6 @@ export const step3 = {
     applicationDate: timeToDateyyymmdd(0),
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
-    accountNumber: '',
-    accountBranch: '',
     comments: '',
 };
 
@@ -118,7 +116,5 @@ export const customerCreationValidationStepThree = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(local.required),
     permanentEmployeeCount: Yup.string().trim(),
     partTimeEmployeeCount: Yup.string().trim(),
-    accountNumber: Yup.string().trim().max(100, local.maxLength100),
-    accountBranch: Yup.string().trim().max(100, local.maxLength100),
     comments: Yup.string().trim().max(500, local.maxLength100),
 })

@@ -41,6 +41,7 @@ interface Application {
   entryDate: number;
   principal: number;
   status: string;
+  group: Group;
 }
 interface IndividualsInGroup {
   type: string;
@@ -54,7 +55,6 @@ interface LoanItem {
   id: string;
   branchId: string;
   application: Application;
-  group: Group;
 }
 interface State {
   branches: Array<Branch>;
@@ -105,7 +105,7 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   async getDataFromBranch(e: Branch) {
     this.setState({ loading: true, filteredBranch: e });
-    const res = await searchApplication({ branchId: e.value, size: 50 });
+    const res = await searchApplication({ branchId: e.value, size: 1000, status: "reviewed" });
     if (res.status === "success") {
       this.setState({ loading: false, searchResults: res.body.applications ? res.body.applications.filter(loanItem => loanItem.application.status === "reviewed") : [] });
     } else {
@@ -180,36 +180,20 @@ class BulkApplicationApproval extends Component<Props, State>{
                   <th>{local.loanAppCreationDate}</th>
                   <th>{local.applicationStatus}</th>
                   <th>{local.loanPrinciple}</th>
-                  <th>
-                    <Form.Control as="select"
-                      type="select"
-                      name="issuingBank"
-                      data-qc="issuingBank"
-                      value={this.state.filteredLoanOfficer}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filteredLoanOfficer: e.currentTarget.value })}
-                    >
-                      <option value="">{local.loanOfficer}</option>
-                      {this.state.uniqueLoanOfficers.map((loanOfficer, index) => {
-                        return <option key={index} value={loanOfficer}>{loanOfficer}</option>
-                      })}
-                    </Form.Control>
-                  </th>
                   <th><FormCheck type='checkbox' onClick={(e) => this.checkAll(e)}></FormCheck></th>
                 </tr>
               </thead>
               <tbody>
                 {this.state.searchResults
-                  // .filter(loanItem => this.state.filteredLoanOfficer !== "" ? loanItem.loanOfficer === this.state.filteredLoanOfficer : loanItem)
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
                         <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
                         <td>{loanItem.application.product.productName}</td>
-                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName:loanItem.application.customer.customerName}</td>
+                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName:loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
                         <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.principal}</td>
-                        <td></td>
                         <td>
                           <FormCheck type='checkbox'
                             checked={this.state.selectedReviewedLoans.includes(loanItem)}

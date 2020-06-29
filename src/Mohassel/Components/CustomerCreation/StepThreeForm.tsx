@@ -175,52 +175,6 @@ export const StepThreeForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Row>
-                <Col sm={6}>
-                    <Form.Group controlId="accountNumber">
-                        <Form.Label className="customer-form-label">{local.accountNumber}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control
-                                type="text"
-                                name="accountNumber"
-                                data-qc="accountNumber"
-                                value={values.accountNumber}
-                                onBlur={handleBlur}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    const re = /^\d*$/;
-                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                        setFieldValue('accountNumber', event.currentTarget.value)
-                                    }
-                                }}
-                                disabled={(!allowed && props.hasLoan)}
-                                isInvalid={errors.accountNumber && touched.accountNumber}
-                            />}
-                        </Can>
-                        <Form.Control.Feedback type="invalid">
-                            {errors.accountNumber}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group controlId="accountBranch">
-                        <Form.Label className="customer-form-label">{local.accountBranch}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control
-                                type="text"
-                                name="accountBranch"
-                                data-qc="accountBranch"
-                                value={values.accountBranch}
-                                onChange={handleChange}
-                                disabled={(!allowed && props.hasLoan)}
-                                isInvalid={errors.accountBranch && touched.accountBranch}
-                            />}
-                        </Can>
-                        <Form.Control.Feedback type="invalid">
-                            {errors.accountBranch}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-            </Row>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
                     props.edit && allowed &&
