@@ -42,7 +42,6 @@ class UploadDocuments extends Component<Props, State> {
     }
 
     async getApplicationDocuments(){
-        console.log(this.props);
         const res = await getApplicationDocuments(this.props.application._id as string);
         if (res.status === "success") {
           if(res.body.docs){

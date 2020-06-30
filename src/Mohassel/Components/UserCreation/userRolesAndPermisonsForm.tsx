@@ -262,7 +262,6 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
          filterOption={customFilterOption}
          placeholder={<span style={{ width: '100%', padding: "5px", margin: "5px" }}><img style={{ float: "right" }} alt="search-icon" src={require('../../Assets/searchIcon.svg')} /> {local.chooseManager}</span>}
          name="manager"
-         value = {manager}
          data-qc="manager"
          options= {managersList}
          onChange = {(e: any) => {
