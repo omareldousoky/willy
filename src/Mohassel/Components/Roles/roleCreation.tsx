@@ -66,7 +66,6 @@ class RoleCreation extends Component<Props, State>{
                 step1: step1Edit
             })
         }
-        this.getRolesForManager();
     }
     async getPermissions() {
         this.setState({ loading: true })
@@ -182,8 +181,7 @@ class RoleCreation extends Component<Props, State>{
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.roleName}
-                                    </Form.Control.Feedback>
-                         
+                                    </Form.Control.Feedback>             
                             </Form.Group>
                             <Form.Group as={Row} controlId="hQpermission" className= "data-group row-nowrap">
                                     <Form.Check
@@ -201,30 +199,7 @@ class RoleCreation extends Component<Props, State>{
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.hQpermission}
                                     </Form.Control.Feedback>
-        
                                 <Form.Label style={{ textAlign: 'right' }}>{local.hQpermission}</Form.Label>
-                            </Form.Group>
-                            <Form.Group
-                                className={'data-group'}
-                                controlId='managerRole'
-                                style= {{minHeight:"20rem"}}
-                            >
-                                <Form.Label
-                                    className={'data-label'}
-                                >{local.selectManagerRole}</Form.Label>
-
-                                <Select
-                                    styles={theme.selectStyle}
-                                    isSearchable={true}
-                                    filterOption={customFilterOption}
-                                    placeholder={<span style={{ width: '100%', padding: "5px", margin: "5px" }}><img style={{ float: "right" }} alt="search-icon" src={require('../../Assets/searchIcon.svg')} /> {local.searchByUserRole}</span>}
-                                    name="mangerRole"
-                                    data-qc="managerRole"
-                                    onChange = {(e)=> {
-                                        this.setState({managerRole:e.value});
-                                    }}
-                                    options={this.state.managerRolesList}
-                                />
                             </Form.Group>
                             <Form.Group as={Row} className="justify-content-around">
                                 <Button style={{ width: '20%' }} onClick={() => { this.cancel() }}>{local.cancel}</Button>

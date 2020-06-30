@@ -107,7 +107,6 @@ class LoanList extends Component<Props, State> {
 
   async getLoans() {
      let query = {};
-     console.log(this.props);
      if(this.props.fromBranch){
        query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
      } else {

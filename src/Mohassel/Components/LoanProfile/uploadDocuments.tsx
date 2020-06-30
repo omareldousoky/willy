@@ -29,6 +29,7 @@ class UploadDocuments extends Component<Props, State> {
     
     async getDocumentTypes(){
 
+        const query =  this.props.application.status === "issued" ? "loanApplication,issuedLoan":"loanApplication";
         const response = await getDocumentsTypes('loanApplication,issuedLoan');
         if(response.status === "success") {
             this.setState({
@@ -73,7 +74,7 @@ class UploadDocuments extends Component<Props, State> {
     render() {
         return (
             <>
-                <Loader type="fullscreen" open={this.state.loading} />
+                <Loader type="fullscreen" open={this.state.loading} />               
                 {this.state.documentTypes.map((documentType, index) => {
                     const ImageFiles =  this.state.docsOfImagesFiles.filter(item => item.name === documentType.name);
                     return (
@@ -86,7 +87,10 @@ class UploadDocuments extends Component<Props, State> {
                             uploadedImageFile = {this.prepareApplicationDocuments(ImageFiles,documentType.name)}
                             keyName="applicationId"
                             keyId = {this.props.application._id as string}
-                            view = {false}
+                            view = {this.props.application.status==="pending"|| 
+                            this.props.application.status==="canceled"||
+                            (this.props.application.status==="issued" && documentType.type==="loanApplication") ||
+                            (this.props.application.status !=="issued" &&  documentType.type==="issuedLoan")as boolean}
                         />
                     )
 

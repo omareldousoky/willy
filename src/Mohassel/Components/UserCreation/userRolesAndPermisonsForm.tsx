@@ -148,54 +148,6 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
         {showRolesError &&
           <div style={{ color: 'red', fontSize: '15px', margin: '10px' }}>{local.rolesIsRequired}</div>}
       </Form.Group>
-      {!props.edit && roles.length > 0 &&
-      <Form.Group className="user-role-group" controlId="mainRole" style={{ border: "1px solid #e5e5e5",backgroundColor:"#f7fff2", padding: "5px",}}>
-          {
-            roles.map((role,index)=>{
-               return (
-         <div key={index}  className={index ===(roles.length -1 )? "row-nowrap" : "row-nowrap border-bottom"} style={{width: '100%',marginTop:"5px"}}>
-                 <Col>
-                 <div className= {"row-nowrap"} style ={{height: '50px'}}>
-                   <Form.Label className="">{local.roleName}</Form.Label>
-                   <Form.Label className="" >{role.label}</Form.Label>
-                   </div>
-                  </Col>
-                  <Col>
-                  <Row className="row-nowrap"> 
-                 <Form.Check 
-                 key={index}
-                 checked = {mainRoleCheck[index]}
-                 value = {props.values.mainRoleId}
-                 onChange = {(e)=>{
-                   const checks: any[] = [];
-                   mainRoleCheck.map((check, i)=>{
-                     if(i === index){
-                       checks.push(true);
-                       setMainRoleId(role.value)
-                       setMainRoleId(role.value);
-                       props.values.mainRoleId = role.value;
-                       setMangerRole(role.managerRole);
-                     
-                     } else {
-                       checks.push(false);
-                     }
-                      
-                   })
-                
-                   setMainRoleCheck(checks);
-                 }
-                 }
-                 type = "radio"
-                 />
-               <Form.Label className={""}>{local.chooseAsMainRole}</Form.Label>
-                 </Row>
-                 </Col>
-          </div>
-               )
-            })
-          }
-        </Form.Group>
-}
       {hasBranch &&
         <Form.Group
           className={'user-role-group'}
@@ -222,57 +174,6 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
             options={props.userBranchesOptions}
           />
         </Form.Group>
-      }
-   {!props.edit && branches.length > 0 &&
-      <Form.Group controlId = "mainBranch">
-        <Form.Label>
-           {local.chooseMainBranch}
-        </Form.Label>
-        <Select 
-         styles={theme.selectStyle}
-         isSearchable={true}
-         filterOption={customFilterOption}
-         placeholder={<span style={{ width: '100%', padding: "5px", margin: "5px" }}><img style={{ float: "right" }} alt="search-icon" src={require('../../Assets/searchIcon.svg')} /> {local.searchByBranch}</span>}
-         name="mainBranch"
-         data-qc="mainBranch"
-         options= {branches.map(branch=>{
-           return {
-             label: branch.branchName,
-             value: branch._id
-           }
-         })}
-         onChange = {(e: any) => {
-           props.values.mainBranchId = e.value;
-           setMainBranchId(e.value);
-         }
-
-         }
-        />
-        
-      </Form.Group>
-      }
-      {!props.edit && managersList.length > 0 &&
-      <Form.Group controlId="manager">
-        <Form.Label>
-           {local.chooseManager}
-        </Form.Label>
-        <Select 
-         styles={theme.selectStyle}
-         isSearchable={true}
-         filterOption={customFilterOption}
-         placeholder={<span style={{ width: '100%', padding: "5px", margin: "5px" }}><img style={{ float: "right" }} alt="search-icon" src={require('../../Assets/searchIcon.svg')} /> {local.chooseManager}</span>}
-         name="manager"
-         data-qc="manager"
-         options= {managersList}
-         onChange = {(e: any) => {
-            setMangerId(e.value)
-            props.values.manager = e.value;
-         }
-
-         }
-        />
-        
-      </Form.Group>
       }
       <Form.Group
         as={Row}
