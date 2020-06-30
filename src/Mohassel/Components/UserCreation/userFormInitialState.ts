@@ -39,6 +39,9 @@ export const userBranchesOptions = [
 export const initialStep2: RolesBranchesValues = {
     roles: [],
     branches: [],
+    mainBranchId: '',
+    mainRoleId: '',
+    manager: '',
 
 }
 export const wizardStepsArr = [
