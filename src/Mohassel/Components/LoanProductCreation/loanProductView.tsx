@@ -204,30 +204,6 @@ class ViewProduct extends Component<Props, State>{
                                         </tr>
                                     </>}
                                 </>}
-                                {/*{this.state.formula.roundWhat !== 'noRounding' &&
-                                    <>
-                                        <tr>
-                                            <td>{local.roundDirection}</td>
-                                            <td>{roundDirection(this.state.formula.roundDirection)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{local.roundTo}</td>
-                                            <td>{this.state.formula.roundTo}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{local.roundWhat}</td>
-                                            <td>{roundWhat(this.state.formula.roundWhat)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{local.equalInstallmentsTrue}</td>
-                                            <td>{(this.state.formula.equalInstallments ? local.yes : local.no)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{local.roundLastInstallment}</td>
-                                            <td>{(this.state.formula.roundLastInstallment ? local.yes : local.no)}</td>
-                                        </tr>
-                                    </> 
-                                }*/}
                             </tbody>
                         </Table>
                     </div>}
