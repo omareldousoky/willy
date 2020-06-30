@@ -164,8 +164,8 @@ class PostponeInstallments extends Component<Props, State>{
                     {(formikProps) =>
                         <Form onSubmit={formikProps.handleSubmit}>
                             <Col>
-                                <Form.Group as={Row} md="5" controlId="noOfInstallments">
-                                    <Form.Label column sm={4}>{local.noOfInstallments}</Form.Label>
+                                <Form.Group controlId="noOfInstallments">
+                                    <Form.Label column sm={6}>{local.noOfInstallments}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
                                             type="number"
@@ -183,8 +183,8 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="withInterest">
-                                    <Form.Label style={{ textAlign: 'right' }} column md={4}>{local.withInterest}</Form.Label>
-                                    <Col sm={1}>
+                                    <Form.Label style={{ textAlign: 'right' }} column md={3}>{local.withInterest}</Form.Label>
+                                    <div className="d-flex align-items-center">
                                         <Form.Check
                                             type="checkbox"
                                             name="withInterest"
@@ -198,11 +198,11 @@ class PostponeInstallments extends Component<Props, State>{
                                         <Form.Control.Feedback type="invalid">
                                             {formikProps.errors.withInterest}
                                         </Form.Control.Feedback>
-                                    </Col>
+                                    </div>
                                 </Form.Group>
 
-                                <Form.Group as={Row} md="5" controlId="postponementInterest">
-                                    <Form.Label column sm={4}>{local.postponementInterest}</Form.Label>
+                                <Form.Group controlId="postponementInterest">
+                                    <Form.Label column sm={6}>{local.postponementInterest}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
                                             type="number"
@@ -221,8 +221,8 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row} controlId="payWhere">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.payWhere}</Form.Label>
+                                <Form.Group controlId="payWhere">
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{local.payWhere}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control as="select"
                                             name="payWhere"
@@ -243,8 +243,8 @@ class PostponeInstallments extends Component<Props, State>{
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
-                                <Form.Group as={Row} controlId="installmentNumber">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.installmentNumber}</Form.Label>
+                                <Form.Group controlId="installmentNumber">
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{local.installmentNumber}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control as="select"
                                             name="installmentNumber"
@@ -266,7 +266,7 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
                             </Col>
-                            <div className="d-flex align-items-center">
+                            <div className="d-flex justify-content-end">
                                 <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
                             </div>
                         </Form>

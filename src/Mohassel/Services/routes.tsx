@@ -70,21 +70,21 @@ const appRoutes = [
       {
         path: "/tools",
         label: local.tools,
-        render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+        render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
         routes: [{
           path: "/encoding-files",
           label: local.encodingFiles,
-          render: (props) => <Can I ='getCustomer' a='customer'><EncodingFiles {...props}/> </Can>,
+          render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
           routes:[
             {
               path: "/create-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='createCustomer' a='customer'><DocumentTypeCreation {...props} edit={false} /> </Can>
+              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={false} /> </Can>
             },
             {
               path: "/edit-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='updateCustomer' a='customer'><DocumentTypeCreation {...props} edit={true} /> </Can>
+              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
             }
           ]
         }
@@ -130,7 +130,7 @@ const appRoutes = [
           {
             path: "/loan-roll-back",
             label: local.previousActions,
-            render: (props) => <Can I='rollback' a='application'><LoanRollBack {...props} /></Can>,
+            render: (props) => <LoanRollBack {...props} />,
           }
         ]
       },
@@ -162,7 +162,7 @@ const appRoutes = [
               {
                 path: "/view-product",
                 label: local.productName,
-                render: (props) => <ViewProduct {...props} />,
+                render: (props) => <Can I='getLoanProduct' a='product'><ViewProduct {...props} /></Can>,
               }
             ]
           },
@@ -179,7 +179,7 @@ const appRoutes = [
               {
                 path: "/view-formula",
                 label: local.calculationFormulaId,
-                render: (props) => <ViewFormula {...props} />,
+                render: (props) => <Can I='getCalculationFormula' a='product'><ViewFormula {...props} /></Can>,
               }
             ]
           },
@@ -198,12 +198,12 @@ const appRoutes = [
           {
             path: "/roles",
             label: local.roles,
-            render: (props) => <Can I='createRoles' a='user'><RolesList {...props} withHeader={true} /> </Can>,
+            render: (props) => <Can I='getRoles' a='user'><RolesList {...props} withHeader={true} /> </Can>,
             routes: [
               {
                 path: "/new-role",
                 label: local.createNewRole,
-                render: (props) => <Can I='getRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
+                render: (props) => <Can I='createRoles' a='user'><RoleCreation {...props} edit={false} /></Can>,
               },
               {
                 path: "/edit-role",
@@ -269,7 +269,14 @@ const appRoutes = [
       }, {
         path: "/loans",
         label: local.issuedLoans,
-        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>
+        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,
+        routes: [
+          {
+            path: "/loan-profile",
+            label: local.loanDetails,
+            render: (props) => <LoanProfile {...props} />,
+          },
+        ]
 
       }
       , {

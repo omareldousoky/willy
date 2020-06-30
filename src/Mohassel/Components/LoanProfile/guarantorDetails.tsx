@@ -17,6 +17,10 @@ export const GuarantorView = (props: Props) => {
                         <p style={{ margin: '0 10px 0 0' }}>{guar.customerName}</p>
                     </div>
                     <div className="d-flex flex-row">
+                        <p>{local.guarantorCode}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.code}</p>
+                    </div>
+                    <div className="d-flex flex-row">
                         <p>{local.nationalId}</p>
                         <p style={{ margin: '0 10px 0 0' }}>{guar.nationalId}</p>
                     </div>
@@ -30,9 +34,16 @@ export const GuarantorView = (props: Props) => {
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.customerHomeAddress}</p>
-                        <p style={{ width: '60%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.customerHomeAddress}</p>
+                        <p style={{ width: '50%', margin: '0 10px 0 0', wordBreak: 'break-all' }}>{guar.customerHomeAddress}</p>
                     </div>
-
+                    <div className="d-flex flex-row">
+                        <p>{local.homePhoneNumber}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.homePhoneNumber}</p>
+                    </div>
+                    <div className="d-flex flex-row">
+                        <p>{local.mobilePhoneNumber}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.mobilePhoneNumber}</p>
+                    </div>
                 </div>
             )
                 : <p>No Guarantors</p>}
@@ -55,11 +66,11 @@ export const GuarantorTableView = (props: Props) => {
                 <tbody>
                     {props.guarantors.length > 0 && props.guarantors.map((guar, i) =>
                         <tr key={i}>
-                            <td></td>
+                            <td>{guar.code}</td>
                             <td>{guar.customerName}</td>
                             <td>{guar.geographicalDistribution}</td>
                             <td>{guar.customerHomeAddress}</td>
-                            <td>{guar.homePhoneNumber}</td>
+                            <td>{guar.mobilePhoneNumber}</td>
                         </tr>
                     )}
                 </tbody>

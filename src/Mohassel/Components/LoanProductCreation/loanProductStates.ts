@@ -5,7 +5,7 @@ export const LoanProductValidation = Yup.object().shape({
     beneficiaryType: Yup.string().required('required!'),
     calculationFormulaId: Yup.string().required('required!'),
     periodLength: Yup.number().integer('Must be int').min(1, "Can't be less than 1").required('required!'),
-    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `cant be out of range` + Yup.ref('minInstallment') + 'to' + Yup.ref('maxInstallment'),
+    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `outOfRange`,
         function (this: any, value: any) {
             const { minInstallment, maxInstallment } = this.parent
             if (minInstallment === 0 && maxInstallment === 0) {
@@ -49,5 +49,4 @@ export const LoanProductValidation = Yup.object().shape({
     loanImpactPrincipal: Yup.boolean().required('required!'),
     mustEnterGuarantor: Yup.boolean().required('required!'),
     noOfGuarantors: Yup.number().integer().required('required!'),
-    guarantorGuaranteesMultiple: Yup.boolean().required('required!'),
 })

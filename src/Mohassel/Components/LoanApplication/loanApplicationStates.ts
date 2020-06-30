@@ -93,7 +93,7 @@ export const LoanApplicationValidation = Yup.object().shape({
     periodType: Yup.string().required(local.required),
     gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
     pushPayment: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
-    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `cant be out of range` + Yup.ref('minInstallment') + 'to' + Yup.ref('maxInstallment'),
+    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `outOfRange`,
         function (this: any, value: any) {
             const { minInstallment, maxInstallment } = this.parent
             if (minInstallment === 0 && maxInstallment === 0) {
@@ -134,13 +134,13 @@ export const LoanApplicationValidation = Yup.object().shape({
     // )
     individualDetails: Yup.array().of(
         Yup.object().shape({
-            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0")
+            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").nullable()
         })
-    ),
+    ).nullable(),
     viceCustomers: Yup.array().of(
         Yup.object().shape({
             name: Yup.string(),
-            phoneNumber: Yup.string().min(10).max(11)
+            phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11)
         })
     ),
 });

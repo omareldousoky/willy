@@ -48,7 +48,8 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
         }
     }
     useEffect(() => {
-        getOfficerName(props.application.customer.representative);
+        const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
+        getOfficerName(id);
         getLoanUsages()
     }, [])
     return (
@@ -149,6 +150,7 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
 //this is used in rescheduling
 export const LoanDetailsBoxView = (props: Props) => {
     const [officer, changeOfficerName] = useState('')
+    const [loanUse, changeUse] = useState('')
     async function getOfficerName(id) {
         const res = await getLoanOfficer(id);
         if (res.status === "success") {
@@ -159,8 +161,22 @@ export const LoanDetailsBoxView = (props: Props) => {
             return ''
         }
     }
+    async function getLoanUsages() {
+        const res = await getLoanUsage();
+        if (res.status === "success") {
+            const uses = res.body.usages
+            const value = uses.find(use => use.id === props.application.usage).name
+            changeUse(value)
+        } else {
+            console.log('Err')
+            return ''
+        }
+    }
     useEffect(() => {
-        getOfficerName(props.application.customer.representative);
+        const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
+        getOfficerName(id);
+        getLoanUsages()
+
     }, [])
     return (
         <Form>
@@ -280,7 +296,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.usage}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.usage} </Form.Label>
+                        <Form.Label>{loanUse} </Form.Label>
                     </Row>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
@@ -296,7 +312,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.enquirorId} </Form.Label>
+                        <Form.Label>{officer} </Form.Label>
                     </Row>
                 </Form.Group>
             </Form.Row>
