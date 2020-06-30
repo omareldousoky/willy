@@ -53,6 +53,9 @@
 
         & .tablestyle {
             margin-bottom: 10px;
+            & td{
+                direction: ltr;
+            }
         }
 
         & .overall {

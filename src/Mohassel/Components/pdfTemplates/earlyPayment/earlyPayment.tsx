@@ -4,8 +4,8 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 
 const EarlyPaymentPDF = (props) => {
-    function getStatus(status: string){
-        switch(status){
+    function getStatus(status: string) {
+        switch (status) {
             case 'paid': return local.paid;
             case 'unpaid': return local.unpaid;
             case 'partiallyPaid': return local.partiallyPaid;
@@ -14,7 +14,7 @@ const EarlyPaymentPDF = (props) => {
             default: return '';
         }
     }
-    function getSum(key: string){
+    function getSum(key: string) {
         let max = 0;
         props.data.installmentsObject.installments.forEach(installment => {
             max = max + installment[key];
@@ -24,11 +24,25 @@ const EarlyPaymentPDF = (props) => {
     function getInstallmentsRemaining() {
         const installmentsRemaining: Array<number> = [];
         props.data.installmentsObject.installments.forEach(installment => {
-          if (installment.status !== 'paid')
-            installmentsRemaining.push(installment.id);
+            if (installment.status !== 'paid')
+                installmentsRemaining.push(installment.id);
         })
         return numbersToArabic(installmentsRemaining.toString());
-      }
+    }
+    function getApplicationFee() {
+        if(props.data.product.applicationFeePercent !== 0){
+            return numbersToArabic(props.data.product.applicationFeePercent)
+        }
+        if(props.data.product.applicationFeePercentPerPerson !== 0){
+            return numbersToArabic(props.data.product.applicationFeePercentPerPerson)
+        }
+        if(props.data.product.individualApplicationFee !== 0){
+            return numbersToArabic(props.data.product.individualApplicationFee)
+        }
+        if(props.data.product.applicationFee !== 0){
+            return numbersToArabic(props.data.product.applicationFee)
+        }
+    }
     return (
         <div className="early-payment-print" style={{ direction: "rtl" }} lang="ar">
             <table>
@@ -91,8 +105,8 @@ const EarlyPaymentPDF = (props) => {
                         <td>الغرامات المستحقه : <div className="frame">0.00</div>
 
                         </td>
-                        <td>ر ط
-					<div className="frame">300</div>
+                        <td>رسوم تحصيل
+					<div className="frame">{getApplicationFee()}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -124,8 +138,8 @@ const EarlyPaymentPDF = (props) => {
                                 <td>{numbersToArabic(installment.principalPaid)}</td>
                                 <td>{numbersToArabic(installment.feesPaid)}</td>
                                 <td>{getStatus(installment.status)}</td>
-                                <td>{timeToArabicDate(installment.paidAt, false)}</td>
-                                <td>{Math.round((installment.paidAt-installment.dateOfPayment)/(1000*60*60*24))> 0? numbersToArabic(Math.round((installment.paidAt-installment.dateOfPayment))): ''}</td>
+                                <td>{installment.paidAt? timeToArabicDate(installment.paidAt, false): ''}</td>
+                                <td>{Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24)) > 0 ? numbersToArabic(Math.round((installment.paidAt - installment.dateOfPayment))) : ''}</td>
                                 <td></td>
                             </tr>
                         )
@@ -167,7 +181,7 @@ const EarlyPaymentPDF = (props) => {
                         <td></td>
                         <td></td>
                         <th className="border">الخصم</th>
-                        <td className="border">{numbersToArabic((props.data.installmentsObject.totalInstallments.feesSum - getSum('feesPaid'))-(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal))}</td>
+                        <td className="border">{numbersToArabic( props.earlyPaymentData.requiredAmount -((props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal) + props.earlyPaymentData.remainingPrincipal))}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -184,7 +198,7 @@ const EarlyPaymentPDF = (props) => {
                         <td className="border">{getInstallmentsRemaining()}</td>
                         <td className="border">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
                         <td className="border">{numbersToArabic(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal)}</td>
-                        <td className="border">{numbersToArabic(props.earlyPaymentData.requiredAmount - (props.data.installmentsObject.totalInstallments.feesSum - getSum('feesPaid'))-(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal))}</td>
+                        <td className="border">{numbersToArabic((props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal) + props.earlyPaymentData.remainingPrincipal)}</td>
                         <td></td>
                         <td></td>
                         <td></td>

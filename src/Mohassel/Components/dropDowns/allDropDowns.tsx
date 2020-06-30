@@ -37,7 +37,7 @@ export const LoanOfficersDropDown = (props) => {
                 // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
                 // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
                 onChange={(loanOfficer) => props.onSelectLoanOfficer(loanOfficer)}
-                getOptionLabel={(option) => option.username}
+                getOptionLabel={(option) => option.name}
                 getOptionValue={(option) => option._id}
                 loadOptions={getLoanOfficers}
                 cacheOptions defaultOptions
