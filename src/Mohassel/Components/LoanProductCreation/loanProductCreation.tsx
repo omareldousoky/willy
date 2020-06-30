@@ -67,7 +67,6 @@ class LoanProductCreation extends Component<Props, State>{
                 loanImpactPrincipal: true,
                 mustEnterGuarantor: false,
                 noOfGuarantors: 2,
-                guarantorGuaranteesMultiple: true,
                 deductionFee: 0,
                 allocatedDebtForGoodLoans: 0,
                 aging: [{ from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }],

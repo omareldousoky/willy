@@ -199,10 +199,6 @@ class ViewProduct extends Component<Props, State>{
                                     </tr>
                                     {this.state.product.mustEnterGuarantor && <>
                                         <tr>
-                                            <td>{local.guarantorGuaranteesMultiple}</td>
-                                            <td>{(this.state.product.guarantorGuaranteesMultiple ? local.yes : local.no)}</td>
-                                        </tr>
-                                        <tr>
                                             <td>{local.noOfGuarantors}</td>
                                             <td>{this.state.product.noOfGuarantors}</td>
                                         </tr>
