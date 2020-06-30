@@ -339,6 +339,8 @@
     "hrCode": "كود الموارد البشرية",
     "confrimPasswordCheck": "كلمة المرور يجب ان تتطابق",
     "selectUserPermision": "تحديد دور المستخدم",
+    "selectManagerRole": "تحديد دور المدير",
+    "getManagerRolesError": "خطأ في إسترجاع أدوار للمدير",
     "searchByUserRole": "البحث بدور المستخدم",
     "searchByBranchName": "البحث بإسم الفرع",
     "goToBranch": "الإنتقال إلي فرع",

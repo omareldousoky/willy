@@ -227,3 +227,12 @@ export const dayToArabic = (index: number): string => {
   const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   return weekday[index];
 }
+export const customFilterOption = (option, rawInput) => {
+  if (option.label) {
+    const words = rawInput.split(' ');
+    return words.reduce(
+      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
+      true,
+    );
+  }
+};

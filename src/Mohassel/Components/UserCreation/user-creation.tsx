@@ -115,10 +115,7 @@ class UserCreation extends Component<Props, State> {
       componentDidMount() {
         if (this.props.edit) {
            this.setState({loading: true}, () => this.getUser())
-        }  else {
-
-        }
-            
+        }  
         this.setState({ loading: true },()=>this.getUserRolePermissions())
     }
   
