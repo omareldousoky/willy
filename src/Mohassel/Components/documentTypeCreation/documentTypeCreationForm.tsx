@@ -35,7 +35,7 @@ const DocumentTypeCreationForm = (props: Props) => {
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.name && props.touched.name) as boolean}
-                            disabled = {props.edit}
+                            disabled={props.edit}
                         />
                         <Form.Control.Feedback
                             type="invalid">
@@ -46,14 +46,18 @@ const DocumentTypeCreationForm = (props: Props) => {
                 <Col>
                     <Form.Group className="data-group" controlId="type">
                         <Form.Label className="data-label">{`${local.documentFor} *`}</Form.Label>
-                        <Form.Control
-                            type="text"
+                        <Form.Control as="select"
                             name="type"
                             value={props.values.type}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.type && props.touched.type) as boolean}
-                        />
+                        >
+                            <option value="" disabled></option>
+                            <option value="customer">{local.customer}</option>
+                            <option value="loanApplication">{local.loanApplicationId}</option>
+                            <option value="issuedLoan">{local.issuedLoan}</option>
+                        </Form.Control>
                         <Form.Control.Feedback
                             type="invalid">
                             {props.errors.type}
@@ -72,7 +76,7 @@ const DocumentTypeCreationForm = (props: Props) => {
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.pages && props.touched.pages) as boolean}
-                            disabled = {props.edit}
+                            disabled={props.edit}
                         />
                         <Form.Control.Feedback
                             type="invalid">

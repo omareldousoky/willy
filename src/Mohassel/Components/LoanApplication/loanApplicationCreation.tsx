@@ -263,8 +263,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 this.setState({
                     selectedCustomers
                 })
+            }else{
+                this.populateCustomer(application.body.customer)
             }
-            this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
             const value = application.body.product.noOfGuarantors
             const guarsArr: Array<any> = [];
