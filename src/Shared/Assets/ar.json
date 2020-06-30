@@ -403,6 +403,7 @@
     "principalPaid": "الاصل المسدد",
     "totalPaid": "مسدد",
     "loanApplications": "طلبات القروض",
+    "issuedLoan": "قرض مصدر",
     "issuedLoans": "قروض مصدرة",
     "noOfIssuedLoans": "عدد القروض المصدرة",
     "createCalculationMethod": "إنشاء طريقة حساب",
@@ -577,5 +578,7 @@
     "mustBeinRange":"يجب أن تكون القيمة بين",
     "and":"و",
     "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء",
-    "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط"
+    "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
+    "customer":"العميل"
+
 }
