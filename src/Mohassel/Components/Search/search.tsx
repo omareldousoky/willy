@@ -32,6 +32,7 @@ interface Props {
   url: string;
   roleId?: string;
   searchPlaceholder: string;
+  datePlaceholder?: string;
   hqBranchIdRequest?: string;
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
@@ -166,7 +167,7 @@ class Search extends Component<Props, State> {
                   return (
                     <Col key={index} sm={6}>
                       <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
-                        <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{local.creationDate}</p>
+                        <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{this.props.datePlaceholder? this.props.datePlaceholder : local.creationDate}</p>
                         <span>{local.from}</span>
                         <Form.Control
                           style={{ marginLeft: 20, border: 'none' }}

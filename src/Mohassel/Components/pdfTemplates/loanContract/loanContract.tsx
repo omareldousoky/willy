@@ -419,8 +419,8 @@ const LoanContract = (props) => {
 
                 <div>
                   <div className="title_last">
-                    <Barcode value={props.data.applicationCode}/>
-                    <div>{props.data.applicationCode}</div>
+                    <Barcode value={props.data.applicationKey}/>
+                    <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
 
@@ -456,14 +456,14 @@ const LoanContract = (props) => {
                     <tr>
                       <td>١</td>
                       <td>{props.data.customer.customerName}</td>
-                      <td>{props.data.customer.code}</td>
+                      <td>{props.data.customer.key}</td>
                     </tr>
                     {props.data.guarantors.map((guarantor, index) => {
                       return (
                         <tr key={index}>
                           <td>{numbersToArabic(index + 2)}</td>
                           <td>{guarantor.customerName}</td>
-                          <td>{numbersToArabic(guarantor.code)}</td>
+                          <td>{numbersToArabic(guarantor.key)}</td>
                         </tr>
                       )
                     })}
@@ -501,7 +501,7 @@ const LoanContract = (props) => {
                         <div>أقر انا العميل/ {props.data.customer.customerName}</div>
                       </td>
                       <td>
-                        <div><b>الكود</b> &emsp; {numbersToArabic(props.data.customer.code)}</div>
+                        <div><b>الكود</b> &emsp; {numbersToArabic(props.data.customer.key)}</div>
                       </td>
                     </tr>
                     <tr>
@@ -563,14 +563,14 @@ const LoanContract = (props) => {
               <div className="main">
                 <div className="last">
                   <div className="title_last">
-                    <Barcode value={props.data.applicationCode}/>
-                    <div>{props.data.applicationCode}</div>
+                    <Barcode value={props.data.applicationKey}/>
+                    <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                    <Barcode value={props.data.applicationCode}/>
-                    <div>{props.data.applicationCode}</div>
+                    <Barcode value={props.data.applicationKey}/>
+                    <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
                   </div>

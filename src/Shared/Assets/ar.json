@@ -225,7 +225,9 @@
     "andEndsIn": "و تنتهى فى",
     "welcome": "آهلا",
     "searchByNameOrNationalId": "البحث بالاسم او برقم البطاقة",
+    "searchByName": "البحث بالاسم ",
     "searchByBranchNameOrCode": "البحث بإسم الفرع أو الكود",
+    "searchByBranchNameOrNationalIdOrCode": "البحث بإسم الفرع او برقم البطاقة أو الكود",
     "dateFrom": "التاريخ من",
     "dateTo": "التاريخ الي",
     "noShow": "عدم حضورهم للصرف",
@@ -273,6 +275,7 @@
     "oneBranch": "الفرع",
     "employment": "التعيين",
     "creationDate": "تاريخ الإنشاء",
+    "issuanceDate": "تاريخ الإصدار",
     "noOfUsers": "عدد المستخدمين",
     "userSearchPlaceholder": "إبحث بإسم المستخدم أو رقم تعريفه",
     "searchByBranch": "إبحث بالفرع",
@@ -572,5 +575,7 @@
     "bankName": "إسم البنك",
     "bankAddress": "عنوان البنك",
     "mustBeinRange":"يجب أن تكون القيمة بين",
-    "and":"و"
+    "and":"و",
+    "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء",
+    "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط"
 }
