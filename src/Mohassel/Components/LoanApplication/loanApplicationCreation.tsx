@@ -385,10 +385,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         let query = {}
         if (key && key.length > 0) {
             this.setState({ loading: true, searchGroupCustomerKey: key, branchCustomers: [] });
-            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
+            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         } else {
             this.setState({ loading: true, branchCustomers: [] });
-            query = { from: 0, size: 50, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
+            query = { from: 0, size: 50, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
@@ -774,7 +774,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
-                                search={(key) => this.searchCustomers(key)}
                                 options={this.state.branchCustomers}
                                 selected={this.state.selectedCustomers}
                                 onChange={(list) => this.handleGroupChange(list)}
