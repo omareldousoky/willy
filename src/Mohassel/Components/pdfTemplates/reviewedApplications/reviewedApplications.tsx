@@ -2,6 +2,7 @@ import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { ageCalculate } from './../../../Services/utils';
+import store from '../../../redux/store';
 const ReviewedApplicationsPDF = (props) => {
     return (
         <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
@@ -16,7 +17,7 @@ const ReviewedApplicationsPDF = (props) => {
                     <tr>
                         <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
                         <td></td>
-                        <td style={{ fontSize: '8px' }}>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
+                        <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
                         <td></td>

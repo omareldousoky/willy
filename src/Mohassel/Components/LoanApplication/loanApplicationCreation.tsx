@@ -387,10 +387,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         let query = {}
         if (key && key.length > 0) {
             this.setState({ loading: true, searchGroupCustomerKey: key, branchCustomers: [] });
-            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
+            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         } else {
             this.setState({ loading: true, branchCustomers: [] });
-            query = { from: 0, size: 50, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
+            query = { from: 0, size: 50, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
@@ -793,7 +793,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 >
                                     <option value="" disabled></option>
                                     {this.state.businessSectors.map((businessSector, index) => {
-                                        return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
+                                        return <option key={index} value={businessSector.i18n.ar} >{businessSector.i18n.ar}</option>
                                     })}
                                 </Form.Control>
                             </Form.Group>

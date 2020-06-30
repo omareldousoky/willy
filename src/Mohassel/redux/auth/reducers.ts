@@ -9,6 +9,7 @@ export const authReducer = (state: Auth = { loading: true }, action) => {
                 clientPermissions: clientPermissions,
                 roles: action.payload.roles,
                 validBranches: action.payload.validBranches,
+                name: action.payload.name,
                 loading: false
             }
         default:
