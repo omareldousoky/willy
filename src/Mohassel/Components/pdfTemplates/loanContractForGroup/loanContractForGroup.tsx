@@ -375,8 +375,8 @@ const LoanContractForGroup = (props) => {
 
                 <div>
                   <div className="title_last">
-                    <Barcode value={props.data.applicationCode} />
-                    <div>{props.data.applicationCode}</div>
+                    <Barcode value={props.data.applicationKey} />
+                    <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{leaderName}</div>
 
@@ -414,7 +414,7 @@ const LoanContractForGroup = (props) => {
                     <tr key={index}>
                       <td>{numbersToArabic(index + 1)}</td>
                       <td>{individualInGroup.customer.customerName}</td>
-                      <td>{individualInGroup.customer.code}</td>
+                      <td>{individualInGroup.customer.key}</td>
                     </tr>
                       )
                       })}
@@ -442,14 +442,14 @@ const LoanContractForGroup = (props) => {
               <div className="main">
                 <div className="last">
                   <div className="title_last">
-                    <Barcode value={props.data.applicationCode} />
-                    <div>{props.data.applicationCode}</div>
+                    <Barcode value={props.data.applicationKey} />
+                    <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{leaderName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                    <Barcode value={props.data.applicationCode} />
-                    <div>{props.data.applicationCode}</div>
+                    <Barcode value={props.data.applicationKey} />
+                    <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{leaderName}</div>
                   </div>

@@ -206,7 +206,6 @@ class Payment extends Component<Props, State>{
     } else {
       const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
       if (res.status === 'success') {
-        console.log(res)
         this.setState({ loadingFullScreen: false });
         Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
       } else {
@@ -238,6 +237,9 @@ class Payment extends Component<Props, State>{
         installmentsRemaining.push(installment.id);
     })
     return installmentsRemaining.toString();
+  }
+  componentWillUnmount() {
+    this.props.changePaymentState(0)
   }
   renderPaymentMethods() {
     switch (this.props.paymentState) {

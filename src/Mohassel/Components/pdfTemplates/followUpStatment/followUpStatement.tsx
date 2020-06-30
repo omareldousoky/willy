@@ -2,6 +2,7 @@ import React from 'react';
 import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Services/utils';
+import store from '../../../redux/store';
 
 const FollowUpStatment = (props) => {
     function getGov() {
@@ -21,7 +22,7 @@ const FollowUpStatment = (props) => {
                     <tr>
                         <td>{props.branchDetails.name} - {getGov()}</td>
                         <td></td>
-                        <td>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
+                        <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
                         <td>{timeToArabicDate(0, true)}</td>
@@ -83,7 +84,7 @@ const FollowUpStatment = (props) => {
                         {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{individualInGroup.customer.code}</td>
+                                    <td>{individualInGroup.customer.key}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
                                     <td>{individualInGroup.amount}</td>
                                     <td></td>
