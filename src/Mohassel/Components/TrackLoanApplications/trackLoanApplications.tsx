@@ -10,7 +10,9 @@ import Search from '../Search/search';
 import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
+import { getBranch } from '../../Services/APIs/Branch/getBranch';
+import { getCookie } from '../../Services/getCookie';
 
 interface Product {
   productName: string;
@@ -36,6 +38,7 @@ interface State {
   print: boolean;
   size: number;
   from: number;
+  branchDetails: any;
 }
 interface Props {
   history: any;
@@ -55,6 +58,7 @@ class TrackLoanApplications extends Component<Props, State>{
       print: false,
       size: 5,
       from: 0,
+      branchDetails: {}
     }
     this.mappers = [
       {
@@ -71,8 +75,16 @@ class TrackLoanApplications extends Component<Props, State>{
         title: local.customerName,
         key: "customerName",
         render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
+          </div>
+      },
+      {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
+          {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.nationalId}</span>: null)}
         </div>
       },
       {
@@ -81,8 +93,8 @@ class TrackLoanApplications extends Component<Props, State>{
         render: data => data.application.product.productName
       },
       {
-        title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        title: local.loanCreationDate,
+        key: "loanCreationDate",
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
@@ -115,8 +127,18 @@ class TrackLoanApplications extends Component<Props, State>{
         return <div className="status-chip outline approved">{local.approved}</div>
       case 'rejected':
         return <div className="status-chip outline rejected">{local.rejected}</div>
+      case 'canceled':
+        return <div className="status-chip outline canceled">{local.cancelled}</div>
       default: return null;
     }
+  }
+  async getBranchData() {
+    const token = getCookie('token');
+    const details = parseJwt(token)
+    const res = await getBranch(details.branch);
+    if (res.status === 'success') {
+      this.setState({ branchDetails: res.body.data, print: true }, () => window.print()) 
+    } else console.log('error getting branch details')
   }
   render() {
     const reviewedResults = (this.props.data) ? this.props.data.filter(result => result.application.status === "reviewed") : [];
@@ -132,7 +154,7 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
               <div>
                 {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
-                <Button disabled={reviewedResults.length === 0} style={{ marginRight: 10 }} onClick={() => { this.setState({ print: true }, () => window.print()) }}>{local.downloadPDF}</Button>
+                <Button disabled={reviewedResults.length === 0} style={{ marginRight: 10 }} onClick={() => { this.getBranchData() }}>{local.downloadPDF}</Button>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -155,7 +177,7 @@ class TrackLoanApplications extends Component<Props, State>{
             />
           </Card.Body>
         </Card>
-        {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} />}
+        {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} branchDetails={this.state.branchDetails} />}
       </>
     )
   }

@@ -168,7 +168,7 @@ class DualBox extends Component<Props, State> {
                                     {this.state.options
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
                                         .map(option => {
-                                            return <div key={option._id} onClick={() => this.selectItem(option)}
+                                            return <div key={option._id} 
                                                 className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected" : "list-group-item"}>
                                                 <Form.Check
                                                     type='checkbox'

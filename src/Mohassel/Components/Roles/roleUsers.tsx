@@ -7,6 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
+import Can from '../../config/Can';
 
 interface Props {
     history: any;
@@ -43,14 +44,14 @@ class RoleUsers extends Component<Props, State> {
                 render: data => data.name
             },
             {
+                title: local.nationalId,
+                key: "nationalId",
+                render: data => data.nationalId
+            },
+            {
                 title: local.employment,
                 key: "employment",
                 render: data => "employment"
-            },
-            {
-                title: local.createdBy,
-                key: "createdBy",
-                render: data => "createdBy"
             },
             {
                 title: local.creationDate,
@@ -62,7 +63,7 @@ class RoleUsers extends Component<Props, State> {
                 key: "actions",
                 render: data => <>
                     <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }}></span>
-                    <span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }}></span>
+                    <Can I="createUser" a="user"><span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }}></span></Can>
                 </>
             },
         ]
@@ -89,14 +90,14 @@ class RoleUsers extends Component<Props, State> {
                             </div> */}
                         </div>
                         <hr className="dashed-line" />
-                        <Search 
-                        searchKeys={['keyword', 'dateFromTo']} 
-                        dropDownKeys={['name', 'nationalId']}
-                        searchPlaceholder = {local.searchByNameOrNationalId}
-                         url="user" 
-                         from={this.state.from} 
-                         size={this.state.size} 
-                         roleId={this.props._id}/>
+                        <Search
+                            searchKeys={['keyword', 'dateFromTo']}
+                            dropDownKeys={['name', 'nationalId']}
+                            searchPlaceholder={local.searchByNameOrNationalId}
+                            url="user"
+                            from={this.state.from}
+                            size={this.state.size}
+                            roleId={this.props._id} />
                         <DynamicTable
                             mappers={this.mappers}
                             totalCount={this.props.totalCount}
@@ -115,17 +116,17 @@ class RoleUsers extends Component<Props, State> {
 
 const addSearchToProps = dispatch => {
     return {
-      search: data => dispatch(search(data)),
-      setSearchFilters: data => dispatch(searchFilters(data)),
+        search: data => dispatch(search(data)),
+        setSearchFilters: data => dispatch(searchFilters(data)),
     };
-  };
-  const mapStateToProps = state => {
+};
+const mapStateToProps = state => {
     return {
-      data: state.search.data,
-      totalCount: state.search.totalCount,
-      loading: state.loading,
-      searchFilters: state.searchFilters
+        data: state.search.data,
+        totalCount: state.search.totalCount,
+        loading: state.loading,
+        searchFilters: state.searchFilters
     };
-  };
+};
 
 export default connect(mapStateToProps, addSearchToProps)(withRouter(RoleUsers));

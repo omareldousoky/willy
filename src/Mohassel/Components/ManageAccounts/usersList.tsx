@@ -56,14 +56,14 @@ class UsersList extends Component<Props, State> {
         render: data => data.name
       },
       {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.nationalId
+      },
+      {
         title: local.employment,
         key: "employment",
         render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
-      },
-      {
-        title: local.createdBy,
-        key: "createdBy",
-        render: data => data.created? data.created.by : null
       },
       {
         title: local.creationDate,
@@ -104,8 +104,9 @@ class UsersList extends Component<Props, State> {
     return (
       <>
         <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
-        <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span>
-        <span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span> </>
+        <Can I="createUser" a="user"><span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span></Can>
+        <Can I="userActivation" a="user"><span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span></Can>
+      </>
     );
   }
   getUsers() {

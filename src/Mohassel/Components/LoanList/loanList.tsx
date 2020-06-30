@@ -39,21 +39,31 @@ class LoanList extends Component<Props, State> {
         render: data => beneficiaryType(data.application.product.beneficiaryType)
       },
       {
+        title: local.loanCode,
+        key: "loanCode",
+        render: data => data.application.loanApplicationCode
+      },
+      {
         title: local.customerName,
         key: "customerName",
-        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
             </div>)
           }
         </div>
-        // <div style={{ cursor: 'pointer', width:50, height:50 }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}>{data.application.customer.customerName}</div>
       },
       {
-        title: local.loanCode,
-        key: "loanCode",
-        render: data => data.application.loanApplicationCode
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.nationalId}</span>: null)}
+            </div>)
+          }
+        </div>
       },
       {
         title: local.productName,
@@ -73,7 +83,7 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
       },
     ]
   }
@@ -88,6 +98,8 @@ class LoanList extends Component<Props, State> {
         return <div className="status-chip unpaid">{local.issued}</div>
       case 'pending':
         return <div className="status-chip pending">{local.pending}</div>
+      case 'canceled':
+        return <div className="status-chip canceled">{local.cancelled}</div>
       default: return null;
     }
   }

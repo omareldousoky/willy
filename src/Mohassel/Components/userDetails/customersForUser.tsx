@@ -8,6 +8,8 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FormCheck from 'react-bootstrap/FormCheck';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { Loader } from '../../../Shared/Components/Loader';
 import { LoanOfficersDropDown } from '../dropDowns/allDropDowns';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
@@ -31,6 +33,7 @@ interface State {
   loading: boolean;
   openModal: boolean;
   selectedLO: { _id?: string };
+  filterCustomers: string;
 }
 class CustomersForUser extends Component<Props, State> {
   constructor(props) {
@@ -41,7 +44,8 @@ class CustomersForUser extends Component<Props, State> {
       totalCustomers: 0,
       loading: false,
       openModal: false,
-      selectedLO: {}
+      selectedLO: {},
+      filterCustomers: ''
     }
   }
   componentDidMount() {
@@ -49,7 +53,7 @@ class CustomersForUser extends Component<Props, State> {
   }
   async getCoustomersForUser() {
     this.setState({ loading: true })
-    const res = await searchCustomer({ size: 1000, from: 0, representative: this.props.id })
+    const res = await searchCustomer({ size: 1000, from: 0, representativeId: this.props.id })
     if (res.status === "success") {
       this.setState({
         totalCustomers: res.body.totalCount,
@@ -96,21 +100,32 @@ class CustomersForUser extends Component<Props, State> {
             <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCustomers})`}</span>
           </div>
           <div>
-            <Can I='moveOfficerCustomers' a='customer'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
+            <Can I='moveOfficerCustomers' a='user'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
           </div>
         </div>
+        <InputGroup style={{ direction: 'ltr', marginBottom: 20 }}>
+          <Form.Control
+            value={this.state.filterCustomers}
+            style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+            placeholder={local.searchByName}
+            onChange={(e) => this.setState({ filterCustomers: e.currentTarget.value })}
+          />
+          <InputGroup.Append>
+            <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+          </InputGroup.Append>
+        </InputGroup>
         <Table striped hover style={{ textAlign: 'right' }}>
           <thead>
             <tr>
               <th><FormCheck type='checkbox' onClick={(e) => this.checkAll(e)}></FormCheck></th>
               <th>{local.customerCode}</th>
               <th>{local.customerName}</th>
-              <th>{local.branch}</th>
               <th>{local.representative}</th>
             </tr>
           </thead>
           <tbody>
             {this.state.customers
+              .filter(customer => customer.customerName?.includes(this.state.filterCustomers))
               .map((customer, index) => {
                 return (
                   <tr key={index}>
@@ -122,7 +137,6 @@ class CustomersForUser extends Component<Props, State> {
                     </td>
                     <td>{customer.code}</td>
                     <td>{customer.customerName}</td>
-                    <td>{customer.branchId}</td>
                     <td>{this.props.name}</td>
                   </tr>
                 )
