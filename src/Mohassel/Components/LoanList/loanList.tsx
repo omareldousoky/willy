@@ -105,7 +105,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
+    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   render() {
     return (
