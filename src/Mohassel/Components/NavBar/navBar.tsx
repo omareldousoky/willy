@@ -9,7 +9,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCookie } from '../../Services/getCookie';
-import { parseJwt } from '../../Services/utils';
+import { parseJwt, timeToDateyyymmdd } from '../../Services/utils';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
 import ability from '../../config/ability';
 import './styles.scss';
@@ -122,6 +122,12 @@ class NavBar extends Component<Props, State> {
       </div>
     )
   }
+  getDaysOfMonth() {
+    const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    const firstDay = new Date(y, m, 2).valueOf();
+    const lastDay = new Date(y, m + 1, 1).valueOf();
+    return {firstDay: timeToDateyyymmdd(firstDay), lastDay: timeToDateyyymmdd(lastDay)}
+  }
   render() {
     return (
       <>
@@ -137,9 +143,9 @@ class NavBar extends Component<Props, State> {
                 <div className="refresh-logo-navbar"><img alt="navbar-refresh" src={require('../../Assets/refresh.svg')} /></div>
                 <div className="info-navbar">
                   <span style={{ marginLeft: 10 }}>{local.currentPeriodStartsIn}</span>
-                  <span style={{ marginLeft: 10 }} className="primary-color">  01/02/2020  </span>
+                  <span style={{ marginLeft: 10 }} className="primary-color">  {this.getDaysOfMonth().firstDay}  </span>
                   <span style={{ marginLeft: 10 }}>{local.andEndsIn}</span>
-                  <span className="primary-color">  29/02/2020  </span>
+                  <span className="primary-color">  {this.getDaysOfMonth().lastDay}  </span>
                 </div>
               </div>
               <div className="navbar-choose-branch" onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
