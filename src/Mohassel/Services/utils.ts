@@ -208,7 +208,7 @@ export const pathTo = route => {
 };
 
 export const numbersToArabic = (input: number | string) => {
-  if (input) {
+  if (input  || input === 0) {
     const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
     const inputStr = input.toString();
     return inputStr.replace(/[0-9]/g, (number) => {
