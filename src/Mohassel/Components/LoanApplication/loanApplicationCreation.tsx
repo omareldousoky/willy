@@ -398,9 +398,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearch = async (query) => {
+    handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 50, name: query })
+        const results = await searchCustomer({ from: 0, size: 50, [key]: (key === 'code') ? Number(query) : query })
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -412,9 +412,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearchGuarantors = async (query, index) => {
+    handleSearchGuarantors = async (key, query, index) => {
         const obj = {
-            name: query,
+            [key]: (key === 'code') ? Number(query) : query,
             from: 0,
             size: 30,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
@@ -747,7 +747,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         return (
             <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
                 {(this.state.customerType === 'individual') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
-                    <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
+                    <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(key, query) => this.handleSearch(key, query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
                 </div> :
                     <div>
                         <h4>{local.customersSelection}</h4>
@@ -798,7 +798,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                         <option key={i} value={customer._id}>{customer.customerName}</option>
                                     )}
                                 </Form.Control>
-                                    </Form.Group> : <span>{local.rangeOfGroup}</span>
+                            </Form.Group> : <span>{local.rangeOfGroup}</span>
                             }
                         </div>
                         }
@@ -852,7 +852,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationGuarantorForm {...formikProps}
                         step={(key) => this.step(key)}
                         addGuar={() => this.addOptionalGuarantor()}
-                        handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
+                        handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
                     />

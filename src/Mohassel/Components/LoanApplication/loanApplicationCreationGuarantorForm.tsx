@@ -11,7 +11,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
         <>
-            <Form style={{ textAlign: 'right', width: '100%' }} onSubmit={handleSubmit}>
+            <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
                     {values.guarantors.length > 0 && <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.guarantorInfo}</h5>
@@ -21,7 +21,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                     source={i + 1}
                                     key={i}
                                     style={{ width: '48%' }}
-                                    handleSearch={(query) => props.handleSearch(query, i)}
+                                    handleSearch={(key, query) => props.handleSearch(key,query, i)}
                                     searchResults={guarantor.searchResults}
                                     selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
                                     selectedCustomer={guarantor.guarantor}
@@ -39,7 +39,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                 <div>
                                     {values.viceCustomers.length > 0 && values.viceCustomers.map((customer, index) => (
                                         <div key={index}>
-                                            {/* <Field name={`viceCustomers[${index}].name`} /> */}
                                             <Form.Group as={Row} controlId="name">
                                                 <Form.Label column sm={4}>{local.name}</Form.Label>
                                                 <Col sm={6}>
@@ -88,9 +87,6 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                     {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" className='btn-submit-next' style={{ float: 'left', width: '20%' }} onClick={handleSubmit}>{(values.state === 'under_review') ? local.submit : local.edit}</Button>}
                 </div>
             </Form >
-            {/* {!(values.state === 'edit' || values.state === 'under_review') && <div style={{ margin: '20px 0', border: '1px solid black', padding: 10, borderRadius: 4 }}>
-                <StatusHelper status={values.state} id={values.id} handleStatusChange={(values, status) => { props.handleStatusChange(values, status) }} application={values} />
-            </div>} */}
         </>
     )
 }
