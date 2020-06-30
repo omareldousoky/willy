@@ -4,11 +4,9 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
-
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from './manageLoansInitials';
 import { Formula } from '../LoanApplication/loanApplicationCreation';
@@ -31,6 +29,7 @@ interface State {
     loading: boolean;
     products: Array<Formula>;
     filterProducts: string;
+    manageLoansTabs: any[];
 }
 
 class LoanProducts extends Component<Props, State> {
@@ -40,7 +39,8 @@ class LoanProducts extends Component<Props, State> {
         this.state = {
             loading: false,
             products: [],
-            filterProducts: ''
+            filterProducts: '',
+            manageLoansTabs: []
         }
         this.mappers = [
             {
@@ -51,7 +51,7 @@ class LoanProducts extends Component<Props, State> {
             {
                 title: local.branches,
                 key: "branches",
-                render: data => data.branches
+                render: data => (data.branches) ? data.branches : 0
             },
             {
                 title: '',
@@ -62,6 +62,7 @@ class LoanProducts extends Component<Props, State> {
     }
     componentDidMount() {
         this.getProducts()
+        this.setState({manageLoansTabs: manageLoansArray()})
     }
     renderIcons(data: any) {
         return (
@@ -87,9 +88,9 @@ class LoanProducts extends Component<Props, State> {
         return (
             <div>
                 <HeaderWithCards
-                    header={local.calculationForumlas}
-                    array={manageLoansArray}
-                    active={0}
+                    header={local.loanProducts}
+                    array={this.state.manageLoansTabs}
+                    active={this.state.manageLoansTabs.map(item => {return item.icon}).indexOf('loanProducts')}
                 />
                 <Card style={{ margin: '20px 50px' }}>
                     <Loader type="fullsection" open={this.state.loading} />
@@ -105,7 +106,6 @@ class LoanProducts extends Component<Props, State> {
                             </div>
                         </div>
                         <hr className="dashed-line" />
-                        {/* <Search searchKeys={['keyword', 'dateFromTo']} dropDownKeys={['name', 'nationalId']} url="user" from={this.state.from} size={this.state.size} hqBranchIdRequest={this.props.branchId} /> */}
                         {this.state.products.length > 0 && <div className="d-flex flex-row justify-content-center">
                             <Form.Control
                                 type="text"

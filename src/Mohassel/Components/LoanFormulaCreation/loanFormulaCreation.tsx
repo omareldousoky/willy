@@ -44,7 +44,7 @@ class FormulaCreation extends Component<Props, State>{
         const res = await createFormula(toSend);
         if (res.status === 'success') {
             this.setState({ loading: false });
-            Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/") })
+            Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/manage-loans/calculation-formulas") })
         } else {
             Swal.fire("error", local.formulaCreationError, 'error')
             this.setState({ loading: false });

@@ -12,6 +12,9 @@ code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.form-control {
+  padding: 0 0.75rem !important;
+}
 .pac-container.pac-logo.hdpi, .pac-container.pac-logo {
   z-index: 1100;
 }

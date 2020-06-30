@@ -2,6 +2,7 @@ import React from 'react';
 import './customerCard.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import store from '../../../redux/store';
 
 const CustomerCardPDF = (props) => {
     function getGov() {
@@ -11,8 +12,8 @@ const CustomerCardPDF = (props) => {
     }
     function getCode() {
         if (props.data.product.beneficiaryType === "individual")
-            props.data.customer.code;
-        else return props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.code;
+            props.data.customer.key;
+        else return props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.key;
     }
     return (
         <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
@@ -27,7 +28,7 @@ const CustomerCardPDF = (props) => {
                     <tr>
                         <td className="bold">ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (٢) لسنة ٢٠١٥</td>
                         <td></td>
-                        <td style={{ fontSize: "8px" }}>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
+                        <td style={{ fontSize: "8px" }}>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
                         <td>{timeToArabicDate(0, true)}</td>
@@ -117,7 +118,7 @@ const CustomerCardPDF = (props) => {
                         props.data.guarantors.map((guarantor, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{numbersToArabic(guarantor.code)}</td>
+                                    <td>{numbersToArabic(guarantor.key)}</td>
                                     <td>{guarantor.customerName}</td>
                                     <td>{guarantor.district}</td>
                                     <td>{guarantor.customerHomeAddress}</td>
@@ -129,7 +130,7 @@ const CustomerCardPDF = (props) => {
                         props.data.group.individualsInGroup.map((individualInGroup, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{numbersToArabic(individualInGroup.customer.code)}</td>
+                                    <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
                                     <td>{individualInGroup.customer.district}</td>
                                     <td>{individualInGroup.customer.customerHomeAddress}</td>

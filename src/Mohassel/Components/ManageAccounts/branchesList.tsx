@@ -93,7 +93,7 @@ class BranchesList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
               <div>
               <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>

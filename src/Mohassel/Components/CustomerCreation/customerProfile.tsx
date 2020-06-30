@@ -237,14 +237,6 @@ const CustomerProfile = (props: Props) => {
               <td>{customerDetails?.partTimeEmployeeCount}</td>
             </tr>
             <tr>
-              <td>{local.accountNumber}</td>
-              <td>{customerDetails?.accountNumber}</td>
-            </tr>
-            <tr>
-              <td>{local.accountBranch}</td>
-              <td>{customerDetails?.accountBranch}</td>
-            </tr>
-            <tr>
               <td>{local.allowMultiLoans}</td>
               <td>{customerDetails?.allowMultiLoans ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}</td>
             </tr>

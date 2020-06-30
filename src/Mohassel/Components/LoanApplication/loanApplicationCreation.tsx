@@ -46,6 +46,7 @@ export interface Formula {
 interface LoanOfficer {
     _id: string;
     username: string;
+    name: string;
 }
 export interface Customer {
     _id?: string;
@@ -74,7 +75,6 @@ interface State {
     selectedCustomer: Customer;
     selectedGroupLeader: string;
     selectedLoanOfficer: string;
-    selectedBusinessSector: string;
     searchResults: Results;
     guarantor1Res: Results;
     guarantor2Res: Results;
@@ -192,7 +192,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             products: [],
             branchCustomers: [],
             businessSectors: [],
-            selectedBusinessSector: '',
             selectedCustomers: [],
             searchGroupCustomerKey: '',
             guarantor1Res: {
@@ -257,7 +256,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     if (customer.type === 'leader') {
                         this.setState({
                             selectedGroupLeader: customer.customer._id,
-                            selectedBusinessSector: customer.customer.businessSector,
                             selectedLoanOfficer: customer.customer.representative
                         })
                     }
@@ -268,7 +266,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const value = (application.body.product.noOfGuarantors) ? application.body.product.noOfGuarantors : 2;
+            const value = application.body.product.noOfGuarantors
             const guarsArr: Array<any> = [];
             for (let i = 0; i < value; i++) {
                 if (application.body.guarantors[i]) {
@@ -383,15 +381,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             Swal.fire('', local.selectBranch, 'error');
         }
     }
-    async searchCustomers(key?: string) {
-        let query = {}
-        if (key && key.length > 0) {
-            this.setState({ loading: true, searchGroupCustomerKey: key, branchCustomers: [] });
-            query = { from: 0, size: 50, name: key, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
-        } else {
-            this.setState({ loading: true, branchCustomers: [] });
-            query = { from: 0, size: 50, branchId: this.tokenData.branch, representative: this.state.selectedLoanOfficer }
-        }
+    async searchCustomers() {
+        this.setState({ loading: true, branchCustomers: [] });
+        const query = { from: 0, size: 50, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
@@ -400,9 +392,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearch = async (query) => {
+    handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 50, name: query })
+        const results = await searchCustomer({ from: 0, size: 50, [key]: (key === 'code') ? Number(query) : query })
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -414,9 +406,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearchGuarantors = async (query, index) => {
+    handleSearchGuarantors = async (key, query, index) => {
         const obj = {
-            name: query,
+            [key]: (key === 'code') ? Number(query) : query,
             from: 0,
             size: 30,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
@@ -717,14 +709,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             application: defaultApplication
         })
     }
-    filterCustomersByBusinessSector() {
-        const branchCustomers = this.state.branchCustomers;
-        if (this.state.selectedBusinessSector === "") {
-            return branchCustomers
-        } else {
-            return branchCustomers.filter((customer: Customer) => customer.businessSector === this.state.selectedBusinessSector)
-        }
-    }
     async viewCustomer(id) {
         this.setState({ loading: true });
         const selectedCustomer = await getCustomerByID(id)
@@ -757,7 +741,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         return (
             <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
                 {(this.state.customerType === 'individual') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
-                    <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(query) => this.handleSearch(query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
+                    <CustomerSearch source='loanApplication' style={{ width: '100%' }} handleSearch={(key, query) => this.handleSearch(key, query)} selectedCustomer={this.state.selectedCustomer} searchResults={this.state.searchResults} selectCustomer={(customer) => this.selectCustomer(customer)} />
                 </div> :
                     <div>
                         <h4>{local.customersSelection}</h4>
@@ -770,40 +754,21 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     value={this.state.selectedLoanOfficer}
                                     disabled={this.state.selectedCustomers.length > 0}
                                     onChange={(event) => {
-                                        this.setState({ selectedLoanOfficer: event.currentTarget.value })
+                                        this.setState({ selectedLoanOfficer: event.currentTarget.value }, () => { this.searchCustomers() })
                                     }}
                                 >
                                     <option value="" disabled></option>
                                     {this.state.loanOfficers.map((officer) =>
-                                        <option key={officer._id} value={officer._id}>{officer.username}</option>
+                                        <option key={officer._id} value={officer._id}>{officer.name}</option>
                                     )}
                                 </Form.Control>
                             </Form.Group>
-
-                            <Form.Group controlId="businessSector" style={{ margin: 'auto', width: '60%' }}>
-                                <Form.Label>{local.businessSector}</Form.Label>
-                                <Form.Control as="select"
-                                    name="businessSector"
-                                    data-qc="businessSector"
-                                    value={this.state.selectedBusinessSector}
-                                    disabled={(this.state.selectedCustomers.length > 0 || this.state.selectedLoanOfficer.length === 0)}
-                                    onChange={(event) => {
-                                        this.setState({ selectedBusinessSector: event.currentTarget.value }, () => { this.searchCustomers() })
-                                    }}
-                                >
-                                    <option value="" disabled></option>
-                                    {this.state.businessSectors.map((businessSector, index) => {
-                                        return <option key={index} value={businessSector.legacyCode} >{businessSector.i18n.ar}</option>
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
                         </div>
-                        {this.state.branchCustomers.length > 0 && this.state.selectedBusinessSector.length > 0 && <div style={{ marginTop: 10, marginBottom: 10 }}>
+                        {this.state.branchCustomers.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
-                                search={(key) => this.searchCustomers(key)}
-                                options={this.filterCustomersByBusinessSector()}
+                                options={this.state.branchCustomers}
                                 selected={this.state.selectedCustomers}
                                 onChange={(list) => this.handleGroupChange(list)}
                                 filterKey={this.state.searchGroupCustomerKey}
@@ -826,7 +791,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                         <option key={i} value={customer._id}>{customer.customerName}</option>
                                     )}
                                 </Form.Control>
-                            </Form.Group> : <span>Select customers</span>
+                            </Form.Group> : <span>{local.rangeOfGroup}</span>
                             }
                         </div>
                         }
@@ -880,7 +845,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationGuarantorForm {...formikProps}
                         step={(key) => this.step(key)}
                         addGuar={() => this.addOptionalGuarantor()}
-                        handleSearch={(query, guarantor) => { this.handleSearchGuarantors(query, guarantor) }}
+                        handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
                     />
