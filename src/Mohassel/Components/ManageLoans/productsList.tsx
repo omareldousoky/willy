@@ -51,7 +51,7 @@ class LoanProducts extends Component<Props, State> {
             {
                 title: local.branches,
                 key: "branches",
-                render: data => data.branches
+                render: data => (data.branches) ? data.branches : 0
             },
             {
                 title: '',

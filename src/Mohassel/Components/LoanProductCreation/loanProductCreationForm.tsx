@@ -788,25 +788,6 @@ export const LoanProductCreationForm = (props: any) => {
                                     <Form.Label className="data-check-label">{local.mustEnterGuarantor}</Form.Label>
                                 </Form.Group>
                             </Col>
-                            <Col>
-                                <Form.Group className="data-check-group row-nowrap" controlId='guarantorGuaranteesMultiple'>
-
-                                    <Form.Check
-                                        type='checkbox'
-                                        name='guarantorGuaranteesMultiple'
-                                        data-qc='guarantorGuaranteesMultiple'
-                                        value={values.guarantorGuaranteesMultiple}
-                                        checked={values.guarantorGuaranteesMultiple}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        isInvalid={errors.guarantorGuaranteesMultiple && touched.guarantorGuaranteesMultiple}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.guarantorGuaranteesMultiple}
-                                    </Form.Control.Feedback>
-                                    <Form.Label className="data-check-label">{local.guarantorGuaranteesMultiple}</Form.Label>
-                                </Form.Group>
-                            </Col>
                         </Row>
                         <Form.Group className="data-group" controlId="noOfGuarantors">
                             <Form.Label className="data-label">{local.noOfGuarantors}</Form.Label>

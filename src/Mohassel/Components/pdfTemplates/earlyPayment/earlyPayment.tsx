@@ -50,7 +50,7 @@ const EarlyPaymentPDF = (props) => {
                 <tbody>
                     <tr>
                         <td> العميل
-					<div className="frame">{props.data.customer.code}</div>
+					<div className="frame">{props.data.customer.key}</div>
                             <div className="frame">{props.data.customer.customerName}</div>
                         </td>
                         <td> التاريخ
