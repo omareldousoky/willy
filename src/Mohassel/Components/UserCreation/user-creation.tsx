@@ -68,9 +68,14 @@ class UserCreation extends Component<Props, State> {
             confirmPassword: '',
 
         }
-        const step2data: RolesBranchesValues = { roles: [], branches: [] }
+        const step2data: RolesBranchesValues = { roles: [], branches: [],mainRoleId: res.body.user.mainRoleId, mainBranchId: res.body.user.mainBranchId , manager: res.body.user.manager}
         res.body.roles?.forEach(role => {
-            step2data.roles.push({ label: role.roleName, value: role._id, hasBranch: role.hasBranch });
+            step2data.roles.push({ 
+                label: role.roleName, 
+                value: role._id,
+                managerRole: role.managerRole,
+                hasBranch: role.hasBranch ,
+            });
         }),
             res.body.branches?.forEach(branch => {
                 step2data.branches?.push({ branchName: branch.name? branch.name : 'HQ', _id: branch._id });
@@ -86,6 +91,7 @@ class UserCreation extends Component<Props, State> {
                 labeldRoles.push({
                     label: role.roleName,
                     hasBranch: role.hasBranch,
+                    managerRole: role.managerRole,
                     value: role._id,
                 })
             })
@@ -137,7 +143,10 @@ class UserCreation extends Component<Props, State> {
     prepareUser(userObj: User) {
         const user = {
             ...userObj.userInfo,
-            branches: userObj.branches, roles: userObj.roles
+            branches: userObj.branches, roles: userObj.roles,
+            mainRoleId: userObj.mainRoleId,
+            mainBranchId: userObj.mainBranchId,
+            manager: userObj.manager,
         };
         user.birthDate = new Date(user.birthDate).valueOf();
         user.hiringDate = new Date(user.hiringDate).valueOf();
@@ -146,7 +155,7 @@ class UserCreation extends Component<Props, State> {
     }
     async createUser(userObj: User) {
         const user = this.prepareUser(userObj);
-        this.setState({ loading: true });
+       this.setState({ loading: true });
         const res = await createUser({user});
         if (res.status === 'success') {
             Swal.fire("success", local.userCreated).then(() => {
@@ -199,11 +208,15 @@ class UserCreation extends Component<Props, State> {
                 userInfo: this.getUserInfo(),
                 roles,
                 branches,
+                mainRoleId: this.state.step2.mainRoleId,
+                mainBranchId: this.state.step2.mainBranchId,
+                manager: this.state.step2.manager,
             }
             if (this.props.edit) {
                 this.editUser(userObj);
 
             } else {
+
                 this.createUser(userObj);
             }
         }
@@ -258,6 +271,7 @@ class UserCreation extends Component<Props, State> {
                         userRolesOptions={this.state.rolesLabeled}
                         userBranchesOptions={this.state.branchesLabeled}
                         previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)}
+                        edit = {this.props.edit}
                     />
         );
     }
