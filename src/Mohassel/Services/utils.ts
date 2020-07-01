@@ -19,6 +19,18 @@ export function parseJwt(token: string) {
     return null;
   }
 };
+export function documentTypeLocalization(val: string) {
+  switch (val) {
+    case 'customer':
+      return local.customer
+    case 'loanApplication':
+      return local.loanApplicationId
+    case 'issuedLoan':
+      return local.issuedLoan
+    default:
+      return ''
+  }
+}
 export function beneficiaryType(val: string) {
   switch (val) {
     case 'individual':
@@ -208,7 +220,7 @@ export const pathTo = route => {
 };
 
 export const numbersToArabic = (input: number | string) => {
-  if (input  || input === 0) {
+  if (input || input === 0) {
     const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
     const inputStr = input.toString();
     return inputStr.replace(/[0-9]/g, (number) => {
@@ -227,3 +239,12 @@ export const dayToArabic = (index: number): string => {
   const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   return weekday[index];
 }
+export const customFilterOption = (option, rawInput) => {
+  if (option.label) {
+    const words = rawInput.split(' ');
+    return words.reduce(
+      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
+      true,
+    );
+  }
+};

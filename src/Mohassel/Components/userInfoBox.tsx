@@ -39,7 +39,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.customerCode}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{(values.customerCode) ? values.customerCode : 'N/A'} </Form.Label>
+                            <Form.Label>{(values.code) ? values.code : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>

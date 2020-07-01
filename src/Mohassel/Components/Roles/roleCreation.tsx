@@ -12,6 +12,12 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
+import Select from 'react-select';
+import { theme } from '../../../theme';
+import { getRoles } from '../../Services/APIs/Roles/roles';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import {customFilterOption} from '../../Services/utils'
 export interface Section {
     _id: string;
     key: string;
@@ -30,8 +36,10 @@ interface State {
         roleName: string;
         hQpermission: boolean;
     };
+    managerRole?: string;
     sections: Array<Section>;
     permissions: Array<any>;
+    managerRolesList: Array<any>;
     loading: boolean;
 }
 class RoleCreation extends Component<Props, State>{
@@ -42,6 +50,8 @@ class RoleCreation extends Component<Props, State>{
             step1: step1,
             sections: [],
             permissions: [],
+            managerRolesList: [],
+            managerRole: '',
             loading: false,
         };
     }
@@ -71,6 +81,31 @@ class RoleCreation extends Component<Props, State>{
             this.setState({ loading: false })
         }
     }
+    async getRolesForManager() {
+
+            this.setState({ loading: true })
+            const res = await getRoles();
+            if (res.status === "success") {
+              this.setState({
+                managerRolesList: this.prepareManagerRolesOptions(res.body.roles),
+                loading: false,
+              });
+            } else {
+            this.setState({ loading: false })
+             Swal.fire('error',local.getManagerRolesError)
+            }
+
+    }
+    prepareManagerRolesOptions(roles: Array<any>){
+        const managerRoles: any[] = [];
+        roles.forEach((role)=> {
+          managerRoles.push({
+            label: role.roleName,
+            value: role._id,
+        });
+        })
+        return managerRoles;
+      }
     async getEditPermissions(hasbranch) {
         this.setState({ loading: true })
         const id = (!hasbranch) ? 'hq' : 'branch';
@@ -129,11 +164,10 @@ class RoleCreation extends Component<Props, State>{
             >
                 {(formikProps) =>
                     // <UserDataForm {...formikProps} cancle={() => this.cancel()} />
-                    <Form onSubmit={formikProps.handleSubmit}>
+                    <Form onSubmit={formikProps.handleSubmit} className="data-form">
                         <Col>
-                            <Form.Group as={Row} controlId="roleName" >
-                                <Form.Label style={{ margin: 0 }}>{local.roleName}</Form.Label>
-                                <Col sm={6}>
+                            <Form.Group className = "data-group" controlId="roleName" >
+                                <Form.Label  className= "data-label">{local.roleName}</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="roleName"
@@ -147,16 +181,14 @@ class RoleCreation extends Component<Props, State>{
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.roleName}
-                                    </Form.Control.Feedback>
-                                </Col>
+                                    </Form.Control.Feedback>             
                             </Form.Group>
-                            <Form.Group as={Row} controlId="hQpermission">
-                                {/* <Col sm={4}/> */}
-                                <Col sm={1}>
+                            <Form.Group as={Row} controlId="hQpermission" className= "data-group row-nowrap">
                                     <Form.Check
                                         type="checkbox"
                                         name="hQpermission"
                                         data-qc="hQpermission"
+                                        style={{ marginRight: "20px"}}
                                         value={(formikProps.values.hQpermission).toString()}
                                         checked={formikProps.values.hQpermission}
                                         onBlur={formikProps.handleBlur}
@@ -167,9 +199,7 @@ class RoleCreation extends Component<Props, State>{
                                     <Form.Control.Feedback type="invalid">
                                         {formikProps.errors.hQpermission}
                                     </Form.Control.Feedback>
-                                </Col>
-                                <Form.Label style={{ textAlign: 'right' }} column md={4}>{local.hQpermission}</Form.Label>
-
+                                <Form.Label style={{ textAlign: 'right' }}>{local.hQpermission}</Form.Label>
                             </Form.Group>
                             <Form.Group as={Row} className="justify-content-around">
                                 <Button style={{ width: '20%' }} onClick={() => { this.cancel() }}>{local.cancel}</Button>
@@ -203,6 +233,7 @@ class RoleCreation extends Component<Props, State>{
                 const obj = {
                     roleName: this.state.step1.roleName,
                     hasBranch: !this.state.step1.hQpermission,
+                    managerRole: this.state.managerRole,
                     permissions: perms
                 }
                 const res = await createRole(obj);
@@ -257,20 +288,24 @@ class RoleCreation extends Component<Props, State>{
     }
     render() {
         return (
-            <div>
-                <Loader type="fullscreen" open={this.state.loading} />
-
-                <div style={{ display: "flex", flexDirection: "row", textAlign: 'right' }}>
+            <>
+            <Loader type="fullscreen" open={this.state.loading} />
+            <Container style={{height:"fit-content"}}>
+                <Card>
+                <div style={{ display: "flex", flexDirection: "row", textAlign: 'right'}}>
                     <Wizard
                         currentStepNumber={this.state.step - 1}
                         stepsDescription={[local.userBasicStep1, local.rolesStep2]}
                     />
 
-                    <div style={{ width: '70%', margin: '40px auto' }}>
+                    <Card.Body>
                         {this.renderSteps()}
-                    </div>
+                    </Card.Body>
                 </div>
-            </div>
+
+            </Card>
+       </Container>
+            </>
         )
     }
 }
