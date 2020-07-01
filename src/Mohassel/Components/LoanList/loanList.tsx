@@ -8,6 +8,7 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import store from '../../redux/store';
 
 interface Props {
   history: Array<any>;
@@ -88,7 +89,7 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getLoans()
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -104,8 +105,11 @@ class LoanList extends Component<Props, State> {
     }
   }
 
-  async getLoans() {
+  getLoans() {
     this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   render() {
     return (

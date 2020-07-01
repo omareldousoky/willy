@@ -231,7 +231,7 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
-    objToSubmit.representative = objToSubmit.representative._id;
+    objToSubmit.representative = objToSubmit.representative._id ? objToSubmit.representative._id : objToSubmit.representative;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
