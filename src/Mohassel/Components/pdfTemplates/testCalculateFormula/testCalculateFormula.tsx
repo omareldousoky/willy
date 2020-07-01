@@ -2,6 +2,7 @@ import React from 'react';
 import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Services/utils';
+import store from '../../../redux/store';
 
 const TestCalculateFormulaPDF = (props) => {
     return (
@@ -11,7 +12,7 @@ const TestCalculateFormulaPDF = (props) => {
                     <tr>
                         <td>{props.branchName}</td>
                         <td></td>
-                        <td>١/١ &emsp; جرجس فوزي عطيه - اخصائي نظم معلومات</td>
+                        <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
                         <td>{timeToArabicDate(0,true)}</td>

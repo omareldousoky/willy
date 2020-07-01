@@ -13,6 +13,7 @@ interface Props {
   history: Array<any>;
   data: any;
   branchId: string;
+  fromBranch?: boolean;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
@@ -105,7 +106,13 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
+     let query = {};
+     if(this.props.fromBranch){
+       query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
+     } else {
+      query = {size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" , ...this.props.searchFilters}
+     }
+    this.props.search(query);
   }
   render() {
     return (
@@ -116,14 +123,15 @@ class LoanList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
-                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
             </div>
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
             dropDownKeys={['name', 'nationalId', 'code']}
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
+            datePlaceholder={local.issuanceDate}
              url="loan" 
              from={this.state.from} 
              size={this.state.size} 

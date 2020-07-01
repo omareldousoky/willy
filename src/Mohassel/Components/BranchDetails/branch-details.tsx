@@ -125,7 +125,7 @@ interface State {
                  />)
              case 3:   return (<CustomersList {...{branchId: this.state._id}} />)
              case 4: return (<TrackLoanApplications {...{branchId: this.state._id}} />)
-             case 5: return (<LoanList {...{branchId: this.state._id}}/>)
+             case 5: return (<LoanList {...{branchId: this.state._id, fromBranch: true}}/>)
              default: return null;   
         }
     }

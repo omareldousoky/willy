@@ -8,6 +8,8 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import Can from '../../config/Can';
+import { timeToDateyyymmdd } from '../../Services/utils';
+import { getDateAndTime } from '../../Services/getRenderDate';
 
 interface Props {
     history: any;
@@ -51,12 +53,12 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: local.employment,
                 key: "employment",
-                render: data => "employment"
+                render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
             },
             {
                 title: local.creationDate,
                 key: "creationDate",
-                render: data => "creationDate"
+                render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
             },
             {
                 title: '',
@@ -83,7 +85,7 @@ class RoleUsers extends Component<Props, State> {
                         <div className="custom-card-header">
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                                <span className="text-muted">{local.noOfUsers} {this.props.totalCount}</span>
+                                <span className="text-muted">{local.noOfUsers} {this.props.totalCount? this.props.totalCount : 0}</span>
                             </div>
                             {/* <div>
                                 <Button variant="outline-primary" className="big-button">download pdf</Button>

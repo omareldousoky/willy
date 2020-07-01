@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import './userCreation.scss';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -10,6 +10,7 @@ import { theme } from '../../../theme';
 import { RolesBranchesValues } from './userCreationinterfaces';
 import DualBox from '../DualListBox/dualListBox';
 import Container from 'react-bootstrap/Container';
+import {searchUsers} from '../../Services/APIs/Users/searchUsers';
 
 interface Props {
   values: RolesBranchesValues;
@@ -17,30 +18,49 @@ interface Props {
   userBranchesOptions: Array<object>;
   handleSubmit: any;
   previousStep: any;
+  edit: boolean;
 }
 
 const isHasBranch = (roles: Array<any>): boolean => {
   let rolesState = false;
   roles?.map(role => {
     if (role.hasBranch === true) {
-
       rolesState = true;
       return;
     }
   })
   return rolesState;
 }
+
 const UserRolesAndPermisonsFrom = (props: Props) => {
+
+ const checksInitials: any[] = [];
+ let mangerRoleInitial = "";
+   props.values.roles?.map((role)=> {
+    if(role.value=== props.values.mainRoleId){
+      mangerRoleInitial = role.managerRole;
+        checksInitials.push(true)
+    } else{
+      checksInitials.push(false);
+    }
+  })
   const [hasBranch, setHasBranch] = useState(() => isHasBranch(props.values.roles));
   const [roles, setRoles] = useState(props.values.roles);
   const [branches, setBranches] = useState(props.values.branches);
   const [showRolesError, setShowRolesError] = useState(false);
   const [showBranchesError, setShowBranchesError] = useState(false);
-  const handleChange = (list) => {
+  const [mainRoleCheck, setMainRoleCheck] = useState<Array<any>>(checksInitials);
+  const [mainBranchId, setMainBranchId] = useState(props.values.mainBranchId);
+  const [mainRoleId,  setMainRoleId] = useState(props.values.mainRoleId);
+  const [mangerRole, setMangerRole] = useState(mangerRoleInitial);
+  const [manager, setMangerId] = useState(props.values.manager);
+  const [managersList, setMangersList] = useState<Array<any>> ([]);
+    const handleChange = (list) => {
     if (hasBranch && list.length === 0) {
       setShowBranchesError(true);
     } else {
       setShowBranchesError(false);
+      (list)
       setBranches(list)
       props.values.branches = list;
     }
@@ -55,6 +75,32 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
       );
     }
   };
+  
+
+  const getMangersList = async (managerRoleId: string) => {
+    if (!props.edit && managerRoleId){
+    const obj = {
+      status: 'active',
+      roleId: managerRoleId,
+      from: 0,
+      size: 200,
+    }
+     const res = await searchUsers(obj);
+     const users: any[] = [];  
+     res.body.data.map((user: any)=> {
+       users.push({
+         label: user.name,
+         value: user._id,
+       })
+     })
+     setMangersList(users);
+    }   
+  }
+   
+  useEffect(() => {
+       getMangersList(mangerRole);
+}, [mangerRole]);
+
 
   return (
     <Container
@@ -81,6 +127,11 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
 
               props.values.roles = event;
               setRoles(event);
+              const checks: boolean[]= [];
+              event.map(e =>{
+                checks.push(false);
+              })
+               setMainRoleCheck(checks);
               setHasBranch(isHasBranch(event))
               if (!hasBranch) {
                 props.values.branches = [];
@@ -97,7 +148,6 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
         {showRolesError &&
           <div style={{ color: 'red', fontSize: '15px', margin: '10px' }}>{local.rolesIsRequired}</div>}
       </Form.Group>
-
       {hasBranch &&
         <Form.Group
           className={'user-role-group'}

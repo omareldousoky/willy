@@ -99,11 +99,6 @@ export const UserDataForm = (props: Props) => {
                             type="invalid">
                             {props.errors.nationalId}
                         </Form.Control.Feedback>
-                        <Col sm={1}>
-                            <Col sm={1}>
-                                <Loader type="inline" open={loading} />
-                            </Col>
-                        </Col>
                     </Form.Group>
                 </Col>
                 <Col sm={4}>
