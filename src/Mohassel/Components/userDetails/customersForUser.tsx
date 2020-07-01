@@ -219,12 +219,7 @@ class CustomersForUser extends Component<Props, State> {
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
               <Col sm={9}>
-                <LoanOfficersDropDown
-                  onSelectLoanOfficer={(LO) =>
-                    this.setState({ selectedLO: LO })
-                  }
-                  excludeId={this.props.id}
-                />
+                <LoanOfficersDropDown onSelectLoanOfficer={(LO) => this.setState({ selectedLO: LO })} excludeId={this.props.id}/>
               </Col>
               <Col sm={3}>
                 <Button

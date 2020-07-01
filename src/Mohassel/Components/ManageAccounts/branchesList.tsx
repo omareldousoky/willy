@@ -74,7 +74,7 @@ class BranchesList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getBranches();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })

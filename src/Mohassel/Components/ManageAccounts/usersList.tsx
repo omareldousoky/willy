@@ -85,8 +85,7 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    
-    this.getUsers();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })

@@ -73,7 +73,7 @@ class CustomersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getCustomers();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
   }
   getCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });

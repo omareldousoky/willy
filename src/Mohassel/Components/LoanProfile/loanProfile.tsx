@@ -91,74 +91,63 @@ class LoanProfile extends Component<Props, State>{
     async getAppByID(id) {
         this.setState({ loading: true });
         const application = await getApplication(id);
-        if (store.getState().auth.clientPermissions !== {}) {
-            this.generateTabs(application);
-        } else {
-            store.subscribe(() => {
-                if (store.getState().auth.clientPermissions !== {}) {
-                    this.generateTabs(application);
+        store.subscribe(() => {
+            if (store.getState().auth.clientPermissions !== {}) {
+                if (application.status === 'success') {
+                    this.getBranchData(application.body.branchId);
+                    const tabsToRender = [
+                        {
+                            header: local.loanInfo,
+                            stringKey: 'loanDetails'
+                        },
+                        {
+                            header: local.logs,
+                            stringKey: 'loanLogs'
+                        }
+                    ]
+                    const guarantorsTab = {
+                        header: local.guarantorInfo,
+                        stringKey: 'loanGuarantors'
+                    };
+                    const customerCardTab = {
+                        header: local.customerCard,
+                        stringKey: 'customerCard'
+                    };
+                    const paymentTab = {
+                        header: local.payments,
+                        stringKey: 'loanPayments'
+                    };
+                    const reschedulingTab = {
+                        header: local.rescheduling,
+                        stringKey: 'loanRescheduling'
+                    };
+                    const reschedulingTestTab = {
+                        header: local.reschedulingTest,
+                        stringKey: 'loanReschedulingTest'
+                    };
+                    if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
+                    if (application.body.status === "paid") tabsToRender.push(customerCardTab)
+                    if (application.body.status === "issued" || application.body.status === "pending") {
+                        tabsToRender.push(customerCardTab)
+                        if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
+                        if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
+                        if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
+                    }
+                    if (application.body.status === "pending") {
+                        this.setState({ activeTab: 'loanDetails' })
+                        this.getPendingActions();
+                    }
+                    this.setState({
+                        application: application.body,
+                        tabsArray: tabsToRender,
+                        loading: false
+                    })
+                } else {
+                    Swal.fire('', 'fetch error', 'error')
+                    this.setState({ loading: false })
                 }
-            })
-        }
-    }
-    generateTabs(application) {
-        if (application.status === 'success') {
-            this.getBranchData(application.body.branchId);
-            const tabsToRender = [
-                {
-                    header: local.loanInfo,
-                    stringKey: 'loanDetails'
-                },
-                {
-                    header: local.logs,
-                    stringKey: 'loanLogs'
-                },
-                {
-                    header: local.documents,
-                    stringKey: 'documents'
-                },
-            ]
-            const guarantorsTab = {
-                header: local.guarantorInfo,
-                stringKey: 'loanGuarantors'
-            };
-            const customerCardTab = {
-                header: local.customerCard,
-                stringKey: 'customerCard'
-            };
-            const paymentTab = {
-                header: local.payments,
-                stringKey: 'loanPayments'
-            };
-            const reschedulingTab = {
-                header: local.rescheduling,
-                stringKey: 'loanRescheduling'
-            };
-            const reschedulingTestTab = {
-                header: local.reschedulingTest,
-                stringKey: 'loanReschedulingTest'
-            };
-            if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
-            if (application.body.status === "paid") tabsToRender.push(customerCardTab)
-            if (application.body.status === "issued" || application.body.status === "pending") {
-                tabsToRender.push(customerCardTab)
-                if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
-                if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
-                if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
             }
-            if (application.body.status === "pending") {
-                this.setState({ activeTab: 'loanDetails' })
-                this.getPendingActions();
-            }
-            this.setState({
-                application: application.body,
-                tabsArray: tabsToRender,
-                loading: false
-            })
-        } else {
-            Swal.fire('', 'fetch error', 'error')
-            this.setState({ loading: false })
-        }
+        })
     }
     async getPendingActions() {
         this.setState({ loading: true })
@@ -291,7 +280,7 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'created' && <Can I='issueLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.issueLoan}</span></Can>}
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
-                                {this.state.application.status !== 'canceled' && (ability.can('rollback','application') || ability.can('rollbackPayment','application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span> }
+                                {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
 
                             </div>
                         </div>
@@ -349,14 +338,14 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
-                        <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails}/>
+                        <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <TotalWrittenChecksPDF data={this.state.application} />
-                        <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails}/>
-                        {this.state.application.product.beneficiaryType === "individual"?
-                        <LoanContract data={this.state.application} branchDetails={this.state.branchDetails}/>
-                        : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails}/>
-                    }
+                        <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />
+                        {this.state.application.product.beneficiaryType === "individual" ?
+                            <LoanContract data={this.state.application} branchDetails={this.state.branchDetails} />
+                            : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
+                        }
                     </>}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}

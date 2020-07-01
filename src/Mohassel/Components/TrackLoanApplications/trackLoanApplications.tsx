@@ -113,7 +113,7 @@ class TrackLoanApplications extends Component<Props, State>{
     ]
   }
   componentDidMount() {
-    this.getApplications();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
   }
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
