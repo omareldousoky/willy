@@ -164,7 +164,7 @@ steps:
     deployment: fe-login
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
     container: fe-login
-    tag: "${DRONE_COMMIT_SHA:0:8}"
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
 
   when:
     branch:
@@ -187,7 +187,7 @@ steps:
     deployment: fe-mohassel
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
     container: fe-mohassel
-    tag: "${DRONE_COMMIT_SHA:0:8}"
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
 
   when:
     branch:
