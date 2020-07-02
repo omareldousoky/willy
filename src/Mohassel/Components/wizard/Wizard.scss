@@ -1,0 +1,75 @@
+
+
+.stepper-container-vertical {
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  padding: 30px 0;
+  width: 20%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.stepper-wrapper-vertical {
+    .step-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content:flex-start;
+        height: auto;
+        align-items: flex-start;
+        margin-bottom: 40px;
+        position: relative;
+    }
+
+    .step-description {
+        margin-right: 1.2rem;
+        font-size: 14px;
+        text-align: right;
+        padding-bottom: 3px;
+        
+    }
+    .step-visited {
+        color: #7dc356;
+    }
+
+    .divider-line {
+        height:70px;
+        width: 1px;
+        background-color: #7dc356;
+        position: absolute;
+        left: -1px;
+    }
+}
+.outer {
+    position: absolute;
+    left: -10px;
+    background-color:#bae3a3;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+}
+
+.inner {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    background-color:#7dc356;
+    width:10px;
+    height:10px;
+    border-radius: 50%;
+}
+.selected-circile {
+    position: absolute;
+    left: -5px;
+    //top: 5px;
+    background-color:#7dc356;
+    width:10px;
+    height:10px;
+    border-radius: 50%;
+}
+.step-description-active {
+    font-weight: bold;
+}
+.step-description-completed {
+    color:  #7dc356;
+}

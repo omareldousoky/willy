@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+body {
+    margin: 0;
+    height: 100%;
+    font-family: 'Cairo', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    direction: rtl !important;
+}
+.btn-primary {
+    color: #fff;
+}
+.login-parent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    direction: rtl;
+}
+
+.right-hero {
+    display: flex;
+    flex-direction: column;
+    background-color: #131848;
+    flex: 1;
+}
+
+.right-hero h1 {
+    color: #7dc356;
+}
+.right-hero .texts {
+    flex:2;
+    text-align: center;
+    margin: 40% auto;
+}
+.right-hero h3 {
+    color: #fff;
+}
+.left-hero {
+    background-color: #fafafa;
+    text-align: right;
+    flex: 3;
+}
+
+.left-hero .login-logo {
+    margin: 100px;
+}
+
+.left-hero .login-form {
+    text-align: center;
+}
+
+.login-form h2 {
+    color: #7dc356;
+}
+
+.login-form .btn {
+    padding: 15px 20px;
+}
+
+.vertical-line-login {
+    width: 3px;
+    height: 60px;
+    background-color: #7dc356;
+    margin: 100px 100px 0px 0px;
+}

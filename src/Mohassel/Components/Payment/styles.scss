@@ -1,0 +1,136 @@
+.payment-menu {
+    flex-direction: row;
+    & .payment-info {
+        text-align: right;
+        padding: 40px 20px 25px 50px;
+        & h6:nth-child(odd){
+            color: #2a3390;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        & h6:nth-child(even){
+            color: #7dc356;
+            margin-bottom: 15px;
+        }
+        & img {
+            margin-bottom: 20px;
+        }
+    }
+    & .payment-icons-container {
+        display: flex;
+        margin: auto;
+        width: 100%;
+        justify-content: space-evenly;
+        & .payment-icon {
+            display: flex;
+            flex-direction: column;
+            & img {
+                margin-bottom: 20px;
+            }
+        }
+    }
+    & .payments-buttons-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px 15px;
+    }
+    
+}
+.verticalLine{
+    border-left: 1px dashed #e5e5e5;
+}
+
+.payment-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.status-chip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 30px; 
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    width: 100px;
+    height: 25px;
+    &.outline {
+        background-color: #fff;
+    }
+    &.under-review {
+        border: 1px solid #ed7600;
+        color: #ed7600;
+    }
+    &.created {
+        border: 1px solid #2a3390;
+        color: #2a3390;
+    }
+    &.reviewed {
+        border: 1px solid #edb600;
+        color: #edb600;
+    }
+    &.approved {
+        border: 1px solid #009bed;
+        color: #009bed;
+    }
+    &.rejected {
+        border: 1px solid #d51b1b;
+        color: #d51b1b;
+    }
+    &.late {
+        background-color: #d51b1b;
+    }
+    &.paid {
+        background-color: #7DC356;
+    }
+    &.unpaid {
+        background-color: #009bed;
+    }
+    &.partially-paid {
+        background-color: #edb600;
+    }
+    &.cancelled {
+        background-color: gray;
+    }
+    &.pending {
+        background-color: #edb600;
+        color: #fff;
+    }
+    &.canceled {
+        background-color: #d51b1b;
+        color: #fff;
+    }
+}
+.receipt-modal {
+    .modal-content {
+        width: 520px;
+    }
+}
+.receipt-container{
+    width: 500px;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid black;
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .receipt-content {
+        text-align: right;
+        .title {
+            text-align: left;
+        }
+        .info {
+            padding-right: 10px;
+            margin-right: 0px;
+            border: 1px black solid;
+        }
+        .dots {
+            padding-right: 10px;
+            margin-right: 0px;
+        }
+    }
+}
