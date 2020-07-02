@@ -1,4 +1,5 @@
 import * as local from '../../Shared/Assets/ar.json';
+import jwtDecode from 'jwt-decode';
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -14,7 +15,7 @@ export const timeToDateyyymmdd = (timeStamp: number): any => {
 
 export function parseJwt(token: string) {
   try {
-    return JSON.parse(atob(token.split('.')[1]));
+    return jwtDecode(token);
   } catch (e) {
     return null;
   }
