@@ -91,7 +91,7 @@ steps:
       - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
     tags:
-      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
   when:
     branch:
@@ -126,7 +126,7 @@ steps:
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
-      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
   when:
     branch:
