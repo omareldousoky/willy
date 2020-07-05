@@ -34,6 +34,7 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
+import store from '../../redux/store';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -84,6 +85,17 @@ class LoanProfile extends Component<Props, State>{
     async getAppByID(id) {
         this.setState({ loading: true });
         const application = await getApplication(id);
+        if (store.getState().auth.clientPermissions !== {}) {
+            this.generateTabs(application);
+        } else {
+            store.subscribe(() => {
+                if (store.getState().auth.clientPermissions !== {}) {
+                    this.generateTabs(application);
+                }
+            })
+        }
+    }
+    generateTabs(application) {
         if (application.status === 'success') {
             this.getBranchData(application.body.branchId);
             const tabsToRender = [
@@ -94,7 +106,11 @@ class LoanProfile extends Component<Props, State>{
                 {
                     header: local.logs,
                     stringKey: 'loanLogs'
-                }
+                },
+                {
+                    header: local.documents,
+                    stringKey: 'documents'
+                },
             ]
             const guarantorsTab = {
                 header: local.guarantorInfo,
