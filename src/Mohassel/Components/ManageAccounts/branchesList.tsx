@@ -61,17 +61,17 @@ class BranchesList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <><span 
-        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}
-        className='fa fa-eye icon'></span>
-         <span
-          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}
-          className='fa fa-pencil-alt icon'></span></>
+        render: data => <>
+        <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')}
+        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}></img>
+         <img style={{cursor: 'pointer'}} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}></img>
+          </>
       },
     ]
   }
   componentDidMount() {
-    this.getBranches();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
