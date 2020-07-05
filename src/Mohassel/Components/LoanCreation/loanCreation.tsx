@@ -201,7 +201,7 @@ class LoanCreation extends Component<Props, State> {
             </tr>
           </thead>
           <tbody>
-            {this.state.installmentsData.installments && this.state.installmentsData.installments.sort(function(a,b) {return a.installmentNumber - b.installmentNumber }).map((installment, index) => {
+            {this.state.installmentsData.installments && this.state.installmentsData.installments.map((installment, index) => {
               return (
                 <tr key={index}>
                   <td>{installment.id}</td>
