@@ -72,7 +72,7 @@ class FormulaList extends Component<Props, State> {
     renderIcons(data: any) {
         return (
             <>
-                <span onClick={() => { this.props.history.push({ pathname: "/manage-loans/calculation-formulas/view-formula", state: { id: data._id } }) }} className='fa fa-eye icon'></span>
+                <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-loans/calculation-formulas/view-formula", state: { id: data._id } }) }}></img>
             </>
         );
     }
