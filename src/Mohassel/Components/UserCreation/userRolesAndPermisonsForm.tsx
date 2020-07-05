@@ -60,10 +60,9 @@ const UserRolesAndPermisonsFrom = (props: Props) => {
       setShowBranchesError(true);
     } else {
       setShowBranchesError(false);
-      (list)
-      setBranches(list)
+    } 
+     setBranches(list)
       props.values.branches = list;
-    }
 
   }
   const customFilterOption = (option, rawInput) => {

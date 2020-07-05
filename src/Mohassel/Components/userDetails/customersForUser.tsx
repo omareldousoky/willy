@@ -15,6 +15,7 @@ import { LoanOfficersDropDown } from '../dropDowns/allDropDowns';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer';
 import Swal from 'sweetalert2';
+import Pagination from '../pagination/pagination';
 
 interface Props {
   id: string;
@@ -30,6 +31,8 @@ interface State {
   customers: Array<Customer>;
   selectedCustomers: Array<Customer>;
   totalCustomers: number;
+  size: number;
+  from: number;
   loading: boolean;
   openModal: boolean;
   selectedLO: { _id?: string };
@@ -40,6 +43,8 @@ class CustomersForUser extends Component<Props, State> {
     super(props);
     this.state = {
       customers: [],
+      size: 5,
+      from: 0,
       selectedCustomers: [],
       totalCustomers: 0,
       loading: false,
@@ -49,11 +54,12 @@ class CustomersForUser extends Component<Props, State> {
     }
   }
   componentDidMount() {
-    this.getCoustomersForUser();
+    this.getCustomersForUser();
   }
-  async getCoustomersForUser() {
+  async getCustomersForUser(name?: string) {
+    console.log('name',name)
     this.setState({ loading: true })
-    const res = await searchCustomer({ size: 1000, from: 0, representativeId: this.props.id })
+    const res = await searchCustomer({ name: name ,size: this.state.size, from: this.state.from,representativeId: this.props.id })
     if (res.status === "success") {
       this.setState({
         totalCustomers: res.body.totalCount,
@@ -84,7 +90,7 @@ class CustomersForUser extends Component<Props, State> {
     const res = await moveCustomerToOfficer({ user: this.props.id, newUser: this.state.selectedLO._id, customers: this.state.selectedCustomers.map(customer => customer._id) });
     if (res.status === "success") {
       this.setState({ loading: false })
-      Swal.fire("", `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`, "success").then(() => this.getCoustomersForUser());
+      Swal.fire("", `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`, "success").then(() => this.getCustomersForUser());
     } else {
       this.setState({ loading: false })
       console.log(res);
@@ -93,74 +99,91 @@ class CustomersForUser extends Component<Props, State> {
   render() {
     return (
       <>
-        <div className="custom-card-header">
-          <Loader open={this.state.loading} type="fullsection" />
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
-            <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCustomers})`}</span>
+              <div className="custom-card-header">
+              <Loader open={this.state.loading} type="fullsection" />
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
+                <span className="text-muted">{local.noOfCustomers + ` (${this.state.totalCustomers})`}</span>
+              </div>
+              <div>
+                <Can I='moveOfficerCustomers' a='user'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
+              </div>
+            </div>
+      
+            <InputGroup style={{ direction: 'ltr', margin: "20px 0", }}>
+              <Form.Control
+                value={this.state.filterCustomers}
+                style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+                placeholder={local.searchByName}
+                onChange={async (e) => {console.log(e.currentTarget.value) ;this.setState({filterCustomers: e.currentTarget.value},()=>this.getCustomersForUser(this.state.filterCustomers) )} }
+              />
+              <InputGroup.Append>
+                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            {this.state.totalCustomers > 0 ?
+            <Table striped hover style={{ textAlign: 'right' }}>
+              <thead>
+                <tr>
+                  <th><FormCheck type='checkbox' onClick={(e) => this.checkAll(e)}></FormCheck></th>
+                  <th>{local.customerCode}</th>
+                  <th>{local.customerName}</th>
+                  <th>{local.representative}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.customers.map((customer, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <FormCheck type='checkbox'
+                            checked={this.state.selectedCustomers.includes(customer)}
+                            onChange={() => this.addRemoveItemFromChecked(customer)}>
+                          </FormCheck>
+                        </td>
+                        <td>{customer.code}</td>
+                        <td>{customer.customerName}</td>
+                        <td>{this.props.name}</td>
+                      </tr>
+                    )
+                  })}
+              </tbody>
+            </Table>
+          :
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+            <h4>{local.noResultsFound}</h4>
           </div>
-          <div>
-            <Can I='moveOfficerCustomers' a='user'><Button onClick={() => { this.setState({ openModal: true }) }} disabled={!Boolean(this.state.selectedCustomers.length)} className="big-button" style={{ marginLeft: 20 }}>{local.changeRepresentative} <span className="fa fa-exchange-alt"></span></Button></Can>
-          </div>
-        </div>
-        <InputGroup style={{ direction: 'ltr', marginBottom: 20 }}>
-          <Form.Control
-            value={this.state.filterCustomers}
-            style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-            placeholder={local.searchByName}
-            onChange={(e) => this.setState({ filterCustomers: e.currentTarget.value })}
-          />
-          <InputGroup.Append>
-            <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-          </InputGroup.Append>
-        </InputGroup>
-        <Table striped hover style={{ textAlign: 'right' }}>
-          <thead>
-            <tr>
-              <th><FormCheck type='checkbox' onClick={(e) => this.checkAll(e)}></FormCheck></th>
-              <th>{local.customerCode}</th>
-              <th>{local.customerName}</th>
-              <th>{local.representative}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.customers
-              .filter(customer => customer.customerName?.includes(this.state.filterCustomers))
-              .map((customer, index) => {
-                return (
-                  <tr key={index}>
-                    <td>
-                      <FormCheck type='checkbox'
-                        checked={this.state.selectedCustomers.includes(customer)}
-                        onChange={() => this.addRemoveItemFromChecked(customer)}>
-                      </FormCheck>
-                    </td>
-                    <td>{customer.code}</td>
-                    <td>{customer.customerName}</td>
-                    <td>{this.props.name}</td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </Table>
-        <Modal size="lg" show={this.state.openModal} centered onHide={() => this.setState({ openModal: false })}>
-          <Modal.Header closeButton>
-            <Modal.Title>{local.chooseRepresentative}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Row style={{ padding: '10px 40px' }}>
-              <Col sm={9}>
-                <LoanOfficersDropDown onSelectLoanOfficer={(LO) => this.setState({ selectedLO: LO })} excludeId={this.props.id}/>
-              </Col>
-              <Col sm={3}>
-                <Button style={{ width: '100%', height: '100%' }}
-                  onClick={() => this.submit()}
-                  disabled={!Boolean(this.state.selectedLO._id)}
-                  variant="primary">{local.submit}</Button>
-              </Col>
-            </Row>
-          </Modal.Body>
-        </Modal>
+        }
+            <Modal size="lg" show={this.state.openModal} centered onHide={() => this.setState({ openModal: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title>{local.chooseRepresentative}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Row style={{ padding: '10px 40px' }}>
+                  <Col sm={9}>
+                    <LoanOfficersDropDown onSelectLoanOfficer={(LO) => this.setState({ selectedLO: LO })} excludeId={this.props.id} />
+                  </Col>
+                  <Col sm={3}>
+                    <Button style={{ width: '100%', height: '100%' }}
+                      onClick={() => this.submit()}
+                      disabled={!Boolean(this.state.selectedLO._id)}
+                      variant="primary">{local.submit}</Button>
+                  </Col>
+                </Row>
+              </Modal.Body>
+            </Modal>
+            <Pagination 
+             totalCount = {this.state.totalCustomers}
+             pagination = {true}
+             dataLength = {this.state.customers.length}
+
+             changeNumber={(key: string, number: number) => {
+              this.setState({ [key]: number } as any, () => this.getCustomersForUser());
+            }}
+            />
+       
+
       </>
     )
   }
