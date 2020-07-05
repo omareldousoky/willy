@@ -86,7 +86,7 @@ class LoanCreation extends Component<Props, State> {
     const { id, type } = this.props.location.state;
     this.setState({ id, type, loading: true })
     if (type === "create") {
-      const res = await testCalculateApplication(id);
+      const res = await testCalculateApplication(id, new Date(this.state.loanCreationDate).valueOf());
       if (res.status === "success") {
         this.setState({ installmentsData: res.body })
       } else console.log(res)
@@ -145,6 +145,14 @@ class LoanCreation extends Component<Props, State> {
   getStatus(status: string){
     if(status === "created") return local.created;
     else return local.approved;
+  }
+  async handleCreationDateChange(creationDate: string) {
+    const { id } = this.props.location.state;
+    this.setState({ loading: true });
+    const res = await testCalculateApplication(id, new Date(creationDate).valueOf());
+    if (res.status === "success") {
+      this.setState({ installmentsData: res.body, loading: false })
+    } else this.setState({ loading: false });
   }
   render() {
     return (
@@ -224,8 +232,10 @@ class LoanCreation extends Component<Props, State> {
                       type="date"
                       name="loanCreationDate"
                       data-qc="loanCreationDate"
-                      value={formikProps.values.loanCreationDate}
-                      onChange={formikProps.handleChange}
+                      onChange={(e)=> {
+                        formikProps.setFieldValue('loanCreationDate', e.currentTarget.value);
+                        this.handleCreationDateChange(e.currentTarget.value);
+                      }}
                       onBlur={formikProps.handleBlur}
                       isInvalid={Boolean(formikProps.errors.loanCreationDate) && Boolean(formikProps.touched.loanCreationDate)}
                     />

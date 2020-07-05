@@ -86,67 +86,74 @@ class LoanProfile extends Component<Props, State>{
     async getAppByID(id) {
         this.setState({ loading: true });
         const application = await getApplication(id);
-        store.subscribe(() => {
-            if (store.getState().auth.clientPermissions !== {}) {
-                if (application.status === 'success') {
-                    this.getBranchData(application.body.branchId);
-                    const tabsToRender = [
-                        {
-                            header: local.loanInfo,
-                            stringKey: 'loanDetails'
-                        },
-                        {
-                            header: local.logs,
-                            stringKey: 'loanLogs'
-                        },
-                        {
-                            header: local.documents,
-                            stringKey: 'documents'
-                        },
-                    ]
-                    const guarantorsTab = {
-                        header: local.guarantorInfo,
-                        stringKey: 'loanGuarantors'
-                    };
-                    const customerCardTab = {
-                        header: local.customerCard,
-                        stringKey: 'customerCard'
-                    };
-                    const paymentTab = {
-                        header: local.payments,
-                        stringKey: 'loanPayments'
-                    };
-                    const reschedulingTab = {
-                        header: local.rescheduling,
-                        stringKey: 'loanRescheduling'
-                    };
-                    const reschedulingTestTab = {
-                        header: local.reschedulingTest,
-                        stringKey: 'loanReschedulingTest'
-                    };
-                    if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
-                    if (application.body.status === "paid") tabsToRender.push(customerCardTab)
-                    if (application.body.status === "issued" || application.body.status === "pending") {
-                        tabsToRender.push(customerCardTab)
-                        if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
-                        if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
-                        if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
-                    }
-                    if (application.body.status === "pending") {
-                        this.setState({ activeTab: 'loanDetails' })
-                        this.getPendingActions();
-                    }
-                    this.setState({
-                        application: application.body,
-                        tabsArray: tabsToRender,
-                        loading: false
-                    })
-                } else {
-                    Swal.fire('', 'fetch error', 'error')
-                    this.setState({ loading: false })
+        if (store.getState().auth.clientPermissions !== {}) {
+            this.generateTabs(application);
+        } else {
+            store.subscribe(() => {
+                if (store.getState().auth.clientPermissions !== {}) {
+                    this.generateTabs(application);
                 }
+            })
+        }
+    }
+    generateTabs(application) {
+        if (application.status === 'success') {
+            this.getBranchData(application.body.branchId);
+            const tabsToRender = [
+                {
+                    header: local.loanInfo,
+                    stringKey: 'loanDetails'
+                },
+                {
+                    header: local.logs,
+                    stringKey: 'loanLogs'
+                },
+                {
+                    header: local.documents,
+                    stringKey: 'documents'
+                },
+            ]
+            const guarantorsTab = {
+                header: local.guarantorInfo,
+                stringKey: 'loanGuarantors'
+            };
+            const customerCardTab = {
+                header: local.customerCard,
+                stringKey: 'customerCard'
+            };
+            const paymentTab = {
+                header: local.payments,
+                stringKey: 'loanPayments'
+            };
+            const reschedulingTab = {
+                header: local.rescheduling,
+                stringKey: 'loanRescheduling'
+            };
+            const reschedulingTestTab = {
+                header: local.reschedulingTest,
+                stringKey: 'loanReschedulingTest'
+            };
+            if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
+            if (application.body.status === "paid") tabsToRender.push(customerCardTab)
+            if (application.body.status === "issued" || application.body.status === "pending") {
+                tabsToRender.push(customerCardTab)
+                if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
+                if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
+                if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
             }
-        })
+            if (application.body.status === "pending") {
+                this.setState({ activeTab: 'loanDetails' })
+                this.getPendingActions();
+            }
+            this.setState({
+                application: application.body,
+                tabsArray: tabsToRender,
+                loading: false
+            })
+        } else {
+            Swal.fire('', 'fetch error', 'error')
+            this.setState({ loading: false })
+        }
     }
     async getPendingActions() {
         this.setState({ loading: true })
@@ -261,7 +268,7 @@ class LoanProfile extends Component<Props, State>{
                             <div className="d-flex justify-content-end" style={{ width: '75%' }}>
                                 <span style={{ cursor: 'not-allowed', padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
                                 {this.state.application.status === 'issued' && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span></Can>}
-                                {(this.state.application.status === "created" || this.state.application.status === "issued" || this.state.application.status === "pending") && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
+                                {this.state.application.status === "created" && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
                                 {this.state.application.status === 'underReview' && <Can I='assignProductToCustomer' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.editLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'review' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.reviewLoan}</span></Can>}
                                 {this.state.application.status === 'reviewed' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.undoLoanReview}</span></Can>}
