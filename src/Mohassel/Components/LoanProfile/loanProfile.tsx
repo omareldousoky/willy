@@ -86,67 +86,74 @@ class LoanProfile extends Component<Props, State>{
     async getAppByID(id) {
         this.setState({ loading: true });
         const application = await getApplication(id);
-        store.subscribe(() => {
-            if (store.getState().auth.clientPermissions !== {}) {
-                if (application.status === 'success') {
-                    this.getBranchData(application.body.branchId);
-                    const tabsToRender = [
-                        {
-                            header: local.loanInfo,
-                            stringKey: 'loanDetails'
-                        },
-                        {
-                            header: local.logs,
-                            stringKey: 'loanLogs'
-                        },
-                        {
-                            header: local.documents,
-                            stringKey: 'documents'
-                        },
-                    ]
-                    const guarantorsTab = {
-                        header: local.guarantorInfo,
-                        stringKey: 'loanGuarantors'
-                    };
-                    const customerCardTab = {
-                        header: local.customerCard,
-                        stringKey: 'customerCard'
-                    };
-                    const paymentTab = {
-                        header: local.payments,
-                        stringKey: 'loanPayments'
-                    };
-                    const reschedulingTab = {
-                        header: local.rescheduling,
-                        stringKey: 'loanRescheduling'
-                    };
-                    const reschedulingTestTab = {
-                        header: local.reschedulingTest,
-                        stringKey: 'loanReschedulingTest'
-                    };
-                    if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
-                    if (application.body.status === "paid") tabsToRender.push(customerCardTab)
-                    if (application.body.status === "issued" || application.body.status === "pending") {
-                        tabsToRender.push(customerCardTab)
-                        if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
-                        if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
-                        if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
-                    }
-                    if (application.body.status === "pending") {
-                        this.setState({ activeTab: 'loanDetails' })
-                        this.getPendingActions();
-                    }
-                    this.setState({
-                        application: application.body,
-                        tabsArray: tabsToRender,
-                        loading: false
-                    })
-                } else {
-                    Swal.fire('', 'fetch error', 'error')
-                    this.setState({ loading: false })
+        if (store.getState().auth.clientPermissions !== {}) {
+            this.generateTabs(application);
+        } else {
+            store.subscribe(() => {
+                if (store.getState().auth.clientPermissions !== {}) {
+                    this.generateTabs(application);
                 }
+            })
+        }
+    }
+    generateTabs(application) {
+        if (application.status === 'success') {
+            this.getBranchData(application.body.branchId);
+            const tabsToRender = [
+                {
+                    header: local.loanInfo,
+                    stringKey: 'loanDetails'
+                },
+                {
+                    header: local.logs,
+                    stringKey: 'loanLogs'
+                },
+                {
+                    header: local.documents,
+                    stringKey: 'documents'
+                },
+            ]
+            const guarantorsTab = {
+                header: local.guarantorInfo,
+                stringKey: 'loanGuarantors'
+            };
+            const customerCardTab = {
+                header: local.customerCard,
+                stringKey: 'customerCard'
+            };
+            const paymentTab = {
+                header: local.payments,
+                stringKey: 'loanPayments'
+            };
+            const reschedulingTab = {
+                header: local.rescheduling,
+                stringKey: 'loanRescheduling'
+            };
+            const reschedulingTestTab = {
+                header: local.reschedulingTest,
+                stringKey: 'loanReschedulingTest'
+            };
+            if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
+            if (application.body.status === "paid") tabsToRender.push(customerCardTab)
+            if (application.body.status === "issued" || application.body.status === "pending") {
+                tabsToRender.push(customerCardTab)
+                if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
+                if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
+                if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
             }
-        })
+            if (application.body.status === "pending") {
+                this.setState({ activeTab: 'loanDetails' })
+                this.getPendingActions();
+            }
+            this.setState({
+                application: application.body,
+                tabsArray: tabsToRender,
+                loading: false
+            })
+        } else {
+            Swal.fire('', 'fetch error', 'error')
+            this.setState({ loading: false })
+        }
     }
     async getPendingActions() {
         this.setState({ loading: true })

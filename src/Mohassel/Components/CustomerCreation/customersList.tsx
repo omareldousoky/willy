@@ -63,8 +63,9 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <span className='fa fa-pencil-alt icon' onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></span>: null}
-          <Can I='getCustomer' a='customer'><span className='fa fa-eye icon' onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></span></Can></>  
+        
+        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
+          <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can></>  
       },
     ]
   }
