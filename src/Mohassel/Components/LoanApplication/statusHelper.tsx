@@ -11,6 +11,7 @@ import GroupInfoBox from '../LoanProfile/groupInfoBox';
 import { LoanDetailsTableView } from '../LoanProfile/applicationsDetails';
 import InfoBox from '../userInfoBox';
 import Table from 'react-bootstrap/Table';
+import { getRejectionReasons } from '../../Services/APIs/configApis/config';
 interface Props {
     status: string;
     application: any;
@@ -57,31 +58,7 @@ class StatusHelper extends Component<Props, State>{
                 value: 'rejected',
                 label: local.rejected
             }],
-            rejectionReasonValues: [{
-                value: 'noShow',
-                label: local.noShow
-            }, {
-                value: 'wrongData',
-                label: local.wrongData
-            }, {
-                value: 'changeRequirements',
-                label: local.changeRequirements
-            }, {
-                value: 'badReputation',
-                label: local.badReputation
-            }, {
-                value: 'existingFellony',
-                label: local.existingFellony
-            }, {
-                value: 'existingLoan',
-                label: local.existingLoan
-            }, {
-                value: 'existingDebts',
-                label: local.existingDebts
-            }, {
-                value: 'guarantorRefused',
-                label: local.guarantorRefused
-            }],
+            rejectionReasonValues: [],
             loading: false,
             reviewState: {
                 reviewStatus: 'reviewRequired',
@@ -102,6 +79,21 @@ class StatusHelper extends Component<Props, State>{
             loanOfficer: ''
         }
     }
+    componentDidMount() {
+        if (this.props.status === 'reject') {
+            this.getRejectionReasons();
+        }
+    }
+    async getRejectionReasons() {
+        const rejectionReasons = await getRejectionReasons();
+        if (rejectionReasons.status === 'success') {
+            this.setState({
+                rejectionReasonValues: rejectionReasons.body.data
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+        }
+    }
     handleStatusChange = (values: object) => {
         this.props.handleStatusChange(values, this.props.status)
     }
@@ -114,7 +106,7 @@ class StatusHelper extends Component<Props, State>{
                 {this.props.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.props.application.customer} /> :
                     <GroupInfoBox group={this.props.application.group} />
                 }
-                <LoanDetailsTableView application={this.props.application} setLoanOfficer={(name)=> this.setState({loanOfficer: name})}/>
+                <LoanDetailsTableView application={this.props.application} setLoanOfficer={(name) => this.setState({ loanOfficer: name })} />
                 {this.props.application.product.beneficiaryType === 'individual' && this.props.application.guarantors.length > 0 && <Table>
                     <thead>
                         <tr>
@@ -150,12 +142,6 @@ class StatusHelper extends Component<Props, State>{
             >
                 {(formikProps) =>
                     <Form onSubmit={formikProps.handleSubmit}>
-                        {/* <Col> */}
-                        {/* <Row>
-                                <h1>
-                                    {local.reviewStatus}
-                                </h1>
-                            </Row> */}
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="reviewStatus">
@@ -216,12 +202,6 @@ class StatusHelper extends Component<Props, State>{
             >
                 {(formikProps) =>
                     <Form onSubmit={formikProps.handleSubmit}>
-                        {/* <Col>
-                            <Row>
-                                <h1>
-                                    {local.undoLoanReview}
-                                </h1>
-                            </Row> */}
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="unreviewStatus">
@@ -292,12 +272,6 @@ class StatusHelper extends Component<Props, State>{
             >
                 {(formikProps) =>
                     <Form onSubmit={formikProps.handleSubmit}>
-                        {/* <Col>
-                            <Row>
-                                <h1>
-                                    {local.committeeDecision}
-                                </h1>
-                            </Row> */}
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="rejectionStatus">
@@ -355,8 +329,8 @@ class StatusHelper extends Component<Props, State>{
                                         isInvalid={Boolean(formikProps.errors.rejectionReason) && Boolean(formikProps.touched.rejectionReason)}
                                     >
                                         <option value="" disabled></option>
-                                        {this.state.rejectionReasonValues.map((option, i) =>
-                                            <option key={i} value={option.value}>{option.label}</option>
+                                        {this.state.rejectionReasonValues.filter(option => option.activated).map(option =>
+                                            <option key={option.id} value={option.id}>{option.name}</option>
                                         )}
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">

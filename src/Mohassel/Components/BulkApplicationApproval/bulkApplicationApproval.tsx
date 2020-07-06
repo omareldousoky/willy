@@ -97,6 +97,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           value: branch._id
         })
       })
+      this.filterResults()
       this.setState({
         loading: false,
         branches: branches
@@ -156,6 +157,10 @@ class BulkApplicationApproval extends Component<Props, State>{
       return timeToDateyyymmdd(date)
     }
   }
+  filterResults(){
+    const res = this.state.searchResults.filter(loanItem => Object.keys(loanItem.application.customer).length > 0 ? loanItem.application.customer.customerName.includes(this.state.filterCustomers) : loanItem.application.group.individualsInGroup.filter(member => member.customer.customerName.includes(this.state.filterCustomers)));
+    console.log(res)
+  }
   render() {
     return (
       <Container>
@@ -198,9 +203,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                 </tr>
               </thead>
               <tbody>
-                {this.state.searchResults
-                  .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))
-                  .map((loanItem, index) => {
+                {this.state.searchResults.map((loanItem, index) => {
                     return (
                       <tr key={index}>
                         <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>

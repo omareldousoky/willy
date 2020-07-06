@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
@@ -197,69 +198,69 @@ export const LoanProductCreationForm = (props: any) => {
                     {errors.gracePeriod}
                 </Form.Control.Feedback>
             </Form.Group>
+            {/* <Row> */}
+            {/* <Col> */}
             <Row>
                 <Col>
-                    <Form.Group className="data-group row-nowrap" controlId="interest">
-                        <Col>
-                            <Form.Label className="data-label">{local.interest}</Form.Label>
+                    <Form.Group className="data-group" controlId="interest">
+                        <Form.Label className="data-label">{local.interest}</Form.Label>
 
-                            <Form.Control
-                                type="number"
-                                name="interest"
-                                data-qc="interest"
-                                value={values.interest}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.interest && touched.interest}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.interest}
-                            </Form.Control.Feedback>
-                        </Col>
-                        <Col>
-                            <Form.Control as="select"
-                                style={{ margin: "40px 0" }}
-                                name="interestPeriod"
-                                data-qc="interestPeriod"
-                                value={values.interestPeriod}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.interestPeriod && touched.interestPeriod}
-                            >
-                                <option value='yearly'>{local.yearlyInnterestPeriod}</option>
-                                <option value='monthly'>{local.monthlyInnterestPeriod}</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.interestPeriod}
-                            </Form.Control.Feedback>
-                        </Col>
+                        <Form.Control
+                            type="number"
+                            name="interest"
+                            data-qc="interest"
+                            value={values.interest}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.interest && touched.interest}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.interest}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
                 <Col>
+                    <Form.Group className="data-group" controlId="interest">
+                        <Form.Control as="select"
+                            style={{ margin: "40px 0" }}
+                            name="interestPeriod"
+                            data-qc="interestPeriod"
+                            value={values.interestPeriod}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.interestPeriod && touched.interestPeriod}
+                        >
+                            <option value='yearly'>{local.yearlyInnterestPeriod}</option>
+                            <option value='monthly'>{local.monthlyInnterestPeriod}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.interestPeriod}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentTrue'>
+                        <Form.Check
+                            type='checkbox'
+                            name='allowInterestAdjustment'
+                            data-qc='allowInterestAdjustment'
+                            value={values.allowInterestAdjustment}
+                            checked={values.allowInterestAdjustment}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.allowInterestAdjustment}
+                        </Form.Control.Feedback>
+                        <Form.Label className="data-check-label">{local.allowInterestAdjustment}</Form.Label>
+                    </Form.Group>
+                </Col>
+            </Row>
+            {/* </Col> */}
+            {/* <Col>
                     <Row className="row-nowrap">
-                        <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentTrue'>
-                            <Form.Check
-                                type='radio'
-                                name='allowInterestAdjustment'
-                                data-qc='allowInterestAdjustment'
-                                value={values.allowInterestAdjustment}
-                                checked={values.allowInterestAdjustment}
-                                onBlur={handleBlur}
-                                onChange={(e: any) => {
-                                    const val = e.currentTarget.value;
-                                    if (val === true) {
-                                        setFieldValue('allowInterestAdjustment', false)
-                                    } else {
-                                        setFieldValue('allowInterestAdjustment', true)
-                                    }
-                                }}
-                                isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.allowInterestAdjustment}
-                            </Form.Control.Feedback>
-                            <Form.Label className="data-check-label">{local.allowInterestAdjustment}</Form.Label>
-                        </Form.Group>
+                        
                         <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentFalse'>
                             <Form.Check
                                 type='radio'
@@ -284,8 +285,8 @@ export const LoanProductCreationForm = (props: any) => {
                             <Form.Label className="data-check-label">{local.allowInterestAdjustmentFalse}</Form.Label>
                         </Form.Group>
                     </Row>
-                </Col>
-            </Row>
+                </Col> */}
+            {/* </Row> */}
 
             <Form.Group className="data-group" controlId="inAdvanceFees">
                 <Form.Label className="data-label" >{local.inAdvanceFees}</Form.Label>
@@ -304,7 +305,7 @@ export const LoanProductCreationForm = (props: any) => {
                             {errors.inAdvanceFees}
                         </Form.Control.Feedback>
                     </Col>
-                    <Col sm={3}>
+                    <Col sm={6}>
                         <Form.Control as="select"
                             name="inAdvanceFrom"
                             data-qc="v"
@@ -807,6 +808,95 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Group>
 
                     </Col>}
+            </Col>
+            <Form.Group className="data-group" controlId="allocatedDebtForGoodLoans">
+                <Form.Label className="data-label">{local.allocatedDebtForGoodLoans}</Form.Label>
+                <Form.Control
+                    type="number"
+                    name="allocatedDebtForGoodLoans"
+                    data-qc="allocatedDebtForGoodLoans"
+                    value={values.allocatedDebtForGoodLoans}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={errors.allocatedDebtForGoodLoans && touched.allocatedDebtForGoodLoans}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.allocatedDebtForGoodLoans}
+                </Form.Control.Feedback>
+            </Form.Group>
+            {console.log(values.aging)}
+            <Col style={{ backgroundColor: '#e5e5e5', textAlign: 'right', padding: 20 }}>
+                <Row>
+                    <Col sm={6}>
+                            <h3>{local.aging}</h3>
+                    </Col>
+                    <Col sm={6}>
+                            <h3>{local.agingPercent}</h3>
+                    </Col>
+                </Row>
+                {values.aging.map((element, i) => {
+                    return (
+                        <Col key={i} style={{ padding: '10px 0px'}}>
+                            <Col sm={6}>
+                                <Row>
+                                    <span style={{ width:'10%'}}>{i + 1} - </span>
+                                    <span style={{ direction: 'rtl', width:'10%' }}>{local.from}</span>
+                                    <span style={{ width:'10%'}}>{(i === 0) ? values.aging[i].from : values.aging[i - 1].to}</span>
+                                    <span style={{ direction: 'rtl', width:'10%' }}>{local.to}</span>
+                                    <Form.Group controlId={`agingTo${i}`} style={{ width: '50%' }}>
+                                        <InputGroup>
+                                            <Form.Control
+                                                type="number"
+                                                name={`aging[${i}].to`}
+                                                data-qc="aging"
+                                                value={values.aging[i].to}
+                                                onChange={(e) => {
+                                                    setFieldValue(`aging[${i}].to`, Number(e.currentTarget.value))
+                                                    if (i < 6) {
+                                                        console.log(e.currentTarget.value, i, values.aging[i + 1])
+                                                        setFieldValue(`aging[${i + 1}].from`, Number(e.currentTarget.value))
+                                                    }
+                                                }}
+                                                onBlur={handleBlur}
+                                                min={values.aging[i].from + 1}
+                                                isInvalid={errors.interest && touched.interest}
+                                            // disabled={!values.allowInterestAdjustment}
+                                            />
+                                        </InputGroup>
+                                        {/* <Form.Control.Feedback type="invalid">
+                                                {errors.interest}
+                                            </Form.Control.Feedback> */}
+                                    </Form.Group>
+                                </Row>
+                            </Col>
+                            <Col sm={6}>
+                                <Row>
+                                    <Form.Group controlId={`agingFee${i}`} style={{ width:'100%' }}>
+                                        {/* <Form.Label column sm={6}>{local.interest}</Form.Label> */}
+                                        <InputGroup>
+                                            <Form.Control
+                                                type="number"
+                                                name={`aging[${i}].fee`}
+                                                data-qc="aging"
+                                                value={values.aging[i].fee}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                            // isInvalid={errors.interest && touched.interest}
+                                            // disabled={!values.allowInterestAdjustment}
+                                            />
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                        </InputGroup>
+                                        {/* <Form.Control.Feedback type="invalid">
+                                                {errors.interest}
+                                            </Form.Control.Feedback> */}
+                                    </Form.Group>
+                                </Row>
+                            </Col>
+                        </Col>
+                    )
+                })}
             </Col>
             <Form.Group
                 as={Row}

@@ -93,7 +93,7 @@
     "productName": "نوع القرض",
     "calculationFormulaId": "طريقه الحساب",
     "loanNature": "طبيعة الاقتراض",
-    "currency": "اسم العمله",
+    "currency": "العمله",
     "lateDays": "عدد أيام التأخير",
     "allowInterestAdjustment": "السماح بالتعديل عند إدراج طلب القرض",
     "allowInterestAdjustmentFalse": "لا يمكن التعديل عند ادراج طلب القرض",
@@ -579,6 +579,9 @@
     "and":"و",
     "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء",
     "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
-    "customer":"العميل"
+    "customer":"العميل",
+    "allocatedDebtForGoodLoans":"نسبة مخصص الديون للقروض الجديدة الغير متأخرة",
+    "aging":"مدد اعمار الديون",
+    "agingPercent":"نسب مخصص الديون"
 
 }
