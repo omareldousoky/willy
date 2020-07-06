@@ -384,7 +384,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async searchCustomers() {
         this.setState({ loading: true, branchCustomers: [] });
-        const query = { from: 0, size: 50, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
+        const query = { from: 0, size: 1000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
@@ -395,7 +395,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 50, [key]: (key === 'code') ? Number(query) : query })
+        const results = await searchCustomer({ from: 0, size: 1000, [key]: (key === 'code') ? Number(query) : query })
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -411,7 +411,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const obj = {
             [key]: (key === 'code') ? Number(query) : query,
             from: 0,
-            size: 30,
+            size: 1000,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
         }
         this.setState({ loading: true });
