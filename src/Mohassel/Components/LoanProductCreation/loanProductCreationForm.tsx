@@ -828,18 +828,18 @@ export const LoanProductCreationForm = (props: any) => {
             <Col style={{ backgroundColor: '#e5e5e5', textAlign: 'right', padding: 20 }}>
                 <Row>
                     <Col sm={6}>
-                            <h3>{local.aging}</h3>
+                            <h3 style={{ color: '#2a3390'}}>{local.aging}</h3>
                     </Col>
                     <Col sm={6}>
-                            <h3>{local.agingPercent}</h3>
+                            <h3 style={{ color: '#2a3390'}}>{local.agingPercent}</h3>
                     </Col>
                 </Row>
                 {values.aging.map((element, i) => {
                     return (
-                        <Col key={i} style={{ padding: '10px 0px'}}>
+                        <Row key={i} style={{ padding: '25px 0px'}}>
                             <Col sm={6}>
-                                <Row>
-                                    <span style={{ width:'10%'}}>{i + 1} - </span>
+                                <div className='d-flex'>
+                                    <span style={{ width:'10%', color:'#7dc356'}}>{i + 1} - </span>
                                     <span style={{ direction: 'rtl', width:'10%' }}>{local.from}</span>
                                     <span style={{ width:'10%'}}>{(i === 0) ? values.aging[i].from : values.aging[i - 1].to}</span>
                                     <span style={{ direction: 'rtl', width:'10%' }}>{local.to}</span>
@@ -867,10 +867,10 @@ export const LoanProductCreationForm = (props: any) => {
                                                 {errors.interest}
                                             </Form.Control.Feedback> */}
                                     </Form.Group>
-                                </Row>
+                                </div>
                             </Col>
                             <Col sm={6}>
-                                <Row>
+                                {/* <Row> */}
                                     <Form.Group controlId={`agingFee${i}`} style={{ width:'100%' }}>
                                         {/* <Form.Label column sm={6}>{local.interest}</Form.Label> */}
                                         <InputGroup>
@@ -892,9 +892,9 @@ export const LoanProductCreationForm = (props: any) => {
                                                 {errors.interest}
                                             </Form.Control.Feedback> */}
                                     </Form.Group>
-                                </Row>
+                                {/* </Row> */}
                             </Col>
-                        </Col>
+                        </Row>
                     )
                 })}
             </Col>
