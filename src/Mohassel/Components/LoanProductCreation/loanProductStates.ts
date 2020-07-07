@@ -16,7 +16,7 @@ export const LoanProductValidation = Yup.object().shape({
         }).required('required!'),
     lateDays: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
     gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
-    interest: Yup.number().moreThan(0, "Can't be less than zero").max(100, "Can't be more than 100").required('required!'),
+    interest: Yup.number().min(0, "Can't be less than zero").max(100, "Can't be more than 100").required('required!'),
     inAdvanceFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
     stamps: Yup.number().min(0, "Can't be less than 0").required('required!'),
     representativeFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
@@ -49,4 +49,16 @@ export const LoanProductValidation = Yup.object().shape({
     loanImpactPrincipal: Yup.boolean().required('required!'),
     mustEnterGuarantor: Yup.boolean().required('required!'),
     noOfGuarantors: Yup.number().integer().required('required!'),
+    allocatedDebtForGoodLoans: Yup.number().integer().required('required!'),
+    aging: Yup.array().of(
+        Yup.object().shape({
+            to: Yup.number().integer('Must be int').min(0, "Can't be less than 0"),
+            fee: Yup.number().integer('Must be int').min(0, "Can't be less than 0")
+        })
+    ),
+    mergeUndoubtedLoansFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
+    mergeDoubtedLoansFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
+    pushDays: Yup.array().of(
+        Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!')
+    )
 })
