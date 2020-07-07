@@ -22,7 +22,7 @@ interface Props {
 }
 interface Customer {
   customerName?: string;
-  code?: number;
+  key?: number;
   _id?: string;
   branchId?: string;
 }
@@ -135,7 +135,7 @@ class CustomersForUser extends Component<Props, State> {
                         onChange={() => this.addRemoveItemFromChecked(customer)}>
                       </FormCheck>
                     </td>
-                    <td>{customer.code}</td>
+                    <td>{customer.key}</td>
                     <td>{customer.customerName}</td>
                     <td>{this.props.name}</td>
                   </tr>

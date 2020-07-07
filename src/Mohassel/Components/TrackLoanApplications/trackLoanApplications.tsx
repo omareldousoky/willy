@@ -56,7 +56,7 @@ class TrackLoanApplications extends Component<Props, State>{
     super(props);
     this.state = {
       print: false,
-      size: 5,
+      size: 10,
       from: 0,
       branchDetails: {}
     }
@@ -69,7 +69,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.applicationCode,
         key: "applicationCode",
-        render: data => data.application.applicationCode
+        render: data => data.application.applicationKey
       },
       {
         title: local.customerName,
@@ -163,7 +163,7 @@ class TrackLoanApplications extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
-            dropDownKeys={['name', 'nationalId', 'code']} 
+            dropDownKeys={['name', 'nationalId', 'key']} 
             url="application" 
             from={this.state.from} 
             size={this.state.size} 

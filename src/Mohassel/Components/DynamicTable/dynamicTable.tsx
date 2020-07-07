@@ -22,8 +22,9 @@ interface Props {
 
 const DynamicTable = (props: Props) => {
   const [page, changePage] = useState(0);
-  const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 5 : props.data.length);
+  const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 10 : props.data.length);
   const [order, changeOrder] = useState('');
+  const [selectedSortKey, changeSortKey] = useState('');
   const totalPages: Array<number> = [];
   for (let index = 1; index <= Math.ceil(props.totalCount / rowsPerPage); index++) {
     totalPages.push(index)
@@ -37,6 +38,7 @@ const DynamicTable = (props: Props) => {
     return output;
   }
   function sortBy(key: string) {
+    changeSortKey(key);
     if (order === '') {
       changeOrder('asc');
       changePage(0);
@@ -54,13 +56,15 @@ const DynamicTable = (props: Props) => {
       props.search({ size: props.size, from: 0, url: props.url });
     }
   }
-  function getOrderIcon() {
-    switch (order) {
-      case '': return <span className="fa fa-sort sort-icons" ></span>
-      case 'asc': return <span className="fa fa-sort-down sort-icons"></span>
-      case 'desc': return <span className="fa fa-sort-up sort-icons"></span>
-      default: return null;
-    }
+  function getOrderIcon(key: string) {
+    if (key === selectedSortKey) {
+      switch (order) {
+        case '': return <span className="fa fa-sort sort-icons" ></span>
+        case 'asc': return key === selectedSortKey ? <span className="fa fa-sort-down sort-icons"></span> : null
+        case 'desc': return key === selectedSortKey ? <span className="fa fa-sort-up sort-icons"></span> : null
+        default: return null;
+      }
+    } else return <span className="fa fa-sort sort-icons" ></span>
   }
   return (
     <>
@@ -72,7 +76,7 @@ const DynamicTable = (props: Props) => {
                 return (
                   <th style={mapper.sortable ? { cursor: 'pointer' } : {}} key={index} onClick={() => mapper.sortable ? sortBy(mapper.key) : null}>
                     {mapper.title}
-                    {mapper.sortable ? getOrderIcon() : null}
+                    {mapper.sortable ? getOrderIcon(mapper.key) : null}
                   </th>
                 )
               })}
@@ -95,8 +99,7 @@ const DynamicTable = (props: Props) => {
           </tbody>
         </Table>
         :
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>        <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
           <h4>{local.noResultsFound}</h4>
         </div>
       }
@@ -110,8 +113,10 @@ const DynamicTable = (props: Props) => {
               props.changeNumber && props.changeNumber('from', 0)
               changePage(0)
             }}>
-              <option value={5}>5</option>
               <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
             </Form.Control>
           </div>
           <div className="pagination-container">
