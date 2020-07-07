@@ -231,7 +231,7 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
-    objToSubmit.representative = objToSubmit.representative._id;
+    objToSubmit.representative = objToSubmit.representative._id ? objToSubmit.representative._id : objToSubmit.representative;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
@@ -309,7 +309,7 @@ class CustomerCreation extends Component<Props, State>{
     )
   }
   renderDocuments() {
-    return (
+    return ( 
       <DocumentsUpload
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
@@ -340,7 +340,7 @@ class CustomerCreation extends Component<Props, State>{
           <div style={{ display: "flex", flexDirection: "row", }} >
             <Wizard currentStepNumber={this.state.step - 1}
               stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}></Wizard>
-            <Card.Body style={{width:"80%"}} >
+            <Card.Body style= {{width:"80%"}}>
               {this.renderSteps()}
             </Card.Body>
           </div>

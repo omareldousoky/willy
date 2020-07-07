@@ -8,11 +8,13 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import store from '../../redux/store';
 
 interface Props {
   history: Array<any>;
   data: any;
   branchId: string;
+  fromBranch?: boolean;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
@@ -83,12 +85,12 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
       },
     ]
   }
   componentDidMount() {
-    this.getLoans()
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -105,7 +107,16 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+     let query = {};
+     if(this.props.fromBranch){
+       query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
+     } else {
+      query = {size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" , ...this.props.searchFilters}
+     }
+    this.props.search(query);
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   render() {
     return (
