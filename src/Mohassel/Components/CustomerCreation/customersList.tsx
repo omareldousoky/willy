@@ -27,7 +27,7 @@ interface Props {
   setSearchFilters: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +42,8 @@ class CustomersList extends Component<Props, State> {
       },
       {
         title: local.customerName,
-        key: "customerName",
+        sortable: true,
+        key: "name",
         render: data => data.customerName
       },
       {
@@ -52,13 +53,15 @@ class CustomersList extends Component<Props, State> {
       },
       {
         title: local.governorate,
+        sortable: true,
         key: "governorate",
         render: data => data.governorate
       },
       {
         title: local.creationDate,
-        key: "creationDate",
-        render: data => getDateAndTime(data.created?.at)
+        sortable: true,
+        key: "createdAt",
+        render: data => data.created?.at? getDateAndTime(data.created?.at): ''
       },
       {
         title: '',
@@ -100,10 +103,13 @@ class CustomersList extends Component<Props, State> {
           hqBranchIdRequest = {this.props.branchId}/>
           {this.props.data &&
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.props.data}
+              url="customer" 
               changeNumber={(key: string, number: number) => {
                 this.setState({ [key]: number } as any, () => this.getCustomers());
               }}

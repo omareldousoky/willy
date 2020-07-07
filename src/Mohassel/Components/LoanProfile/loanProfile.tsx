@@ -34,6 +34,7 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
+import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 
 interface EarlyPayment {
@@ -191,6 +192,14 @@ class LoanProfile extends Component<Props, State>{
                 return null
         }
     }
+    async rejectManualPayment() {
+        this.setState({ loading: true });
+        const res = await rejectManualPayment(this.props.history.location.state.id);
+        if (res.status === "success") {
+            this.setState({ loading: false })
+            Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
+        } else this.setState({ loading: false })
+    }
     async approveManualPayment() {
         const table = document.createElement("table");
         table.className = "swal-table";
@@ -300,6 +309,9 @@ class LoanProfile extends Component<Props, State>{
                                 <div className="status-chip pending">{local.pending}</div>
                                 <Can I='payInstallment' a='application'>
                                     <div style={{ color: '#000', cursor: 'pointer' }} onClick={() => this.editManualPayment()}><span className="fa fa-pencil" style={{ marginLeft: 5 }}></span>{local.edit}</div>
+                                </Can>
+                                <Can I='payInstallment' a='application'>
+                                    <div className="cancel" onClick={() => { this.rejectManualPayment() }}>{local.cancel}</div>
                                 </Can>
                                 <Can I='approvePendingAction' a='application'>
                                     <div className="submit" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
