@@ -14,7 +14,9 @@ interface Props {
 
 const DynamicTable = (props: Props) => {
   const [page, changePage] = useState(0);
-  const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 5 : props.data.length);
+  const [rowsPerPage, changeRowsPerPage] = useState(props.pagination ? 10 : props.data.length);
+  const [order, changeOrder] = useState('');
+  const [selectedSortKey, changeSortKey] = useState('');
   const totalPages: Array<number> = [];
   for (let index = 1; index <= Math.ceil(props.totalCount / rowsPerPage); index++) {
     totalPages.push(index)
@@ -27,6 +29,35 @@ const DynamicTable = (props: Props) => {
     }
     return output;
   }
+  function sortBy(key: string) {
+    changeSortKey(key);
+    if (order === '') {
+      changeOrder('asc');
+      changePage(0);
+      props.setSearchFilters({ ...props.searchFilters, sort: key, order: 'asc' })
+      props.search({ size: props.size, from: 0, url: props.url, sort: key, order: 'asc' });
+    } else if (order === 'asc') {
+      changeOrder('desc');
+      changePage(0);
+      props.setSearchFilters({ ...props.searchFilters, sort: key, order: 'desc' })
+      props.search({ size: props.size, from: 0, url: props.url, sort: key, order: 'desc' });
+    } else {
+      changeOrder('');
+      changePage(0);
+      props.setSearchFilters({ ...props.searchFilters, sort: '', order: '' })
+      props.search({ size: props.size, from: 0, url: props.url });
+    }
+  }
+  function getOrderIcon(key: string) {
+    if (key === selectedSortKey) {
+      switch (order) {
+        case '': return <span className="fa fa-sort sort-icons" ></span>
+        case 'asc': return key === selectedSortKey ? <span className="fa fa-sort-down sort-icons"></span> : null
+        case 'desc': return key === selectedSortKey ? <span className="fa fa-sort-up sort-icons"></span> : null
+        default: return null;
+      }
+    } else return <span className="fa fa-sort sort-icons" ></span>
+  }
   return (
     <>
       {props.data?.length ?
@@ -34,7 +65,12 @@ const DynamicTable = (props: Props) => {
           <thead>
             <tr>
               {props.mappers?.map((mapper, index: number) => {
-                return <th key={index}>{mapper.title}</th>
+                return (
+                  <th style={mapper.sortable ? { cursor: 'pointer' } : {}} key={index} onClick={() => mapper.sortable ? sortBy(mapper.key) : null}>
+                    {mapper.title}
+                    {mapper.sortable ? getOrderIcon(mapper.key) : null}
+                  </th>
+                )
               })}
             </tr>
           </thead>
@@ -55,8 +91,7 @@ const DynamicTable = (props: Props) => {
           </tbody>
         </Table>
         :
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>        <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
           <h4>{local.noResultsFound}</h4>
         </div>
       }

@@ -40,7 +40,7 @@ class UsersList extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       manageAccountTabs:[],
     }
@@ -49,6 +49,11 @@ class UsersList extends Component<Props, State> {
         title: local.username,
         key: "username",
         render: data => data.username
+      },
+      {
+        title: local.code,
+        key: "userCode",
+        render: data => data.loanOfficerKey
       },
       {
         title: local.name,
@@ -138,7 +143,7 @@ class UsersList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'nationalId']} 
+            dropDownKeys={['name', 'nationalId', 'key']} 
             searchPlaceholder = {local.searchByNameOrNationalId}
             url="user" from={this.state.from} size={this.state.size} 
             hqBranchIdRequest={this.props.branchId} />

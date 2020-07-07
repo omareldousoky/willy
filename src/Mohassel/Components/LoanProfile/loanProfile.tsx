@@ -290,10 +290,13 @@ class LoanProfile extends Component<Props, State>{
                                 </div>
                                 <div className="status-chip pending">{local.pending}</div>
                                 <Can I='payInstallment' a='application'>
-                                    <div style={{ color: '#000', cursor: 'pointer' }} onClick={() => this.editManualPayment()}><span className="fa fa-pencil" style={{ marginLeft: 5 }}></span>{local.edit}</div>
+                                    <div style={{ color: '#000', cursor: 'pointer' }} data-qc="editManualPayment" onClick={() => this.editManualPayment()}><span className="fa fa-pencil" style={{ marginLeft: 5 }}></span>{local.edit}</div>
+                                </Can>
+                                <Can I='payInstallment' a='application'>
+                                    <div className="cancel" data-qc="rejectManualPayment" onClick={() => { this.rejectManualPayment() }}>{local.cancel}</div>
                                 </Can>
                                 <Can I='approvePendingAction' a='application'>
-                                    <div className="submit" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
+                                    <div className="submit" data-qc="approveManualPayment" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
                                 </Can>
 
                             </div>

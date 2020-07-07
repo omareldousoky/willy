@@ -42,7 +42,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanCode,
         key: "loanCode",
-        render: data => data.application.loanApplicationCode
+        render: data => data.application.loanApplicationKey
       },
       {
         title: local.customerName,
@@ -132,7 +132,7 @@ class LoanList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
-            dropDownKeys={['name', 'nationalId', 'code']}
+            dropDownKeys={['name', 'nationalId', 'key']}
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}
              url="loan" 

@@ -27,7 +27,7 @@ interface State {
 }
 
 class RoleUsers extends Component<Props, State> {
-    mappers: { title: string; key: string; render: (data: any) => void }[]
+    mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -38,7 +38,13 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: local.username,
                 key: "username",
+                sortable: true,
                 render: data => data.username
+            },
+            {
+              title: local.code,
+              key: "userCode",
+              render: data => data.loanOfficerKey
             },
             {
                 title: local.name,
@@ -58,6 +64,7 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: local.creationDate,
                 key: "creationDate",
+                sortable: true,
                 render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
             },
             {
@@ -94,13 +101,16 @@ class RoleUsers extends Component<Props, State> {
                         <hr className="dashed-line" />
                         <Search
                             searchKeys={['keyword', 'dateFromTo']}
-                            dropDownKeys={['name', 'nationalId']}
+                            dropDownKeys={['name', 'nationalId', 'key']}
                             searchPlaceholder={local.searchByNameOrNationalId}
                             url="user"
                             from={this.state.from}
                             size={this.state.size}
                             roleId={this.props._id} />
                         <DynamicTable
+                            url="user"
+                            from={this.state.from}
+                            size={this.state.size}
                             mappers={this.mappers}
                             totalCount={this.props.totalCount}
                             pagination={true}
