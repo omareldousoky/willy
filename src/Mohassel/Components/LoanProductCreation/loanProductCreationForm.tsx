@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { dayOfWeek } from '../../Services/utils';
+import { dayToArabic } from '../../Services/utils';
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
@@ -1053,7 +1053,7 @@ export const LoanProductCreationForm = (props: any) => {
                             return (
                                 <Row key={i}>
                                     <Col sm={2} style={{ margin: 'auto' }}>
-                                        <span>{dayOfWeek(i)}</span>
+                                        <span>{dayToArabic(i)}</span>
                                     </Col>
                                     <Col sm={10}>
                                         {/* <Form.Label className="data-label" style={{ color: '#2a3390' }}>{`Day${i}`}</Form.Label> */}

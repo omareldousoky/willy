@@ -20,26 +20,6 @@ export function parseJwt(token: string) {
     return null;
   }
 };
-export function dayOfWeek(number: number) {
-  switch (number) {
-    case 0:
-      return local.saturday
-    case 1:
-      return local.sunday
-    case 2:
-      return local.monday
-    case 3:
-      return local.tuesday
-    case 4:
-      return local.wednesday
-    case 5:
-      return local.thursday
-    case 6:
-      return local.friday
-    default:
-      return ''
-  }
-}
 export function documentTypeLocalization(val: string) {
   switch (val) {
     case 'customer':
@@ -255,9 +235,8 @@ export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string =
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleString('ar-EG').slice(0, 12)
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleString('ar-EG').slice(0, 12)
 }
-
 export const dayToArabic = (index: number): string => {
-  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
 }
 export const customFilterOption = (option, rawInput) => {
