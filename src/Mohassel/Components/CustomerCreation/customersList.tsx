@@ -31,14 +31,14 @@ class CustomersList extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
     }
     this.mappers = [
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.code
+        render: data => data.key
       },
       {
         title: local.customerName,
@@ -96,7 +96,7 @@ class CustomersList extends Component<Props, State> {
           <hr className="dashed-line" />
           <Search 
           searchKeys={['keyword', 'dateFromTo', 'governorate']} 
-          dropDownKeys={['name', 'nationalId', 'code']} 
+          dropDownKeys={['name', 'nationalId', 'key']} 
           searchPlaceholder ={local.searchByBranchNameOrNationalIdOrCode}
           url="customer" 
           from={this.state.from} size={this.state.size}  
