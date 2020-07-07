@@ -17,7 +17,7 @@ import { searchApplication } from '../../Services/APIs/loanApplication/searchApp
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
 import * as local from '../../../Shared/Assets/ar.json';
-import { englishToArabic }  from '../../Services/statusLanguage';
+import { englishToArabic } from '../../Services/statusLanguage';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 import InputGroup from 'react-bootstrap/InputGroup';
 interface Branch {
@@ -117,7 +117,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     }
   }
   addRemoveItemFromChecked(loan: LoanItem) {
-    if (this.state.selectedReviewedLoans.findIndex(loanItem=> loanItem.id == loan.id ) > -1) {
+    if (this.state.selectedReviewedLoans.findIndex(loanItem => loanItem.id == loan.id) > -1) {
       this.setState({
         selectedReviewedLoans: this.state.selectedReviewedLoans.filter(el => el.id !== loan.id),
       })
@@ -143,16 +143,16 @@ class BulkApplicationApproval extends Component<Props, State>{
     const res = await bulkApproval(obj);
     if (res.status === "success") {
       this.setState({ loading: false })
-      Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getDataFromBranch(this.state.filteredBranch));
+      Swal.fire('', local.bulkLoanApproved, 'success').then(() => this.getDataFromBranch(this.state.filteredBranch));
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
-  dateSlice(date){
-    if(!date){
+  dateSlice(date) {
+    if (!date) {
       return timeToDateyyymmdd(0)
-    }else{
+    } else {
       return timeToDateyyymmdd(date)
     }
   }
@@ -199,13 +199,13 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
-                .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))	
+                  .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
                         <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
                         <td>{loanItem.application.product.productName}</td>
-                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName:loanItem.application.customer.customerName}</td>
+                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName : loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
                         <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.principal}</td>
@@ -220,12 +220,12 @@ class BulkApplicationApproval extends Component<Props, State>{
                   })}
               </tbody>
             </Table>
-                <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>{local.approve}</Button>
+            <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>{local.approve}</Button>
           </div>
           : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans:this.state.selectedReviewedLoans }}
+            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans: this.state.selectedReviewedLoans }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur
