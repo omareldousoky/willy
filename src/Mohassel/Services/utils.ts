@@ -19,6 +19,26 @@ export function parseJwt(token: string) {
     return null;
   }
 };
+export function dayOfWeek(number: number) {
+  switch (number) {
+    case 0:
+      return local.saturday
+    case 1:
+      return local.sunday
+    case 2:
+      return local.monday
+    case 3:
+      return local.tuesday
+    case 4:
+      return local.wednesday
+    case 5:
+      return local.thursday
+    case 6:
+      return local.friday
+    default:
+      return ''
+  }
+}
 export function documentTypeLocalization(val: string) {
   switch (val) {
     case 'customer':
