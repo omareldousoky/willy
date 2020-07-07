@@ -290,6 +290,14 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     border-radius: 6px;
     cursor: pointer;
   }
+  & .cancel {
+    background: #d51b1b;
+    color: #fff;
+    padding: 5px 40px;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 }
 .swal-table {
   width: 100%;
@@ -319,4 +327,9 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   padding: 5px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.sort-icons {
+  vertical-align: middle;
+  margin-right: 5px;
 }
