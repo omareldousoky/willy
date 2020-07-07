@@ -199,7 +199,7 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
-                  .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))	
+                  .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
