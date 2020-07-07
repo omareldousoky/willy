@@ -585,6 +585,7 @@
     "chooseManager": "إختر المدير",
     "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء",
     "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
-    "customer":"العميل"
+    "customer":"العميل",
+    "rejectManualPaymentSuccess": "تم الغاء الحركة"
 
 }

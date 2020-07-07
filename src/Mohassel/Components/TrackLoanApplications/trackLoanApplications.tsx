@@ -51,7 +51,7 @@ interface Props {
   branchId?: string;
 };
 class TrackLoanApplications extends Component<Props, State>{
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
@@ -73,7 +73,8 @@ class TrackLoanApplications extends Component<Props, State>{
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
@@ -94,12 +95,14 @@ class TrackLoanApplications extends Component<Props, State>{
       },
       {
         title: local.loanCreationDate,
-        key: "loanCreationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.loanStatus,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
@@ -167,6 +170,9 @@ class TrackLoanApplications extends Component<Props, State>{
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              url="application" 
+              from={this.state.from} 
+              size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}

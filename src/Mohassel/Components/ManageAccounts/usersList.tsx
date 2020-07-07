@@ -36,7 +36,7 @@ interface State {
 }
 
 class UsersList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -48,6 +48,7 @@ class UsersList extends Component<Props, State> {
       {
         title: local.username,
         key: "username",
+        sortable: true,
         render: data => data.username
       },
       {
@@ -67,7 +68,8 @@ class UsersList extends Component<Props, State> {
       },
       {
         title: local.creationDate,
-        key: "creationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
       },
       {
@@ -143,6 +145,7 @@ class UsersList extends Component<Props, State> {
             hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
+              url="user" from={this.state.from} size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
