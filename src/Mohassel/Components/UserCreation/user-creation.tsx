@@ -84,7 +84,7 @@ class UserCreation extends Component<Props, State> {
     }),
       res.body.branches?.forEach((branch) => {
         step2data.branches?.push({
-          branchName: branch.name ? branch.name : "HQ",
+          branchName: branch.name ? branch.name : "invalid",
           _id: branch._id,
         });
       });
@@ -117,7 +117,7 @@ class UserCreation extends Component<Props, State> {
       RolesAndBranches[1].body.data.data.forEach((branch) => {
         labeldBranches.push({
           _id: branch._id,
-          branchName: branch.name ? branch.name : "HQ",
+          branchName: branch.name ? branch.name : "invalid",
         });
       });
       this.setState({
@@ -220,6 +220,7 @@ class UserCreation extends Component<Props, State> {
         this.createUser(user);
       }
     }
+    console.log("values", this.state.step2);
   };
 
   getUserInfo(): UserInfo {
@@ -282,6 +283,9 @@ class UserCreation extends Component<Props, State> {
             {...formikProps}
             userRolesOptions={this.state.rolesLabeled}
             userBranchesOptions={this.state.branchesLabeled}
+            hasBranch={
+              this.props.edit && this.state.step2.branches ? true : false
+            }
             previousStep={(valuesOfStep2) =>
               this.previousStep(valuesOfStep2, 2)
             }
@@ -292,20 +296,31 @@ class UserCreation extends Component<Props, State> {
   }
   renderStepThree(): any {
     const labeldBranches: Array<{ label: string; value: string }> = [];
-    this.state.step2.branches.forEach((item) => {
+    this.state.step2.branches?.forEach((item) => {
       return labeldBranches.push({
         label: item.branchName,
         value: item._id,
       });
     });
     return (
-      <UserManagerForm
-        handleSubmit={this.submit}
-        values={this.state.step3}
-        roles={this.state.step2.roles}
-        branches={labeldBranches}
-        previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)}
-      />
+      <Formik
+        enableReinitialize
+        initialValues={this.state.step3}
+        onSubmit={this.submit}
+        validateOnBlur
+        validateOnChange
+      >
+        {(formikProps) => (
+          <UserManagerForm
+            {...formikProps}
+            roles={this.state.step2.roles}
+            branches={labeldBranches}
+            previousStep={(valuesOfStep3) =>
+              this.previousStep(valuesOfStep3, 3)
+            }
+          />
+        )}
+      </Formik>
     );
   }
   renderSteps() {

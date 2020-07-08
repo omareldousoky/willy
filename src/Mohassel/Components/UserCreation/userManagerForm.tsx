@@ -35,9 +35,8 @@ const UserManagerForm = (props: Props) => {
   const [managersList, setMangersList] = useState<Array<any>>([]);
   const [showMainRoleError, setShowMainRoleError] = useState(false);
   const [showMainBranchError, setShowMainBranchError] = useState(false);
-  const users: any[] = [];
 
-  console.log("props", props.values.mainRoleId, props.values.mainBranchId);
+  console.log("props", props);
   console.log("states", mainRoleId, mainBranchId);
   const mangerRoleValue = () => {
     return props.roles.find(
@@ -68,7 +67,7 @@ const UserManagerForm = (props: Props) => {
     getMangersList(role?.managerRole);
   }, [mainRoleId]);
   return (
-    <Form className="user-role-form" onSubmit={props.handleSubmit}>
+    <Container className="user-role-form">
       <Form.Group className={"user-role-group"} controlId="mainRole">
         <Form.Label className={"user-role-label"}>
           {`${local.chooseMainRole} *`}
@@ -205,9 +204,9 @@ const UserManagerForm = (props: Props) => {
         <Col>
           <Button
             className={"btn-submit-next"}
-            // disabled={
-            //   !mainRoleId || (!mainBranchId && props.branches.length > 0)
-            // }
+            disabled={
+              !mainRoleId || (!mainBranchId && props.branches.length > 0)
+            }
             style={{ float: "left", width: "60%" }}
             type="button"
             onClick={props.handleSubmit}
@@ -217,7 +216,7 @@ const UserManagerForm = (props: Props) => {
           </Button>
         </Col>
       </Form.Group>
-    </Form>
+    </Container>
   );
 };
 
