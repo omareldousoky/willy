@@ -41,6 +41,7 @@ interface State {
   approvalDate: string;
   beneficiaryType: string;
   application: any;
+  loanApplicationKey: number;
 }
 export interface Location {
   pathname: string;
@@ -79,7 +80,8 @@ class LoanCreation extends Component<Props, State> {
       },
       beneficiaryType: '',
       installmentsData: {},
-      application: {}
+      application: {},
+      loanApplicationKey: 0
     }
   }
   async componentDidMount() {
@@ -95,6 +97,7 @@ class LoanCreation extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         loading: false,
+        loanApplicationKey: res.body.applicationKey,
         application: res.body,
         approvalDate: res.body.approvalDate,
         loanCreationDate: res.body.creationDate? res.body.creationDate: this.state.loanCreationDate,
@@ -204,7 +207,7 @@ class LoanCreation extends Component<Props, State> {
             {this.state.installmentsData.installments && this.state.installmentsData.installments.map((installment, index) => {
               return (
                 <tr key={index}>
-                  <td>{installment.id}</td>
+                  <td>{`${this.state.loanApplicationKey}${installment.id}`}</td>
                   <td>{installment.installmentResponse ? installment.installmentResponse.toFixed(2) : 0}</td>
                   <td>{installment.principalInstallment ? installment.principalInstallment.toFixed(2) : 0}</td>
                   <td>{installment.feesInstallment ? installment.feesInstallment.toFixed(2) : 0}</td>

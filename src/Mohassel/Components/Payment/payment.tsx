@@ -309,7 +309,7 @@ class Payment extends Component<Props, State>{
                           >
                             <option value={-1}></option>
                             {this.props.installments.map(installment => {
-                              if (installment.status !== "partiallyPaid" && installment.status !== "paid")
+                              if (installment.status !== "partiallyPaid" && installment.status !== "paid" && installment.status !== "rescheduled")
                                 return (<option key={installment.id} value={installment.id}>{installment.id}</option>)
                             })}
                           </Form.Control>

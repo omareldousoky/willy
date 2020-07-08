@@ -3,6 +3,7 @@ import './loanContractForGroup.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { numbersToArabic, timeToArabicDate, dayToArabic } from '../../../Services/utils';
+import Tafgeet from 'tafgeetjs';
 
 const LoanContractForGroup = (props) => {
   const leaderName = props.data.group.individualsInGroup.find(individualInGroup => individualInGroup.type === "leader").customer.customerName;
@@ -148,7 +149,7 @@ const LoanContractForGroup = (props) => {
                 <section>
                   <div className="title">البند الثاني</div>
                   <div>
-                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {numbersToArabic(props.data.principal)} جنيه فقط لاغير نقداً موزع بينهم على النحو التالي:
+                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.pricipal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
                   </div>
                   <table className="stakeholders">
                     <tbody>
@@ -188,7 +189,7 @@ const LoanContractForGroup = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {numbersToArabic(props.data.principal)} جنيه
+                  البالغة {`${numbersToArabic(props.data.pricipal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه فقط لاغير، يتم
@@ -414,7 +415,7 @@ const LoanContractForGroup = (props) => {
                     <tr key={index}>
                       <td>{numbersToArabic(index + 1)}</td>
                       <td>{individualInGroup.customer.customerName}</td>
-                      <td>{individualInGroup.customer.key}</td>
+                      <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                     </tr>
                       )
                       })}
