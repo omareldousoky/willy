@@ -95,8 +95,8 @@ steps:
       - ${DRONE_BRANCH}
   when:
     branch:
-    - dev
     - master
+    - dev
     - staging
     - test
     - prod
@@ -130,8 +130,8 @@ steps:
       - ${DRONE_BRANCH}
   when:
     branch:
-    - dev
     - master
+    - dev
     - staging
     - test
     - prod
