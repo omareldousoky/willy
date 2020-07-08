@@ -116,33 +116,36 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Group className="data-group" controlId="periodLength">
                         <Form.Label className="data-label">{local.periodLengthEvery}</Form.Label>
                         <Row className={"row-nowrap"}>
-                            <Form.Control
-                                style={{ margin: "0 20px" }}
-                                type="number"
-                                name="periodLength"
-                                data-qc="periodLength"
-                                value={values.periodLength}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.periodLength && touched.periodLength}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.periodLength}
-                            </Form.Control.Feedback>
-                            <Form.Control as="select"
-                                name="periodType"
-                                data-qc="periodType"
-                                value={values.periodType}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.periodType && touched.periodType}
-                            >
-                                <option value='months'>{local.month}</option>
-                                <option value='days'>{local.day}</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.periodType}
-                            </Form.Control.Feedback>
+                            <Col>
+                                <Form.Control
+                                    type="number"
+                                    name="periodLength"
+                                    data-qc="periodLength"
+                                    value={values.periodLength}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={errors.periodLength && touched.periodLength}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.periodLength}
+                                </Form.Control.Feedback>
+                            </Col>
+                            <Col>
+                                <Form.Control as="select"
+                                    name="periodType"
+                                    data-qc="periodType"
+                                    value={values.periodType}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    isInvalid={errors.periodType && touched.periodType}
+                                >
+                                    <option value='months'>{local.month}</option>
+                                    <option value='days'>{local.day}</option>
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.periodType}
+                                </Form.Control.Feedback>
+                            </Col>
                         </Row>
                     </Form.Group>
                 </Col>
@@ -528,7 +531,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>
             </Form.Group>
-            <Col style={{ border: '1px solid black', borderRadius: '9px', margin: '10px 0 10px 0' }}>
+            <>
                 <Row>
                     {values.beneficiaryType === 'individual' && <Col>
                         <Form.Group className="data-group" controlId="applicationFee">
@@ -681,8 +684,7 @@ export const LoanProductCreationForm = (props: any) => {
                         </Col>
                     </Row>
                 </Form.Group>}
-            </Col>
-            <Col style={{ border: '2px solid black', borderRadius: '9px', }}>
+            </>
                 <Row>
                     <Col>
                         <Form.Group className="data-check-group row-nowrap" controlId='loanImpactPrincipal'>
@@ -736,7 +738,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>
                 {values.beneficiaryType !== 'group' &&
-                    <Col>
+                    <>
                         <Row>
                             <Col>
                                 <Form.Group className="data-check-group row-nowrap" controlId='mustEnterGuarantor'>
@@ -775,8 +777,7 @@ export const LoanProductCreationForm = (props: any) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                    </Col>}
-            </Col>
+                    </>}
             <Form.Group className="data-group" controlId="allocatedDebtForGoodLoans">
                 <Form.Label className="data-label">{local.allocatedDebtForGoodLoans}</Form.Label>
                 <Form.Control
@@ -808,7 +809,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 <div className='d-flex'>
                                     <span style={{ width: '10%', color: '#7dc356' }}>{i + 1} - </span>
                                     <span style={{ direction: 'rtl', width: '10%' }}>{local.from}</span>
-                                    <span style={{ width: '10%' }}>{(i === 0) ? values.aging[i].from : values.aging[i - 1].to}</span>
+                                    <span style={{ width: '10%' }}>{values.aging[i].from}</span>
                                     <span style={{ direction: 'rtl', width: '10%' }}>{local.to}</span>
                                     <Form.Group controlId={`agingTo${i}`} style={{ width: '50%' }}>
                                         <InputGroup>
@@ -820,11 +821,11 @@ export const LoanProductCreationForm = (props: any) => {
                                                 onChange={(e) => {
                                                     setFieldValue(`aging[${i}].to`, Number(e.currentTarget.value))
                                                     if (i < 6) {
-                                                        setFieldValue(`aging[${i + 1}].from`, Number(e.currentTarget.value))
+                                                        setFieldValue(`aging[${i + 1}].from`, Number(e.currentTarget.value)+1)
                                                     }
                                                 }}
                                                 onBlur={handleBlur}
-                                                min={values.aging[i].from + 1}
+                                                min={values.aging[i].from}
                                                 isInvalid={errors.aging && errors.aging[i] && errors.aging[i].to && touched.aging && touched.aging[i] && touched.aging[i].to}
                                             />
                                         </InputGroup>
@@ -1007,12 +1008,10 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>}
             </Form.Group>
-            <Col style={{ backgroundColor: '#e5e5e5', textAlign: 'right', padding: 20 }}>
-                <h2 style={{ color: '#2a3390' }}>{local.push}</h2>
-                <Row>
+            <Row>
                     <Col sm={6}>
                         <Form.Group className="data-group" controlId="pushPayment">
-                            <Form.Label className="data-label" style={{ color: '#2a3390' }}>{local.pushPayment}</Form.Label>
+                            <Form.Label className="data-label">{local.pushPayment}</Form.Label>
                             <Form.Control
                                 type="number"
                                 name="pushPayment"
@@ -1029,7 +1028,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                     <Col sm={6}>
                         <Form.Group className="data-group" controlId="pushHolidays">
-                            <Form.Label className="data-label" style={{ color: '#2a3390' }}>{local.pushHolidays}</Form.Label>
+                            <Form.Label className="data-label">{local.pushHolidays}</Form.Label>
                             <Form.Control as="select"
                                 name="pushHolidays"
                                 data-qc="pushHolidays"
@@ -1047,6 +1046,9 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Group>
                     </Col>
                 </Row>
+            {/* <Col style={{ backgroundColor: '#e5e5e5', textAlign: 'right', padding: 20 }}>
+                <h2 style={{ color: '#2a3390' }}>{local.push}</h2>
+                
                 <Row>
                     <Col sm={6}>
                         {values.pushDays.map((day, i) => {
@@ -1056,7 +1058,6 @@ export const LoanProductCreationForm = (props: any) => {
                                         <span>{dayToArabic(i)}</span>
                                     </Col>
                                     <Col sm={10}>
-                                        {/* <Form.Label className="data-label" style={{ color: '#2a3390' }}>{`Day${i}`}</Form.Label> */}
                                         <Form.Group className="data-group" controlId={`pushDays[${i}]`}>
                                             <Form.Control
                                                 type="number"
@@ -1087,8 +1088,8 @@ export const LoanProductCreationForm = (props: any) => {
                         </div>
                     </Col>
                 </Row>
-            </Col>
-            <Form.Group className="data-check-group row-nowrap" controlId='enabled'>
+            </Col> */}
+            {/* <Form.Group className="data-check-group row-nowrap" controlId='enabled'>
                 <Form.Check
                     type='checkbox'
                     name='enabled'
@@ -1135,7 +1136,7 @@ export const LoanProductCreationForm = (props: any) => {
                     {errors.reviewerChiefAndDate}
                 </Form.Control.Feedback>
                 <Form.Label className="data-check-label">{local.reviewerChiefAndDate}</Form.Label>
-            </Form.Group>
+            </Form.Group> */}
             <Form.Group className="data-check-group row-nowrap" controlId='branchManagerAndDate'>
                 <Form.Check
                     type='checkbox'

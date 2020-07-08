@@ -123,7 +123,7 @@ class LoanProductCreation extends Component<Props, State>{
                 <BackButton title={local.createLoanProduct} />
                 <Container>
                     <Loader open={this.state.loading} type="fullscreen" />
-                    <Card style={{ padding: 20 }}>
+                    <Card style={{ padding: '20px 10px' }}>
                         <Formik
                             initialValues={this.state.product}
                             onSubmit={this.submit}

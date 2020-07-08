@@ -586,7 +586,7 @@
     "rangeOfGroup":"يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء",
     "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
     "customer":"العميل",
-    "allocatedDebtForGoodLoans":"نسبة مخصص الديون للقروض الجديدة الغير متأخرة",
+    "allocatedDebtForGoodLoans":"نسبة مخصص الديون للقروض الجيدة الغير متأخرة",
     "aging":"مدد اعمار الديون",
     "agingPercent":"نسب مخصص الديون",
     "mergeDoubtedLoans":"القروض المجدولة المشكوك في سدادها",

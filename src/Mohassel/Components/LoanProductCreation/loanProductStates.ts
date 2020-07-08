@@ -21,7 +21,7 @@ export const LoanProductValidation = Yup.object().shape({
     stamps: Yup.number().min(0, "Can't be less than 0").required('required!'),
     representativeFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
     adminFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
-    earlyPaymentFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
+    earlyPaymentFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
     maxNoOfRestructuring: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!'),
     minPrincipal: Yup.number().min(0, "Can't be less than 0").required('required!'),
     maxPrincipal: Yup.number().min(Yup.ref('minPrincipal'), `Max should be greater than ${Yup.ref('minPrincipal')}`).required('required!'),
@@ -48,16 +48,25 @@ export const LoanProductValidation = Yup.object().shape({
     spreadApplicationFee: Yup.boolean().required('required!'),
     loanImpactPrincipal: Yup.boolean().required('required!'),
     mustEnterGuarantor: Yup.boolean().required('required!'),
-    noOfGuarantors: Yup.number().integer().required('required!'),
-    allocatedDebtForGoodLoans: Yup.number().integer().required('required!'),
+    noOfGuarantors: Yup.number().integer().min(0, "Can't be less than 0").required('required!'),
+    allocatedDebtForGoodLoans: Yup.number().integer().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
     aging: Yup.array().of(
         Yup.object().shape({
-            to: Yup.number().integer('Must be int').min(0, "Can't be less than 0"),
-            fee: Yup.number().integer('Must be int').min(0, "Can't be less than 0")
+            to: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test('mustbegreater','cant be less than or equal to',
+            function(this: any) {
+            const { from, to } = this.parent
+            if(from<=to){
+                return true
+            }else{
+                return false
+            }
+            }).required('required!'),
+            fee: Yup.number().integer('Must be int').min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!')
         })
     ),
-    mergeUndoubtedLoansFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
-    mergeDoubtedLoansFees: Yup.number().min(0, "Can't be less than 0").required('required!'),
+    mergeUndoubtedLoansFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
+    mergeDoubtedLoansFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required('required!'),
+    pushPayment:Yup.number().integer().min(0, "Can't be less than 0").required('required!'),
     pushDays: Yup.array().of(
         Yup.number().integer('Must be int').min(0, "Can't be less than 0").required('required!')
     )
