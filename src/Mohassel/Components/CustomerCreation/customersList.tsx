@@ -63,8 +63,9 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <span className='fa fa-pencil-alt icon' onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></span>: null}
-          <Can I='getCustomer' a='customer'><span className='fa fa-eye icon' onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></span></Can></>  
+        
+        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
+          <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can></>  
       },
     ]
   }
@@ -82,7 +83,7 @@ class CustomersList extends Component<Props, State> {
           <div className="custom-card-header">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
-              <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount})`}</span>
+              <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
             </div>
             <div>
               <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/customers/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
@@ -93,7 +94,7 @@ class CustomersList extends Component<Props, State> {
           <Search 
           searchKeys={['keyword', 'dateFromTo', 'governorate']} 
           dropDownKeys={['name', 'nationalId', 'code']} 
-          searchPlaceholder ={local.searchByNameOrNationalId}
+          searchPlaceholder ={local.searchByBranchNameOrNationalIdOrCode}
           url="customer" 
           from={this.state.from} size={this.state.size}  
           hqBranchIdRequest = {this.props.branchId}/>

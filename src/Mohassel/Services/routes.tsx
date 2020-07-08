@@ -130,7 +130,7 @@ const appRoutes = [
           {
             path: "/loan-roll-back",
             label: local.previousActions,
-            render: (props) => <Can I='rollback' a='application'><LoanRollBack {...props} /></Can>,
+            render: (props) => <LoanRollBack {...props} />,
           }
         ]
       },

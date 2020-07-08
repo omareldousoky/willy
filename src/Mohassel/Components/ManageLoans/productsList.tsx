@@ -51,7 +51,7 @@ class LoanProducts extends Component<Props, State> {
             {
                 title: local.branches,
                 key: "branches",
-                render: data => data.branches
+                render: data => (data.branches) ? data.branches : 0
             },
             {
                 title: '',
@@ -67,7 +67,7 @@ class LoanProducts extends Component<Props, State> {
     renderIcons(data: any) {
         return (
             <>
-                <span onClick={() => { this.props.history.push({ pathname: "/manage-loans/loan-products/view-product", state: { id: data.id } }) }} className='fa fa-eye icon'></span>
+                <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-loans/loan-products/view-product", state: { id: data.id } }) }}></img>
             </>
         );
     }

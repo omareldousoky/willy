@@ -61,12 +61,12 @@ class BranchesList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <><span 
-        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}
-        className='fa fa-eye icon'></span>
-         <span
-          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}
-          className='fa fa-pencil-alt icon'></span></>
+        render: data => <>
+        <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')}
+        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}></img>
+         <img style={{cursor: 'pointer'}} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}></img>
+          </>
       },
     ]
   }
@@ -93,7 +93,7 @@ class BranchesList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
               <div>
               <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>

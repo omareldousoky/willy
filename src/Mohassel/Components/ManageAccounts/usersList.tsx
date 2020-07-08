@@ -103,8 +103,8 @@ class UsersList extends Component<Props, State> {
   renderIcons(data: any) {
     return (
       <>
-        <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
-        <Can I="createUser" a="user"><span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span></Can>
+        <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} ></img>
+        <Can I="createUser" a="user"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} ></img></Can>
         <Can I="userActivation" a="user"><span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span></Can>
       </>
     );
@@ -128,7 +128,7 @@ class UsersList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.users}</Card.Title>
-                <span className="text-muted">{local.noOfUsers + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfUsers + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
               <div>
                 <Can I='createUser' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/manage-accounts/users/new-user')}>{local.createNewUser}</Button></Can>

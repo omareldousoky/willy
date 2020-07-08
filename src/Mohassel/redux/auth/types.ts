@@ -8,4 +8,5 @@ export interface Auth {
     roles?: Array<string>;
     loading: boolean;
     clientPermissions?: any;
+    name?: string;
 }

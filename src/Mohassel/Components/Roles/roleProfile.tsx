@@ -122,7 +122,7 @@ class RoleProfile extends Component<Props, State>{
                         <div className="d-flex justify-content-between align-items-center">
                             <BackButton title={local.roleDetails} />
                             <div>
-                                <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/roles/edit-role", state: { role: this.state.role } }) }}><span className='fa fa-pencil-alt icon'> {local.edit}</span></span>
+                                <span style={{cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/roles/edit-role", state: { role: this.state.role } }) }}><img alt={"edit"} src={require('../../Assets/editIcon.svg')}/> {local.edit}</span>
                             </div>
                         </div>
                         <Card style={{ marginTop: 15 }}>

@@ -105,7 +105,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}></img>
       },
     ]
   }
@@ -150,7 +150,7 @@ class TrackLoanApplications extends Component<Props, State>{
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
-                <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
               <div>
                 {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
@@ -164,7 +164,7 @@ class TrackLoanApplications extends Component<Props, State>{
             url="application" 
             from={this.state.from} 
             size={this.state.size} 
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}

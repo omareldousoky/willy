@@ -83,7 +83,7 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
       },
     ]
   }
@@ -105,7 +105,7 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" });
+    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   render() {
     return (
@@ -116,14 +116,15 @@ class LoanList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
-                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
             </div>
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
             dropDownKeys={['name', 'nationalId', 'code']}
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
+            datePlaceholder={local.issuanceDate}
              url="loan" 
              from={this.state.from} 
              size={this.state.size} 
