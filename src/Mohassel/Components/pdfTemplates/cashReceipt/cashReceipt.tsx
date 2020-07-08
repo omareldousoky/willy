@@ -1,6 +1,7 @@
 import React from 'react';
 import './cashReceipt.scss';
 import { numbersToArabic, timeToArabicDate } from '../../../Services/utils';
+import Tafgeet from 'tafgeetjs';
 
 const CashReceipt = (props) => {
     return (
@@ -29,7 +30,7 @@ const CashReceipt = (props) => {
                         <div>  تحريرا في
 			<span>{' ' + timeToArabicDate(0, false) + ' '}</span>
                         </div>
-                        <div>استلمت انا / {props.data.customer.customerName}، مبلغ {numbersToArabic(props.data.principal)} جنيه’ من شركة
+                        <div>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} جنيه’ من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
                         <table>
                             <tbody>
