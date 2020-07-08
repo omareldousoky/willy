@@ -609,6 +609,6 @@
     "wednesday":"الاربعاء",
     "thursday":"الخميس",
     "friday":"الجمعة",
-    "rejectManualPaymentSuccess": "تم الغاء الحركة"
-
+    "rejectManualPaymentSuccess": "تم الغاء الحركة",
+    "daily": "يومي"
 }

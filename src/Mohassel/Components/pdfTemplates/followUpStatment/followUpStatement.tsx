@@ -41,7 +41,7 @@ const FollowUpStatment = (props) => {
                 <tbody>
                     <tr>
                         <td style={{ textAlign: "right" }}> العميل
-					<div className="frame">{getCustomerData('code')}</div>
+					<div className="frame">{numbersToArabic(getCustomerData('key'))}</div>
                             <div className="frame">{getCustomerData('customerName')}</div>
                         </td>
 
@@ -84,9 +84,9 @@ const FollowUpStatment = (props) => {
                         {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{individualInGroup.customer.key}</td>
+                                    <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
-                                    <td>{individualInGroup.amount}</td>
+                                    <td>{numbersToArabic(individualInGroup.amount)}</td>
                                     <td></td>
                                     <td>{individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}</td>
                                     <td>{individualInGroup.customer.district}</td>

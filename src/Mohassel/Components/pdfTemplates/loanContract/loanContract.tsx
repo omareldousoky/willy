@@ -3,8 +3,24 @@ import './loanContract.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { numbersToArabic, timeToArabicDate, dayToArabic } from '../../../Services/utils';
+import Tafgeet from 'tafgeetjs';
 
 const LoanContract = (props) => {
+  function getNumbersOfGuarantor() {
+    switch (props.data.guarantors.length) {
+      case 1: return ' الثالث';
+      case 2: return ' الثالث و الرابع';
+      case 3: return ' الثالث و الرابع و الخامس';
+    }
+  }
+  function getIndexInArabic(index: number) {
+    switch (index) {
+      case 0: return ['ثالثا', 'ثالث'];
+      case 1: return ['رابعا', 'رابع'];
+      case 2: return ['خامسا', 'خامس'];
+      default: return ['', '']
+    }
+  }
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">
@@ -53,7 +69,7 @@ const LoanContract = (props) => {
                                                     تجاري استثمار
                                                     القاهره تحت رقم ٨٤٢٠٩ والكائن مقرها 3 شارع الزهور - المهندسين - الجيزه
                                                     والمقيده تحت رقم ٢
-                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ بصفته مدير الفرع بموجب
+                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ _______________________________ بصفته مدير الفرع بموجب
                                                     تفويض صادر له من
                                                     السيد/ منير اكرام نخله - رئيس مجلس الإداره بتاريخ ٢٠١٦/٠٥/١٠
 										</div>
@@ -90,7 +106,7 @@ const LoanContract = (props) => {
                       <td>
                         <div>
                           <b>تليفون</b>
-                          <div style={{ display: 'inline-block', width: '80px' }}>{props.data.customer.mobilePhoneNumber}</div>
+                          <div style={{ display: 'inline-block', width: '80px' }}>{numbersToArabic(props.data.customer.mobilePhoneNumber)}</div>
                         </div>
                       </td>
                     </tr>
@@ -104,10 +120,10 @@ const LoanContract = (props) => {
                           <tr>
                             <td>
                               <div>
-                                <b>ثالثا:- السيد :-</b>
+                                <b>{getIndexInArabic(index)[0]}:- السيد :-</b>
                                 <span>{guarantor.customerName}</span>
                               </div>
-                            </td>individualInGroup
+                            </td>
                             <td>
                               <div>
                                 <b>الكائن:</b>
@@ -128,13 +144,13 @@ const LoanContract = (props) => {
                               <div>
                                 <b>تليفون</b>
                                 <span>
-                                {guarantor.mobilePhoneNumber}
+                                  {guarantor.mobilePhoneNumber}
                                 </span>
                               </div>
                             </td>
                           </tr>
                           <tr style={{ textAlign: 'left' }}>
-                            <td colSpan={4}>&quot;طرف ثالث - ضامن متضامن&quot;</td>
+                            <td colSpan={4}>&quot;طرف {getIndexInArabic(index)[1]} - ضامن متضامن&quot;</td>
                           </tr>
                         </>
                       )
@@ -151,14 +167,14 @@ const LoanContract = (props) => {
                   بالتمويل
 								متناهي الصغر ..</div>
                   <div>
-                    وقد تقدم الطرف الثاني صاحب نشاط خدمي - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
+                    وقد تقدم الطرف الثاني صاحب نشاط {props.data.customer.businessSector} - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
                     {props.branchDetails.name} - {props.data.customer.governorate} الكائن
                     {props.branchDetails.address} لحاجته للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال
                     العامل وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
                     الطرف
-                    الثالث والرابع وقد
+                    {getNumbersOfGuarantor()} وقد
                     وافقه الطرف الأول علي ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
                     الأطراف
                     بأهليتهم القانونيه
@@ -178,7 +194,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثاني</div>
-                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {numbersToArabic(props.data.principal)} جنيه فقط لا غير ويقر
+                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.pricipal)} = (${new Tafgeet(props.data.pricipal, 'EGP').parse()})`} ويقر
                   الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم بسداده للطرف الأول وفقا لما هو وارد
                   بالبند الثالث من هذا
                   العقد
@@ -189,10 +205,10 @@ const LoanContract = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرفان الثاني والثالث والرابع ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {numbersToArabic(props.data.principal)} جنيه
+                  البالغة {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه فقط لاغير، يتم
+                  قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)}، يتم
                   سداده
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه فقط لا غير، تبدأ في
@@ -419,7 +435,7 @@ const LoanContract = (props) => {
 
                 <div>
                   <div className="title_last">
-                    <Barcode value={props.data.applicationKey}/>
+                    <Barcode value={props.data.applicationKey} />
                     <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
@@ -456,7 +472,7 @@ const LoanContract = (props) => {
                     <tr>
                       <td>١</td>
                       <td>{props.data.customer.customerName}</td>
-                      <td>{props.data.customer.key}</td>
+                      <td>{numbersToArabic(props.data.customer.key)}</td>
                     </tr>
                     {props.data.guarantors.map((guarantor, index) => {
                       return (
@@ -505,12 +521,13 @@ const LoanContract = (props) => {
                       </td>
                     </tr>
                     <tr>
-                    {props.data.guarantors.map((guarantor, index) => {
-                      return (
-                      <td key={index}>
-                        <div>ضامن أول/ {guarantor.customerName}</div>
-                      </td>
-                      )})}
+                      {props.data.guarantors.map((guarantor, index) => {
+                        return (
+                          <td key={index}>
+                            <div>ضامن/ {guarantor.customerName}</div>
+                          </td>
+                        )
+                      })}
                     </tr>
                     <tr>
                       <td>
@@ -522,9 +539,8 @@ const LoanContract = (props) => {
                     </tr>
                   </tbody>
                 </table>
-
-                <div>بأنني قد استلمت تمويل قدره: {numbersToArabic(props.data.principal)} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
-							{timeToArabicDate(0,false)}</div>
+                <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
+							{timeToArabicDate(0, false)}</div>
                 <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
                 تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات
 							البيع والشراء.</div>
@@ -563,13 +579,13 @@ const LoanContract = (props) => {
               <div className="main">
                 <div className="last">
                   <div className="title_last">
-                    <Barcode value={props.data.applicationKey}/>
+                    <Barcode value={props.data.applicationKey} />
                     <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                    <Barcode value={props.data.applicationKey}/>
+                    <Barcode value={props.data.applicationKey} />
                     <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
