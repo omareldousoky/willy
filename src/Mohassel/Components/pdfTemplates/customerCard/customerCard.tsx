@@ -45,14 +45,14 @@ const CustomerCardPDF = (props) => {
             <table className="titleborder">
                 <tbody>
                     <tr>
-                        <td> المجموعه
-					<div className="frame">{numbersToArabic(getCode())}</div>
+                        <td> {props.data.product.beneficiaryType === "individual" ? 'العميل' : ' المجموعه '}
+                            <div className="frame">{numbersToArabic(getCode())}</div>
                             <div className="frame">{props.data.customer.customerName}</div>
                         </td>
-                        <td> التاريخ
+                        <td> التاريخ 
 					<div className="frame">{timeToArabicDate(0, false)}</div>
                         </td>
-                        <td> المندوب
+                        <td> المندوب 
 					<div className="frame">{props.loanOfficer}</div>
                         </td>
                     </tr>
@@ -65,13 +65,13 @@ const CustomerCardPDF = (props) => {
                     <tr>
                         <td>قيمة التمويل <div className="frame">{numbersToArabic(props.data.principal)}</div>
                         </td>
-                        <td>فترة السداد <div className="frame">كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}</div>
+                        <td>فترة السداد <div className="frame">{props.data.product.periodType === 'days' ? local.daily : local.inAdvanceFromMonthly}</div>
                         </td>
                         <td>عدد الاقساط <div className="frame">{numbersToArabic(props.data.installmentsObject.installments.length)}</div>
                         </td>
                         <td>فترة السماح
 					<div className="frame">{numbersToArabic(props.data.product.gracePeriod)}</div>
-                            <div className="frame">{props.data.customer.businessActivity}</div>
+                            <div className="frame">تمويل رأس المال</div>
                         </td>
                     </tr>
                 </tbody>
@@ -87,7 +87,7 @@ const CustomerCardPDF = (props) => {
                     </tr>
                     {props.data.installmentsObject.installments.map(installment => {
                         return (<tr key={installment.id}>
-                            <td>{numbersToArabic(installment.id)}</td>
+                            <td>{numbersToArabic(props.data.applicationKey)+ "/" + numbersToArabic(installment.id)}</td>
                             <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                             <td>{numbersToArabic(installment.installmentResponse)}</td>
                             <td></td>
@@ -122,7 +122,7 @@ const CustomerCardPDF = (props) => {
                                     <td>{guarantor.customerName}</td>
                                     <td>{guarantor.district}</td>
                                     <td>{guarantor.customerHomeAddress}</td>
-                                    <td>{numbersToArabic(guarantor.mobilePhoneNumber)}</td>
+                                    <td>{numbersToArabic(guarantor.mobilePhoneNumber) + '-' + numbersToArabic(guarantor.businessPhoneNumber)  + '-' + numbersToArabic(guarantor.homePhoneNumber)}</td>
                                 </tr>
                             )
                         })
@@ -134,7 +134,7 @@ const CustomerCardPDF = (props) => {
                                     <td>{individualInGroup.customer.customerName}</td>
                                     <td>{individualInGroup.customer.district}</td>
                                     <td>{individualInGroup.customer.customerHomeAddress}</td>
-                                    <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber)}</td>
+                                    <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber)+ '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber)  + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
                                 </tr>
                             )
                         })
@@ -150,7 +150,7 @@ const CustomerCardPDF = (props) => {
                 <li>يتم دفع الاقساط في مواعيدها من خلال خزينة الفرع بايصال رسمي مختوم او عبر وسائل الدفع الالكتروني المعتمده
                 من
                 هيئة
-			الرقابه</li>
+			الرقابه المالية</li>
                 <li>ممنوع منعا باتا دفع اي مبالغ نقديه للمندوب تحت اي مسمي</li>
                 <li>الاداره غير مسؤله عن اي مبالغ يتم دفعها لاي شخص بدون ايصال رسمي مختوم من خزينة الفرع</li>
                 <li>تلتزم الاعضاء بسداد غرامة تآخير قدرها ٥٪ من قيمة القسط في اليوم التالي لتاريخ الاستحقاق للقسط، وابتداء

@@ -309,7 +309,7 @@ class Payment extends Component<Props, State>{
                           >
                             <option value={-1}></option>
                             {this.props.installments.map(installment => {
-                              if (installment.status !== "partiallyPaid" && installment.status !== "paid")
+                              if (installment.status !== "partiallyPaid" && installment.status !== "paid" && installment.status !== "rescheduled")
                                 return (<option key={installment.id} value={installment.id}>{installment.id}</option>)
                             })}
                           </Form.Control>
@@ -605,7 +605,6 @@ class Payment extends Component<Props, State>{
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
         <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
-        {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
         {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} truthDate={this.state.truthDate} />}
       </>

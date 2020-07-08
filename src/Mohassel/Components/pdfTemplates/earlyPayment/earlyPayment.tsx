@@ -65,7 +65,7 @@ const EarlyPaymentPDF = (props) => {
                     <tr>
                         <td> العميل
 					<div className="frame">{props.data.customer.key}</div>
-                            <div className="frame">{props.data.customer.customerName}</div>
+                            <div className="frame">{(props.data.product.beneficiaryType === "individual")? props.data.customer.customerName : props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName}</div>
                         </td>
                         <td> التاريخ
 					<div className="frame">{timeToArabicDate(0, false)}</div>
@@ -175,7 +175,7 @@ const EarlyPaymentPDF = (props) => {
                     </tr>
                     <tr>
                         <th>الرصيد</th>
-                        <td className="border">{numbersToArabic(props.earlyPaymentData.requiredAmount)}</td>
+                        <td className="border">{numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)}</td>
                         <td className="border">{numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum - getSum('feesPaid'))}</td>
                         <td className="border">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
                         <td></td>
@@ -197,7 +197,7 @@ const EarlyPaymentPDF = (props) => {
                         <th>السداد المعجل</th>
                         <td className="border">{getInstallmentsRemaining()}</td>
                         <td className="border">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
-                        <td className="border">{numbersToArabic(props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal)}</td>
+                        <td className="border">{numbersToArabic((props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal)/100)}</td>
                         <td className="border">{numbersToArabic((props.data.product.earlyPaymentFees * props.earlyPaymentData.remainingPrincipal) + props.earlyPaymentData.remainingPrincipal)}</td>
                         <td></td>
                         <td></td>
@@ -206,9 +206,6 @@ const EarlyPaymentPDF = (props) => {
                 </tbody>
 
             </table>
-            <div>
-                * يجب العوده لبرنامج المحصل لاحتساب الغرامات إن وجدت
-	        </div>
         </div >
     )
 }
