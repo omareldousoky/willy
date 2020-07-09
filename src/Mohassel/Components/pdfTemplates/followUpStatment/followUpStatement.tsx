@@ -5,11 +5,6 @@ import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Service
 import store from '../../../redux/store';
 
 const FollowUpStatment = (props) => {
-    function getGov() {
-        if (props.data.product.beneficiaryType === "individual")
-            return props.data.customer.governorate;
-        else return props.data.group.individualsInGroup[0].customer.governorate;
-    }
     function getCustomerData(key: string) {
         if (props.data.product.beneficiaryType === "individual")
             return props.data.customer[key]
@@ -20,7 +15,7 @@ const FollowUpStatment = (props) => {
             <table className="margin" >
                 <tbody>
                     <tr>
-                        <td>{props.branchDetails.name} - {getGov()}</td>
+                        <td>{props.branchDetails.name} - {props.branchDetails.governorate}</td>
                         <td></td>
                         <td>{store.getState().auth.name}</td>
                     </tr>

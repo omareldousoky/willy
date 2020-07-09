@@ -221,7 +221,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثالث</div>
-                  <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
+                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
@@ -239,7 +239,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر الطرفان الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر الأطراف الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
