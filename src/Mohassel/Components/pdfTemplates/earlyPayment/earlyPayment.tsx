@@ -20,7 +20,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
             totalDaysEarly: 0,
         }
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
