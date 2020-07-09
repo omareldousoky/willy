@@ -352,7 +352,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
             </Container>
         )
