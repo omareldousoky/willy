@@ -1,15 +1,9 @@
 import React from 'react';
 import './customerCardAttachments.scss';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic, arabicGender } from '../../../Services/utils';
 import * as local from '../../../../Shared/Assets/ar.json';
 const CustomerCardAttachments = (props) => {
-  function arabicGender(gender: string) {
-    switch (gender) {
-      case 'male': return local.male;
-      case 'female': return local.female;
-      default: return ''
-    }
-  }
+  
   function getArabicNumberFromIndex(index: number) {
     switch (index) {
       case 1: return local.first;
