@@ -5,11 +5,6 @@ import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 import store from '../../../redux/store';
 
 const CustomerCardPDF = (props) => {
-    function getGov() {
-        if (props.data.product.beneficiaryType === "individual")
-            return props.data.customer.governorate;
-        else return props.data.group.individualsInGroup[0].customer.governorate;
-    }
     function getCode() {
         if (props.data.product.beneficiaryType === "individual")
             return props.data.customer.key;
@@ -40,7 +35,7 @@ const CustomerCardPDF = (props) => {
                         <td className="title bold titleborder titlebackground">
                             شركة تساهيل للتمويل متناهي الصغر</td>
                         <td style={{ width: "30%" }}></td>
-                        <td className="title bold">{props.branchDetails.name} - {getGov()}</td>
+                        <td className="title bold">{props.branchDetails.name} - {props.branchDetails.governorate}</td>
                     </tr>
                     <tr>
                         <td className="bold">ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (٢) لسنة ٢٠١٥</td>

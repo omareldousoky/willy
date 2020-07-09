@@ -31,7 +31,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 } else totalDaysEarly = totalDaysEarly + number;
             }
         });
-        this.setState({totalDaysEarly, totalDaysLate})
+        this.setState({ totalDaysEarly, totalDaysLate })
     }
     getStatus(status: string) {
         switch (status) {
@@ -79,7 +79,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <th style={{ width: "35%" }} className="title bold border">
                                 شركة تساهيل للتمويل متناهي الصغر</th>
                             <td></td>
-                            <td className="title bold">{this.props.branchDetails.name} - {this.props.data.customer.governorate}</td>
+                            <td className="title bold">{this.props.branchDetails.name} - {this.props.branchDetails.governorate}</td>
                         </tr>
                         <tr>
                             <td>{timeToArabicDate(0, true)}</td>
@@ -182,7 +182,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <th className="border">ايام التأخير</th>
                             <td className="border">{numbersToArabic(this.state.totalDaysLate)}</td>
                             <th className="border">ايام التبكير</th>
-                            <td className="border">{numbersToArabic(this.state.totalDaysEarly < 0? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
+                            <td className="border">{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -203,13 +203,13 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         </tr>
                         <tr>
                             <th>الرصيد</th>
-                            <td className="border">{numbersToArabic(this.props.data.installmentsObject.totalInstallments.installmentSum)}</td>
+                            <td className="border">{numbersToArabic((this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid')) + this.props.earlyPaymentData.remainingPrincipal)}</td>
                             <td className="border">{numbersToArabic(this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid'))}</td>
                             <td className="border">{numbersToArabic(this.props.earlyPaymentData.remainingPrincipal)}</td>
                             <td></td>
                             <td></td>
                             <th className="border">الخصم</th>
-                            <td className="border">{numbersToArabic(this.props.data.installmentsObject.totalInstallments.installmentSum - this.props.earlyPaymentData.requiredAmount)}</td>
+                            <td className="border">{numbersToArabic(Math.ceil((this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid')) + this.props.earlyPaymentData.remainingPrincipal) - this.props.earlyPaymentData.requiredAmount)}</td>
                         </tr>
                         <tr>
                             <td></td>
