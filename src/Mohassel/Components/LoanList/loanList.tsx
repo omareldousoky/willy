@@ -13,6 +13,7 @@ interface Props {
   history: Array<any>;
   data: any;
   branchId: string;
+  fromBranch?: boolean;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
@@ -105,7 +106,16 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+     let query = {};
+     if(this.props.fromBranch){
+       query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
+     } else {
+      query = {size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" , ...this.props.searchFilters}
+     }
+    this.props.search(query);
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   render() {
     return (

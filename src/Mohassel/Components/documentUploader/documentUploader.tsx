@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 interface Document {
   key: string;
   url: string | ArrayBuffer | null;
+  valid: boolean;
 }
 
 interface Props {
@@ -47,8 +48,19 @@ class DocumentUploader extends Component<Props, State> {
     return null;
   }
 
+  calculateNumOfValidDocuments(): number{
+    const numOfValidDocs: number = this.state.imagesFiles.filter((doc)=> {
+      return !doc.valid;
+    }).length;
+      return numOfValidDocs;
+  }
+   calculateLimit(){
+      
+    return (this.state.imagesFiles.length - this.calculateNumOfValidDocuments());
+
+   }
   triggerInputFile() {
-    const limit = this.props.documentType.pages;
+    const limit = this.props.documentType.pages + this.calculateNumOfValidDocuments();
     if (this.state.imagesFiles.length < limit) {
 
       this[`fileInput`].current?.click()
@@ -79,7 +91,7 @@ class DocumentUploader extends Component<Props, State> {
   };
 
   constructArr(name: string) {
-    const len = this.props.documentType.pages;
+    const len = this.props.documentType.pages + this.calculateNumOfValidDocuments() ;
     const arr: number[] = [];
     for (let i = 0; i < len; i++) {
       arr.push(i);
@@ -97,7 +109,7 @@ class DocumentUploader extends Component<Props, State> {
     return flag;
   }
   async readFiles(files: Array<File> | FileList, name: string) {
-    const imagesLimit = this.props.documentType.pages;
+    const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments();
     const flag: boolean = this.checkFileType(files)
     if (flag) Swal.fire('', local.invalidFileType, 'error')
     else if (files.length <= imagesLimit && this.state.imagesFiles.length < imagesLimit) {
@@ -115,6 +127,7 @@ class DocumentUploader extends Component<Props, State> {
             const document: Document = {
               key: res.body.message,
               url: reader.result,
+              valid: true,
             }
             this.setState({
               imagesFiles: [...this.state.imagesFiles, document]
@@ -135,19 +148,30 @@ class DocumentUploader extends Component<Props, State> {
     const data = {
       [this.props.keyName]: this.props.keyId,
       docName: name,
-      key: this.state.imagesFiles[key].key
+      key: this.state.imagesFiles[key].key,
+      delete: this.props.documentType.updatable,
     }
     const res = await this.props.deleteDocumentFun(data);
-    if (res.status === "success") {
+    if (res.status === "success" && this.props.documentType.updatable) {
       this.setState({
         imagesFiles: this.state.imagesFiles.filter((_el, index) => index !== key),
         loading: false,
       })
+
+    } else if(res.status === "success" && !  this.props.documentType.updatable) {
+      const currentImages = this.state.imagesFiles;
+       currentImages[key].valid = false;
+      this.setState({
+        imagesFiles: currentImages,
+        loading: false,
+      })
+
     }
     else {
-      this.setState({ loading: false });
       Swal.fire("", local.deleteError, "error")
+      this.setState({ loading: false });
     }
+  
   }
   dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
     this.overrideEventDefaults(event);
@@ -159,7 +183,7 @@ class DocumentUploader extends Component<Props, State> {
   };
   handleOnChange = (event, name: string) => {
     event.preventDefault();
-    const imagesLimit = this.props.documentType.pages;
+    const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments();
     if (event.target.files.length <= imagesLimit && this.state.imagesFiles.length <= imagesLimit && !this.props.view) {
       this.readFiles(event.target.files, name);
     } else {
@@ -169,7 +193,8 @@ class DocumentUploader extends Component<Props, State> {
   renderLoading() {
     return (
       <div className="document-upload-container">
-        <Spinner animation="border"></Spinner>
+        <Spinner animation="border" variant="primary"></Spinner>
+
       </div>
     )
   }
@@ -196,19 +221,28 @@ class DocumentUploader extends Component<Props, State> {
   renderPhotoByName(key: number, name: string) {
     return (
       <div key={key} className="document-upload-container">
-       {!this.props.view && <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument (e, name, key)}>
+       {(!this.props.view && this.state.imagesFiles[key].valid) && <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument (e, name, key)}>
           <span className="fa fa-trash">{local.delete}</span>
         </div>}
-        <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={this.state.imagesFiles[key].url as string} key={key} alt="" />
+        {!this.state.imagesFiles[key].valid && <div className = "invalid-document">
+          <img src = {require('../../Assets/deactivateIcon.svg')} />
+        </div>
+
+        }
+        <img  className ={this.state.imagesFiles[key].valid ? "uploaded-image" : "uploaded-image invalid-image"} src={this.state.imagesFiles[key].url as string} key={key} alt="" />
       </div>
     )
   }
   renderContainer(name: string) {
+    const Limit = this.props.documentType.pages + this.calculateNumOfValidDocuments();
     return (
       <div style={{
-        display: 'flex',
-        flexWrap: "wrap",
-        justifyContent: 'center', backgroundColor: '#f5f5f5', cursor: this.state.imagesFiles.length === this.props.documentType.pages ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
+         display: 'flex',
+         overflowX:"scroll",
+         flexDirection : "row",
+         flexFlow: "nowrap",
+        justifyContent: "space-between", 
+        backgroundColor: '#fafafa', cursor: this.state.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
       }}
         data-qc={`upload-${name}`}
         onClick={() => this.triggerInputFile()}
@@ -234,7 +268,7 @@ class DocumentUploader extends Component<Props, State> {
   }
   render() {
     return (
-      <div style={{ marginBottom: 30 }}>
+      <div style={{ marginBottom: 30}}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}  <span style={
             {
@@ -244,7 +278,9 @@ class DocumentUploader extends Component<Props, State> {
 
             }
           }>{this.props.documentType.updatable ? local.updatable : local.nonUpdatable}</span></h4>
-          <small style={{ color: "#6e6e6e", fontSize: "12px" }}>{`${local.numOfUploadedImages}(${this.state.imagesFiles.length}/${this.props.documentType.pages})`}</small>
+          {!this.props.documentType.updatable &&  
+          <small style={{ color: "#edb600", fontSize: "12px", fontWeight:'bold' }}>{`${local.numOfInvalidImages} ( ${this.calculateNumOfValidDocuments()} )`}</small>}
+          <small style={{ color: "#6e6e6e", fontSize: "12px", fontWeight:'bold' }}>{`${local.numOfUploadedImages} ( ${this.state.imagesFiles.length - this.calculateNumOfValidDocuments()} / ${this.props.documentType.pages} )`}</small>
         </div>
         {this.renderContainer(this.props.documentType.name)}
       </div>

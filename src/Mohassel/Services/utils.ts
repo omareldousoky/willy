@@ -20,6 +20,18 @@ export function parseJwt(token: string) {
     return null;
   }
 };
+export function documentTypeLocalization(val: string) {
+  switch (val) {
+    case 'customer':
+      return local.customer
+    case 'loanApplication':
+      return local.loanApplicationId
+    case 'issuedLoan':
+      return local.issuedLoan
+    default:
+      return ''
+  }
+}
 export function beneficiaryType(val: string) {
   switch (val) {
     case 'individual':
@@ -234,3 +246,13 @@ export function arabicGender(gender: string) {
     default: return ''
   }
 }
+
+export const customFilterOption = (option, rawInput) => {
+  if (option.label) {
+    const words = rawInput.split(' ');
+    return words.reduce(
+      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
+      true,
+    );
+  }
+};
