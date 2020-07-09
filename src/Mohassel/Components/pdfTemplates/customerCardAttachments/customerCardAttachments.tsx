@@ -10,6 +10,8 @@ const CustomerCardAttachments = (props) => {
       case 2: return local.second;
       case 3: return local.third;
       case 4: return local.fourth;
+      case 5: return local.fifth;
+      case 6: return local.sixth;
       default: return '';
     }
   }
@@ -26,7 +28,7 @@ const CustomerCardAttachments = (props) => {
               </tr>
               <tr>
                 <td>رقم السجل التجارى :٨٤٢٠٩ </td>
-                <td rowSpan={2} >العنوان : {props.data.customer.customerHomeAddress}</td>
+                <td rowSpan={2} >العنوان : {props.branchDetails.address}</td>
                 <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
               </tr>
               <tr>
@@ -300,8 +302,8 @@ const CustomerCardAttachments = (props) => {
                     </tr>
                     <tr>
                       <td>رقم السجل التجارى : {numbersToArabic(individualInGroup.customer.businessLicenseNumber)}</td>
-                      <td rowSpan={2} >العنوان : شارع الموافى من شارع الجمهورية أمام مدرسة النهضة</td>
-                      <td rowSpan={2} >تاريخ القيد بالسجل التجاري: {timeToArabicDate(individualInGroup.customer.businessLicenseIssueDate, false)}</td>
+                      <td rowSpan={2} >العنوان : {props.branchDetails.address}</td>
+                      <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
                     </tr>
                     <tr>
                       <td>فرع : {props.branchDetails.name} - {individualInGroup.customer.governorate}</td>

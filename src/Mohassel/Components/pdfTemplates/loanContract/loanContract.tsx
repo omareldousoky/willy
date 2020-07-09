@@ -11,6 +11,21 @@ const LoanContract = (props) => {
       case 1: return ' الثالث';
       case 2: return ' الثالث و الرابع';
       case 3: return ' الثالث و الرابع و الخامس';
+      case 4: return 'الثالث و الرابع و الخامس و السادس ';
+      case 5: return 'الثالث و الرابع و الخامس و السادس و السابع ';
+      case 6: return 'الثالث و الرابع و الخامس و السادس و السابع و الثامن ';
+      default: return '';
+    }
+  }
+  function getIndexOfGuarantorInAr(index: number) {
+    switch (index) {
+      case 0: return ' الثالث';
+      case 1: return ' الرابع';
+      case 2: return ' الخامس';
+      case 3: return 'السادس';
+      case 4: return 'السابع';
+      case 5: return 'الثامن';
+      default: return '';
     }
   }
   function getIndexInArabic(index: number) {
@@ -18,6 +33,9 @@ const LoanContract = (props) => {
       case 0: return ['ثالثا', 'ثالث'];
       case 1: return ['رابعا', 'رابع'];
       case 2: return ['خامسا', 'خامس'];
+      case 3: return ['سادسا', 'سادس'];
+      case 4: return ['سابعا', 'سابع'];
+      case 5: return ['ثامنا', 'ثامن'];
       default: return ['', '']
     }
   }
@@ -194,7 +212,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثاني</div>
-                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.pricipal)} = (${new Tafgeet(props.data.pricipal, 'EGP').parse()})`} ويقر
+                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} ويقر
                   الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم بسداده للطرف الأول وفقا لما هو وارد
                   بالبند الثالث من هذا
                   العقد
@@ -203,7 +221,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثالث</div>
-                  <div>يلتزم الطرفان الثاني والثالث والرابع ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
+                  <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
@@ -221,7 +239,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر الطرفان الثاني والثالث والرابع متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر الطرفان الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
@@ -229,7 +247,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الخامس</div>
-                  <div>يلتزم الأطراف الثاني والثالث والرابع متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
                   من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقع يلتزموا بسداد
@@ -260,12 +278,10 @@ const LoanContract = (props) => {
                   الوارده بهذا العقد
                   وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
                   الأطراف
-                  الثاني والثالث
-                  والرابع مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                  الثاني وا{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الأطراف
-                  الثاني أو الثالث أو
-								الرابع أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
+                  الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
                   <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                   <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                   <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>
@@ -273,7 +289,7 @@ const LoanContract = (props) => {
                   او
                   غير سليمه وذلك الي
 								المقرض.</div>
-                  <div>٧/٤ في حاله فقد الطرف الثاني أو الثالث أو الرابع اهليته أو اشهار افلاسه او اعساره
+                  <div>٧/٤ في حاله فقد الطرف الثاني أو {getNumbersOfGuarantor()} اهليته أو اشهار افلاسه او اعساره
                   او
                   وفاته او وضعه تحت
                   الحراسه او توقيع الحجز علي امواله او وضع امواله تحت التحفظ ومنعه من التصرف فيها او
@@ -284,7 +300,7 @@ const LoanContract = (props) => {
                   الممول بالقرض كله
                   او بعضه، او اذا تم التصرف في جزء او كل من المشروعالممول او اذا تم تأجيره للغير.
 							</div>
-                  <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو الثالث أو الرابع علي سداد الاقساط في مواعيدها
+                  <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو {getNumbersOfGuarantor()} علي سداد الاقساط في مواعيدها
                   او
                   توقف اعمال المشروع
 								الممول لاي سبب من الاسباب</div>
@@ -298,7 +314,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند التاسع</div>
-                  <div>يقر الطرف الثالث والرابع الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
+                  <div>يقر الطرف {getNumbersOfGuarantor()} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
                   لقيمة هذا القرض من
                   اصل وعوائد وعمولات وكافة المصروفات المستحقه بموجب هذا العقد وايا من ملحقاته، ويحق
@@ -363,17 +379,18 @@ const LoanContract = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
-                        <div><b>الطرف الثالث</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
-                      </td>
-                      <td>
-                        <div><b>الطرف الرابع</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
-                      </td>
+
+                      {props.data.guarantors.map((_guarantor, index) => {
+                        return (
+                          <td key={index}>
+                            <div><b>الطرف {getIndexOfGuarantorInAr(index)}</b></div>
+                            <div><b>الأسم:</b></div>
+                            <div><b>التوقيع:</b></div>
+                          </td>
+                        )
+                      })}
                     </tr>
+
                   </tbody>
                 </table>
 
@@ -561,18 +578,16 @@ const LoanContract = (props) => {
                       </td>
                       <td style={{ width: "100px" }}></td>
                     </tr>
-                    <tr>
-                      <td>
-                        <div>الضامن الأول /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>الضامن الثاني /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
+                    {props.data.guarantors.map((_guarantor, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <div>الضامن {numbersToArabic(index+1)}/</div>
+                          </td>
+                          <td style={{ width: "100px" }}></td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>

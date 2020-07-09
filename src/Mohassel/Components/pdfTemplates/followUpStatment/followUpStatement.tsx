@@ -61,7 +61,7 @@ const FollowUpStatment = (props) => {
                     {props.data.installmentsObject.installments.map((installment, index) => {
                         return (
                             <tr key={index}>
-                                <td>{numbersToArabic(installment.id)}</td>
+                                <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
                                 <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
@@ -77,7 +77,6 @@ const FollowUpStatment = (props) => {
                             <th>كود العضوه</th>
                             <th>اسم العضو</th>
                             <th>التمويل</th>
-                            <th>القسط</th>
                             <th>النشاط</th>
                             <th>المنطقه</th>
                         </tr>
@@ -87,7 +86,6 @@ const FollowUpStatment = (props) => {
                                     <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
                                     <td>{numbersToArabic(individualInGroup.amount)}</td>
-                                    <td></td>
                                     <td>{individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}</td>
                                     <td>{individualInGroup.customer.district}</td>
                                 </tr>
