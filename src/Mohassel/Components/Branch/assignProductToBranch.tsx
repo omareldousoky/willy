@@ -12,6 +12,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { withRouter } from 'react-router-dom';
 
 interface Props {
     title: string;
@@ -139,4 +140,4 @@ class AssignProductToBranch extends Component<Props, State>{
         )
     }
 }
-export default AssignProductToBranch;
+export default withRouter(AssignProductToBranch);
