@@ -209,7 +209,7 @@ export const pathTo = route => {
 };
 
 export const numbersToArabic = (input: number | string) => {
-  if (input  || input === 0) {
+  if (input || input === 0) {
     const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
     const inputStr = input.toString();
     return inputStr.replace(/[0-9]/g, (number) => {
@@ -223,8 +223,14 @@ export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string =
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
-
 export const dayToArabic = (index: number): string => {
-  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
+}
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return ''
+  }
 }
