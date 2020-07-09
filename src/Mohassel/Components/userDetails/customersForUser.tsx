@@ -66,7 +66,7 @@ class CustomersForUser extends Component<Props, State> {
     });
     if (res.status === "success") {
       this.setState({
-        totalCustomers: res.body.totalCount,
+        totalCustomers: res.body.totalCount ? res.body.totalCount : 0,
         customers: res.body.data,
         loading: false,
       });
