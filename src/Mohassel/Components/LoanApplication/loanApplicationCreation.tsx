@@ -263,10 +263,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 this.setState({
                     selectedCustomers
                 })
+            } else {
+                this.populateCustomer(application.body.customer)
             }
-            this.populateCustomer(application.body.customer)
             this.populateLoanProduct(application.body.product)
-            const value = application.body.product.noOfGuarantors
+            const value = (this.state.prevId.length > 0) ? application.body.guarantors.length : application.body.product.noOfGuarantors
             const guarsArr: Array<any> = [];
             for (let i = 0; i < value; i++) {
                 if (application.body.guarantors[i]) {
@@ -370,7 +371,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const products = await getProductsByBranch(this.tokenData.branch);
             if (products.status === 'success') {
                 this.setState({
-                    products: products.body.data.productIds,
+                    products: (products.body.data.productIds)?products.body.data.productIds:[],
                     loading: false
                 })
             } else {
@@ -394,7 +395,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 1000, [key]: (key === 'code') ? Number(query) : query })
+        const results = await searchCustomer({ from: 0, size: 1000, [key]: (key === 'key') ? Number(query) : query })
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -408,7 +409,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearchGuarantors = async (key, query, index) => {
         const obj = {
-            [key]: (key === 'code') ? Number(query) : query,
+            [key]: (key === 'key') ? Number(query) : query,
             from: 0,
             size: 1000,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
@@ -513,6 +514,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultGuar.searchResults.results = [];
         defaultGuar.searchResults.empty = false;
         defaultApplication.guarantors[index] = defaultGuar;
+        this.setState({ application: defaultApplication, loading: false });
+    }
+    removeOptionalGuar(obj, index, values) {
+        this.setState({ loading: true });
+        const defaultApplication = { ...values }
+        defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(id => obj.guarantor._id !== id)
+        defaultApplication.guarantors.splice(index, 1);
         this.setState({ application: defaultApplication, loading: false });
     }
     populateLoanProduct(selectedProductDetails) {
@@ -845,6 +853,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationGuarantorForm {...formikProps}
                         step={(key) => this.step(key)}
                         addGuar={() => this.addOptionalGuarantor()}
+                        removeGuar={(guarantor, i, values) => this.removeOptionalGuar(guarantor, i, values)}
                         handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}

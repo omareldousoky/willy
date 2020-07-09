@@ -236,8 +236,15 @@ export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string =
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
 export const dayToArabic = (index: number): string => {
-  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
+}
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return ''
+  }
 }
 
 export const customFilterOption = (option, rawInput) => {
