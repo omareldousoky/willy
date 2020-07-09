@@ -10,7 +10,8 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { withRouter } from 'react-router-dom';
-import { DocumentType } from '../../Services/interfaces'
+import { DocumentType } from '../../Services/interfaces';
+import { documentTypeLocalization } from '../../Services/utils';
 interface Props {
     history: any;
 }
@@ -86,7 +87,7 @@ class EncodingFiles extends Component<Props, State> {
                                                     </Col>
                                                     <Col>
                                                         <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.documentFor}</div>
-                                                        <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentType.type} </div>
+                                                        <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentTypeLocalization(documentType.type)} </div>
                                                     </Col>
                                                     <Col>
                                                         <span
