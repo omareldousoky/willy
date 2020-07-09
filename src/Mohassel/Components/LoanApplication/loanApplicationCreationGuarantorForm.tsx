@@ -15,10 +15,10 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.guarantorInfo}</h5>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+                        <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                             {values.guarantors.map((guarantor, i) => {
                                 return (
-                                    <div key={i} style={{ width: '50%', display: 'flex', alignItems: "center" }}>
+                                    <Row key={i} style={{ width: '100%' }}>
                                         <CustomerSearch
                                             source={i + 1}
                                             key={i}
@@ -29,13 +29,13 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                             selectedCustomer={guarantor.guarantor}
                                             removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
                                         />
-                                        {(i > values.noOfGuarantors - 1) && <span style={{ width: '2%', cursor: 'pointer' }} onClick={() => props.removeGuar(guarantor, i, values)}>-</span>}
-                                    </div>
+                                        {(i > values.noOfGuarantors - 1) && <span style={{ width: '2%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => props.removeGuar(guarantor, i, values)}>-</span>}
+                                    </Row>
                                 )
                             }
                             )}
                             <Button onClick={() => props.addGuar()}>+</Button>
-                        </div>
+                        </Col>
                     </div>
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.viceCustomersInfo}</h5>
