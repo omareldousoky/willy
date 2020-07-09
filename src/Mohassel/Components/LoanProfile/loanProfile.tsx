@@ -34,6 +34,7 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
+import UploadDocuments from './uploadDocuments';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -94,7 +95,11 @@ class LoanProfile extends Component<Props, State>{
                 {
                     header: local.logs,
                     stringKey: 'loanLogs'
-                }
+                },
+                {
+                    header: local.documents,
+                    stringKey: 'documents'
+                },
             ]
             const guarantorsTab = {
                 header: local.guarantorInfo,
@@ -171,6 +176,8 @@ class LoanProfile extends Component<Props, State>{
                 return <Rescheduling application={this.state.application} test={false} />
             case 'loanReschedulingTest':
                 return <Rescheduling application={this.state.application} test={true} />
+            case 'documents':
+                return <UploadDocuments application={this.state.application} />
             default:
                 return null
         }
