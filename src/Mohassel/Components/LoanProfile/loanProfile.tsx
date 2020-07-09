@@ -14,7 +14,7 @@ import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs';
 import Card from 'react-bootstrap/Card';
 import { LoanDetailsTableView } from './applicationsDetails';
-import { GuarantorView } from './guarantorDetails'
+import { GuarantorTableView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard';
 import Rescheduling from '../Rescheduling/rescheduling';
 import ability from '../../config/ability';
@@ -167,7 +167,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanDetails':
                 return <LoanDetailsTableView application={this.state.application} setLoanOfficer={(name) => this.setState({ loanOfficer: name })} />
             case 'loanGuarantors':
-                return <GuarantorView guarantors={this.state.application.guarantors} />
+                return <GuarantorTableView guarantors={this.state.application.guarantors} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -333,7 +333,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
             </Container>
         )

@@ -85,7 +85,7 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
       },
     ]
   }

@@ -3,10 +3,10 @@ import './loanContractForGroup.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { numbersToArabic, timeToArabicDate, dayToArabic } from '../../../Services/utils';
+import Tafgeet from 'tafgeetjs';
 
 const LoanContractForGroup = (props) => {
   const leaderName = props.data.group.individualsInGroup.find(individualInGroup => individualInGroup.type === "leader").customer.customerName;
-  console.log(props)
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">
@@ -55,7 +55,7 @@ const LoanContractForGroup = (props) => {
                                                     تجاري استثمار
                                                     القاهره تحت رقم ٨٤٢٠٩ والكائن مقرها 3 شارع الزهور - المهندسين - الجيزه
                                                     والمقيده تحت رقم ٢
-                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ بصفته مدير الفرع بموجب
+                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ _______________________________ بصفته مدير الفرع بموجب
                                                     تفويض صادر له من
                                                     السيد/ منير اكرام نخله - رئيس مجلس الإداره بتاريخ ٢٠١٦/٠٥/١٠
 										</div>
@@ -148,7 +148,7 @@ const LoanContractForGroup = (props) => {
                 <section>
                   <div className="title">البند الثاني</div>
                   <div>
-                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {numbersToArabic(props.data.principal)} جنيه فقط لاغير نقداً موزع بينهم على النحو التالي:
+                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
                   </div>
                   <table className="stakeholders">
                     <tbody>
@@ -188,7 +188,7 @@ const LoanContractForGroup = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {numbersToArabic(props.data.principal)} جنيه
+                  البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه فقط لاغير، يتم
@@ -220,11 +220,14 @@ const LoanContractForGroup = (props) => {
                   تأخير ٥% من قيمة
                   القسط في اليوم التالي لتاريخ الأستحقاق للقسط وابتداء من اليوم الذي يليه كالتالي :-
 							</div>
-                  <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ٢٠٠٠ جنيها</div>
-                  <div>يتم تحصيل ٧.٥ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي
-                  ٣٠٠٠
+                  <div>يتم تحصيل ٢ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ جنيها</div>
+                  <div>يتم تحصيل ٣ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ جنيها حتي
+                  ٢٠٠٠
 								جنيها</div>
-                  <div>يتم تحصيل ١٠ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٣٠٠٠ جنيها</div>
+                <div>يتم تحصيل ٤ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي
+                  ٢٥٠٠
+								جنيها</div>
+                  <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٢٥٠٠ جنيها</div>
                 </section>
 
                 <section>
@@ -280,7 +283,7 @@ const LoanContractForGroup = (props) => {
 
                 <section>
                   <div className="title">البند التاسع</div>
-                  <div>يتسري أحكام القانون رقم ١٤١ لسنة ٢٠١٤ بشأن تمويل منتناهي الصغر و لائحته التنفيذية وتعديلاته (إن وجد) على هذا العقد وتعتبر مكمله له وتختص المحاكم الإقتصادية بالفصل في أي نزاع قد ينشأ بخصوص تفسير أو تنفيذ أي بند من بنود هذا العقد
+                  <div>تسري أحكام القانون رقم ١٤١ لسنة ٢٠١٤ بشأن تمويل منتناهي الصغر و لائحته التنفيذية وتعديلاته (إن وجد) على هذا العقد وتعتبر مكمله له وتختص المحاكم الإقتصادية بالفصل في أي نزاع قد ينشأ بخصوص تفسير أو تنفيذ أي بند من بنود هذا العقد
                   كما تطبق أحكام القوانين السارية بجمهرية مصر العربية في حالة خلو القانون المشار إليه من تنظيم النزاع المطروح على المحكمة
                   </div>
                 </section>
@@ -393,7 +396,7 @@ const LoanContractForGroup = (props) => {
                 <div>الاسم <div style={{ display: 'inline-block', width: '150px' }}></div> الموظف بشركة تساهيل للتمويل
 							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate}</div>
                 <div>بوظيفة</div>
-                <div>بأن توقيع كل من العميل والضامن المدرجين بالجدول تم امامي وان جميع بيانات ايصالات
+                <div>بأن توقيع كل من عضو من اعضاء المجموعة المدرجين بالجدول تم امامي وان جميع بيانات ايصالات
                 الامانه الخاصه بهم صحيحة
                 وتحت مسئوليتي وانني قمت بمطابقة اصول بطاقات الرقم القومي لجميع اعضاء المجموعه مع الصور
                 المرفقه بطلب التمويل
@@ -414,7 +417,7 @@ const LoanContractForGroup = (props) => {
                     <tr key={index}>
                       <td>{numbersToArabic(index + 1)}</td>
                       <td>{individualInGroup.customer.customerName}</td>
-                      <td>{individualInGroup.customer.key}</td>
+                      <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                     </tr>
                       )
                       })}

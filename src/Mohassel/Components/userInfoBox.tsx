@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
+import { arabicGender } from '../Services/utils';
 
 interface Props {
     values: any;
@@ -39,7 +40,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.customerCode}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{(values.code) ? values.code : 'N/A'} </Form.Label>
+                            <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>
@@ -65,7 +66,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.gender}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{values.gender} </Form.Label>
+                            <Form.Label>{arabicGender(values.gender)} </Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>

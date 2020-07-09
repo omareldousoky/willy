@@ -1,4 +1,5 @@
 import * as local from '../../Shared/Assets/ar.json';
+import jwtDecode from 'jwt-decode';
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -14,7 +15,7 @@ export const timeToDateyyymmdd = (timeStamp: number): any => {
 
 export function parseJwt(token: string) {
   try {
-    return JSON.parse(atob(token.split('.')[1]));
+    return jwtDecode(token);
   } catch (e) {
     return null;
   }
@@ -231,20 +232,17 @@ export const numbersToArabic = (input: number | string) => {
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
   if (timeStamp > 0)
-    return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleString('ar-EG').slice(0, 12)
-  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleString('ar-EG').slice(0, 12)
+    return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
+  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
-
 export const dayToArabic = (index: number): string => {
-  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
 }
-export const customFilterOption = (option, rawInput) => {
-  if (option.label) {
-    const words = rawInput.split(' ');
-    return words.reduce(
-      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
-      true,
-    );
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return ''
   }
-};
+}
