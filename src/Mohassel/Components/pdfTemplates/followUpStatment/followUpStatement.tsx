@@ -5,11 +5,6 @@ import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Service
 import store from '../../../redux/store';
 
 const FollowUpStatment = (props) => {
-    function getGov() {
-        if (props.data.product.beneficiaryType === "individual")
-            return props.data.customer.governorate;
-        else return props.data.group.individualsInGroup[0].customer.governorate;
-    }
     function getCustomerData(key: string) {
         if (props.data.product.beneficiaryType === "individual")
             return props.data.customer[key]
@@ -20,7 +15,7 @@ const FollowUpStatment = (props) => {
             <table className="margin" >
                 <tbody>
                     <tr>
-                        <td>{props.branchDetails.name} - {getGov()}</td>
+                        <td>{props.branchDetails.name} - {props.branchDetails.governorate}</td>
                         <td></td>
                         <td>{store.getState().auth.name}</td>
                     </tr>
@@ -41,7 +36,7 @@ const FollowUpStatment = (props) => {
                 <tbody>
                     <tr>
                         <td style={{ textAlign: "right" }}> العميل
-					<div className="frame">{getCustomerData('code')}</div>
+					<div className="frame">{numbersToArabic(getCustomerData('key'))}</div>
                             <div className="frame">{getCustomerData('customerName')}</div>
                         </td>
 
@@ -61,7 +56,7 @@ const FollowUpStatment = (props) => {
                     {props.data.installmentsObject.installments.map((installment, index) => {
                         return (
                             <tr key={index}>
-                                <td>{numbersToArabic(installment.id)}</td>
+                                <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
                                 <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
@@ -77,17 +72,15 @@ const FollowUpStatment = (props) => {
                             <th>كود العضوه</th>
                             <th>اسم العضو</th>
                             <th>التمويل</th>
-                            <th>القسط</th>
                             <th>النشاط</th>
                             <th>المنطقه</th>
                         </tr>
                         {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{individualInGroup.customer.key}</td>
+                                    <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
-                                    <td>{individualInGroup.amount}</td>
-                                    <td></td>
+                                    <td>{numbersToArabic(individualInGroup.amount)}</td>
                                     <td>{individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}</td>
                                     <td>{individualInGroup.customer.district}</td>
                                 </tr>
