@@ -9,7 +9,7 @@ interface Props {
 
 export const GuarantorView = (props: Props) => {
     return (
-        <div className="d-flex">
+        <div className="d-flex flex-wrap">
             {(props.guarantors.length > 0) ? props.guarantors.map((guar, i) =>
                 <div key={i} style={{margin: 'auto'}}>
                     <div className="d-flex flex-row">
@@ -18,7 +18,7 @@ export const GuarantorView = (props: Props) => {
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.guarantorCode}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.code}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.key}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.nationalId}</p>

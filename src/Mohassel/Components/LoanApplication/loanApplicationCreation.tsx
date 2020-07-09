@@ -371,7 +371,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const products = await getProductsByBranch(this.tokenData.branch);
             if (products.status === 'success') {
                 this.setState({
-                    products: products.body.data.productIds,
+                    products: (products.body.data.productIds)?products.body.data.productIds:[],
                     loading: false
                 })
             } else {

@@ -248,3 +248,10 @@ export const customFilterOption = (option, rawInput) => {
     );
   }
 };
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return ''
+  }
+}
