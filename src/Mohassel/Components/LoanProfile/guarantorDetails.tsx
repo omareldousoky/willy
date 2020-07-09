@@ -53,7 +53,7 @@ export const GuarantorView = (props: Props) => {
 export const GuarantorTableView = (props: Props) => {
     return (
         <div className="d-flex justify-content-center">
-            <Table>
+            <Table style={{ textAlign: 'right' }}>
                 <thead>
                     <tr>
                         <th>{local.guarantorCode}</th>

@@ -172,7 +172,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             />
           </Form.Group>
         </div>
-        {this.state.searchResults.filter(loanItem => loanItem.application.status === "reviewed").length ?
+        {this.state.searchResults.length ?
           <div>
             <InputGroup style={{ direction: 'ltr', margin: '20px 0px' }}>
               <Form.Control
@@ -199,7 +199,10 @@ class BulkApplicationApproval extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.searchResults
-                  .filter(loanItem => loanItem.application.customer.customerName?.includes(this.state.filterCustomers))
+                  .filter(loanItem => loanItem.application.product.beneficiaryType !== 'group'? 
+                  loanItem.application.customer.customerName?.includes(this.state.filterCustomers)
+                  : loanItem.application.group.individualsInGroup.find(customer=> customer.type === 'leader')?.customer.customerName.includes(this.state.filterCustomers)
+                  )
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>

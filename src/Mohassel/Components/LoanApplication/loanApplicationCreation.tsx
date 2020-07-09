@@ -395,7 +395,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 1000, [key]: (key === 'code') ? Number(query) : query })
+        const results = await searchCustomer({ from: 0, size: 1000, [key]: (key === 'key') ? Number(query) : query })
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -409,7 +409,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearchGuarantors = async (key, query, index) => {
         const obj = {
-            [key]: (key === 'code') ? Number(query) : query,
+            [key]: (key === 'key') ? Number(query) : query,
             from: 0,
             size: 1000,
             excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
