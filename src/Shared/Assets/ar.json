@@ -603,5 +603,7 @@
     "thursday":"الخميس",
     "friday":"الجمعة",
     "rejectManualPaymentSuccess": "تم الغاء الحركة",
-    "daily": "يومي"
+    "daily": "يومي",
+    "fifth": "الخامس",
+    "sixth": "السادس"
 }

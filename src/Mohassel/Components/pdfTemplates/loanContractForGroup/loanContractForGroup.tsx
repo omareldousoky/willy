@@ -7,7 +7,6 @@ import Tafgeet from 'tafgeetjs';
 
 const LoanContractForGroup = (props) => {
   const leaderName = props.data.group.individualsInGroup.find(individualInGroup => individualInGroup.type === "leader").customer.customerName;
-  console.log(props)
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">
@@ -56,7 +55,7 @@ const LoanContractForGroup = (props) => {
                                                     تجاري استثمار
                                                     القاهره تحت رقم ٨٤٢٠٩ والكائن مقرها 3 شارع الزهور - المهندسين - الجيزه
                                                     والمقيده تحت رقم ٢
-                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ بصفته مدير الفرع بموجب
+                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ _______________________________ بصفته مدير الفرع بموجب
                                                     تفويض صادر له من
                                                     السيد/ منير اكرام نخله - رئيس مجلس الإداره بتاريخ ٢٠١٦/٠٥/١٠
 										</div>
@@ -149,7 +148,7 @@ const LoanContractForGroup = (props) => {
                 <section>
                   <div className="title">البند الثاني</div>
                   <div>
-                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.pricipal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
+                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
                   </div>
                   <table className="stakeholders">
                     <tbody>
@@ -189,7 +188,7 @@ const LoanContractForGroup = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {`${numbersToArabic(props.data.pricipal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
+                  البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه فقط لاغير، يتم
@@ -221,11 +220,14 @@ const LoanContractForGroup = (props) => {
                   تأخير ٥% من قيمة
                   القسط في اليوم التالي لتاريخ الأستحقاق للقسط وابتداء من اليوم الذي يليه كالتالي :-
 							</div>
-                  <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ٢٠٠٠ جنيها</div>
-                  <div>يتم تحصيل ٧.٥ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي
-                  ٣٠٠٠
+                  <div>يتم تحصيل ٢ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ جنيها</div>
+                  <div>يتم تحصيل ٣ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ جنيها حتي
+                  ٢٠٠٠
 								جنيها</div>
-                  <div>يتم تحصيل ١٠ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٣٠٠٠ جنيها</div>
+                <div>يتم تحصيل ٤ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي
+                  ٢٥٠٠
+								جنيها</div>
+                  <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٢٥٠٠ جنيها</div>
                 </section>
 
                 <section>
