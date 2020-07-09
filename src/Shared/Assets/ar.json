@@ -610,6 +610,8 @@
     "thursday":"الخميس",
     "friday":"الجمعة",
     "rejectManualPaymentSuccess": "تم الغاء الحركة",
-    "noGuarantors":"لا يوجد ضمان",
-    "daily": "يومي"
+    "daily": "يومي",
+    "fifth": "الخامس",
+    "sixth": "السادس",
+    "noGuarantors":"لا يوجد ضمان"
 }

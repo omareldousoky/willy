@@ -10,6 +10,8 @@ const CustomerCardAttachments = (props) => {
       case 2: return local.second;
       case 3: return local.third;
       case 4: return local.fourth;
+      case 5: return local.fifth;
+      case 6: return local.sixth;
       default: return '';
     }
   }
@@ -25,9 +27,9 @@ const CustomerCardAttachments = (props) => {
                 <td>ترخيص رقم (٢)</td>
               </tr>
               <tr>
-                <td>رقم السجل التجارى : {numbersToArabic(props.data.customer.businessLicenseNumber)}</td>
-                <td rowSpan={2} >العنوان : شارع الموافى من شارع الجمهورية أمام مدرسة النهضة</td>
-                <td rowSpan={2} >تاريخ القيد بالسجل التجاري: {timeToArabicDate(props.data.customer.businessLicenseIssueDate, false)}</td>
+                <td>رقم السجل التجارى :٨٤٢٠٩ </td>
+                <td rowSpan={2} >العنوان : {props.branchDetails.address}</td>
+                <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
               </tr>
               <tr>
                 <td>فرع : {props.branchDetails.name} - {props.data.customer.governorate}</td>
@@ -100,7 +102,7 @@ const CustomerCardAttachments = (props) => {
           </div>
           <div className="triple">
             <div>أرقام التليفون :
-          <div className="value">{props.data.customer.mobilePhoneNumber}</div>
+          <div className="value">{props.data.customer.mobilePhoneNumber + '-' + props.data.customer.businessPhoneNumber  + '-' + props.data.customer.homePhoneNumber}</div>
             </div>
             <div>رقم آخر :
           <div className="value">---------------------</div>
@@ -221,7 +223,7 @@ const CustomerCardAttachments = (props) => {
               </div>
               <div className="triple">
                 <div>رقم تليفون الضامن {getArabicNumberFromIndex(index + 1)} :
-                     <div className="value">{guarantor.mobilePhoneNumber}</div>
+                     <div className="value">{guarantor.mobilePhoneNumber + '-' + guarantor.businessPhoneNumber  + '-' + guarantor.homePhoneNumber}</div>
                 </div>
                 <div>رقم آخر :
                      <div className="value">---------------------</div>
@@ -300,8 +302,8 @@ const CustomerCardAttachments = (props) => {
                     </tr>
                     <tr>
                       <td>رقم السجل التجارى : {numbersToArabic(individualInGroup.customer.businessLicenseNumber)}</td>
-                      <td rowSpan={2} >العنوان : شارع الموافى من شارع الجمهورية أمام مدرسة النهضة</td>
-                      <td rowSpan={2} >تاريخ القيد بالسجل التجاري: {timeToArabicDate(individualInGroup.customer.businessLicenseIssueDate, false)}</td>
+                      <td rowSpan={2} >العنوان : {props.branchDetails.address}</td>
+                      <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
                     </tr>
                     <tr>
                       <td>فرع : {props.branchDetails.name} - {individualInGroup.customer.governorate}</td>
@@ -374,7 +376,7 @@ const CustomerCardAttachments = (props) => {
                 </div>
                 <div className="triple">
                   <div>أرقام التليفون :
-          <div className="value">{individualInGroup.customer.mobilePhoneNumber}</div>
+          <div className="value">{individualInGroup.customer.mobilePhoneNumber + '-' + individualInGroup.customer.businessPhoneNumber  + '-' + individualInGroup.customer.homePhoneNumber}</div>
                   </div>
                   <div>رقم آخر :
           <div className="value">---------------------</div>
