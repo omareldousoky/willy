@@ -18,7 +18,6 @@ interface Props {
   userBranchesOptions: Array<object>;
   handleSubmit: any;
   previousStep: any;
-  hasBranch: boolean;
 }
 interface State {
   hasBranch: boolean;
@@ -26,22 +25,42 @@ interface State {
   showBranchesError: boolean;
   roles: Array<object>;
   branches: Array<object>;
+  key: string;
 }
 class UserRolesAndPermissionsFrom extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      hasBranch: this.props.hasBranch,
+      hasBranch: false,
       showBranchesError: false,
       showRolesError: false,
       roles: [],
       branches: [],
+      key: "",
     };
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.values.roles !== state.roles && state.key !== "updated") {
+      let rolesState = false;
+      props.values.roles?.map((role, index) => {
+        if (role.hasBranch === true) {
+          rolesState = true;
+          return;
+        }
+      });
+      return {
+        roles: props.values.roles,
+        branches: props.values.branches,
+        hasBranch: rolesState,
+        key: "updated",
+      };
+    }
+    return null;
+  }
   isHasBranch(roles): boolean {
     let rolesState = false;
-    roles.map((role, index) => {
+    roles?.map((role, index) => {
       if (role.hasBranch === true) {
         rolesState = true;
         return;
@@ -51,15 +70,15 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
   }
   handleChange(list) {
     this.props.values.branches = list;
+    this.setState({ branches: list });
     if (this.state.hasBranch && list.length === 0) {
-      this.setState({ showBranchesError: true, branches: [] });
+      this.setState({ showBranchesError: true });
     } else {
-      this.setState({ showBranchesError: false, branches: list });
+      this.setState({ showBranchesError: false });
     }
   }
 
   render() {
-    console.log(this.state.branches, this.props.values.branches);
     return (
       <Container className="user-role-form">
         <Form.Group className={"user-role-group"} controlId="roles">
@@ -85,20 +104,24 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             data-qc="roles"
             onChange={(event: any) => {
               this.props.values.roles = event;
+              const check = this.isHasBranch(event);
               this.setState({
-                hasBranch: this.isHasBranch(event),
+                hasBranch: check,
                 showRolesError: !event ? true : false,
               });
-
-              this.setState(event);
               this.props.values.roles = event;
+              this.setState({ roles: event });
+
               if (!this.state.hasBranch || !event) {
                 this.props.values.branches = [];
+                this.setState({ branches: [] });
               }
 
-              this.setState({ showBranchesError: !this.isHasBranch(event) });
+              this.setState({
+                showBranchesError: check && !this.props.values.branches,
+              });
             }}
-            value={this.props.values.roles}
+            value={this.state.roles}
             options={this.props.userRolesOptions}
           />
           {this.state.showRolesError && (
@@ -120,7 +143,7 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             <DualBox
               labelKey={"branchName"}
               filterKey={"noKey"}
-              selected={this.state.branches}
+              selected={this.props.values.branches}
               onChange={(list) => {
                 this.handleChange(list);
               }}
@@ -147,9 +170,9 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             <Button
               disabled={
                 this.state.showRolesError ||
-                (this.props.values.branches?.length === 0 &&
-                  this.state.hasBranch) ||
-                this.state.showBranchesError
+                this.state.showBranchesError ||
+                (this.state.hasBranch &&
+                  this.props.values.branches?.length === 0)
               }
               className={"btn-submit-next"}
               style={{ float: "left", width: "60%" }}

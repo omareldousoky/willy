@@ -88,7 +88,12 @@ class UserCreation extends Component<Props, State> {
           _id: branch._id,
         });
       });
-    this.setState({ step1: step1Data, step2: step2data });
+    const step3data: MainChoosesValues = {
+      mainBranchId: res.body.user.mainBranchId,
+      mainRoleId: res.body.user.mainRoleId,
+      manager: res.body.user.manager,
+    };
+    this.setState({ step1: step1Data, step2: step2data, step3: step3data });
   }
   async getUserRolePermissions() {
     const RolesAndBranches = await getUserRolesAndBranches();
@@ -139,13 +144,13 @@ class UserCreation extends Component<Props, State> {
       step: 1,
       step1: initialStep1,
       step2: initialStep2,
+      step3: initialStep3,
     });
     this.props.history.goBack();
   }
-  previousStep(values, step: number): void {
+  previousStep(step: number): void {
     this.setState({
       step: step - 1,
-      [`step${step}`]: values,
     } as State);
   }
   prepareUser(values: object) {
@@ -206,21 +211,24 @@ class UserCreation extends Component<Props, State> {
       this.setState({ loading: false });
     }
   }
-  submit = async (values: object) => {
-    if (this.state.step < 3) {
+  submit = async (values: any) => {
+    if (this.state.step === 1) {
       this.setState({
         [`step${this.state.step}`]: values,
         step: this.state.step + 1,
       } as any);
-    } else {
+    } else if (this.state.step === 3) {
       const user = this.prepareUser(values);
       if (this.props.edit) {
-        this.editUser(user);
+        await this.editUser(user);
       } else {
-        this.createUser(user);
+        await this.createUser(user);
       }
+    } else {
+      this.setState({
+        step: 3,
+      });
     }
-    console.log("values", this.state.step2);
   };
 
   getUserInfo(): UserInfo {
@@ -244,6 +252,9 @@ class UserCreation extends Component<Props, State> {
   componentWillUnmount() {
     initialStep2.roles = [];
     initialStep2.branches = [];
+    initialStep3.mainRoleId = "";
+    initialStep3.mainRoleId = "";
+    initialStep3.manager = "";
   }
   renderStepOne(): any {
     return (
@@ -271,30 +282,18 @@ class UserCreation extends Component<Props, State> {
   }
   renderStepTwo(): any {
     return (
-      <Formik
-        enableReinitialize
-        initialValues={this.state.step2}
-        onSubmit={this.submit}
-        validateOnBlur
-        validateOnChange
-      >
-        {(formikProps) => (
-          <UserRolesAndPermissionsFrom
-            {...formikProps}
-            userRolesOptions={this.state.rolesLabeled}
-            userBranchesOptions={this.state.branchesLabeled}
-            hasBranch={
-              this.props.edit && this.state.step2.branches ? true : false
-            }
-            previousStep={(valuesOfStep2) =>
-              this.previousStep(valuesOfStep2, 2)
-            }
-          />
-        )}
-      </Formik>
+      <UserRolesAndPermissionsFrom
+        values={this.state.step2}
+        handleSubmit={this.submit}
+        userRolesOptions={this.state.rolesLabeled}
+        userBranchesOptions={this.state.branchesLabeled}
+        previousStep={() => this.previousStep(2)}
+      />
     );
   }
   renderStepThree(): any {
+    const w = this.state.step2.roles;
+    const l = this.state.step2.branches;
     const labeldBranches: Array<{ label: string; value: string }> = [];
     this.state.step2.branches?.forEach((item) => {
       return labeldBranches.push({
@@ -303,24 +302,13 @@ class UserCreation extends Component<Props, State> {
       });
     });
     return (
-      <Formik
-        enableReinitialize
-        initialValues={this.state.step3}
-        onSubmit={this.submit}
-        validateOnBlur
-        validateOnChange
-      >
-        {(formikProps) => (
-          <UserManagerForm
-            {...formikProps}
-            roles={this.state.step2.roles}
-            branches={labeldBranches}
-            previousStep={(valuesOfStep3) =>
-              this.previousStep(valuesOfStep3, 3)
-            }
-          />
-        )}
-      </Formik>
+      <UserManagerForm
+        values={this.state.step3}
+        roles={this.state.step2.roles}
+        branches={labeldBranches}
+        previousStep={() => this.previousStep(3)}
+        handleSubmit={this.submit}
+      />
     );
   }
   renderSteps() {

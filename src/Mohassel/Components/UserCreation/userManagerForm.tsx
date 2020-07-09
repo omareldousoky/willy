@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 import Select from "react-select";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -11,6 +11,7 @@ import { customFilterOption } from "../../Services/utils";
 import { MainChoosesValues } from "./userCreationinterfaces";
 import Button from "react-bootstrap/Button";
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
+import { Loader } from "../../../Shared/Components/Loader";
 
 interface Props {
   roles: any[];
@@ -19,31 +20,66 @@ interface Props {
   handleSubmit: any;
   previousStep: any;
 }
-const UserManagerForm = (props: Props) => {
-  const mainRoleValue = () => {
-    return props.roles.find((item) => item.value === props.values.mainRoleId);
-  };
-  const mainBranchValue = () => {
-    return props.branches?.find(
+interface State {
+  mainBranchId: string;
+  mainRoleId: string;
+  managersList: any[];
+  showMainRoleError: boolean;
+  showMainBranchError: boolean;
+  hasManager: boolean;
+  hasBranch: boolean;
+  manager: string;
+  key: string;
+  loading: boolean;
+}
+class UserManagerForm extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      mainBranchId: "",
+      mainRoleId: "",
+      managersList: [],
+      manager: "",
+      showMainRoleError: false,
+      showMainBranchError: false,
+      hasManager: false,
+      hasBranch: false,
+      key: "",
+      loading: false,
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const role = props.roles.find(
+      (item) => item.value === props.values.mainRoleId
+    );
+    const branch = props.branches.find(
       (item) => item.value === props.values.mainBranchId
     );
-  };
+    if (
+      props.values.mainRoleId !== state.mainRoleId &&
+      state.key !== "updated"
+    ) {
+      return {
+        mainRoleId: role?.value,
+        mainBranchId: branch?.value,
+        manager:
+          role?.value === props.values.mainRoleId ? props.values.manager : "",
+        hasBranch: role?.hasBranch,
+        hasManager: props.values.manager || role?.managerRole ? true : false,
+        key: "updated",
+      };
+    }
+    return null;
+  }
 
-  const [mainBranchId, setMainBranchId] = useState(mainBranchValue);
-  const [mainRoleId, setMainRoleId] = useState(mainRoleValue);
-  const [manager, setMangerId] = useState(props.values.manager);
-  const [managersList, setMangersList] = useState<Array<any>>([]);
-  const [showMainRoleError, setShowMainRoleError] = useState(false);
-  const [showMainBranchError, setShowMainBranchError] = useState(false);
-
-  console.log("props", props);
-  console.log("states", mainRoleId, mainBranchId);
-  const mangerRoleValue = () => {
-    return props.roles.find(
-      (item) => item.value === mainRoleId && item.managerRole
+  componentDidMount() {
+    const role = this.props.roles.find(
+      (item) => item.value === this.props.values.mainRoleId && item.managerRole
     );
-  };
-  const getMangersList = async (managerRoleId: string) => {
+    if (role) this.getMangersList(role.managerRole);
+  }
+  async getMangersList(managerRoleId: string) {
     if (managerRoleId) {
       const obj = {
         status: "active",
@@ -51,6 +87,7 @@ const UserManagerForm = (props: Props) => {
         from: 0,
         size: 1000,
       };
+      this.setState({ loading: true });
       const res = await searchUsers(obj);
       const users: any[] = [];
       res.body.data.map((user: any) => {
@@ -59,59 +96,16 @@ const UserManagerForm = (props: Props) => {
           value: user._id,
         });
       });
-      setMangersList(users);
+
+      this.setState({ managersList: users, loading: false });
     }
-  };
-  useEffect(() => {
-    const role = mangerRoleValue();
-    getMangersList(role?.managerRole);
-  }, [mainRoleId]);
-  return (
-    <Container className="user-role-form">
-      <Form.Group className={"user-role-group"} controlId="mainRole">
-        <Form.Label className={"user-role-label"}>
-          {`${local.chooseMainRole} *`}
-        </Form.Label>
-        <Select
-          styles={theme.selectStyle}
-          isSearchable={true}
-          filterOption={customFilterOption}
-          placeholder={
-            <span style={{ width: "100%", padding: "5px", margin: "5px" }}>
-              <img
-                style={{ float: "right" }}
-                alt="search-icon"
-                src={require("../../Assets/searchIcon.svg")}
-              />{" "}
-              {local.searchByUserRole}
-            </span>
-          }
-          name="mainRole"
-          data-qc="mainRole"
-          onBlur={() => {
-            setShowMainRoleError(!mainRoleId);
-          }}
-          onFocus={() => {
-            setShowMainRoleError(!mainRoleId);
-          }}
-          onChange={(event: any) => {
-            props.values.mainRoleId = event.value;
-            setMainRoleId(event.value);
-            setShowMainRoleError(!event);
-          }}
-          value={mainRoleValue()}
-          options={props.roles}
-        />
-        {showMainRoleError && (
-          <div style={{ color: "red", fontSize: "15px", margin: "10px" }}>
-            {local.required}
-          </div>
-        )}
-      </Form.Group>
-      {props.branches?.length > 0 && (
-        <Form.Group className={"user-role-group"} controlId="mainBranch">
+  }
+  render() {
+    return (
+      <Container className="user-role-form">
+        <Form.Group className={"user-role-group"} controlId="mainRole">
           <Form.Label className={"user-role-label"}>
-            {`${local.chooseMainBranch} *`}
+            {`${local.chooseMainRole} *`}
           </Form.Label>
           <Select
             styles={theme.selectStyle}
@@ -124,100 +118,166 @@ const UserManagerForm = (props: Props) => {
                   alt="search-icon"
                   src={require("../../Assets/searchIcon.svg")}
                 />{" "}
-                {local.searchByBranch}
+                {local.searchByUserRole}
               </span>
             }
-            name="mainBranch"
-            data-qc="mainBranch"
-            onChange={(event: any) => {
-              props.values.mainBranchId = event.value;
-              setMainBranchId(event.value);
-              setShowMainBranchError(
-                !event.value && props.branches?.length > 0
-              );
-            }}
+            name="mainRole"
+            data-qc="mainRole"
             onBlur={() => {
-              setShowMainBranchError(
-                !mainBranchId && props.branches?.length > 0
-              );
+              this.setState({ showMainRoleError: !this.state.mainRoleId });
             }}
             onFocus={() => {
-              setShowMainBranchError(
-                !mainBranchId && props.branches?.length > 0
-              );
+              this.setState({ showMainRoleError: !this.state.mainRoleId });
             }}
-            value={mainBranchValue()}
-            options={props.branches}
+            onChange={async (event: any) => {
+              this.props.values.mainRoleId = event.value;
+              if (event.managerRole) {
+                await this.getMangersList(event.managerRole);
+              }
+              this.setState({
+                showMainRoleError: !event,
+                mainRoleId: event.value,
+                hasBranch: event.hasBranch,
+                hasManager: event.managerRole ? true : false,
+              });
+              if (!event.hasBranch) {
+                (this.props.values.mainBranchId = ""),
+                  this.setState({ mainBranchId: "" });
+              }
+            }}
+            value={this.props.roles.find(
+              (item) => item.value === this.state.mainRoleId
+            )}
+            options={this.props.roles}
           />
-          {showMainBranchError && (
+          {this.state.showMainRoleError && (
             <div style={{ color: "red", fontSize: "15px", margin: "10px" }}>
               {local.required}
             </div>
           )}
         </Form.Group>
-      )}
-      {managersList?.length > 0 && (
-        <Form.Group className={"user-role-group"} controlId="manager">
-          <Form.Label className={"user-role-label"}>
-            {local.chooseManager}
-          </Form.Label>
-          <Select
-            styles={theme.selectStyle}
-            isSearchable={true}
-            filterOption={customFilterOption}
-            placeholder={
-              <span style={{ width: "100%", padding: "5px", margin: "5px" }}>
-                <img
-                  style={{ float: "right" }}
-                  alt="search-icon"
-                  src={require("../../Assets/searchIcon.svg")}
-                />{" "}
-                {local.searchByName}
-              </span>
-            }
-            name="manager"
-            data-qc="manager"
-            onChange={(event: any) => {
-              props.values.manager = event.value;
-              setMangerId(event.value);
-            }}
-            value={managersList?.find(
-              (item) => item.value === props.values.manager
+        {this.props.branches?.length > 0 && this.state.hasBranch && (
+          <Form.Group className={"user-role-group"} controlId="mainBranch">
+            <Form.Label className={"user-role-label"}>
+              {`${local.chooseMainBranch} *`}
+            </Form.Label>
+            <Select
+              styles={theme.selectStyle}
+              isSearchable={true}
+              filterOption={customFilterOption}
+              placeholder={
+                <span style={{ width: "100%", padding: "5px", margin: "5px" }}>
+                  <img
+                    style={{ float: "right" }}
+                    alt="search-icon"
+                    src={require("../../Assets/searchIcon.svg")}
+                  />{" "}
+                  {local.searchByBranch}
+                </span>
+              }
+              name="mainBranch"
+              data-qc="mainBranch"
+              onChange={(event: any) => {
+                this.props.values.mainBranchId = event.value;
+                this.setState({
+                  mainBranchId: event.value,
+                  showMainBranchError:
+                    !event.value && this.props.branches?.length > 0,
+                });
+              }}
+              onBlur={() => {
+                this.setState({
+                  showMainBranchError:
+                    !this.state.mainBranchId && this.props.branches?.length > 0,
+                });
+              }}
+              onFocus={() => {
+                this.setState({
+                  showMainBranchError:
+                    !this.state.mainBranchId && this.props.branches?.length > 0,
+                });
+              }}
+              value={this.props.branches?.find(
+                (item) => item.value === this.state.mainBranchId
+              )}
+              options={this.props.branches}
+            />
+            {this.state.showMainBranchError && (
+              <div style={{ color: "red", fontSize: "15px", margin: "10px" }}>
+                {local.required}
+              </div>
             )}
-            options={managersList}
-          />
+          </Form.Group>
+        )}
+        {this.state.hasManager && (
+          <>
+            <Loader open={this.state.loading} type="fullsection" />
+            <Form.Group className={"user-role-group"} controlId="manager">
+              <Form.Label className={"user-role-label"}>
+                {local.chooseManager}
+              </Form.Label>
+              <Select
+                styles={theme.selectStyle}
+                isSearchable={true}
+                filterOption={customFilterOption}
+                placeholder={
+                  <span
+                    style={{ width: "100%", padding: "5px", margin: "5px" }}
+                  >
+                    <img
+                      style={{ float: "right" }}
+                      alt="search-icon"
+                      src={require("../../Assets/searchIcon.svg")}
+                    />{" "}
+                    {local.searchByName}
+                  </span>
+                }
+                name="manager"
+                data-qc="manager"
+                onChange={(event: any) => {
+                  this.props.values.manager = event.value;
+                  this.setState({ manager: event.value });
+                }}
+                value={this.state.managersList?.find(
+                  (item) => item.value === this.state.manager
+                )}
+                options={this.state.managersList}
+              />
+            </Form.Group>
+          </>
+        )}
+        <Form.Group as={Row}>
+          <Col>
+            <Button
+              className={"btn-cancel-prev"}
+              style={{ width: "60%" }}
+              data-qc="previous"
+              onClick={() => {
+                this.props.previousStep(this.props.values);
+              }}
+            >
+              {local.previous}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              className={"btn-submit-next"}
+              disabled={
+                !this.state.mainRoleId ||
+                (!this.state.mainBranchId && this.state.hasBranch)
+              }
+              style={{ float: "left", width: "60%" }}
+              type="button"
+              onClick={this.props.handleSubmit}
+              data-qc="submit"
+            >
+              {local.submit}
+            </Button>
+          </Col>
         </Form.Group>
-      )}
-      <Form.Group as={Row}>
-        <Col>
-          <Button
-            className={"btn-cancel-prev"}
-            style={{ width: "60%" }}
-            data-qc="previous"
-            onClick={() => {
-              props.previousStep(props.values);
-            }}
-          >
-            {local.previous}
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            className={"btn-submit-next"}
-            disabled={
-              !mainRoleId || (!mainBranchId && props.branches.length > 0)
-            }
-            style={{ float: "left", width: "60%" }}
-            type="button"
-            onClick={props.handleSubmit}
-            data-qc="submit"
-          >
-            {local.submit}
-          </Button>
-        </Col>
-      </Form.Group>
-    </Container>
-  );
-};
+      </Container>
+    );
+  }
+}
 
 export default UserManagerForm;
