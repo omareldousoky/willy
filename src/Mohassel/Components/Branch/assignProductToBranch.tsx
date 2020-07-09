@@ -12,6 +12,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { withRouter } from 'react-router-dom';
 
 interface Props {
     title: string;
@@ -124,12 +125,12 @@ class AssignProductToBranch extends Component<Props, State>{
                     </Form.Group>
                     {this.state.products.length > 0 &&
                         <DualBox
-                        labelKey = {"productName"}
+                            labelKey = {"productName"}
                             options={this.state.products}
                             selected={this.state.selectedBranchProducts}
                             onChange={(list) => this.handleChange(list)}
                             filterKey={this.state.branch._id}
-                            rightHeader={local.loanProducts}
+                            rightHeader={local.availableLoanProducts}
                             leftHeader={local.loanProductsForBranch}
                         />
                     }
@@ -139,4 +140,4 @@ class AssignProductToBranch extends Component<Props, State>{
         )
     }
 }
-export default AssignProductToBranch;
+export default withRouter(AssignProductToBranch);

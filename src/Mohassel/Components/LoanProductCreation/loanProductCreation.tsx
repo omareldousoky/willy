@@ -9,10 +9,12 @@ import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
+import BackButton from '../BackButton/back-button';
+import Card from 'react-bootstrap/Card';
 
 interface Props {
     title: string;
-    history: Array<string>;
+    history: any;
 
 };
 interface State {
@@ -27,6 +29,7 @@ class LoanProductCreation extends Component<Props, State>{
         this.state = {
             product: {
                 productName: '',
+                beneficiaryType: 'individual',
                 calculationFormulaId: '',
                 loanNature: 'cash',
                 currency: 'egp',
@@ -62,9 +65,8 @@ class LoanProductCreation extends Component<Props, State>{
                 applicationFeePercentPerPerson: 0,
                 applicationFeePercentPerPersonType: 'principal',
                 loanImpactPrincipal: true,
-                mustEnterGuarantor: true,
-                noOfGuarantors:2,
-                guarantorGuaranteesMultiple: true,
+                mustEnterGuarantor: false,
+                noOfGuarantors: 2,
                 deductionFee: 0,
                 allocatedDebtForGoodLoans: 0,
                 aging: [{ from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }],
@@ -97,16 +99,19 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    cancel() {
+        this.props.history.goBack();
+    }
     submit = async (values: any) => {
         this.setState({ loading: true });
-        const obj = {...values}
-        if(obj.mustEnterGuarantor === false){
+        const obj = { ...values }
+        if (obj.mustEnterGuarantor === false) {
             obj.noOfGuarantors = 0;
         }
         const res = await createProduct(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });
-            Swal.fire("success", local.loanProductCreated).then(() => { this.props.history.push("/") })
+            Swal.fire("success", local.loanProductCreated).then(() => { this.props.history.push("/manage-loans/loan-products") })
         } else {
             Swal.fire("error", local.loanProductCreationError, 'error')
             this.setState({ loading: false });
@@ -114,20 +119,25 @@ class LoanProductCreation extends Component<Props, State>{
     }
     render() {
         return (
-            <Container>
-                <Loader open={this.state.loading} type="fullscreen" />
-                <Formik
-                    initialValues={this.state.product}
-                    onSubmit={this.submit}
-                    validationSchema={LoanProductValidation}
-                    validateOnBlur
-                    validateOnChange
-                >
-                    {(formikProps) =>
-                        <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} />
-                    }
-                </Formik>
-            </Container>
+            <>
+                <BackButton title={local.createLoanProduct} />
+                <Container>
+                    <Loader open={this.state.loading} type="fullscreen" />
+                    <Card style={{ padding: '20px 10px' }}>
+                        <Formik
+                            initialValues={this.state.product}
+                            onSubmit={this.submit}
+                            validationSchema={LoanProductValidation}
+                            validateOnBlur
+                            validateOnChange
+                        >
+                            {(formikProps) =>
+                                <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} cancel={() => this.cancel()} />
+                            }
+                        </Formik>
+                    </Card>
+                </Container>
+            </>
         )
     }
 }

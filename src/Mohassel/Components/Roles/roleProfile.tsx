@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CardNavBar, Tab } from '../HeaderWithCards/headerWithCards'
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Swal from 'sweetalert2';
 import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -14,6 +14,7 @@ import { Section } from "./roleCreation";
 import RoleUsers from './roleUsers';
 import Button from 'react-bootstrap/Button';
 import BackButton from '../BackButton/back-button';
+import { withRouter } from 'react-router-dom';
 interface Role {
     permissions: Array<any>;
     hasBranch: boolean;
@@ -108,20 +109,20 @@ class RoleProfile extends Component<Props, State>{
                     <RoleTable sections={this.state.allSections} permissions={this.state.role.permissions} />
                 </div>
             case 'roleUsers':
-                return <RoleUsers role={this.state.role} />
+                return <RoleUsers {...this.state.role} />
             default:
                 return null
         }
     }
     render() {
         return (
-            <Container>
+            <div style={{padding: 20}}>
                 {Object.keys(this.state.role).length > 0 &&
                     <div>
                         <div className="d-flex justify-content-between align-items-center">
                             <BackButton title={local.roleDetails} />
                             <div>
-                                <span onClick={() => { this.props.history.push({ pathname: "/edit-role", state: { role: this.state.role } }) }}><span className='fa fa-pencil-alt icon'> {local.edit}</span></span>
+                                <span style={{cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/roles/edit-role", state: { role: this.state.role } }) }}><img alt={"edit"} src={require('../../Assets/editIcon.svg')}/> {local.edit}</span>
                             </div>
                         </div>
                         <Card style={{ marginTop: 15 }}>
@@ -138,8 +139,8 @@ class RoleProfile extends Component<Props, State>{
                         </Card>
                     </div>
                 }
-            </Container>
+            </div>
         )
     }
 }
-export default RoleProfile;
+export default withRouter(RoleProfile);

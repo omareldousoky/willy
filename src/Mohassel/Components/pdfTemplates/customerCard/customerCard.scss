@@ -1,0 +1,82 @@
+@media 
+	print {
+		.print-none {
+			display: none;
+		}
+		.customer-card-print {
+			font-size: 9px;
+			font-weight: bold;
+			margin: 8px;
+			page-break-after: always;
+			
+			& ol {
+				list-style: arabic-indic;
+				text-align: right;
+			}
+
+			& li {
+				line-height: 20px;
+			}
+
+			& th {
+				background-color: lightgrey;
+				-webkit-print-color-adjust: exact;
+			}
+
+			& tbody, .title {
+				text-align: center;
+			}
+
+			& table {
+				width: 100%;
+				border-collapse: separate !important;
+				/* border-collapse: collapse; */
+			}
+
+			& .bold {
+				font-weight: bold;
+			}
+
+			& .title {
+				font-size: 10px;
+			}
+
+			& .title2 {
+				font-size: 16px;
+			}
+
+			& .titlebackground {
+				background-color: darkgray;
+				-webkit-print-color-adjust: exact;
+			}
+
+			& .titleborder {
+				border: 1.5px solid black;
+			}
+
+			& .tablestyle {
+				margin: 10px;
+				& th, td {
+					border: 1px solid black;
+					direction: ltr;
+				}
+			}
+			/* .tablestyle tbody td,th {
+				border: 1px solid black;
+			} */
+
+			& .frame {
+				direction: rtl;
+				border: 0.5px solid black;
+				padding: 2px;
+				display: inline-block;
+			}
+		}
+	}
+
+@media screen {
+	.customer-card-print {
+		max-width: 700px;
+		display: none;
+	}
+}

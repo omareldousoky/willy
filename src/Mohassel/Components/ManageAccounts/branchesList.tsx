@@ -1,45 +1,40 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Form from 'react-bootstrap/Form';
-import { Formik } from 'formik';
-import Swal from 'sweetalert2';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
-import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import Can from '../../config/Can';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import './styles.scss';
-
+import Search from '../Search/search';
+import { connect } from 'react-redux';
+import { search, searchFilters } from '../../redux/search/actions';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageAccountsArray } from './manageAccountsInitials';
 interface State {
-  data: any;
   size: number;
   from: number;
-  searchKeyWord: string;
-  dateFrom: string;
-  dateTo: string;
-  totalCount: number;
-  loading: boolean;
+  manageAccountTabs: any[];
 }
 interface Props {
   history: any;
+  data: any;
+  totalCount: number;
+  loading: boolean;
+  searchFilters: any;
+  search: (data) => void;
+  setSearchFilters: (data) => void;
 }
+
 class BranchesList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      size: 5,
+      size: 10,
       from: 0,
-      searchKeyWord: '',
-      dateFrom: '',
-      dateTo: '',
-      totalCount: 0,
-      loading: false,
+      manageAccountTabs: [],
     }
     this.mappers = [
       {
@@ -49,160 +44,82 @@ class BranchesList extends Component<Props, State> {
       },
       {
         title: local.oneBranch,
-        key: "branch",
-        render: data => data.governorate + "-" + data.name
+        key: "name",
+        sortable: true,
+        render: data =>  data.name
       },
       {
-        title: local.noOfUsers,
-        key: "noOfUsers",
-        render: data => 'noOfUsers'
-      },
-      {
-        title: local.transactions,
-        key: "transactions",
-        render: data => "transactions"
+        title: local.governorate,
+        key: "governorate",
+        sortable: true,
+        render: data =>  data.governorate
+
       },
       {
         title: local.creationDate,
-        key: "creationDate",
-        render: data => getDateAndTime(data.created.at)
-      },
-      {
-        title: local.status,
-        key: "status",
-        render: data => data.status
-      },
-      {
-        title: local.gender,
-        key: "type",
-        render: data => data.type
+        key: "createdAt",
+        sortable: true,
+        render: data => data.created? getDateAndTime(data.created.at) : ''
       },
       {
         title: '',
         key: "actions",
-        render: data => <><span className='fa fa-eye icon'></span> <span className='fa fa-pencil-alt icon'></span></>
+        render: data => <>
+        <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')}
+        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}></img>
+         <img style={{cursor: 'pointer'}} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}></img>
+          </>
       },
     ]
   }
   componentDidMount() {
-    this.getBranches()
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' });
+    this.setState({
+      manageAccountTabs: manageAccountsArray()
+    })
   }
-
-  async getBranches() {
-    this.setState({ loading: true })
-    const res = await searchBranches({ size: this.state.size, from: this.state.from });
-    if (res.status === "success") {
-      this.setState({
-        data: res.body.data,
-        totalCount: res.body.totalCount,
-        loading: false
-      })
-    } else {
-      console.log("error")
-      this.setState({ loading: false })
-    }
-  }
-  submit = async (values) => {
-    this.setState({ loading: true })
-    let obj = {}
-    if (values.dateFrom === "" && values.dateTo === "") {
-      obj = {
-        size: this.state.size,
-        from: this.state.from,
-        name: values.searchKeyWord
-      }
-    } else {
-      obj = {
-        fromDate: new Date(values.dateFrom).setHours(this.state.from, 0, 0, 0).valueOf(),
-        toDate: new Date(values.dateTo).setHours(23, 59, 59, 59).valueOf(),
-        size: this.state.size,
-        from: 0,
-        name: values.searchKeyWord
-      }
-    }
-    const res = await searchBranches(obj);
-    if (res.status === "success") {
-      this.setState({
-        loading: false,
-        data: res.body.data
-      })
-    } else {
-      this.setState({ loading: false });
-      Swal.fire('', local.searchError, 'error');
-    }
+  getBranches() {
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' });
   }
   render() {
     return (
-      <>
+      <div>
+      (<HeaderWithCards
+      header={local.manageAccounts}
+      array = {this.state.manageAccountTabs}
+      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('branch')}
+      />
         <Card style={{ margin: '20px 50px' }}>
-          <Loader type="fullsection" open={this.state.loading} />
+          <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches + ` (${this.state.totalCount})`}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
               <div>
-              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
+              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
-            <Formik
-              initialValues={this.state}
-              onSubmit={this.submit}
-              // validationSchema={}
-              validateOnBlur
-              validateOnChange>
-              {(formikProps) =>
-                <Form onSubmit={formikProps.handleSubmit}>
-                  <div className="custom-card-body">
-                    <InputGroup style={{ direction: 'ltr', flex: 1, marginLeft: 20 }}>
-                      <Form.Control
-                        type="text"
-                        name="searchKeyWord"
-                        data-qc="searchKeyWord"
-                        onChange={formikProps.handleChange}
-                        style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-                        placeholder={local.searchByBranch}
-                      />
-                      <InputGroup.Append>
-                        <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                      </InputGroup.Append>
-                    </InputGroup>
-                    <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
-                      <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{local.creationDate}</p>
-                      <span>{local.from}</span>
-                      <Form.Control
-                        style={{ marginLeft: 20, border: 'none' }}
-                        type="date"
-                        name="dateFrom"
-                        data-qc="dateFrom"
-                        onChange={formikProps.handleChange}
-                      >
-                      </Form.Control>
-                      <span>{local.to}</span>
-                      <Form.Control
-                        style={{ marginRight: 20, border: 'none' }}
-                        type="date"
-                        name="dateTo"
-                        data-qc="dateTo"
-                        min={formikProps.values.dateFrom}
-                        onChange={formikProps.handleChange}
-                        disabled={!Boolean(formikProps.values.dateFrom)}
-                      >
-                      </Form.Control>
-                    </div>
-                  </div>
-                </Form>
-              }
-            </Formik>
-            {this.state.data &&
+            <Search
+              searchKeys={['keyword', 'dateFromTo']} 
+              dropDownKeys={['name', 'code']} 
+              searchPlaceholder={local.searchByBranchNameOrCode}
+              url="branch"
+             from={this.state.from} 
+             size={this.state.size} />
+            {this.props.data &&
               <DynamicTable
-                totalCount={this.state.totalCount}
+                url="branch"
+                from={this.state.from} 
+                size={this.state.size}
+                totalCount={this.props.totalCount}
                 mappers={this.mappers}
                 pagination={true}
-                data={this.state.data}
+                data={this.props.data}
                 changeNumber={(key: string, number: number) => {
                   this.setState({ [key]: number } as any, () => this.getBranches());
                 }}
@@ -210,9 +127,24 @@ class BranchesList extends Component<Props, State> {
             }
           </Card.Body>
         </Card>
-      </>
+      </div>
     )
   }
 }
 
-export default withRouter(BranchesList);
+const addSearchToProps = dispatch => {
+  return {
+    search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
+  };
+};
+const mapStateToProps = state => {
+  return {
+    data: state.search.data,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    searchFilters: state.searchFilters
+  };
+};
+
+export default connect(mapStateToProps, addSearchToProps)(withRouter(BranchesList));

@@ -35,9 +35,10 @@ class Labels extends Component<Props,State>  {
    render() {
 
     return (
-        <div style={{display:"flex",flexDirection:'row'}}>
+        <div style={{display:"flex",flexDirection:'row', flexWrap:'wrap'}}>
             { this.props.labelsTextArr?.map((labelText,index)=>{
                 return (
+                    <span  className = {this.props.isClickable ? 'fa icon' : '' }>
                     <div 
                     key={index}  
                     className={this.props.isClickable? (this.state.selected && index === this.state.item)? 'labels-active-selected': 'labels-active':'labels'} 
@@ -46,6 +47,7 @@ class Labels extends Component<Props,State>  {
                       
                     {labelText}
                    </div>
+                   </span>
                 )
             })
             

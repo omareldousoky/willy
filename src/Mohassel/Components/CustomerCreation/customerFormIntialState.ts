@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 export const step1: any = {
     customerName: '',
@@ -50,11 +51,9 @@ export const step2 = {
 export const step3 = {
     geographicalDistribution: '',
     representative: '',
-    applicationDate: new Date().toISOString().slice(0, 10),
+    applicationDate: timeToDateyyymmdd(0),
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
-    accountNumber: '',
-    accountBranch: '',
     comments: '',
 };
 
@@ -117,7 +116,5 @@ export const customerCreationValidationStepThree = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(local.required),
     permanentEmployeeCount: Yup.string().trim(),
     partTimeEmployeeCount: Yup.string().trim(),
-    accountNumber: Yup.string().trim().max(100, local.maxLength100),
-    accountBranch: Yup.string().trim().max(100, local.maxLength100),
     comments: Yup.string().trim().max(500, local.maxLength100),
 })

@@ -108,7 +108,7 @@ class RoleTable extends Component<Props, State> {
                     <thead style={tableHead}>
                         <tr style={{}}>
                             <th style={{ width: '30%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.permissions}</th>
-                            <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.created}</th>
+                            <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.create}</th>
                             <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.read}</th>
                             <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.edit}</th>
                             <th style={{ width: '10%', borderBottom: 'none', fontSize: 12, color: '#6e6e6e' }}>{local.delete}</th>

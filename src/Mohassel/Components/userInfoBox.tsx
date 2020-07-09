@@ -4,9 +4,11 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
+import { arabicGender } from '../Services/utils';
 
 interface Props {
     values: any;
+    noHeader?: boolean;
 };
 
 interface State {
@@ -22,8 +24,8 @@ class InfoBox extends Component<Props, State>{
     render() {
         const values = this.props.values;
         return (
-            <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5' }}>
-                <h5>{local.mainInfo}</h5>
+            <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width:'100%' }}>
+                {!this.props.noHeader && <h5>{local.mainInfo}</h5>}
                 <Form.Row>
                     <Form.Group as={Col} md="4">
                         <Row>
@@ -38,7 +40,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.customerCode}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{(values.customerCode) ? values.customerCode : 'N/A'} </Form.Label>
+                            <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>
@@ -64,7 +66,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.gender}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{values.gender} </Form.Label>
+                            <Form.Label>{arabicGender(values.gender)} </Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>

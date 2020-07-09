@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
+import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
-import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
-import cloneDeep from 'lodash.clonedeep';
+import Wizard from '../wizard/Wizard';
+import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
 import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
@@ -16,6 +15,7 @@ import { StepThreeForm } from './StepThreeForm';
 import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../Services/utils';
 
 interface CustomerInfo {
   birthDate: number;
@@ -44,6 +44,9 @@ interface CustomerExtraDetails {
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
   representative: any;
+  allowMultiLoans: boolean;
+  allowGuarantorLoan: boolean;
+  allowMultiGuarantee: boolean;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -101,13 +104,12 @@ interface State {
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
-    accountNumber: string;
-    accountBranch: string;
     comments: string;
   };
   customerId: string;
   selectedCustomer: any;
   loading: boolean;
+  hasLoan: boolean;
   searchResults: {
     results: Array<object>;
     empty: boolean;
@@ -124,6 +126,7 @@ class CustomerCreation extends Component<Props, State>{
       step3: step3,
       customerId: '',
       loading: false,
+      hasLoan: false,
       searchResults: {
         results: [],
         empty: false
@@ -141,25 +144,68 @@ class CustomerCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const res = await getCustomerByID(this.props.location.state.id)
     if (res.status === 'success') {
-      const customerInfo = { ...res.body };
-      const customerBusiness = { ...res.body };
-      const customerExtraDetails = { ...res.body };
-      const customerAddressLatLongNumber = res.body.customerAddressLatLong ? { lat: Number(res.body.customerAddressLatLong.split(',')[0]), lng: Number(res.body.customerAddressLatLong.split(',')[1]) } : { lat: 0, lng: 0 };
-      const businessAddressLatLongNumber = res.body.businessAddressLatLong ? { lat: Number(res.body.businessAddressLatLong.split(',')[0]), lng: Number(res.body.businessAddressLatLong.split(',')[1]) } : { lat: 0, lng: 0 };
-      customerInfo.customerAddressLatLongNumber = customerAddressLatLongNumber;
-      customerInfo.birthDate = new Date(customerInfo.birthDate).toISOString().slice(0, 10);
-      customerInfo.nationalIdIssueDate = new Date(customerInfo.nationalIdIssueDate).toISOString().slice(0, 10);
-      customerBusiness.businessAddressLatLongNumber = businessAddressLatLongNumber;
-      customerBusiness.businessLicenseIssueDate = customerBusiness.businessLicenseIssueDate ? new Date(customerBusiness.businessLicenseIssueDate).toISOString().slice(0, 10) : customerBusiness.businessLicenseIssueDate;
-      customerExtraDetails.applicationDate = new Date(customerExtraDetails.applicationDate).toISOString().slice(0, 10);
+      const customerInfo = {
+        customerName: res.body.customerName,
+        nationalId: res.body.nationalId,
+        birthDate: timeToDateyyymmdd(res.body.birthDate),
+        gender: res.body.gender,
+        nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
+        homePostalCode: res.body.homePostalCode,
+        customerHomeAddress: res.body.customerHomeAddress,
+        customerAddressLatLong: res.body.customerAddressLatLong,
+        customerAddressLatLongNumber: {
+          lat: res.body.customerAddressLatLong ? Number(res.body.customerAddressLatLong.split(',')[0]) : 0,
+          lng: res.body.customerAddressLatLong ? Number(res.body.customerAddressLatLong.split(',')[1]) : 0,
+        },
+        homePhoneNumber: res.body.homePhoneNumber,
+        faxNumber: res.body.faxNumber,
+        mobilePhoneNumber: res.body.mobilePhoneNumber,
+        customerWebsite: res.body.customerWebsite,
+        emailAddress: res.body.emailAddress
+      };
+      const customerBusiness = {
+        businessAddressLatLong: res.body.businessAddressLatLong,
+        businessAddressLatLongNumber: {
+          lat: res.body.businessAddressLatLong ? Number(res.body.businessAddressLatLong.split(',')[0]) : 0,
+          lng: res.body.businessAddressLatLong ? Number(res.body.businessAddressLatLong.split(',')[1]) : 0,
+        },
+        businessName: res.body.businessName,
+        businessAddress: res.body.businessAddress,
+        governorate: res.body.governorate,
+        district: res.body.district,
+        village: res.body.village,
+        ruralUrban: res.body.ruralUrban,
+        businessPostalCode: res.body.businessPostalCode,
+        businessPhoneNumber: res.body.businessPhoneNumber,
+        businessSector: res.body.businessSector,
+        businessActivity: res.body.businessActivity,
+        businessSpeciality: res.body.businessSpeciality,
+        businessLicenseNumber: res.body.businessLicenseNumber,
+        businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
+        businessLicenseIssueDate: timeToDateyyymmdd(res.body.businessLicenseIssueDate),
+        commercialRegisterNumber: res.body.commercialRegisterNumber,
+        industryRegisterNumber: res.body.industryRegisterNumber,
+        taxCardNumber: res.body.taxCardNumber,
+      };
+      const customerExtraDetails = {
+        geographicalDistribution: res.body.geographicalDistribution,
+        representative: res.body.representative,
+        applicationDate: timeToDateyyymmdd(res.body.applicationDate),
+        permanentEmployeeCount: res.body.permanentEmployeeCount,
+        partTimeEmployeeCount: res.body.partTimeEmployeeCount,
+        comments: res.body.comments,
+        allowMultiLoans: res.body.allowMultiLoans,
+        allowGuarantorLoan: res.body.allowGuarantorLoan,
+        allowMultiGuarantee: res.body.allowMultiGuarantee,
+      };
       this.setState({
         loading: false,
         selectedCustomer: res.body,
         step1: { ...this.state.step1, ...customerInfo },
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
-      });
-
+        hasLoan: res.body.hasLoan
+      } as any);
     } else {
       this.setState({ loading: false });
       Swal.fire('error', local.searchError, 'error');
@@ -172,14 +218,11 @@ class CustomerCreation extends Component<Props, State>{
         step: this.state.step + 1,
       } as any);
     } else {
-      this.setState({ step3: values, loading: true } as any)
-      this.createEditCustomer();
+      this.setState({ step3: values, loading: true } as any, () => this.createEditCustomer())
     }
   }
   async createEditCustomer() {
-    let objToSubmit;
-    if (this.props.edit) objToSubmit = cloneDeep(this.state.step1, this.state.step2, this.state.step3);
-    else objToSubmit = { ...this.state.step1, ...this.state.step2, ...this.state.step3 };
+    const objToSubmit = { ...this.state.step1, ...this.state.step2, ...this.state.step3 };
     objToSubmit.birthDate = new Date(objToSubmit.birthDate).valueOf();
     objToSubmit.nationalIdIssueDate = new Date(objToSubmit.nationalIdIssueDate).valueOf();
     objToSubmit.customerAddressLatLongNumber?.lat === 0 && objToSubmit.customerAddressLatLongNumber?.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber?.lat},${objToSubmit.customerAddressLatLongNumber?.lng}`;
@@ -188,7 +231,7 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
-    objToSubmit.representative = objToSubmit.representative._id;
+    objToSubmit.representative = objToSubmit.representative._id ? objToSubmit.representative._id : objToSubmit.representative;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
@@ -226,7 +269,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepOneForm {...formikProps} edit={this.props.edit} />
+          <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />
         }
       </Formik>
     )
@@ -243,7 +286,7 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} />
+          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan}/>
         }
       </Formik>
     )
@@ -260,17 +303,18 @@ class CustomerCreation extends Component<Props, State>{
         validateOnChange
       >
         {(formikProps) =>
-          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} />
+          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan}/>
         }
       </Formik>
     )
   }
   renderDocuments() {
-    return (
+    return ( 
       <DocumentsUpload
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
+        view = {false}
       />
     )
   }
@@ -292,20 +336,16 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
-        <>
-          <Tabs activeKey={this.state.step} id="controlled-tab-example" style={{ marginBottom: 20 }} onSelect={(key: string) => this.props.edit ? this.setState({ step: Number(key) }) : {}}>
-            <Tab eventKey={1} title={local.mainInfo}>
-            </Tab>
-            <Tab eventKey={2} title={local.workInfo}>
-            </Tab>
-            <Tab eventKey={3} title={local.differentInfo}>
-            </Tab>
-            <Tab eventKey={4} title={local.documents}>
-            </Tab>
-          </Tabs>
-          {this.renderSteps()}
-        </>
-      </Container>
+        <Card>
+          <div style={{ display: "flex", flexDirection: "row", }} >
+            <Wizard currentStepNumber={this.state.step - 1}
+              stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}></Wizard>
+            <Card.Body style= {{width:"80%"}}>
+              {this.renderSteps()}
+            </Card.Body>
+          </div>
+        </Card>
+      </Container >
     )
   }
 }

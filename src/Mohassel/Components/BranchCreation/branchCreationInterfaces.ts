@@ -7,18 +7,10 @@ export interface BasicValues {
     faxNumber?: string;
     address?: string;
     postalCode?: string;
-}
-export interface Branch {
-    longitude?: number;
-    latitude?: number;
-    name: string;
-    governorate: string;
-    status: string;
-    phoneNumber?: string;
-    faxNumber?: string;
-    address?: string;
-    postalCode?: string;
-
+    licenseDate: number|string;
+    licenseNumber: string;
+    bankAccount: string;
+    costCenter: string;
 }
 export interface BasicErrors { 
     name?: string;
@@ -28,6 +20,10 @@ export interface BasicErrors {
     faxNumber?: string;
     address?: string;
     postalCode?: string;
+    licenseDate?: string;
+    licenseNumber?: string;
+    bankAccount?: string;
+    costCenter?: string;
 }
 
 export interface BasicTouched {
@@ -38,4 +34,8 @@ export interface BasicTouched {
     faxNumber?: boolean;
     address?: boolean;
     postalCode?: boolean;
+    licenseDate?: boolean;
+    licenseNumber?: boolean;
+    bankAccount?: boolean;
+    costCenter?: boolean;
 }

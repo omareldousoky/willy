@@ -3,13 +3,19 @@ import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
 import { FormulaTestClass, loanFormulaTestValidation } from './loanCreationInitialStates';
 import { LoanFormulaTestForm } from './loanFormulaTestForm';
+import TestCalculateFormulaPDF from '../pdfTemplates/testCalculateFormula/testCalculateFormula';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { testFormula } from '../../Services/APIs/LoanFormula/testFormula';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import { View } from '../PDF/documentView';
-import { DownloadPdf } from '../PDF/documentExport';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Table from 'react-bootstrap/Table';
+import { timeToDateyyymmdd, parseJwt } from '../../Services/utils';
+import { getCookie } from '../../Services/getCookie';
+import BackButton from '../BackButton/back-button';
+import store from '../../redux/store';
 
 interface Props {
     title: string;
@@ -18,7 +24,8 @@ interface State {
     formula: FormulaTestClass;
     loading: boolean;
     formulas: Array<Formula>;
-    result: object;
+    result: any;
+    branchName: string;
 }
 interface Formula {
     name: string;
@@ -50,7 +57,8 @@ class FormulaTest extends Component<Props, State>{
             },
             loading: false,
             formulas: [],
-            result: {}
+            result: {},
+            branchName: ''
         }
     }
     async UNSAFE_componentWillMount() {
@@ -66,9 +74,18 @@ class FormulaTest extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    componentDidMount() {
+        this.getBranchData();
+    }
+    getBranchData() {
+        const token = getCookie('token');
+        const branchDetails = parseJwt(token);
+        const branchName = store.getState().auth.validBranches?.find(branch => branch._id === branchDetails.branch)?.name;
+        this.setState({ branchName })
+    }
     submit = async (values: FormulaTestClass) => {
         this.setState({ loading: true });
-        const obj = {...values};
+        const obj = { ...values };
         const date = new Date(obj.loanStartDate).valueOf();
         obj.loanStartDate = date;
         const formula = this.state.formulas.find(formula => formula._id === values.calculationFormulaId)
@@ -84,22 +101,73 @@ class FormulaTest extends Component<Props, State>{
     }
     render() {
         return (
-            <Container>
-                <Loader open={this.state.loading} type="fullscreen" />
-                <Formik
-                    initialValues={this.state.formula}
-                    onSubmit={this.submit}
-                    validationSchema={loanFormulaTestValidation}
-                    validateOnBlur
-                    validateOnChange
-                >
-                    {(formikProps) =>
-                        <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
-                    }
-                </Formik>
-                {Object.keys(this.state.result).length > 0 && <DownloadPdf data={this.state.result} />}
-                {Object.keys(this.state.result).length > 0 && <View data={this.state.result} />}
-            </Container>
+            <>
+                <span className="print-none">
+                    <BackButton  title={local.testCalculationMethod} />
+                </span>
+                <Container className="print-none">
+                    <Loader open={this.state.loading} type="fullscreen" />
+                    <Card style={{ textAlign: 'right' }}>
+                        {Object.keys(this.state.result).length === 0 ? <Formik
+                            initialValues={this.state.formula}
+                            onSubmit={this.submit}
+                            validationSchema={loanFormulaTestValidation}
+                            validateOnBlur
+                            validateOnChange
+                        >
+                            {(formikProps) =>
+                                <LoanFormulaTestForm {...formikProps} formulas={this.state.formulas} result={this.state.result} />
+                            }
+                        </Formik> : <div>
+                                <Table striped style={{ textAlign: 'right' }}>
+                                    <thead>
+                                        <tr>
+                                            <th>{local.installmentNumber}</th>
+                                            <th>{local.installmentType}</th>
+                                            <th>{local.principalInstallment}</th>
+                                            <th>{local.fees}</th>
+                                            <th>{local.paymentDate}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.result.result.output && this.state.result.result.output.map((installment, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{installment.id}</td>
+                                                    <td>{installment.installmentResponse ? installment.installmentResponse.toFixed(2) : 0}</td>
+                                                    <td>{installment.principalInstallment ? installment.principalInstallment.toFixed(2) : 0}</td>
+                                                    <td>{installment.feesInstallment ? installment.feesInstallment.toFixed(2) : 0}</td>
+                                                    <td>{timeToDateyyymmdd(installment.dateOfPayment)}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                                <div className="d-flex justify-content-between" style={{ padding: 50, backgroundColor: '#f7fff2' }}>
+                                    <div>
+                                        <h4 style={{ color: '#2a3390' }}>{local.noOfInstallments}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.output.length}</span>
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: '#2a3390' }}>{local.sumValue}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.sum.installmentSum}</span>
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: '#2a3390' }}>{local.sumPrinciple}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.sum.principal}</span>
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: '#2a3390' }}>{local.sumFees}</h4>
+                                        <span style={{ color: '#7dc356', fontWeight: 'bold', fontSize: 'large' }}>{this.state.result.result.sum.feesSum ? this.state.result.result.sum.feesSum : 0}</span>
+                                    </div>
+                                    <div className="d-flex justify-content-end" ><Button style={{ marginTop: 10 }} onClick={() => window.print()}>{local.downloadPDF}</Button></div>
+                                </div>
+                            </div>
+                        }
+                    </Card>
+                </Container>
+                {Object.keys(this.state.result).length > 0 && <TestCalculateFormulaPDF data={this.state.result} branchName={this.state.branchName}/>}
+            </>
         )
     }
 }

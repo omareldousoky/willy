@@ -8,6 +8,8 @@ import { createFormula } from '../../Services/APIs/LoanFormula/createFromula';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
+import BackButton from '../BackButton/back-button';
+import Card from 'react-bootstrap/Card';
 interface Props {
     title: string;
     history: Array<string>;
@@ -42,7 +44,7 @@ class FormulaCreation extends Component<Props, State>{
         const res = await createFormula(toSend);
         if (res.status === 'success') {
             this.setState({ loading: false });
-            Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/") })
+            Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/manage-loans/calculation-formulas") })
         } else {
             Swal.fire("error", local.formulaCreationError, 'error')
             this.setState({ loading: false });
@@ -50,20 +52,25 @@ class FormulaCreation extends Component<Props, State>{
     }
     render() {
         return (
-            <Container>
-                <Loader open={this.state.loading} type="fullscreen" />
-                <Formik
-                    initialValues={this.state.formula}
-                    onSubmit={this.submit}
-                    validationSchema={loanFormulaCreationValidation}
-                    validateOnBlur
-                    validateOnChange
-                >
-                    {(formikProps) =>
-                        <LoanFormulaCreationForm {...formikProps} />
-                    }
-                </Formik>
-            </Container>
+            <>
+                <BackButton title={local.createCalculationMethod} />
+                <Container>
+                    <Loader open={this.state.loading} type="fullscreen" />
+                    <Card style={{ padding: 20 }}>
+                        <Formik
+                            initialValues={this.state.formula}
+                            onSubmit={this.submit}
+                            validationSchema={loanFormulaCreationValidation}
+                            validateOnBlur
+                            validateOnChange
+                        >
+                            {(formikProps) =>
+                                <LoanFormulaCreationForm {...formikProps} />
+                            }
+                        </Formik>
+                    </Card>
+                </Container>
+            </>
         )
     }
 }

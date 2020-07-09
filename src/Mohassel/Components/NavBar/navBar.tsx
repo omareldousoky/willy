@@ -9,11 +9,16 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCookie } from '../../Services/getCookie';
+import { parseJwt, timeToDateyyymmdd } from '../../Services/utils';
 import { contextBranch } from '../../Services/APIs/Login/contextBranch';
+import ability from '../../config/ability';
 import './styles.scss';
-
+import { setToken } from '../../../Shared/token';
+import { connect } from 'react-redux';
+import { Auth } from '../../redux/auth/types'
 interface Props {
   history: any;
+  auth: Auth;
 }
 interface Branch {
   _id: string;
@@ -40,37 +45,24 @@ class NavBar extends Component<Props, State> {
       loading: false
     }
   }
-  componentDidMount() {
-    const branches = JSON.parse(getCookie("validbranches"));
-    if (branches?.length === 1) {
-      this.setState({ selectedBranch: branches[0], branches: branches })
-    }
-    const token = getCookie('token');
-    const tokenData = this.parseJwt(token);
-    if (tokenData?.requireBranch === false) {
-      if (branches) {
-        this.setState({ branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
-      } else this.setState({ branches: [...this.state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } })
-    } else this.setState({ branches })
-    if (tokenData.branch !== "") {
-      this.setState({ selectedBranch: branches.find(branch => branch._id === tokenData.branch) })
-    }
+  static getDerivedStateFromProps(props, state) {
+    if (props.auth.loading === false && state.branches.length === 0) {
+      const token = getCookie('token');
+      const tokenData = parseJwt(token);
+      const branches = props.auth.validBranches;
+      if (tokenData?.requireBranch === false) {
+        if (branches) {
+          return { branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
+        } else return { branches: [...state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
+      } else return { selectedBranch: branches[0], branches: branches }
+    } else return null;
   }
-  parseJwt(token: string) {
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-      return null;
-    }
-  };
   async goToBranch(branch: Branch) {
+    document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = "token=" + res.body.token + ";path=/;";
-      if(branch._id === 'hq' ){ 
-        document.cookie = "selectedbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-      } else document.cookie = "selectedbranch=" + branch._id + ";path=/;";
+      setToken(res.body.token);
       this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
@@ -115,10 +107,6 @@ class NavBar extends Component<Props, State> {
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "roles=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "validbranches=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "clientpermissions=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "selectedbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
           }}>{local.logOut}</Button>
         </div>
@@ -133,6 +121,12 @@ class NavBar extends Component<Props, State> {
         <h6 className="text-muted">{local.looksLikeYouCantFindResults}</h6>
       </div>
     )
+  }
+  getDaysOfMonth() {
+    const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    const firstDay = new Date(y, m, 2).valueOf();
+    const lastDay = new Date(y, m + 1, 1).valueOf();
+    return {firstDay: timeToDateyyymmdd(firstDay), lastDay: timeToDateyyymmdd(lastDay)}
   }
   render() {
     return (
@@ -149,9 +143,9 @@ class NavBar extends Component<Props, State> {
                 <div className="refresh-logo-navbar"><img alt="navbar-refresh" src={require('../../Assets/refresh.svg')} /></div>
                 <div className="info-navbar">
                   <span style={{ marginLeft: 10 }}>{local.currentPeriodStartsIn}</span>
-                  <span style={{ marginLeft: 10 }} className="primary-color">  01/02/2020  </span>
+                  <span style={{ marginLeft: 10 }} className="primary-color">  {this.getDaysOfMonth().firstDay}  </span>
                   <span style={{ marginLeft: 10 }}>{local.andEndsIn}</span>
-                  <span className="primary-color">  29/02/2020  </span>
+                  <span className="primary-color">  {this.getDaysOfMonth().lastDay}  </span>
                 </div>
               </div>
               <div className="navbar-choose-branch" onClick={() => this.setState({ openBranchList: !this.state.openBranchList })}>
@@ -170,27 +164,19 @@ class NavBar extends Component<Props, State> {
         {this.state.selectedBranch._id && <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
+            <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
-              {<Can I='createCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/new-formula')}>{local.createCalculationMethod}</Nav.Link></Can>}
-              {<Can I='testCalculate' a='product'><Nav.Link onClick={() => this.props.history.push('/test-formula')}>{local.testCalculationMethod}</Nav.Link></Can>}
-              {<Can I='createLoanProduct' a='product'><Nav.Link onClick={() => this.props.history.push('/new-loan-product')}>{local.createLoanProduct}</Nav.Link></Can>}
+              {<Can I='getLoanProduct' a='product'><Can I='getCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can></Can>}
               {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
-              {<Can I='assignProductToCustomer' a='application'><Nav.Link onClick={() => this.props.history.push('/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Nav.Link></Can>}
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
-              {<Can I='getUser' a='user'><Can I='getRoles' a='user'><Can I='getBranch' a='branch'><Nav.Link onClick={() => this.props.history.push('/manage-accounts')}>{local.manageAccounts}</Nav.Link></Can></Can></Can>}
+              {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
+                : ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
+                  : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
+    {<Can I='documentTypes' a='config'><Nav.Link onClick={()=> this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
-
-              {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                    </NavDropdown> */}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
@@ -199,4 +185,10 @@ class NavBar extends Component<Props, State> {
   }
 }
 
-export default withRouter(NavBar);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(NavBar));
