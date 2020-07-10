@@ -14,7 +14,7 @@ import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs';
 import Card from 'react-bootstrap/Card';
 import { LoanDetailsTableView } from './applicationsDetails';
-import { GuarantorView } from './guarantorDetails'
+import { GuarantorTableView } from './guarantorDetails'
 import { CustomerCardView } from './customerCard';
 import Rescheduling from '../Rescheduling/rescheduling';
 import ability from '../../config/ability';
@@ -34,6 +34,7 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
+import UploadDocuments from './uploadDocuments';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -94,7 +95,11 @@ class LoanProfile extends Component<Props, State>{
                 {
                     header: local.logs,
                     stringKey: 'loanLogs'
-                }
+                },
+                {
+                    header: local.documents,
+                    stringKey: 'documents'
+                },
             ]
             const guarantorsTab = {
                 header: local.guarantorInfo,
@@ -157,7 +162,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanDetails':
                 return <LoanDetailsTableView application={this.state.application} setLoanOfficer={(name) => this.setState({ loanOfficer: name })} />
             case 'loanGuarantors':
-                return <GuarantorView guarantors={this.state.application.guarantors} />
+                return <GuarantorTableView guarantors={this.state.application.guarantors} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -171,6 +176,8 @@ class LoanProfile extends Component<Props, State>{
                 return <Rescheduling application={this.state.application} test={false} />
             case 'loanReschedulingTest':
                 return <Rescheduling application={this.state.application} test={true} />
+            case 'documents':
+                return <UploadDocuments application={this.state.application} />
             default:
                 return null
         }
@@ -321,7 +328,7 @@ class LoanProfile extends Component<Props, State>{
                         : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails}/>
                     }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails}/>}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
             </Container>
         )

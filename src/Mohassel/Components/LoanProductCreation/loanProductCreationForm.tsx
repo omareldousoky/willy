@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
+import InputGroup from 'react-bootstrap/InputGroup';
+import { dayToArabic } from '../../Services/utils';
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
@@ -114,33 +116,36 @@ export const LoanProductCreationForm = (props: any) => {
                     <Form.Group className="data-group" controlId="periodLength">
                         <Form.Label className="data-label">{local.periodLengthEvery}</Form.Label>
                         <Row className={"row-nowrap"}>
-                            <Form.Control
-                                style={{ margin: "0 20px" }}
-                                type="number"
-                                name="periodLength"
-                                data-qc="periodLength"
-                                value={values.periodLength}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.periodLength && touched.periodLength}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.periodLength}
-                            </Form.Control.Feedback>
-                            <Form.Control as="select"
-                                name="periodType"
-                                data-qc="periodType"
-                                value={values.periodType}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.periodType && touched.periodType}
-                            >
-                                <option value='months'>{local.month}</option>
-                                <option value='days'>{local.day}</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.periodType}
-                            </Form.Control.Feedback>
+                            <Col>
+                                <Form.Control
+                                    type="number"
+                                    name="periodLength"
+                                    data-qc="periodLength"
+                                    value={values.periodLength}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={errors.periodLength && touched.periodLength}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.periodLength}
+                                </Form.Control.Feedback>
+                            </Col>
+                            <Col>
+                                <Form.Control as="select"
+                                    name="periodType"
+                                    data-qc="periodType"
+                                    value={values.periodType}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    isInvalid={errors.periodType && touched.periodType}
+                                >
+                                    <option value='months'>{local.month}</option>
+                                    <option value='days'>{local.day}</option>
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.periodType}
+                                </Form.Control.Feedback>
+                            </Col>
                         </Row>
                     </Form.Group>
                 </Col>
@@ -199,94 +204,61 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Group>
             <Row>
                 <Col>
-                    <Form.Group className="data-group row-nowrap" controlId="interest">
-                        <Col>
-                            <Form.Label className="data-label">{local.interest}</Form.Label>
+                    <Form.Group className="data-group" controlId="interest">
+                        <Form.Label className="data-label">{local.interest}</Form.Label>
 
-                            <Form.Control
-                                type="number"
-                                name="interest"
-                                data-qc="interest"
-                                value={values.interest}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={errors.interest && touched.interest}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.interest}
-                            </Form.Control.Feedback>
-                        </Col>
-                        <Col>
-                            <Form.Control as="select"
-                                style={{ margin: "40px 0" }}
-                                name="interestPeriod"
-                                data-qc="interestPeriod"
-                                value={values.interestPeriod}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                isInvalid={errors.interestPeriod && touched.interestPeriod}
-                            >
-                                <option value='yearly'>{local.yearlyInnterestPeriod}</option>
-                                <option value='monthly'>{local.monthlyInnterestPeriod}</option>
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.interestPeriod}
-                            </Form.Control.Feedback>
-                        </Col>
+                        <Form.Control
+                            type="number"
+                            name="interest"
+                            data-qc="interest"
+                            value={values.interest}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={errors.interest && touched.interest}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.interest}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Row className="row-nowrap">
-                        <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentTrue'>
-                            <Form.Check
-                                type='radio'
-                                name='allowInterestAdjustment'
-                                data-qc='allowInterestAdjustment'
-                                value={values.allowInterestAdjustment}
-                                checked={values.allowInterestAdjustment}
-                                onBlur={handleBlur}
-                                onChange={(e: any) => {
-                                    const val = e.currentTarget.value;
-                                    if (val === true) {
-                                        setFieldValue('allowInterestAdjustment', false)
-                                    } else {
-                                        setFieldValue('allowInterestAdjustment', true)
-                                    }
-                                }}
-                                isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.allowInterestAdjustment}
-                            </Form.Control.Feedback>
-                            <Form.Label className="data-check-label">{local.allowInterestAdjustment}</Form.Label>
-                        </Form.Group>
-                        <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustmentFalse'>
-                            <Form.Check
-                                type='radio'
-                                name='allowInterestAdjustment'
-                                data-qc='allowInterestAdjustment'
-                                value={values.allowInterestAdjustment}
-                                checked={(!values.allowInterestAdjustment)}
-                                onBlur={handleBlur}
-                                onChange={(e: any) => {
-                                    const val = e.currentTarget.value;
-                                    if (val === false) {
-                                        setFieldValue('allowInterestAdjustment', true)
-                                    } else {
-                                        setFieldValue('allowInterestAdjustment', false)
-                                    }
-                                }}
-                                isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.allowInterestAdjustment}
-                            </Form.Control.Feedback>
-                            <Form.Label className="data-check-label">{local.allowInterestAdjustmentFalse}</Form.Label>
-                        </Form.Group>
-                    </Row>
+                    <Form.Group className="data-group" controlId="interest">
+                        <Form.Control as="select"
+                            style={{ margin: "40px 0" }}
+                            name="interestPeriod"
+                            data-qc="interestPeriod"
+                            value={values.interestPeriod}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.interestPeriod && touched.interestPeriod}
+                        >
+                            <option value='yearly'>{local.yearlyInnterestPeriod}</option>
+                            <option value='monthly'>{local.monthlyInnterestPeriod}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.interestPeriod}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group className="data-check-group row-nowrap" controlId='allowInterestAdjustment'>
+                        <Form.Check
+                            type='checkbox'
+                            name='allowInterestAdjustment'
+                            data-qc='allowInterestAdjustment'
+                            value={values.allowInterestAdjustment}
+                            checked={values.allowInterestAdjustment}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.allowInterestAdjustment}
+                        </Form.Control.Feedback>
+                        <Form.Label className="data-check-label">{local.allowInterestAdjustment}</Form.Label>
+                    </Form.Group>
                 </Col>
             </Row>
-
             <Form.Group className="data-group" controlId="inAdvanceFees">
                 <Form.Label className="data-label" >{local.inAdvanceFees}</Form.Label>
                 <Row className="row-nowrap">
@@ -304,7 +276,7 @@ export const LoanProductCreationForm = (props: any) => {
                             {errors.inAdvanceFees}
                         </Form.Control.Feedback>
                     </Col>
-                    <Col sm={3}>
+                    <Col sm={6}>
                         <Form.Control as="select"
                             name="inAdvanceFrom"
                             data-qc="v"
@@ -559,7 +531,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>
             </Form.Group>
-            <Col style={{ border: '1px solid black', borderRadius: '9px', margin: '10px 0 10px 0' }}>
+            <>
                 <Row>
                     {values.beneficiaryType === 'individual' && <Col>
                         <Form.Group className="data-group" controlId="applicationFee">
@@ -712,8 +684,7 @@ export const LoanProductCreationForm = (props: any) => {
                         </Col>
                     </Row>
                 </Form.Group>}
-            </Col>
-            <Col style={{ border: '2px solid black', borderRadius: '9px', }}>
+            </>
                 <Row>
                     <Col>
                         <Form.Group className="data-check-group row-nowrap" controlId='loanImpactPrincipal'>
@@ -767,7 +738,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>
                 {values.beneficiaryType !== 'group' &&
-                    <Col>
+                    <>
                         <Row>
                             <Col>
                                 <Form.Group className="data-check-group row-nowrap" controlId='mustEnterGuarantor'>
@@ -806,8 +777,382 @@ export const LoanProductCreationForm = (props: any) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                    </Col>}
+                    </>}
+            <Form.Group className="data-group" controlId="allocatedDebtForGoodLoans">
+                <Form.Label className="data-label">{local.allocatedDebtForGoodLoans}</Form.Label>
+                <Form.Control
+                    type="number"
+                    name="allocatedDebtForGoodLoans"
+                    data-qc="allocatedDebtForGoodLoans"
+                    value={values.allocatedDebtForGoodLoans}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={errors.allocatedDebtForGoodLoans && touched.allocatedDebtForGoodLoans}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.allocatedDebtForGoodLoans}
+                </Form.Control.Feedback>
+            </Form.Group>
+            <Col style={{ backgroundColor: '#e5e5e5', textAlign: 'right', padding: 20 }}>
+                <Row>
+                    <Col sm={6}>
+                        <h3 style={{ color: '#2a3390' }}>{local.aging}</h3>
+                    </Col>
+                    <Col sm={6}>
+                        <h3 style={{ color: '#2a3390' }}>{local.agingPercent}</h3>
+                    </Col>
+                </Row>
+                {values.aging.map((element, i) => {
+                    return (
+                        <Row key={i} style={{ padding: '25px 0px' }}>
+                            <Col sm={6}>
+                                <div className='d-flex'>
+                                    <span style={{ width: '10%', color: '#7dc356' }}>{i + 1} - </span>
+                                    <span style={{ direction: 'rtl', width: '10%' }}>{local.from}</span>
+                                    <span style={{ width: '10%' }}>{values.aging[i].from}</span>
+                                    <span style={{ direction: 'rtl', width: '10%' }}>{local.to}</span>
+                                    <Form.Group controlId={`agingTo${i}`} style={{ width: '50%' }}>
+                                        <InputGroup>
+                                            <Form.Control
+                                                type="number"
+                                                name={`aging[${i}].to`}
+                                                data-qc="aging"
+                                                value={values.aging[i].to}
+                                                onChange={(e) => {
+                                                    setFieldValue(`aging[${i}].to`, Number(e.currentTarget.value))
+                                                    if (i < 6) {
+                                                        setFieldValue(`aging[${i + 1}].from`, Number(e.currentTarget.value)+1)
+                                                    }
+                                                }}
+                                                onBlur={handleBlur}
+                                                min={values.aging[i].from}
+                                                isInvalid={errors.aging && errors.aging[i] && errors.aging[i].to && touched.aging && touched.aging[i] && touched.aging[i].to}
+                                            />
+                                        </InputGroup>
+                                        {errors.aging && errors.aging[i] && errors.aging[i].to && <Form.Control.Feedback type="invalid" className="d-flex">
+                                            {errors.aging[i].to}
+                                        </Form.Control.Feedback>}
+                                    </Form.Group>
+                                </div>
+                            </Col>
+                            <Col sm={6}>
+                                <Form.Group controlId={`agingFee${i}`} style={{ width: '100%' }}>
+                                    <InputGroup>
+                                        <Form.Control
+                                            type="number"
+                                            name={`aging[${i}].fee`}
+                                            data-qc="aging"
+                                            value={values.aging[i].fee}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isInvalid={errors.aging && errors.aging[i] && errors.aging[i].fee && touched.aging && touched.aging[i] && touched.aging[i].fee}
+                                        />
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                    </InputGroup>
+                                    {errors.aging && errors.aging[i] && errors.aging[i].fee && <Form.Control.Feedback type="invalid" className="d-flex">
+                                        {errors.aging[i].fee}
+                                    </Form.Control.Feedback>}
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    )
+                })}
             </Col>
+            <Form.Group className="data-group" controlId="mergeUndoubtedLoans">
+                <Form.Label className="data-label">{local.mergeUndoubtedLoans}</Form.Label>
+                <Row className={'row-nowrap'}>
+                    <Col>
+                        <Form.Group className="row-nowrap" style={{ padding: '20px 10px' }} controlId='mergeUndoubtedLoans'>
+                            <Form.Check
+                                type='radio'
+                                name='mergeUndoubtedLoans'
+                                data-qc='mergeUndoubtedLoans'
+                                value={values.mergeUndoubtedLoans}
+                                checked={values.mergeUndoubtedLoans}
+                                onBlur={handleBlur}
+                                onChange={(e: any) => {
+                                    const val = e.currentTarget.value;
+                                    if (val === true) {
+                                        setFieldValue('mergeUndoubtedLoans', false)
+                                    } else {
+                                        setFieldValue('mergeUndoubtedLoans', true)
+                                    }
+                                }}
+                                isInvalid={errors.mergeUndoubtedLoans && touched.mergeUndoubtedLoans}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.mergeUndoubtedLoans}
+                            </Form.Control.Feedback>
+                            <Form.Label className="data-check-label">{local.mergeLoans}</Form.Label>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group className="row-nowrap" style={{ padding: '20px 10px' }} controlId='mergeUndoubtedLoans'>
+                            <Form.Check
+                                type='radio'
+                                name='mergeUndoubtedLoans'
+                                data-qc='mergeUndoubtedLoans'
+                                value={values.mergeUndoubtedLoans}
+                                checked={(!values.mergeUndoubtedLoans)}
+                                onBlur={handleBlur}
+                                onChange={(e: any) => {
+                                    const val = e.currentTarget.value;
+                                    if (val === false) {
+                                        setFieldValue('mergeUndoubtedLoans', true)
+                                    } else {
+                                        setFieldValue('mergeUndoubtedLoans', false)
+                                    }
+                                }}
+                                isInvalid={errors.mergeUndoubtedLoans && touched.mergeUndoubtedLoans}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.mergeUndoubtedLoans}
+                            </Form.Control.Feedback>
+                            <Form.Label className="data-check-label">{local.mergeLoans2}</Form.Label>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                {!values.mergeUndoubtedLoans && <Row>
+                    <Col></Col>
+                    <Col>
+                        <Form.Group controlId="mergeUndoubtedLoansFees">
+                            <Form.Control
+                                type="number"
+                                name="mergeUndoubtedLoansFees"
+                                data-qc="mergeUndoubtedLoansFees"
+                                value={values.mergeUndoubtedLoansFees}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.mergeUndoubtedLoansFees && touched.mergeUndoubtedLoansFees}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.mergeUndoubtedLoansFees}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>}
+            </Form.Group>
+            <Form.Group className="data-group" controlId="mergeDoubtedLoans">
+                <Form.Label className="data-label">{local.mergeDoubtedLoans}</Form.Label>
+                <Row className={'row-nowrap'}>
+                    <Col>
+                        <Form.Group className="row-nowrap" style={{ padding: '20px 10px' }} controlId='mergeDoubtedLoans'>
+                            <Form.Check
+                                type='radio'
+                                name='mergeDoubtedLoans'
+                                data-qc='mergeDoubtedLoans'
+                                value={values.mergeDoubtedLoans}
+                                checked={values.mergeDoubtedLoans}
+                                onBlur={handleBlur}
+                                onChange={(e: any) => {
+                                    const val = e.currentTarget.value;
+                                    if (val === true) {
+                                        setFieldValue('mergeDoubtedLoans', false)
+                                    } else {
+                                        setFieldValue('mergeDoubtedLoans', true)
+                                    }
+                                }}
+                                isInvalid={errors.mergeDoubtedLoans && touched.mergeDoubtedLoans}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.mergeDoubtedLoans}
+                            </Form.Control.Feedback>
+                            <Form.Label className="data-check-label">{local.mergeLoans}</Form.Label>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group className="row-nowrap" style={{ padding: '20px 10px' }} controlId='mergeDoubtedLoans'>
+                            <Form.Check
+                                type='radio'
+                                name='mergeDoubtedLoans'
+                                data-qc='mergeDoubtedLoans'
+                                value={values.mergeDoubtedLoans}
+                                checked={(!values.mergeDoubtedLoans)}
+                                onBlur={handleBlur}
+                                onChange={(e: any) => {
+                                    const val = e.currentTarget.value;
+                                    if (val === false) {
+                                        setFieldValue('mergeDoubtedLoans', true)
+                                    } else {
+                                        setFieldValue('mergeDoubtedLoans', false)
+                                    }
+                                }}
+                                isInvalid={errors.mergeDoubtedLoans && touched.mergeDoubtedLoans}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.mergeDoubtedLoans}
+                            </Form.Control.Feedback>
+                            <Form.Label className="data-check-label">{local.mergeLoans2}</Form.Label>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                {!values.mergeDoubtedLoans && <Row>
+                    <Col></Col>
+                    <Col>
+                        <Form.Group controlId="mergeDoubtedLoansFees">
+                            <Form.Control
+                                type="number"
+                                name="mergeDoubtedLoansFees"
+                                data-qc="mergeDoubtedLoansFees"
+                                value={values.mergeDoubtedLoansFees}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.mergeDoubtedLoansFees && touched.mergeDoubtedLoansFees}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.mergeDoubtedLoansFees}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>}
+            </Form.Group>
+            <Row>
+                    <Col sm={6}>
+                        <Form.Group className="data-group" controlId="pushPayment">
+                            <Form.Label className="data-label">{local.pushPayment}</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="pushPayment"
+                                data-qc="pushPayment"
+                                value={values.pushPayment}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.pushPayment && touched.pushPayment}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.pushPayment}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group className="data-group" controlId="pushHolidays">
+                            <Form.Label className="data-label">{local.pushHolidays}</Form.Label>
+                            <Form.Control as="select"
+                                name="pushHolidays"
+                                data-qc="pushHolidays"
+                                value={values.pushHolidays}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.pushHolidays && touched.pushHolidays}
+                            >
+                                <option value='previous'>{local.previous}</option>
+                                <option value='next'>{local.next}</option>
+                            </Form.Control>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.pushHolidays}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            {/* <Col style={{ backgroundColor: '#e5e5e5', textAlign: 'right', padding: 20 }}>
+                <h2 style={{ color: '#2a3390' }}>{local.push}</h2>
+                
+                <Row>
+                    <Col sm={6}>
+                        {values.pushDays.map((day, i) => {
+                            return (
+                                <Row key={i}>
+                                    <Col sm={2} style={{ margin: 'auto' }}>
+                                        <span>{dayToArabic(i)}</span>
+                                    </Col>
+                                    <Col sm={10}>
+                                        <Form.Group className="data-group" controlId={`pushDays[${i}]`}>
+                                            <Form.Control
+                                                type="number"
+                                                name={`pushDays[${i}]`}
+                                                data-qc="pushDays"
+                                                value={values.pushDays[i]}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                isInvalid={errors.pushDays && errors.pushDays[i] && touched.pushDays && touched.pushDays[i]}
+                                            />
+                                            {errors.pushDays && errors.pushDays[i] && <Form.Control.Feedback type="invalid">
+                                                {errors.pushDays[i]}
+                                            </Form.Control.Feedback>}
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            )
+                        })}
+                    </Col>
+                    <Col sm={6}>
+                        <div style={{ backgroundColor: '#efefef', padding: '30px 40px' }}>
+                            <h4 style={{ color: '#2a3390' }}>{local.priority}</h4>
+                            <ul>
+                                <li style={{ color: '#7dc356' }}><span style={{ color: '#2a3390' }}>{local.pushPaymentPriority1}</span></li>
+                                <li style={{ color: '#7dc356' }}><span style={{ color: '#2a3390' }}>{local.pushPaymentPriority2}</span></li>
+                                <li style={{ color: '#7dc356' }}><span style={{ color: '#2a3390' }}>{local.pushPaymentPriority3}</span></li>
+                            </ul>
+                        </div>
+                    </Col>
+                </Row>
+            </Col> */}
+            {/* <Form.Group className="data-check-group row-nowrap" controlId='enabled'>
+                <Form.Check
+                    type='checkbox'
+                    name='enabled'
+                    data-qc='enabled'
+                    value={values.enabled}
+                    checked={values.enabled}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    isInvalid={errors.enabled && touched.enabled}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.enabled}
+                </Form.Control.Feedback>
+                <Form.Label className="data-check-label">{local.enabledProduct}</Form.Label>
+            </Form.Group>
+            <Form.Group className="data-check-group row-nowrap" controlId='viceFieldManagerAndDate'>
+                <Form.Check
+                    type='checkbox'
+                    name='viceFieldManagerAndDate'
+                    data-qc='viceFieldManagerAndDate'
+                    value={values.viceFieldManagerAndDate}
+                    checked={values.viceFieldManagerAndDate}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    isInvalid={errors.viceFieldManagerAndDate && touched.viceFieldManagerAndDate}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.viceFieldManagerAndDate}
+                </Form.Control.Feedback>
+                <Form.Label className="data-check-label">{local.viceFieldManagerAndDate}</Form.Label>
+            </Form.Group>
+            <Form.Group className="data-check-group row-nowrap" controlId='reviewerChiefAndDate'>
+                <Form.Check
+                    type='checkbox'
+                    name='reviewerChiefAndDate'
+                    data-qc='reviewerChiefAndDate'
+                    value={values.reviewerChiefAndDate}
+                    checked={values.reviewerChiefAndDate}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    isInvalid={errors.reviewerChiefAndDate && touched.reviewerChiefAndDate}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.reviewerChiefAndDate}
+                </Form.Control.Feedback>
+                <Form.Label className="data-check-label">{local.reviewerChiefAndDate}</Form.Label>
+            </Form.Group> */}
+            <Form.Group className="data-check-group row-nowrap" controlId='branchManagerAndDate'>
+                <Form.Check
+                    type='checkbox'
+                    name='branchManagerAndDate'
+                    data-qc='branchManagerAndDate'
+                    value={values.branchManagerAndDate}
+                    checked={values.branchManagerAndDate}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    isInvalid={errors.branchManagerAndDate && touched.branchManagerAndDate}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.branchManagerAndDate}
+                </Form.Control.Feedback>
+                <Form.Label className="data-check-label">{local.branchManagerAndDate}</Form.Label>
+            </Form.Group>
             <Form.Group
                 as={Row}
                 className={['branch-data-group']}

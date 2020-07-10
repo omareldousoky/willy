@@ -13,24 +13,30 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                    {values.guarantors.length > 0 && <div style={{ width: '100%', margin: '20px 0' }}>
+                    <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.guarantorInfo}</h5>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                            {values.guarantors.map((guarantor, i) =>
-                                <CustomerSearch
-                                    source={i + 1}
-                                    key={i}
-                                    style={{ width: '48%' }}
-                                    handleSearch={(key, query) => props.handleSearch(key,query, i)}
-                                    searchResults={guarantor.searchResults}
-                                    selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
-                                    selectedCustomer={guarantor.guarantor}
-                                    removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
-                                />
+                        <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                            {values.guarantors.map((guarantor, i) => {
+                                return (
+                                    <Row key={i} style={{ width: '100%' }}>
+                                        <CustomerSearch
+                                            source={i + 1}
+                                            key={i}
+                                            style={{ width: '98%' }}
+                                            handleSearch={(key, query) => props.handleSearch(key, query, i)}
+                                            searchResults={guarantor.searchResults}
+                                            selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
+                                            selectedCustomer={guarantor.guarantor}
+                                            removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
+                                        />
+                                        {(i > values.noOfGuarantors - 1) && <span style={{ width: '2%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => props.removeGuar(guarantor, i, values)}>-</span>}
+                                    </Row>
+                                )
+                            }
                             )}
-                            {/* <Button onClick={()=>props.addGuar()}>+</Button> */}
-                        </div>
-                    </div>}
+                            <Button onClick={() => props.addGuar()}>+</Button>
+                        </Col>
+                    </div>
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.viceCustomersInfo}</h5>
                         <FieldArray
