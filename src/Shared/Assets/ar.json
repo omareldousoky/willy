@@ -615,10 +615,9 @@
     "chooseMainRole": " إختيار الدور رئيسي",
     "chooseMainBranch": "إختر الفرع الرئيسي",
     "chooseManager": "إختر المدير",
-    "rangeOfGroup": "يجب أن يكون عدد أعضاء المجموعة بين 3 و 7 أعضاء",
-    "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
-    "userStep3": "٣.بيانات أخرى",
-    "daily": "يومي",
+   "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
+   "userStep3": "٣.بيانات أخرى",
     "fifth": "الخامس",
-    "sixth": "السادس"
+    "sixth": "السادس",
+    "noGuarantors":"لا يوجد ضمان"
 }
