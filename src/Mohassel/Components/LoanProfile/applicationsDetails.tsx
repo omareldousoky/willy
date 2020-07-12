@@ -186,7 +186,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.productName}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.product.currency}</Form.Label>
+                        <Form.Label>{props.application.product.productName}</Form.Label>
                     </Row>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
@@ -194,7 +194,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.currency}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.product.currency} </Form.Label>
+                        <Form.Label>{currency(props.application.product.currency)} </Form.Label>
                     </Row>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
@@ -210,7 +210,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.interest}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.product.interest + ' ' + props.application.product.interestPeriod} </Form.Label>
+                        <Form.Label>{props.application.product.interest + ' ' + interestPeriod(props.application.product.interestPeriod)} </Form.Label>
                     </Row>
                 </Form.Group>
             </Form.Row>
@@ -228,7 +228,7 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.periodLengthEvery}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{props.application.product.periodLength + ' ' + props.application.product.periodType} </Form.Label>
+                        <Form.Label>{props.application.product.periodLength + ' ' + periodType(props.application.product.periodType)} </Form.Label>
                     </Row>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
@@ -345,7 +345,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                             <Form.Label >{local.loanCode}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label >{props.application.product.currency}</Form.Label>
+                            <Form.Label >{props.application.applicationKey}</Form.Label>
                         </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="3">
@@ -384,16 +384,6 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                     </Form.Group>
                     <Form.Group as={Col} md="3">
                         <Row>
-                            <Form.Label>{local.issuingBank}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>N/A</Form.Label>
-                        </Row>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col} md="3">
-                        <Row>
                             <Form.Label>{local.representative}</Form.Label>
                         </Row>
                         <Row>
@@ -401,7 +391,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                         </Row>
                     </Form.Group>
                 </Form.Row>
-                {props.application.guarantors && <Form.Row>
+                {props.application.guarantors && props.application.product.beneficiaryType === 'individual' && <Form.Row>
                     <GuarantorTableView guarantors={props.application.guarantors} />
                 </Form.Row>}
             </Form>

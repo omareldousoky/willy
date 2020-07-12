@@ -80,7 +80,7 @@ export interface Application {
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),
     calculationFormulaId: Yup.string().required(local.required),
-    interest: Yup.number().moreThan(0, "Can't be 0 or less").max(100, "Can't be more than 100").required(local.required),
+    interest: Yup.number().min(0, "Can't be 0 or less").max(100, "Can't be more than 100").required(local.required),
     interestPeriod: Yup.string().required(local.required),
     inAdvanceFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),
     inAdvanceFrom: Yup.string().required(local.required),

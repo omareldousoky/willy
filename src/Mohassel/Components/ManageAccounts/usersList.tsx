@@ -98,7 +98,7 @@ class UsersList extends Component<Props, State> {
       Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
     } else {
       this.props.setLoading(false);
-      Swal.fire("error");
+      Swal.fire(res.error.error,res.error.details,"error");
     }
 
   }
