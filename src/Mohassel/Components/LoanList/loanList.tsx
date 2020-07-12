@@ -30,7 +30,7 @@ class LoanList extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
     }
     this.mappers = [

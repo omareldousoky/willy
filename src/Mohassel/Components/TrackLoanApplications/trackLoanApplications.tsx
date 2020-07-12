@@ -56,7 +56,7 @@ class TrackLoanApplications extends Component<Props, State>{
     super(props);
     this.state = {
       print: false,
-      size: 5,
+      size: 10,
       from: 0,
       branchDetails: {}
     }

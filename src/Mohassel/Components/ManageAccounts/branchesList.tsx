@@ -32,7 +32,7 @@ class BranchesList extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       manageAccountTabs: [],
     }
