@@ -41,7 +41,6 @@ interface State {
   approvalDate: string;
   beneficiaryType: string;
   application: any;
-  loanApplicationKey: number;
 }
 export interface Location {
   pathname: string;
@@ -80,8 +79,7 @@ class LoanCreation extends Component<Props, State> {
       },
       beneficiaryType: '',
       installmentsData: {},
-      application: {},
-      loanApplicationKey: 0
+      application: {}
     }
   }
   async componentDidMount() {
@@ -97,7 +95,6 @@ class LoanCreation extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({
         loading: false,
-        loanApplicationKey: res.body.applicationKey,
         application: res.body,
         approvalDate: res.body.approvalDate,
         loanCreationDate: res.body.creationDate? res.body.creationDate: this.state.loanCreationDate,
@@ -207,7 +204,7 @@ class LoanCreation extends Component<Props, State> {
             {this.state.installmentsData.installments && this.state.installmentsData.installments.map((installment, index) => {
               return (
                 <tr key={index}>
-                  <td>{`${this.state.loanApplicationKey}${installment.id}`}</td>
+                  <td>{installment.id}</td>
                   <td>{installment.installmentResponse ? installment.installmentResponse.toFixed(2) : 0}</td>
                   <td>{installment.principalInstallment ? installment.principalInstallment.toFixed(2) : 0}</td>
                   <td>{installment.feesInstallment ? installment.feesInstallment.toFixed(2) : 0}</td>
@@ -235,6 +232,7 @@ class LoanCreation extends Component<Props, State> {
                       type="date"
                       name="loanCreationDate"
                       data-qc="loanCreationDate"
+                      value={formikProps.values.loanCreationDate}
                       onChange={(e)=> {
                         formikProps.setFieldValue('loanCreationDate', e.currentTarget.value);
                         this.handleCreationDateChange(e.currentTarget.value);

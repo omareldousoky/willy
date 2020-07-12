@@ -255,3 +255,13 @@ export function arabicGender(gender: string) {
     default: return ''
   }
 }
+
+export const customFilterOption = (option, rawInput) => {
+  if (option.label) {
+    const words = rawInput.split(' ');
+    return words.reduce(
+      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
+      true,
+    );
+  }
+};
