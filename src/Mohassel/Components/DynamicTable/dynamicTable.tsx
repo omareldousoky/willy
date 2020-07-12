@@ -3,6 +3,8 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import './styles.scss';
 import * as local from '../../../Shared/Assets/ar.json';
+import { connect } from 'react-redux';
+import { searchFilters, search } from '../../redux/search/actions';
 
 interface Props {
   mappers: Array<any>;
@@ -10,6 +12,12 @@ interface Props {
   data: Array<any>;
   totalCount: number;
   changeNumber?: (key: string, number: number) => void | undefined;
+  search: (data) => void;
+  setSearchFilters: (data) => void;
+  searchFilters: any;
+  size?: number;
+  from?: number;
+  url?: string;
 }
 
 const DynamicTable = (props: Props) => {
@@ -91,7 +99,8 @@ const DynamicTable = (props: Props) => {
           </tbody>
         </Table>
         :
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>        <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
           <h4>{local.noResultsFound}</h4>
         </div>
       }
@@ -147,4 +156,16 @@ const DynamicTable = (props: Props) => {
   )
 }
 
-export default DynamicTable
+const addSearchToProps = dispatch => {
+  return {
+    search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
+  };
+};
+const mapStateToProps = state => {
+  return {
+    searchFilters: state.searchFilters
+  };
+};
+
+export default connect(mapStateToProps, addSearchToProps)(DynamicTable);

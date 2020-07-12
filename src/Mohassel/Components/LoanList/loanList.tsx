@@ -26,7 +26,7 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -46,7 +46,8 @@ class LoanList extends Component<Props, State> {
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -73,12 +74,14 @@ class LoanList extends Component<Props, State> {
       },
       {
         title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        key: "issueDate",
+        sortable: true,
         render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
@@ -140,6 +143,9 @@ class LoanList extends Component<Props, State> {
              size={this.state.size} 
              hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
+              url="loan" 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
