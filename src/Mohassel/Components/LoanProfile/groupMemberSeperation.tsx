@@ -108,6 +108,8 @@ class GroupMemberSeperation extends Component<Props, State>{
             }).then((result) => {
                 if (result.value) {
                     this.props.history.push('/track-loan-applications/loan-profile', { id: res.body.id })
+                }else if(result.dismiss){
+                    this.props.history.push('/track-loan-applications/loan-profile', { id: this.state.application._id })
                 }
             })
         } else {

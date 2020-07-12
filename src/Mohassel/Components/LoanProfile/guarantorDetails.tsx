@@ -9,16 +9,16 @@ interface Props {
 
 export const GuarantorView = (props: Props) => {
     return (
-        <div className="d-flex justify-content-around">
+        <div className="d-flex flex-wrap">
             {(props.guarantors.length > 0) ? props.guarantors.map((guar, i) =>
-                <div key={i}>
+                <div key={i} style={{margin: 'auto'}}>
                     <div className="d-flex flex-row">
                         <p>{local.name}</p>
                         <p style={{ margin: '0 10px 0 0' }}>{guar.customerName}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.guarantorCode}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{guar.code}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{guar.key}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.nationalId}</p>
@@ -46,14 +46,14 @@ export const GuarantorView = (props: Props) => {
                     </div>
                 </div>
             )
-                : <p>No Guarantors</p>}
+                : <p>{local.noGuarantors}</p>}
         </div>
     )
 }
 export const GuarantorTableView = (props: Props) => {
     return (
         <div className="d-flex justify-content-center">
-            <Table>
+            <Table style={{ textAlign: 'right' }}>
                 <thead>
                     <tr>
                         <th>{local.guarantorCode}</th>
