@@ -192,7 +192,7 @@ class Payment extends Component<Props, State>{
       this.setState({ payAmount: res.body.requiredAmount })
       if (res.status === 'success') {
         this.props.setReceiptData(res.body);
-          this.props.print({print: 'payment'});
+          this.props.print({print: 'payEarly'});
         this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
         // Swal.fire("", "early payment done", "success")
       } else {
