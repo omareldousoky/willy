@@ -10,7 +10,6 @@ interface Props {
 }
 interface State {
     totalDaysLate: number;
-    daysLate: Array<number>;
     totalDaysEarly: number;
 }
 class EarlyPaymentPDF extends Component<Props, State> {
@@ -19,35 +18,23 @@ class EarlyPaymentPDF extends Component<Props, State> {
         this.state = {
             totalDaysLate: 0,
             totalDaysEarly: 0,
-            daysLate: [],
         }
     }
     UNSAFE_componentWillMount() {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
-        const daysLate: Array<number> = [];
         this.props.data.installmentsObject.installments.forEach(installment => {
             if (installment.paidAt) {
                 const number = Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
                 if (number > 0) {
-                    daysLate.push(number);
                     totalDaysLate = totalDaysLate + number;
                 } else totalDaysEarly = totalDaysEarly + number;
             } else {
                 const number = Math.round((new Date().valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
-                daysLate.push(number);
                 totalDaysLate = totalDaysLate + number;
             }
         });
-        this.setState({ totalDaysEarly, totalDaysLate, daysLate })
-    }
-    getMaxNumberInArr() {
-        let largest = 0;
-        this.state.daysLate.forEach((day) => {
-            if(day > largest)
-                largest = day;
-        })
-        return largest
+        this.setState({ totalDaysEarly, totalDaysLate })
     }
     getStatus(status: string) {
         switch (status) {
@@ -141,7 +128,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 <table>
                     <tbody>
                         <tr>
-                            <td>عدد ايام التأخير :<span className="frame">{numbersToArabic(this.getMaxNumberInArr())}</span>
+                            <td>عدد ايام التأخير :<span className="frame">{numbersToArabic(this.state.totalDaysLate)}</span>
                             </td>
                             <td>الغرامات المسدده :<span className="frame">{numbersToArabic(0)}</span>
                             </td>
@@ -198,7 +185,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <td className="border">{numbersToArabic(this.getSum('principalPaid'))}</td>
                             <td className="border">{numbersToArabic(this.getSum('feesPaid'))}</td>
                             <th className="border">ايام التأخير</th>
-                            <td className="border">{numbersToArabic(this.getMaxNumberInArr())}</td>
+                            <td className="border">{numbersToArabic(this.state.totalDaysLate)}</td>
                             <th className="border">ايام التبكير</th>
                             <td className="border">{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                         </tr>
