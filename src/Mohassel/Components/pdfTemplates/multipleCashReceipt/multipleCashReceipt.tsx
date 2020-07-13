@@ -1,11 +1,11 @@
 import React from 'react';
 import Tafgeet from 'tafgeetjs';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
-import './earlyPaymentReceipt.scss';
+import './multipleCashReceipt.scss';
 
-const EarlyPaymentReceipt = (props) => {
+const MultipleCashReceipt = (props) => {
     return (
-        <div className="early-payment-receipt" dir="rtl" lang="ar">
+        <div className="multiple-cash-receipt frame" dir="rtl" lang="ar">
             <table className="title">
                 <tbody>
                     <tr>
@@ -16,67 +16,69 @@ const EarlyPaymentReceipt = (props) => {
                         </td>
                     </tr>
                     <tr>
-                        <td>{`${props.branchDetails.name} - ${props.branchDetails.governorate}`}</td>
+                        <td>أسيوط - أبوتيج</td>
                     </tr>
                     <tr>
                         <td>إيصال إيداع نقدية</td>
                     </tr>
                     <tr>
-                        <td>خزينه 1 فرع {props.branchDetails.name}</td>
+                        <td>خزينه 5 فرع أبوتيج</td>
                     </tr>
                 </tbody>
             </table>
 
 
-            <table>
+            <table className="body">
                 <tbody>
                     <tr>
-                        <th className="frame">التاريخ</th>
-                        <td className="frame">{timeToArabicDate(0, false)}</td>
-
+                        <th>رقم الإيصال :</th>
+                        <td>26878</td>
                     </tr>
 
                     <tr>
-                        <th className="frame">رقم الإيصال</th>
-                        <td className="frame">010/00125012</td>
-                    </tr>
-                    <tr>
-                        <th className="frame">إسم العميل</th>
-                        <td className="frame">{props.receiptData[0].customerName}</td>
-                    </tr>
-                    <tr>
-                        <th className="frame">قيمة القسط</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].installmentAmount)}</td>
+                        <th>إسم العميل :</th>
+                        <td>إبتسام احمد صديق سليمان</td>
                     </tr>
 
                     <tr>
-                        <th className="frame">مسدد من قبل</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].previouslyPaid)}</td>
+                        <th>السداد الحالي :</th>
+                        <td>1.00</td>
                     </tr>
+
                     <tr>
-                        <th className="frame">السداد الحالي</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].paidNow)}
-					<div>{new Tafgeet(props.receiptData[0].paidNow, 'EGP').parse()}</div>
-                        </td>
+                        <td className="title frame" colSpan={2}>فقط واحد جنيه مصري فقط لاغير</td>
                     </tr>
+
                     <tr>
-                        <th className="frame">الغرض</th>
-                        <td className="frame">سداد قسط رقم <div>    010/0016708/002/012</div>
+                        <th style={{ verticalAlign: "top" }}>الغـــــــرض :</th>
+                        <td>رسوم إعادة إصدار
+					<div>
+                                10/16708/1
+					</div>
                         </td>
                     </tr>
 
                     <tr>
-                        <th className="frame">المتبقي</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].remaining)}</td>
+                        <th>بنك الإصدار :</th>
+                        <td>خزينه 5 فرع أبوتيج</td>
                     </tr>
 
-                    <tr style={{ height: "45px" }}>
-                        <td>توقيع المستلم :</td>
-                        <td>-----------------------------------------------</td>
+                    <tr>
+                        <th>التاريخ :</th>
+                        <td>2020/07/02</td>
+                    </tr>
+
+                    <tr>
+                        <td colSpan={2} style={{ borderTop: "1px solid black" }}></td>
+                    </tr>
+
+                    <tr>
+                        <th>توقيع المستلم :</th>
+                        <td>--------------------------------------------------</td>
                     </tr>
                     <tr>
-                        <td>روجع واعتمد :</td>
-                        <td>-----------------------------------------------</td>
+                        <th>روجع واعتمد :</th>
+                        <td>--------------------------------------------------</td>
                     </tr>
                 </tbody>
             </table>
@@ -84,4 +86,4 @@ const EarlyPaymentReceipt = (props) => {
     )
 }
 
-export default EarlyPaymentReceipt;
+export default MultipleCashReceipt;

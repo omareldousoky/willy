@@ -26,6 +26,7 @@ import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpState
 import LoanContract from '../pdfTemplates/loanContract/loanContract';
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup';
 import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt';
+import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import { withRouter } from 'react-router-dom';
 import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
@@ -38,7 +39,6 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
-import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
