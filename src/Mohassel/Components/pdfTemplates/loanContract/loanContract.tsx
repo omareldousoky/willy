@@ -224,7 +224,7 @@ const LoanContract = (props) => {
                   <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}
-                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.applicationFee)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)}، يتم
                   سداده
