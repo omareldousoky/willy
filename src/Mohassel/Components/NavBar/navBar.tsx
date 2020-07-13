@@ -126,7 +126,7 @@ class NavBar extends Component<Props, State> {
     const date = new Date(), y = date.getFullYear(), m = date.getMonth();
     const firstDay = new Date(y, m, 2).valueOf();
     const lastDay = new Date(y, m + 1, 1).valueOf();
-    return {firstDay: timeToDateyyymmdd(firstDay), lastDay: timeToDateyyymmdd(lastDay)}
+    return { firstDay: timeToDateyyymmdd(firstDay), lastDay: timeToDateyyymmdd(lastDay) }
   }
   render() {
     return (
@@ -175,7 +175,7 @@ class NavBar extends Component<Props, State> {
               {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
                 : ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
                   : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
-    {<Can I='documentTypes' a='config'><Nav.Link onClick={()=> this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
+              {<Can I='documentTypes' a='config'><Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
             </Nav>
           </Navbar.Collapse>

@@ -95,6 +95,6 @@ export interface DocumentType {
     type: string;
     paperType: string;
     name: string;
-    active: boolean;
-    updatable: boolean;
+    active?: boolean;
+    updatable?: boolean;
 }

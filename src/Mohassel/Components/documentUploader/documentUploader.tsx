@@ -3,6 +3,7 @@ import { DocumentType } from '../../Services/interfaces'
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import Spinner from 'react-bootstrap/Spinner';
+import Card from 'react-bootstrap/Card';
 interface Document {
   key: string;
   url: string | ArrayBuffer | null;
@@ -39,7 +40,7 @@ class DocumentUploader extends Component<Props, State> {
     }
   }
   static getDerivedStateFromProps(props, state) {
-    if ((props.edit || props.view) && props.uploadedImageFile?.length > 0 )
+    if ((props.edit || props.view) && props.uploadedImageFile?.length > 0)
       if (props.uploadedImageFile !== state.imagesFiles && state.imagesFiles.length == 0) {
         return {
           imagesFiles: props.uploadedImageFile,
@@ -48,17 +49,17 @@ class DocumentUploader extends Component<Props, State> {
     return null;
   }
 
-  calculateNumOfValidDocuments(): number{
-    const numOfValidDocs: number = this.state.imagesFiles.filter((doc)=> {
+  calculateNumOfValidDocuments(): number {
+    const numOfValidDocs: number = this.state.imagesFiles.filter((doc) => {
       return !doc.valid;
     }).length;
-      return numOfValidDocs;
+    return numOfValidDocs;
   }
-   calculateLimit(){
-      
+  calculateLimit() {
+
     return (this.state.imagesFiles.length - this.calculateNumOfValidDocuments());
 
-   }
+  }
   triggerInputFile() {
     const limit = this.props.documentType.pages + this.calculateNumOfValidDocuments();
     if (this.state.imagesFiles.length < limit) {
@@ -91,7 +92,7 @@ class DocumentUploader extends Component<Props, State> {
   };
 
   constructArr(name: string) {
-    const len = this.props.documentType.pages + this.calculateNumOfValidDocuments() ;
+    const len = this.props.documentType.active ? this.props.documentType.pages + this.calculateNumOfValidDocuments() : this.state.imagesFiles.length;
     const arr: number[] = [];
     for (let i = 0; i < len; i++) {
       arr.push(i);
@@ -149,7 +150,7 @@ class DocumentUploader extends Component<Props, State> {
       [this.props.keyName]: this.props.keyId,
       docName: name,
       key: this.state.imagesFiles[key].key,
-      delete: this.props.documentType.updatable,
+      delete: (this.props.documentType.updatable && this.props.documentType.active),
     }
     const res = await this.props.deleteDocumentFun(data);
     if (res.status === "success" && this.props.documentType.updatable) {
@@ -158,9 +159,9 @@ class DocumentUploader extends Component<Props, State> {
         loading: false,
       })
 
-    } else if(res.status === "success" && !  this.props.documentType.updatable) {
+    } else if (res.status === "success" && !this.props.documentType.updatable) {
       const currentImages = this.state.imagesFiles;
-       currentImages[key].valid = false;
+      currentImages[key].valid = false;
       this.setState({
         imagesFiles: currentImages,
         loading: false,
@@ -171,7 +172,7 @@ class DocumentUploader extends Component<Props, State> {
       Swal.fire("", local.deleteError, "error")
       this.setState({ loading: false });
     }
-  
+
   }
   dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
     this.overrideEventDefaults(event);
@@ -207,7 +208,7 @@ class DocumentUploader extends Component<Props, State> {
   }
   renderUploadPhoto(key: number) {
     return (
-      <div key={key} className="document-upload-container">
+      <Card.Body key={key} className="document-upload-container">
         <img src={this.props.view ? require('../../Assets/imagePlaceholder.svg') : require('../../Assets/uploadDrag.svg')}
           alt="upload-document"
         />
@@ -215,34 +216,34 @@ class DocumentUploader extends Component<Props, State> {
           <h5>{this.props.view ? local.documentNotUploadedYet : local.documentUploadDragDropText}</h5>
           {!this.props.view && <h5>{local.documentUploadBrowseFileText}</h5>}
         </div>
-      </div>
+      </Card.Body>
     )
   }
   renderPhotoByName(key: number, name: string) {
+    console.log(this.state.imagesFiles, key, name);
     return (
-      <div key={key} className="document-upload-container">
-       {(!this.props.view && this.state.imagesFiles[key].valid) && <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument (e, name, key)}>
+      <Card.Body key={key} className="document-upload-container" style={{ cursor: this.state.imagesFiles[key].valid ? "pointer" : 'not-allowed' }}>
+        {(!this.props.view && this.state.imagesFiles[key].valid) && <div data-qc="delete-document" className="delete-document" onClick={(e) => this.deleteDocument(e, name, key)}>
           <span className="fa fa-trash">{local.delete}</span>
         </div>}
-        {!this.state.imagesFiles[key].valid && <div className = "invalid-document">
-          <img src = {require('../../Assets/deactivateIcon.svg')} />
+        {!this.state.imagesFiles[key]?.valid && <div className="invalid-document">
+          <img src={require('../../Assets/deactivateIcon.svg')} />
         </div>
-
         }
-        <img  className ={this.state.imagesFiles[key].valid ? "uploaded-image" : "uploaded-image invalid-image"} src={this.state.imagesFiles[key].url as string} key={key} alt="" />
-      </div>
+        <img className={this.state.imagesFiles[key]?.valid ? "uploaded-image" : "uploaded-image invalid-image"} src={this.state.imagesFiles[key]?.url as string} key={key} alt="" />
+      </Card.Body>
     )
   }
   renderContainer(name: string) {
     const Limit = this.props.documentType.pages + this.calculateNumOfValidDocuments();
     return (
-      <div style={{
-         display: 'flex',
-         overflowX:"scroll",
-         flexDirection : "row",
-         flexFlow: "nowrap",
-        justifyContent: "space-between", 
-        backgroundColor: '#fafafa', cursor: this.state.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
+      <Card style={{
+        display: 'flex',
+        overflowX: "scroll",
+        flexDirection: "row",
+        flexFlow: "nowrap",
+        justifyContent: "space-between",
+        backgroundColor: '#fafafa', cursor: this.state.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4,
       }}
         data-qc={`upload-${name}`}
         onClick={() => this.triggerInputFile()}
@@ -263,27 +264,66 @@ class DocumentUploader extends Component<Props, State> {
               else return this.renderUploadPhoto(key)
             } else return this.renderPhotoByName(key, name)
           })}
-      </div>
+      </Card>
     )
+  }
+  renderInactiveDoc(name) {
+    return (
+      <div style={{ marginBottom: 30 }}>
+        <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}
+          <span style={
+            {
+              margin: "0  10px",
+              fontSize: "16px",
+              color: "#d51b1b",
+              fontWeight: "bold",
+
+            }
+          }>  {local.inactiveDocument} </span>
+        </h4>
+        <div style={{
+          display: 'flex',
+          overflowX: "scroll",
+          flexDirection: "row",
+          flexFlow: "nowrap",
+          justifyContent: "space-between",
+          backgroundColor: '#fafafa',
+          cursor: 'not-allowed',
+          border: '#e5e5e5 solid 1px',
+          borderRadius: 4,
+          opacity: .4,
+        }}
+          data-qc={`inactiveDoc-${name}`}>
+          {this.state.loading ? this.renderLoading()
+            : this.constructArr(name).map((_value: number, key: number) => {
+              return this.renderPhotoByName(key, name)
+            })}
+        </div>
+      </div>
+    );
   }
   render() {
     return (
-      <div style={{ marginBottom: 30}}>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}  <span style={
-            {
-              margin: "0  10px",
-              fontSize: "14px",
-              color: this.props.documentType.updatable ? "#7dc356" : "#d51b1b"
+      this.props.documentType.active ?
+        <div style={{ marginBottom: 30 }}>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <h4 style={{ textAlign: 'right' }}>{this.props.documentType.name}  <span style={
+              {
+                margin: "0  10px",
+                fontSize: "14px",
+                color: this.props.documentType.updatable ? "#7dc356" : "#d51b1b"
 
-            }
-          }>{this.props.documentType.updatable ? local.updatable : local.nonUpdatable}</span></h4>
-          {!this.props.documentType.updatable &&  
-          <small style={{ color: "#edb600", fontSize: "12px", fontWeight:'bold' }}>{`${local.numOfInvalidImages} ( ${this.calculateNumOfValidDocuments()} )`}</small>}
-          <small style={{ color: "#6e6e6e", fontSize: "12px", fontWeight:'bold' }}>{`${local.numOfUploadedImages} ( ${this.state.imagesFiles.length - this.calculateNumOfValidDocuments()} / ${this.props.documentType.pages} )`}</small>
+              }
+            }>{this.props.documentType.updatable ? local.updatable : local.nonUpdatable}</span></h4>
+            {!this.props.documentType.updatable &&
+              <small style={{ color: "#edb600", fontSize: "12px", fontWeight: 'bold' }}>{`${local.numOfInvalidImages} ( ${this.calculateNumOfValidDocuments()} )`}</small>}
+            <small style={{ color: "#6e6e6e", fontSize: "12px", fontWeight: 'bold' }}>{`${local.numOfUploadedImages} ( ${this.state.imagesFiles.length - this.calculateNumOfValidDocuments()} / ${this.props.documentType.pages} )`}</small>
+          </div>
+          {this.renderContainer(this.props.documentType.name)}
         </div>
-        {this.renderContainer(this.props.documentType.name)}
-      </div>
+        :
+        !this.props.documentType.active && this.state.imagesFiles.length > 0 ? this.renderInactiveDoc(this.props.documentType.name)
+          : null
     )
   }
 }
