@@ -10,7 +10,7 @@ const PaymentReceipt = (props) => {
         <>
             {props.receiptData.map((receiptData, index) => {
                 return (
-                    <div className="payment-receipt frame" dir="rtl" lang="ar">
+                    <div key={index} className="payment-receipt frame" dir="rtl" lang="ar">
                         <div key={index} className="receipt-container">
                             <div className="receipt-header">
                                 <h5>{local.tasaheelName}</h5>
