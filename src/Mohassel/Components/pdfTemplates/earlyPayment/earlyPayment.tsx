@@ -25,7 +25,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
     UNSAFE_componentWillMount() {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
-        let daysLate: Array<number> = [];
+        const daysLate: Array<number> = [];
         this.props.data.installmentsObject.installments.forEach(installment => {
             if (installment.paidAt) {
                 const number = Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
