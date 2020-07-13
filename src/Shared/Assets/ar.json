@@ -622,5 +622,6 @@
     "noGuarantors": "لا يوجد ضمان",
     "inactiveDocument": "مستند تالف",
     "activated": "مفعل",
-    "deactivated": "معطل"
+    "deactivated": "معطل",
+    "editNumOfPagesError": " لايمكن أن تعدل عدد الصفحات لأقل من العدد السابق"
 }

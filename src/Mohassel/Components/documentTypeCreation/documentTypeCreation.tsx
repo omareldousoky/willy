@@ -5,7 +5,7 @@ import DocumentTypeCreationForm from './documentTypeCreationForm'
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import { DocumentType } from '../../Services/interfaces';
-import { documentType, documentTypeCreationValidation } from './documnetTypeinitialState';
+import { documentType, documentTypeCreationValidation, documentTypeEditValidation } from './documnetTypeinitialState';
 import { createDocumentsType } from '../../Services/APIs/encodingFiles/createDocumentType';
 import { editDocumentsType } from '../../Services/APIs/encodingFiles/editDocumentType';
 import Swal from 'sweetalert2';
@@ -87,7 +87,7 @@ class DocumentTypeCreation extends Component<Props, State> {
                             <Formik
                                 enableReinitialize
                                 initialValues={this.state.documentType}
-                                validationSchema={documentTypeCreationValidation}
+                                validationSchema={this.props.edit ? documentTypeEditValidation : documentTypeCreationValidation}
                                 onSubmit={this.submit}
                                 validateOnChange
                                 validateOnBlur
