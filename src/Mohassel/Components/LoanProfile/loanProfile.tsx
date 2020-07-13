@@ -34,7 +34,10 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
+import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
+import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
+import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -53,6 +56,7 @@ interface State {
     manualPaymentEditId: string;
     loanOfficer: string;
     branchDetails: any;
+    receiptData: any;
 }
 
 interface Props {
@@ -75,7 +79,8 @@ class LoanProfile extends Component<Props, State>{
             pendingActions: {},
             manualPaymentEditId: '',
             loanOfficer: '',
-            branchDetails: {}
+            branchDetails: {},
+            receiptData: {}
         };
     }
     componentDidMount() {
@@ -85,6 +90,17 @@ class LoanProfile extends Component<Props, State>{
     async getAppByID(id) {
         this.setState({ loading: true });
         const application = await getApplication(id);
+        if (store.getState().auth.clientPermissions !== {}) {
+            this.generateTabs(application);
+        } else {
+            store.subscribe(() => {
+                if (store.getState().auth.clientPermissions !== {}) {
+                    this.generateTabs(application);
+                }
+            })
+        }
+    }
+    generateTabs(application) {
         if (application.status === 'success') {
             this.getBranchData(application.body.branchId);
             const tabsToRender = [
@@ -166,7 +182,8 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
+                return <Payment print={(data) => this.setState({ print: data.print, earlyPaymentData: { ...data } }, () => window.print())}
+                    setReceiptData={(data)=> this.setState({receiptData: data})}
                     application={this.state.application} installments={this.state.application.installmentsObject.installments}
                     currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} />
@@ -181,6 +198,14 @@ class LoanProfile extends Component<Props, State>{
             default:
                 return null
         }
+    }
+    async rejectManualPayment() {
+        this.setState({ loading: true });
+        const res = await rejectManualPayment(this.props.history.location.state.id);
+        if (res.status === "success") {
+            this.setState({ loading: false })
+            Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
+        } else this.setState({ loading: false })
     }
     async approveManualPayment() {
         const table = document.createElement("table");
@@ -256,7 +281,7 @@ class LoanProfile extends Component<Props, State>{
                             <div className="d-flex justify-content-end" style={{ width: '75%' }}>
                                 <span style={{ cursor: 'not-allowed', padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
                                 {this.state.application.status === 'issued' && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span></Can>}
-                                {(this.state.application.status === "created" || this.state.application.status === "issued" || this.state.application.status === "pending") && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
+                                {this.state.application.status === "created" && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
                                 {this.state.application.status === 'underReview' && <Can I='assignProductToCustomer' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.editLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'review' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.reviewLoan}</span></Can>}
                                 {this.state.application.status === 'reviewed' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.undoLoanReview}</span></Can>}
@@ -290,10 +315,16 @@ class LoanProfile extends Component<Props, State>{
                                 </div>
                                 <div className="status-chip pending">{local.pending}</div>
                                 <Can I='payInstallment' a='application'>
-                                    <div style={{ color: '#000', cursor: 'pointer' }} onClick={() => this.editManualPayment()}><span className="fa fa-pencil" style={{ marginLeft: 5 }}></span>{local.edit}</div>
+                                    <div style={{ color: '#000', cursor: 'pointer' }} data-qc="editManualPayment" onClick={() => this.editManualPayment()}><span className="fa fa-pencil" style={{ marginLeft: 5 }}></span>{local.edit}</div>
+                                </Can>
+                                <Can I='payInstallment' a='application'>
+                                    <div className="cancel" data-qc="rejectManualPayment" onClick={() => { this.rejectManualPayment() }}>{local.cancel}</div>
+                                </Can>
+                                <Can I='payInstallment' a='application'>
+                                    <div className="cancel" onClick={() => { this.rejectManualPayment() }}>{local.cancel}</div>
                                 </Can>
                                 <Can I='approvePendingAction' a='application'>
-                                    <div className="submit" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
+                                    <div className="submit" data-qc="approveManualPayment" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
                                 </Can>
 
                             </div>
@@ -330,6 +361,7 @@ class LoanProfile extends Component<Props, State>{
                     </>}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} />}
             </Container>
         )
     }

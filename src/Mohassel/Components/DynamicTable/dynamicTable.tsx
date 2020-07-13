@@ -99,7 +99,8 @@ const DynamicTable = (props: Props) => {
           </tbody>
         </Table>
         :
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>        <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
           <h4>{local.noResultsFound}</h4>
         </div>
       }
@@ -113,10 +114,10 @@ const DynamicTable = (props: Props) => {
               props.changeNumber && props.changeNumber('from', 0)
               changePage(0)
             }}>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
+              <option value={10} data-qc={10}>10</option>
+              <option value={25} data-qc={25}>25</option>
+              <option value={50} data-qc={50}>50</option>
+              <option value={100} data-qc={100}>100</option>
             </Form.Control>
           </div>
           <div className="pagination-container">
