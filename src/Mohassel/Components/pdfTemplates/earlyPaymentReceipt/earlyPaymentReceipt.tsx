@@ -50,16 +50,8 @@ const EarlyPaymentReceipt = (props) => {
                         <td className="frame">{numbersToArabic(getCode())}</td>
                     </tr>
                     <tr>
-                        <th className="frame">قيمة السداد المعجل</th>
-                        <td className="frame">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
-                    </tr>
-                    <tr>
-                        <th className="frame">قيمة مصروفات السداد المعجل</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].paidNow - props.earlyPaymentData.remainingPrincipal)}</td>
-                    </tr>
-                    <tr>
-                        <th className="frame"> اجمالي السداد الحالي </th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].paidNow)}
+                        <th className="frame"> السداد الحالي </th>
+                        <td className="frame" style={{direction: 'ltr'}}>{numbersToArabic(props.receiptData[0].paidNow)}
 					<div>{new Tafgeet(props.receiptData[0].paidNow, 'EGP').parse()}</div>
                         </td>
                     </tr>
