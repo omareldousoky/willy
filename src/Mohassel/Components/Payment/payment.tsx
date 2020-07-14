@@ -46,6 +46,7 @@ interface Props {
   setReceiptData: (data) => void;
   print: (data) => void;
   refreshPayment: () => void;
+  setEarlyPaymentData: (data) => void;
   manualPaymentEditId: string;
 }
 interface State {
@@ -224,6 +225,7 @@ class Payment extends Component<Props, State>{
     this.setState({ loading: true })
     const res = await calculateEarlyPayment(this.props.applicationId);
     if (res.status === 'success') {
+      this.props.setEarlyPaymentData({remainingPrincipal: res.body.remainingPrincipal, earlyPaymentFees: res.body.earlyPaymentFees, requiredAmount: res.body.requiredAmount })
       this.setState({
         loading: false,
         remainingPrincipal: res.body.remainingPrincipal,

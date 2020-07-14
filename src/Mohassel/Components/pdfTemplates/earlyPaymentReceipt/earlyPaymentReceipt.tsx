@@ -4,7 +4,11 @@ import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 import './earlyPaymentReceipt.scss';
 
 const EarlyPaymentReceipt = (props) => {
-    console.log(props)
+    function getCode() {
+        if (props.data.product.beneficiaryType === "individual")
+            return props.data.customer.key;
+        else return props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.key;
+    }
     return (
         <div className="early-payment-receipt" dir="rtl" lang="ar">
             <table className="title">
@@ -22,9 +26,6 @@ const EarlyPaymentReceipt = (props) => {
                     <tr>
                         <td>إيصال إيداع نقدية</td>
                     </tr>
-                    <tr>
-                        <td>خزينه 1 فرع {props.branchDetails.name}</td>
-                    </tr>
                 </tbody>
             </table>
 
@@ -36,41 +37,32 @@ const EarlyPaymentReceipt = (props) => {
                         <td className="frame">{timeToArabicDate(0, false)}</td>
 
                     </tr>
-
                     <tr>
                         <th className="frame">رقم الإيصال</th>
-                        <td className="frame">010/00125012</td>
+                        <td className="frame">{numbersToArabic(props.receiptData[0].receiptNumber)}</td>
                     </tr>
                     <tr>
                         <th className="frame">إسم العميل</th>
                         <td className="frame">{props.receiptData[0].customerName}</td>
                     </tr>
                     <tr>
-                        <th className="frame">قيمة القسط</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].installmentAmount)}</td>
-                    </tr>
-
-                    <tr>
-                        <th className="frame">مسدد من قبل</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].previouslyPaid)}</td>
+                        <th className="frame">كود العميل</th>
+                        <td className="frame">{numbersToArabic(getCode())}</td>
                     </tr>
                     <tr>
-                        <th className="frame">السداد الحالي</th>
+                        <th className="frame">قيمة السداد المعجل</th>
+                        <td className="frame">{numbersToArabic(props.earlyPaymentData.remainingPrincipal)}</td>
+                    </tr>
+                    <tr>
+                        <th className="frame">قيمة مصروفات السداد المعجل</th>
+                        <td className="frame">{numbersToArabic(props.receiptData[0].paidNow - props.earlyPaymentData.remainingPrincipal)}</td>
+                    </tr>
+                    <tr>
+                        <th className="frame"> اجمالي السداد الحالي </th>
                         <td className="frame">{numbersToArabic(props.receiptData[0].paidNow)}
 					<div>{new Tafgeet(props.receiptData[0].paidNow, 'EGP').parse()}</div>
                         </td>
                     </tr>
-                    <tr>
-                        <th className="frame">الغرض</th>
-                        <td className="frame">سداد قسط رقم <div>    010/0016708/002/012</div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th className="frame">المتبقي</th>
-                        <td className="frame">{numbersToArabic(props.receiptData[0].remaining)}</td>
-                    </tr>
-
                     <tr style={{ height: "45px" }}>
                         <td>توقيع المستلم :</td>
                         <td>-----------------------------------------------</td>

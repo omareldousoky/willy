@@ -183,8 +183,9 @@ class LoanProfile extends Component<Props, State>{
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
-                return <Payment print={(data) => this.setState({ print: data.print, earlyPaymentData: { ...data } }, () => window.print())}
+                return <Payment print={(data) => this.setState({ print: data.print, earlyPaymentData: { ...this.state.earlyPaymentData, ...data } }, () => window.print())}
                     setReceiptData={(data)=> this.setState({receiptData: data})}
+                    setEarlyPaymentData={(data) => this.setState({ earlyPaymentData: data })}
                     application={this.state.application} installments={this.state.application.installmentsObject.installments}
                     currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} />
@@ -363,7 +364,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} />}
-                {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails}/>}
+                {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application}/>}
 
             </Container>
         )
