@@ -130,6 +130,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <th>تاريخ الآستحقاق</th>
                             <th> قيمة القسط</th>
                             <th>المصاريف</th>
+                            <th>اجمالي القيمة</th>
                             <th>قيمه مسدده</th>
                             <th>مصاريف مسدده</th>
                             <th>الحاله</th>
@@ -143,6 +144,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                                 <td>{numbersToArabic(installment.principalInstallment)}</td>
                                 <td>{numbersToArabic(installment.feesInstallment)}</td>
+                                <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td>{numbersToArabic(installment.principalPaid)}</td>
                                 <td>{numbersToArabic(installment.feesPaid)}</td>
                                 <td>{this.getStatus(installment.status)}</td>
@@ -159,10 +161,11 @@ class CustomerCardPDF extends Component<Props, State> {
                             <td></td>
                             <td>{numbersToArabic(this.props.data.installmentsObject.totalInstallments.principal)}</td>
                             <td>{numbersToArabic(this.props.data.installmentsObject.totalInstallments.feesSum)}</td>
+                            <td>{numbersToArabic(this.props.data.installmentsObject.totalInstallments.installmentSum)}</td>
                             <td>{numbersToArabic(this.getSum('principalPaid'))}</td>
                             <td>{numbersToArabic(this.getSum('feesPaid'))}</td>
                             <th>ايام التأخير</th>
-                            <td>{numbersToArabic(this.state.totalDaysLate)}</td>
+                            <td>{this.state.totalDaysLate > 0 ? numbersToArabic(this.state.totalDaysLate): numbersToArabic(0)}</td>
                             <th>ايام التبكير</th>
                             <td>{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                         </tr>

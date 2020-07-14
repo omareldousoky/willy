@@ -19,6 +19,8 @@ const LoanContract = (props) => {
   }
   function getIndexOfGuarantorInAr(index: number) {
     switch (index) {
+      case -2: return 'الأول';
+      case -1: return 'الثاني';
       case 0: return ' الثالث';
       case 1: return ' الرابع';
       case 2: return ' الخامس';
@@ -124,7 +126,7 @@ const LoanContract = (props) => {
                       <td>
                         <div>
                           <b>تليفون</b>
-                          <div style={{ display: 'inline-block', width: '80px' }}>{numbersToArabic(props.data.customer.mobilePhoneNumber)}</div>
+                          <div style={{ display: 'inline-block', width: '80px' }}>{numbersToArabic(props.data.customer.mobilePhoneNumber) + "-" + numbersToArabic(props.data.customer.homePhoneNumber) + "-" + numbersToArabic(props.data.customer.businessPhoneNumber)}</div>
                         </div>
                       </td>
                     </tr>
@@ -162,7 +164,7 @@ const LoanContract = (props) => {
                               <div>
                                 <b>تليفون</b>
                                 <span>
-                                  {guarantor.mobilePhoneNumber}
+                                  {numbersToArabic(guarantor.mobilePhoneNumber) + "-" + numbersToArabic(guarantor.homePhoneNumber) + "-" + numbersToArabic(guarantor.businessPhoneNumber)}
                                 </span>
                               </div>
                             </td>
@@ -223,13 +225,13 @@ const LoanContract = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}
+                  البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.applicationFee)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)}، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
                   سداده
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
-                  قيمة كل قسط {numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه فقط لا غير، تبدأ في
+                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} = (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
                   {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.customer.governorate} الكائن
                     {props.branchDetails.address} أو
@@ -582,7 +584,7 @@ const LoanContract = (props) => {
                       return (
                         <tr key={index}>
                           <td>
-                            <div>الضامن {numbersToArabic(index+1)}/</div>
+                            <div>الضامن {getIndexOfGuarantorInAr(index-2)}/</div>
                           </td>
                           <td style={{ width: "100px" }}></td>
                         </tr>

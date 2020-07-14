@@ -99,7 +99,7 @@ const LoanContractForGroup = (props) => {
                           <td>
                             <div>
                               <b>تليفون</b>
-                              <div style={{ display: 'inline-block', width: '80px' }}>{individualInGroup.customer.mobilePhoneNumber}</div>
+                              <div style={{ display: 'inline-block', width: '80px' }}>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + "-" + numbersToArabic(individualInGroup.customer.homePhoneNumber) + "-" + numbersToArabic(individualInGroup.customer.businessPhoneNumber)}</div>
                             </div>
                           </td>
                         </tr>
@@ -191,10 +191,10 @@ const LoanContractForGroup = (props) => {
                   البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.applicationFee * props.data.group.individualsInGroup.length)} جنيه بواقع {numbersToArabic(props.data.product.applicationFee)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه فقط لاغير، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} ، يتم
                   سداده
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
-                  قيمة كل قسط {numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه فقط لا غير، تبدأ في
+                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} = (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} جنيه فقط لا غير، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
                   {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن
                     {props.branchDetails.address} أو

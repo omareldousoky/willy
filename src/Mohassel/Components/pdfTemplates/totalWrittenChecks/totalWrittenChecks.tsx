@@ -29,9 +29,9 @@ const TotalWrittenChecks = (props) => {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div>الاسم</div>
+                                        <div>الاسم:</div>
                                     </td>
-                                    <td style={{ width: "100px" }}></td>
+                                    <td style={{ width: "250px" }}></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -58,9 +58,9 @@ const TotalWrittenChecks = (props) => {
                                         </tr>
                                         <tr>
                                             <td>
-                                                <div>الاسم</div>
+                                                <div>الاسم:</div>
                                             </td>
-                                            <td style={{ width: "100px" }}></td>
+                                            <td style={{ width: "250px" }}></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -91,9 +91,9 @@ const TotalWrittenChecks = (props) => {
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div>الاسم</div>
+                                            <div>الاسم:</div>
                                         </td>
-                                        <td style={{ width: "100px" }}></td>
+                                        <td style={{ width: "250px" }}></td>
                                     </tr>
                                 </tbody>
                             </table>
