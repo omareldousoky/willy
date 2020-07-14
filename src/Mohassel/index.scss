@@ -54,13 +54,13 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   border: #e5e5e5 dashed 1px;
 }
 
-.delete-document {
+.document-actions {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
   top: 0;
   left: 10px;
-  background: red;
-  color: white;
-  padding: 5px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
 }
