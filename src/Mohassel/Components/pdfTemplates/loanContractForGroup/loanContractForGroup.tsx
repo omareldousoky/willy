@@ -221,12 +221,8 @@ const LoanContractForGroup = (props) => {
                   القسط في اليوم التالي لتاريخ الأستحقاق للقسط وابتداء من اليوم الذي يليه كالتالي :-
 							</div>
                   <div>يتم تحصيل ٢ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ جنيها</div>
-                  <div>يتم تحصيل ٣ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ جنيها حتي
-                  ٢٠٠٠
-								جنيها</div>
-                <div>يتم تحصيل ٤ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي
-                  ٢٥٠٠
-								جنيها</div>
+                  <div> يتم تحصيل ٣ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ جنيها حتي أقل من ٢٠٠٠ جنيها</div>
+                  <div>يتم تحصيل ٤ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي أقل من ٢٥٠٠ جنيها</div>
                   <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٢٥٠٠ جنيها</div>
                 </section>
 
@@ -347,6 +343,12 @@ const LoanContractForGroup = (props) => {
                 للشركة الرجوع علي العميل والضامنين في أي وقت من الاوقات بقيمة مالم يتم سداده لخزينة فرع
                 الشركة ودون أدني
 							اعتراض مننا علي ذلك وهذا اقرار منا بذلك ولا يحق لنا الرجوع فيه حاليا او مستقبلا.</div>
+                <div>
+                  ونقر بأن الغرض من التمويل هو تطوير وزيادة رأس مال النشاط، و اننا غير متضررين من الظروف الحالية والتي لها تأثير عام على جميع الأنشطة الإقتصادية والمشروعات وقد ينتج عن هذه الأحداث ركود في حركات البيع و الشراء
+              </div>
+                <div>
+                  لذا و بناءً على رغبتنا جميعاً نرفض عمل أي جدولة للتمويل أو التأجيل للاقساط أو الحصول على فترة سماح لأي اقساط مستحقة طوال فترة التمويل وبأننا ملتزمون جميعاً بسداد الأقساط طبقاً لجدول المسلم لي من الشركة
+              </div>
                 <div>تحريرا في {timeToArabicDate(0, false)}</div>
 
                 <table>
@@ -412,15 +414,15 @@ const LoanContractForGroup = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                  {props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                    {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                       return (
-                    <tr key={index}>
-                      <td>{numbersToArabic(index + 1)}</td>
-                      <td>{individualInGroup.customer.customerName}</td>
-                      <td>{numbersToArabic(individualInGroup.customer.key)}</td>
-                    </tr>
+                        <tr key={index}>
+                          <td>{numbersToArabic(index + 1)}</td>
+                          <td>{individualInGroup.customer.customerName}</td>
+                          <td>{numbersToArabic(individualInGroup.customer.key)}</td>
+                        </tr>
                       )
-                      })}
+                    })}
                   </tbody>
                 </table>
 
