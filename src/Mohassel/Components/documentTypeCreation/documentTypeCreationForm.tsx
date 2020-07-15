@@ -98,9 +98,6 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                                 type="number"
                                 name="pages"
                                 value={this.props.values.pages}
-                                onFocus={() => {
-
-                                }}
                                 onChange={this.props.handleChange}
                                 onBlur={this.props.handleBlur}
                                 isInvalid={(this.props.errors.pages && this.props.touched.pages) as boolean}
