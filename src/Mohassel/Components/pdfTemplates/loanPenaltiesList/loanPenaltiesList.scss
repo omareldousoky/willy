@@ -1,0 +1,51 @@
+@media screen,
+print {
+    .loan-penalties-list {
+        font-size: 10px;
+        font-weight: bold;
+    	page-break-after: always;
+
+        & .tbodyborder {
+            box-shadow: 0 0 0 1px black;
+        }
+    
+        & .headtitle {
+            font-size: 12px;
+            font-weight: bolder;
+            text-align: center;
+        }
+    
+        & table {
+            width: 100%;
+        }
+        & td {
+            text-align: right;
+        }
+    
+        & thead.report-header {
+            display: table-header-group;
+        }
+    
+        & .horizontal-line {
+            border: 0.5px solid black;
+        }
+    
+        & .gray {
+            background-color: lightgrey;
+            -webkit-print-color-adjust: exact;
+            text-align: center;
+        }
+    
+        & .border-line {
+            border-bottom: 1px solid black;
+        }
+    }
+}
+
+@media screen {
+    .loan-penalties-list {
+        max-width: 624px;
+        font-size: 8px;
+        display: none;
+    }
+}
