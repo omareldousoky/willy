@@ -196,7 +196,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <tr key={index}>
                                         <td>{numbersToArabic(guarantor.key)}</td>
                                         <td>{guarantor.customerName}</td>
-                                        <td>{guarantor.district}</td>
+                                        <td>{guarantor.geographicalDistribution}</td>
                                         <td>{guarantor.customerHomeAddress}</td>
                                         <td>{numbersToArabic(guarantor.mobilePhoneNumber) + '-' + numbersToArabic(guarantor.businessPhoneNumber) + '-' + numbersToArabic(guarantor.homePhoneNumber)}</td>
                                     </tr>
@@ -208,7 +208,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <tr key={index}>
                                         <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                         <td>{individualInGroup.customer.customerName}</td>
-                                        <td>{individualInGroup.customer.district}</td>
+                                        <td>{individualInGroup.customer.geographicalDistribution}</td>
                                         <td>{individualInGroup.customer.customerHomeAddress}</td>
                                         <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
                                     </tr>
