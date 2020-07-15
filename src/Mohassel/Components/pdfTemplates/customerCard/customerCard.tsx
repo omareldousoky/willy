@@ -33,7 +33,7 @@ class CustomerCardPDF extends Component<Props, State> {
                 } else totalDaysEarly = totalDaysEarly + number;
             } else {
                 const number = Math.round((new Date().valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
-                totalDaysLate = totalDaysLate + number;
+                if(number > 0) totalDaysLate = totalDaysLate + number;
             }
         });
         this.setState({ totalDaysEarly, totalDaysLate })
