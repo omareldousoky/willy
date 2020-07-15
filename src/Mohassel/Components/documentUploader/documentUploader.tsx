@@ -5,6 +5,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { download } from '../../Services/utils';
+import ability from '../../config/ability';
 interface Document {
   key: string;
   url: string | ArrayBuffer | null;
@@ -226,14 +227,13 @@ class DocumentUploader extends Component<Props, State> {
   renderPhotoByName(key: number, name: string) {
     return (
       <Card.Body key={key} className="document-upload-container" style={{ cursor: this.state.imagesFiles[key].valid && this.props.documentType.active ? "pointer" : 'not-allowed' }}>
-        {(this.props.documentType.active && this.state.imagesFiles[key].valid) && !this.props.view && <div data-qc="document-actions" className="document-actions" >
-          <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img alt="delete" src={require('../../Assets/deleteIcon.svg')} /></span>
-          <span className="fa icon" onClick={() => { this.downloadPhoto(this.state.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>
+        {(this.props.documentType.active && this.state.imagesFiles[key].valid) && <div data-qc="document-actions" className="document-actions" >
+          {!this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img alt="delete" src={require('../../Assets/deleteIcon.svg')} /></span>}
+          {((!this.props.edit && this.props.view) || ((ability.can('addingDocuments', 'application') && this.props.documentType.type !== 'customer'))) && <span className="fa icon" onClick={() => { this.downloadPhoto(this.state.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
         </div>}
         {!this.state.imagesFiles[key]?.valid && <div className="invalid-document">
           <img src={require('../../Assets/deactivateIcon.svg')} />
-        </div>
-        }
+        </div>}
         <img className={this.state.imagesFiles[key]?.valid ? "uploaded-image" : "uploaded-image invalid-image"} src={this.state.imagesFiles[key]?.url as string} key={key} alt="" />
       </Card.Body>
     )

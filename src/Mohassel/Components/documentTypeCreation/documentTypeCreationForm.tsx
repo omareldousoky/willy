@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 import { DocumentType } from '../../Services/interfaces';
-import { render } from 'react-dom';
 
 interface Props {
     values: DocumentType;
@@ -36,6 +35,8 @@ class DocumentTypeCreationForm extends Component<Props, State> {
 
     static getDerivedStateFromProps(props, state) {
         if (props.edit && props.values.name !== "" && state.key !== "updated") {
+            if (props.edit)
+                props.setFieldValue('currPage', props.values.pages)
             return {
                 updatable: props.values.updatable ? true : false,
                 active: props.values.active ? true : false,
@@ -98,8 +99,7 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                                 name="pages"
                                 value={this.props.values.pages}
                                 onFocus={() => {
-                                    if (this.props.edit)
-                                        this.props.setFieldValue('currPage', this.props.values.pages)
+
                                 }}
                                 onChange={this.props.handleChange}
                                 onBlur={this.props.handleBlur}
