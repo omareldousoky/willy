@@ -2,21 +2,22 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import "./Wizard.scss";
 interface Step {
-    description: string;
-    selected: boolean;
-    completed: boolean;
+  description: string;
+  selected: boolean;
+  completed: boolean;
 }
-interface Props{
-    currentStepNumber: number;
-    stepsDescription: string[];
-    
+interface Props {
+  currentStepNumber: number;
+  stepsDescription: string[];
+  edit?: boolean;
+  onClick?: any;
 };
-interface State{
- steps: Step[];
+interface State {
+  steps: Step[];
 }
-export default class Wizard extends Component  <Props , State>{
+export default class Wizard extends Component<Props, State>{
   constructor(props: Props) {
-     super(props);
+    super(props);
 
     this.state = {
       steps: []
@@ -24,21 +25,26 @@ export default class Wizard extends Component  <Props , State>{
   }
   resetStateStepsSelection(steps: Step[]) {
     return steps.forEach(step => {
-      step.selected =false;
+      step.selected = false;
     });
 
   }
-
+  handleClick(index) {
+    console.log(this.props)
+    if (this.props.edit) {
+      this.props.onClick(index);
+    }
+  }
   componentDidMount() {
     const { stepsDescription } = this.props;
 
     const stepsState = stepsDescription.map((stepDescription, index) => {
       const stepObj: Step = {
-        description : stepDescription,
-        selected : index === 0 ? true : false,
-        completed : false,
+        description: stepDescription,
+        selected: index === 0 ? true : false,
+        completed: false,
       };
-     
+
       return stepObj;
     });
 
@@ -46,60 +52,60 @@ export default class Wizard extends Component  <Props , State>{
       steps: stepsState
     });
   }
-  
 
-  componentDidUpdate (previousProps){
-    if(previousProps.currentStepNumber !== this.props.currentStepNumber){
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.currentStepNumber !== this.props.currentStepNumber) {
       const index = this.props.currentStepNumber;
-    const stepsState = this.state.steps;
-    this.resetStateStepsSelection(stepsState);
-    stepsState[index].selected =true;
-    
-     if(index >0 && index< this.state.steps.length){
-       
-          stepsState[index-1].completed =true;
-          stepsState[index-1].selected = false;
-          
-     }
-     this.setState({steps:stepsState});
+      const stepsState = this.state.steps;
+      this.resetStateStepsSelection(stepsState);
+      stepsState[index].selected = true;
+
+      if (index > 0 && index < this.state.steps.length) {
+
+        stepsState[index - 1].completed = true;
+        stepsState[index - 1].selected = false;
+
+      }
+      this.setState({ steps: stepsState });
     }
   }
 
 
-   render() {
+  render() {
     const { steps } = this.state;
     const renderedSteps = steps.map((step: Step, index) => {
       return (
-        <div className="step-wrapper" key={index}>
+        <div className={this.props.edit ? "step-wrapper steps-interactive" : "step-wrapper"} key={index} onClick={() => this.handleClick(index)}>
           <div
-            className={`step-description ${(step.completed||step.selected) && "step-visited"}`} 
+            className={`step-description ${(step.completed || step.selected || this.props.edit) && "step-visited"}`}
           >
             {step.description}
           </div>
-         
-            {
-              (step.completed && step.selected === false)&& <div className={"selected-circile"}></div>
-            }
-           { step.selected && <>
+
+          {
+            (step.completed && step.selected === false || this.props.edit) && <div className={"selected-circile"}></div>
+          }
+          {step.selected && <>
             <div className={"outer"}>
-            <div className={ "inner" } > </div> </div>
-             </>
-           }
-           { step.completed && 
-             
+              <div className={"inner"} > </div> </div>
+          </>
+          }
+          {(step.completed || this.props.edit && index < steps.length - 1) &&
+
             <div className={"divider-line"} > </div>
-            
-           }
+
+          }
         </div>
       );
     });
 
     return (
       <div className="stepper-container-vertical">
-       <div className={`stepper-wrapper-vertical`}>
-      {renderedSteps}
+        <div className={`stepper-wrapper-vertical`}>
+          {renderedSteps}
+        </div>
       </div>
-    </div>
     );
   }
 }
