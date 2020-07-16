@@ -613,11 +613,8 @@
     "noGuarantors":"لا يوجد ضمان",
     "daily": "يومي",
     "chooseMainRole": " إختيار الدور رئيسي",
-    "chooseMainBranch": "إختر الفرع الرئيسي",
-    "chooseManager": "إختر المدير",
-   "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
    "userStep3": "٣.بيانات أخرى",
     "fifth": "الخامس",
     "sixth": "السادس",
-    "noGuarantors":"لا يوجد ضمان"
+    "seperationReason": "سبب فصل العميل"
 }

@@ -11,6 +11,7 @@ import { Customer } from '../LoanApplication/loanApplicationCreation';
 import BackButton from '../BackButton/back-button';
 import Button from 'react-bootstrap/Button';
 import { removeMemberFromGroup } from '../../Services/APIs/loanApplication/removeMemberFromGroup';
+import { getSeperationReasons } from '../../Services/APIs/configApis/config';
 interface Member {
     type: string;
     amount: number;
@@ -21,6 +22,8 @@ interface State {
     application: any;
     selectedMember: Member;
     newGroupLeader: Member;
+    reason: string;
+    reasons: any;
 }
 interface Props {
     history: any;
@@ -45,12 +48,15 @@ class GroupMemberSeperation extends Component<Props, State>{
                     _id: ''
                 }
             },
+            reason: '',
+            reasons: [],
             loading: false,
         };
     }
     componentDidMount() {
         const appId = this.props.history.location.state.id;
         this.getAppByID(appId)
+        this.getReasons()
     }
     async getAppByID(id) {
         this.setState({ loading: true });
@@ -58,6 +64,19 @@ class GroupMemberSeperation extends Component<Props, State>{
         if (application.status === 'success') {
             this.setState({
                 application: application.body,
+                loading: false
+            })
+        } else {
+            Swal.fire('', 'fetch error', 'error');
+            this.setState({ loading: false });
+        }
+    }
+    async getReasons() {
+        this.setState({ loading: true });
+        const application = await getSeperationReasons();
+        if (application.status === 'success') {
+            this.setState({
+                reasons: application.body.data,
                 loading: false
             })
         } else {
@@ -92,7 +111,8 @@ class GroupMemberSeperation extends Component<Props, State>{
         this.setState({ loading: true });
         const obj = {
             customerId: this.state.selectedMember.customer._id,
-            newLeader: this.state.newGroupLeader.customer._id
+            newLeader: this.state.newGroupLeader.customer._id,
+            separationReason: this.state.reason
         }
         const res = await removeMemberFromGroup(obj, this.state.application._id);
         if (res.status === 'success') {
@@ -108,7 +128,7 @@ class GroupMemberSeperation extends Component<Props, State>{
             }).then((result) => {
                 if (result.value) {
                     this.props.history.push('/track-loan-applications/loan-profile', { id: res.body.id })
-                }else if(result.dismiss){
+                } else if (result.dismiss) {
                     this.props.history.push('/track-loan-applications/loan-profile', { id: this.state.application._id })
                 }
             })
@@ -161,8 +181,24 @@ class GroupMemberSeperation extends Component<Props, State>{
                                     </Form.Control>
                                 </Form.Group>
                             }
+                            <Form.Group controlId="reason" style={{ margin: '10px auto', width: '60%' }}>
+                                <Form.Label>{local.seperationReason}</Form.Label>
+                                <Form.Control as="select"
+                                    name="reason"
+                                    data-qc="reason"
+                                    value={this.state.reason}
+                                    onChange={(event) => {
+                                        this.setState({ reason: event.currentTarget.value })
+                                    }}
+                                >
+                                    <option value="" disabled></option>
+                                    {this.state.reasons.filter((reason) => reason.activated).map((reason) =>
+                                        <option key={reason.id} value={reason.id}>{reason.name}</option>
+                                    )}
+                                </Form.Control>
+                            </Form.Group>
                             <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '50px 0px' }}>
-                                <Button className={'btn-submit-next'} disabled={this.state.newGroupLeader.customer._id?.length === 0} style={{ float: 'left', width: '20%' }} onClick={() => this.submit()} data-qc="submit">{local.submit}</Button>
+                                <Button className={'btn-submit-next'} disabled={this.state.newGroupLeader.customer._id?.length === 0 || this.state.reason.length === 0 } style={{ float: 'left', width: '20%' }} onClick={() => this.submit()} data-qc="submit">{local.submit}</Button>
                             </div>
                         </Card>
                     </div>}

@@ -41,3 +41,13 @@ export const getRejectionReasons = async () => {
         return { status: "error", error: error.response.data }
     }
 }
+export const getSeperationReasons = async () => {
+    const url = process.env.REACT_APP_BASE_URL + '/config/separation-reasons';
+    try {
+        const res = await axios.get(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
