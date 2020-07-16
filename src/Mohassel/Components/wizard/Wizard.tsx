@@ -30,7 +30,6 @@ export default class Wizard extends Component<Props, State>{
 
   }
   handleClick(index) {
-    console.log(this.props)
     if (this.props.edit) {
       this.props.onClick(index);
     }
