@@ -87,7 +87,7 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
-                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
+                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative : values.representative._id))}
                                 onBlur={handleBlur}
                                 onChange={(id) => setFieldValue("representative", id)}
                                 getOptionLabel={(option) => option.name}
