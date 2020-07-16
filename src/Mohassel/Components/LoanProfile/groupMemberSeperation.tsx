@@ -198,7 +198,7 @@ class GroupMemberSeperation extends Component<Props, State>{
                                 </Form.Control>
                             </Form.Group>
                             <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '50px 0px' }}>
-                                <Button className={'btn-submit-next'} disabled={this.state.newGroupLeader.customer._id?.length === 0 || this.state.reason.length === 0 } style={{ float: 'left', width: '20%' }} onClick={() => this.submit()} data-qc="submit">{local.submit}</Button>
+                                <Button className={'btn-submit-next'} disabled={ this.state.newGroupLeader.customer._id?.length === 0 || this.state.reason.length === 0 } style={{ float: 'left', width: '20%' }} onClick={() => this.submit()} data-qc="submit">{local.submit}</Button>
                             </div>
                         </Card>
                     </div>}
