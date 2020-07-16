@@ -16,11 +16,9 @@ import './styles.scss';
 import { setToken } from '../../../Shared/token';
 import { connect } from 'react-redux';
 import { Auth } from '../../redux/auth/types'
-import { getAuthData } from '../../redux/auth/actions';
 interface Props {
   history: any;
   auth: Auth;
-  getAuthData: typeof getAuthData;
 }
 interface Branch {
   _id: string;
@@ -59,18 +57,12 @@ class NavBar extends Component<Props, State> {
       } else return { selectedBranch: branches[0], branches: branches }
     } else return null;
   }
-  componentDidUpdate(prevProps: Props, prevState: State){
-    if(this.state.openBranchList === prevState.openBranchList && this.state.selectedBranch._id !== prevState.selectedBranch._id ){
-      this.goToBranch(this.state.selectedBranch);
-    }
-  }
   async goToBranch(branch: Branch) {
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
       setToken(res.body.token);
-      // this.props.getAuthData();
       this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
@@ -192,16 +184,10 @@ class NavBar extends Component<Props, State> {
     )
   }
 }
-const mapMethodsToProps = dispatch => {
-  return {
-      getAuthData: () => dispatch(getAuthData())
-  };
-};
 const mapStateToProps = state => {
-  console.log(state)
   return {
     auth: state.auth,
   };
 };
 
-export default connect(mapStateToProps, mapMethodsToProps)(withRouter(NavBar));
+export default connect(mapStateToProps)(withRouter(NavBar));
