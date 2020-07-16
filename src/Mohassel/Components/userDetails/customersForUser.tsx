@@ -43,7 +43,7 @@ class CustomersForUser extends Component<Props, State> {
     super(props);
     this.state = {
       customers: [],
-      size: 5,
+      size: 10,
       from: 0,
       selectedCustomers: [],
       totalCustomers: 0,

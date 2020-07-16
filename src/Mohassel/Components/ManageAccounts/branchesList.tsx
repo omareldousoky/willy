@@ -28,11 +28,11 @@ interface Props {
 }
 
 class BranchesList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       manageAccountTabs: [],
     }
@@ -44,19 +44,22 @@ class BranchesList extends Component<Props, State> {
       },
       {
         title: local.oneBranch,
-        key: "branch",
-        render: data => data.name
+        key: "name",
+        sortable: true,
+        render: data =>  data.name
       },
       {
         title: local.governorate,
         key: "governorate",
-        render: data => data.governorate
+        sortable: true,
+        render: data =>  data.governorate
 
       },
       {
         title: local.creationDate,
-        key: "creationDate",
-        render: data => data.created ? getDateAndTime(data.created.at) : ''
+        key: "createdAt",
+        sortable: true,
+        render: data => data.created? getDateAndTime(data.created.at) : ''
       },
       {
         title: '',
@@ -102,14 +105,17 @@ class BranchesList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo']}
-              dropDownKeys={['name', 'code']}
+              searchKeys={['keyword', 'dateFromTo']} 
+              dropDownKeys={['name', 'code']} 
               searchPlaceholder={local.searchByBranchNameOrCode}
               url="branch"
-              from={this.state.from}
-              size={this.state.size} />
+             from={this.state.from} 
+             size={this.state.size} />
             {this.props.data &&
               <DynamicTable
+                url="branch"
+                from={this.state.from} 
+                size={this.state.size}
                 totalCount={this.props.totalCount}
                 mappers={this.mappers}
                 pagination={true}
