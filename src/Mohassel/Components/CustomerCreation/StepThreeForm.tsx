@@ -218,7 +218,6 @@ export const StepThreeForm = (props: any) => {
                                     value={values.allowMultiGuarantee}
                                     label={local.allowMultiGuarantee}
                                     onChange={handleChange}
-                                    disabled
                                 />
                             </Form.Group>
                         </Col>
