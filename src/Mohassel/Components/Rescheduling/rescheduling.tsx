@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import PostponeInstallments from './postponeInstallments';
 import { timeToDateyyymmdd } from '../../Services/utils';
+import TraditionalLoanRescheduling from './traditionalLoanRescheduling';
 
 interface Props {
     test: boolean;
@@ -54,13 +55,15 @@ class Rescheduling extends Component<Props, State>{
     }
     handleOptionChange = (changeEvent) => {
         this.setState({
-          selectedOption: changeEvent.target.value
+            selectedOption: changeEvent.target.value
         });
     }
-    renderContent(){
-        switch (this.state.selectedOption){
+    renderContent() {
+        switch (this.state.selectedOption) {
             case "postponeInstallment":
                 return <PostponeInstallments application={this.props.application} test={this.props.test} />
+            case "traditionalRescheduling":
+                return <TraditionalLoanRescheduling application={this.props.application} test={this.props.test} />
             default:
                 return <PostponeInstallments application={this.props.application} test={this.props.test} />
         }
@@ -69,21 +72,21 @@ class Rescheduling extends Component<Props, State>{
         return (
             <>
                 <div className="d-flex justify-content-center" style={{ marginBottom: 20 }}>
-                        <label className='radio-item'>
-                            <input type="radio" value="postponeInstallment" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'postponeInstallment'} />
-                            <span className="checkmark"></span>
-                            {local.postponeInstallments}
-                        </label>
-                        <label className='radio-item'>
-                            <input type="radio" value="traditionalRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'traditionalRescheduling'} disabled />
-                            <span className="checkmark"></span>
-                            {local.traditionalRescheduling}
-                        </label>
-                        <label className='radio-item'>
-                            <input type="radio" value="freeRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'freeRescheduling'} disabled />
-                            <span className="checkmark"></span>
-                            {local.freeRescheduling}
-                        </label>
+                    <label className='radio-item'>
+                        <input type="radio" value="postponeInstallment" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'postponeInstallment'} />
+                        <span className="checkmark"></span>
+                        {local.postponeInstallments}
+                    </label>
+                    <label className='radio-item'>
+                        <input type="radio" value="traditionalRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'traditionalRescheduling'} />
+                        <span className="checkmark"></span>
+                        {local.traditionalRescheduling}
+                    </label>
+                    <label className='radio-item'>
+                        <input type="radio" value="freeRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'freeRescheduling'} disabled />
+                        <span className="checkmark"></span>
+                        {local.freeRescheduling}
+                    </label>
                 </div>
                 {this.renderContent()}
             </>

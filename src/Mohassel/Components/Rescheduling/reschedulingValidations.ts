@@ -20,3 +20,6 @@ export const reschedulingValidation = Yup.object().shape({
         otherwise: Yup.number().notRequired()
     })
 })
+export const traditionalReschedulingValidation = Yup.object().shape({
+    noOfInstallments: Yup.number().integer('Must be int').min(1, 'Must be 1 or more').required(local.required),
+})
