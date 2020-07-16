@@ -184,6 +184,7 @@ class NavBar extends Component<Props, State> {
     )
   }
 }
+
 const mapStateToProps = state => {
   return {
     auth: state.auth,
