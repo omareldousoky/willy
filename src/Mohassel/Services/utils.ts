@@ -239,13 +239,6 @@ export const dayToArabic = (index: number): string => {
   const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
 }
-export function arabicGender(gender: string) {
-  switch (gender) {
-    case 'male': return local.male;
-    case 'female': return local.female;
-    default: return '';
-  }
-}
 
 export const customFilterOption = (option, rawInput) => {
   if (option.label) {
@@ -256,6 +249,15 @@ export const customFilterOption = (option, rawInput) => {
     );
   }
 };
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return '';
+  }
+}
+
+
 export const download = (url, fileName: string): void => {
   const a = document.createElement("a");
   a.href = url;
