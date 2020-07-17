@@ -12,9 +12,6 @@ code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.form-control {
-  padding: 0 0.75rem !important;
-}
 .pac-container.pac-logo.hdpi, .pac-container.pac-logo {
   z-index: 1100;
 }
@@ -44,22 +41,23 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   flex-direction: column;
   margin: 20px;
   flex: 1;
-  background-color: white;
+  background-color: #ffffff;
   text-align: center;
-  min-height: 300px;
-  min-width: 10rem;
+  min-height: 20rem;
+  min-width: 20rem;
+  max-height: 20rem;
   justify-content: center;
   align-items: center;
   border: #e5e5e5 dashed 1px;
 }
 
-.delete-document {
+.document-actions {
   position: absolute;
-  top: 10px;
+  display: flex;
+  justify-content: space-between;
+  top: 0;
   left: 10px;
-  background: red;
-  color: white;
-  padding: 5px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -248,7 +246,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 }
 .data-group{
   padding: 20px 10px;
-
 }
 
 .data-label{
@@ -291,6 +288,14 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     border-radius: 6px;
     cursor: pointer;
   }
+  & .cancel {
+    background: #d51b1b;
+    color: #fff;
+    padding: 5px 40px;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 }
 .swal-table {
   width: 100%;
@@ -301,4 +306,27 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   & td {
     background-color: #f7fff2;
   }
+}
+.uploaded-image {
+  padding-top: 35px;
+   width: 100%;
+   height: 100%;
+}
+.invalid-image{
+
+  opacity: 0.7;
+
+}
+.invalid-document {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.sort-icons {
+  vertical-align: middle;
+  margin-right: 5px;
 }

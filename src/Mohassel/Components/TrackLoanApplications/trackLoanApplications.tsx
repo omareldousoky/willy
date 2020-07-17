@@ -51,12 +51,12 @@ interface Props {
   branchId?: string;
 };
 class TrackLoanApplications extends Component<Props, State>{
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
       print: false,
-      size: 5,
+      size: 10,
       from: 0,
       branchDetails: {}
     }
@@ -69,11 +69,12 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.applicationCode,
         key: "applicationCode",
-        render: data => data.application.applicationCode
+        render: data => data.application.applicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
@@ -94,18 +95,20 @@ class TrackLoanApplications extends Component<Props, State>{
       },
       {
         title: local.loanCreationDate,
-        key: "loanCreationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.loanStatus,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}></img>
       },
     ]
   }
@@ -160,13 +163,16 @@ class TrackLoanApplications extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
-            dropDownKeys={['name', 'nationalId', 'code']} 
+            dropDownKeys={['name', 'nationalId', 'key']} 
             url="application" 
             from={this.state.from} 
             size={this.state.size} 
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              url="application" 
+              from={this.state.from} 
+              size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}

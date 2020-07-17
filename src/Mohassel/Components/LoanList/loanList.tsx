@@ -13,6 +13,7 @@ interface Props {
   history: Array<any>;
   data: any;
   branchId: string;
+  fromBranch?: boolean;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
@@ -25,11 +26,11 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
     }
     this.mappers = [
@@ -41,11 +42,12 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanCode,
         key: "loanCode",
-        render: data => data.application.loanApplicationCode
+        render: data => data.application.loanApplicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -72,18 +74,20 @@ class LoanList extends Component<Props, State> {
       },
       {
         title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        key: "issueDate",
+        sortable: true,
         render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
         title: '',
         key: "action",
-        render: data => <span style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })} className="fa fa-eye icon"></span>
+        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
       },
     ]
   }
@@ -105,7 +109,16 @@ class LoanList extends Component<Props, State> {
   }
 
   async getLoans() {
-    this.props.search({ ...this.props.searchFilters ,size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+     let query = {};
+     if(this.props.fromBranch){
+       query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
+     } else {
+      query = {size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" , ...this.props.searchFilters}
+     }
+    this.props.search(query);
+  }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
   render() {
     return (
@@ -122,7 +135,7 @@ class LoanList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
-            dropDownKeys={['name', 'nationalId', 'code']}
+            dropDownKeys={['name', 'nationalId', 'key']}
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}
              url="loan" 
@@ -130,6 +143,9 @@ class LoanList extends Component<Props, State> {
              size={this.state.size} 
              hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
+              url="loan" 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}

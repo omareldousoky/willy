@@ -86,7 +86,7 @@ class LoanCreation extends Component<Props, State> {
     const { id, type } = this.props.location.state;
     this.setState({ id, type, loading: true })
     if (type === "create") {
-      const res = await testCalculateApplication(id);
+      const res = await testCalculateApplication(id, new Date(this.state.loanCreationDate).valueOf());
       if (res.status === "success") {
         this.setState({ installmentsData: res.body })
       } else console.log(res)
@@ -142,9 +142,30 @@ class LoanCreation extends Component<Props, State> {
       }
     }
   }
+  getCurrency() {
+    switch(this.state.customerData.currency) {
+      case 'egp': return local.egp;
+      default: return '';
+    }
+  }
+  getPeriod() {
+    switch(this.state.customerData.periodType) {
+      case 'days': return local.day;
+      case 'months': return local.month;
+      default: return '';
+    }
+  }
   getStatus(status: string){
     if(status === "created") return local.created;
     else return local.approved;
+  }
+  async handleCreationDateChange(creationDate: string) {
+    const { id } = this.props.location.state;
+    this.setState({ loading: true });
+    const res = await testCalculateApplication(id, new Date(creationDate).valueOf());
+    if (res.status === "success") {
+      this.setState({ installmentsData: res.body, loading: false })
+    } else this.setState({ loading: false });
   }
   render() {
     return (
@@ -171,10 +192,10 @@ class LoanCreation extends Component<Props, State> {
               <td>{beneficiaryType(this.state.beneficiaryType)}</td>
               <td>{this.state.beneficiaryType === 'group' ? this.state.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer?.customerName:this.state.customerData.customerName}</td>
               <td>{this.state.customerData.principal}</td>
-              <td>{this.state.customerData.currency}</td>
+              <td>{this.getCurrency()}</td>
               <td>{this.state.customerData.noOfInstallments}</td>
               <td>{this.state.customerData.periodLength}</td>
-              <td>{this.state.customerData.periodType}</td>
+              <td>{this.getPeriod()}</td>
               <td>{this.state.customerData.gracePeriod}</td>
               <td>{this.getStatus(this.state.customerData.status)}</td>
               <td>{this.state.customerData.productName}</td>
@@ -225,7 +246,10 @@ class LoanCreation extends Component<Props, State> {
                       name="loanCreationDate"
                       data-qc="loanCreationDate"
                       value={formikProps.values.loanCreationDate}
-                      onChange={formikProps.handleChange}
+                      onChange={(e)=> {
+                        formikProps.setFieldValue('loanCreationDate', e.currentTarget.value);
+                        this.handleCreationDateChange(e.currentTarget.value);
+                      }}
                       onBlur={formikProps.handleBlur}
                       isInvalid={Boolean(formikProps.errors.loanCreationDate) && Boolean(formikProps.touched.loanCreationDate)}
                     />

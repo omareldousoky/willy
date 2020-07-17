@@ -27,18 +27,24 @@ interface State {
 }
 
 class RoleUsers extends Component<Props, State> {
-    mappers: { title: string; key: string; render: (data: any) => void }[]
+    mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
     constructor(props: Props) {
         super(props);
         this.state = {
-            size: 5,
+            size: 10,
             from: 0,
         }
         this.mappers = [
             {
                 title: local.username,
                 key: "username",
+                sortable: true,
                 render: data => data.username
+            },
+            {
+              title: local.code,
+              key: "userCode",
+              render: data => data.loanOfficerKey
             },
             {
                 title: local.name,
@@ -58,14 +64,15 @@ class RoleUsers extends Component<Props, State> {
             {
                 title: local.creationDate,
                 key: "creationDate",
+                sortable: true,
                 render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
             },
             {
                 title: '',
                 key: "actions",
                 render: data => <>
-                    <span className='fa fa-eye icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }}></span>
-                    <Can I="createUser" a="user"><span className='fa fa-pencil-alt icon' onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }}></span></Can>
+                    <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }}></img>
+                    <Can I="createUser" a="user"><img style={{cursor: 'pointer'}} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }}></img></Can>
                 </>
             },
         ]
@@ -94,13 +101,16 @@ class RoleUsers extends Component<Props, State> {
                         <hr className="dashed-line" />
                         <Search
                             searchKeys={['keyword', 'dateFromTo']}
-                            dropDownKeys={['name', 'nationalId']}
+                            dropDownKeys={['name', 'nationalId', 'key']}
                             searchPlaceholder={local.searchByNameOrNationalId}
                             url="user"
                             from={this.state.from}
                             size={this.state.size}
                             roleId={this.props._id} />
                         <DynamicTable
+                            url="user"
+                            from={this.state.from}
+                            size={this.state.size}
                             mappers={this.mappers}
                             totalCount={this.props.totalCount}
                             pagination={true}

@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card';
 import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import PaymentReceipt from './paymentReceipt';
 import { Loader } from '../../../Shared/Components/Loader';
 import { paymentValidation, earlyPaymentValidation } from './paymentValidation';
 import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarlyPayment';
@@ -44,12 +43,13 @@ interface Props {
   paymentState: number;
   pendingActions: PendingActions;
   changePaymentState: (data) => void;
+  setReceiptData: (data) => void;
   print: (data) => void;
   refreshPayment: () => void;
+  setEarlyPaymentData: (data) => void;
   manualPaymentEditId: string;
 }
 interface State {
-  receiptModal: boolean;
   receiptData: any;
   payAmount: number;
   receiptNumber: string;
@@ -68,7 +68,6 @@ class Payment extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      receiptModal: false,
       receiptData: {},
       payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
       receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
@@ -131,7 +130,7 @@ class Payment extends Component<Props, State>{
   }
   getStatus(data) {
     // const todaysDate = new Date("2020-06-30").valueOf();
-    const todaysDate = new Date().valueOf();
+    const todaysDate = new Date().setHours(23, 59, 59, 59).valueOf();
     switch (data.status) {
       case 'unpaid':
         if (data.dateOfPayment < todaysDate)
@@ -171,7 +170,9 @@ class Payment extends Component<Props, State>{
       if (Number(values.installmentNumber) === -1) {
         const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf());
         if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
+          this.props.setReceiptData(res.body);
+          this.props.print({print: 'payment'});
+          this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           // Swal.fire("", "payment done", "success")
         } else {
           this.setState({ loadingFullScreen: false });
@@ -179,7 +180,9 @@ class Payment extends Component<Props, State>{
       } else {
         const res = await payFutureInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), Number(values.installmentNumber));
         if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
+          this.props.setReceiptData(res.body);
+          this.props.print({print: 'payment'});
+          this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           // Swal.fire("", "payment done", "success")
         } else {
           this.setState({ loadingFullScreen: false });
@@ -189,7 +192,9 @@ class Payment extends Component<Props, State>{
       const res = await earlyPayment(this.props.applicationId, values.payAmount);
       this.setState({ payAmount: res.body.requiredAmount })
       if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
+        this.props.setReceiptData(res.body);
+          this.props.print({print: 'payEarly'});
+        this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
         // Swal.fire("", "early payment done", "success")
       } else {
         this.setState({ loadingFullScreen: false });
@@ -220,6 +225,7 @@ class Payment extends Component<Props, State>{
     this.setState({ loading: true })
     const res = await calculateEarlyPayment(this.props.applicationId);
     if (res.status === 'success') {
+      this.props.setEarlyPaymentData({remainingPrincipal: res.body.remainingPrincipal, earlyPaymentFees: res.body.earlyPaymentFees, requiredAmount: res.body.requiredAmount })
       this.setState({
         loading: false,
         remainingPrincipal: res.body.remainingPrincipal,
@@ -309,7 +315,7 @@ class Payment extends Component<Props, State>{
                           >
                             <option value={-1}></option>
                             {this.props.installments.map(installment => {
-                              if (installment.status !== "partiallyPaid" && installment.status !== "paid")
+                              if (installment.status !== "partiallyPaid" && installment.status !== "paid" && installment.status !== "rescheduled")
                                 return (<option key={installment.id} value={installment.id}>{installment.id}</option>)
                             })}
                           </Form.Control>
@@ -386,7 +392,7 @@ class Payment extends Component<Props, State>{
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>
             <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
-              onClick={() => this.props.print({ remainingPrincipal: this.state.remainingPrincipal, earlyPaymentFees: this.state.earlyPaymentFees, requiredAmount: this.state.requiredAmount, })}>
+              onClick={() => this.props.print({ print: 'earlyPayment', remainingPrincipal: this.state.remainingPrincipal, earlyPaymentFees: this.state.earlyPaymentFees, requiredAmount: this.state.requiredAmount, })}>
               <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
             <Formik
               enableReinitialize
@@ -604,10 +610,8 @@ class Payment extends Component<Props, State>{
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable totalCount={0} pagination={false} data={this.props.installments} mappers={this.mappers} />
-        {/* <Button onClick= {()=> window.print()}>print</Button> */}
+        <DynamicTable totalCount={0} pagination={false} data={this.props.installments.sort(function(a,b) {return a.id - b.id })} mappers={this.mappers} />
         {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} truthDate={this.state.truthDate} />}
       </>
     );
   }

@@ -27,22 +27,23 @@ interface Props {
   setSearchFilters: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
     }
     this.mappers = [
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.code
+        render: data => data.key
       },
       {
         title: local.customerName,
-        key: "customerName",
+        sortable: true,
+        key: "name",
         render: data => data.customerName
       },
       {
@@ -52,19 +53,22 @@ class CustomersList extends Component<Props, State> {
       },
       {
         title: local.governorate,
+        sortable: true,
         key: "governorate",
         render: data => data.governorate
       },
       {
         title: local.creationDate,
-        key: "creationDate",
-        render: data => getDateAndTime(data.created?.at)
+        sortable: true,
+        key: "createdAt",
+        render: data => data.created?.at? getDateAndTime(data.created?.at): ''
       },
       {
         title: '',
         key: "actions",
-        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <span className='fa fa-pencil-alt icon' onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></span>: null}
-          <Can I='getCustomer' a='customer'><span className='fa fa-eye icon' onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></span></Can></>  
+        
+        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
+          <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can></>  
       },
     ]
   }
@@ -92,17 +96,20 @@ class CustomersList extends Component<Props, State> {
           <hr className="dashed-line" />
           <Search 
           searchKeys={['keyword', 'dateFromTo', 'governorate']} 
-          dropDownKeys={['name', 'nationalId', 'code']} 
+          dropDownKeys={['name', 'nationalId', 'key']} 
           searchPlaceholder ={local.searchByBranchNameOrNationalIdOrCode}
           url="customer" 
           from={this.state.from} size={this.state.size}  
           hqBranchIdRequest = {this.props.branchId}/>
           {this.props.data &&
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.props.data}
+              url="customer" 
               changeNumber={(key: string, number: number) => {
                 this.setState({ [key]: number } as any, () => this.getCustomers());
               }}
