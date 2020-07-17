@@ -322,9 +322,6 @@ class LoanProfile extends Component<Props, State>{
                                 <Can I='payInstallment' a='application'>
                                     <div className="cancel" data-qc="rejectManualPayment" onClick={() => { this.rejectManualPayment() }}>{local.cancel}</div>
                                 </Can>
-                                <Can I='payInstallment' a='application'>
-                                    <div className="cancel" onClick={() => { this.rejectManualPayment() }}>{local.cancel}</div>
-                                </Can>
                                 <Can I='approvePendingAction' a='application'>
                                     <div className="submit" data-qc="approveManualPayment" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
                                 </Can>

@@ -256,3 +256,19 @@ export const customFilterOption = (option, rawInput) => {
     );
   }
 };
+
+export const getStatus = (installment) => {
+  const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
+  switch (installment.status) {
+      case 'unpaid':
+          if (installment.dateOfPayment < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      default: return '';
+  }
+}

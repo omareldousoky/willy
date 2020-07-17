@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './customerCard.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic, getStatus } from '../../../Services/utils';
 import store from '../../../redux/store';
 
 interface Props {
@@ -32,7 +32,7 @@ class CustomerCardPDF extends Component<Props, State> {
                     totalDaysLate = totalDaysLate + number;
                 } else totalDaysEarly = totalDaysEarly + number;
             } else {
-                const number = Math.round((new Date().valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
+                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
                 if(number > 0) totalDaysLate = totalDaysLate + number;
             }
         });
@@ -49,16 +49,6 @@ class CustomerCardPDF extends Component<Props, State> {
             max = max + installment[key];
         })
         return max;
-    }
-    getStatus(status: string) {
-        switch (status) {
-            case 'paid': return local.paid;
-            case 'unpaid': return local.unpaid;
-            case 'partiallyPaid': return local.partiallyPaid;
-            case 'late': return local.late;
-            case 'cancelled': return local.cancelled;
-            default: return '';
-        }
     }
     render() {
         return (
@@ -147,7 +137,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td>{numbersToArabic(installment.principalPaid)}</td>
                                 <td>{numbersToArabic(installment.feesPaid)}</td>
-                                <td>{this.getStatus(installment.status)}</td>
+                                <td>{getStatus(installment)}</td>
                                 <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                 <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24)))

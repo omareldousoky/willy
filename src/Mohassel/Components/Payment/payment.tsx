@@ -129,8 +129,7 @@ class Payment extends Component<Props, State>{
     ]
   }
   getStatus(data) {
-    // const todaysDate = new Date("2020-06-30").valueOf();
-    const todaysDate = new Date().setHours(23, 59, 59, 59).valueOf();
+    const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
     switch (data.status) {
       case 'unpaid':
         if (data.dateOfPayment < todaysDate)
