@@ -245,7 +245,6 @@ class LoanCreation extends Component<Props, State> {
                       type="date"
                       name="loanCreationDate"
                       data-qc="loanCreationDate"
-                      value={formikProps.values.loanCreationDate}
                       onChange={(e)=> {
                         formikProps.setFieldValue('loanCreationDate', e.currentTarget.value);
                         this.handleCreationDateChange(e.currentTarget.value);
