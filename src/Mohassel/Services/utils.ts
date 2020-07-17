@@ -256,6 +256,15 @@ export const customFilterOption = (option, rawInput) => {
     );
   }
 };
+export const download = (url, fileName: string): void => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  a.remove();
+}
 
 export const getStatus = (installment) => {
   const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
