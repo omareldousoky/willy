@@ -256,7 +256,6 @@ export const customFilterOption = (option, rawInput) => {
     );
   }
 };
-
 export const download = (url, fileName: string): void => {
   const a = document.createElement("a");
   a.href = url;
@@ -265,4 +264,20 @@ export const download = (url, fileName: string): void => {
   a.click();
   document.body.removeChild(a);
   a.remove();
+}
+
+export const getStatus = (installment) => {
+  const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
+  switch (installment.status) {
+      case 'unpaid':
+          if (installment.dateOfPayment < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      default: return '';
+  }
 }

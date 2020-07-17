@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Component } from 'react';
 import './earlyPayment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic, getStatus } from '../../../Services/utils';
 interface Props {
     data: any;
     earlyPaymentData: any;
@@ -30,22 +30,13 @@ class EarlyPaymentPDF extends Component<Props, State> {
                     totalDaysLate = totalDaysLate + number;
                 } else totalDaysEarly = totalDaysEarly + number;
             } else {
-                const number = Math.round((new Date().valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
-                totalDaysLate = totalDaysLate + number;
+                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
+                if (number > 0) totalDaysLate = totalDaysLate + number;
             }
         });
         this.setState({ totalDaysEarly, totalDaysLate })
     }
-    getStatus(status: string) {
-        switch (status) {
-            case 'paid': return local.paid;
-            case 'unpaid': return local.unpaid;
-            case 'partiallyPaid': return local.partiallyPaid;
-            case 'late': return local.late;
-            case 'cancelled': return local.cancelled;
-            default: return '';
-        }
-    }
+    
     getSum(key: string) {
         let max = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
@@ -119,7 +110,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             </td>
                             <td>فترة السماح
 					        <div className="frame">{numbersToArabic(this.props.data.product.gracePeriod)}</div>
-                                <div className="frame">{this.props.data.product.beneficiaryType === "individual"? this.props.data.customer.businessActivity : "تمويل رأس المال"}</div>
+                                <div className="frame">{this.props.data.product.beneficiaryType === "individual" ? this.props.data.customer.businessActivity : "تمويل رأس المال"}</div>
                             </td>
                         </tr>
                     </tbody>
@@ -169,12 +160,12 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                     <td>{numbersToArabic(installment.installmentResponse)}</td>
                                     <td>{numbersToArabic(installment.principalPaid)}</td>
                                     <td>{numbersToArabic(installment.feesPaid)}</td>
-                                    <td>{this.getStatus(installment.status)}</td>
+                                    <td>{getStatus(installment)}</td>
                                     <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                     <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24)))
                                         :
-                                        Date.now().valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((installment.dateOfPayment - Date.now().valueOf()) / (1000 * 60 * 60 * 24))): ''}</td>
+                                        Date.now().valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((installment.dateOfPayment - Date.now().valueOf()) / (1000 * 60 * 60 * 24))) : ''}</td>
                                     <td></td>
                                 </tr>
                             )
@@ -188,7 +179,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <td className="border">{numbersToArabic(this.getSum('principalPaid'))}</td>
                             <td className="border">{numbersToArabic(this.getSum('feesPaid'))}</td>
                             <th className="border">ايام التأخير</th>
-                            <td className="border">{this.state.totalDaysLate > 0 ? numbersToArabic(this.state.totalDaysLate): numbersToArabic(0)}</td>
+                            <td className="border">{this.state.totalDaysLate > 0 ? numbersToArabic(this.state.totalDaysLate) : numbersToArabic(0)}</td>
                             <th className="border">ايام التبكير</th>
                             <td className="border">{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                         </tr>
