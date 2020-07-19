@@ -143,6 +143,9 @@ const RandomPayment = () => {
 			<tr>
 				<td colSpan={10} className="border"></td>
 			</tr>
+			<tr>
+				<td colSpan={10} ></td>
+			</tr>
 		</tbody>
 		<tbody className="tbody-border">
 			<tr>
