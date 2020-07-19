@@ -35,7 +35,6 @@ import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import UploadDocuments from './uploadDocuments';
-import RandomPayment from '../pdfTemplates/randomPayment/randomPayment';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -319,7 +318,6 @@ class LoanProfile extends Component<Props, State>{
                 }
                 {this.state.print === 'all' &&
                     <>
-                        <RandomPayment />
                         <CashReceiptPDF data={this.state.application} />
                         <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails}/>
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
