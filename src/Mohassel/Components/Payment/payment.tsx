@@ -10,17 +10,13 @@ import DynamicTable from '../DynamicTable/dynamicTable';
 import PaymentReceipt from './paymentReceipt';
 import { Loader } from '../../../Shared/Components/Loader';
 import { paymentValidation, earlyPaymentValidation } from './paymentValidation';
-import { calculateEarlyPayment } from '../../Services/APIs/Payment/calculateEarlyPayment';
-import { earlyPayment } from '../../Services/APIs/Payment/earlyPayment';
-import { payFutureInstallment } from '../../Services/APIs/Payment/payFutureInstallment';
-import { payInstallment } from '../../Services/APIs/Payment/payInstallment';
-import { manualPayment } from '../../Services/APIs/Payment/manualPayment';
-import { editManualPayment } from '../../Services/APIs/Payment/editManualPayment';
 import { timeToDateyyymmdd } from '../../Services/utils';
 import { PendingActions } from '../../Services/interfaces';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
+import PayInstallment from "./payInstallment";
 import Can from '../../config/Can';
+import { calculateEarlyPayment, earlyPayment, editManualPayment, manualPayment, payFutureInstallment, payInstallment, otherPayment } from "../../Services/APIs/Payment";
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 
@@ -47,6 +43,7 @@ interface Props {
   print: (data) => void;
   refreshPayment: () => void;
   manualPaymentEditId: string;
+  paymentType: string;
 }
 interface State {
   receiptModal: boolean;
@@ -168,50 +165,106 @@ class Payment extends Component<Props, State>{
   handleSubmit = async (values) => {
     this.setState({ loadingFullScreen: true })
     if (this.props.paymentState === 1) {
-      if (Number(values.installmentNumber) === -1) {
-        const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf());
-        if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
-          // Swal.fire("", "payment done", "success")
+      if (this.props.paymentType === "normal") {
+        if (Number(values.installmentNumber) === -1) {
+          const res = await payInstallment(
+            this.props.applicationId,
+            values.payAmount,
+            new Date(values.truthDate).valueOf()
+          );
+          if (res.status === "success") {
+            this.setState({
+              loadingFullScreen: false,
+              receiptModal: true,
+              receiptData: res.body
+            });
+            // Swal.fire("", "payment done", "success")
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         } else {
-          this.setState({ loadingFullScreen: false });
+          const res = await payFutureInstallment(
+            this.props.applicationId,
+            values.payAmount,
+            new Date(values.truthDate).valueOf(),
+            Number(values.installmentNumber)
+          );
+          if (res.status === "success") {
+            this.setState({
+              loadingFullScreen: false,
+              receiptModal: true,
+              receiptData: res.body
+            });
+            // Swal.fire("", "payment done", "success")
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         }
-      } else {
-        const res = await payFutureInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), Number(values.installmentNumber));
-        if (res.status === 'success') {
-          this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
-          // Swal.fire("", "payment done", "success")
+      }else {
+        const data = {
+          payAmount: values.payAmount,
+          truthDate: new Date(values.truthDate).valueOf(),
+          type: values.randomPaymentType
+        };
+        const res = await otherPayment({ id: this.props.applicationId, data });
+        if (res.status === "success") {
+          this.setState({
+            loadingFullScreen: false,
+            receiptModal: true,
+            receiptData: res.body
+          });
         } else {
           this.setState({ loadingFullScreen: false });
         }
       }
-    } else if(this.props.paymentState === 2) {
-      const res = await earlyPayment(this.props.applicationId, values.payAmount);
-      this.setState({ payAmount: res.body.requiredAmount })
-      if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false, receiptModal: true, receiptData: res.body });
+    } else if (this.props.paymentState === 2) {
+      const res = await earlyPayment(
+        this.props.applicationId,
+        values.payAmount
+      );
+      this.setState({ payAmount: res.body.requiredAmount });
+      if (res.status === "success") {
+        this.setState({
+          loadingFullScreen: false,
+          receiptModal: true,
+          receiptData: res.body
+        });
         // Swal.fire("", "early payment done", "success")
       } else {
         this.setState({ loadingFullScreen: false });
       }
     } else {
-      if(this.props.manualPaymentEditId === ''){
-      const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
-      if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false });
-        Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
+      if (this.props.manualPaymentEditId === "") {
+        const res = await manualPayment(
+          this.props.applicationId,
+          values.payAmount,
+          values.receiptNumber,
+          new Date(values.truthDate).valueOf()
+        );
+        if (res.status === "success") {
+          this.setState({ loadingFullScreen: false });
+          Swal.fire("", local.manualPaymentSuccess, "success").then(() =>
+            this.props.refreshPayment()
+          );
+        } else {
+          this.setState({ loadingFullScreen: false });
+        }
       } else {
-        this.setState({ loadingFullScreen: false });
+        const res = await editManualPayment(
+          this.props.applicationId,
+          values.payAmount,
+          values.receiptNumber,
+          new Date(values.truthDate).valueOf()
+        );
+        if (res.status === "success") {
+          this.setState({ loadingFullScreen: false });
+          Swal.fire("", local.editManualPaymentSuccess, "success").then(() =>
+            this.props.refreshPayment()
+          );
+        } else {
+          this.setState({ loadingFullScreen: false });
+        }
       }
-    } else {
-      const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
-      if (res.status === 'success') {
-        this.setState({ loadingFullScreen: false });
-        Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
-      } else {
-        this.setState({ loadingFullScreen: false });
-      }
-    }
     }
     this.props.changePaymentState(0);
   }
@@ -244,138 +297,82 @@ class Payment extends Component<Props, State>{
   renderPaymentMethods() {
     switch (this.props.paymentState) {
       case 0: return (
-        <Card className="payment-menu">
-          <div className="payment-info">
-            <h6 >{local.requiredAmount}</h6>
-            <h6>{this.getRequiredAmount().total}</h6>
-            <h6>{local.forInstallments}</h6>
-            <h6>{this.getRequiredAmount().installments.toString()}</h6>
-            <h6>{local.dateOfPayment}</h6>
-            <h6>{}</h6>
-          </div>
-          <div className="verticalLine"></div>
-          <div className="payment-icons-container">
-            <Can I='payInstallment' a='application'>
-              <div className="payment-icon">
-                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-                <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(1)} variant="primary">{local.payInstallment}</Button>
-              </div>
-            </Can>
-            <Can I='payEarly' a='application'>
-              <div className="payment-icon">
-                <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
-                <Button disabled={this.props.application.status === 'pending'} onClick={() => this.handleClickEarlyPayment()} variant="primary">{local.earlyPayment}</Button>
-              </div>
-            </Can>
-            <Can I='payInstallment' a='application'>
-              <div className="payment-icon">
-                <img alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
-                <Button disabled={this.props.application.status === 'pending'} onClick={() => this.props.changePaymentState(3)} variant="primary">{local.manualPayment}</Button>
-              </div>
-            </Can>
-          </div>
-        </Card>
-      )
-      case 1:
-        return (
-          <Card className="payment-menu">
-            <div className="payment-info" style={{ textAlign: 'center' }}>
-              <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
-              <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.payInstallment}</span></h6>
-            </div>
-            <div className="verticalLine"></div>
-            <div style={{ width: '100%', padding: 20 }}>
-              <Formik
-                enableReinitialize
-                initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
-                onSubmit={this.handleSubmit}
-                validationSchema={paymentValidation}
-                validateOnBlur
-                validateOnChange
-              >
-                {(formikProps) =>
-                  <Form onSubmit={formikProps.handleSubmit}>
-                    <Form.Group as={Row}>
-                      <Form.Group as={Col} controlId="installmentNumber">
-                        <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.installmentToBePaid}`}</Form.Label>
-                        <Col>
-                          <Form.Control as="select"
-                            name="installmentNumber"
-                            data-qc="installmentNumber"
-                            onChange={(event) => {
-                              formikProps.setFieldValue('installmentNumber', event.currentTarget.value);
-                              formikProps.setFieldValue('requiredAmount', this.props.installments.find(installment => installment.id === Number(event.currentTarget.value))?.installmentResponse);
-                            }}
-                          >
-                            <option value={-1}></option>
-                            {this.props.installments.map(installment => {
-                              if (installment.status !== "partiallyPaid" && installment.status !== "paid" && installment.status !== "rescheduled")
-                                return (<option key={installment.id} value={installment.id}>{installment.id}</option>)
-                            })}
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Col} controlId="requiredAmount">
-                        <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.requiredAmount}`}</Form.Label>
-                        <Col>
-                          <Form.Control
-                            type="number"
-                            name="requiredAmount"
-                            value={formikProps.values.requiredAmount || this.getRequiredAmount().total}
-                            disabled
-                          >
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                    </Form.Group>
-                    <Form.Group as={Row}>
-                      <Form.Group as={Col} controlId="payAmount">
-                        <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
-                        <Col>
-                          <Form.Control
-                            type="number"
-                            name="payAmount"
-                            data-qc="payAmount"
-                            value={formikProps.values.payAmount.toString()}
-                            onBlur={formikProps.handleBlur}
-                            onChange={formikProps.handleChange}
-                            isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
-                          >
-                          </Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.payAmount}
-                          </Form.Control.Feedback>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Col} controlId="truthDate">
-                        <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
-                        <Col>
-                          <Form.Control
-                            type="date"
-                            name="truthDate"
-                            data-qc="truthDate"
-                            value={formikProps.values.truthDate}
-                            onBlur={formikProps.handleBlur}
-                            onChange={formikProps.handleChange}
-                            isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
-                          >
-                          </Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.truthDate}
-                          </Form.Control.Feedback>
-                        </Col>
-                      </Form.Group>
-                    </Form.Group>
-                    <div className="payments-buttons-container">
-                      <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
-                      <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
+                <Card className="payment-menu">
+                  {this.props.paymentType === "normal" ? (
+                    <div className="payment-info">
+                      <h6>{local.requiredAmount}</h6>
+                      <h6>{this.getRequiredAmount().total}</h6>
+                      <h6>{local.forInstallments}</h6>
+                      <h6>
+                        {this.getRequiredAmount().installments.toString()}
+                      </h6>
+                      <h6>{local.dateOfPayment}</h6>
+                      <h6>{}</h6>
                     </div>
-                  </Form>
-                }
-              </Formik>
-            </div>
-          </Card>
-        )
+                  ) : null}
+                  <div className="verticalLine"></div>
+                  <div className="payment-icons-container">
+                    <Can I="payInstallment" a="application">
+                      <div className="payment-icon">
+                        <img
+                          alt="pay-installment"
+                          src={require("../../Assets/payInstallment.svg")}
+                        />
+                        <Button
+                          disabled={this.props.application.status === "pending"}
+                          onClick={() => this.props.changePaymentState(1)}
+                          variant="primary"
+                        >
+                          {local.payInstallment}
+                        </Button>
+                      </div>
+                    </Can>
+                    {this.props.paymentType === "normal" ? (
+                      <Can I="payEarly" a="application">
+                        <div className="payment-icon">
+                          <img
+                            alt="early-payment"
+                            src={require("../../Assets/earlyPayment.svg")}
+                          />
+                          <Button
+                            disabled={
+                              this.props.application.status === "pending"
+                            }
+                            onClick={() => this.handleClickEarlyPayment()}
+                            variant="primary"
+                          >
+                            {local.earlyPayment}
+                          </Button>
+                        </div>
+                      </Can>
+                    ) : null}
+                    <Can I="payInstallment" a="application">
+                      <div className="payment-icon">
+                        <img
+                          alt="pay-installment"
+                          src={require("../../Assets/payInstallment.svg")}
+                        />
+                        <Button
+                          disabled={this.props.application.status === "pending"}
+                          onClick={() => this.props.changePaymentState(3)}
+                          variant="primary"
+                        >
+                          {local.manualPayment}
+                        </Button>
+                      </div>
+                    </Can>
+                  </div>
+                </Card>
+              );
+      case 1:
+        return <PayInstallment
+        installments={this.props.installments}
+        application={this.props.application}
+        handleSubmit={this.handleSubmit}
+        payAmount={this.state.payAmount}
+        truthDate={this.state.truthDate}
+        paymentType={this.props.paymentType}
+        />
       case 2: return (
         <Card className="payment-menu">
           <Loader type="fullsection" open={this.state.loading} />

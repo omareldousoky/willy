@@ -181,7 +181,8 @@ class LoanProfile extends Component<Props, State>{
                 return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
                     application={this.state.application} installments={this.state.application.installmentsObject.installments}
                     currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
-                    manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} />
+                    manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
+                    paymentType={"normal"} />
             case 'customerCard':
                 return <CustomerCardView application={this.state.application} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
             case 'loanRescheduling':
@@ -190,6 +191,12 @@ class LoanProfile extends Component<Props, State>{
                 return <Rescheduling application={this.state.application} test={true} />
             case 'documents':
                 return <UploadDocuments application={this.state.application} />
+            case 'financialTransactions':
+                return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
+                application={this.state.application} installments={this.state.application.installmentsObject.installments}
+                currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
+                manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
+                paymentType={"random"} />
             default:
                 return null
         }

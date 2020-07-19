@@ -8,6 +8,8 @@ import { Formik, FormikProps } from "formik";
 import { paymentValidation } from "./paymentValidation";
 import { timeToDateyyymmdd } from "../../Services/utils";
 import * as local from "../../../Shared/Assets/ar.json";
+import { connect } from "react-redux";
+import { payment } from "../../redux/payment/actions";
 import "./styles.scss";
 interface State {
   payAmount: number;
@@ -217,3 +219,15 @@ class PayInstallment extends Component<Props, State> {
     );
   }
 }
+
+const addPaymentToProps = dispatch => {
+  return {
+    changePaymentState: data => dispatch(payment(data))
+  };
+};
+const mapStateToProps = state => {
+  return {
+    paymentState: state.payment
+  };
+};
+export default connect(mapStateToProps, addPaymentToProps)(PayInstallment);
