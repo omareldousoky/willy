@@ -121,6 +121,14 @@ class LoanProfile extends Component<Props, State>{
                 header: local.reschedulingTest,
                 stringKey: 'loanReschedulingTest'
             };
+            const financialTransactionsTab = {
+                header: local.financialTransactions,
+                stringKey: 'financialTransactions'
+            };
+            const cancelPaymentsTab = {
+                header: local.cancelPayments,
+                stringKey: 'cancelPayments'
+            };
             if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
             if (application.body.status === "paid") tabsToRender.push(customerCardTab)
             if (application.body.status === "issued" || application.body.status === "pending") {
@@ -128,6 +136,10 @@ class LoanProfile extends Component<Props, State>{
                 if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
                 if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
                 if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
+            }
+            if(true){
+                tabsToRender.push(financialTransactionsTab)
+                tabsToRender.push(cancelPaymentsTab)
             }
             if (application.body.status === "pending") {
                 this.setState({ activeTab: 'loanDetails' })
