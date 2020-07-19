@@ -23,3 +23,11 @@ export const reschedulingValidation = Yup.object().shape({
 export const traditionalReschedulingValidation = Yup.object().shape({
     noOfInstallments: Yup.number().integer('Must be int').min(1, 'Must be 1 or more').required(local.required),
 })
+export const freeReschedulingValidation = Yup.object().shape({
+    installments: Yup.array().of(
+        Yup.object().shape({
+            principalInstallment: Yup.number().min(Yup.ref('principalPaid')).required(local.required),
+            feesInstallment: Yup.number().min(Yup.ref('feesPaid')).required(local.required),
+        })
+    )
+})

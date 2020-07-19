@@ -3,6 +3,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import PostponeInstallments from './postponeInstallments';
 import { timeToDateyyymmdd } from '../../Services/utils';
 import TraditionalLoanRescheduling from './traditionalLoanRescheduling';
+import FreeRescheduling from './freeRescheduling';
 
 interface Props {
     test: boolean;
@@ -64,6 +65,8 @@ class Rescheduling extends Component<Props, State>{
                 return <PostponeInstallments application={this.props.application} test={this.props.test} />
             case "traditionalRescheduling":
                 return <TraditionalLoanRescheduling application={this.props.application} test={this.props.test} />
+            case "freeRescheduling":
+                return <FreeRescheduling application={this.props.application} test={this.props.test} />
             default:
                 return <PostponeInstallments application={this.props.application} test={this.props.test} />
         }
@@ -83,7 +86,7 @@ class Rescheduling extends Component<Props, State>{
                         {local.traditionalRescheduling}
                     </label>
                     <label className='radio-item'>
-                        <input type="radio" value="freeRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'freeRescheduling'} disabled />
+                        <input type="radio" value="freeRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'freeRescheduling'} />
                         <span className="checkmark"></span>
                         {local.freeRescheduling}
                     </label>

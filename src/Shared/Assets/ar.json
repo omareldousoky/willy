@@ -400,6 +400,7 @@
     "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
     "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من قيمة القرض",
     "amountShouldNotbeLessThanReqAmount": "المبلغ يجب ان يكون اكبر من قيمة المطلوبة",
+    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي",
     "totalPayment": "إجمالي المدفوع",
     "feesPaid": "المصاريف المسدده",
     "principalPaid": "الاصل المسدد",
@@ -619,5 +620,6 @@
    "userStep3": "٣.بيانات أخرى",
     "fifth": "الخامس",
     "sixth": "السادس",
-    "noGuarantors":"لا يوجد ضمان"
+    "noGuarantors":"لا يوجد ضمان",
+    "statusDate":"تاريخ الحاله"
 }
