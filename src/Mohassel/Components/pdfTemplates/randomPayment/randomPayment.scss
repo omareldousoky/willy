@@ -1,0 +1,42 @@
+
+@media screen,
+print {
+    .random-payment-print  {
+        font-size: 12px;
+        font-weight: bold;
+        page-break-after: always;
+ 
+    & .head-title {
+        width: 100%;
+        font-size: 14px;
+        text-align: center;
+    }
+
+   & table {
+        width: 100%;
+        text-align: center;
+    }
+  &  .frame {
+         border: 1px solid black ;
+    }
+   & .border{
+       border : solid black !important;
+       border-width: 0 0 1px 0 !important;
+    }
+  & .tbody-border {
+    box-shadow: 0 0 0 1px black !important;
+
+}
+
+   & thead.report-header {
+        display: table-header-group;
+    }
+}
+}
+@media screen {
+    .random-payment-print  {
+        max-width: 800px;
+        display: block;
+    }
+
+}
