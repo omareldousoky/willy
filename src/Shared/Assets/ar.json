@@ -634,5 +634,6 @@
     "loanFreeReschedulingError": "حدث خطأ في جدولة القرض",
     "loanFreeReschedulingTestSuccess": "تم تجربة جدولة القرض بنجاح",
     "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض",
+    "seperationReason": "سبب فصل العميل"
     
 }
