@@ -623,7 +623,6 @@
     "changePassword": "تغيير كلمه السر",
     "passwordValidationError": "كلمة السر يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص",
     "seperationReason": "سبب فصل العميل",
-    "statusDate":"تاريخ الحاله",
     "datesShouldBeInChronologicalOrder":"يجب أن تكون التواريخ مرتبة ترتيبًا زمنيًا",
     "principalOfTotalInstallmentsMustBe":"إجمالي قيمة الاصل يجب أن تكون",
     "itIs":"و هي",
@@ -631,6 +630,7 @@
     "loanFreeReschedulingError": "حدث خطأ في جدولة القرض",
     "loanFreeReschedulingTestSuccess": "تم تجربة جدولة القرض بنجاح",
     "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض",
-    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي"
+    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي",
+    "statusDate":"تاريخ الحاله"
     
 }
