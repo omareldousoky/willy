@@ -45,28 +45,28 @@ class BranchesList extends Component<Props, State> {
       {
         title: local.oneBranch,
         key: "branch",
-        render: data =>  data.name
+        render: data => data.name
       },
       {
         title: local.governorate,
         key: "governorate",
-        render: data =>  data.governorate
+        render: data => data.governorate
 
       },
       {
         title: local.creationDate,
         key: "creationDate",
-        render: data => data.created? getDateAndTime(data.created.at) : ''
+        render: data => data.created ? getDateAndTime(data.created.at) : ''
       },
       {
         title: '',
         key: "actions",
         render: data => <>
-        <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')}
-        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}></img>
-         <img style={{cursor: 'pointer'}} alt={"edit"} src={require('../../Assets/editIcon.svg')}
-          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}></img>
-          </>
+          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')}
+            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } }) }}></img>
+          <img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } }) }}></img>
+        </>
       },
     ]
   }
@@ -82,32 +82,32 @@ class BranchesList extends Component<Props, State> {
   render() {
     return (
       <div>
-      (<HeaderWithCards
-      header={local.manageAccounts}
-      array = {this.state.manageAccountTabs}
-      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('branch')}
-      />
+        (<HeaderWithCards
+          header={local.manageAccounts}
+          array={this.state.manageAccountTabs}
+          active={this.state.manageAccountTabs.map(item => { return item.icon }).indexOf('branches')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
               </div>
               <div>
-              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
+                <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
             <Search
-            searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'code']} 
-            searchPlaceholder={local.searchByBranchNameOrCode}
-            url="branch"
-             from={this.state.from} 
-             size={this.state.size} />
+              searchKeys={['keyword', 'dateFromTo']}
+              dropDownKeys={['name', 'code']}
+              searchPlaceholder={local.searchByBranchNameOrCode}
+              url="branch"
+              from={this.state.from}
+              size={this.state.size} />
             {this.props.data &&
               <DynamicTable
                 totalCount={this.props.totalCount}
