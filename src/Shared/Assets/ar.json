@@ -304,8 +304,8 @@
     "postponeInstallments": "ترحيل اقساط",
     "traditionalRescheduling": "جدولة تقليدية",
     "freeRescheduling": "جدولة حرة",
-    "installmentsTableBeforeRescheduling": "جدول الاقساط قبل الترحيل",
-    "installmentsTableAfterRescheduling": "جدول الاقساط بعد الترحيل",
+    "installmentsTableBeforeRescheduling": "جدول الاقساط قبل ",
+    "installmentsTableAfterRescheduling": "جدول الاقساط بعد ",
     "areYouSure": "هل أنت متأكد ؟",
     "willBePostponed": "سيتم ترحيل",
     "installment": "قسط",
@@ -621,5 +621,12 @@
     "fifth": "الخامس",
     "sixth": "السادس",
     "noGuarantors":"لا يوجد ضمان",
-    "statusDate":"تاريخ الحاله"
+    "statusDate":"تاريخ الحاله",
+    "datesShouldBeInChronologicalOrder":"يجب أن تكون التواريخ مرتبة ترتيبًا زمنيًا",
+    "principalOfTotalInstallmentsMustBe":"إجمالي قيمة الاصل يجب أن تكون",
+    "itIs":"و هي",
+    "loanFreeReschedulingSuccess": "تم جدولة القرض بنجاح",
+    "loanFreeReschedulingError": "حدث خطأ في جدولة القرض",
+    "loanFreeReschedulingTestSuccess": "تم تجربة جدولة القرض بنجاح",
+    "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض"
 }
