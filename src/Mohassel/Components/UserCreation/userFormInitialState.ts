@@ -127,7 +127,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
     })
     .required(local.required),
-  password: Yup.string().required(local.required),
+  password: Yup.string().matches(/^(?=.*[A-Z])(?!.*[\u0621-\u064A\u0660-\u0669 ])(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,}$/, local.passwordValidationError).required(local.required),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], local.confrimPasswordCheck)
     .required(local.required),
@@ -179,6 +179,16 @@ export const editUserValidationStepOne = Yup.object().shape({
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
     })
     .required(local.required),
+  password: Yup.string().matches(/^(?=.*[A-Z])(?!.*[\u0621-\u064A\u0660-\u0669 ])(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,}$/, local.passwordValidationError),
+  confirmPassword: Yup.string()
+    .when(
+      'password', {
+      is: (val) => val !== undefined,
+      then: Yup.string().oneOf([Yup.ref('password'), null], local.confrimPasswordCheck).required(local.required),
+      otherwise: Yup.string().notRequired(),
+    },
+
+    ),
 });
 export const userValidationStepThree = Yup.object().shape({
   mainRole: Yup.object().required(local.required),
