@@ -626,7 +626,6 @@
     "editNumOfPagesError": " لايمكن أن تعدل عدد الصفحات لأقل من العدد السابق",
     "changePassword": "تغيير كلمه السر",
     "passwordValidationError": "كلمة السر يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص",
-    "seperationReason": "سبب فصل العميل",
     "statusDate":"تاريخ الحاله",
     "datesShouldBeInChronologicalOrder":"يجب أن تكون التواريخ مرتبة ترتيبًا زمنيًا",
     "principalOfTotalInstallmentsMustBe":"إجمالي قيمة الاصل يجب أن تكون",
