@@ -566,7 +566,7 @@
     "editEncodingFiles": "تعديل ملفات تكويد",
     "documentName": "إسم المستند",
     "numOfDocuments": "عدد المستندات",
-    "minNumOfPages1": " يجب ألا يقل عدد الصفحات عن 1",
+    "minNumOfPages1": " يجب ألا يقل عدد الصفحات عن 1",
     "documentTypeCreationSuccessMessage": "تم إنشاء ملف تكويد جديد",
     "documentTypeCreationErrorMessage": "حدث خطأ ولم يتم إنشاء ملف التكويد",
     "documentTypeEditSuccessMessage": "تم تعديل ملف التكويد ",
@@ -619,8 +619,8 @@
     "inactiveDocument": "مستند تالف",
     "activated": "مفعل",
     "deactivated": "معطل",
-    "editNumOfPagesError": " لايمكن أن تعدل عدد الصفحات لأقل من العدد السابق",
+    "editNumOfPagesError": " لايمكن أن تعدل عدد الصفحات لأقل من العدد السابق",
     "changePassword": "تغيير كلمه السر",
-    "passwordValidationError": "كلمة السر يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص",
-    "seperationReason": "سبب فصل العميل"
+    "seperationReason": "سبب فصل العميل",
+    "passwordValidationError": "كلمة السر يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص"
 }
