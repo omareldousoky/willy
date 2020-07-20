@@ -7,10 +7,10 @@ import './userCreation.scss'
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
-import {checkIssueDate} from '../../Services/utils';
+import { checkIssueDate } from '../../Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
-import {checkUsernameDuplicates} from '../../Services/APIs/User-Creation/checkUsernameDup';
+import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 interface Props {
     values: Values;
@@ -155,7 +155,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={props.handleChange}
                     isInvalid={(props.errors.nationalIdIssueDate && props.touched.nationalIdIssueDate) as boolean}
                 />
-                <Form.Control.Feedback type="invalid" style={checkIssueDate(props.values.nationalIdIssueDate) !==""? {display: 'block'}: {}}>
+                <Form.Control.Feedback type="invalid" style={checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
                     {props.errors.nationalIdIssueDate || checkIssueDate(props.values.nationalIdIssueDate)}
                 </Form.Control.Feedback>
             </Form.Group>
@@ -202,7 +202,7 @@ export const UserDataForm = (props: Props) => {
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.hiringDate && props.touched.hiringDate) as boolean}
-                        />     
+                        />
                         <Form.Control.Feedback
                             type="invalid">
                             {props.errors.hiringDate}
@@ -250,19 +250,19 @@ export const UserDataForm = (props: Props) => {
                     name={"username"}
                     data-qc={"username"}
                     value={props.values.username}
-                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
-                        props.setFieldValue('username',event.currentTarget.value );
+                    onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                        props.setFieldValue('username', event.currentTarget.value);
                         setLoading(true);
                         const res = await checkUsernameDuplicates(event.currentTarget.value);
-                          
+
                         if (res.status === 'success') {
                             setLoading(false);
                             props.setFieldValue('usernameChecker', res.body.Exists);
                         } else setLoading(false);
-                
-                }}
+
+                    }}
                     onBlur={props.handleBlur}
-                    disabled = {props.edit}
+                    disabled={props.edit}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />
                 <Form.Control.Feedback
@@ -270,10 +270,10 @@ export const UserDataForm = (props: Props) => {
                     {props.errors.username}
                 </Form.Control.Feedback>
                 <Col sm={1}>
-                            <Col sm={1}>
-                                <Loader type="inline" open={loading} />
-                            </Col>
-                        </Col>
+                    <Col sm={1}>
+                        <Loader type="inline" open={loading} />
+                    </Col>
+                </Col>
             </Form.Group>
             <Form.Group as={Row}
                 className={'user-data-group'}
@@ -281,7 +281,7 @@ export const UserDataForm = (props: Props) => {
                 <Col>
                     <Form.Label
                         className={'user-data-label'}
-                    >{`${local.password}*`}
+                    >{props.edit ? `${local.changePassword}` : `${local.password}*`}
                     </Form.Label>
                     <Form.Control
                         type={"password"}
@@ -291,7 +291,6 @@ export const UserDataForm = (props: Props) => {
                         placeholder={local.password}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
-                        disabled={props.edit}
                         isInvalid={(props.errors.password && props.touched.password) as boolean}
                     />
                     <Form.Control.Feedback
@@ -303,7 +302,7 @@ export const UserDataForm = (props: Props) => {
                 <Col>
                     <Form.Label
                         className={'user-data-label'}
-                    >{`${local.confrimPassword}*`}
+                    >{props.edit ? local.confrimPassword : `${local.confrimPassword}*`}
                     </Form.Label>
                     <Form.Control
                         type={"password"}
@@ -313,12 +312,11 @@ export const UserDataForm = (props: Props) => {
                         placeholder={`${local.confrimPassword}*`}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
-                        disabled={props.edit}
                         isInvalid={(props.errors.confirmPassword && props.touched.confirmPassword) as boolean}
                     />
                     <Form.Control.Feedback
                         type={'invalid'}
-                    >    
+                    >
                         {props.errors.confirmPassword}
                     </Form.Control.Feedback>
                 </Col>
