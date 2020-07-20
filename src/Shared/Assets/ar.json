@@ -621,6 +621,6 @@
     "deactivated": "معطل",
     "editNumOfPagesError": " لايمكن أن تعدل عدد الصفحات لأقل من العدد السابق",
     "changePassword": "تغيير كلمه السر",
-    "seperationReason": "سبب فصل العميل",
-    "passwordValidationError": "كلمة السر يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص"
+    "passwordValidationError": "كلمة السر يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص",
+    "seperationReason": "سبب فصل العميل"
 }
