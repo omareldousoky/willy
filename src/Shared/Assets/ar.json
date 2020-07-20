@@ -400,7 +400,6 @@
     "minPayment": "المبلغ يجب ان تكون اكبر من صفر",
     "amountShouldNotExceedReqAmount": "المبلغ يجب ان يكون اصغر من قيمة القرض",
     "amountShouldNotbeLessThanReqAmount": "المبلغ يجب ان يكون اكبر من قيمة المطلوبة",
-    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي",
     "totalPayment": "إجمالي المدفوع",
     "feesPaid": "المصاريف المسدده",
     "principalPaid": "الاصل المسدد",
@@ -614,9 +613,6 @@
     "noGuarantors":"لا يوجد ضمان",
     "daily": "يومي",
     "chooseMainRole": " إختيار الدور رئيسي",
-    "chooseMainBranch": "إختر الفرع الرئيسي",
-    "chooseManager": "إختر المدير",
-   "SearchOnlyNumbers": "يجب أن يحتوي البحث على أرقام فقط",
    "userStep3": "٣.بيانات أخرى",
     "fifth": "الخامس",
     "sixth": "السادس",
@@ -634,6 +630,7 @@
     "loanFreeReschedulingSuccess": "تم جدولة القرض بنجاح",
     "loanFreeReschedulingError": "حدث خطأ في جدولة القرض",
     "loanFreeReschedulingTestSuccess": "تم تجربة جدولة القرض بنجاح",
-    "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض"
+    "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض",
+    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي"
     
 }
