@@ -111,6 +111,10 @@ class LoanProfile extends Component<Props, State>{
             {
                 header: local.logs,
                 stringKey: 'loanLogs'
+            },
+            {
+                header: local.documents,
+                stringKey: 'documents'
             }
         ]
         const guarantorsTab = {
