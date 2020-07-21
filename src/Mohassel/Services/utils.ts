@@ -271,7 +271,7 @@ export const getStatus = (installment) => {
   const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
   switch (installment.status) {
       case 'unpaid':
-          if (installment.dateOfPayment < todaysDate)
+          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
               return local.late
           else
               return local.unpaid

@@ -69,9 +69,9 @@ class Payment extends Component<Props, State>{
     super(props);
     this.state = {
       receiptData: {},
-      payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
-      receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-      truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+      payAmount: 0,
+      receiptNumber: '',
+      truthDate: timeToDateyyymmdd(0),
       dueDate: timeToDateyyymmdd(0),
       loading: false,
       loadingFullScreen: false,
@@ -128,11 +128,20 @@ class Payment extends Component<Props, State>{
       },
     ]
   }
+  componentDidMount() {
+    if(Object.keys(this.props.pendingActions).length) {
+      this.setState({
+        payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
+        receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
+        truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+      })
+    }
+  }
   getStatus(data) {
     const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
     switch (data.status) {
       case 'unpaid':
-        if (data.dateOfPayment < todaysDate)
+        if (new Date(data.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
           return <div className="status-chip late">{local.late}</div>
         else
           return <div className="status-chip unpaid">{local.unpaid}</div>
@@ -192,7 +201,7 @@ class Payment extends Component<Props, State>{
       this.setState({ payAmount: res.body.requiredAmount })
       if (res.status === 'success') {
         this.props.setReceiptData(res.body);
-          this.props.print({print: 'payEarly'});
+        this.props.print({print: 'payEarly'});
         this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
         // Swal.fire("", "early payment done", "success")
       } else {
@@ -314,7 +323,7 @@ class Payment extends Component<Props, State>{
                           >
                             <option value={-1}></option>
                             {this.props.installments.map(installment => {
-                              if (installment.status !== "partiallyPaid" && installment.status !== "paid" && installment.status !== "rescheduled")
+                              if ((installment.status !== "partiallyPaid" && installment.status !== "paid" && installment.status !== "rescheduled") && installment.dateOfPayment > Date.now())
                                 return (<option key={installment.id} value={installment.id}>{installment.id}</option>)
                             })}
                           </Form.Control>

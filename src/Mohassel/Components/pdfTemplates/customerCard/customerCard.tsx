@@ -7,7 +7,6 @@ import store from '../../../redux/store';
 interface Props {
     data: any;
     branchDetails: any;
-    loanOfficer: string;
 }
 interface State {
     totalDaysLate: number;
@@ -27,12 +26,12 @@ class CustomerCardPDF extends Component<Props, State> {
         let totalDaysEarly = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
             if (installment.paidAt) {
-                const number = Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
+                const number = Math.round((new Date(installment.paidAt).setHours(23,59,59,59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
                 if (number > 0) {
                     totalDaysLate = totalDaysLate + number;
                 } else totalDaysEarly = totalDaysEarly + number;
             } else {
-                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - installment.dateOfPayment) / (1000 * 60 * 60 * 24));
+                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
                 if(number > 0) totalDaysLate = totalDaysLate + number;
             }
         });
@@ -89,7 +88,7 @@ class CustomerCardPDF extends Component<Props, State> {
 					<div className="frame">{timeToArabicDate(0, false)}</div>
                             </td>
                             <td> المندوب
-					<div className="frame">{this.props.loanOfficer}</div>
+					<div className="frame">{(this.props.data.product.beneficiaryType === 'group') ? this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : this.props.data.customer.representativeName}</div>
                             </td>
                         </tr>
                     </tbody>
@@ -140,9 +139,9 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{getStatus(installment)}</td>
                                 <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                 <td>{installment.paidAt ?
-                                        numbersToArabic(Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24)))
+                                        numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
                                         :
-                                        Date.now().valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((installment.dateOfPayment - Date.now().valueOf()) / (1000 * 60 * 60 * 24))): ''}</td>
+                                        new Date().setHours(23, 59, 59, 59).valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
                                 <td></td>
                             </tr>)
                         })}

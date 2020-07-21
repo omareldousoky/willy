@@ -80,6 +80,7 @@ class Search extends Component<Props, State> {
     obj.from = 0;
     if(obj.key) obj.key = Number(obj.key);
     if(obj.code) obj.code = Number(obj.code);
+    if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }

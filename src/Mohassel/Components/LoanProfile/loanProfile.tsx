@@ -55,7 +55,6 @@ interface State {
     earlyPaymentData: EarlyPayment;
     pendingActions: PendingActions;
     manualPaymentEditId: string;
-    loanOfficer: string;
     branchDetails: any;
     receiptData: any;
 }
@@ -79,7 +78,6 @@ class LoanProfile extends Component<Props, State>{
             earlyPaymentData: {},
             pendingActions: {},
             manualPaymentEditId: '',
-            loanOfficer: '',
             branchDetails: {},
             receiptData: {}
         };
@@ -89,7 +87,7 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getAppByID(id) {
-        this.setState({ loading: true });
+        this.setState({ loading: true, activeTab: 'loanDetails' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
         if (application.status === "success") {
@@ -169,7 +167,7 @@ class LoanProfile extends Component<Props, State>{
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
-                return <LoanDetailsTableView application={this.state.application} setLoanOfficer={(name) => this.setState({ loanOfficer: name })} />
+                return <LoanDetailsTableView application={this.state.application} />
             case 'loanGuarantors':
                 return <GuarantorTableView guarantors={this.state.application.guarantors} />
             case 'loanLogs':
@@ -197,7 +195,7 @@ class LoanProfile extends Component<Props, State>{
         this.setState({ loading: true });
         const res = await rejectManualPayment(this.props.history.location.state.id);
         if (res.status === "success") {
-            this.setState({ loading: false })
+            this.setState({ loading: false, pendingActions: {} })
             Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
         } else this.setState({ loading: false })
     }
@@ -341,7 +339,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
-                        <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />
+                        <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <TotalWrittenChecksPDF data={this.state.application} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />
@@ -350,8 +348,8 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
-                {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} />}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application}/>}
 
