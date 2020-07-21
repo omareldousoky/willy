@@ -145,6 +145,7 @@ class DocumentUploader extends Component<Props, State> {
     }
   }
   async deleteDocument(event, name: string, key: number) {
+
     this.overrideEventDefaults(event);
     this.setState({ loading: true });
     const data = {
@@ -155,11 +156,12 @@ class DocumentUploader extends Component<Props, State> {
     }
     const res = await this.props.deleteDocumentFun(data);
     if (res.status === "success" && this.props.documentType.updatable) {
+      const files = this.state.imagesFiles;
+        files.splice(key,1);
       this.setState({
-        imagesFiles: this.state.imagesFiles.filter((_el, index) => index !== key),
+        imagesFiles:files,
         loading: false,
       })
-     window.location.reload();
     } else if (res.status === "success" && !this.props.documentType.updatable) {
       const currentImages = this.state.imagesFiles;
       currentImages[key].valid = false;
