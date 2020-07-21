@@ -619,5 +619,8 @@
    "userStep3": "٣.بيانات أخرى",
     "fifth": "الخامس",
     "sixth": "السادس",
-    "noGuarantors":"لا يوجد ضمان"
+    "noGuarantors":"لا يوجد ضمان",
+    "reports": "التقارير",
+    "reportsProgram": "برنامج التقارير",
+    "noOfReports": "عدد التقارير"
 }

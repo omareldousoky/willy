@@ -177,6 +177,7 @@ class NavBar extends Component<Props, State> {
                   : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
     {<Can I='documentTypes' a='config'><Nav.Link onClick={()=> this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
+              <Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>}

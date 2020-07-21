@@ -37,6 +37,7 @@ import LoanRollBack from '../Components/LoanProfile/loanRollBack';
 import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
+import Reports from '../Components/Reports/reports';
 
 const appRoutes = [
   {
@@ -283,6 +284,11 @@ const appRoutes = [
         path: "/assign-branch-products",
         label: local.assignProductToBranch,
         render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductToBranch {...props} /> </Can>,
+      }, 
+      {
+        path: "/reports",
+        label: local.reports,
+        render: () => <Reports/>
       }
     ]
   }
