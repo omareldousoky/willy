@@ -43,7 +43,7 @@ const PaymentReceipt = (props) => {
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.purpose}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{'سداد قسط رقم : ' + receiptData.receiptNumber}</Form.Label>
+                                    <Form.Label column sm={6} className="info">{'سداد قسط رقم : ' + numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(receiptData.installmentSerial)}</Form.Label>
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.remaining}</Form.Label>
