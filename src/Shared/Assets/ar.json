@@ -631,5 +631,10 @@
     "loanFreeReschedulingError": "حدث خطأ في جدولة القرض",
     "loanFreeReschedulingTestSuccess": "تم تجربة جدولة القرض بنجاح",
     "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض",
-    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي"
+    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي",
+    "totalPricipleInLoan":"إجمالي الاصل فالقرض",
+    "totalPricipleInTable":"إجمالي الاصل فالجدول",
+    "totalFeesInLoan":"إجمالي المصاريف فالقرض",
+    "totalFeesInTable":"إجمالي المصاريف فالجدول"
+
 }

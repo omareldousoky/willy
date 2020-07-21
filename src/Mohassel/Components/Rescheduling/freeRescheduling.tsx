@@ -148,13 +148,7 @@ class FreeRescheduling extends Component<Props, State>{
                 principleSum += inst.principalInstallment;
             }
         })
-        if (principleSum === this.props.application.installmentsObject.totalInstallments.principal) {
-            return <div className="d-flex justify-content-end">
-                <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
-            </div>
-        } else {
-            return <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {principleSum}</h1></div>
-        }
+        return { feesSum, principleSum }
     }
     rescheduleInstallment(values, index) {
         const installments = [...values.installments];
@@ -299,18 +293,35 @@ class FreeRescheduling extends Component<Props, State>{
                                                             {formikProps.values.installments[index].status}
                                                         </td>
                                                         <td>
-                                                            {formikProps.values.installments[index].new && <span onClick={() => formikProps.setFieldValue('installments', this.removeNew(formikProps.values, index))}>x</span>}
-                                                            {!formikProps.values.installments[index].new && this.editable(item) && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}>resched</span>}
+                                                            {formikProps.values.installments[index].new && <span onClick={() => formikProps.setFieldValue('installments', this.removeNew(formikProps.values, index))}><span className="fa fa-trash" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
+                                                            {!formikProps.values.installments[index].new && this.editable(item) && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
                                                         </td>
                                                     </tr>
                                                 )
                                             })}
                                         </tbody>
                                     </Table>
-                                    <div className="d-flex justify-content-end" style={{ margin: '10px 0px' }}>
-                                        <Button onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
+                                    <div className="d-flex flex-column justify-content-end" style={{ margin: '10px 0px', textAlign:'right' }}>
+                                        <div className="d-flex flex-column">
+                                            <span>{local.totalPricipleInTable} {this.getTotals(formikProps.values).principleSum}</span>
+                                            <span>{local.totalPricipleInLoan} {this.props.application.installmentsObject.totalInstallments.principal}</span>
+                                        </div>
+                                        <div className="d-flex flex-column">
+                                            <span>{local.totalFeesInTable} {this.getTotals(formikProps.values).feesSum}</span>
+                                            <span>{local.totalFeesInLoan} {this.props.application.installmentsObject.totalInstallments.feesSum}</span>
+                                        </div>
+                                        <Button style={{ width: '4%', alignSelf: 'flex-end'}} onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
                                     </div>
-                                    {this.getTotals(formikProps.values)}
+                                    {this.getTotals(formikProps.values).principleSum === this.props.application.installmentsObject.totalInstallments.principal ? <div className="d-flex justify-content-end">
+                                        <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
+                                    </div> : <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {this.getTotals(formikProps.values).principleSum}</h1></div>}
+                                    {/* // if (principleSum === this.props.application.installmentsObject.totalInstallments.principal) {
+        //     return <div className="d-flex justify-content-end">
+        //         <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
+        //     </div>
+        // } else {
+        //     return <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {principleSum}</h1></div>
+        // } */}
                                 </Col>
                             </Form>
                         }
