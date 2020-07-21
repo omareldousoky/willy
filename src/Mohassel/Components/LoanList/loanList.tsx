@@ -8,6 +8,7 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import store from '../../redux/store';
 
 interface Props {
   history: Array<any>;
@@ -26,11 +27,11 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
     }
     this.mappers = [
@@ -42,11 +43,12 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanCode,
         key: "loanCode",
-        render: data => data.application.loanApplicationCode
+        render: data => data.application.loanApplicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -73,12 +75,14 @@ class LoanList extends Component<Props, State> {
       },
       {
         title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        key: "issueDate",
+        sortable: true,
         render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
@@ -89,7 +93,7 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getLoans()
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -132,7 +136,7 @@ class LoanList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
-            dropDownKeys={['name', 'nationalId', 'code']}
+            dropDownKeys={['name', 'nationalId', 'key']}
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}
              url="loan" 
@@ -140,6 +144,9 @@ class LoanList extends Component<Props, State> {
              size={this.state.size} 
              hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
+              url="loan" 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
