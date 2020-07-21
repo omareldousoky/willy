@@ -641,5 +641,6 @@
     "writeOffReason":"سبب شطب القرض",
     "loanWriteOffSuccess":"تم شطب القرض بنجاح",
     "loanWriteOffError":"حدث خطأ في شطب القرض",
-    "writtenOffLoan":"مشطوب"
+    "writtenOffLoan":"مشطوب",
+    "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 "
 }
