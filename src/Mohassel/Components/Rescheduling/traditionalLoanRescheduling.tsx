@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
+import { getStatus } from '../../Services/utils';
 
 interface Props {
     application: any;
@@ -62,7 +63,7 @@ class TraditionalLoanRescheduling extends Component<Props, State>{
             {
                 title: local.loanStatus,
                 key: "loanStatus",
-                render: data => data.status
+                render: data => getStatus(data)
             },
         ];
     }

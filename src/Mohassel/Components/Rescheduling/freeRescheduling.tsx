@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import Table from 'react-bootstrap/Table';
+import { getStatus } from '../../Services/utils';
 
 interface Props {
     application: any;
@@ -73,7 +74,7 @@ class FreeRescheduling extends Component<Props, State>{
             {
                 title: local.loanStatus,
                 key: "loanStatus",
-                render: data => data.status
+                render: data => getStatus(data)
             },
             {
                 title: '',
@@ -240,7 +241,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                                     onChange={(e) => {
 
                                                                         formikProps.setFieldValue(`installments[${index}].principalInstallment`, Number(e.currentTarget.value));
-                                                                        formikProps.setFieldValue(`installments[${index}].installmentResponse`, Number(e.currentTarget.value) + formikProps.values.installments[index].feesInstallment);
+                                                                        formikProps.setFieldValue(`installments[${index}].installmentResponse`, parseFloat((Number(e.currentTarget.value) + formikProps.values.installments[index].feesInstallment).toFixed(2)));
                                                                     }}
                                                                 />}
                                                             {formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].principalInstallment && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
@@ -257,7 +258,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                                 isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].feesInstallment && formikProps.touched.installments && formikProps.touched.installments[index] && formikProps.touched.installments[index].feesInstallment}
                                                                 onChange={(e) => {
                                                                     formikProps.setFieldValue(`installments[${index}].feesInstallment`, Number(e.currentTarget.value));
-                                                                    formikProps.setFieldValue(`installments[${index}].installmentResponse`, formikProps.values.installments[index].principalInstallment + Number(e.currentTarget.value));
+                                                                    formikProps.setFieldValue(`installments[${index}].installmentResponse`, parseFloat((Number(e.currentTarget.value) + formikProps.values.installments[index].principalInstallment).toFixed(2)));
                                                                 }}
                                                             />}
                                                             {formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].feesInstallment && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
@@ -265,7 +266,21 @@ class FreeRescheduling extends Component<Props, State>{
                                                             </Form.Control.Feedback>}
                                                         </td>
                                                         <td>
+                                                            {console.log(formikProps.errors)}
                                                             {formikProps.values.installments[index].installmentResponse}
+                                                            {/* {!this.editable(item) ? formikProps.values.installments[index].principalInstallment :
+                                                                <Form.Control
+                                                                    type="number"
+                                                                    name={`installments[${index}].installmentResponse`}
+                                                                    data-qc="installmentResponse"
+                                                                    value={formikProps.values.installments[index].installmentResponse}
+                                                                    onBlur={formikProps.handleBlur}
+                                                                    isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].installmentResponse}
+                                                                    disabled
+                                                                />} */}
+                                                            {formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].installmentResponse && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                                {formikProps.errors.installments[index].installmentResponse}
+                                                            </Form.Control.Feedback>}
                                                         </td>
                                                         {/* <td>
                                                         {formikProps.values.installments[index].principalPaid}
@@ -282,7 +297,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                                 onBlur={formikProps.handleBlur}
                                                                 onChange={(e) => { formikProps.setFieldValue(`installments[${index}].dateOfPayment`, new Date(e.currentTarget.value).valueOf()) }}
                                                                 min={index > 0 ? this.getDateString(formikProps.values.installments[index - 1].dateOfPayment) : undefined}
-                                                                max={index < formikProps.values.installments.length - 1 ? this.getDateString(formikProps.values.installments[index + 1].dateOfPayment) : undefined}
+                                                                // max={index < formikProps.values.installments.length - 1 ? this.getDateString(formikProps.values.installments[index + 1].dateOfPayment) : undefined}
                                                                 isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].dateOfPayment}
                                                             />}
                                                             {formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].dateOfPayment && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
@@ -290,7 +305,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                             </Form.Control.Feedback>}
                                                         </td>
                                                         <td>
-                                                            {formikProps.values.installments[index].status}
+                                                            {getStatus(formikProps.values.installments[index])}
                                                         </td>
                                                         <td>
                                                             {formikProps.values.installments[index].new && <span onClick={() => formikProps.setFieldValue('installments', this.removeNew(formikProps.values, index))}><span className="fa fa-trash" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
@@ -303,11 +318,11 @@ class FreeRescheduling extends Component<Props, State>{
                                     </Table>
                                     <div className="d-flex flex-column justify-content-end" style={{ margin: '10px 0px', textAlign:'right' }}>
                                         <div className="d-flex flex-column">
-                                            <span>{local.totalPricipleInTable} {this.getTotals(formikProps.values).principleSum}</span>
+                                            <span>{local.totalPricipleInTable} {parseFloat(this.getTotals(formikProps.values).principleSum.toFixed(2))}</span>
                                             <span>{local.totalPricipleInLoan} {this.props.application.installmentsObject.totalInstallments.principal}</span>
                                         </div>
                                         <div className="d-flex flex-column">
-                                            <span>{local.totalFeesInTable} {this.getTotals(formikProps.values).feesSum}</span>
+                                            <span>{local.totalFeesInTable} {parseFloat(this.getTotals(formikProps.values).feesSum.toFixed(2))}</span>
                                             <span>{local.totalFeesInLoan} {this.props.application.installmentsObject.totalInstallments.feesSum}</span>
                                         </div>
                                         <Button style={{ width: '4%', alignSelf: 'flex-end'}} onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
