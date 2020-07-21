@@ -315,13 +315,6 @@ class FreeRescheduling extends Component<Props, State>{
                                     {this.getTotals(formikProps.values).principleSum === this.props.application.installmentsObject.totalInstallments.principal ? <div className="d-flex justify-content-end">
                                         <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
                                     </div> : <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {this.getTotals(formikProps.values).principleSum}</h1></div>}
-                                    {/* // if (principleSum === this.props.application.installmentsObject.totalInstallments.principal) {
-        //     return <div className="d-flex justify-content-end">
-        //         <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
-        //     </div>
-        // } else {
-        //     return <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {principleSum}</h1></div>
-        // } */}
                                 </Col>
                             </Form>
                         }
