@@ -61,6 +61,7 @@ interface State {
   earlyPaymentFees: number;
   requiredAmount: number;
   installmentNumber: number;
+  byInsurance: boolean;
 }
 
 class Payment extends Component<Props, State>{
@@ -79,6 +80,7 @@ class Payment extends Component<Props, State>{
       earlyPaymentFees: 0,
       requiredAmount: 0,
       installmentNumber: -1,
+      byInsurance: false,
     }
     this.mappers = [
       {
@@ -176,7 +178,7 @@ class Payment extends Component<Props, State>{
     this.setState({ loadingFullScreen: true })
     if (this.props.paymentState === 1) {
       if (Number(values.installmentNumber) === -1) {
-        const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf());
+        const res = await payInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), values.byInsurance);
         if (res.status === 'success') {
           this.props.setReceiptData(res.body);
           this.props.print({print: 'payment'});
@@ -186,7 +188,7 @@ class Payment extends Component<Props, State>{
           this.setState({ loadingFullScreen: false });
         }
       } else {
-        const res = await payFutureInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), Number(values.installmentNumber));
+        const res = await payFutureInstallment(this.props.applicationId, values.payAmount, new Date(values.truthDate).valueOf(), Number(values.installmentNumber), values.byInsurance);
         if (res.status === 'success') {
           this.props.setReceiptData(res.body);
           this.props.print({print: 'payment'});
@@ -209,7 +211,7 @@ class Payment extends Component<Props, State>{
       }
     } else {
       if(this.props.manualPaymentEditId === ''){
-      const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
+      const res = await manualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf(), values.byInsurance);
       if (res.status === 'success') {
         this.setState({ loadingFullScreen: false });
         Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
@@ -217,7 +219,7 @@ class Payment extends Component<Props, State>{
         this.setState({ loadingFullScreen: false });
       }
     } else {
-      const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf());
+      const res = await editManualPayment(this.props.applicationId, values.payAmount, values.receiptNumber, new Date(values.truthDate).valueOf(), values.byInsurance);
       if (res.status === 'success') {
         this.setState({ loadingFullScreen: false });
         Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
@@ -380,6 +382,17 @@ class Payment extends Component<Props, State>{
                         </Col>
                       </Form.Group>
                     </Form.Group>
+                    <div style={{ display: 'flex' }}>
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }}>{`${local.byInsurance}`}</Form.Label>
+                      <Form.Check
+                        name="byInsurance"
+                        id="byInsurance"
+                        data-qc="byInsurance"
+                        type='checkbox'
+                        checked={formikProps.values.byInsurance}
+                        onChange={formikProps.handleChange}
+                      />
+                    </div>
                     <div className="payments-buttons-container">
                       <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
                       <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
@@ -601,6 +614,17 @@ class Payment extends Component<Props, State>{
                       </Col>
                     </Form.Group>
                   </Form.Group>
+                  <div style={{ display: 'flex' }}>
+                    <Form.Label style={{ textAlign: 'right', paddingRight: 0 }}>{`${local.byInsurance}`}</Form.Label>
+                    <Form.Check
+                      name="byInsurance"
+                      id="byInsurance"
+                      data-qc="byInsurance"
+                      type='checkbox'
+                      checked={formikProps.values.byInsurance}
+                      onChange={formikProps.handleChange}
+                    />
+                  </div>
                   <div className="payments-buttons-container">
                     <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
                     <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
