@@ -142,6 +142,19 @@ class LoanCreation extends Component<Props, State> {
       }
     }
   }
+  getCurrency() {
+    switch(this.state.customerData.currency) {
+      case 'egp': return local.egp;
+      default: return '';
+    }
+  }
+  getPeriod() {
+    switch(this.state.customerData.periodType) {
+      case 'days': return local.day;
+      case 'months': return local.month;
+      default: return '';
+    }
+  }
   getStatus(status: string){
     if(status === "created") return local.created;
     else return local.approved;
@@ -179,10 +192,10 @@ class LoanCreation extends Component<Props, State> {
               <td>{beneficiaryType(this.state.beneficiaryType)}</td>
               <td>{this.state.beneficiaryType === 'group' ? this.state.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer?.customerName:this.state.customerData.customerName}</td>
               <td>{this.state.customerData.principal}</td>
-              <td>{this.state.customerData.currency}</td>
+              <td>{this.getCurrency()}</td>
               <td>{this.state.customerData.noOfInstallments}</td>
               <td>{this.state.customerData.periodLength}</td>
-              <td>{this.state.customerData.periodType}</td>
+              <td>{this.getPeriod()}</td>
               <td>{this.state.customerData.gracePeriod}</td>
               <td>{this.getStatus(this.state.customerData.status)}</td>
               <td>{this.state.customerData.productName}</td>
@@ -235,6 +248,7 @@ class LoanCreation extends Component<Props, State> {
                       value={formikProps.values.loanCreationDate}
                       onChange={(e)=> {
                         formikProps.setFieldValue('loanCreationDate', e.currentTarget.value);
+                        this.setState({loanCreationDate: e.currentTarget.value})
                         this.handleCreationDateChange(e.currentTarget.value);
                       }}
                       onBlur={formikProps.handleBlur}
