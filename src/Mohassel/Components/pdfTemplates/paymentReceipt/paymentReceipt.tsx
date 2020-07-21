@@ -40,7 +40,7 @@ const PaymentReceipt = (props) => {
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{props.fromLoanIssuance ? local.value : local.installmentType}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{`${numbersToArabic(receiptData.installmentAmount)} = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})`}</Form.Label>
+                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.installmentAmount)}</span><span></span>{` = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})`}</Form.Label>
                                 </Form.Group>
                                 {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.paidFrom}</Form.Label>

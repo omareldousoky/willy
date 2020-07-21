@@ -648,5 +648,5 @@
     "reportsProgram": "برنامج التقارير",
     "noOfReports": "عدد التقارير",
     "value": "القيمة",
-    "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 "
+    "byInsurance": "تأمين"
 }
