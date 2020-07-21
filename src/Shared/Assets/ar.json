@@ -631,11 +631,11 @@
     "loanFreeReschedulingError": "حدث خطأ في جدولة القرض",
     "loanFreeReschedulingTestSuccess": "تم تجربة جدولة القرض بنجاح",
     "loanFreeReschedulingTestError": "حدث خطأ في تجربة جدولة القرض",
+    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي",
     "writeOffLoan":"شطب القرض",
     "loanWillBeWrittenOff":"سيتم شطب القرض",
     "writeOffReason":"سبب شطب القرض",
     "loanWriteOffSuccess":"تم شطب القرض بنجاح",
     "loanWriteOffError":"حدث خطأ في شطب القرض",
-    "writtenOffLoan":"مشطوب",
-    "amountShouldNotbeLessThanPaidAmount": "المبلغ يجب ان يكون اكبر من القيمة المسدده و هي"
+    "writtenOffLoan":"مشطوب"
 }
