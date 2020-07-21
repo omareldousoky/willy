@@ -642,5 +642,11 @@
     "loanWriteOffSuccess":"تم شطب القرض بنجاح",
     "loanWriteOffError":"حدث خطأ في شطب القرض",
     "writtenOffLoan":"مشطوب",
+    "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 ",
+    "noGuarantors":"لا يوجد ضمان",
+    "reports": "التقارير",
+    "reportsProgram": "برنامج التقارير",
+    "noOfReports": "عدد التقارير",
+    "value": "القيمة",
     "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 "
 }

@@ -4,8 +4,17 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import Tafgeet from 'tafgeetjs'
 
 const PaymentReceipt = (props) => {
+    function getPurpose(installmentSerial: number) {
+        switch (installmentSerial) {
+            case 0: return local.stamps;
+            case 1: return local.representativeFees;
+            case 2: return local.applicationFee;
+            default: return '';
+        }
+    }
     return (
         <>
             {props.receiptData.map((receiptData, index) => {
@@ -30,25 +39,29 @@ const PaymentReceipt = (props) => {
                                     <Form.Label column sm={6} className="info">{receiptData.customerName}</Form.Label>
                                 </Form.Group>
                                 <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.installmentType}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{numbersToArabic(receiptData.installmentAmount)}</Form.Label>
+                                    <Form.Label column sm={3} className="title">{props.fromLoanIssuance ? local.value : local.installmentType}</Form.Label>
+                                    <Form.Label column sm={6} className="info">{`${numbersToArabic(receiptData.installmentAmount)} = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})`}</Form.Label>
                                 </Form.Group>
-                                <Form.Group as={Row}>
+                                {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.paidFrom}</Form.Label>
                                     <Form.Label column sm={6} className="info">{numbersToArabic(receiptData.previouslyPaid)}</Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
+                                </Form.Group>}
+                                {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.currentPayment}</Form.Label>
                                     <Form.Label column sm={6} className="info">{numbersToArabic(receiptData.paidNow)}</Form.Label>
-                                </Form.Group>
+                                </Form.Group>}
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.purpose}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{'سداد قسط رقم : ' + numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(receiptData.installmentSerial)}</Form.Label>
+                                    {props.fromLoanIssuance ?
+                                        <Form.Label column sm={6} className="info">{getPurpose(receiptData.installmentSerial)}</Form.Label>
+                                        : <Form.Label column sm={6} className="info">{'سداد قسط رقم : ' + numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(receiptData.installmentSerial)}</Form.Label>
+                                    }
                                 </Form.Group>
-                                <Form.Group as={Row}>
+                                {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.remaining}</Form.Label>
                                     <Form.Label column sm={6} className="info">{numbersToArabic(receiptData.remaining)}</Form.Label>
                                 </Form.Group>
+                                }
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.recipientSignature}</Form.Label>
                                     <Form.Label column sm={6} className="dots">........................................................</Form.Label>
