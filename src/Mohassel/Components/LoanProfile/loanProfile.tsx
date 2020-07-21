@@ -38,6 +38,7 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
+import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 
 interface EarlyPayment {
@@ -242,7 +243,9 @@ class LoanProfile extends Component<Props, State>{
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.cancelApplication
+            confirmButtonText: local.cancelApplication,
+            cancelButtonText: local.cancel
+
         }).then(async (result) => {
             if (result.value) {
                 this.setState({ loading: true });
@@ -257,6 +260,47 @@ class LoanProfile extends Component<Props, State>{
             }
         })
     }
+    async writeOffApplication() {
+        const { value: text } = await Swal.fire({
+            title: local.writeOffReason,
+            input: 'text',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.writeOffLoan,
+            cancelButtonText: local.cancel,
+            inputValidator: (value) => {
+                if (!value) {
+                    return local.required
+                } else return ''
+            }
+        })
+        if (text) {
+
+            Swal.fire({
+                title: local.areYouSure,
+                text: `${local.loanWillBeWrittenOff}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: local.writeOffLoan,
+                cancelButtonText: local.cancel
+            }).then(async (result) => {
+                if (result.value) {
+                    this.setState({ loading: true });
+                    const res = await writeOffLoan(this.props.history.location.state.id, { writeOffReason: text });
+                    if (res.status === "success") {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanWriteOffSuccess, 'success').then(() => window.location.reload());
+                    } else {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanWriteOffError, 'error');
+                    }
+                }
+            })
+        }
+    }
     render() {
         return (
             <Container>
@@ -264,13 +308,16 @@ class LoanProfile extends Component<Props, State>{
                 {Object.keys(this.state.application).length > 0 &&
                     <div className="print-none">
                         <div className="d-flex justify-content-between">
-                            <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                            <div className="d-flex justify-content-start" style={{ width: '30%' }}>
                                 <h3>{local.loanDetails}</h3>
-                                <span style={{ display: 'flex', padding: 10, borderRadius: 30, border: `1px solid ${englishToArabic(this.state.application.status).color}` }}>
+                                <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid ${englishToArabic(this.state.application.status).color}` }}>
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
+                                {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
+                                    <p style={{ margin: 0, color: 'red' }}>{local.writtenOffLoan}</p>
+                                </span>}
                             </div>
-                            <div className="d-flex justify-content-end" style={{ width: '75%' }}>
+                            <div className="d-flex justify-content-end" style={{ width: '70%' }}>
                                 <span style={{ cursor: 'not-allowed', padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
                                 {this.state.application.status === 'issued' && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span></Can>}
                                 {this.state.application.status === "created" && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
@@ -281,7 +328,8 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'created' && <Can I='issueLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.issueLoan}</span></Can>}
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
-                                {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
+                                {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span> }
+                                {this.state.application.status === 'issued' && !this.state.application.writeOff && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
 
                             </div>
                         </div>
