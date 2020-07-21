@@ -622,5 +622,6 @@
     "noGuarantors":"لا يوجد ضمان",
     "reports": "التقارير",
     "reportsProgram": "برنامج التقارير",
-    "noOfReports": "عدد التقارير"
+    "noOfReports": "عدد التقارير",
+    "value": "القيمة"
 }
