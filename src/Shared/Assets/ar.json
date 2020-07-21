@@ -647,5 +647,6 @@
     "reports": "التقارير",
     "reportsProgram": "برنامج التقارير",
     "noOfReports": "عدد التقارير",
-    "value": "القيمة"
+    "value": "القيمة",
+    "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 "
 }
