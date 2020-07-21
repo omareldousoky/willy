@@ -51,12 +51,12 @@ interface Props {
   branchId?: string;
 };
 class TrackLoanApplications extends Component<Props, State>{
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
       print: false,
-      size: 5,
+      size: 10,
       from: 0,
       branchDetails: {}
     }
@@ -69,11 +69,12 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.applicationCode,
         key: "applicationCode",
-        render: data => data.application.applicationCode
+        render: data => data.application.applicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
@@ -94,12 +95,14 @@ class TrackLoanApplications extends Component<Props, State>{
       },
       {
         title: local.loanCreationDate,
-        key: "loanCreationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.loanStatus,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
@@ -110,7 +113,7 @@ class TrackLoanApplications extends Component<Props, State>{
     ]
   }
   componentDidMount() {
-    this.getApplications();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
   }
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
@@ -160,13 +163,16 @@ class TrackLoanApplications extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
-            dropDownKeys={['name', 'nationalId', 'code']} 
+            dropDownKeys={['name', 'nationalId', 'key']} 
             url="application" 
             from={this.state.from} 
             size={this.state.size} 
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              url="application" 
+              from={this.state.from} 
+              size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}

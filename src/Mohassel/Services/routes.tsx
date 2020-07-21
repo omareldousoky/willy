@@ -70,21 +70,21 @@ const appRoutes = [
       {
         path: "/tools",
         label: local.tools,
-        render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
+        render: (props) => <Can I='documentTypes' a='config'><EncodingFiles {...props} /> </Can>,
         routes: [{
           path: "/encoding-files",
           label: local.encodingFiles,
-          render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
-          routes:[
+          render: (props) => <Can I='documentTypes' a='config'><EncodingFiles {...props} /> </Can>,
+          routes: [
             {
               path: "/create-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={false} /> </Can>
+              render: (props) => <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={false} /> </Can>
             },
             {
               path: "/edit-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
+              render: (props) => <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
             }
           ]
         }
@@ -220,7 +220,7 @@ const appRoutes = [
           {
             path: "/users",
             label: local.users,
-            render: (props) => <Can I='getUser' a='user'> <UsersList  {...props} withHeader={true}  /></Can>,
+            render: (props) => <Can I='getUser' a='user'> <UsersList  {...props} withHeader={true} /></Can>,
             routes: [
               {
                 path: "/new-user",
@@ -243,7 +243,7 @@ const appRoutes = [
           {
             path: "/branches",
             label: local.branches,
-            render: (props) => <Can I='getBranch' a='branch'> <BranchesList {...props} withHeader={true}  /> </Can>,
+            render: (props) => <Can I='getBranch' a='branch'> <BranchesList {...props} withHeader={true} /> </Can>,
             routes: [
               {
                 path: "/new-branch",

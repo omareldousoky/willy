@@ -131,7 +131,7 @@ class CustomerCreation extends Component<Props, State>{
         results: [],
         empty: false
       },
-      selectedCustomer: {}
+      selectedCustomer: {},
     }
   }
 
@@ -140,6 +140,21 @@ class CustomerCreation extends Component<Props, State>{
       this.getCustomerById();
     }
   }
+  formikStep1 = {
+    isValid: true,
+    values: step1,
+    errors: {},
+  };
+  formikStep2 = {
+    isValid: true,
+    values: step2,
+    errors: {},
+  };
+  formikStep3 = {
+    isValid: true,
+    values: step3,
+    errors: {},
+  };
   async getCustomerById() {
     this.setState({ loading: true });
     const res = await getCustomerByID(this.props.location.state.id)
@@ -198,13 +213,29 @@ class CustomerCreation extends Component<Props, State>{
         allowGuarantorLoan: res.body.allowGuarantorLoan,
         allowMultiGuarantee: res.body.allowMultiGuarantee,
       };
+      this.formikStep1 = {
+        values: { ...this.state.step1, ...customerInfo },
+        errors: {},
+        isValid: true,
+      };
+      this.formikStep2 = {
+        values: { ...this.state.step2, ...customerBusiness },
+        errors: {},
+        isValid: true,
+      };
+      this.formikStep3 = {
+        errors: {},
+        values: { ...this.state.step3, ...customerExtraDetails },
+        isValid: true,
+
+      };
       this.setState({
         loading: false,
         selectedCustomer: res.body,
         step1: { ...this.state.step1, ...customerInfo },
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
-        hasLoan: res.body.hasLoan
+        hasLoan: res.body.hasLoan,
       } as any);
     } else {
       this.setState({ loading: false });
@@ -231,7 +262,7 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
-    objToSubmit.representative = objToSubmit.representative._id;
+    objToSubmit.representative = objToSubmit.representative._id ? objToSubmit.representative._id : objToSubmit.representative;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
@@ -268,8 +299,14 @@ class CustomerCreation extends Component<Props, State>{
         validateOnBlur
         validateOnChange
       >
-        {(formikProps) =>
-          <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />
+        {(formikProps) => {
+          if (this.props.edit) {
+            this.formikStep1 = formikProps;
+          }
+
+          return (
+            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />);
+        }
         }
       </Formik>
     )
@@ -285,9 +322,16 @@ class CustomerCreation extends Component<Props, State>{
         validateOnBlur
         validateOnChange
       >
-        {(formikProps) =>
-          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan}/>
+        {(formikProps) => {
+          if (this.props.edit) {
+            this.formikStep2 = formikProps;
+          }
+
+          return (
+            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} />);
         }
+        }
+
       </Formik>
     )
   }
@@ -302,9 +346,16 @@ class CustomerCreation extends Component<Props, State>{
         validateOnBlur
         validateOnChange
       >
-        {(formikProps) =>
-          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan}/>
-        }
+        {(formikProps) => {
+          if (this.props.edit) {
+
+            this.formikStep3 = formikProps;
+
+          }
+          return (
+            <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} />
+          )
+        }}
       </Formik>
     )
   }
@@ -314,7 +365,7 @@ class CustomerCreation extends Component<Props, State>{
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
-        view = {false}
+        view={false}
       />
     )
   }
@@ -332,6 +383,31 @@ class CustomerCreation extends Component<Props, State>{
       default: return null;
     }
   }
+  handleWizardClick = (index: number) => {
+    if (this.formikStep1.isValid == true && this.formikStep2.isValid == true && this.formikStep3.isValid == true)
+      switch (this.state.step) {
+        case 1:
+          return (this.setState({
+            step1: this.formikStep1.values,
+            step: index + 1
+          }))
+        case 2:
+          return (this.setState({
+            step2: this.formikStep2.values,
+            step: index + 1
+          }))
+        case 3:
+          return (this.setState({
+            step3: this.formikStep3.values,
+            step: index + 1
+          }))
+        default:
+          return (this.setState({
+            step: index + 1
+          }))
+
+      }
+  }
   render() {
     return (
       <Container>
@@ -339,8 +415,11 @@ class CustomerCreation extends Component<Props, State>{
         <Card>
           <div style={{ display: "flex", flexDirection: "row", }} >
             <Wizard currentStepNumber={this.state.step - 1}
-              stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}></Wizard>
-            <Card.Body style={{width:"80%"}} >
+              edit={this.props.edit}
+              onClick={this.handleWizardClick}
+              stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}
+            />
+            <Card.Body style={{ width: "80%" }} >
               {this.renderSteps()}
             </Card.Body>
           </div>

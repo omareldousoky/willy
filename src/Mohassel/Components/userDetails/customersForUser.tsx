@@ -43,7 +43,7 @@ class CustomersForUser extends Component<Props, State> {
     super(props);
     this.state = {
       customers: [],
-      size: 5,
+      size: 10,
       from: 0,
       selectedCustomers: [],
       totalCustomers: 0,
@@ -219,12 +219,7 @@ class CustomersForUser extends Component<Props, State> {
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
               <Col sm={9}>
-                <LoanOfficersDropDown
-                  onSelectLoanOfficer={(LO) =>
-                    this.setState({ selectedLO: LO })
-                  }
-                  excludeId={this.props.id}
-                />
+                <LoanOfficersDropDown onSelectLoanOfficer={(LO) => this.setState({ selectedLO: LO })} excludeId={this.props.id}/>
               </Col>
               <Col sm={3}>
                 <Button

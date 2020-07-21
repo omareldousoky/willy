@@ -20,6 +20,8 @@ export const LoanOfficersDropDown = (props) => {
     const getLoanOfficers = async (searchKeyWord) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: searchKeyWord });
         if (res.status === "success") {
+            if(props.excludeId)
+                return res.body.data.filter(loanOfficer => loanOfficer._id !== props.excludeId)
             return res.body.data;
         } else {
             return [];
