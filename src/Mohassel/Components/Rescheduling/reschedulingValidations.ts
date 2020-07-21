@@ -28,36 +28,27 @@ export const freeReschedulingValidation = Yup.object().shape({
         Yup.object().shape({
             principalInstallment: Yup.number().min(Yup.ref('principalPaid')).required(local.required),
             feesInstallment: Yup.number().min(Yup.ref('feesPaid')).required(local.required),
-            installmentResponse:  Yup.number().min(0).required(local.required),
 
-        }).test('is before', '', function(item) {
-            const {dateOfPayment, installmentResponse} = item;
+        }).test('is before', '', function (item) {
+            const { dateOfPayment } = item;
             const array = this.parent;
-            const index = parseInt(this.path.split('[')[1].split(']')[0],10);
-            // if(installmentResponse === 0){
-            //     return this.createError({
-            //         path: `${this.path}.installmentResponse`,
-            //         message: local.datesShouldBeInChronologicalOrder
-            //     })
-            // }
-            if(array[index-1] && dateOfPayment < array[index-1].dateOfPayment && installmentResponse == 0){
+            const index = parseInt(this.path.split('[')[1].split(']')[0], 10);
+            if (array[index - 1] && dateOfPayment < array[index - 1].dateOfPayment) {
                 return this.createError({
                     path: `${this.path}.dateOfPayment`,
                     message: local.datesShouldBeInChronologicalOrder
                 })
-            }else{
+            } else {
                 return true
             }
-        }).test('is zero', '', function(item) {
-            const {installmentResponse} = item;
-            const array = this.parent;
-            const index = parseInt(this.path.split('[')[1].split(']')[0],10);
-            if(installmentResponse === 0){
+        }).test('is zero', '', function (item) {
+            const { installmentResponse } = item;
+            if (installmentResponse <= 0) {
                 return this.createError({
                     path: `${this.path}.installmentResponse`,
                     message: local.mustBeGreaterThanZero
                 })
-            }else{
+            } else {
                 return true
             }
         })

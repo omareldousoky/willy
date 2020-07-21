@@ -159,7 +159,6 @@ class FreeRescheduling extends Component<Props, State>{
     applyChanges() {
         Swal.fire({
             title: local.areYouSure,
-            // text: `${local.willBePostponed}  ${(this.state.noOfInstallments > 1) ? this.state.noOfInstallments + local.installments : local.installment}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -266,28 +265,11 @@ class FreeRescheduling extends Component<Props, State>{
                                                             </Form.Control.Feedback>}
                                                         </td>
                                                         <td>
-                                                            {console.log(formikProps.errors)}
                                                             {formikProps.values.installments[index].installmentResponse}
-                                                            {/* {!this.editable(item) ? formikProps.values.installments[index].principalInstallment :
-                                                                <Form.Control
-                                                                    type="number"
-                                                                    name={`installments[${index}].installmentResponse`}
-                                                                    data-qc="installmentResponse"
-                                                                    value={formikProps.values.installments[index].installmentResponse}
-                                                                    onBlur={formikProps.handleBlur}
-                                                                    isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].installmentResponse}
-                                                                    disabled
-                                                                />} */}
                                                             {formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].installmentResponse && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
                                                                 {formikProps.errors.installments[index].installmentResponse}
                                                             </Form.Control.Feedback>}
                                                         </td>
-                                                        {/* <td>
-                                                        {formikProps.values.installments[index].principalPaid}
-                                                    </td>
-                                                    <td>
-                                                        {formikProps.values.installments[index].feesPaid}
-                                                    </td> */}
                                                         <td>
                                                             {(!this.editable(item) || item.status === 'partiallyPaid') ? getRenderDate(formikProps.values.installments[index].dateOfPayment) : <Form.Control
                                                                 type="date"

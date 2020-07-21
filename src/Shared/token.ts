@@ -1,4 +1,4 @@
 export function setToken(token) {
-  //;domain=.halan.io
-  document.cookie = "token=" + token + ";domain=.halan.io;path=/;";
+    //;domain=.halan.io
+    document.cookie = "token=" + token + ";path=/;";
 }
