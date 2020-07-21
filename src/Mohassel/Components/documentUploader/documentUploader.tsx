@@ -156,10 +156,10 @@ class DocumentUploader extends Component<Props, State> {
     const res = await this.props.deleteDocumentFun(data);
     if (res.status === "success" && this.props.documentType.updatable) {
       this.setState({
-        imagesFiles: this.state.imagesFiles.filter((_el, index) => index !== key).then( window.location.reload()),
+        imagesFiles: this.state.imagesFiles.filter((_el, index) => index !== key),
         loading: false,
       })
-    
+     window.location.reload();
     } else if (res.status === "success" && !this.props.documentType.updatable) {
       const currentImages = this.state.imagesFiles;
       currentImages[key].valid = false;
