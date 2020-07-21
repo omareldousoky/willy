@@ -270,7 +270,6 @@ class LoanProfile extends Component<Props, State>{
                 confirmButtonText: local.writeOffLoan,
                 cancelButtonText: local.cancel
             }).then(async (result) => {
-                console.log(result, text)
                 if (result.value) {
                     this.setState({ loading: true });
                     const res = await writeOffLoan(this.props.history.location.state.id, { writeOffReason: text });
