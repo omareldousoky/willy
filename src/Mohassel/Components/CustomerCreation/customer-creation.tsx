@@ -110,6 +110,7 @@ interface State {
   selectedCustomer: any;
   loading: boolean;
   hasLoan: boolean;
+  isGuarantor: boolean;
   searchResults: {
     results: Array<object>;
     empty: boolean;
@@ -127,6 +128,7 @@ class CustomerCreation extends Component<Props, State>{
       customerId: '',
       loading: false,
       hasLoan: false,
+      isGuarantor: false,
       searchResults: {
         results: [],
         empty: false
@@ -236,6 +238,7 @@ class CustomerCreation extends Component<Props, State>{
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
         hasLoan: res.body.hasLoan,
+        isGuarantor: res.body.isGuarantor,
       } as any);
     } else {
       this.setState({ loading: false });
@@ -305,7 +308,7 @@ class CustomerCreation extends Component<Props, State>{
           }
 
           return (
-            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />);
+            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>);
         }
         }
       </Formik>
@@ -328,7 +331,7 @@ class CustomerCreation extends Component<Props, State>{
           }
 
           return (
-            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} />);
+            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>);
         }
         }
 
@@ -353,7 +356,7 @@ class CustomerCreation extends Component<Props, State>{
 
           }
           return (
-            <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} />
+            <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>
           )
         }}
       </Formik>

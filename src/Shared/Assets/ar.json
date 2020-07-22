@@ -5,6 +5,7 @@
     "customerType": "نوع العميل",
     "name": "الإسم",
     "gender": "النوع",
+    "thisUserIsAsiggnedToOtherCustomers": "هذا العميل مربوط بعملاء اخرين سيتم نقلهم ايضا",
     "nameSecondLang": "الاسم باللغة الثانية",
     "nationalId": "الرقم القومي",
     "nationalIdIssueDate": "تاريخ اصدار البطاقة",
@@ -643,5 +644,11 @@
     "loanWriteOffError":"حدث خطأ في شطب القرض",
     "writtenOffLoan":"مشطوب",
     "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 ",
+    "reports": "التقارير",
+    "reportsProgram": "برنامج التقارير",
+    "noOfReports": "عدد التقارير",
+    "value": "القيمة",
+    "byInsurance": "تأمين",
     "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !"
+
 }
