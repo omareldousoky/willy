@@ -111,6 +111,10 @@ class LoanProfile extends Component<Props, State>{
             {
                 header: local.logs,
                 stringKey: 'loanLogs'
+            },
+            {
+                header: local.documents,
+                stringKey: 'documents'
             }
         ]
         const guarantorsTab = {
@@ -398,7 +402,7 @@ class LoanProfile extends Component<Props, State>{
                     </>}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
-                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} />}
+                {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application}/>}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application}/>}
 
             </Container>
