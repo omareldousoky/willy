@@ -86,6 +86,12 @@ const CustomerCardPDF = (props) => {
                             <div className="frame">تمويل رأس المال</div>
                         </td>
                     </tr>
+                    <tr>
+                        <td>غرامات مسددة <div className="frame">{numbersToArabic(props.data.penaltiesPaid)}</div>
+                        </td>
+                        <td>غرامات معفاة <div className="frame">{numbersToArabic(props.data.penaltiesCanceled)}</div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -101,7 +107,7 @@ const CustomerCardPDF = (props) => {
                         <th>الحاله</th>
                         <th>تاريخ الحاله</th>
                         <th>ايام التأخير</th>
-                        <th style={{ width: "30%"}}>ملاحظات</th>
+                        <th style={{ width: "30%" }}>ملاحظات</th>
                     </tr>
                     {props.data.installmentsObject.installments.map(installment => {
                         return (<tr key={installment.id}>
@@ -112,7 +118,7 @@ const CustomerCardPDF = (props) => {
                             <td>{numbersToArabic(installment.principalPaid)}</td>
                             <td>{numbersToArabic(installment.feesPaid)}</td>
                             <td>{getStatus(installment.status)}</td>
-                            <td>{installment.paidAt? timeToArabicDate(installment.paidAt, false): ''}</td>
+                            <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                             <td>{Math.round((installment.paidAt - installment.dateOfPayment) / (1000 * 60 * 60 * 24)) > 0 ? numbersToArabic(Math.round((installment.paidAt - installment.dateOfPayment))) : ''}</td>
                             <td></td>
                         </tr>)
@@ -133,7 +139,7 @@ const CustomerCardPDF = (props) => {
             </table>
             <table className="tablestyle" style={{ border: "1px black solid" }}>
                 <tbody>
-                    {props.data.product.beneficiaryType === "individual" ?
+                    {props.data.product.beneficiaryType === "individual" && props.data.guarantors.length > 0 ?
                         <tr>
                             <th>كود الضامن</th>
                             <th>اسم الضامن</th>
@@ -141,16 +147,17 @@ const CustomerCardPDF = (props) => {
                             <th>العنوان</th>
                             <th>تليفون</th>
                         </tr>
-                        :
-                        <tr>
-                            <th>كود العضو</th>
-                            <th>اسم العضو</th>
-                            <th>المنطقه</th>
-                            <th>العنوان</th>
-                            <th>تليفون</th>
-                        </tr>
+                        : props.data.product.beneficiaryType === "group" ?
+                            <tr>
+                                <th>كود العضو</th>
+                                <th>اسم العضو</th>
+                                <th>المنطقه</th>
+                                <th>العنوان</th>
+                                <th>تليفون</th>
+                            </tr>
+                            : null
                     }
-                    {props.data.product.beneficiaryType === "individual" ?
+                    {props.data.product.beneficiaryType === "individual" && props.data.guarantors.length > 0 ?
                         props.data.guarantors.map((guarantor, index) => {
                             return (
                                 <tr key={index}>
@@ -162,18 +169,19 @@ const CustomerCardPDF = (props) => {
                                 </tr>
                             )
                         })
-                        :
-                        props.data.group.individualsInGroup.map((individualInGroup, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{numbersToArabic(individualInGroup.customer.key)}</td>
-                                    <td>{individualInGroup.customer.customerName}</td>
-                                    <td>{individualInGroup.customer.district}</td>
-                                    <td>{individualInGroup.customer.customerHomeAddress}</td>
-                                    <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
-                                </tr>
-                            )
-                        })
+                        : props.data.product.beneficiaryType === "group" ?
+                            props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{numbersToArabic(individualInGroup.customer.key)}</td>
+                                        <td>{individualInGroup.customer.customerName}</td>
+                                        <td>{individualInGroup.customer.district}</td>
+                                        <td>{individualInGroup.customer.customerHomeAddress}</td>
+                                        <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
+                                    </tr>
+                                )
+                            })
+                            : null
                     }
                 </tbody>
             </table>

@@ -21,6 +21,9 @@ class InfoBox extends Component<Props, State>{
             loading: false,
         }
     }
+    getIscore() {
+        console.log(this.props)
+    }
     render() {
         const values = this.props.values;
         return (
@@ -44,7 +47,7 @@ class InfoBox extends Component<Props, State>{
                         </Row>
                     </Form.Group>
                     <Col>
-                        <span style={{ cursor: 'not-allowed', padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
+                        <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore()}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
                     </Col>
                 </Form.Row>
                 <Form.Row>

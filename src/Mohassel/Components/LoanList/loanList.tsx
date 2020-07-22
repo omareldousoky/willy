@@ -50,7 +50,7 @@ class LoanList extends Component<Props, State> {
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
           }
         </div>
@@ -61,7 +61,7 @@ class LoanList extends Component<Props, State> {
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.nationalId}</span>: null)}
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.nationalId}</span> : null)}
             </div>)
           }
         </div>
@@ -84,7 +84,7 @@ class LoanList extends Component<Props, State> {
       {
         title: '',
         key: "action",
-        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
+        render: data => this.renderIcons(data)
       },
     ]
   }
@@ -104,14 +104,24 @@ class LoanList extends Component<Props, State> {
       default: return null;
     }
   }
-
+  renderIcons(data) {
+    return (
+      <>
+        <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
+        <span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getIScore(data)}>iScore</span>
+      </>
+    )
+  }
+  getIScore(data: any){
+    console.log(data)
+  }
   async getLoans() {
-     let query = {};
-     if(this.props.fromBranch){
-       query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
-     } else {
-      query = {size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" , ...this.props.searchFilters}
-     }
+    let query = {};
+    if (this.props.fromBranch) {
+      query = { size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", ...this.props.searchFilters }
+    } else {
+      query = { size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", ...this.props.searchFilters }
+    }
     this.props.search(query);
   }
   componentWillUnmount() {
@@ -126,19 +136,19 @@ class LoanList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
-                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
+                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search 
-            searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
-            dropDownKeys={['name', 'nationalId', 'code']}
-            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
-            datePlaceholder={local.issuanceDate}
-             url="loan" 
-             from={this.state.from} 
-             size={this.state.size} 
-             hqBranchIdRequest={this.props.branchId} />
+            <Search
+              searchKeys={['keyword', 'dateFromTo', 'status', 'branch']}
+              dropDownKeys={['name', 'nationalId', 'code']}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              datePlaceholder={local.issuanceDate}
+              url="loan"
+              from={this.state.from}
+              size={this.state.size}
+              hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               totalCount={this.props.totalCount}
               mappers={this.mappers}
