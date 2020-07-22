@@ -112,7 +112,7 @@ class FreeRescheduling extends Component<Props, State>{
     addRow(values) {
         const installments = [...values.installments];
         installments.push({
-            id: values.installments.length + 1,
+            id: values.installments.length,
             dateOfPayment: new Date().valueOf(),
             feesInstallment: 0,
             feesPaid: 0,
