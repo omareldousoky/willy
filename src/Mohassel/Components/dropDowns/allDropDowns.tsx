@@ -76,8 +76,7 @@ export const BranchesDropDown = (props) => {
                 name="branches"
                 data-qc="branches"
                 placeholder={local.chooseBranch}
-                // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
-                // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
+                isMulti={props.multiselect}
                 onChange={(branch) => props.onSelectBranch(branch)}
                 getOptionLabel={(option) => option.name}
                 getOptionValue={(option) => option._id}
