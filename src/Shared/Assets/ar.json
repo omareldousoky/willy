@@ -642,5 +642,6 @@
     "loanWriteOffSuccess":"تم شطب القرض بنجاح",
     "loanWriteOffError":"حدث خطأ في شطب القرض",
     "writtenOffLoan":"مشطوب",
-    "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 "
+    "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 ",
+    "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !"
 }
