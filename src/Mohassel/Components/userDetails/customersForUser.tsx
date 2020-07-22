@@ -158,7 +158,7 @@ class CustomersForUser extends Component<Props, State> {
         this.setState({ loading: false }, () => {
           Swal.fire({
             title: "",
-            text: "هذا العميل مربوط بعملاء اخرين سيتم نقلهم ايضا",
+            text: local.thisUserIsAsiggnedToOtherCustomers,
             icon: "warning",
             showCancelButton: true,
             focusConfirm: false,
