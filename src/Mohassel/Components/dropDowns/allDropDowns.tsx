@@ -17,17 +17,36 @@ export const LoanOfficersDropDown = (props) => {
             }
         })
     }
-    const getLoanOfficers = async (searchKeyWord) => {
-        const res = await searchLoanOfficer({ from: 0, size: 100, name: searchKeyWord });
+    const getLoanOfficers = async searchKeyWord => {
+      let res;
+      console.log('props.branchId',props.branchId);
+      
+      if (props.branchId) {
+        if (!props.sameBranch)
+          res = await searchLoanOfficer({
+            from: 0,
+            size: 100,
+            name: searchKeyWord,
+            status: "active",
+            excludedIds: [props.excludeId],
+            branchId: props.branchId
+          });
+        else
+          res = await searchLoanOfficer({
+            from: 0,
+            size: 100,
+            name: searchKeyWord
+          });
         if (res.status === "success") {
-            return res.body.data;
+          return res.body.data;
         } else {
-            return [];
+          return [];
         }
-    }
+      }
+    };
     return (
         <div className="dropdown-container" style={{ flex: 2 }}>
-            <p className="dropdown-label">{local.representative}</p>
+            {/* <p className="dropdown-label">{local.representative}</p> */}
             <AsyncSelect
                 styles={customStyles}
                 className="full-width"
@@ -41,6 +60,7 @@ export const LoanOfficersDropDown = (props) => {
                 getOptionValue={(option) => option._id}
                 loadOptions={getLoanOfficers}
                 cacheOptions defaultOptions
+                isClearable={true}
             />
         </div>
     );
