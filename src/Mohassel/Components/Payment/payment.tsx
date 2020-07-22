@@ -60,6 +60,7 @@ interface State {
   earlyPaymentFees: number;
   requiredAmount: number;
   installmentNumber: number;
+  penalty: number;
 }
 
 class Payment extends Component<Props, State>{
@@ -79,6 +80,7 @@ class Payment extends Component<Props, State>{
       earlyPaymentFees: 0,
       requiredAmount: 0,
       installmentNumber: -1,
+      penalty: -1
     }
     this.mappers = [
       {
@@ -131,6 +133,11 @@ class Payment extends Component<Props, State>{
   componentDidMount() {
     this.getActionLogs()
     if(this.props.paymentType==='penalties'){
+      this.calculatePenalties()
+    }
+  }
+  componentDidUpdate(){
+    if(this.props.paymentType==='penalties' && this.state.penalty === -1){
       this.calculatePenalties()
     }
   }
@@ -319,6 +326,12 @@ class Payment extends Component<Props, State>{
                       <h6>{}</h6>
                     </div>
                   ) : null}
+                  {this.props.paymentType === "penalties" ? (
+                    <div className="payment-info">
+                      <h6>{local.requiredAmount}</h6>
+                      <h6>{this.state.penalty}</h6>
+                    </div>
+                  ) : null}
                   <div className="verticalLine"></div>
                   <div className="payment-icons-container">
                     <Can I="payInstallment" a="application">
@@ -355,21 +368,25 @@ class Payment extends Component<Props, State>{
                         </div>
                       </Can>
                     ) : null}
-                    <Can I="payInstallment" a="application">
-                      <div className="payment-icon">
-                        <img
-                          alt="pay-installment"
-                          src={require("../../Assets/payInstallment.svg")}
-                        />
-                        <Button
-                          disabled={this.props.application.status === "pending"}
-                          onClick={() => this.props.changePaymentState(3)}
-                          variant="primary"
-                        >
-                          {local.manualPayment}
-                        </Button>
-                      </div>
-                    </Can>
+                    {this.props.paymentType === "normal" ? (
+                      <Can I="payInstallment" a="application">
+                        <div className="payment-icon">
+                          <img
+                            alt="pay-installment"
+                            src={require("../../Assets/payInstallment.svg")}
+                          />
+                          <Button
+                            disabled={
+                              this.props.application.status === "pending"
+                            }
+                            onClick={() => this.props.changePaymentState(3)}
+                            variant="primary"
+                          >
+                            {local.manualPayment}
+                          </Button>
+                        </div>
+                      </Can>
+                    ) : null}
                   </div>
                 </Card>
               );
@@ -612,8 +629,9 @@ class Payment extends Component<Props, State>{
       // truthDate: this.state.truthDate
       truthDate: 1592784000000
     });
-    if(res.body){
-      console.log('calculatePenalties',res.body);
+    if (res.body) {
+      console.log("calculatePenalties", res.body);
+      this.setState({ penalty: res.body.penalty });
     }
   }
   async getActionLogs() {
