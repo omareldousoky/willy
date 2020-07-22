@@ -16,10 +16,14 @@ import { searchCustomer } from "../../Services/APIs/Customer-Creation/searchCust
 import { moveCustomerToOfficer } from "../../Services/APIs/Customer-Creation/moveCustomerToOfficer";
 import Swal from "sweetalert2";
 import Pagination from "../pagination/pagination";
+import { getBranches } from "../../Services/APIs/Branch/getBranches";
+import Select from "react-select";
+import { UserDateValues } from "./userDetailsInterfaces";
 
 interface Props {
   id: string;
   name: string;
+  user: UserDateValues;
 }
 interface Customer {
   customerName?: string;
@@ -35,8 +39,15 @@ interface State {
   from: number;
   loading: boolean;
   openModal: boolean;
-  selectedLO: { _id?: string };
+  selectedLO: { _id?: string } | undefined;
   filterCustomers: string;
+  branches: Array<Branch>;
+  branch: any;
+  moveMissing: boolean;
+}
+interface Branch {
+  _id: string;
+  name: string;
 }
 class CustomersForUser extends Component<Props, State> {
   constructor(props) {
@@ -51,7 +62,26 @@ class CustomersForUser extends Component<Props, State> {
       openModal: false,
       selectedLO: {},
       filterCustomers: "",
+      branches: [],
+      branch: this.props.user.branchesObjects
+        ? this.props.user.branchesObjects[0]
+        : null,
+        moveMissing: false
     };
+    this.getBranches();
+  }
+  async getBranches() {
+    const branches = await getBranches();
+    if (branches.status === "success") {
+      this.setState(
+        {
+          branches: branches.body.data.data,
+          loading: false
+        });
+    } else {
+      this.setState({ loading: false });
+      Swal.fire("", local.searchError, "error");
+    }
   }
   componentDidMount() {
     this.getCustomersForUser();
@@ -62,13 +92,13 @@ class CustomersForUser extends Component<Props, State> {
       name: name,
       size: this.state.size,
       from: this.state.from,
-      representativeId: this.props.id,
+      representativeId: this.props.id
     });
     if (res.status === "success") {
       this.setState({
         totalCustomers: res.body.totalCount ? res.body.totalCount : 0,
         customers: res.body.data,
-        loading: false,
+        loading: false
       });
     } else this.setState({ loading: false });
   }
@@ -81,36 +111,68 @@ class CustomersForUser extends Component<Props, State> {
   addRemoveItemFromChecked(customer: Customer) {
     if (
       this.state.selectedCustomers.findIndex(
-        (selectedCustomer) => selectedCustomer._id == customer._id
+        selectedCustomer => selectedCustomer._id == customer._id
       ) > -1
     ) {
       this.setState({
         selectedCustomers: this.state.selectedCustomers.filter(
-          (el) => el._id !== customer._id
-        ),
+          el => el._id !== customer._id
+        )
       });
     } else {
       this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, customer],
+        selectedCustomers: [...this.state.selectedCustomers, customer]
       });
     }
   }
   async submit() {
     this.setState({ loading: true, openModal: false });
-    const res = await moveCustomerToOfficer({
+    const data: {
+      user: string;
+      newUser: string | undefined;
+      customers: Array<string | undefined>;
+      [k: string]: any;
+    } = {
       user: this.props.id,
-      newUser: this.state.selectedLO._id,
-      customers: this.state.selectedCustomers.map((customer) => customer._id),
-    });
+      newUser: this.state.selectedLO ? this.state.selectedLO._id : "",
+      customers: this.state.selectedCustomers.map(customer => customer._id)
+    };
+    if (this.state.branch._id !== this.props.user.branchesObjects[0]._id) {
+      data.branchId = this.state.branch._id;
+    }
+    if(this.state.moveMissing===true ){
+      data.moveMissing = true;
+    }
+    const res = await moveCustomerToOfficer(data);
     if (res.status === "success") {
       this.setState({ loading: false });
       Swal.fire(
         "",
         `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`,
         "success"
-      ).then(() => this.getCustomersForUser());
+      ).then(() => {
+        this.setState({ openModal: false, moveMissing: false  }, () => this.getCustomersForUser());
+      });
     } else {
-      this.setState({ loading: false });
+      if (res.error && res.error.error === "move_missing_customers") {
+        this.setState({ loading: false }, () => {
+          Swal.fire({
+            title: "",
+            text: local.thisUserIsAsiggnedToOtherCustomers,
+            icon: "warning",
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: 'تأكيد',
+            cancelButtonText: 'إلغاء'
+          }).then(value => {
+            if (value.value) {
+              this.setState({ loading: false, moveMissing: true }, () =>
+                this.submit()
+              );
+            }
+          });
+        });
+      } else this.setState({ loading: false });
     }
   }
   render() {
@@ -147,10 +209,10 @@ class CustomersForUser extends Component<Props, State> {
             value={this.state.filterCustomers}
             style={{ direction: "rtl", borderRight: 0, padding: 22 }}
             placeholder={local.searchByName}
-            onChange={(e) => {
+            onChange={e => {
               this.setState({ filterCustomers: e.currentTarget.value });
             }}
-            onKeyPress={async (event) => {
+            onKeyPress={async event => {
               if (event.key === "Enter") {
                 this.getCustomersForUser(this.state.filterCustomers);
               }
@@ -169,7 +231,7 @@ class CustomersForUser extends Component<Props, State> {
                 <th>
                   <FormCheck
                     type="checkbox"
-                    onClick={(e) => this.checkAll(e)}
+                    onClick={e => this.checkAll(e)}
                   ></FormCheck>
                 </th>
                 <th>{local.customerCode}</th>
@@ -211,21 +273,64 @@ class CustomersForUser extends Component<Props, State> {
           size="lg"
           show={this.state.openModal}
           centered
-          onHide={() => this.setState({ openModal: false })}
+          onHide={() => this.setState({ openModal: false, moveMissing: false })}
         >
           <Modal.Header closeButton>
-            <Modal.Title>{local.chooseRepresentative}</Modal.Title>
+            <Modal.Title style={{ margin: " 0 auto" }}>
+              {local.chooseRepresentative}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
-              <Col sm={9}>
-                <LoanOfficersDropDown onSelectLoanOfficer={(LO) => this.setState({ selectedLO: LO })} excludeId={this.props.id}/>
+              <Col sm={12}>
+                <Select
+                  placeholder={local.chooseBranch}
+                  name="branch"
+                  data-qc="branch"
+                  value={this.state.branch}
+                  enableReinitialize={false}
+                  onChange={event => {
+                    if (!event)
+                      this.setState({ branch: event, selectedLO: event });
+                    else
+                      this.setState({ branch: event });
+                  }}
+                  type="text"
+                  getOptionLabel={option => option.name}
+                  getOptionValue={option => option._id}
+                  options={this.state.branches}
+                  isClearable={true}
+                />
               </Col>
+            </Row>
+            <Row style={{ padding: "10px 40px" }}>
+              <Col sm={12}>
+                <LoanOfficersDropDown
+                  onSelectLoanOfficer={LO => {
+                    if (LO) this.setState({ selectedLO: LO });
+                    else this.setState({ selectedLO: {} });
+                  }}
+                  excludeId={this.props.id}
+                  branchId={this.state.branch ? this.state.branch._id : ""}
+                  sameBranch={
+                    this.state.branch
+                      ? this.state.branch._id ===
+                        this.props.user.branchesObjects[0]._id
+                      : false
+                  }
+                />
+              </Col>
+            </Row>
+            <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
               <Col sm={3}>
                 <Button
                   style={{ width: "100%", height: "100%" }}
                   onClick={() => this.submit()}
-                  disabled={!Boolean(this.state.selectedLO._id)}
+                  disabled={
+                    (this.state.selectedLO
+                      ? !Boolean(this.state.selectedLO._id)
+                      : true) || this.state.branch === null
+                  }
                   variant="primary"
                 >
                   {local.submit}
