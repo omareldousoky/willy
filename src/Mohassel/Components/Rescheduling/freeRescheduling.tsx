@@ -112,7 +112,7 @@ class FreeRescheduling extends Component<Props, State>{
     addRow(values) {
         const installments = [...values.installments];
         installments.push({
-            id: values.installments.length + 1,
+            id: values.installments.length,
             dateOfPayment: new Date().valueOf(),
             feesInstallment: 0,
             feesPaid: 0,
@@ -291,7 +291,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                         </td>
                                                         <td>
                                                             {formikProps.values.installments[index].new && <span onClick={() => formikProps.setFieldValue('installments', this.removeNew(formikProps.values, index))}><span className="fa fa-trash" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
-                                                            {!formikProps.values.installments[index].new && this.editable(item) && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
+                                                            {!formikProps.values.installments[index].new && this.editable(item) && item.status !== 'partiallyPaid'  && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
                                                         </td>
                                                     </tr>
                                                 )
