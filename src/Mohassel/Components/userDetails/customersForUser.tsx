@@ -43,6 +43,7 @@ interface State {
   filterCustomers: string;
   branches: Array<Branch>;
   branch: any;
+  moveMissing: boolean;
 }
 interface Branch {
   _id: string;
@@ -64,7 +65,8 @@ class CustomersForUser extends Component<Props, State> {
       branches: [],
       branch: this.props.user.branchesObjects
         ? this.props.user.branchesObjects[0]
-        : null
+        : null,
+        moveMissing: false
     };
     this.getBranches();
   }
@@ -75,17 +77,13 @@ class CustomersForUser extends Component<Props, State> {
         {
           branches: branches.body.data.data,
           loading: false
-        },
-        () => console.log("branches", this.state.branches)
-      );
+        });
     } else {
       this.setState({ loading: false });
       Swal.fire("", local.searchError, "error");
     }
   }
   componentDidMount() {
-    console.log("user", this.props.user);
-
     this.getCustomersForUser();
   }
   async getCustomersForUser(name?: string) {
@@ -142,6 +140,9 @@ class CustomersForUser extends Component<Props, State> {
     if (this.state.branch._id !== this.props.user.branchesObjects[0]._id) {
       data.branchId = this.state.branch._id;
     }
+    if(this.state.moveMissing===true ){
+      data.moveMissing = true;
+    }
     const res = await moveCustomerToOfficer(data);
     if (res.status === "success") {
       this.setState({ loading: false });
@@ -150,12 +151,28 @@ class CustomersForUser extends Component<Props, State> {
         `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`,
         "success"
       ).then(() => {
-        this.setState({ openModal: false }, () => this.getCustomersForUser());
+        this.setState({ openModal: false, moveMissing: false  }, () => this.getCustomersForUser());
       });
     } else {
-      console.log("error", res.error);
-
-      this.setState({ loading: false });
+      if (res.error && res.error.error === "move_missing_customers") {
+        this.setState({ loading: false }, () => {
+          Swal.fire({
+            title: "",
+            text: "هذا العميل مربوط بعملاء اخرين سيتم نقلهم ايضا",
+            icon: "warning",
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: 'تأكيد',
+            cancelButtonText: 'إلغاء'
+          }).then(value => {
+            if (value.value) {
+              this.setState({ loading: false, moveMissing: true }, () =>
+                this.submit()
+              );
+            }
+          });
+        });
+      } else this.setState({ loading: false });
     }
   }
   render() {
@@ -256,7 +273,7 @@ class CustomersForUser extends Component<Props, State> {
           size="lg"
           show={this.state.openModal}
           centered
-          onHide={() => this.setState({ openModal: false })}
+          onHide={() => this.setState({ openModal: false, moveMissing: false })}
         >
           <Modal.Header closeButton>
             <Modal.Title style={{ margin: " 0 auto" }}>
@@ -273,15 +290,10 @@ class CustomersForUser extends Component<Props, State> {
                   value={this.state.branch}
                   enableReinitialize={false}
                   onChange={event => {
-                    console.log("here", event);
                     if (!event)
-                      this.setState({ branch: event, selectedLO: event }, () =>
-                        console.log("LO", this.state.selectedLO)
-                      );
+                      this.setState({ branch: event, selectedLO: event });
                     else
-                      this.setState({ branch: event }, () =>
-                        console.log("LO", this.state.selectedLO)
-                      );
+                      this.setState({ branch: event });
                   }}
                   type="text"
                   getOptionLabel={option => option.name}
