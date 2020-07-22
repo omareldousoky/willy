@@ -197,6 +197,12 @@ class LoanProfile extends Component<Props, State>{
                 currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                 manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
                 paymentType={"random"} />
+            case 'cancelPayments':
+                return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
+                application={this.state.application} installments={this.state.application.installmentsObject.installments}
+                currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
+                manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
+                paymentType={"penalties"} />
             default:
                 return null
         }

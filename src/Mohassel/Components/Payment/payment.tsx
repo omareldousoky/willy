@@ -19,6 +19,8 @@ import Can from '../../config/Can';
 import { calculateEarlyPayment, earlyPayment, editManualPayment, manualPayment, payFutureInstallment, payInstallment, otherPayment } from "../../Services/APIs/Payment";
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
+import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
+import { actionLogs } from '../../Services/APIs/Payment/actionLogs';
 
 
 interface Installment {
@@ -126,6 +128,13 @@ class Payment extends Component<Props, State>{
       },
     ]
   }
+  componentDidMount() {
+    this.getActionLogs()
+    if(this.props.paymentType==='penalties'){
+      this.calculatePenalties()
+    }
+  }
+  
   getStatus(data) {
     // const todaysDate = new Date("2020-06-30").valueOf();
     const todaysDate = new Date().valueOf();
@@ -595,6 +604,22 @@ class Payment extends Component<Props, State>{
         </Card>
       )
       default: return null;
+    }
+  }
+  async calculatePenalties() {
+    const res = await calculatePenalties({
+      id: this.props.applicationId,
+      // truthDate: this.state.truthDate
+      truthDate: 1592784000000
+    });
+    if(res.body){
+      console.log('calculatePenalties',res.body);
+    }
+  }
+  async getActionLogs() {
+    const res = await actionLogs({ id: this.props.applicationId });
+    if(res.body){
+      console.log('actionLogs',res.body);
     }
   }
   render() {
