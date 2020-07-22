@@ -89,6 +89,9 @@
     &.unpaid {
         background-color: #009bed;
     }
+    &.rescheduled {
+        background-color: #2a3390;
+    }
     &.partially-paid {
         background-color: #edb600;
     }
