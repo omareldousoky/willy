@@ -9,6 +9,7 @@ import { arabicGender } from '../Services/utils';
 interface Props {
     values: any;
     noHeader?: boolean;
+    getIscore?: Function;
 };
 
 interface State {
@@ -21,8 +22,10 @@ class InfoBox extends Component<Props, State>{
             loading: false,
         }
     }
-    getIscore() {
-        console.log(this.props)
+    getIscore(data) {
+        if (this.props.getIscore) {
+            this.props.getIscore(data)
+        }
     }
     render() {
         const values = this.props.values;
@@ -46,9 +49,9 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
-                    <Col>
-                        <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore()}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
-                    </Col>
+                    {this.props.getIscore && <Col>
+                        <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.props.values)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
+                    </Col>}
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} md="4">

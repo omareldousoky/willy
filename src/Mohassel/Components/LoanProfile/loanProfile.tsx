@@ -35,6 +35,7 @@ import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import UploadDocuments from './uploadDocuments';
+import { getIscore } from '../../Services/APIs/iScore/iScore';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -217,6 +218,38 @@ class LoanProfile extends Component<Props, State>{
         window.scrollTo(0, document.body.scrollHeight);
         this.setState({ activeTab: 'loanPayments', manualPaymentEditId: this.state.pendingActions._id ? this.state.pendingActions?._id : '' });
     }
+    async getIscore(data) {
+        this.setState({ loading: true });
+        const obj = {
+            requestNumber: '002',
+            reportId: '002',
+            product: `${this.state.application.product.code}`,
+            loanAccountNumber: `${data.key}`,
+            number: '003',
+            date: '003',
+            amount: `${this.state.application.principal}`,
+            lastName: `${data.customerName}`,
+            idSource: '003',
+            idValue: `${data.nationalId}`,
+            gender: (data.gender === 'male') ? '001' : '002',
+            dateOfBirth: `${data.birthDate}`
+        }
+        const iScore = await getIscore(obj);
+        if (iScore.status === 'success') {
+            this.downloadFile(iScore.body.url, `siScore.pdf`)
+            this.setState({ loading: false })
+        } else {
+            Swal.fire('', 'fetch error', 'error')
+            this.setState({ loading: false })
+        }
+    }
+    downloadFile(fileURL, fileName) {
+        const link = document.createElement('a');
+        link.href = fileURL;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
     cancelApplication() {
         Swal.fire({
             title: local.areYouSure,
@@ -264,7 +297,7 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
                                 {this.state.application.status !== 'canceled' && (ability.can('rollback','application') || ability.can('rollbackPayment','application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span> }
-
+                                
                             </div>
                         </div>
                         {this.state.application.status === "pending" ?
@@ -298,8 +331,8 @@ class LoanProfile extends Component<Props, State>{
                             </div>
                             : null}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} /> :
-                                <GroupInfoBox group={this.state.application.group} />
+                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} /> :
+                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} />
                             }
                         </div>
                         <Card style={{ marginTop: 15 }}>
@@ -323,9 +356,9 @@ class LoanProfile extends Component<Props, State>{
                         <TotalWrittenChecksPDF data={this.state.application} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails}/>
                         {this.state.application.product.beneficiaryType === "individual"?
-                        <LoanContract data={this.state.application} branchDetails={this.state.branchDetails}/>
-                        : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails}/>
-                    }
+                            <LoanContract data={this.state.application} branchDetails={this.state.branchDetails}/>
+                            : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails}/>
+                        }
                     </>}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} loanOfficer={this.state.loanOfficer}/>}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails} />}
