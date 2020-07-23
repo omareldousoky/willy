@@ -1,0 +1,31 @@
+@media screen,print {
+    .early-payment-receipt {
+        font-weight: bold;
+        page-break-after: always;
+
+        /* max-width: 400px; */
+        & th {
+            background-color: lightgrey;
+            -webkit-print-color-adjust: exact;
+        }
+        & tbody,
+        .title {
+            text-align: center;
+        }
+
+        & table {
+            width: 100%;
+        }
+        & .frame {
+            border: 0.5px solid black;
+        }
+    }
+}
+
+@media screen {
+    .early-payment-receipt {
+        max-width: 800px;
+        display: none;
+        /* max-width: 400px; */
+    }
+}

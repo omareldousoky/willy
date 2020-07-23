@@ -20,6 +20,7 @@ interface MyFormValues {
   max: number;
   paymentType: string;
   penaltyAction: string;
+  byInsurance: boolean;
 }
 interface Installment {
   id: number;
@@ -50,6 +51,7 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
+  byInsurance: boolean;
 }
 interface SelectObject {
   label: string;
@@ -130,7 +132,8 @@ class PayInstallment extends Component<Props, State> {
             initialValues={{
               ...this.state,
               max: this.props.application.installmentsObject.totalInstallments
-                .installmentSum
+                .installmentSum,
+                byInsurance: this.props.byInsurance
             }}
             onSubmit={this.props.handleSubmit}
             validationSchema={paymentValidation}
@@ -296,6 +299,19 @@ class PayInstallment extends Component<Props, State> {
                     ) : null}
                   </Form.Group>
                 </Container>
+                <div style={{ display: "flex" }}>
+                  <Form.Label
+                    style={{ textAlign: "right", paddingRight: 0 }}
+                  >{`${local.byInsurance}`}</Form.Label>
+                  <Form.Check
+                    name="byInsurance"
+                    id="byInsurance"
+                    data-qc="byInsurance"
+                    type="checkbox"
+                    checked={formikBag.values.byInsurance}
+                    onChange={formikBag.handleChange}
+                  />
+                </div>
                 <div className="payments-buttons-container">
                   <Button
                     variant="outline-primary"

@@ -239,14 +239,6 @@ export const dayToArabic = (index: number): string => {
   const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
 }
-export function arabicGender(gender: string) {
-  switch (gender) {
-    case 'male': return local.male;
-    case 'female': return local.female;
-    default: return ''
-  }
-}
-
 export const customFilterOption = (option, rawInput) => {
   if (option.label) {
     const words = rawInput.split(' ');
@@ -256,3 +248,37 @@ export const customFilterOption = (option, rawInput) => {
     );
   }
 };
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return ''
+  }
+}
+
+
+export const download = (url, fileName: string): void => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  a.remove();
+}
+
+export const getStatus = (installment) => {
+  const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
+  switch (installment.status) {
+      case 'unpaid':
+          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      default: return '';
+  }
+}

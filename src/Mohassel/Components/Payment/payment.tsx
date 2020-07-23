@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card';
 import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
-import PaymentReceipt from './paymentReceipt';
 import { Loader } from '../../../Shared/Components/Loader';
 import { paymentValidation, earlyPaymentValidation } from './paymentValidation';
 import { timeToDateyyymmdd } from '../../Services/utils';
@@ -44,13 +43,14 @@ interface Props {
   paymentState: number;
   pendingActions: PendingActions;
   changePaymentState: (data) => void;
+  setReceiptData: (data) => void;
   print: (data) => void;
   refreshPayment: () => void;
+  setEarlyPaymentData: (data) => void;
   manualPaymentEditId: string;
   paymentType: string;
 }
 interface State {
-  receiptModal: boolean;
   receiptData: any;
   payAmount: number;
   receiptNumber: string;
@@ -64,6 +64,7 @@ interface State {
   installmentNumber: number;
   penalty: number;
   penaltyAction: string;
+  byInsurance: boolean;
 }
 
 class Payment extends Component<Props, State>{
@@ -71,11 +72,10 @@ class Payment extends Component<Props, State>{
   constructor(props: Props) {
     super(props);
     this.state = {
-      receiptModal: false,
       receiptData: {},
-      payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
-      receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-      truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+      payAmount: 0,
+      receiptNumber: '',
+      truthDate: timeToDateyyymmdd(0),
       dueDate: timeToDateyyymmdd(0),
       loading: false,
       loadingFullScreen: false,
@@ -84,7 +84,8 @@ class Payment extends Component<Props, State>{
       requiredAmount: 0,
       installmentNumber: -1,
       penalty: -1,
-      penaltyAction: ''
+      penaltyAction: '',
+      byInsurance: false,
     }
     this.mappers = [
       {
@@ -139,6 +140,13 @@ class Payment extends Component<Props, State>{
     if(this.props.paymentType==='penalties'){
       this.calculatePenalties()
     }
+    if(Object.keys(this.props.pendingActions).length) {
+      this.setState({
+        payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
+        receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
+        truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+      })
+    }
   }
   componentDidUpdate(){
     if(this.props.paymentType==='penalties' && this.state.penalty === -1){
@@ -147,11 +155,10 @@ class Payment extends Component<Props, State>{
   }
   
   getStatus(data) {
-    // const todaysDate = new Date("2020-06-30").valueOf();
-    const todaysDate = new Date().valueOf();
+    const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
     switch (data.status) {
       case 'unpaid':
-        if (data.dateOfPayment < todaysDate)
+        if (new Date(data.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
           return <div className="status-chip late">{local.late}</div>
         else
           return <div className="status-chip unpaid">{local.unpaid}</div>
@@ -190,15 +197,13 @@ class Payment extends Component<Props, State>{
           const res = await payInstallment(
             this.props.applicationId,
             values.payAmount,
-            new Date(values.truthDate).valueOf()
+            new Date(values.truthDate).valueOf(), 
+            values.byInsurance
           );
           if (res.status === "success") {
-            this.setState({
-              loadingFullScreen: false,
-              receiptModal: true,
-              receiptData: res.body
-            });
-            // Swal.fire("", "payment done", "success")
+            this.props.setReceiptData(res.body);
+          this.props.print({print: 'payment'});
+          this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
             this.setState({ loadingFullScreen: false });
           }
@@ -207,15 +212,13 @@ class Payment extends Component<Props, State>{
             this.props.applicationId,
             values.payAmount,
             new Date(values.truthDate).valueOf(),
-            Number(values.installmentNumber)
+            Number(values.installmentNumber), 
+            values.byInsurance
           );
           if (res.status === "success") {
-            this.setState({
-              loadingFullScreen: false,
-              receiptModal: true,
-              receiptData: res.body
-            });
-            // Swal.fire("", "payment done", "success")
+            this.props.setReceiptData(res.body);
+            this.props.print({print: 'payment'});
+            this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
             this.setState({ loadingFullScreen: false });
           }
@@ -228,11 +231,9 @@ class Payment extends Component<Props, State>{
         };
         const res = await otherPayment({ id: this.props.applicationId, data });
         if (res.status === "success") {
-          this.setState({
-            loadingFullScreen: false,
-            receiptModal: true,
-            receiptData: res.body
-          });
+          this.props.setReceiptData(res.body);
+          this.props.print({print: 'payment'});
+          this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
         } else {
           this.setState({ loadingFullScreen: false });
         }
@@ -247,7 +248,6 @@ class Payment extends Component<Props, State>{
           if (res.status === "success") {
             this.setState({
               loadingFullScreen: false,
-              receiptModal: true,
               receiptData: res.body
             });
           } else {
@@ -274,12 +274,9 @@ class Payment extends Component<Props, State>{
       );
       this.setState({ payAmount: res.body.requiredAmount });
       if (res.status === "success") {
-        this.setState({
-          loadingFullScreen: false,
-          receiptModal: true,
-          receiptData: res.body
-        });
-        // Swal.fire("", "early payment done", "success")
+        this.props.setReceiptData(res.body);
+        this.props.print({print: 'payEarly'});
+        this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
       } else {
         this.setState({ loadingFullScreen: false });
       }
@@ -289,13 +286,12 @@ class Payment extends Component<Props, State>{
           this.props.applicationId,
           values.payAmount,
           values.receiptNumber,
-          new Date(values.truthDate).valueOf()
+          new Date(values.truthDate).valueOf(), 
+          values.byInsurance
         );
         if (res.status === "success") {
           this.setState({ loadingFullScreen: false });
-          Swal.fire("", local.manualPaymentSuccess, "success").then(() =>
-            this.props.refreshPayment()
-          );
+          Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false });
         }
@@ -304,13 +300,12 @@ class Payment extends Component<Props, State>{
           this.props.applicationId,
           values.payAmount,
           values.receiptNumber,
-          new Date(values.truthDate).valueOf()
+          new Date(values.truthDate).valueOf(),
+          values.byInsurance
         );
         if (res.status === "success") {
           this.setState({ loadingFullScreen: false });
-          Swal.fire("", local.editManualPaymentSuccess, "success").then(() =>
-            this.props.refreshPayment()
-          );
+          Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false });
         }
@@ -323,6 +318,7 @@ class Payment extends Component<Props, State>{
     this.setState({ loading: true })
     const res = await calculateEarlyPayment(this.props.applicationId);
     if (res.status === 'success') {
+      this.props.setEarlyPaymentData({remainingPrincipal: res.body.remainingPrincipal, earlyPaymentFees: res.body.earlyPaymentFees, requiredAmount: res.body.requiredAmount })
       this.setState({
         loading: false,
         remainingPrincipal: res.body.remainingPrincipal,
@@ -462,6 +458,7 @@ class Payment extends Component<Props, State>{
         truthDate={this.state.truthDate}
         paymentType={this.props.paymentType}
         penaltyAction={this.state.penaltyAction}
+        byInsurance={this.state.byInsurance}
         />
       case 2: return (
         <Card className="payment-menu">
@@ -473,7 +470,7 @@ class Payment extends Component<Props, State>{
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>
             <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
-              onClick={() => this.props.print({ remainingPrincipal: this.state.remainingPrincipal, earlyPaymentFees: this.state.earlyPaymentFees, requiredAmount: this.state.requiredAmount, })}>
+              onClick={() => this.props.print({ print: 'earlyPayment', remainingPrincipal: this.state.remainingPrincipal, earlyPaymentFees: this.state.earlyPaymentFees, requiredAmount: this.state.requiredAmount, })}>
               <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
             <Formik
               enableReinitialize
@@ -674,6 +671,17 @@ class Payment extends Component<Props, State>{
                       </Col>
                     </Form.Group>
                   </Form.Group>
+                  <div style={{ display: 'flex' }}>
+                    <Form.Label style={{ textAlign: 'right', paddingRight: 0 }}>{`${local.byInsurance}`}</Form.Label>
+                    <Form.Check
+                      name="byInsurance"
+                      id="byInsurance"
+                      data-qc="byInsurance"
+                      type='checkbox'
+                      checked={formikProps.values.byInsurance}
+                      onChange={formikProps.handleChange}
+                    />
+                  </div>
                   <div className="payments-buttons-container">
                     <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
                     <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
@@ -726,16 +734,6 @@ class Payment extends Component<Props, State>{
         )}
         {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
-        {this.state.receiptModal && (
-          <PaymentReceipt
-            receiptData={this.state.receiptData}
-            closeModal={() => {
-              this.setState({ receiptModal: false });
-              this.props.refreshPayment();
-            }}
-            truthDate={this.state.truthDate}
-          />
-        )}
       </>
     );
   }

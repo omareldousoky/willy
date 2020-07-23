@@ -17,25 +17,12 @@ interface Props {
 }
 interface LoanDetailsProps {
     application: any;
-    setLoanOfficer: (name: string) => void;
 }
 
 //this is used in the application details tab from loanProfile
 export const LoanDetailsTableView = (props: LoanDetailsProps) => {
-    const [officer, changeOfficerName] = useState('')
     const [loanUse, changeUse] = useState('')
 
-    async function getOfficerName(id) {
-        const res = await getLoanOfficer(id);
-        if (res.status === "success") {
-            const name = res.body.name
-            props.setLoanOfficer(name)
-            changeOfficerName(name)
-        } else {
-            console.log('Err')
-            return ''
-        }
-    }
     async function getLoanUsages() {
         const res = await getLoanUsage();
         if (res.status === "success") {
@@ -49,7 +36,6 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
     }
     useEffect(() => {
         const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
-        getOfficerName(id);
         getLoanUsages()
     }, [])
     return (
@@ -133,11 +119,11 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 </tr>
                 <tr>
                     <td>{local.representative}</td>
-                    <td>{officer}</td>
+                    <td>{(props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : props.application.customer.representativeName}</td>
                 </tr>
                 <tr>
                     <td>{local.enquiror}</td>
-                    <td>{officer}</td>
+                    <td>{(props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : props.application.customer.representativeName}</td>
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>
@@ -149,18 +135,8 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
 }
 //this is used in rescheduling
 export const LoanDetailsBoxView = (props: Props) => {
-    const [officer, changeOfficerName] = useState('')
     const [loanUse, changeUse] = useState('')
-    async function getOfficerName(id) {
-        const res = await getLoanOfficer(id);
-        if (res.status === "success") {
-            const name = res.body.name
-            changeOfficerName(name)
-        } else {
-            console.log('Err')
-            return ''
-        }
-    }
+
     async function getLoanUsages() {
         const res = await getLoanUsage();
         if (res.status === "success") {
@@ -174,7 +150,6 @@ export const LoanDetailsBoxView = (props: Props) => {
     }
     useEffect(() => {
         const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
-        getOfficerName(id);
         getLoanUsages()
 
     }, [])
@@ -304,7 +279,9 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.representative}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{officer} </Form.Label>
+                        <Form.Label>{(props.application.product.beneficiaryType === 'group') ?
+                            props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName
+                            : props.application.customer.representativeName}</Form.Label>
                     </Row>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
@@ -312,7 +289,9 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{officer} </Form.Label>
+                        <Form.Label>{(props.application.product.beneficiaryType === 'group') ?
+                            props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName
+                            : props.application.customer.representativeName} </Form.Label>
                     </Row>
                 </Form.Group>
             </Form.Row>

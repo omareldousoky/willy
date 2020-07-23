@@ -12,9 +12,6 @@ code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.form-control {
-  padding: 0 0.75rem !important;
-}
 .pac-container.pac-logo.hdpi, .pac-container.pac-logo {
   z-index: 1100;
 }
@@ -48,18 +45,19 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   text-align: center;
   min-height: 20rem;
   min-width: 20rem;
+  max-height: 20rem;
   justify-content: center;
   align-items: center;
   border: #e5e5e5 dashed 1px;
 }
 
-.delete-document {
+.document-actions {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
   top: 0;
   left: 10px;
-  background: red;
-  color: white;
-  padding: 5px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -313,7 +311,6 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   padding-top: 35px;
    width: 100%;
    height: 100%;
-
 }
 .invalid-image{
 
