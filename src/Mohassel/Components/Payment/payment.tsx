@@ -710,7 +710,7 @@ class Payment extends Component<Props, State>{
     }
   }
   async getActionLogs() {
-    let data={
+    const data={
       id: this.props.applicationId ,
       action: "payPenalties",
       size: 500
