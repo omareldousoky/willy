@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { payment } from "../../redux/payment/actions";
 import "./styles.scss";
 
-interface MyFormValues {
+interface FormValues {
   requiredAmount: number;
   truthDate: string;
   payAmount: number;
@@ -140,7 +140,7 @@ class PayInstallment extends Component<Props, State> {
             validateOnBlur
             validateOnChange
           >
-            {(formikBag: FormikProps<MyFormValues>) => (
+            {(formikBag: FormikProps<FormValues>) => (
               <Form onSubmit={formikBag.handleSubmit}>
                 <Container>
                   <Form.Group as={Row} md={12}>

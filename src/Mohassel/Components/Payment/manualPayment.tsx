@@ -19,7 +19,7 @@ interface State {
   receiptNumber: string;
   paymentType: string;
 }
-interface MyFormValues {
+interface FormValues {
   truthDate: string;
   payAmount: number;
   randomPaymentType: string;
@@ -103,7 +103,7 @@ class PayInstallment extends Component<Props, State> {
             validateOnBlur
             validateOnChange
           >
-            {(formikBag: FormikProps<MyFormValues>) => (
+            {(formikBag: FormikProps<FormValues>) => (
               <Form onSubmit={formikBag.handleSubmit}>
                 <Form.Group as={Row}>
                   <Form.Group as={Col} controlId="truthDate">
