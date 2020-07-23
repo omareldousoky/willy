@@ -120,9 +120,9 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <td>عدد ايام التأخير :<span className="frame">{numbersToArabic(this.state.totalDaysLate)}</span>
                             </td>
-                            <td>الغرامات المسدده :<span className="frame">{numbersToArabic(0)}</span>
+                            <td>الغرامات المسدده :<span className="frame">{numbersToArabic(this.props.data.penaltiesPaid)}</span>
                             </td>
-                            <td>الغرامات المستحقه : <div className="frame">{numbersToArabic(0)}</div>
+                            <td>الغرامات المستحقه : <div className="frame">{numbersToArabic(this.props.data.penalties)}</div>
 
                             </td>
                             <td>رسوم تحصيل
