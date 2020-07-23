@@ -1,6 +1,7 @@
 import * as local from '../../Shared/Assets/ar.json';
 import jwtDecode from 'jwt-decode';
-
+import JsZip from 'jszip';
+import {saveAs} from 'file-saver'
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -280,5 +281,18 @@ export const getStatus = (installment) => {
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
       default: return '';
+  }
+}
+export const downloadAsZip = (images: Array<{url: string; fileName: string}>, folderName: string) => {
+  const zip =  new JsZip();
+  try {
+    images.forEach((image) => {
+     zip.file(image.fileName,image.url,{base64: true});
+    });
+    zip.generateAsync({type:"blob"}).then((content)=>{
+      saveAs(content,folderName);
+    })
+  } catch (error) {
+    
   }
 }
