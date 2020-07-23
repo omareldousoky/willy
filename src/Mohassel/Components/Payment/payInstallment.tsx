@@ -133,7 +133,7 @@ class PayInstallment extends Component<Props, State> {
               ...this.state,
               max: this.props.application.installmentsObject.totalInstallments
                 .installmentSum,
-                byInsurance: this.props.byInsurance
+              byInsurance: this.props.byInsurance
             }}
             onSubmit={this.props.handleSubmit}
             validationSchema={paymentValidation}
@@ -299,19 +299,21 @@ class PayInstallment extends Component<Props, State> {
                     ) : null}
                   </Form.Group>
                 </Container>
-                <div style={{ display: "flex" }}>
-                  <Form.Label
-                    style={{ textAlign: "right", paddingRight: 0 }}
-                  >{`${local.byInsurance}`}</Form.Label>
-                  <Form.Check
-                    name="byInsurance"
-                    id="byInsurance"
-                    data-qc="byInsurance"
-                    type="checkbox"
-                    checked={formikBag.values.byInsurance}
-                    onChange={formikBag.handleChange}
-                  />
-                </div>
+                {this.props.penaltyAction === "normal" ? (
+                  <div style={{ display: "flex" }}>
+                    <Form.Label
+                      style={{ textAlign: "right", paddingRight: 0 }}
+                    >{`${local.byInsurance}`}</Form.Label>
+                    <Form.Check
+                      name="byInsurance"
+                      id="byInsurance"
+                      data-qc="byInsurance"
+                      type="checkbox"
+                      checked={formikBag.values.byInsurance}
+                      onChange={formikBag.handleChange}
+                    />
+                  </div>
+                ) : null}
                 <div className="payments-buttons-container">
                   <Button
                     variant="outline-primary"

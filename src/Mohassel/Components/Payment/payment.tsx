@@ -250,6 +250,8 @@ class Payment extends Component<Props, State>{
               loadingFullScreen: false,
               receiptData: res.body
             });
+            this.getActionLogs()
+            this.calculatePenalties()
           } else {
             this.setState({ loadingFullScreen: false });
           }
@@ -262,6 +264,8 @@ class Payment extends Component<Props, State>{
           if (res.status === "success") {
             this.setState({  loadingFullScreen: false });
             Swal.fire("", local.penaltyCancelledSuccessfully, "success")
+            this.getActionLogs()
+            this.calculatePenalties()
           } else {
             this.setState({ loadingFullScreen: false });
           }
@@ -708,7 +712,8 @@ class Payment extends Component<Props, State>{
   async getActionLogs() {
     let data={
       id: this.props.applicationId ,
-      action: "payPenalties"
+      action: "payPenalties",
+      size: 500
     }
     if(this.props.paymentType==="random"){
       data.action="random"
