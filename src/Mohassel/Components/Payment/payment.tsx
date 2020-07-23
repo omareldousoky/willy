@@ -260,11 +260,8 @@ class Payment extends Component<Props, State>{
           };
           const res = await cancelPenalties({ id: this.props.applicationId, data });
           if (res.status === "success") {
-            this.setState({
-              loadingFullScreen: false,
-              receiptModal: true,
-              receiptData: res.body
-            });
+            this.setState({  loadingFullScreen: false });
+            Swal.fire("", local.penaltyCancelledSuccessfully, "success")
           } else {
             this.setState({ loadingFullScreen: false });
           }

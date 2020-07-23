@@ -531,6 +531,7 @@
     "bankAccount": "الحساب البنكي",
     "costCenter": " مركز حساب التكلفة",
     "manualPayment": "دفع يدوي",
+    "penaltyCancelledSuccessfully": "تم الاعفاء من الغرامه بنجاح",
     "dueDate": "تاريخ الإستحقاق",
     "manualPaymentSuccess": "تمت عملية الدفع اليدوي بنجاح",
     "editManualPaymentSuccess": "تم تعديل عملية الدفع اليدوي بنجاح",
