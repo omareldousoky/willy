@@ -39,6 +39,7 @@ import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPaymen
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
+import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -140,6 +141,7 @@ class LoanProfile extends Component<Props, State>{
             if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
             if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
         }
+       
         const financialTransactionsTab = {
             header: local.financialTransactions,
             stringKey: 'financialTransactions'
@@ -148,8 +150,11 @@ class LoanProfile extends Component<Props, State>{
             header: local.penalties,
             stringKey: 'penalties'
         };
-        tabsToRender.push(financialTransactionsTab)
-        tabsToRender.push(penaltiesTab)
+        if (application.body.status === "issued" || application.body.status === "paid") {
+            if (ability.can('payInstallment', 'application'))  tabsToRender.push(financialTransactionsTab)
+            if (ability.can('payInstallment', 'application') || ability.can('rollback', 'application'))  tabsToRender.push(penaltiesTab)
+        }
+      
         if (application.body.status === "pending") {
             this.setState({ activeTab: 'loanDetails' })
             this.getPendingActions();
@@ -199,7 +204,7 @@ class LoanProfile extends Component<Props, State>{
             case 'documents':
                 return <UploadDocuments application={this.state.application} />
             case 'financialTransactions':
-                return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
+                return <Payment print={(data) => this.setState({ print: data.print, earlyPaymentData: { ...this.state.earlyPaymentData, ...data } }, () => window.print())}
                 setReceiptData={(data)=> this.setState({receiptData: data})}
                 setEarlyPaymentData={(data) => this.setState({ earlyPaymentData: data })}
                 application={this.state.application} installments={this.state.application.installmentsObject.installments}
@@ -207,7 +212,7 @@ class LoanProfile extends Component<Props, State>{
                 manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
                 paymentType={"random"} />
             case 'penalties':
-                return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
+                return <Payment print={(data) => this.setState({ print: data.print, earlyPaymentData: { ...this.state.earlyPaymentData, ...data } }, () => window.print())}
                 setReceiptData={(data)=> this.setState({receiptData: data})}
                 setEarlyPaymentData={(data) => this.setState({ earlyPaymentData: data })}
                 application={this.state.application} installments={this.state.application.installmentsObject.installments}
@@ -379,7 +384,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application}/>}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application}/>}
-
+                {(this.state.print === 'randomPayment' || this.state.print === 'penalty')? <RandomPaymentReceipt receiptData={this.state.receiptData} data={this.state.application}/> : null}                
             </Container>
         )
     }

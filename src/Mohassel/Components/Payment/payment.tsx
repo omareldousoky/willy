@@ -231,8 +231,11 @@ class Payment extends Component<Props, State>{
         };
         const res = await otherPayment({ id: this.props.applicationId, data });
         if (res.status === "success") {
-          this.props.setReceiptData(res.body);
-          this.props.print({print: 'payment'});
+          const resBody = res.body;
+          resBody[0].type = "randomPayment";
+          resBody[0].randomPaymentType = values.randomPaymentType;
+          this.props.setReceiptData(resBody);
+          this.props.print({print: 'randomPayment'});
           this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
         } else {
           this.setState({ loadingFullScreen: false });
@@ -246,12 +249,15 @@ class Payment extends Component<Props, State>{
           };
           const res = await payPenalties({ id: this.props.applicationId, data });
           if (res.status === "success") {
-            this.setState({
-              loadingFullScreen: false,
-              receiptData: res.body
-            });
-            this.getActionLogs()
-            this.calculatePenalties()
+            const resBody = res.body;
+            resBody[0].type = "penalty";
+             this.props.setReceiptData(resBody);
+             this.props.print({ print: "penalty" });
+             this.setState({ loadingFullScreen: false }, () =>
+               this.props.refreshPayment()
+             );
+             this.getActionLogs();
+             this.calculatePenalties();
           } else {
             this.setState({ loadingFullScreen: false });
           }
