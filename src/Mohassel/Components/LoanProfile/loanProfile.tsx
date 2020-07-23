@@ -125,9 +125,9 @@ class LoanProfile extends Component<Props, State>{
                 header: local.financialTransactions,
                 stringKey: 'financialTransactions'
             };
-            const cancelPaymentsTab = {
-                header: local.cancelPayments,
-                stringKey: 'cancelPayments'
+            const penaltiesTab = {
+                header: local.penalties,
+                stringKey: 'penalties'
             };
             if (application.body.product.beneficiaryType === 'individual') tabsToRender.push(guarantorsTab)
             if (application.body.status === "paid") tabsToRender.push(customerCardTab)
@@ -139,7 +139,7 @@ class LoanProfile extends Component<Props, State>{
             }
             if(true){
                 tabsToRender.push(financialTransactionsTab)
-                tabsToRender.push(cancelPaymentsTab)
+                tabsToRender.push(penaltiesTab)
             }
             if (application.body.status === "pending") {
                 this.setState({ activeTab: 'loanDetails' })
@@ -197,7 +197,7 @@ class LoanProfile extends Component<Props, State>{
                 currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
                 manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
                 paymentType={"random"} />
-            case 'cancelPayments':
+            case 'penalties':
                 return <Payment print={(data) => this.setState({ print: 'earlyPayment', earlyPaymentData: { ...data } }, () => window.print())}
                 application={this.state.application} installments={this.state.application.installmentsObject.installments}
                 currency={this.state.application.product.currency} applicationId={this.state.application._id} pendingActions={this.state.pendingActions}
@@ -333,7 +333,7 @@ class LoanProfile extends Component<Props, State>{
                                 header={'here'}
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
-                                selectTab={(index: string) => this.setState({ activeTab: index })}
+                                selectTab={(index: string) => this.setState({ activeTab: index },()=> this.props.changePaymentState(0))}
                             />
                             <div style={{ padding: 20, marginTop: 15 }}>
                                 {this.renderContent()}

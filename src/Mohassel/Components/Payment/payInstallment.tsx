@@ -19,6 +19,7 @@ interface MyFormValues {
   randomPaymentType: string;
   max: number;
   paymentType: string;
+  penaltyAction: string;
 }
 interface Installment {
   id: number;
@@ -48,6 +49,7 @@ interface Props {
   payAmount: number;
   truthDate: string;
   paymentType: string;
+  penaltyAction: string;
 }
 interface SelectObject {
   label: string;
@@ -60,6 +62,7 @@ interface State {
   requiredAmount: number;
   paymentType: string;
   randomPaymentTypes: Array<SelectObject>;
+  penaltyAction: string;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -77,9 +80,15 @@ class PayInstallment extends Component<Props, State> {
         { label: local.clearanceFees, value: "clearanceFees" },
         { label: local.toktokStamp, value: "toktokStamp" },
         { label: local.tricycleStamp, value: "tricycleStamp" }
-      ]
+      ],
+      penaltyAction: this.props.penaltyAction
     };
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.penaltyAction !== this.props.penaltyAction)
+      this.setState({ penaltyAction: prevProps.penaltyAction });
+  }
+
   getRequiredAmount() {
     // const todaysDate = new Date("2020-06-30").valueOf();
     const todaysDate = new Date().valueOf();
@@ -260,29 +269,31 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="truthDate">
-                      <Form.Label
-                        style={{ textAlign: "right", paddingRight: 0 }}
-                        column
-                      >{`${local.truthDate}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="date"
-                          name="truthDate"
-                          data-qc="truthDate"
-                          value={formikBag.values.truthDate}
-                          onBlur={formikBag.handleBlur}
-                          onChange={formikBag.handleChange}
-                          isInvalid={
-                            Boolean(formikBag.errors.truthDate) &&
-                            Boolean(formikBag.touched.truthDate)
-                          }
-                        ></Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikBag.errors.truthDate}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
+                    {this.state.penaltyAction !== "cancel" ? (
+                      <Form.Group as={Col} md={6} controlId="truthDate">
+                        <Form.Label
+                          style={{ textAlign: "right", paddingRight: 0 }}
+                          column
+                        >{`${local.truthDate}`}</Form.Label>
+                        <Col>
+                          <Form.Control
+                            type="date"
+                            name="truthDate"
+                            data-qc="truthDate"
+                            value={formikBag.values.truthDate}
+                            onBlur={formikBag.handleBlur}
+                            onChange={formikBag.handleChange}
+                            isInvalid={
+                              Boolean(formikBag.errors.truthDate) &&
+                              Boolean(formikBag.touched.truthDate)
+                            }
+                          ></Form.Control>
+                          <Form.Control.Feedback type="invalid">
+                            {formikBag.errors.truthDate}
+                          </Form.Control.Feedback>
+                        </Col>
+                      </Form.Group>
+                    ) : null}
                   </Form.Group>
                 </Container>
                 <div className="payments-buttons-container">

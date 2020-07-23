@@ -22,6 +22,7 @@ import './styles.scss';
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 import { actionLogs } from '../../Services/APIs/Payment/actionLogs';
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
+import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
 
 
 interface Installment {
@@ -62,6 +63,7 @@ interface State {
   requiredAmount: number;
   installmentNumber: number;
   penalty: number;
+  penaltyAction: string;
 }
 
 class Payment extends Component<Props, State>{
@@ -81,7 +83,8 @@ class Payment extends Component<Props, State>{
       earlyPaymentFees: 0,
       requiredAmount: 0,
       installmentNumber: -1,
-      penalty: -1
+      penalty: -1,
+      penaltyAction: ''
     }
     this.mappers = [
       {
@@ -235,19 +238,36 @@ class Payment extends Component<Props, State>{
         }
       }
       else if(this.props.paymentType === "penalties") {
-        const data = {
-          payAmount: values.payAmount,
-          truthDate: new Date(values.truthDate).valueOf()
-        };
-        const res = await payPenalties({ id: this.props.applicationId, data });
-        if (res.status === "success") {
-          this.setState({
-            loadingFullScreen: false,
-            receiptModal: true,
-            receiptData: res.body
-          });
-        } else {
-          this.setState({ loadingFullScreen: false });
+        if(this.state.penaltyAction==='pay'){
+          const data = {
+            payAmount: values.payAmount,
+            truthDate: new Date(values.truthDate).valueOf()
+          };
+          const res = await payPenalties({ id: this.props.applicationId, data });
+          if (res.status === "success") {
+            this.setState({
+              loadingFullScreen: false,
+              receiptModal: true,
+              receiptData: res.body
+            });
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
+        }
+        else if(this.state.penaltyAction==='cancel'){
+          const data = {
+            cancelAmount: values.payAmount
+          };
+          const res = await cancelPenalties({ id: this.props.applicationId, data });
+          if (res.status === "success") {
+            this.setState({
+              loadingFullScreen: false,
+              receiptModal: true,
+              receiptData: res.body
+            });
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         }
       }
     } else if (this.props.paymentState === 2) {
@@ -354,18 +374,47 @@ class Payment extends Component<Props, State>{
                     <Can I="payInstallment" a="application">
                       <div className="payment-icon">
                         <img
-                          alt="pay-installment"
+                          alt={
+                            this.props.paymentType === "penalties"
+                              ? "pay-penalty"
+                              : "pay-installment"
+                          }
                           src={require("../../Assets/payInstallment.svg")}
                         />
                         <Button
                           disabled={this.props.application.status === "pending"}
-                          onClick={() => this.props.changePaymentState(1)}
+                          onClick={() => {
+                            if (this.props.paymentType === "penalties") {
+                              this.setState({ penaltyAction: "pay" });
+                              this.props.changePaymentState(1);
+                            } else this.props.changePaymentState(1);
+                          }}
                           variant="primary"
                         >
-                          {local.payInstallment}
+                          {this.props.paymentType === "penalties"
+                            ? local.payPenalty
+                            : local.payInstallment}
                         </Button>
                       </div>
                     </Can>
+                  { this.props.paymentType === "penalties"? <Can I="rollback" a="application">
+                      <div className="payment-icon">
+                        <img
+                          alt="cancel-penalty"
+                          src={require("../../Assets/payInstallment.svg")}
+                        />
+                        <Button
+                          disabled={this.props.application.status === "pending"}
+                          onClick={() => {
+                              this.setState({ penaltyAction: "cancel" });
+                              this.props.changePaymentState(1);
+                          }}
+                          variant="primary"
+                        >
+                          {local.cancelPenalty}
+                        </Button>
+                      </div>
+                    </Can>:null}
                     {this.props.paymentType === "normal" ? (
                       <Can I="payEarly" a="application">
                         <div className="payment-icon">
@@ -415,6 +464,7 @@ class Payment extends Component<Props, State>{
         payAmount={this.state.payAmount}
         truthDate={this.state.truthDate}
         paymentType={this.props.paymentType}
+        penaltyAction={this.state.penaltyAction}
         />
       case 2: return (
         <Card className="payment-menu">
@@ -647,24 +697,48 @@ class Payment extends Component<Props, State>{
       truthDate: 1592784000000
     });
     if (res.body) {
-      console.log("calculatePenalties", res.body);
       this.setState({ penalty: res.body.penalty });
     }
   }
   async getActionLogs() {
-    const res = await actionLogs({ id: this.props.applicationId });
+    let data={
+      id: this.props.applicationId ,
+      action: "payPenalties"
+    }
+    if(this.props.paymentType==="random"){
+      data.action="random"
+    }
+    const res = await actionLogs(data);
     if(res.body){
-      console.log('actionLogs',res.body);
+      // console.log('actionLogs',res.body);
     }
   }
   render() {
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        <DynamicTable totalCount={0} pagination={false} data={this.props.installments.sort(function(a,b) {return a.id - b.id })} mappers={this.mappers} />
+        {this.props.paymentType === "random" || this.props.paymentType === "penalties" ? null : (
+          <DynamicTable
+            totalCount={0}
+            pagination={false}
+            data={this.props.installments.sort(function(a, b) {
+              return a.id - b.id;
+            })}
+            mappers={this.mappers}
+          />
+        )}
         {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
-        {this.state.receiptModal && <PaymentReceipt receiptData={this.state.receiptData} closeModal={() => { this.setState({ receiptModal: false }); this.props.refreshPayment() }} truthDate={this.state.truthDate} />}
+        {this.state.receiptModal && (
+          <PaymentReceipt
+            receiptData={this.state.receiptData}
+            closeModal={() => {
+              this.setState({ receiptModal: false });
+              this.props.refreshPayment();
+            }}
+            truthDate={this.state.truthDate}
+          />
+        )}
       </>
     );
   }
