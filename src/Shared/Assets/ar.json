@@ -644,10 +644,11 @@
     "loanWriteOffError":"حدث خطأ في شطب القرض",
     "writtenOffLoan":"مشطوب",
     "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 ",
-    "noGuarantors":"لا يوجد ضمان",
     "reports": "التقارير",
     "reportsProgram": "برنامج التقارير",
     "noOfReports": "عدد التقارير",
     "value": "القيمة",
-    "byInsurance": "تأمين"
+    "byInsurance": "تأمين",
+    "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !"
+
 }

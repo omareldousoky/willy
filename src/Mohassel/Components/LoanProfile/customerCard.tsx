@@ -74,7 +74,7 @@ export const CustomerCardView = (props: Props) => {
     {
       title: local.statusDate,
       key: "paidAt",
-      render: data => getRenderDate(data.paidAt)
+      render: data => data.paidAt ? getRenderDate(data.paidAt) : ''
     },
   ]
   return (

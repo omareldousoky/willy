@@ -143,7 +143,7 @@ class LoanProfile extends Component<Props, State>{
             tabsToRender.push(customerCardTab)
             if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
             if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
-            if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
+            // if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
         }
         if (application.body.status === "pending") {
             this.setState({ activeTab: 'loanDetails' })

@@ -73,21 +73,25 @@ class TraditionalLoanRescheduling extends Component<Props, State>{
         }
     }
     async handleSubmit(values) {
-        this.setState({ loading: true })
-        const obj = {
-            noOfInstallments: values.noOfInstallments
-        }
-        const res = await testTraditionalRescheduling(this.props.application._id, obj);
-        if (res.status === "success") {
-            this.setState({ loading: false })
-            this.setState({
-                noOfInstallments: values.noOfInstallments,
-                installmentsAfterRescheduling: res.body.installments
-            })
-            Swal.fire('', 'Test Success', 'success');
+        if (!this.props.application.installmentsObject.installments.find(installment => installment.status === 'partiallyPaid')) {
+            this.setState({ loading: true })
+            const obj = {
+                noOfInstallments: values.noOfInstallments
+            }
+            const res = await testTraditionalRescheduling(this.props.application._id, obj);
+            if (res.status === "success") {
+                this.setState({ loading: false })
+                this.setState({
+                    noOfInstallments: values.noOfInstallments,
+                    installmentsAfterRescheduling: res.body.installments
+                })
+                Swal.fire('', 'Test Success', 'success');
+            } else {
+                this.setState({ loading: false })
+                Swal.fire('', 'Test Fail', 'error');
+            }
         } else {
-            this.setState({ loading: false })
-            Swal.fire('', 'Test Fail', 'error');
+            Swal.fire('', local.partiallyPaidInstallmentsExistRescheduleFirst, 'warning');
         }
     }
     applyChanges() {

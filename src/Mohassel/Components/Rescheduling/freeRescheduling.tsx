@@ -83,7 +83,7 @@ class FreeRescheduling extends Component<Props, State>{
             },
         ];
     }
-    getDerivedStateFromProps(props: Props, state: State) {
+    static getDerivedStateFromProps(props: Props, state: State) {
         if (props.application._id !== state.application._id) {
             return {
                 application: props.application
@@ -112,7 +112,7 @@ class FreeRescheduling extends Component<Props, State>{
     addRow(values) {
         const installments = [...values.installments];
         installments.push({
-            id: values.installments.length,
+            id: (values.installments[0].id === 0) ? values.installments.length : values.installments.length + 1,
             dateOfPayment: new Date().valueOf(),
             feesInstallment: 0,
             feesPaid: 0,
