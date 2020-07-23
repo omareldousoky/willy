@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 import { getIscore } from '../../Services/APIs/iScore/iScore';
 import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
+import store from '../../redux/store';
 
 interface Props {
   history: Array<any>;
@@ -34,11 +35,11 @@ interface State {
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       iScoreModal: false,
       iScoreCustomers: [],
@@ -53,11 +54,12 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanCode,
         key: "loanCode",
-        render: data => data.application.loanApplicationCode
+        render: data => data.application.loanApplicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -84,12 +86,14 @@ class LoanList extends Component<Props, State> {
       },
       {
         title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        key: "issueDate",
+        sortable: true,
         render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
@@ -100,7 +104,7 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.getLoans()
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -167,12 +171,12 @@ class LoanList extends Component<Props, State> {
     this.setState({ iScoreCustomers: customers })
   }
   async getLoans() {
-    let query = {};
-    if (this.props.fromBranch) {
-      query = { size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", ...this.props.searchFilters }
-    } else {
-      query = { size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", ...this.props.searchFilters }
-    }
+     let query = {};
+     if(this.props.fromBranch){
+       query = {...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" }
+     } else {
+      query = {...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate"}
+     }
     this.props.search(query);
   }
   componentWillUnmount() {
@@ -210,16 +214,19 @@ class LoanList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search
-              searchKeys={['keyword', 'dateFromTo', 'status', 'branch']}
-              dropDownKeys={['name', 'nationalId', 'code']}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              datePlaceholder={local.issuanceDate}
-              url="loan"
-              from={this.state.from}
-              size={this.state.size}
-              hqBranchIdRequest={this.props.branchId} />
+            <Search 
+            searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
+            dropDownKeys={['name', 'nationalId', 'key']}
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
+            datePlaceholder={local.issuanceDate}
+             url="loan" 
+             from={this.state.from} 
+             size={this.state.size} 
+             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
+              url="loan" 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}

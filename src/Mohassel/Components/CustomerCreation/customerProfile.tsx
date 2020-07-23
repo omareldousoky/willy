@@ -4,7 +4,6 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { Customer } from '../../Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { getLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { timeToDateyyymmdd } from '../../Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
@@ -40,26 +39,15 @@ const tabs: Array<Tab> = [
 ]
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
-  const [officer, changeOfficerName] = useState('');
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
 
-  async function getOfficerName(id) {
-    const res = await getLoanOfficer(id);
-    if (res.status === "success") {
-      changeLoading(false);
-      changeOfficerName(res.body.name)
-    } else {
-      changeLoading(false);
-      console.log('Err')
-    }
-  }
   async function getCustomerDetails() {
     changeLoading(true);
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
-      changeCustomerDetails(res.body)
-      getOfficerName(res.body.representative)
+      changeCustomerDetails(res.body);
+      changeLoading(false);
     } else {
       changeLoading(false);
       console.log("failed to get customer data")
@@ -222,7 +210,7 @@ const CustomerProfile = (props: Props) => {
             </tr>
             <tr>
               <td>{local.representative}</td>
-              <td>{officer}</td>
+              <td>{customerDetails?.representativeName}</td>
             </tr>
             <tr>
               <td>{local.applicationDate}</td>
