@@ -611,7 +611,6 @@
     "thursday": "الخميس",
     "friday": "الجمعة",
     "rejectManualPaymentSuccess": "تم الغاء الحركة",
-    "noGuarantors": "لا يوجد ضمان",
     "daily": "يومي",
     "chooseMainRole": " إختيار الدور رئيسي",
     "userStep3": "٣.بيانات أخرى",
@@ -644,10 +643,11 @@
     "loanWriteOffError":"حدث خطأ في شطب القرض",
     "writtenOffLoan":"مشطوب",
     "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 ",
-    "noGuarantors":"لا يوجد ضمان",
     "reports": "التقارير",
     "reportsProgram": "برنامج التقارير",
     "noOfReports": "عدد التقارير",
     "value": "القيمة",
-    "byInsurance": "تأمين"
+    "byInsurance": "تأمين",
+    "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !"
+
 }
