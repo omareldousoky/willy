@@ -21,6 +21,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 import { actionLogs } from '../../Services/APIs/Payment/actionLogs';
+import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 
 
 interface Installment {
@@ -216,13 +217,29 @@ class Payment extends Component<Props, State>{
             this.setState({ loadingFullScreen: false });
           }
         }
-      }else {
+      } else if(this.props.paymentType === "random") {
         const data = {
           payAmount: values.payAmount,
           truthDate: new Date(values.truthDate).valueOf(),
           type: values.randomPaymentType
         };
         const res = await otherPayment({ id: this.props.applicationId, data });
+        if (res.status === "success") {
+          this.setState({
+            loadingFullScreen: false,
+            receiptModal: true,
+            receiptData: res.body
+          });
+        } else {
+          this.setState({ loadingFullScreen: false });
+        }
+      }
+      else if(this.props.paymentType === "penalties") {
+        const data = {
+          payAmount: values.payAmount,
+          truthDate: new Date(values.truthDate).valueOf()
+        };
+        const res = await payPenalties({ id: this.props.applicationId, data });
         if (res.status === "success") {
           this.setState({
             loadingFullScreen: false,
