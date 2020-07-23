@@ -34,7 +34,9 @@ export const LoanOfficersDropDown = props => {
           from: 0,
           size: 100,
           name: searchKeyWord,
-          excludedIds: [props.excludeId]
+          status: "active",
+          excludedIds: [props.excludeId],
+          branchId: props.branchId
         });
       if (res.status === "success") {
         return res.body.data;

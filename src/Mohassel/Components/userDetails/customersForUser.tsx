@@ -148,7 +148,7 @@ class CustomersForUser extends Component<Props, State> {
       this.setState({ loading: false });
       Swal.fire(
         "",
-        `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`,
+        `${local.doneMoving} ${this.state.moveMissing? local.customersSuccess: (this.state.selectedCustomers.length) + " " + local.customerSuccess}`,
         "success"
       ).then(() => {
         this.setState({ openModal: false, moveMissing: false  }, () => this.getCustomersForUser());
@@ -172,7 +172,10 @@ class CustomersForUser extends Component<Props, State> {
             }
           });
         });
-      } else this.setState({ loading: false });
+      } else {
+        this.setState({ loading: false });
+        Swal.fire("",local.actionHasntBeenMadeTheUserIsAssignedToOtherCustomers,'error')
+      }
     }
   }
   render() {
