@@ -26,13 +26,13 @@ class CustomerCardPDF extends Component<Props, State> {
         let totalDaysEarly = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
             if (installment.paidAt) {
-                const number = Math.round((new Date(installment.paidAt).setHours(23,59,59,59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                const number = Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
                 if (number > 0) {
                     totalDaysLate = totalDaysLate + number;
                 } else totalDaysEarly = totalDaysEarly + number;
             } else {
                 const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if(number > 0) totalDaysLate = totalDaysLate + number;
+                if (number > 0) totalDaysLate = totalDaysLate + number;
             }
         });
         this.setState({ totalDaysEarly, totalDaysLate })
@@ -109,6 +109,12 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <div className="frame">تمويل رأس المال</div>
                             </td>
                         </tr>
+                        <tr>
+                            <td>غرامات مسددة <div className="frame">{numbersToArabic(this.props.data.penaltiesPaid)}</div>
+                            </td>
+                            <td>غرامات معفاة <div className="frame">{numbersToArabic(this.props.data.penaltiesCanceled)}</div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -139,9 +145,9 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{getStatus(installment)}</td>
                                 <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                 <td>{installment.paidAt ?
-                                        numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
-                                        :
-                                        new Date().setHours(23, 59, 59, 59).valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
+                                    numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
+                                    :
+                                    new Date().setHours(23, 59, 59, 59).valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))) : ''}</td>
                                 <td></td>
                             </tr>)
                         })}
@@ -154,7 +160,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <td>{numbersToArabic(this.getSum('principalPaid'))}</td>
                             <td>{numbersToArabic(this.getSum('feesPaid'))}</td>
                             <th>ايام التأخير</th>
-                            <td>{this.state.totalDaysLate > 0 ? numbersToArabic(this.state.totalDaysLate): numbersToArabic(0)}</td>
+                            <td>{this.state.totalDaysLate > 0 ? numbersToArabic(this.state.totalDaysLate) : numbersToArabic(0)}</td>
                             <th>ايام التبكير</th>
                             <td>{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                         </tr>
@@ -162,7 +168,7 @@ class CustomerCardPDF extends Component<Props, State> {
                 </table>
                 <table className="tablestyle" style={{ border: "1px black solid" }}>
                     <tbody>
-                        {this.props.data.product.beneficiaryType === "individual" ?
+                        {this.props.data.product.beneficiaryType === "individual" && this.props.data.guarantors.length > 0 ?
                             <tr>
                                 <th>كود الضامن</th>
                                 <th>اسم الضامن</th>
@@ -170,16 +176,17 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <th>العنوان</th>
                                 <th>تليفون</th>
                             </tr>
-                            :
-                            <tr>
-                                <th>كود العضو</th>
-                                <th>اسم العضو</th>
-                                <th>المنطقه</th>
-                                <th>العنوان</th>
-                                <th>تليفون</th>
-                            </tr>
+                            : this.props.data.product.beneficiaryType === "group" ?
+                                <tr>
+                                    <th>كود العضو</th>
+                                    <th>اسم العضو</th>
+                                    <th>المنطقه</th>
+                                    <th>العنوان</th>
+                                    <th>تليفون</th>
+                                </tr>
+                                : null
                         }
-                        {this.props.data.product.beneficiaryType === "individual" ?
+                        {this.props.data.product.beneficiaryType === "individual" && this.props.data.guarantors.length > 0 ?
                             this.props.data.guarantors.map((guarantor, index) => {
                                 return (
                                     <tr key={index}>
@@ -191,18 +198,19 @@ class CustomerCardPDF extends Component<Props, State> {
                                     </tr>
                                 )
                             })
-                            :
-                            this.props.data.group.individualsInGroup.map((individualInGroup, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>{numbersToArabic(individualInGroup.customer.key)}</td>
-                                        <td>{individualInGroup.customer.customerName}</td>
-                                        <td>{individualInGroup.customer.geographicalDistribution}</td>
-                                        <td>{individualInGroup.customer.customerHomeAddress}</td>
-                                        <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
-                                    </tr>
-                                )
-                            })
+                            : this.props.data.product.beneficiaryType === "group" ?
+                                this.props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{numbersToArabic(individualInGroup.customer.key)}</td>
+                                            <td>{individualInGroup.customer.customerName}</td>
+                                            <td>{individualInGroup.customer.geographicalDistribution}</td>
+                                            <td>{individualInGroup.customer.customerHomeAddress}</td>
+                                            <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
+                                        </tr>
+                                    )
+                                })
+                                : null
                         }
                     </tbody>
                 </table>
