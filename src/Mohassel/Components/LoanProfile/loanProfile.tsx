@@ -257,6 +257,13 @@ class LoanProfile extends Component<Props, State>{
             }
         })
     }
+    getSumOfPendingActions() {
+        let sum = 0;
+        this.state.pendingActions.transactions?.forEach((transaction) => {
+            sum = sum + transaction.transactionAmount
+        })
+        return sum;
+    }
     render() {
         return (
             <Container>
@@ -299,7 +306,7 @@ class LoanProfile extends Component<Props, State>{
                                 </div>
                                 <div className="info">
                                     <span className="text-muted">{local.amount}</span>
-                                    <span>{this.state.pendingActions.transactions ? this.state.pendingActions?.transactions[0].transactionAmount : ''}</span>
+                                    <span>{this.getSumOfPendingActions()}</span>
                                 </div>
                                 <div className="info">
                                     <span className="text-muted">{local.receiptNumber}</span>
@@ -315,7 +322,6 @@ class LoanProfile extends Component<Props, State>{
                                 <Can I='approvePendingAction' a='application'>
                                     <div className="submit" data-qc="approveManualPayment" onClick={() => { this.approveManualPayment() }}>{local.submit}</div>
                                 </Can>
-
                             </div>
                             : null}
                         <div style={{ marginTop: 15 }}>

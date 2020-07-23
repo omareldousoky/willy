@@ -21,7 +21,7 @@ interface LoanOfficer {
 }
 export const StepThreeForm = (props: any) => {
     const [loading, setLoading] = useState(false);
-    const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficer>>([]);
+    const [loanOfficers, setLoanOfficers] = useState<Array<any>>([]);
     const [geoDivisions, setgeoDivisions] = useState<Array<GeoDivision>>([{
         majorGeoDivisionName: { ar: '' },
         majorGeoDivisionLegacyCode: 0
@@ -89,7 +89,10 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="representative"
                                 value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative : values.representative._id))}
                                 onBlur={handleBlur}
-                                onChange={(id) => setFieldValue("representative", id)}
+                                onChange={(representative) => {
+                                    if(props.edit && values.representative !== representative._id) {setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id)}
+                                    else setFieldValue("representative", representative._id)}
+                                }
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}
                                 loadOptions={getLoanOfficers}
