@@ -8,6 +8,11 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import { getIscore } from '../../Services/APIs/iScore/iScore';
+import Swal from 'sweetalert2';
+import Table from 'react-bootstrap/Table';
 
 interface Props {
   history: Array<any>;
@@ -23,6 +28,9 @@ interface Props {
 interface State {
   size: number;
   from: number;
+  iScoreModal: boolean;
+  iScoreCustomers: any;
+  loading: boolean;
 }
 
 class LoanList extends Component<Props, State> {
@@ -32,6 +40,9 @@ class LoanList extends Component<Props, State> {
     this.state = {
       size: 5,
       from: 0,
+      iScoreModal: false,
+      iScoreCustomers: [],
+      loading: false
     }
     this.mappers = [
       {
@@ -108,12 +119,52 @@ class LoanList extends Component<Props, State> {
     return (
       <>
         <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
-        <span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getIScore(data)}>iScore</span>
+        <span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getAllIScores(data)}>iScore</span>
       </>
     )
   }
-  getIScore(data: any){
-    console.log(data)
+  getAllIScores(data: any) {
+    this.setState({ iScoreModal: true });
+    const customers: any[] = [];
+    if (data.application.product.beneficiaryType === 'individual') {
+      const obj = {
+        requestNumber: '002',
+        reportId: '002',
+        product: `${data.application.product.code}`,
+        loanAccountNumber: `${data.application.customer.key}`,
+        number: '003',
+        date: '003',
+        amount: `${data.application.principal}`,
+        lastName: `${data.application.customer.customerName}`,
+        idSource: '003',
+        idValue: `${data.application.customer.nationalId}`,
+        gender: (data.application.customer.gender === 'male') ? '001' : '002',
+        dateOfBirth: `${data.application.customer.birthDate}`
+      }
+      customers.push(obj)
+    } else {
+      data.application.group.individualsInGroup.forEach(member => {
+        const obj = {
+          requestNumber: '002',
+          reportId: '002',
+          product: `${data.application.product.code}`,
+          loanAccountNumber: `${member.customer.key}`,
+          number: '003',
+          date: '003',
+          amount: `${data.application.principal}`,
+          lastName: `${member.customer.customerName}`,
+          idSource: '003',
+          idValue: `${member.customer.nationalId}`,
+          gender: (member.customer.gender === 'male') ? '001' : '002',
+          dateOfBirth: `${member.customer.birthDate}`
+        }
+        customers.push(obj)
+      })
+    }
+    customers.forEach((customer, i) => {
+      this.getiScore(customer, i)
+    })
+    this.setState({ iScoreCustomers: customers })
   }
   async getLoans() {
     let query = {};
@@ -126,6 +177,25 @@ class LoanList extends Component<Props, State> {
   }
   componentWillUnmount() {
     this.props.setSearchFilters({})
+  }
+  async getiScore(obj, i) {
+    this.setState({ loading: true });
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      const customers = this.state.iScoreCustomers;
+      customers[i].iScore = iScore.body
+      this.setState({ loading: false, iScoreCustomers: customers })
+    } else {
+      Swal.fire('', 'fetch error', 'error')
+      this.setState({ loading: false })
+    }
+  }
+  downloadFile(fileURL) {
+    const link = document.createElement('a');
+    link.href = fileURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
   render() {
     return (
@@ -160,6 +230,39 @@ class LoanList extends Component<Props, State> {
             />
           </Card.Body>
         </Card>
+        <Modal show={this.state.iScoreModal} backdrop="static">
+          <Modal.Header>
+            <Modal.Title>
+              iScore
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Loader type="fullsection" open={this.state.loading} />
+            <Table style={{ textAlign: 'right' }}>
+              <thead>
+                <tr>
+                  <td>{local.customer}</td>
+                  <td>{local.nationalId}</td>
+                  <td>{local.value}</td>
+                  <td>{local.downloadPDF}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.iScoreCustomers.map(customer =>
+                  <tr key={customer.idValue}>
+                    <td>{customer.lastName}</td>
+                    <td>{customer.idValue}</td>
+                    <td>{customer.iScore && customer.iScore.value}</td>
+                    <td>{customer.iScore && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download"  onClick={() => {this.downloadFile(customer.iScore.url)}}></span>}</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.setState({ iScoreModal: false, iScoreCustomers: [] })}>{local.cancel}</Button>
+          </Modal.Footer>
+        </Modal>
       </>
     )
   }

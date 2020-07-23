@@ -236,14 +236,14 @@ class LoanProfile extends Component<Props, State>{
         }
         const iScore = await getIscore(obj);
         if (iScore.status === 'success') {
-            this.downloadFile(iScore.body.url, `siScore.pdf`)
+            this.downloadFile(iScore.body.url)
             this.setState({ loading: false })
         } else {
             Swal.fire('', 'fetch error', 'error')
             this.setState({ loading: false })
         }
     }
-    downloadFile(fileURL, fileName) {
+    downloadFile(fileURL) {
         const link = document.createElement('a');
         link.href = fileURL;
         document.body.appendChild(link);
