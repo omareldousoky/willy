@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 import { Formik } from 'formik';
 import { reportsModalValidation } from './reportsModalValidation';
 import { PDF } from './reports';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import * as local from '../../../Shared/Assets/ar.json';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
+import { Branch } from '../../Services/interfaces';
+
+interface InitialFormikState {
+  fromDate?: string;
+  toDate?: string;
+  branches?: Array<Branch>;
+  key?: string;
+}
 
 interface Props {
   pdf: PDF;
@@ -22,11 +27,23 @@ interface Props {
 const ReportsModal = (props: Props) => {
   function handleSubmit(values) {
     console.log(values)
+  
+  }
+  function getInitialValues() {
+    const initValues: InitialFormikState = {}
+    props.pdf.inputs?.forEach(input => {
+      switch(input) {
+        case 'dateFromTo': initValues.fromDate = ''; initValues.toDate = '';
+        case 'branches': initValues.branches = [];
+        case 'customerKey': initValues.key = ''
+      }
+    })
+    return initValues;
   }
   return (
     <Modal size='lg' show={props.show} onHide={() => { props.hideModal() }}>
       <Formik
-        initialValues={{ fromDate: '', toDate: '', branches: [], code: '' }}
+        initialValues={getInitialValues()}
         onSubmit={handleSubmit}
         validationSchema={reportsModalValidation}
         validateOnBlur
@@ -73,12 +90,11 @@ const ReportsModal = (props: Props) => {
                               disabled={!Boolean(formikProps.values.fromDate)}
                             >
                             </Form.Control>
-                            {console.log(formikProps.errors.toDate, formikProps.touched.toDate)}
 
                           </div>
-                          <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.toDate}
-                          </Form.Control.Feedback>
+                          <span style={{ color: 'red' }}>
+                          {formikProps.errors.toDate}
+                        </span>
                         </Form.Group>
                       </Col>
                     )
@@ -86,29 +102,29 @@ const ReportsModal = (props: Props) => {
                   if (input === 'branches') {
                     return (
                       <Col key={index} sm={12} style={{ marginTop: 20 }}>
-                        <BranchesDropDown multiselect={true} onSelectBranch={(branch) => { formikProps.setFieldValue('branches', branch) }} />
+                        <BranchesDropDown multiselect={true} onSelectBranch={(branch) => { formikProps.setFieldValue('branches', branch) }} />                        
                         <span style={{ color: 'red' }}>
-                          {formikProps.values.branches.length > 0 ? local.required : null}
+                          {formikProps.errors.branches}
                         </span>
                       </Col>
                     )
                   }
-                  if (input === 'customerCode') {
+                  if (input === 'customerKey') {
                     return (
                       <Col sm={12} key={index} style={{ marginTop: 20 }}>
-                        <Form.Group controlId="code">
+                        <Form.Group controlId="key">
                           <div className="dropdown-container">
                             <p className="dropdown-label">{local.code}</p>
                             <Form.Control
                               className="dropdown-select"
-                              name="code"
-                              data-qc="code"
-                              value={formikProps.values.code}
-                              isInvalid={Boolean(formikProps.errors.code && formikProps.touched.code)}
+                              name="key"
+                              data-qc="key"
+                              value={formikProps.values.key}
+                              isInvalid={Boolean(formikProps.errors.key && formikProps.touched.key)}
                               onChange={formikProps.handleChange} />
                           </div>
                           <span style={{ color: 'red' }}>
-                            {Boolean(formikProps.errors.code && formikProps.touched.code) ? formikProps.errors.code : ''}
+                            {Boolean(formikProps.errors.key && formikProps.touched.key) ? formikProps.errors.key : ''}
                           </span>
                         </Form.Group>
                       </Col>

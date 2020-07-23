@@ -23,7 +23,7 @@ class Reports extends Component<{}, State> {
     this.state = {
       showModal: false,
       print: '',
-      pdfsArray: [{ key: 'issuedLoans', local: 'القروض المصدرة', inputs: ['dateFromTo', 'branches', 'customerCode' ]}],
+      pdfsArray: [{ key: 'issuedLoans', local: 'القروض المصدرة', inputs: ['dateFromTo', 'branches' ]}],
       selectedPdf: {}
     }
   }
