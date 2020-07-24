@@ -25,14 +25,16 @@ class CustomerCardPDF extends Component<Props, State> {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
-            if (installment.paidAt) {
-                const number = Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if (number > 0) {
-                    totalDaysLate = totalDaysLate + number;
-                } else totalDaysEarly = totalDaysEarly + number;
-            } else {
-                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if (number > 0) totalDaysLate = totalDaysLate + number;
+            if (installment.status !== "rescheduled") {
+                if (installment.paidAt) {
+                    const number = Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                    if (number > 0) {
+                        totalDaysLate = totalDaysLate + number;
+                    } else totalDaysEarly = totalDaysEarly + number;
+                } else {
+                    const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                    if (number > 0) totalDaysLate = totalDaysLate + number;
+                }
             }
         });
         this.setState({ totalDaysEarly, totalDaysLate })
@@ -145,9 +147,9 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{getStatus(installment)}</td>
                                 <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                 <td>{installment.paidAt ?
-                                    numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
-                                    :
-                                    new Date().setHours(23, 59, 59, 59).valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))) : ''}</td>
+                                        numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
+                                        :
+                                        ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
                                 <td></td>
                             </tr>)
                         })}
