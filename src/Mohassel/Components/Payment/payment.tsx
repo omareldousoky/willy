@@ -885,16 +885,8 @@ class Payment extends Component<Props, State>{
                     return a.id - b.id;
                   })
             }
-            // mappers={
-            //   this.props.paymentType === "random"
-            //     ? this.state.randomPaymentsTableMappers
-            //     : this.props.paymentType === "penalties"
-            //     ? this.state.penaltiesTableMappers
-            //     : this.state.normalTableMappers
-            // }
             mappers={this.mappers}
           />
-        {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
       </>
     );
