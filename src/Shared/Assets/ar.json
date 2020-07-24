@@ -420,7 +420,7 @@
     "bulkLoanApplicationsApproval": "موافقة علي طلبات القروض",
     "searchForBranch": "إبحث عن فرع",
     "approve": "موافقة",
-    "welcomeToMohassel": "اهلا بك في المحصل",
+    "welcomeToMohassel": "اهلا بك في LTS",
     "chooseRepresentative": "اختر المندوب",
     "chooseBranch": "اختر الفرع",
     "issued": "مصدر",
@@ -470,7 +470,7 @@
     "viewCustomer": "تفاصيل العميل",
     "duplicateUsernameMessage": "إسم المستخدم موجود بالفعل لمستخدم أخر",
     "editRole": "تعديل دور المستخدم",
-    "mohassel": "المحصل",
+    "mohassel": "LTS",
     "licenseNumber": "رقم الترخيص",
     "licenseDate": "تاريخ الترخيص",
     "governoratesError": "حدث خطأ في إسترجاع المحافظات",
@@ -662,5 +662,7 @@
     "reportsProgram": "برنامج التقارير",
     "noOfReports": "عدد التقارير",
     "value": "القيمة",
-    "byInsurance": "تأمين"
+    "byInsurance": "تأمين",
+    "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !"
+
 }

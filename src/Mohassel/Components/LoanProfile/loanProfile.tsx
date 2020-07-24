@@ -38,6 +38,8 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
+import { getIscore } from '../../Services/APIs/iScore/iScore';
+import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt';
 
@@ -142,8 +144,8 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
             if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
-            if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTab)
-            if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
+            if (ability.can('pushInstallment', 'application') && !this.state.application.writeOff) tabsToRender.push(reschedulingTab)
+            // if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
         }
        
         const financialTransactionsTab = {
@@ -270,6 +272,38 @@ class LoanProfile extends Component<Props, State>{
         window.scrollTo(0, document.body.scrollHeight);
         this.setState({ activeTab: 'loanPayments', manualPaymentEditId: this.state.pendingActions._id ? this.state.pendingActions?._id : '' });
     }
+    async getIscore(data) {
+        this.setState({ loading: true });
+        const obj = {
+            requestNumber: '002',
+            reportId: '002',
+            product: `${this.state.application.product.code}`,
+            loanAccountNumber: `${data.key}`,
+            number: '003',
+            date: '003',
+            amount: `${this.state.application.principal}`,
+            lastName: `${data.customerName}`,
+            idSource: '003',
+            idValue: `${data.nationalId}`,
+            gender: (data.gender === 'male') ? '001' : '002',
+            dateOfBirth: `${data.birthDate}`
+        }
+        const iScore = await getIscore(obj);
+        if (iScore.status === 'success') {
+            this.downloadFile(iScore.body.url)
+            this.setState({ loading: false })
+        } else {
+            Swal.fire('', 'fetch error', 'error')
+            this.setState({ loading: false })
+        }
+    }
+    downloadFile(fileURL) {
+        const link = document.createElement('a');
+        link.href = fileURL;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
     cancelApplication() {
         Swal.fire({
             title: local.areYouSure,
@@ -278,7 +312,9 @@ class LoanProfile extends Component<Props, State>{
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.cancelApplication
+            confirmButtonText: local.cancelApplication,
+            cancelButtonText: local.cancel
+
         }).then(async (result) => {
             if (result.value) {
                 this.setState({ loading: true });
@@ -292,6 +328,47 @@ class LoanProfile extends Component<Props, State>{
                 }
             }
         })
+    }
+    async writeOffApplication() {
+        const { value: text } = await Swal.fire({
+            title: local.writeOffReason,
+            input: 'text',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.writeOffLoan,
+            cancelButtonText: local.cancel,
+            inputValidator: (value) => {
+                if (!value) {
+                    return local.required
+                } else return ''
+            }
+        })
+        if (text) {
+
+            Swal.fire({
+                title: local.areYouSure,
+                text: `${local.loanWillBeWrittenOff}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: local.writeOffLoan,
+                cancelButtonText: local.cancel
+            }).then(async (result) => {
+                if (result.value) {
+                    this.setState({ loading: true });
+                    const res = await writeOffLoan(this.props.history.location.state.id, { writeOffReason: text });
+                    if (res.status === "success") {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanWriteOffSuccess, 'success').then(() => window.location.reload());
+                    } else {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanWriteOffError, 'error');
+                    }
+                }
+            })
+        }
     }
     getSumOfPendingActions() {
         let sum = 0;
@@ -307,24 +384,27 @@ class LoanProfile extends Component<Props, State>{
                 {Object.keys(this.state.application).length > 0 &&
                     <div className="print-none">
                         <div className="d-flex justify-content-between">
-                            <div className="d-flex justify-content-between" style={{ width: '25%' }}>
+                            <div className="d-flex justify-content-start" style={{ width: '30%' }}>
                                 <h3>{local.loanDetails}</h3>
-                                <span style={{ display: 'flex', padding: 10, borderRadius: 30, border: `1px solid ${englishToArabic(this.state.application.status).color}` }}>
+                                <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid ${englishToArabic(this.state.application.status).color}` }}>
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
+                                {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
+                                    <p style={{ margin: 0, color: 'red' }}>{local.writtenOffLoan}</p>
+                                </span>}
                             </div>
-                            <div className="d-flex justify-content-end" style={{ width: '75%' }}>
-                                <span style={{ cursor: 'not-allowed', padding: 10 }}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
+                            <div className="d-flex justify-content-end" style={{ width: '70%' }}>
                                 {this.state.application.status === 'issued' && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span></Can>}
                                 {this.state.application.status === "created" && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
                                 {this.state.application.status === 'underReview' && <Can I='assignProductToCustomer' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.editLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'review' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.reviewLoan}</span></Can>}
-                                {this.state.application.status === 'reviewed' && <Can I='reviewLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.undoLoanReview}</span></Can>}
+                                {this.state.application.status === 'reviewed' && <Can I='rollback' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'unreview' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.undoLoanReview}</span></Can>}
                                 {this.state.application.status === 'reviewed' && <Can I='rejectLoanApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-status-change', { id: this.props.history.location.state.id, action: 'reject' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rejectLoan}</span></Can>}
                                 {this.state.application.status === 'created' && <Can I='issueLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.issueLoan}</span></Can>}
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
-                                {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
+                                {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span> }
+                                {this.state.application.status === 'issued' && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
 
                             </div>
                         </div>
@@ -361,8 +441,8 @@ class LoanProfile extends Component<Props, State>{
                             </div>
                             : null}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} /> :
-                                <GroupInfoBox group={this.state.application.group} />
+                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} /> :
+                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} />
                             }
                         </div>
                         <Card style={{ marginTop: 15 }}>
