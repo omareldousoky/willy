@@ -5,6 +5,7 @@ import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
 import { arabicGender } from '../Services/utils';
+import Can from '../config/Can';
 
 interface Props {
     values: any;
@@ -50,7 +51,9 @@ class InfoBox extends Component<Props, State>{
                         </Row>
                     </Form.Group>
                     {this.props.getIscore && <Col>
-                        <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.props.values)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
+                        <Can I='getIscore' a='customer'>
+                            <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.props.values)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
+                        </Can>
                     </Col>}
                 </Form.Row>
                 <Form.Row>
