@@ -194,17 +194,12 @@ class FreeRescheduling extends Component<Props, State>{
             Swal.fire('', local.loanFreeReschedulingError, 'error');
         }
     }
-    getRescheuleDate(values){
-        const reschedFreeInsts = values.installments.filter(i => i.status !== 'rescheduled')
-        const dates: any[] = []
-        reschedFreeInsts.forEach(element => {
-            dates.push(element.dateOfPayment)
-        });
-        reschedFreeInsts.splice(dates.length-1, 1)
-        let maxDate = dates[0];
+    getRescheuleDate(values, index){
+        const reschedFreeInsts = values.installments.slice(0,index-1).filter(i => i.status !== 'rescheduled');
+        let maxDate = reschedFreeInsts[0].dateOfPayment;
         reschedFreeInsts.forEach(element => {
             if(element.dateOfPayment>maxDate){
-                maxDate = element.dateOfPayment
+                maxDate = element.dateOfPayment;
             }
         });
         return maxDate
@@ -298,7 +293,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                                 value={this.getDateString(formikProps.values.installments[index].dateOfPayment)}
                                                                 onBlur={formikProps.handleBlur}
                                                                 onChange={(e) => { formikProps.setFieldValue(`installments[${index}].dateOfPayment`, new Date(e.currentTarget.value).valueOf()) }}
-                                                                min={index > 0 ? formikProps.values.installments[index - 1] && formikProps.values.installments[index - 1].status !== 'rescheduled' ? this.getDateString(formikProps.values.installments[index - 1].dateOfPayment) : this.getDateString(this.getRescheuleDate(formikProps.values)) : undefined}
+                                                                min={index > 0 ? formikProps.values.installments[index - 1] && formikProps.values.installments[index - 1].status !== 'rescheduled' ? this.getDateString(formikProps.values.installments[index - 1].dateOfPayment) : this.getDateString(this.getRescheuleDate(formikProps.values, index)) : undefined}
                                                                 // max={index < formikProps.values.installments.length - 1 ? this.getDateString(formikProps.values.installments[index + 1].dateOfPayment) : undefined}
                                                                 isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].dateOfPayment}
                                                             />}
