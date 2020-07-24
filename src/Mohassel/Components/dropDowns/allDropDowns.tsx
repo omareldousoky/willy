@@ -1,12 +1,13 @@
 import React from "react";
 import AsyncSelect from "react-select/async";
-import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import Select from "react-select";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
 
 export const LoanOfficersDropDown = props => {
   // const [loanOfficers, setLoanOfficers] = useState();
   // const [searchKeyWord, changeSearchKeyWord] = useState("");
+  let selectValue: any = props.value;
   const customStyles = {
     control: provided => ({
       ...provided,
@@ -17,50 +18,25 @@ export const LoanOfficersDropDown = props => {
       }
     })
   };
-  const getLoanOfficers = async searchKeyWord => {
-    let res;
-    if (props.branchId) {
-      if (!props.sameBranch)
-        res = await searchLoanOfficer({
-          from: 0,
-          size: 100,
-          name: searchKeyWord,
-          status: "active",
-          excludedIds: [props.excludeId],
-          branchId: props.branchId
-        });
-      else
-        res = await searchLoanOfficer({
-          from: 0,
-          size: 100,
-          name: searchKeyWord,
-          excludedIds: [props.excludeId]
-        });
-      if (res.status === "success") {
-        return res.body.data;
-      } else {
-        return [];
-      }
-    }
-  };
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>
-      {/* <p className="dropdown-label">{local.representative}</p> */}
-      <AsyncSelect
+      <Select
         styles={customStyles}
         className="full-width"
         name="representative"
         data-qc="representative"
         placeholder={local.chooseRepresentative}
-        // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
-        // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
-        onChange={loanOfficer => props.onSelectLoanOfficer(loanOfficer)}
+        isLoading={props.LoanOfficerSelectLoader}
+        isClearable={true}
+        isSearchable={true}
+        options={props.LoanOfficerSelectOptions}
         getOptionLabel={option => option.name}
         getOptionValue={option => option._id}
-        loadOptions={getLoanOfficers}
-        cacheOptions
-        defaultOptions
-        isClearable={true}
+        onChange={loanOfficer => {
+          selectValue = loanOfficer;
+          props.onSelectLoanOfficer(loanOfficer);
+        }}
+        value={selectValue}
       />
     </div>
   );

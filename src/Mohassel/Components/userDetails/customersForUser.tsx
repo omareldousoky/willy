@@ -19,6 +19,7 @@ import Pagination from "../pagination/pagination";
 import { getBranches } from "../../Services/APIs/Branch/getBranches";
 import Select from "react-select";
 import { UserDateValues } from "./userDetailsInterfaces";
+import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 
 interface Props {
   id: string;
@@ -44,6 +45,8 @@ interface State {
   branches: Array<Branch>;
   branch: any;
   moveMissing: boolean;
+  LoanOfficerSelectLoader: boolean;
+  LoanOfficerSelectOptions: Array<any>;
 }
 interface Branch {
   _id: string;
@@ -66,18 +69,19 @@ class CustomersForUser extends Component<Props, State> {
       branch: this.props.user.branchesObjects
         ? this.props.user.branchesObjects[0]
         : null,
-        moveMissing: false
+      moveMissing: false,
+      LoanOfficerSelectLoader: false, 
+      LoanOfficerSelectOptions: []
     };
     this.getBranches();
   }
   async getBranches() {
     const branches = await getBranches();
     if (branches.status === "success") {
-      this.setState(
-        {
-          branches: branches.body.data.data,
-          loading: false
-        });
+      this.setState({
+        branches: branches.body.data.data,
+        loading: false
+      },()=>this.getLoanOfficers(''));
     } else {
       this.setState({ loading: false });
       Swal.fire("", local.searchError, "error");
@@ -140,7 +144,7 @@ class CustomersForUser extends Component<Props, State> {
     if (this.state.branch._id !== this.props.user.branchesObjects[0]._id) {
       data.branchId = this.state.branch._id;
     }
-    if(this.state.moveMissing===true ){
+    if (this.state.moveMissing === true) {
       data.moveMissing = true;
     }
     const res = await moveCustomerToOfficer(data);
@@ -148,10 +152,17 @@ class CustomersForUser extends Component<Props, State> {
       this.setState({ loading: false });
       Swal.fire(
         "",
-        `${local.doneMoving} (${this.state.selectedCustomers.length}) ${local.customerSuccess}`,
+        `${local.doneMoving} ${
+          this.state.moveMissing
+            ? local.customersSuccess
+            : this.state.selectedCustomers.length + " " + local.customerSuccess
+        }`,
         "success"
       ).then(() => {
-        this.setState({ openModal: false, moveMissing: false  }, () => this.getCustomersForUser());
+        this.setState(
+          { openModal: false, moveMissing: false, selectedCustomers: [] },
+          () => this.getCustomersForUser()
+        );
       });
     } else {
       if (res.error && res.error.error === "move_missing_customers") {
@@ -162,8 +173,8 @@ class CustomersForUser extends Component<Props, State> {
             icon: "warning",
             showCancelButton: true,
             focusConfirm: false,
-            confirmButtonText: 'تأكيد',
-            cancelButtonText: 'إلغاء'
+            confirmButtonText: "تأكيد",
+            cancelButtonText: "إلغاء"
           }).then(value => {
             if (value.value) {
               this.setState({ loading: false, moveMissing: true }, () =>
@@ -172,9 +183,50 @@ class CustomersForUser extends Component<Props, State> {
             }
           });
         });
-      } else this.setState({ loading: false });
+      } else {
+        this.setState({ loading: false, selectedCustomers: [] });
+        Swal.fire(
+          "",
+          local.actionHasntBeenMadeTheUserIsAssignedToOtherCustomers,
+          "error"
+        );
+      }
     }
   }
+
+  getLoanOfficers = async searchKeyWord => {
+    this.setState({LoanOfficerSelectLoader: true})
+    let res;
+    const sameBranch = this.state.branch
+    ? this.state.branch._id ===
+      this.props.user.branchesObjects[0]._id
+    : false;
+    if (this.state.branch && this.state.branch._id) {
+      if (!sameBranch)
+        res = await searchLoanOfficer({
+          from: 0,
+          size: 100,
+          name: searchKeyWord,
+          status: "active",
+          excludedIds: [this.props.id],
+          branchId: this.state.branch._id 
+        });
+      else
+        res = await searchLoanOfficer({
+          from: 0,
+          size: 100,
+          name: searchKeyWord,
+          status: "active",
+          excludedIds: [this.props.id],
+          branchId: this.state.branch._id 
+        });
+      if (res.status === "success") {
+        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: res.body.data })
+      } else {
+        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
+      }
+    }
+  };
   render() {
     return (
       <>
@@ -291,9 +343,8 @@ class CustomersForUser extends Component<Props, State> {
                   enableReinitialize={false}
                   onChange={event => {
                     if (!event)
-                      this.setState({ branch: event, selectedLO: event });
-                    else
-                      this.setState({ branch: event });
+                      this.setState({ branch: event, selectedLO: event },()=>this.getLoanOfficers(''));
+                    else this.setState({ branch: event },()=>this.getLoanOfficers(''));
                   }}
                   type="text"
                   getOptionLabel={option => option.name}
@@ -310,14 +361,9 @@ class CustomersForUser extends Component<Props, State> {
                     if (LO) this.setState({ selectedLO: LO });
                     else this.setState({ selectedLO: {} });
                   }}
-                  excludeId={this.props.id}
-                  branchId={this.state.branch ? this.state.branch._id : ""}
-                  sameBranch={
-                    this.state.branch
-                      ? this.state.branch._id ===
-                        this.props.user.branchesObjects[0]._id
-                      : false
-                  }
+                  value={this.state.selectedLO}
+                  LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
+                  LoanOfficerSelectOptions={this.state.LoanOfficerSelectOptions}
                 />
               </Col>
             </Row>
