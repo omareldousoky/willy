@@ -19,7 +19,6 @@ import { calculateEarlyPayment, earlyPayment, editManualPayment, manualPayment, 
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
-import { actionLogs } from '../../Services/APIs/Payment/actionLogs';
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
 import { getBranches } from '../../Services/APIs/Branch/getBranches';
@@ -82,51 +81,14 @@ interface State {
   penaltyAction: string;
   byInsurance: boolean;
   branches: Array<any>;
-  randomPaymentsActionLogs: Array<any>;
-  penaltiesActionLogs: Array<any>;
-  randomPaymentsTableMappers: Array<any>;
-  normalTableMappers: Array<any>;
-  penaltiesTableMappers: Array<any>;
+  // randomPaymentsActionLogs: Array<any>;
+  // penaltiesActionLogs: Array<any>;
 }
 
 class Payment extends Component<Props, State>{
   mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
-    const randomPaymentsTableMappers = [
-      {
-        title: local.actionType,
-        key: "action",
-        render: data => data.action
-      },
-      {
-        title: local.amount,
-        key: "amount",
-        render: data => data.amount
-      },
-      {
-        title: local.dateOfPayment,
-        key: "truthDate",
-        render: data => timeToDateyyymmdd(data.truthDate)
-      }
-    ];
-    const penaltiesTableMappers = [
-      {
-        title: local.branchName,
-        key: "branchName",
-        render: data => data.branchName
-      },
-      {
-        title: local.actionType,
-        key: "action",
-        render: data => data.action
-      },
-      {
-        title: local.dateOfPayment,
-        key: "truthDate",
-        render: data => timeToDateyyymmdd(data.truthDate)
-      }
-    ];
     const normalTableMappers = [
       {
         title: local.installmentNumber,
@@ -190,25 +152,12 @@ class Payment extends Component<Props, State>{
       penaltyAction: '',
       byInsurance: false,
       branches:[],
-      randomPaymentsActionLogs: [],
-      penaltiesActionLogs: [],
-      randomPaymentsTableMappers,
-      normalTableMappers,
-      penaltiesTableMappers
     }
-  
-     if (this.props.paymentType === "random") {
-       this.mappers = randomPaymentsTableMappers;
-     } else if (this.props.paymentType === "penalties") {
-       this.mappers = penaltiesTableMappers;
-     } else {
        this.mappers = normalTableMappers;
-     }
-  
   }
   componentDidMount() {
     if(this.props.paymentType==='penalties' || this.props.paymentType==='random') this.getBranches()
-    if(this.props.paymentType==='penalties'){
+    if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
     }
     if(Object.keys(this.props.pendingActions).length) {
@@ -223,22 +172,18 @@ class Payment extends Component<Props, State>{
   async getBranches(){
     const res = await getBranches()
     if(res.body){
-      this.setState({branches:res.body.data.data },()=> this.getActionLogs()
-      )
+      this.setState({branches:res.body.data.data })
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-        if(this.props.paymentType==='penalties' && this.state.penalty === -1){
-      this.calculatePenalties()
-    }
-    if(prevProps.paymentType!== this.props.paymentType){
-      this.setState({loadingFullScreen:true})
-      this.getActionLogs()
-      if(this.props.paymentType==='random') this.mappers = this.state.randomPaymentsTableMappers
-      else if(this.props.paymentType==='penalties') this.mappers = this.state.penaltiesTableMappers
-      else this.mappers = this.state.normalTableMappers
-    }
+        if (
+          prevProps.paymentType !== this.props.paymentType &&
+          this.props.paymentType === "penalties" &&
+          this.state.penalty === -1
+        ) {
+          this.calculatePenalties();
+        }
   }
   
   
@@ -344,7 +289,6 @@ class Payment extends Component<Props, State>{
              this.setState({ loadingFullScreen: false }, () =>
                this.props.refreshPayment()
              );
-             this.getActionLogs();
              this.calculatePenalties();
           } else {
             this.setState({ loadingFullScreen: false });
@@ -358,7 +302,6 @@ class Payment extends Component<Props, State>{
           if (res.status === "success") {
             this.setState({  loadingFullScreen: false });
             Swal.fire("", local.penaltyCancelledSuccessfully, "success")
-            this.getActionLogs()
             this.calculatePenalties()
           } else {
             this.setState({ loadingFullScreen: false });
@@ -794,14 +737,14 @@ class Payment extends Component<Props, State>{
     }
   }
   async calculatePenalties() {
+    this.setState({ loadingFullScreen: true });
     const res = await calculatePenalties({
       id: this.props.applicationId,
-      // truthDate: this.state.truthDate
-      truthDate: 1592784000000
+      truthDate: new Date().getTime()
     });
     if (res.body) {
-      this.setState({ penalty: res.body.penalty });
-    }
+      this.setState({ penalty: res.body.penalty, loadingFullScreen: false });
+    } else this.setState({ loadingFullScreen: false });
   }
   getValueFromLocalizationFileByKey = (key)=>{
     if(key==='collectionCommission') return local.collectionCommission
@@ -814,79 +757,20 @@ class Payment extends Component<Props, State>{
     else if(key==='cancelPenalties') return local.cancelPenalty
     else if(key==="payRandomPayment") return local.financialTransactions
  }
-  async getActionLogs() {
-    this.setState({ loadingFullScreen: true });
-    if (this.props.paymentType === "penalties") {
-      let responseDataArray = [];
-      const data = {
-        id: this.props.applicationId,
-        action: ["payPenalties", "cancelPenalties"],
-        size: 500,
-        from: 0
-      };
-      const res = await actionLogs(data);
-      if (res.body) {
-        responseDataArray = res.body.data;
-        this.setState({ loadingFullScreen: false });
-        const dataArray: Array<any> = [];
-        responseDataArray.forEach((action: PenaltiesActionLogObject) => {
-          const element = {
-            id: action.id,
-            action: this.getValueFromLocalizationFileByKey(action.action),
-            branchName: this.state.branches.length
-              ? this.state.branches.find(
-                  el => el._id === action.reference.branchId
-                ).name
-              : "",
-            truthDate: new Date(action.trace.at).getTime()
-          };
-          dataArray.push(element);
-        });
-        this.setState({penaltiesActionLogs: dataArray})
-      }
-    } else {
-      const data = {
-        id: this.props.applicationId,
-        type: "payRandomPayment",
-        size: 500,
-        from: 0
-      };
-      const res = await actionLogs(data);
-      if (res.body) {
-        this.setState({ loadingFullScreen: false });
-        const responseDataArray = res.body.data;
-        const dataArray: Array<any> = [];
-        responseDataArray.forEach(action => {
-         const element = {
-          id: action.id,
-          action: this.getValueFromLocalizationFileByKey(action.action),
-          truthDate: new Date(action.trace.at).getTime(),
-          amount: action.info.amount
-         }
-         dataArray.push(element)
-       }); 
-       this.setState({ randomPaymentsActionLogs: dataArray})
-      }
-    }
-  }
   render() {
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
+        {this.props.paymentType === "normal" ? (
           <DynamicTable
             totalCount={0}
             pagination={false}
-            data={
-              this.props.paymentType === "random"
-                ? this.state.randomPaymentsActionLogs
-                : this.props.paymentType === "penalties"
-                ? this.state.penaltiesActionLogs
-                : this.props.installments.sort(function(a, b) {
-                    return a.id - b.id;
-                  })
-            }
+            data={this.props.installments.sort((a, b) => {
+              return a.id - b.id;
+            })}
             mappers={this.mappers}
           />
+        ) : null}
         {this.renderPaymentMethods()}
       </>
     );
