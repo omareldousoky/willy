@@ -95,7 +95,7 @@ export const StepTwoForm = (props: any) => {
                                 onChange={handleChange}
                                 isInvalid={errors.businessName && touched.businessName}
                                 onBlur={handleBlur}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                             />}
                         </Can>
                         <Form.Control.Feedback type="invalid">
@@ -151,7 +151,7 @@ export const StepTwoForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.governorate && touched.governorate}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                             >
                                 <option value="" disabled></option>
                                 {governorates.map((governorate, index) => {
@@ -174,7 +174,7 @@ export const StepTwoForm = (props: any) => {
                                 onChange={handleChange}
                                 // disabled={!values.governorate}
                                 isInvalid={errors.district && touched.district}
-                                disabled={!values.governorate || (!allowed && props.hasLoan)}
+                                disabled={!values.governorate || (!allowed && (props.hasLoan || props.isGuarantor))}
                             >
                                 <option value="" disabled></option>
                                 {governorates.find(gov => gov.governorateName.ar === values.governorate)?.districts.map((district, index) => {
@@ -199,7 +199,7 @@ export const StepTwoForm = (props: any) => {
                                 onChange={handleChange}
                                 // disabled={!values.district}
                                 isInvalid={errors.village && touched.village}
-                                disabled={!values.district || (!allowed && props.hasLoan)}
+                                disabled={!values.district || (!allowed && (props.hasLoan || props.isGuarantor))}
                             >
                                 <option value="" disabled></option>
                                 {governorates.find(gov => gov.governorateName.ar === values.governorate)?.districts
@@ -225,7 +225,7 @@ export const StepTwoForm = (props: any) => {
                                     name="ruralUrban"
                                     id="ruralUrban"
                                     onClick={(e) => setFieldValue("ruralUrban", e.currentTarget.value)}
-                                    disabled={(!allowed && props.hasLoan)}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 />}
                             </Can>
                             <Can I="updateNationalId" a="customer" passThrough>
@@ -239,7 +239,7 @@ export const StepTwoForm = (props: any) => {
                                     name="ruralUrban"
                                     id="ruralUrban"
                                     onClick={(e) => setFieldValue("ruralUrban", e.currentTarget.value)}
-                                    disabled={(!allowed && props.hasLoan)}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 />}
                             </Can>
                         </div>
@@ -307,7 +307,7 @@ export const StepTwoForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.businessSector && touched.businessSector}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                             >
                                 <option value="" disabled></option>
                                 {businessSectors?.map((businessSector, index) => {
@@ -332,7 +332,7 @@ export const StepTwoForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.businessActivity && touched.businessActivity}
-                                disabled={!values.businessSector || (!allowed && props.hasLoan)}
+                                disabled={!values.businessSector || (!allowed && (props.hasLoan || props.isGuarantor))}
                             >
                                 <option value="" disabled></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
@@ -356,7 +356,7 @@ export const StepTwoForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.businessSpeciality && touched.businessSpeciality}
-                                disabled={!values.businessActivity || (!allowed && props.hasLoan)}
+                                disabled={!values.businessActivity || (!allowed && (props.hasLoan || props.isGuarantor))}
                             >
                                 <option value="" disabled></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
@@ -380,7 +380,7 @@ export const StepTwoForm = (props: any) => {
                                 value={values.businessLicenseNumber}
                                 onBlur={handleBlur}
                                 maxLength={100}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     const re = /^\d*$/;
                                     if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
@@ -407,7 +407,7 @@ export const StepTwoForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 maxLength={100}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.businessLicenseIssuePlace && touched.businessLicenseIssuePlace}
                             />}
                         </Can>
@@ -429,7 +429,7 @@ export const StepTwoForm = (props: any) => {
                                 value={values.businessLicenseIssueDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.businessLicenseIssueDate && touched.businessLicenseIssueDate}
                             />}
                         </Can>
@@ -455,7 +455,7 @@ export const StepTwoForm = (props: any) => {
                                         setFieldValue('commercialRegisterNumber', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.commercialRegisterNumber && touched.commercialRegisterNumber}
                             />}
                         </Can>
@@ -483,7 +483,7 @@ export const StepTwoForm = (props: any) => {
                                         setFieldValue('industryRegisterNumber', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.industryRegisterNumber && touched.industryRegisterNumber}
                             />}
                         </Can>
@@ -509,7 +509,7 @@ export const StepTwoForm = (props: any) => {
                                         setFieldValue('taxCardNumber', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.taxCardNumber && touched.taxCardNumber}
                             />}
                         </Can>
