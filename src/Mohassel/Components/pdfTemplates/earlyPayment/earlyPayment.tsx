@@ -23,14 +23,16 @@ class EarlyPaymentPDF extends Component<Props, State> {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
-            if (installment.paidAt) {
-                const number = Math.round((new Date(installment.paidAt).setHours(23,59,59,59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if (number > 0) {
-                    totalDaysLate = totalDaysLate + number;
-                } else totalDaysEarly = totalDaysEarly + number;
-            } else {
-                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if (number > 0) totalDaysLate = totalDaysLate + number;
+            if (installment.status !== "rescheduled") {
+                if (installment.paidAt) {
+                    const number = Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                    if (number > 0) {
+                        totalDaysLate = totalDaysLate + number;
+                    } else totalDaysEarly = totalDaysEarly + number;
+                } else {
+                    const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                    if (number > 0) totalDaysLate = totalDaysLate + number;
+                }
             }
         });
         this.setState({ totalDaysEarly, totalDaysLate })
@@ -120,10 +122,9 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <td>عدد ايام التأخير :<span className="frame">{numbersToArabic(this.state.totalDaysLate)}</span>
                             </td>
-                            <td>الغرامات المسدده :<span className="frame">{numbersToArabic(this.props.data.penaltiesPaid)}</span>
+                            <td>غرامات المسدده :<span className="frame">{numbersToArabic(this.props.data.penaltiesPaid)}</span>
                             </td>
-                            <td>الغرامات المستحقه : <div className="frame">{numbersToArabic(this.props.data.penalties)}</div>
-
+                            <td>غرامات معفاة : <div className="frame">{numbersToArabic(this.props.data.penaltiesCanceled)}</div>
                             </td>
                             <td>رسوم تحصيل
 					<div className="frame">{this.getApplicationFee()}</div>
@@ -164,7 +165,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                     <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
                                         :
-                                        new Date().setHours(23, 59, 59, 59).valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
+                                        ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
                                     <td></td>
                                 </tr>
                             )

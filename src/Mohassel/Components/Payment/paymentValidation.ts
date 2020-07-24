@@ -29,3 +29,16 @@ export const earlyPaymentValidation = Yup.object().shape({
         .required(local.required),
     truthDate: Yup.string().required(local.required)
 })
+
+export const manualPaymentValidation = Yup.object().shape({
+    payAmount: Yup.number()
+        .moreThan(0, local.minPayment)
+        .test("Should not be before acceptance date", local.amountShouldNotExceedReqAmount,
+            function (this: any, value: number) {
+                return value <= this.parent.max
+            }
+        )
+        .required(local.required),
+        truthDate: Yup.string().required(local.required),
+        receiptNumber:Yup.string().required(local.required)
+})
