@@ -61,6 +61,7 @@ export interface Customer {
     partTimeEmployeeCount?: number;
     permanentEmployeeCount?: number;
     representative?: string;
+    representativeName?: string;
     ruralUrban?: string;
     taxCardNumber?: string;
     village?: string;

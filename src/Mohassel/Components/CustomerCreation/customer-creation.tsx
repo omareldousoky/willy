@@ -101,6 +101,7 @@ interface State {
   step3: {
     geographicalDistribution: string;
     representative: any;
+    newRepresentative: any;
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
@@ -110,10 +111,12 @@ interface State {
   selectedCustomer: any;
   loading: boolean;
   hasLoan: boolean;
+  isGuarantor: boolean;
   searchResults: {
     results: Array<object>;
     empty: boolean;
   };
+  oldRepresentative: string;
 }
 
 class CustomerCreation extends Component<Props, State>{
@@ -127,11 +130,13 @@ class CustomerCreation extends Component<Props, State>{
       customerId: '',
       loading: false,
       hasLoan: false,
+      isGuarantor: false,
       searchResults: {
         results: [],
         empty: false
       },
       selectedCustomer: {},
+      oldRepresentative: ''
     }
   }
 
@@ -236,6 +241,8 @@ class CustomerCreation extends Component<Props, State>{
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
         hasLoan: res.body.hasLoan,
+        isGuarantor: res.body.isGuarantor,
+        oldRepresentative: res.body.representative,
       } as any);
     } else {
       this.setState({ loading: false });
@@ -262,7 +269,8 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
-    objToSubmit.representative = objToSubmit.representative._id;
+    objToSubmit.representative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? this.state.oldRepresentative : objToSubmit.representative;
+    objToSubmit.newRepresentative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? objToSubmit.newRepresentative : '';
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
@@ -305,7 +313,7 @@ class CustomerCreation extends Component<Props, State>{
           }
 
           return (
-            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />);
+            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>);
         }
         }
       </Formik>
@@ -328,7 +336,7 @@ class CustomerCreation extends Component<Props, State>{
           }
 
           return (
-            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} />);
+            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>);
         }
         }
 
@@ -353,7 +361,7 @@ class CustomerCreation extends Component<Props, State>{
 
           }
           return (
-            <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} />
+            <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>
           )
         }}
       </Formik>

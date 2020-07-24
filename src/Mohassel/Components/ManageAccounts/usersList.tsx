@@ -36,11 +36,11 @@ interface State {
 }
 
 class UsersList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       manageAccountTabs:[],
     }
@@ -48,7 +48,13 @@ class UsersList extends Component<Props, State> {
       {
         title: local.username,
         key: "username",
+        sortable: true,
         render: data => data.username
+      },
+      {
+        title: local.code,
+        key: "userCode",
+        render: data => data.loanOfficerKey
       },
       {
         title: local.name,
@@ -67,7 +73,8 @@ class UsersList extends Component<Props, State> {
       },
       {
         title: local.creationDate,
-        key: "creationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
       },
       {
@@ -78,8 +85,7 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    
-    this.getUsers();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
@@ -138,12 +144,13 @@ class UsersList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'nationalId']} 
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            dropDownKeys={['name', 'nationalId', 'key']} 
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             url="user" from={this.state.from} size={this.state.size} 
             hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
+              url="user" from={this.state.from} size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
