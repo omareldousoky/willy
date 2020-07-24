@@ -22,6 +22,7 @@ import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalti
 import { actionLogs } from '../../Services/APIs/Payment/actionLogs';
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
+import { getBranches } from '../../Services/APIs/Branch/getBranches';
 
 
 interface Installment {
@@ -34,6 +35,21 @@ interface Installment {
   feesPaid: number;
   dateOfPayment: number;
   status: string;
+}
+interface PenaltiesActionLogObject {
+  action: string;
+  id: string;
+  reference: PenaltiesActionLogObjectReference;
+  trace: PenaltiesActionLogObjectTrace;
+  type: string;
+}
+interface PenaltiesActionLogObjectReference {
+  branchId: string;
+  customerId: string;
+}
+interface PenaltiesActionLogObjectTrace{
+  at: number;
+  by: string;
 }
 interface Props {
   installments: Array<Installment>;
@@ -65,29 +81,53 @@ interface State {
   penalty: number;
   penaltyAction: string;
   byInsurance: boolean;
+  branches: Array<any>;
+  randomPaymentsActionLogs: Array<any>;
+  penaltiesActionLogs: Array<any>;
+  randomPaymentsTableMappers: Array<any>;
+  normalTableMappers: Array<any>;
+  penaltiesTableMappers: Array<any>;
 }
 
 class Payment extends Component<Props, State>{
   mappers: { title: string; key: string; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
-    this.state = {
-      receiptData: {},
-      payAmount: 0,
-      receiptNumber: '',
-      truthDate: timeToDateyyymmdd(0),
-      dueDate: timeToDateyyymmdd(0),
-      loading: false,
-      loadingFullScreen: false,
-      remainingPrincipal: 0,
-      earlyPaymentFees: 0,
-      requiredAmount: 0,
-      installmentNumber: -1,
-      penalty: -1,
-      penaltyAction: '',
-      byInsurance: false,
-    }
-    this.mappers = [
+    const randomPaymentsTableMappers = [
+      {
+        title: local.actionType,
+        key: "action",
+        render: data => data.action
+      },
+      {
+        title: local.amount,
+        key: "amount",
+        render: data => data.amount
+      },
+      {
+        title: local.dateOfPayment,
+        key: "truthDate",
+        render: data => timeToDateyyymmdd(data.truthDate)
+      }
+    ];
+    const penaltiesTableMappers = [
+      {
+        title: local.branchName,
+        key: "branchName",
+        render: data => data.branchName
+      },
+      {
+        title: local.actionType,
+        key: "action",
+        render: data => data.action
+      },
+      {
+        title: local.dateOfPayment,
+        key: "truthDate",
+        render: data => timeToDateyyymmdd(data.truthDate)
+      }
+    ];
+    const normalTableMappers = [
       {
         title: local.installmentNumber,
         key: "id",
@@ -132,11 +172,42 @@ class Payment extends Component<Props, State>{
         title: local.installmentStatus,
         key: "installmentStatus",
         render: data => this.getStatus(data)
-      },
-    ]
+      }
+    ];
+    this.state = {
+      receiptData: {},
+      payAmount: 0,
+      receiptNumber: '',
+      truthDate: timeToDateyyymmdd(0),
+      dueDate: timeToDateyyymmdd(0),
+      loading: false,
+      loadingFullScreen: false,
+      remainingPrincipal: 0,
+      earlyPaymentFees: 0,
+      requiredAmount: 0,
+      installmentNumber: -1,
+      penalty: -1,
+      penaltyAction: '',
+      byInsurance: false,
+      branches:[],
+      randomPaymentsActionLogs: [],
+      penaltiesActionLogs: [],
+      randomPaymentsTableMappers,
+      normalTableMappers,
+      penaltiesTableMappers
+    }
+  
+     if (this.props.paymentType === "random") {
+       this.mappers = randomPaymentsTableMappers;
+     } else if (this.props.paymentType === "penalties") {
+       this.mappers = penaltiesTableMappers;
+     } else {
+       this.mappers = normalTableMappers;
+     }
+  
   }
   componentDidMount() {
-    this.getActionLogs()
+    if(this.props.paymentType==='penalties' || this.props.paymentType==='random') this.getBranches()
     if(this.props.paymentType==='penalties'){
       this.calculatePenalties()
     }
@@ -148,11 +219,28 @@ class Payment extends Component<Props, State>{
       })
     }
   }
-  componentDidUpdate(){
-    if(this.props.paymentType==='penalties' && this.state.penalty === -1){
-      this.calculatePenalties()
+
+  async getBranches(){
+    const res = await getBranches()
+    if(res.body){
+      this.setState({branches:res.body.data.data },()=> this.getActionLogs()
+      )
     }
   }
+
+  componentDidUpdate(prevProps, prevState) {
+        if(this.props.paymentType==='penalties' && this.state.penalty === -1){
+      this.calculatePenalties()
+    }
+    if(prevProps.paymentType!== this.props.paymentType){
+      this.setState({loadingFullScreen:true})
+      this.getActionLogs()
+      if(this.props.paymentType==='random') this.mappers = this.state.randomPaymentsTableMappers
+      else if(this.props.paymentType==='penalties') this.mappers = this.state.penaltiesTableMappers
+      else this.mappers = this.state.normalTableMappers
+    }
+  }
+  
   
   getStatus(data) {
     const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
@@ -715,34 +803,97 @@ class Payment extends Component<Props, State>{
       this.setState({ penalty: res.body.penalty });
     }
   }
+  getValueFromLocalizationFileByKey = (key)=>{
+    if(key==='collectionCommission') return local.collectionCommission
+    else if(key==="payReissuingFees") return local.reissuingFees
+    else if(key==="payLegalFees") return local.legalFees
+    else if(key==="payClearanceFees") return local.clearanceFees
+    else if(key==='payToktokStamp') return local.toktokStamp
+    else if(key==='payTricycleStamp') return local.tricycleStamp
+    else if(key==='payPenalties') return local.payPenalty
+    else if(key==='cancelPenalties') return local.cancelPenalty
+    else if(key==="payRandomPayment") return local.financialTransactions
+ }
   async getActionLogs() {
-    const data={
-      id: this.props.applicationId ,
-      action: "payPenalties",
-      size: 500
-    }
-    if(this.props.paymentType==="random"){
-      data.action="random"
-    }
-    const res = await actionLogs(data);
-    if(res.body){
-      // console.log('actionLogs',res.body);
+    this.setState({ loadingFullScreen: true });
+    if (this.props.paymentType === "penalties") {
+      let responseDataArray = [];
+      const data = {
+        id: this.props.applicationId,
+        action: ["payPenalties", "cancelPenalties"],
+        size: 500,
+        from: 0
+      };
+      const res = await actionLogs(data);
+      if (res.body) {
+        responseDataArray = res.body.data;
+        this.setState({ loadingFullScreen: false });
+        let dataArray: Array<any> = [];
+        responseDataArray.forEach((action: PenaltiesActionLogObject) => {
+          const element = {
+            id: action.id,
+            action: this.getValueFromLocalizationFileByKey(action.action),
+            branchName: this.state.branches.length
+              ? this.state.branches.find(
+                  el => el._id === action.reference.branchId
+                ).name
+              : "",
+            truthDate: new Date(action.trace.at).getTime()
+          };
+          dataArray.push(element);
+        });
+        this.setState({penaltiesActionLogs: dataArray})
+      }
+    } else {
+      const data = {
+        id: this.props.applicationId,
+        type: "payRandomPayment",
+        size: 500,
+        from: 0
+      };
+      const res = await actionLogs(data);
+      if (res.body) {
+        this.setState({ loadingFullScreen: false });
+        let responseDataArray = res.body.data;
+        let dataArray: Array<any> = [];
+        responseDataArray.forEach(action => {
+         const element = {
+          id: action.id,
+          action: this.getValueFromLocalizationFileByKey(action.action),
+          truthDate: new Date(action.trace.at).getTime(),
+          amount: action.info.amount
+         }
+         dataArray.push(element)
+       }); 
+       this.setState({ randomPaymentsActionLogs: dataArray})
+      }
     }
   }
   render() {
     return (
       <>
         <Loader type={"fullscreen"} open={this.state.loadingFullScreen} />
-        {this.props.paymentType === "random" || this.props.paymentType === "penalties" ? null : (
           <DynamicTable
             totalCount={0}
             pagination={false}
-            data={this.props.installments.sort(function(a, b) {
-              return a.id - b.id;
-            })}
+            data={
+              this.props.paymentType === "random"
+                ? this.state.randomPaymentsActionLogs
+                : this.props.paymentType === "penalties"
+                ? this.state.penaltiesActionLogs
+                : this.props.installments.sort(function(a, b) {
+                    return a.id - b.id;
+                  })
+            }
+            // mappers={
+            //   this.props.paymentType === "random"
+            //     ? this.state.randomPaymentsTableMappers
+            //     : this.props.paymentType === "penalties"
+            //     ? this.state.penaltiesTableMappers
+            //     : this.state.normalTableMappers
+            // }
             mappers={this.mappers}
           />
-        )}
         {/* <Button onClick= {()=> window.print()}>print</Button> */}
         {this.renderPaymentMethods()}
       </>
