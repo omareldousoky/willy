@@ -14,6 +14,7 @@ import { getIscore } from '../../Services/APIs/iScore/iScore';
 import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
 import store from '../../redux/store';
+import Can from '../../config/Can';
 
 interface Props {
   history: Array<any>;
@@ -123,7 +124,7 @@ class LoanList extends Component<Props, State> {
     return (
       <>
         <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
-        <span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getAllIScores(data)}>iScore</span>
+        <Can I='getIscore' a='customer'><span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getAllIScores(data)}>iScore</span></Can>
       </>
     )
   }
