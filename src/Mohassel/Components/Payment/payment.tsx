@@ -828,7 +828,7 @@ class Payment extends Component<Props, State>{
       if (res.body) {
         responseDataArray = res.body.data;
         this.setState({ loadingFullScreen: false });
-        let dataArray: Array<any> = [];
+        const dataArray: Array<any> = [];
         responseDataArray.forEach((action: PenaltiesActionLogObject) => {
           const element = {
             id: action.id,
@@ -854,8 +854,8 @@ class Payment extends Component<Props, State>{
       const res = await actionLogs(data);
       if (res.body) {
         this.setState({ loadingFullScreen: false });
-        let responseDataArray = res.body.data;
-        let dataArray: Array<any> = [];
+        const responseDataArray = res.body.data;
+        const dataArray: Array<any> = [];
         responseDataArray.forEach(action => {
          const element = {
           id: action.id,
