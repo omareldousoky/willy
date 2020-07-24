@@ -25,14 +25,16 @@ class CustomerCardPDF extends Component<Props, State> {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
-            if (installment.paidAt) {
-                const number = Math.round((new Date(installment.paidAt).setHours(23,59,59,59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if (number > 0) {
-                    totalDaysLate = totalDaysLate + number;
-                } else totalDaysEarly = totalDaysEarly + number;
-            } else {
-                const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
-                if(number > 0) totalDaysLate = totalDaysLate + number;
+            if (installment.status !== "rescheduled") {
+                if (installment.paidAt) {
+                    const number = Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                    if (number > 0) {
+                        totalDaysLate = totalDaysLate + number;
+                    } else totalDaysEarly = totalDaysEarly + number;
+                } else {
+                    const number = Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
+                    if (number > 0) totalDaysLate = totalDaysLate + number;
+                }
             }
         });
         this.setState({ totalDaysEarly, totalDaysLate })
@@ -141,7 +143,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
                                         :
-                                        new Date().setHours(23, 59, 59, 59).valueOf() > installment.dateOfPayment ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
+                                        ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
                                 <td></td>
                             </tr>)
                         })}
@@ -224,7 +226,6 @@ class CustomerCardPDF extends Component<Props, State> {
                             <ul>يتم تحصيل ٥ ج عن كل يوم تاخير اذا كان قيمه القسط اقل من ٢٠٠٠ ج .</ul>
                             <ul> ويتم تحصيل ٧٫٥ ج عن كل يوم تاخير اذا كان قيمه القسط يتراوح من ٢٠٠٠ ج حتي ٣٠٠٠ ج .</ul>
                             <ul>ويتم تحصيل ١٠ ج عن كل يوم تاخير اذا كان قيمه القسط اكبر من ٣٠٠٠ ج .</ul>
-                            <ul>يتم تحصيل ٥ ج لكل عضوه عن كل يوم تأخير إذا كان قيمة القسط اكبر من او يساوي ٢٥٠٠ ج</ul>
                         </>
                         :
                         <>
@@ -232,7 +233,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <ul>يتم تحصيل ٢ ج عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ ج</ul>
                             <ul> يتم تحصيل ٣ ج عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ ج حتي٢٠٠٠ ج</ul>
                             <ul>تم تحصيل ٤ ج عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي٢٥٠٠ ج</ul>
-                            <ul>يتم تحصيل ٥ ج عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٢٥٠٠ ج</ul>
+                            <ul>يتم تحصيل ٥ ج لكل عضوه عن كل يوم تأخير إذا كان قيمة القسط اكبر من او يساوي ٢٥٠٠ ج</ul>
                         </>
                     }
                     <li>في حالة طلب سداد المديونيه المستحقه يتم خصم تكلفة التمويل للشهر الذي يتم فيه السداد مع اضافة عموله سداد

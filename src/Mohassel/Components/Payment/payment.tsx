@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
-import { paymentValidation, earlyPaymentValidation } from './paymentValidation';
+import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
 import { timeToDateyyymmdd } from '../../Services/utils';
 import { PendingActions } from '../../Services/interfaces';
 import { payment } from '../../redux/payment/actions';
@@ -632,7 +632,7 @@ class Payment extends Component<Props, State>{
               enableReinitialize
               initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
               onSubmit={this.handleSubmit}
-              validationSchema={paymentValidation}
+              validationSchema={manualPaymentValidation}
               validateOnBlur
               validateOnChange
             >
@@ -702,7 +702,12 @@ class Payment extends Component<Props, State>{
                           data-qc="receiptNumber"
                           value={formikProps.values.receiptNumber}
                           onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
+                          onChange={(e) => {
+                            const re = /^\d*$/;
+                            if (e.currentTarget.value === '' || re.test(e.currentTarget.value)) {
+                              formikProps.setFieldValue('receiptNumber', e.currentTarget.value)
+                            }
+                          }}
                           isInvalid={Boolean(formikProps.errors.receiptNumber) && Boolean(formikProps.touched.receiptNumber)}
                         >
                         </Form.Control>
