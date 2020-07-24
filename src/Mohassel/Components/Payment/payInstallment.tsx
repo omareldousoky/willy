@@ -181,7 +181,8 @@ class PayInstallment extends Component<Props, State> {
                                 if (
                                   installment.status !== "partiallyPaid" &&
                                   installment.status !== "paid" &&
-                                  installment.status !== "rescheduled"
+                                  installment.status !== "rescheduled" &&
+                                  installment.dateOfPayment > Date.now()
                                 )
                                   return (
                                     <option
