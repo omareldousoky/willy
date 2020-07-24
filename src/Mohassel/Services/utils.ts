@@ -275,6 +275,7 @@ export const getStatus = (installment) => {
               return local.late
           else
               return local.unpaid
+      case 'pending': return local.pending;
       case 'paid': return local.paid;
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;

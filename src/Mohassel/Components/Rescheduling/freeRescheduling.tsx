@@ -128,13 +128,18 @@ class FreeRescheduling extends Component<Props, State>{
         })
         return installments
     }
-    removeNew(values, i) {
+    removeNew(values, index) {
         const installments = [...values.installments];
-        installments.splice(i, 1);
+        installments.forEach((installment, i) => {
+            if (i > index) {
+                installment.id--
+            }
+        })
+        installments.splice(index, 1);
         return installments
     }
     editable(installment) {
-        if (installment.status === "pending" || installment.status === "paid" || installment.status === "rescheduled") {
+        if (installment.status === "pending" || installment.status === "paid" || installment.status === "rescheduled" || installment.status === "partiallyPaid") {
             return false
         } else {
             return true
@@ -188,6 +193,21 @@ class FreeRescheduling extends Component<Props, State>{
             this.setState({ loading: false })
             Swal.fire('', local.loanFreeReschedulingError, 'error');
         }
+    }
+    getRescheuleDate(values){
+        const reschedFreeInsts = values.installments.filter(i => i.status !== 'rescheduled')
+        const dates: any[] = []
+        reschedFreeInsts.forEach(element => {
+            dates.push(element.dateOfPayment)
+        });
+        reschedFreeInsts.splice(dates.length-1, 1)
+        let maxDate = dates[0];
+        reschedFreeInsts.forEach(element => {
+            if(element.dateOfPayment>maxDate){
+                maxDate = element.dateOfPayment
+            }
+        });
+        return maxDate
     }
     render() {
         return (
@@ -271,14 +291,14 @@ class FreeRescheduling extends Component<Props, State>{
                                                             </Form.Control.Feedback>}
                                                         </td>
                                                         <td>
-                                                            {(!this.editable(item) || item.status === 'partiallyPaid') ? getRenderDate(formikProps.values.installments[index].dateOfPayment) : <Form.Control
+                                                            {(!this.editable(item)) ? getRenderDate(formikProps.values.installments[index].dateOfPayment) : <Form.Control
                                                                 type="date"
                                                                 name={`installments[${index}].dateOfPayment`}
                                                                 data-qc="dateOfPayment"
                                                                 value={this.getDateString(formikProps.values.installments[index].dateOfPayment)}
                                                                 onBlur={formikProps.handleBlur}
                                                                 onChange={(e) => { formikProps.setFieldValue(`installments[${index}].dateOfPayment`, new Date(e.currentTarget.value).valueOf()) }}
-                                                                min={index > 0 ? this.getDateString(formikProps.values.installments[index - 1].dateOfPayment) : undefined}
+                                                                min={index > 0 ? formikProps.values.installments[index - 1] && formikProps.values.installments[index - 1].status !== 'rescheduled' ? this.getDateString(formikProps.values.installments[index - 1].dateOfPayment) : this.getDateString(this.getRescheuleDate(formikProps.values)) : undefined}
                                                                 // max={index < formikProps.values.installments.length - 1 ? this.getDateString(formikProps.values.installments[index + 1].dateOfPayment) : undefined}
                                                                 isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].dateOfPayment}
                                                             />}
@@ -291,7 +311,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                         </td>
                                                         <td>
                                                             {formikProps.values.installments[index].new && <span onClick={() => formikProps.setFieldValue('installments', this.removeNew(formikProps.values, index))}><span className="fa fa-trash" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
-                                                            {!formikProps.values.installments[index].new && this.editable(item) && item.status !== 'partiallyPaid'  && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
+                                                            {!formikProps.values.installments[index].new && this.editable(item) && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
                                                         </td>
                                                     </tr>
                                                 )
@@ -307,7 +327,7 @@ class FreeRescheduling extends Component<Props, State>{
                                             <span>{local.totalFeesInTable} {parseFloat(this.getTotals(formikProps.values).feesSum.toFixed(2))}</span>
                                             <span>{local.totalFeesInLoan} {this.props.application.installmentsObject.totalInstallments.feesSum}</span>
                                         </div>
-                                        <Button style={{ width: '4%', alignSelf: 'flex-end'}} onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
+                                        <Button style={{ width: '4%', alignSelf: 'flex-end' }} onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
                                     </div>
                                     {this.getTotals(formikProps.values).principleSum === this.props.application.installmentsObject.totalInstallments.principal ? <div className="d-flex justify-content-end">
                                         <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>

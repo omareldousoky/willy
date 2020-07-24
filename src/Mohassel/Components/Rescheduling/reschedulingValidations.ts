@@ -33,7 +33,7 @@ export const freeReschedulingValidation = Yup.object().shape({
             const { dateOfPayment } = item;
             const array = this.parent;
             const index = parseInt(this.path.split('[')[1].split(']')[0], 10);
-            if (array[index - 1] && dateOfPayment < array[index - 1].dateOfPayment) {
+            if (array[index - 1] && array[index - 1].status !== 'rescheduled' && dateOfPayment < array[index - 1].dateOfPayment) {
                 return this.createError({
                     path: `${this.path}.dateOfPayment`,
                     message: local.datesShouldBeInChronologicalOrder
