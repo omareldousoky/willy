@@ -16,7 +16,6 @@ import { parseJwt, actionsList } from '../../Services/utils';
 import { getCookie } from '../../Services/getCookie';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
-import actionLogs from '../ActionLogs/action-logs';
 
 interface InitialFormikState {
   name?: string;
