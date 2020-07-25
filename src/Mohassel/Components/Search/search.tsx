@@ -16,6 +16,7 @@ import { parseJwt, actionsList } from '../../Services/utils';
 import { getCookie } from '../../Services/getCookie';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
+import actionLogs from '../ActionLogs/action-logs';
 
 interface InitialFormikState {
   name?: string;
@@ -50,7 +51,7 @@ class Search extends Component<Props, State> {
     super(props);
     this.state = {
       governorates: [],
-      dropDownValue: 'name',
+      dropDownValue: this.props.url ==='actionLogs'? 'authorName' :'name',
     }
   }
   componentDidMount() {
@@ -149,7 +150,7 @@ class Search extends Component<Props, State> {
                           <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                         </InputGroup.Append>
                         {this.props.dropDownKeys && this.props.dropDownKeys.length?
-                        this.props.dropDownKeys[0]!== 'authorName' && <DropdownButton
+                        <DropdownButton
                           as={InputGroup.Append}
                           variant="outline-secondary"
                           title={this.getArValue(this.state.dropDownValue)}
