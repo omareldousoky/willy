@@ -12,7 +12,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { search, searchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
-import { parseJwt } from '../../Services/utils';
+import { parseJwt, actionsList } from '../../Services/utils';
 import { getCookie } from '../../Services/getCookie';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
@@ -24,6 +24,7 @@ interface InitialFormikState {
   toDate?: string;
   governorate?: string;
   status?: string;
+  action?: string;
   branchId?: string;
 }
 interface Props {
@@ -49,7 +50,7 @@ class Search extends Component<Props, State> {
     super(props);
     this.state = {
       governorates: [],
-      dropDownValue: 'name'
+      dropDownValue: 'name',
     }
   }
   componentDidMount() {
@@ -114,6 +115,7 @@ class Search extends Component<Props, State> {
       case 'name': return local.name;
       case 'nationalId': return local.nationalId;
       case 'code': return local.code;
+      case 'authorName': return local.employeeName;
       default: return '';
     }
   }
@@ -147,7 +149,7 @@ class Search extends Component<Props, State> {
                           <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                         </InputGroup.Append>
                         {this.props.dropDownKeys && this.props.dropDownKeys.length?
-                        <DropdownButton
+                        this.props.dropDownKeys[0]!== 'authorName' && <DropdownButton
                           as={InputGroup.Append}
                           variant="outline-secondary"
                           title={this.getArValue(this.state.dropDownValue)}
@@ -167,7 +169,7 @@ class Search extends Component<Props, State> {
                   return (
                     <Col key={index} sm={6}>
                       <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
-                        <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300 }}>{this.props.datePlaceholder? this.props.datePlaceholder : local.creationDate}</p>
+                        <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 400 }}>{this.props.datePlaceholder? this.props.datePlaceholder : local.creationDate}</p>
                         <span>{local.from}</span>
                         <Form.Control
                           style={{ marginLeft: 20, border: 'none' }}
@@ -266,7 +268,27 @@ class Search extends Component<Props, State> {
                     </Col>
                   )
                 }
+                if (searchKey === 'actions') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.transaction}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="actions" value={formikProps.values.action} onChange={(e) => { formikProps.setFieldValue('action', [e.currentTarget.value]) }}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          {
+                            actionsList.map((action,index)=>{
+                              return(
+                                <option key = {index} value= {action} data-qc ={action}>{action}</option>
+                              );
+                            })
+                          }
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
               })}
+              
               <Col>
                 <Button type="submit" style={{ width: 180, height: 50, marginTop: 20 }}>{local.search}</Button>
               </Col>

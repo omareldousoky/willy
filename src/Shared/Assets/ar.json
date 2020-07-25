@@ -619,5 +619,12 @@
    "userStep3": "٣.بيانات أخرى",
     "fifth": "الخامس",
     "sixth": "السادس",
-    "noGuarantors":"لا يوجد ضمان"
+    "noGuarantors":"لا يوجد ضمان",
+    "timeAndDate": "الوقت و التاريخ",
+    "employee":"الموظف",
+    "transaction":"المعاملة",
+    "nOfActionLogs": "إجمالي عدد المعاملات",
+    "employeeName": "إسم الموظف",
+    "transactionDate": "تاريخ المعاملة",
+    "searchByEmp": "البحث بإسم الموظف"
 }

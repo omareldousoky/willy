@@ -288,7 +288,7 @@ const appRoutes = [
       {
         path: "/logs",
         label: local.logs,
-        render: (props) => <ActionLogs {...props} />,
+        render: (props) => <Can I = "viewActionLogs" a = 'user' ><ActionLogs {...props} /></Can>,
       }
     ]
   },
