@@ -79,7 +79,9 @@ class Search extends Component<Props, State> {
     if (this.props.roleId)
       obj.roleId = this.props.roleId;
     obj.from = 0;
+    if(obj.key) obj.key = Number(obj.key);
     if(obj.code) obj.code = Number(obj.code);
+    if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
@@ -114,6 +116,7 @@ class Search extends Component<Props, State> {
     switch(key) {
       case 'name': return local.name;
       case 'nationalId': return local.nationalId;
+      case 'key': return local.code;
       case 'code': return local.code;
       case 'authorName': return local.employeeName;
       default: return '';

@@ -180,10 +180,10 @@ class ViewProduct extends Component<Props, State>{
                                     <td>{local.allowApplicationFeeAdjustment}</td>
                                     <td>{(this.state.product.allowApplicationFeeAdjustment ? local.yes : local.no)}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td>{local.spreadApplicationFee}</td>
                                     <td>{(this.state.product.spreadApplicationFee ? local.yes : local.no)}</td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <td>{local.loanImpactPrincipal}</td>
                                     <td>{(this.state.product.loanImpactPrincipal ? local.yes : local.no)}</td>

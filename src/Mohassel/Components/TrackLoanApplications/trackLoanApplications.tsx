@@ -13,6 +13,10 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../Services/getCookie';
+import Modal from 'react-bootstrap/Modal';
+import { getIscore } from '../../Services/APIs/iScore/iScore';
+import Swal from 'sweetalert2';
+import Table from 'react-bootstrap/Table';
 
 interface Product {
   productName: string;
@@ -39,6 +43,9 @@ interface State {
   size: number;
   from: number;
   branchDetails: any;
+  iScoreModal: boolean;
+  iScoreCustomers: any;
+  loading: boolean;
 }
 interface Props {
   history: any;
@@ -51,14 +58,17 @@ interface Props {
   branchId?: string;
 };
 class TrackLoanApplications extends Component<Props, State>{
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
       print: false,
-      size: 5,
+      size: 10,
       from: 0,
-      branchDetails: {}
+      branchDetails: {},
+      iScoreModal: false,
+      iScoreCustomers: [],
+      loading: false
     }
     this.mappers = [
       {
@@ -69,11 +79,12 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.applicationCode,
         key: "applicationCode",
-        render: data => data.application.applicationCode
+        render: data => data.application.applicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
@@ -94,23 +105,95 @@ class TrackLoanApplications extends Component<Props, State>{
       },
       {
         title: local.loanCreationDate,
-        key: "loanCreationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.loanStatus,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
         title: '',
         key: "action",
-        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}></img>
+        render: data => this.renderIcons(data)
       },
     ]
   }
+  renderIcons(data) {
+    return (
+      <>
+        <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/track-loan-applications/loan-profile', { id: data.application._id })}></img>
+        <Can I='getIscore' a='customer'><span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getAllIScores(data)}>iScore</span></Can>
+      </>
+    )
+  }
+  getAllIScores(data: any) {
+    this.setState({ iScoreModal: true });
+    const customers: any[] = [];
+    if (data.application.product.beneficiaryType === 'individual') {
+      const obj = {
+        requestNumber: '002',
+        reportId: '002',
+        product: `${data.application.product.code}`,
+        loanAccountNumber: `${data.application.customer.key}`,
+        number: '003',
+        date: '003',
+        amount: `${data.application.principal}`,
+        lastName: `${data.application.customer.customerName}`,
+        idSource: '003',
+        idValue: `${data.application.customer.nationalId}`,
+        gender: (data.application.customer.gender === 'male') ? '001' : '002',
+        dateOfBirth: `${data.application.customer.birthDate}`
+      }
+      customers.push(obj)
+    } else {
+      data.application.group.individualsInGroup.forEach(member => {
+        const obj = {
+          requestNumber: '002',
+          reportId: '002',
+          product: `${data.application.product.code}`,
+          loanAccountNumber: `${member.customer.key}`,
+          number: '003',
+          date: '003',
+          amount: `${data.application.principal}`,
+          lastName: `${member.customer.customerName}`,
+          idSource: '003',
+          idValue: `${member.customer.nationalId}`,
+          gender: (member.customer.gender === 'male') ? '001' : '002',
+          dateOfBirth: `${member.customer.birthDate}`
+        }
+        customers.push(obj)
+      })
+    }
+    customers.forEach((customer, i) => {
+      this.getiScore(customer, i)
+    })
+    this.setState({ iScoreCustomers: customers })
+  }
+  async getiScore(obj, i) {
+    this.setState({ loading: true });
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      const customers = this.state.iScoreCustomers;
+      customers[i].iScore = iScore.body
+      this.setState({ loading: false, iScoreCustomers: customers })
+    } else {
+      Swal.fire('', 'fetch error', 'error')
+      this.setState({ loading: false })
+    }
+  }
+  downloadFile(fileURL) {
+    const link = document.createElement('a');
+    link.href = fileURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
   componentDidMount() {
-    this.getApplications();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
   }
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
@@ -160,13 +243,16 @@ class TrackLoanApplications extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']} 
-            dropDownKeys={['name', 'nationalId', 'code']} 
+            dropDownKeys={['name', 'nationalId', 'key']} 
             url="application" 
             from={this.state.from} 
             size={this.state.size} 
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              url="application" 
+              from={this.state.from} 
+              size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
@@ -177,6 +263,39 @@ class TrackLoanApplications extends Component<Props, State>{
             />
           </Card.Body>
         </Card>
+        <Modal show={this.state.iScoreModal} backdrop="static">
+          <Modal.Header>
+            <Modal.Title>
+              iScore
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Loader type="fullsection" open={this.state.loading} />
+            <Table style={{ textAlign: 'right' }}>
+              <thead>
+                <tr>
+                  <td>{local.customer}</td>
+                  <td>{local.nationalId}</td>
+                  <td>{local.value}</td>
+                  <td>{local.downloadPDF}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.iScoreCustomers.map(customer =>
+                  <tr key={customer.idValue}>
+                    <td>{customer.lastName}</td>
+                    <td>{customer.idValue}</td>
+                    <td>{customer.iScore && customer.iScore.value}</td>
+                    <td>{customer.iScore && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download"  onClick={() => {this.downloadFile(customer.iScore.url)}}></span>}</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.setState({ iScoreModal: false, iScoreCustomers: [] })}>{local.cancel}</Button>
+          </Modal.Footer>
+        </Modal>
         {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} branchDetails={this.state.branchDetails} />}
       </>
     )
