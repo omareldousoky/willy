@@ -111,10 +111,6 @@ class LoanProfile extends Component<Props, State>{
                 stringKey: 'loanDetails'
             },
             {
-                header: local.logs,
-                stringKey: 'loanLogs'
-            },
-            {
                 header: local.documents,
                 stringKey: 'documents'
             }
@@ -165,6 +161,7 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ activeTab: 'loanDetails' })
             this.getPendingActions();
         }
+        if(ability.can('viewActionLogs', 'user')) tabsToRender.push({header: local.logs,stringKey: 'loanLogs'})
         this.setState({
             application: application.body,
             tabsArray: tabsToRender,
