@@ -413,7 +413,11 @@ class Payment extends Component<Props, State>{
                               ? "pay-penalty"
                               : "pay-installment"
                           }
-                          src={require("../../Assets/payInstallment.svg")}
+                          src={
+                            this.props.paymentType === "penalties"
+                              ? require("../../Assets/payPenalty.svg")
+                              : require("../../Assets/payInstallment.svg")
+                          }
                         />
                         <Button
                           disabled={this.props.application.status === "pending"}
@@ -431,24 +435,28 @@ class Payment extends Component<Props, State>{
                         </Button>
                       </div>
                     </Can>
-                  { this.props.paymentType === "penalties"? <Can I="rollback" a="application">
-                      <div className="payment-icon">
-                        <img
-                          alt="cancel-penalty"
-                          src={require("../../Assets/payInstallment.svg")}
-                        />
-                        <Button
-                          disabled={this.props.application.status === "pending"}
-                          onClick={() => {
+                    {this.props.paymentType === "penalties" ? (
+                      <Can I="rollback" a="application">
+                        <div className="payment-icon">
+                          <img
+                            alt="cancel-penalty"
+                            src={require("../../Assets/cancelPenalty.svg")}
+                          />
+                          <Button
+                            disabled={
+                              this.props.application.status === "pending"
+                            }
+                            onClick={() => {
                               this.setState({ penaltyAction: "cancel" });
                               this.props.changePaymentState(1);
-                          }}
-                          variant="primary"
-                        >
-                          {local.cancelPenalty}
-                        </Button>
-                      </div>
-                    </Can>:null}
+                            }}
+                            variant="primary"
+                          >
+                            {local.cancelPenalty}
+                          </Button>
+                        </div>
+                      </Can>
+                    ) : null}
                     {this.props.paymentType === "normal" ? (
                       <Can I="payEarly" a="application">
                         <div className="payment-icon">
