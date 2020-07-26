@@ -663,6 +663,12 @@
     "noOfReports": "عدد التقارير",
     "value": "القيمة",
     "byInsurance": "تأمين",
-    "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !"
-
+    "partiallyPaidInstallmentsExistRescheduleFirst":"يوجد اقساط مدفوعة جزئياً الرجاء إعادة جدولتها أولاً !",
+    "timeAndDate": "الوقت و التاريخ",
+    "employee":"الموظف",
+    "transaction":"المعاملة",
+    "nOfActionLogs": "إجمالي عدد المعاملات",
+    "employeeName": "إسم الموظف",
+    "transactionDate": "تاريخ المعاملة",
+    "searchByEmp": "البحث بإسم الموظف"
 }
