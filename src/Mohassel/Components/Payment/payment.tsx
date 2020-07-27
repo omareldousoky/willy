@@ -21,7 +21,6 @@ import './styles.scss';
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
-import { getBranches } from '../../Services/APIs/Branch/getBranches';
 
 
 interface Installment {
@@ -80,9 +79,6 @@ interface State {
   penalty: number;
   penaltyAction: string;
   byInsurance: boolean;
-  branches: Array<any>;
-  // randomPaymentsActionLogs: Array<any>;
-  // penaltiesActionLogs: Array<any>;
 }
 
 class Payment extends Component<Props, State>{
@@ -151,12 +147,10 @@ class Payment extends Component<Props, State>{
       penalty: -1,
       penaltyAction: '',
       byInsurance: false,
-      branches:[],
     }
        this.mappers = normalTableMappers;
   }
   componentDidMount() {
-    if(this.props.paymentType==='penalties' || this.props.paymentType==='random') this.getBranches()
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
     }
@@ -166,13 +160,6 @@ class Payment extends Component<Props, State>{
         receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
         truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
       })
-    }
-  }
-
-  async getBranches(){
-    const res = await getBranches()
-    if(res.body){
-      this.setState({branches:res.body.data.data })
     }
   }
 
