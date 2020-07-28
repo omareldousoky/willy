@@ -57,7 +57,7 @@ const FollowUpStatment = (props) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                                <td>{timeToArabicDate((installment.dateOfPayment - (5*24*60*60*1000)), false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
                             </tr>

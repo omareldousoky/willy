@@ -1,7 +1,7 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate } from './../../../Services/utils';
+import { ageCalculate, timeToArabicDate } from './../../../Services/utils';
 import store from '../../../redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal(){
@@ -21,7 +21,7 @@ const ReviewedApplicationsPDF = (props) => {
                         <td className="title">{props.branchDetails.name}</td>
                     </tr>
                     <tr>
-                        <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
+                        <td>{timeToArabicDate(0,true)}</td>
                         <td></td>
                         <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                     </tr>
@@ -33,7 +33,8 @@ const ReviewedApplicationsPDF = (props) => {
             </table>
 
             <div className="title titleborder titlebackground titlestyle">
-                قرارات الموافقه على صرف التمويلات - فردى - لدفعة ( &emsp; / &emsp; / &emsp; )
+                قرارات الموافقه على صرف التمويلات 
+                {/* - فردى - لدفعة ( &emsp; / &emsp; / &emsp; ) */}
 	</div>
             <table className="tablestyle" style={{ border: "1px black solid" }}>
                 <tbody>
@@ -51,7 +52,7 @@ const ReviewedApplicationsPDF = (props) => {
                     </tr>
                     {props.data.map((application, i) => <tr key={application.id}>
                         <td>{i + 1}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer._id : application.application.customer._id}</td>
+                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.key : application.application.customer.key}</td>
                         <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName : application.application.customer.customerName}</td>
                         <td>{(application.application.product.beneficiaryType === 'group') ? ageCalculate(application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.birthDate) : ageCalculate(application.application.customer.birthDate)}</td>
                         <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.businessSector : application.application.customer.businessSector}</td>
