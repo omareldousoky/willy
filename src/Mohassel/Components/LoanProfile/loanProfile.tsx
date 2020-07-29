@@ -31,7 +31,7 @@ import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import { PendingActions } from '../../Services/interfaces';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, iscoreDate } from '../../Services/utils';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
@@ -272,18 +272,18 @@ class LoanProfile extends Component<Props, State>{
     async getIscore(data) {
         this.setState({ loading: true });
         const obj = {
-            requestNumber: '002',
-            reportId: '002',
-            product: `${this.state.application.product.code}`,
+            requestNumber: '148',
+            reportId: '3004',
+            product: '023',
             loanAccountNumber: `${data.key}`,
-            number: '003',
-            date: '003',
+            number: '1703943',
+            date: '02/12/2014',
             amount: `${this.state.application.principal}`,
             lastName: `${data.customerName}`,
             idSource: '003',
             idValue: `${data.nationalId}`,
             gender: (data.gender === 'male') ? '001' : '002',
-            dateOfBirth: `${data.birthDate}`
+            dateOfBirth: iscoreDate(data.birthDate)
         }
         const iScore = await getIscore(obj);
         if (iScore.status === 'success') {
