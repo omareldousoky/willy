@@ -38,6 +38,8 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
+import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
+import ClientGuaranteedLoans from '../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans';
 import { getIscore } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
@@ -458,6 +460,9 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
+                        <ClientGuaranteedLoans />
+                        <CollectionStatement />
+                        <CustomerCardPDF data={this.state.application} loanOfficer={this.state.loanOfficer} branchDetails={this.state.branchDetails}/>
                         <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <TotalWrittenChecksPDF data={this.state.application} />
