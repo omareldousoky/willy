@@ -10,6 +10,10 @@ export interface Role {
   roleName: string;
   _id: string;
 }
+interface Branch {
+  _id: string;
+  name: string;
+}
 export interface UserDateValues {
   _id: string;
   created: {at: number; by: string};
@@ -26,6 +30,5 @@ export interface UserDateValues {
   hiringDate: number;
   username: string;
   name: string;
-
-
+  branchesObjects: Array<Branch>;
 }

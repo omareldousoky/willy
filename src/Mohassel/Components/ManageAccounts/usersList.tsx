@@ -145,7 +145,7 @@ class UsersList extends Component<Props, State> {
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
             dropDownKeys={['name', 'nationalId', 'key']} 
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             url="user" from={this.state.from} size={this.state.size} 
             hqBranchIdRequest={this.props.branchId} />
 

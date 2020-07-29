@@ -16,6 +16,7 @@ import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/te
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -41,6 +42,8 @@ interface State {
   approvalDate: string;
   beneficiaryType: string;
   application: any;
+  print: boolean;
+  receiptData: any;
 }
 export interface Location {
   pathname: string;
@@ -79,7 +82,9 @@ class LoanCreation extends Component<Props, State> {
       },
       beneficiaryType: '',
       installmentsData: {},
-      application: {}
+      application: {},
+      print: false,
+      receiptData: {}
     }
   }
   async componentDidMount() {
@@ -134,8 +139,8 @@ class LoanCreation extends Component<Props, State> {
     } else {
       const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf());
       if (res.status === "success") {
-        this.setState({ loading: false });
-        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
+        this.setState({ loading: false, print: true, receiptData: res.body }, () => window.print());
+        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => {this.props.history.push('/track-loan-applications')});
       } else {
         this.setState({ loading: false });
         Swal.fire('', local.loanIssuanceError, 'error');
@@ -169,7 +174,8 @@ class LoanCreation extends Component<Props, State> {
   }
   render() {
     return (
-      <Container>
+      <>
+      <Container className="print-none">
         <Loader type="fullscreen" open={this.state.loading} />
         <Table striped bordered hover size="sm">
           <thead>
@@ -248,6 +254,7 @@ class LoanCreation extends Component<Props, State> {
                       value={formikProps.values.loanCreationDate}
                       onChange={(e)=> {
                         formikProps.setFieldValue('loanCreationDate', e.currentTarget.value);
+                        this.setState({loanCreationDate: e.currentTarget.value})
                         this.handleCreationDateChange(e.currentTarget.value);
                       }}
                       onBlur={formikProps.handleBlur}
@@ -283,6 +290,8 @@ class LoanCreation extends Component<Props, State> {
           }
         </Formik>
       </Container>
+      {this.state.print && <PaymentReceipt receiptData={this.state.receiptData} fromLoanIssuance={true}/>}
+      </>
     )
   }
 }
