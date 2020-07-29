@@ -8,6 +8,13 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import { getIscore } from '../../Services/APIs/iScore/iScore';
+import Swal from 'sweetalert2';
+import Table from 'react-bootstrap/Table';
+import store from '../../redux/store';
+import Can from '../../config/Can';
 
 interface Props {
   history: Array<any>;
@@ -23,15 +30,21 @@ interface Props {
 interface State {
   size: number;
   from: number;
+  iScoreModal: boolean;
+  iScoreCustomers: any;
+  loading: boolean;
 }
 
 class LoanList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
+      iScoreModal: false,
+      iScoreCustomers: [],
+      loading: false
     }
     this.mappers = [
       {
@@ -42,15 +55,16 @@ class LoanList extends Component<Props, State> {
       {
         title: local.loanCode,
         key: "loanCode",
-        render: data => data.application.loanApplicationCode
+        render: data => data.application.loanApplicationKey
       },
       {
         title: local.customerName,
-        key: "customerName",
+        key: "name",
+        sortable: true,
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.customerName}</span>: null)}
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
           }
         </div>
@@ -61,7 +75,7 @@ class LoanList extends Component<Props, State> {
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map(member => member.type === 'leader'? <span key={member.customer._id}>{member.customer.nationalId}</span>: null)}
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.nationalId}</span> : null)}
             </div>)
           }
         </div>
@@ -73,23 +87,25 @@ class LoanList extends Component<Props, State> {
       },
       {
         title: local.loanIssuanceDate,
-        key: "loanIssuanceDate",
+        key: "issueDate",
+        sortable: true,
         render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
       },
       {
         title: local.status,
         key: "status",
+        sortable: true,
         render: data => this.getStatus(data.application.status)
       },
       {
         title: '',
         key: "action",
-        render: data => <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
+        render: data => this.renderIcons(data)
       },
     ]
   }
   componentDidMount() {
-    this.getLoans()
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -104,18 +120,87 @@ class LoanList extends Component<Props, State> {
       default: return null;
     }
   }
-
+  renderIcons(data) {
+    return (
+      <>
+        <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}></img>
+        <Can I='getIscore' a='customer'><span style={{ cursor: 'pointer' }} title={"iScore"} onClick={() => this.getAllIScores(data)}>iScore</span></Can>
+      </>
+    )
+  }
+  getAllIScores(data: any) {
+    this.setState({ iScoreModal: true });
+    const customers: any[] = [];
+    if (data.application.product.beneficiaryType === 'individual') {
+      const obj = {
+        requestNumber: '002',
+        reportId: '002',
+        product: `${data.application.product.code}`,
+        loanAccountNumber: `${data.application.customer.key}`,
+        number: '003',
+        date: '003',
+        amount: `${data.application.principal}`,
+        lastName: `${data.application.customer.customerName}`,
+        idSource: '003',
+        idValue: `${data.application.customer.nationalId}`,
+        gender: (data.application.customer.gender === 'male') ? '001' : '002',
+        dateOfBirth: `${data.application.customer.birthDate}`
+      }
+      customers.push(obj)
+    } else {
+      data.application.group.individualsInGroup.forEach(member => {
+        const obj = {
+          requestNumber: '002',
+          reportId: '002',
+          product: `${data.application.product.code}`,
+          loanAccountNumber: `${member.customer.key}`,
+          number: '003',
+          date: '003',
+          amount: `${data.application.principal}`,
+          lastName: `${member.customer.customerName}`,
+          idSource: '003',
+          idValue: `${member.customer.nationalId}`,
+          gender: (member.customer.gender === 'male') ? '001' : '002',
+          dateOfBirth: `${member.customer.birthDate}`
+        }
+        customers.push(obj)
+      })
+    }
+    customers.forEach((customer, i) => {
+      this.getiScore(customer, i)
+    })
+    this.setState({ iScoreCustomers: customers })
+  }
   async getLoans() {
      let query = {};
      if(this.props.fromBranch){
-       query = {size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" , ...this.props.searchFilters}
+       query = {...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" }
      } else {
-      query = {size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" , ...this.props.searchFilters}
+      query = {...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate"}
      }
     this.props.search(query);
   }
   componentWillUnmount() {
     this.props.setSearchFilters({})
+  }
+  async getiScore(obj, i) {
+    this.setState({ loading: true });
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      const customers = this.state.iScoreCustomers;
+      customers[i].iScore = iScore.body
+      this.setState({ loading: false, iScoreCustomers: customers })
+    } else {
+      Swal.fire('', 'fetch error', 'error')
+      this.setState({ loading: false })
+    }
+  }
+  downloadFile(fileURL) {
+    const link = document.createElement('a');
+    link.href = fileURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
   render() {
     return (
@@ -126,13 +211,13 @@ class LoanList extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
-                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
+                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
               </div>
             </div>
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo', 'status', 'branch']} 
-            dropDownKeys={['name', 'nationalId', 'code']}
+            dropDownKeys={['name', 'nationalId', 'key']}
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}
              url="loan" 
@@ -140,6 +225,9 @@ class LoanList extends Component<Props, State> {
              size={this.state.size} 
              hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
+              from={this.state.from} 
+              size={this.state.size} 
+              url="loan" 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
@@ -150,6 +238,39 @@ class LoanList extends Component<Props, State> {
             />
           </Card.Body>
         </Card>
+        <Modal show={this.state.iScoreModal} backdrop="static">
+          <Modal.Header>
+            <Modal.Title>
+              iScore
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Loader type="fullsection" open={this.state.loading} />
+            <Table style={{ textAlign: 'right' }}>
+              <thead>
+                <tr>
+                  <td>{local.customer}</td>
+                  <td>{local.nationalId}</td>
+                  <td>{local.value}</td>
+                  <td>{local.downloadPDF}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.iScoreCustomers.map(customer =>
+                  <tr key={customer.idValue}>
+                    <td>{customer.lastName}</td>
+                    <td>{customer.idValue}</td>
+                    <td>{customer.iScore && customer.iScore.value}</td>
+                    <td>{customer.iScore && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download"  onClick={() => {this.downloadFile(customer.iScore.url)}}></span>}</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.setState({ iScoreModal: false, iScoreCustomers: [] })}>{local.cancel}</Button>
+          </Modal.Footer>
+        </Modal>
       </>
     )
   }

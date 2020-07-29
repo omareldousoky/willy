@@ -128,3 +128,6 @@ yarn-error.log*
 
 # vscode
 .vscode
+
+# WebStorm
+.idea
