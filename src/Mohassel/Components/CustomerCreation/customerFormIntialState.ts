@@ -51,6 +51,7 @@ export const step2 = {
 export const step3 = {
     geographicalDistribution: '',
     representative: '',
+    newRepresentative: '',
     applicationDate: timeToDateyyymmdd(0),
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',

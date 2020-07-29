@@ -61,6 +61,7 @@ export interface Customer {
     partTimeEmployeeCount?: number;
     permanentEmployeeCount?: number;
     representative?: string;
+    representativeName?: string;
     ruralUrban?: string;
     taxCardNumber?: string;
     village?: string;
@@ -95,6 +96,6 @@ export interface DocumentType {
     type: string;
     paperType: string;
     name: string;
-    active: boolean;
-    updatable: boolean;
+    active?: boolean;
+    updatable?: boolean;
 }

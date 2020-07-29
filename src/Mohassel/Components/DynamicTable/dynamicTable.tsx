@@ -42,18 +42,18 @@ const DynamicTable = (props: Props) => {
     if (order === '') {
       changeOrder('asc');
       changePage(0);
-      props.setSearchFilters({ ...props.searchFilters, sort: key, order: 'asc' })
-      props.search({ size: props.size, from: 0, url: props.url, sort: key, order: 'asc' });
+      props.setSearchFilters({ ...props.searchFilters, sort: (props.url === "loan" && key === '') ? 'issueLoan' : key, order: 'asc' })
+      props.search({ size: props.size, from: 0, url: props.url, sort: (props.url === "loan" && key === '') ? 'issueLoan' : key, order: 'asc' });
     } else if (order === 'asc') {
       changeOrder('desc');
       changePage(0);
-      props.setSearchFilters({ ...props.searchFilters, sort: key, order: 'desc' })
-      props.search({ size: props.size, from: 0, url: props.url, sort: key, order: 'desc' });
+      props.setSearchFilters({ ...props.searchFilters, sort: (props.url === "loan" && key === '') ? 'issueLoan' : key, order: 'desc' })
+      props.search({ size: props.size, from: 0, url: props.url, sort: (props.url === "loan" && key === '') ? 'issueLoan' : key, order: 'desc' });
     } else {
       changeOrder('');
       changePage(0);
-      props.setSearchFilters({ ...props.searchFilters, sort: '', order: '' })
-      props.search({ size: props.size, from: 0, url: props.url });
+      props.setSearchFilters({ ...props.searchFilters, sort: (props.url === "loan") ? 'issueLoan' : '', order: '' })
+      props.search({ size: props.size, from: 0, url: props.url, sort: (props.url === "loan") ? 'issueLoan' : '' });
     }
   }
   function getOrderIcon(key: string) {

@@ -85,8 +85,7 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    
-    this.getUsers();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
@@ -146,7 +145,7 @@ class UsersList extends Component<Props, State> {
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
             dropDownKeys={['name', 'nationalId', 'key']} 
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             url="user" from={this.state.from} size={this.state.size} 
             hqBranchIdRequest={this.props.branchId} />
 
