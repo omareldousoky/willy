@@ -40,7 +40,6 @@ class Reports extends Component<{}, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.reportsProgram}</Card.Title>
-                <span className="text-muted">{local.noOfReports + ` (100)`}</span>
               </div>
             </div>
             {this.state.pdfsArray?.map((pdf, index) => {
