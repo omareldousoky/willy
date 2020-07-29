@@ -64,6 +64,7 @@ export const BranchesDropDown = props => {
     } else {
       return [];
     }
+<<<<<<< HEAD
   };
   return (
     <div className="dropdown-container" style={{ flex: 2, paddingLeft: 0 }}>
@@ -86,3 +87,24 @@ export const BranchesDropDown = props => {
     </div>
   );
 };
+=======
+    return (
+        <div className="dropdown-container" style={{ flex: 2, paddingLeft: 0 }}>
+            <p className="dropdown-label">{local.oneBranch}</p>
+            <AsyncSelect
+                styles={customStyles}
+                className="full-width"
+                name="branches"
+                data-qc="branches"
+                placeholder={local.chooseBranch}
+                isMulti={props.multiselect}
+                onChange={(branch) => props.onSelectBranch(branch)}
+                getOptionLabel={(option) => option.name}
+                getOptionValue={(option) => option._id}
+                loadOptions={getBranches}
+                cacheOptions defaultOptions
+            />
+        </div>
+    );
+}
+>>>>>>> sprint5
