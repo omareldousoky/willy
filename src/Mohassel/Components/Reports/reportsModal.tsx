@@ -22,12 +22,12 @@ interface Props {
   pdf: PDF;
   show: boolean;
   hideModal: () => void;
+  submit: (values) => void;
 }
 
 const ReportsModal = (props: Props) => {
   function handleSubmit(values) {
-    console.log(values)
-  
+    props.submit(values);
   }
   function getInitialValues() {
     const initValues: InitialFormikState = {}

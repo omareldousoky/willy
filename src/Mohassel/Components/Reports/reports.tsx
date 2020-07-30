@@ -3,6 +3,8 @@ import Card from 'react-bootstrap/Card';
 import { Loader } from '../../../Shared/Components/Loader';
 import ReportsModal from './reportsModal';
 import * as local from '../../../Shared/Assets/ar.json';
+import CustomerStatusDetails from '../pdfTemplates/customerStatusDetails/customerStatusDetails';
+import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails';
 
 export interface PDF {
   key?: string;
@@ -15,6 +17,7 @@ interface State {
   print?: string;
   pdfsArray?: Array<PDF>;
   selectedPdf: PDF;
+  data: any;
 }
 
 class Reports extends Component<{}, State> {
@@ -23,18 +26,31 @@ class Reports extends Component<{}, State> {
     this.state = {
       showModal: false,
       print: '',
-      pdfsArray: [{ key: 'issuedLoans', local: 'القروض المصدرة', inputs: ['dateFromTo', 'branches' ]}],
-      selectedPdf: {}
+      pdfsArray: [{ key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey' ]}],
+      selectedPdf: {},
+      data: {}
     }
   }
   handlePrint(selectedPdf: PDF) {
     this.setState({ showModal: true, selectedPdf: selectedPdf })
-
+  }
+  handleSubmit(values) {
+    console.log(this.state.selectedPdf.key)
+    switch(this.state.selectedPdf.key) {
+      case 'customerDetails': return this.getCustomerDetails(values);
+      default: return null;
+    }
+  }
+  async getCustomerDetails(values) {
+    const res = await getCustomerDetails(values.key);
+    if(res.status === 'success') {
+      this.setState({data: res.body, print: 'customerDetails'})
+    } else console.log(res)
   }
   render() {
     return (
       <>
-        <Card style={{ margin: '20px 50px' }}>
+        <Card style={{ margin: '20px 50px' }} className="print-none">
           {/* <Loader type="fullsection" open={this.props.loading} /> */}
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -59,7 +75,8 @@ class Reports extends Component<{}, State> {
             })}
           </Card.Body>
         </Card>
-        {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} />}
+        {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)}/>}
+        {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} />}
       </>
     )
   }
