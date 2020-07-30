@@ -42,6 +42,7 @@ class Reports extends Component<{}, State> {
     }
   }
   async getCustomerDetails(values) {
+    console.log(values)
     const res = await getCustomerDetails(values.key);
     if(res.status === 'success') {
       this.setState({data: res.body, print: 'customerDetails'})
