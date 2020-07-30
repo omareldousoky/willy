@@ -181,7 +181,7 @@ class TrackLoanApplications extends Component<Props, State>{
       customers[i].iScore = iScore.body
       this.setState({ loading: false, iScoreCustomers: customers })
     } else {
-      Swal.fire('', 'fetch error', 'error')
+      Swal.fire('', local.noIScore, 'error')
       this.setState({ loading: false })
     }
   }
