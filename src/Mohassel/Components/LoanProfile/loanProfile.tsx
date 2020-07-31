@@ -290,7 +290,7 @@ class LoanProfile extends Component<Props, State>{
             this.downloadFile(iScore.body.url)
             this.setState({ loading: false })
         } else {
-            Swal.fire('', 'fetch error', 'error')
+            Swal.fire('', local.noIScore, 'error')
             this.setState({ loading: false })
         }
     }
