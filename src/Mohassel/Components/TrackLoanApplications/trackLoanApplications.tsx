@@ -10,7 +10,7 @@ import Search from '../Search/search';
 import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt, iscoreDate } from '../../Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
@@ -135,35 +135,35 @@ class TrackLoanApplications extends Component<Props, State>{
     const customers: any[] = [];
     if (data.application.product.beneficiaryType === 'individual') {
       const obj = {
-        requestNumber: '002',
-        reportId: '002',
-        product: `${data.application.product.code}`,
+        requestNumber: '148',
+        reportId: '3004',
+        product: '023',
         loanAccountNumber: `${data.application.customer.key}`,
-        number: '003',
-        date: '003',
+        number: '1703943',
+        date: '02/12/2014',
         amount: `${data.application.principal}`,
         lastName: `${data.application.customer.customerName}`,
         idSource: '003',
         idValue: `${data.application.customer.nationalId}`,
         gender: (data.application.customer.gender === 'male') ? '001' : '002',
-        dateOfBirth: `${data.application.customer.birthDate}`
+        dateOfBirth: iscoreDate(data.application.customer.birthDate)
       }
       customers.push(obj)
     } else {
       data.application.group.individualsInGroup.forEach(member => {
         const obj = {
-          requestNumber: '002',
-          reportId: '002',
-          product: `${data.application.product.code}`,
+          requestNumber: '148',
+          reportId: '3004',
+          product: '023',
           loanAccountNumber: `${member.customer.key}`,
-          number: '003',
-          date: '003',
+          number: '1703943',
+          date: '02/12/2014',
           amount: `${data.application.principal}`,
           lastName: `${member.customer.customerName}`,
           idSource: '003',
           idValue: `${member.customer.nationalId}`,
           gender: (member.customer.gender === 'male') ? '001' : '002',
-          dateOfBirth: `${member.customer.birthDate}`
+          dateOfBirth: iscoreDate(member.customer.birthDate)
         }
         customers.push(obj)
       })
@@ -181,7 +181,7 @@ class TrackLoanApplications extends Component<Props, State>{
       customers[i].iScore = iScore.body
       this.setState({ loading: false, iScoreCustomers: customers })
     } else {
-      Swal.fire('', 'fetch error', 'error')
+      Swal.fire('', local.noIScore, 'error')
       this.setState({ loading: false })
     }
   }
