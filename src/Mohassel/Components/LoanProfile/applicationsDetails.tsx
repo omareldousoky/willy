@@ -10,7 +10,7 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { beneficiaryType, currency, interestPeriod, periodType } from  '../../Services/utils';
+import { beneficiaryType, currency, interestPeriod, periodType } from '../../Services/utils';
 
 interface Props {
     application: any;
@@ -80,11 +80,11 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 {props.application.product.beneficiaryType === 'individual' ? <tr>
                     <td>{local.principal}</td>
                     <td>{props.application.principal}</td>
-                </tr> : props.application.group.individualsInGroup.map((member)=>
-                <tr key={member.customer._id}>
-                    <td>{local.principal} {member.customer.customerName}</td>
-                    <td>{member.amount}</td>
-                </tr>)}
+                </tr> : props.application.group.individualsInGroup.map((member) =>
+                    <tr key={member.customer._id}>
+                        <td>{local.principal} {member.customer.customerName}</td>
+                        <td>{member.amount}</td>
+                    </tr>)}
                 <tr>
                     <td>{local.applicationFee}</td>
                     <td>{props.application.product.applicationFee}</td>
@@ -370,7 +370,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                         </Row>
                     </Form.Group>
                 </Form.Row>
-                {props.application.guarantors && props.application.product.beneficiaryType === 'individual' && <Form.Row>
+                {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
                     <GuarantorTableView guarantors={props.application.guarantors} />
                 </Form.Row>}
             </Form>

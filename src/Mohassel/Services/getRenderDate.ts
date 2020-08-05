@@ -14,6 +14,12 @@ export const getRenderDate = (date: number) => {
 }
 
 export const getDateAndTime = (date: number) => {
-    const dateString = new Date(date).toISOString();
-    return dateString.slice(11,16) + " - " + dateString.slice(0,10)
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+       };
+    const dateString = new Date(date).toLocaleTimeString('ar-EG', options);
+    return dateString
 }

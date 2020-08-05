@@ -276,12 +276,78 @@ export const getStatus = (installment) => {
               return local.late
           else
               return local.unpaid
+      case 'pending': return local.pending;
       case 'paid': return local.paid;
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
       default: return '';
   }
+}
+
+export const actionsList = [
+  "cancelApplication",
+  "createLoanApplication",
+  "createLoan",
+  "undoReviewLoan",
+  "issueLoan",
+  "reviewLoan",
+  "editLoanApplication",
+  "payLoanInstallment",
+  "earlyPayLoan",
+  "rejectLoan",
+  "approveLoan",
+  "splitfromGroup",
+  "rollback",
+  "traditionalRescheduling",
+  "FreeReschedule",
+  "manualPayment",
+  "editManualPayment",
+  "approveManualPayment",
+  "rejectManualPayment",
+  "payPenalties",
+  "createBranch",
+  "updateBranch",
+  "createCustomer",
+  "updateCustomer",
+  "createUser",
+  "updateUser",
+  "createRole",
+  "updateRole",
+  "createProduct",
+  "reschedule",
+  "writeOff",
+  "setDoubtfulLoan",
+  "setUnDoubtfulLoan",
+  "cancelPenalties",
+  "rollbackCreateLoan",
+  "rollbackIssueLoan",
+  "rollbackPayLoanInstallment",
+  "rollbackRejectLoan",
+  "rollbackApproveLoan",
+  "rollbackManualPayment",
+  "rollbackApproveManualPayment",
+  "rollbackRejectManualPayment",
+  "rollbackPayPenalties",
+  "rollbackReschedule",
+  "postpone",
+  "rollbackPostpone",
+  "payClearanceFees",
+  "payCollectionCommission",
+  "payLegalFees",
+  "payReissuingFees",
+  "payToktokStamp",
+  "payTricycleStamp",
+  "activateUser",
+  "deactivateUser"
+]
+
+export const iscoreDate = (date: any) => {
+  const MyDate = new Date(date);
+  const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
+  + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
+  + MyDate.getFullYear();
+  return MyDateString
 }
 export const downloadAsZip = (images: Array<{url: string; fileName: string}>, folderName: string) => {
   const zip =  new JsZip();
