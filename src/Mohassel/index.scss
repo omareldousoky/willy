@@ -43,9 +43,10 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   flex: 1;
   background-color: #ffffff;
   text-align: center;
-  min-height: 20rem;
-  min-width: 20rem;
-  max-height: 20rem;
+  min-width: 250px;
+  min-height: 200px;
+  max-width: 250px;
+  max-height: 200px;
   justify-content: center;
   align-items: center;
   border: #e5e5e5 dashed 1px;
@@ -56,12 +57,15 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   display: flex;
   justify-content: space-between;
   top: 0;
-  left: 10px;
-  padding: 10px;
+  left: 0px;
+  padding: 5px;
   border-radius: 10px;
   cursor: pointer;
 }
-
+.document-action-icon{
+  width: 20px;
+  height: 20px;
+}
 /*Loader Component*/
 .loader-full-screen, .loader-full-section {
   position: fixed;
@@ -100,7 +104,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background-color: #7dc356;
 }
 
-.primary-color {
+.pr2ry-color {
   color: #7dc356
 }
 .navbar-nav a{
@@ -309,8 +313,9 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 }
 .uploaded-image {
   padding-top: 35px;
-   width: 100%;
-   height: 100%;
+   width: 250px;
+   height: 200px;
+   object-fit: fill;
 }
 .invalid-image{
 
