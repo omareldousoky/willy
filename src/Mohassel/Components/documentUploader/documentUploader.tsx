@@ -5,7 +5,6 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { download } from '../../Services/utils';
-import ability from '../../config/ability';
 import Form from 'react-bootstrap/Form';
 interface Document {
   key: string;
@@ -17,6 +16,7 @@ interface Props {
   documentType: DocumentType;
   uploadDocumentFun: any;
   deleteDocumentFun: any;
+  checkAll?: boolean;
   keyName: string;
   keyId: string;
   edit: boolean;
@@ -28,6 +28,7 @@ interface Props {
 interface State {
   loading: boolean;
   dragging: boolean;
+  selectionArray: Array<any>;
   imagesFiles: Array<Document>;
 }
 class DocumentUploader extends Component<Props, State> {
@@ -40,6 +41,7 @@ class DocumentUploader extends Component<Props, State> {
       loading: false,
       dragging: false,
       imagesFiles: [],
+      selectionArray: [],
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -244,10 +246,20 @@ class DocumentUploader extends Component<Props, State> {
   renderPhotoByName(key: number, name: string) {
     return (
       <Card.Body key={key} className="document-upload-container" style={{ cursor: this.state.imagesFiles[key].valid && this.props.documentType.active ? "pointer" : 'not-allowed' }}>
-        {(this.props.documentType.active && this.state.imagesFiles[key].valid) && <div data-qc="document-actions" className="document-actions" >
-          {!this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img  className= {this.props.documentType.updatable ?"": "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
-          {((!this.props.edit && this.props.view) || ((ability.can('addingDocuments', 'application') && this.props.documentType.type !== 'customer'))) && <span className="fa icon" onClick={() => { this.downloadPhoto(this.state.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
-        </div>}
+        <div data-qc="document-actions" className="document-actions" >
+         
+          {(this.props.documentType.active && this.state.imagesFiles[key].valid) &&  !this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img  className= {this.props.documentType.updatable ?"": "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
+          {<span className="fa icon" onClick={() => { this.downloadPhoto(this.state.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
+          {<span className="fa icon document-select">
+        
+            <Form.Check 
+                type='checkbox'
+                id={`${name+ key.toString()}`}
+                // onChange={() => this.selectItem(option)}
+                checked={this.state.selectionArray.find((item) => item._id ===  (name + key.toString()))}
+            />
+            </span>}
+        </div>
         {!this.state.imagesFiles[key]?.valid && <div className="invalid-document">
           <img src={require('../../Assets/deactivateIcon.svg')} />
         </div>}
@@ -319,6 +331,8 @@ class DocumentUploader extends Component<Props, State> {
           cursor: 'not-allowed',
           border: '#e5e5e5 solid 1px',
           borderRadius: 4,
+          filter: "invert(15%)",
+         WebkitBackdropFilter: "invert(15%)",
           opacity: .4,
         }}
           data-qc={`inactiveDoc-${name}`}>
