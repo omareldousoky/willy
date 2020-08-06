@@ -650,7 +650,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 adminFees: obj.adminFees,
                 entryDate: new Date(obj.entryDate).valueOf(),
                 usage: obj.usage,
-                representative: obj.representative,
+                representativeId: obj.representative,
                 enquirorId: obj.enquirorId,
                 visitationDate: new Date(obj.visitationDate).valueOf(),
                 individualDetails: individualsToSend,
