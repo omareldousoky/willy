@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import { Customer } from '../../Services/interfaces';
+import { Customer, GuaranteedLoans } from '../../Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { timeToDateyyymmdd } from '../../Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -10,6 +10,9 @@ import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
 import DocumentsUpload from './documentsUpload';
+import { guaranteed } from "../../Services/APIs/Reports/guaranteed";
+import { CustomerReportsTab } from './customerReportsTab';
+import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -35,19 +38,64 @@ const tabs: Array<Tab> = [
   {
     header: local.documents,
     stringKey: 'documents'
+  },
+  {
+    header: local.reports,
+    stringKey: 'reports'
   }
 ]
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
-
+  const [print, _changePrint] = useState<any>();
+  const [dataToBePrinted, changeDataToBePrinted] = useState<any>();
+  const [guaranteeedLoansData, changeGuaranteeedLoansData] = useState<GuaranteedLoans>()
+  const getGuaranteeedLoans = async (customer)=> {
+    changeLoading(true);
+    const res = await guaranteed(customer?.key)
+    if (res.status === 'success') {
+      console.log('bye', res.body);
+      const response = {
+        data: [
+          {
+            guarantorOrder: "0",
+            customerKey: "111120001923",
+            applicationCode: "1",
+            customerName: "حسن محمد عبدالفتاح محمد",
+            appStatus: "paid",
+            approvalDate: "2019-11-25",
+            loanStatus: "paid",
+            issueDate: "2019-11-25"
+          },
+          {
+            guarantorOrder: "0",
+            customerKey: "111120001923",
+            applicationCode: "1",
+            customerName: "حسن محمد عبدالفتاح محمد",
+            appStatus: "paid",
+            approvalDate: "2019-11-25",
+            loanStatus: "paid",
+            issueDate: "2019-11-25"
+          }
+        ],
+        GuarantorName: "سعاد محمد مصطفي ناجي"
+      }
+      changeGuaranteeedLoansData(response);
+      changeLoading(false);
+    } else {
+      changeLoading(false);
+      console.log("failed to get customer data")
+    }
+  }
   async function getCustomerDetails() {
     changeLoading(true);
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
+      console.log('hi', res.body);
       changeCustomerDetails(res.body);
       changeLoading(false);
+      getGuaranteeedLoans(res.body);
     } else {
       changeLoading(false);
       console.log("failed to get customer data")
@@ -68,13 +116,13 @@ const CustomerProfile = (props: Props) => {
   return (
     <>
       <Loader open={loading} type="fullscreen" />
-      <div className="rowContainer" style={{ paddingLeft: 30 }}>
-        <BackButton title={local.viewCustomer} />
-        <div style={{cursor: 'pointer'}} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
+      <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
+        <BackButton title={local.viewCustomer} className="print-none"/>
+        <div  className="print-none" style={{cursor: 'pointer'}} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
           <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
           {local.edit}</div>
       </div>
-      <Card style={{ marginTop: 10 }}>
+      <Card style={{ marginTop: 10 }}  className="print-none">
         <CardNavBar
           header={'here'}
           array={tabs}
@@ -249,8 +297,16 @@ const CustomerProfile = (props: Props) => {
         view={true}
          />
         }
+        {activeTab === 'reports' &&  (
+        <CustomerReportsTab 
+          changePrint={(data)=> _changePrint(data)}  
+          changeDataToBePrinted={(data)=>{ changeDataToBePrinted(data); window.print(); }}
+          guaranteeedLoansData={guaranteeedLoansData} 
+        />
+        )}
         </Card.Body>
       </Card>
+      {print === "ClientGuaranteedLoans" && ( <ClientGuaranteedLoans data={dataToBePrinted} /> )}
     </>
   )
 }

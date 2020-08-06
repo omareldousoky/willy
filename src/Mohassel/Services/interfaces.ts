@@ -99,3 +99,18 @@ export interface DocumentType {
     active?: boolean;
     updatable?: boolean;
 }
+export interface GuaranteedLoan{
+    guarantorOrder: string;
+    customerKey: string;
+    applicationCode: string;
+    customerName: string;
+    appStatus: string;
+    approvalDate: string;
+    loanStatus: string;
+    issueDate: string;
+}
+export interface GuaranteedLoans {
+        data: Array<GuaranteedLoan>;
+        GuarantorName: string;
+}
+

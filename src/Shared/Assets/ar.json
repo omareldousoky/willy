@@ -92,6 +92,7 @@
     "inAdvanceFees": "نسبه المصاريف المقدمه",
     "inAdvanceFrom": "",
     "inAdvanceType": "طريقه إستخدام النسبه المقدمه",
+    "ClientGuaranteedLoans": "قروض ضمنها العميل",
     "productName": "نوع القرض",
     "calculationFormulaId": "طريقه الحساب",
     "loanNature": "طبيعة الاقتراض",
