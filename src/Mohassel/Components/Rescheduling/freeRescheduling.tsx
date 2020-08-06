@@ -240,7 +240,6 @@ class FreeRescheduling extends Component<Props, State>{
                                         </thead>
                                         <tbody>
                                             {formikProps.values.installments.map((item, index: number) => {
-                                                console.log(index)
                                                 return (
                                                     <tr key={index}>
                                                         <td>
