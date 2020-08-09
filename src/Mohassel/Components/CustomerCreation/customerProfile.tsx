@@ -234,7 +234,7 @@ const CustomerProfile = (props: Props) => {
             </tr>
             <tr>
               <td>{local.guarantorMaxLoans}</td>
-              <td>{customerDetails?.guarantorMaxLoans ? customerDetails.guarantorMaxLoans : customerDetails.guarantorMaxLoans? customerDetails.guarantorMaxLoans : "-"}</td>
+              <td>{customerDetails.guarantorMaxLoans? customerDetails.guarantorMaxLoans : "-"}</td>
             </tr>
             <tr>
               <td>{local.comments}</td>
