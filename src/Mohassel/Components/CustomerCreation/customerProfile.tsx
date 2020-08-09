@@ -10,7 +10,7 @@ import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
 import DocumentsUpload from './documentsUpload';
-import { guaranteed } from "../../Services/APIs/Reports/guaranteed";
+import { guaranteed, collectionReport, penalties, writeOffs } from "../../Services/APIs/Reports";
 import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 
@@ -81,6 +81,13 @@ const CustomerProfile = (props: Props) => {
         ],
         GuarantorName: "سعاد محمد مصطفي ناجي"
       }
+      const resCollectionReport = await collectionReport();
+      const resPenalties = await penalties();
+      const resWriteOffs = await writeOffs();
+      console.log('resCollectionReport', resCollectionReport);
+      console.log('resPenalties', resPenalties);
+      console.log('resWriteOffs', resWriteOffs);
+      
       changeGuaranteeedLoansData(response);
       changeLoading(false);
     } else {
