@@ -531,6 +531,7 @@
     "allowMultiLoans": "عميل يمكنه أخذ اكثر من قرض",
     "allowGuarantorLoan": "ضامن يمكنه أخذ قرض",
     "allowMultiGuarantee": "ضامن يضمن اكثر من عميل",
+    "guarantorMaxLoans": "عدد القروض التي يمكن أن يضمنها العميل",
     "bankAccount": "الحساب البنكي",
     "costCenter": " مركز حساب التكلفة",
     "manualPayment": "دفع يدوي",

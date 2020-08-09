@@ -178,6 +178,28 @@ export const StepThreeForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
+            <Row>
+                <Col sm={6}>
+                        <Form.Group controlId="guarantorMaxLoans">
+                            <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                            <Can I="updateNationalId" a="customer" passThrough>
+                                {allowed => <Form.Control
+                                    type="text"
+                                    name="guarantorMaxLoans"
+                                    data-qc=""
+                                    value={values.guarantorMaxLoans}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                    isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
+                                />}
+                            </Can>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.guarantorMaxLoans}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+            </Row>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
                     props.edit && allowed &&
@@ -210,20 +232,20 @@ export const StepThreeForm = (props: any) => {
                                 />
                             </Form.Group>
                         </Col>
-                        <Col sm={4}>
+                        {/* <Col sm={4}>
                             <Form.Group>
                                 <Form.Check
-                                    name="allowMultiGuarantee"
-                                    id="allowMultiGuarantee"
-                                    data-qc="allowMultiGuarantee"
+                                    name="guarantorMaxLoans"
+                                    id="guarantorMaxLoans"
+                                    data-qc="guarantorMaxLoans"
                                     type='checkbox'
-                                    checked={values.allowMultiGuarantee}
-                                    value={values.allowMultiGuarantee}
-                                    label={local.allowMultiGuarantee}
+                                    checked={values.guarantorMaxLoans}
+                                    value={values.guarantorMaxLoans}
+                                    label={local.guarantorMaxLoans}
                                     onChange={handleChange}
                                 />
                             </Form.Group>
-                        </Col>
+                        </Col> */}
                     </Row>
                 }
             </Can>

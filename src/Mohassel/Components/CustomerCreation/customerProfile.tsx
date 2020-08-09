@@ -233,8 +233,8 @@ const CustomerProfile = (props: Props) => {
               <td>{customerDetails?.allowGuarantorLoan ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}</td>
             </tr>
             <tr>
-              <td>{local.allowMultiGuarantee}</td>
-              <td>{customerDetails?.allowMultiGuarantee ? <span className="fa fa-check"></span> : <span className="fa fa-times"></span>}</td>
+              <td>{local.guarantorMaxLoans}</td>
+              <td>{customerDetails?.guarantorMaxLoans ? customerDetails.guarantorMaxLoans : customerDetails.guarantorMaxLoans? customerDetails.guarantorMaxLoans : "-"}</td>
             </tr>
             <tr>
               <td>{local.comments}</td>

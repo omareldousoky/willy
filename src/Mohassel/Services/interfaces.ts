@@ -67,7 +67,7 @@ export interface Customer {
     village?: string;
     allowMultiLoans?: boolean;
     allowGuarantorLoan?: boolean;
-    allowMultiGuarantee?: boolean;
+    guarantorMaxLoans?: number;
     _id?: string;
 }
 

@@ -46,7 +46,7 @@ interface CustomerExtraDetails {
   representative: any;
   allowMultiLoans: boolean;
   allowGuarantorLoan: boolean;
-  allowMultiGuarantee: boolean;
+  guarantorMaxLoans: number;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -216,7 +216,7 @@ class CustomerCreation extends Component<Props, State>{
         comments: res.body.comments,
         allowMultiLoans: res.body.allowMultiLoans,
         allowGuarantorLoan: res.body.allowGuarantorLoan,
-        allowMultiGuarantee: res.body.allowMultiGuarantee,
+        guarantorMaxLoans: res.body.guarantorMaxLoans? res.body.guarantorMaxLoans : 1,
       };
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
@@ -271,6 +271,8 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
     objToSubmit.representative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? this.state.oldRepresentative : objToSubmit.representative;
     objToSubmit.newRepresentative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? objToSubmit.newRepresentative : '';
+    if(objToSubmit.guarantorMaxLoans && objToSubmit.guarantorMaxLoans > 0) objToSubmit.guarantorMaxLoans = Number(objToSubmit.guarantorMaxLoans);
+    else  objToSubmit.guarantorMaxLoans = 1;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
