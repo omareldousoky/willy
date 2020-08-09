@@ -46,7 +46,7 @@ interface CustomerExtraDetails {
   representative: any;
   allowMultiLoans: boolean;
   allowGuarantorLoan: boolean;
-  guarantorMaxLoans?: number;
+  guarantorMaxLoans: number;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -106,6 +106,7 @@ interface State {
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
     comments: string;
+    guarantorMaxLoans: number;
   };
   customerId: string;
   selectedCustomer: any;
@@ -271,7 +272,7 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
     objToSubmit.representative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? this.state.oldRepresentative : objToSubmit.representative;
     objToSubmit.newRepresentative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? objToSubmit.newRepresentative : '';
-    if(objToSubmit.guarantorMaxLoans && objToSubmit.guarantorMaxLoans > 0) objToSubmit.guarantorMaxLoans = Number(objToSubmit.guarantorMaxLoans);
+    if(objToSubmit?.guarantorMaxLoans && objToSubmit.guarantorMaxLoans > 0) objToSubmit.guarantorMaxLoans = Number(objToSubmit.guarantorMaxLoans);
     else  objToSubmit.guarantorMaxLoans = 1;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
