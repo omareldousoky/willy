@@ -46,7 +46,7 @@ interface CustomerExtraDetails {
   representative: any;
   allowMultiLoans: boolean;
   allowGuarantorLoan: boolean;
-  guarantorMaxLoans: number;
+  guarantorMaxLoans?: number;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
