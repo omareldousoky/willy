@@ -232,20 +232,6 @@ export const StepThreeForm = (props: any) => {
                                 />
                             </Form.Group>
                         </Col>
-                        {/* <Col sm={4}>
-                            <Form.Group>
-                                <Form.Check
-                                    name="guarantorMaxLoans"
-                                    id="guarantorMaxLoans"
-                                    data-qc="guarantorMaxLoans"
-                                    type='checkbox'
-                                    checked={values.guarantorMaxLoans}
-                                    value={values.guarantorMaxLoans}
-                                    label={local.guarantorMaxLoans}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col> */}
                     </Row>
                 }
             </Can>
