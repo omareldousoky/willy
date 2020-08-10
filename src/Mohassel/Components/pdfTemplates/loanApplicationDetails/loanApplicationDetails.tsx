@@ -1,14 +1,28 @@
 import React from 'react';
 import './loanApplicationDetails.scss';
+import * as local from '../../../../Shared/Assets/ar.json';
+import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod } from '../../../Services/utils';
 
 const LoanApplicationDetails = (props) => {
+    function getStatus(status: string) {
+        switch (status) {
+            case 'issued': return local.issued;
+            case 'pending': return local.pending;
+            case 'paid': return local.paid;
+            case 'underReview': return local.underReview;
+            case 'reviewed': return local.reviewed;
+            case 'approved': return local.approved;
+            case 'rejected': return local.rejected;
+            default: return '';
+        }
+    }
     return (
         <div className="loan-application-details" lang="ar">
             <table className="report-container">
                 <thead className="report-header">
                     <tr className="headtitle">
                         <th>شركة تساهيل للتمويل متناهي الصغر
-				</th>
+				        </th>
                         <th>المنيا - ابوقرقاص</th>
                         <th rowSpan={3}>
                             <img width="100px"
@@ -20,335 +34,345 @@ const LoanApplicationDetails = (props) => {
                         <th rowSpan={2}>تفاصيل طلب القرض</th>
                     </tr>
                     <tr className="headtitle">
-                        <th>12:17:26 &emsp; 2020/07/05</th>
+                        <th>{timeToArabicDate(0, false)}</th>
                     </tr>
 
                 </thead>
 
             </table>
 
+            {props.data.loans.map((loan, index) => {
+                return (
+                    <div key={index}>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>كود طلب القرض</th>
+                                    <td>{loan.loanId}</td>
+                                    {/*  <td></td> */}
+                                    <th>حالة طلب القرض</th>
+                                    <td>{getStatus(loan.status)}</td>
+                                </tr>
+                                <tr>
+                                    <th>إسم الطالب</th>
+                                    <td>{props.data.customerName}</td>
+                                </tr>
+                                <tr>
+                                    <th>نوع الأقتراض</th>
+                                    <td>{beneficiaryType(loan.beneficiaryType)}</td>
+                                    <th>المندوب الحالي</th>
+                                    <td>{loan.officerName}</td>
+                                </tr>
+                                <tr>
+                                    <th colSpan={100} className="horizontal-line"></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="frame gray" colSpan={100}>بيانات العميل</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-            <table>
-                <tbody>
-                    <tr>
-                        <th>كود طلب القرض</th>
-                        <td>68/19642/1</td>
-                        {/*  <td></td> */}
-                        <th>حالة طلب القرض</th>
-                        <td>تمت مراجعته</td>
-                        <td>موافق عليه</td>
-                        <td>تم إنشاء القرض</td>
-                    </tr>
-                    <tr>
-                        <th>إسم الطالب</th>
-                        <td>عرفة عبدالله عبدالحليم ابو زيد</td>
-                    </tr>
-                    <tr>
-                        <th>نوع الأقتراض</th>
-                        <td>فردي</td>
-                        <th>المندوب الحالي</th>
-                        <td>مينا مفرح فهمي تاوضروس</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th className="frame gray" colSpan={100}>بيانات العميل</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                <tr>
+                                    <th>الرقم القومي</th>
+                                    <td>{props.data.nationalId}</td>
+                                    <th>فاكس رقم</th>
+                                </tr>
+                                <tr>
+                                    <th>العنوان</th>
+                                    <td>{props.data.customerHomeAddress}</td>
+                                    <th>النوع</th>
+                                    <td>{arabicGender(props.data.customerGender)}</td>
+                                </tr>
+                                <tr>
+                                    <th>تاريخ الميلاد</th>
+                                    <td>{props.data.customerBirthDate}</td>
+                                    <th>التليفون</th>
+                                    <td>{props.data.customerHomePhoneNumber}</td>
+                                </tr>
+                                <tr>
+                                    <th>تاريخ الاصدار</th>
+                                    <td>{props.data.nationalIdIssueDate}</td>
+                                    <th>الرقم البريدي</th>
+                                </tr>
+                                <tr>
+                                    <th>البريد الالكتروني</th>
+                                </tr>
+                                <tr>
+                                    <th>تليفون محمول</th>
+                                    <td>{props.data.customerMobile}</td>
+                                </tr>
+                                <tr>
+                                    <th>الموقع الالكتروني</th>
+                                </tr>
+                                <tr>
+                                    <th colSpan={100} className="horizontal-line"></th>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                    <tr>
-                        <th>الرقم القومي</th>
-                        <td>27504122400697</td>
-                        <th>فاكس رقم</th>
-                    </tr>
-                    <tr>
-                        <th>العنوان</th>
-                        <td>شارع النصر بجوار الجامع - الفكريه مركز ابوقرقاص المنيا</td>
-                        <th>النوع</th>
-                        <td>ذكر</td>
-                    </tr>
-                    <tr>
-                        <th>تاريخ الميلاد</th>
-                        <td>1975/04/12</td>
-                        <th>التليفون</th>
-                        <td>01015013342</td>
-                    </tr>
-                    <tr>
-                        <th>تاريخ الاصدار</th>
-                        <td>2018/09/01</td>
-                        <th>الرقم البريدي</th>
-                    </tr>
-                    <tr>
-                        <th>البريد الالكتروني</th>
-                    </tr>
-                    <tr>
-                        <th>تليفون محمول</th>
-                    </tr>
-                    <tr>
-                        <th>الموقع الالكتروني</th>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th className="frame gray" colSpan={100}>بيانات العمل</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>اسم المنشأه</th>
-                        <td></td>
-                        <th>تليفون العمل</th>
-                        <td>01015013342</td>
-                    </tr>
-                    <tr>
-                        <th>رقم الرخصه</th>
-                        <td></td>
-                        <th>منطقة العمل</th>
-                        <td>أبو قرقاص</td>
-                    </tr>
-                    <tr>
-                        <th>عمال دائمين</th>
-                        <td>0</td>
-                        <th>عمال مؤقتين</th>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <th>مكان الترخيص</th>
-                        <td></td>
-                        <th>الرقم البريدي</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>تاريخ الترخيص</th>
-                        <td></td>
-                        <th>بطاقه ضريبيه</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>العنوان</th>
-                        <td>شارع النصر بجوار الجامع - الفكريه مركز ابوقرقاص المنيا</td>
-                        <th>السجل التجارى</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>قطاع العمل والنشاط والتخصص</th>
-                        <td>زراعى انتاج زراعى اراضي زراعيه</td>
-                        <th>السجل الصناعي</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <table>
-                <thead>
-                    <tr>
-                        <th className="frame gray" colSpan={100}>بيانات القرض المطلوب</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>مصدر التمويل</th>
-                        <td>تساهيل للتمويل متناهى الصغر</td>
-                        <th>العمله</th>
-                        <td>جنيه مصري</td>
-                        <th>تاريخ الإدخال</th>
-                        <td>2020/05/07</td>
-                    </tr>
-                    <tr>
-                        <th>نوع القرض</th>
-                        <td>تمويل فردي موسمي كل 3 شهور 38 </td>
-                        <th>القيمه الموافق عليها</th>
-                        <td>10000</td>
-                        <th>رسوم الطوابع</th>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <th>قيمة القرض</th>
-                        <td>10000</td>
-                        <th>عدد الأقساط</th>
-                        <td>4</td>
-                        <th>عمولة المندوب</th>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <th>طريقة الحساب</th>
-                        <td>فائده متناقصه - اقساط متساويه - لاقرب</td>
-                        <th>فترة السماح</th>
-                        <td>0</td>
-                        <th>ايام الترحيل</th>
-                        <td>0</td>
-                    </tr>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="frame gray" colSpan={100}>بيانات العمل</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>اسم المنشأه</th>
+                                    <td></td>
+                                    <th>تليفون العمل</th>
+                                    <td>{props.data.customerWorkPhone}</td>
+                                </tr>
+                                <tr>
+                                    <th>رقم الرخصه</th>
+                                    <td></td>
+                                    <th>منطقة العمل</th>
+                                    <td>أبو قرقاص</td>
+                                </tr>
+                                <tr>
+                                    <th>عمال دائمين</th>
+                                    <td>0</td>
+                                    <th>عمال مؤقتين</th>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <th>مكان الترخيص</th>
+                                    <td></td>
+                                    <th>الرقم البريدي</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>تاريخ الترخيص</th>
+                                    <td></td>
+                                    <th>بطاقه ضريبيه</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>العنوان</th>
+                                    <td>{loan.customerWorkAddress}</td>
+                                    <th>السجل التجارى</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>قطاع العمل والنشاط والتخصص</th>
+                                    <td>{loan.customerActivity}</td>
+                                    <th>السجل الصناعي</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th colSpan={100} className="horizontal-line"></th>
+                                </tr>
+                            </tbody>
+                        </table>
 
 
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="frame gray" colSpan={100}>بيانات القرض المطلوب</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>مصدر التمويل</th>
+                                    <td>تساهيل للتمويل متناهى الصغر</td>
+                                    <th>العمله</th>
+                                    <td>{currency(loan.currency)}</td>
+                                    <th>تاريخ الإدخال</th>
+                                    <td>{loan.creationDate}</td>
+                                </tr>
+                                <tr>
+                                    <th>نوع القرض</th>
+                                    <td>{loan.calculationFormula}</td>
+                                    <th>القيمه الموافق عليها</th>
+                                    <td>{loan.principal}</td>
+                                    <th>رسوم الطوابع</th>
+                                    <td>{loan.stamps}</td>
+                                </tr>
+                                <tr>
+                                    <th>قيمة القرض</th>
+                                    <td>{loan.principal}</td>
+                                    <th>عدد الأقساط</th>
+                                    <td>{loan.numInst}</td>
+                                    <th>عمولة المندوب</th>
+                                    <td>{loan.representativeFees}</td>
+                                </tr>
+                                <tr>
+                                    <th>طريقة الحساب</th>
+                                    <td>{loan.calculationFormula}</td>
+                                    <th>فترة السماح</th>
+                                    <td>{loan.gracePeriod}</td>
+                                    <th>ايام الترحيل</th>
+                                    <td>0</td>
+                                </tr>
 
-                    <tr>
-                        <td colSpan={100}>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th className="frame gray" colSpan={100}>رسوم طلب القرض</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>قيمه</th>
-                                        <td>0.00</td>
-                                        <th>حصة العضو</th>
-                                        <td>0.00</td>
-                                        <th>نسبه من قيمة القرض</th>
-                                        <td>1.50</td>
-                                        <th>نسبة حصة العضو من قيمة القرض</th>
-                                        <td>0.00</td>
-                                        <th>القيمة الكامله</th>
-                                        <td>150.0000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
+                                <tr>
+                                    <td colSpan={100}>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th className="frame gray" colSpan={100}>رسوم طلب القرض</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>قيمه</th>
+                                                    <td>{loan.principal}</td>
+                                                    <th>حصة العضو</th>
+                                                    <td>0.00</td>
+                                                    <th>نسبه من قيمة القرض</th>
+                                                    <td>1.50</td>
+                                                    <th>نسبة حصة العضو من قيمة القرض</th>
+                                                    <td>0.00</td>
+                                                    <th>القيمة الكامله</th>
+                                                    <td>150.0000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
 
-                    <tr>
-                        <th>فترة السداد كل</th>
-                        <td>3 شهر</td>
-                        <th>حساب السداد</th>
-                        <td></td>
-                        <th>مصاريف إداريه القسط</th>
-                        <td>0</td>
-                    </tr>
-
-
-                    <tr>
-                        <th>المصاريف الموزعه</th>
-                        <td>38 % سنويا</td>
-                        <th>المصاريف المقدمه</th>
-                        <td>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
-                    </tr>
-
-                    <tr>
-                        <th>الأستخدام</th>
-                        <td>تمويل رأس المال العامل</td>
-                        <th>حساب الإصدار</th>
-                    </tr>
-                    <tr>
-                        <th>حساب التجميد</th>
-                    </tr>
-                    <tr>
-                        <th>نائب مدير ميداني</th>
-                        <td>هاني نبيل حشمت امين - مدير الفرع</td>
-                        <th>تاريخ الزياره</th>
-                        <td>2020/05/11</td>
-                    </tr>
-
-                    <tr>
-                        <th>مدير الفرع</th>
-                        <td>هاني نبيل حشمت امين - مدير الفرع</td>
-                        <th>تاريخ الزياره</th>
-                        <td>2020/05/11</td>
-                    </tr>
-
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
-            </table>
+                                <tr>
+                                    <th>فترة السداد كل</th>
+                                    <td>{loan.periodLength} {interestPeriod(loan.periodType)}</td>
+                                    <th>حساب السداد</th>
+                                    <td></td>
+                                    <th>مصاريف إداريه القسط</th>
+                                    <td>0</td>
+                                </tr>
 
 
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>الأسم</th>
-                                        <td>محمد رمضان محمد راغب</td>
-                                    </tr>
-                                    <tr>
-                                        <th>الرقم القومي</th>
-                                        <td>27907012400974</td>
-                                        <th>تاريخ الأصدار</th>
-                                        <td>2017/07/01</td>
-                                    </tr>
-                                    <tr>
-                                        <th>النوع</th>
-                                        <td>ذكر</td>
-                                        <th>تاريخ الميلاد</th>
-                                        <td>2017/07/01</td>
-                                    </tr>
-                                    <tr>
-                                        <th>التليفون</th>
-                                        <td>01064515448</td>
-                                        <th>الرقم البريدي</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th>العنوان</th>
-                                        <td>شارع الابطال متفرع من ش عمر بجوار جامع عمر</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th className="frame gray" colSpan={100}>الضامن الثاني</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>الأسم</th>
-                                        <td>محمد رمضان محمد راغب</td>
-                                    </tr>
-                                    <tr>
-                                        <th>الرقم القومي</th>
-                                        <td>27907012400974</td>
-                                        <th>تاريخ الأصدار</th>
-                                        <td>2017/07/01</td>
-                                    </tr>
-                                    <tr>
-                                        <th>النوع</th>
-                                        <td>ذكر</td>
-                                        <th>تاريخ الميلاد</th>
-                                        <td>2017/07/01</td>
-                                    </tr>
-                                    <tr>
-                                        <th>التليفون</th>
-                                        <td>01064515448</td>
-                                        <th>الرقم البريدي</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th>العنوان</th>
-                                        <td>شارع الابطال متفرع من ش عمر بجوار جامع عمر</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                <tr>
+                                    <th>المصاريف الموزعه</th>
+                                    <td>38 % سنويا</td>
+                                    <th>المصاريف المقدمه</th>
+                                    <td>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                </tr>
+
+                                <tr>
+                                    <th>الأستخدام</th>
+                                    <td>تمويل رأس المال العامل</td>
+                                    <th>حساب الإصدار</th>
+                                </tr>
+                                <tr>
+                                    <th>حساب التجميد</th>
+                                </tr>
+                                <tr>
+                                    <th>نائب مدير ميداني</th>
+                                    <td>{loan.enquirorName}</td>
+                                    <th>تاريخ الزياره</th>
+                                    <td>2020/05/11</td>
+                                </tr>
+
+                                <tr>
+                                    <th>مدير الفرع</th>
+                                    <td>{loan.enquirorName}</td>
+                                    <th>تاريخ الزياره</th>
+                                    <td>2020/05/11</td>
+                                </tr>
+
+                                <tr>
+                                    <th colSpan={100} className="horizontal-line"></th>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <table>
+                            <tbody>
+                                <tr>
+                                    {loan.beneficiaryType === "individual" && loan.guarantors.map((guarantor, index) => {
+                                        return (
+                                            <td key={index}>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>الأسم</th>
+                                                            <td>{guarantor.customerName}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>الرقم القومي</th>
+                                                            <td>{guarantor.nationalId}</td>
+                                                            <th>تاريخ الأصدار</th>
+                                                            <td>{guarantor.nationalIdIssueDate}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>النوع</th>
+                                                            <td>{arabicGender(guarantor.gender)}</td>
+                                                            <th>تاريخ الميلاد</th>
+                                                            <td>{guarantor.customerBirthDate}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>التليفون</th>
+                                                            <td>{guarantor.homePhoneNumber}</td>
+                                                            <th>الرقم البريدي</th>
+                                                            <td>{guarantor.homePostalCode}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>العنوان</th>
+                                                            <td>{guarantor.customerHomeAddress}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        )
+                                    })}
+                                    {loan.beneficiaryType === "group" && loan.members.map((member, index) => {
+                                        return(
+                                            <td key={index}>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="frame gray" colSpan={100}>عضو المجموعة</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>الأسم</th>
+                                                            <td>{member.customerName}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>الرقم القومي</th>
+                                                            <td>{member.nationalId}</td>
+                                                            <th>تاريخ الأصدار</th>
+                                                            <td>{member.nationalIdIssueDate}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>النوع</th>
+                                                            <td>{arabicGender(member.gender)}</td>
+                                                            <th>تاريخ الميلاد</th>
+                                                            <td>{member.customerBirthDate}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>التليفون</th>
+                                                            <td>{member.homePhoneNumber}</td>
+                                                            <th>الرقم البريدي</th>
+                                                            <td>{member.homePostalCode}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>العنوان</th>
+                                                            <td>{member.customerHomeAddress}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                )
+            })}
         </div>
 
     );
