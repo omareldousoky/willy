@@ -65,6 +65,7 @@ interface State {
   paymentType: string;
   randomPaymentTypes: Array<SelectObject>;
   penaltyAction: string;
+  payerType: string;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -83,7 +84,8 @@ class PayInstallment extends Component<Props, State> {
         { label: local.toktokStamp, value: "toktokStamp" },
         { label: local.tricycleStamp, value: "tricycleStamp" }
       ],
-      penaltyAction: this.props.penaltyAction
+      penaltyAction: this.props.penaltyAction,
+      payerType: ''
     };
   }
   componentDidUpdate(prevProps, prevState) {
@@ -298,6 +300,24 @@ class PayInstallment extends Component<Props, State> {
                         </Col>
                       </Form.Group>
                     ) : null}
+                  </Form.Group>
+                  <Form.Group as={Col} md={6} controlId="whoPaid">
+                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                    <Col>
+                      <Form.Control
+                        as="select"
+                        name="payerType"
+                        data-qc="payerType"
+                        onChange={event => { formikBag.setFieldValue("payerType", event.currentTarget.value) }}
+                      >
+                        <option value={''}></option>
+                        <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
+                        <option value='employee' data-qc='employee'>{local.employee}</option>
+                        <option value='family' data-qc='family'>{local.familyMember}</option>
+                        <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                        <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                      </Form.Control>
+                    </Col>
                   </Form.Group>
                 </Container>
                 {this.props.penaltyAction === "normal" ? (
