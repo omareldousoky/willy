@@ -3,8 +3,44 @@ import './loanContract.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { numbersToArabic, timeToArabicDate, dayToArabic } from '../../../Services/utils';
+import Tafgeet from 'tafgeetjs';
 
 const LoanContract = (props) => {
+  function getNumbersOfGuarantor() {
+    switch (props.data.guarantors.length) {
+      case 1: return ' الثالث';
+      case 2: return ' الثالث و الرابع';
+      case 3: return ' الثالث و الرابع و الخامس';
+      case 4: return 'الثالث و الرابع و الخامس و السادس ';
+      case 5: return 'الثالث و الرابع و الخامس و السادس و السابع ';
+      case 6: return 'الثالث و الرابع و الخامس و السادس و السابع و الثامن ';
+      default: return '';
+    }
+  }
+  function getIndexOfGuarantorInAr(index: number) {
+    switch (index) {
+      case -2: return 'الأول';
+      case -1: return 'الثاني';
+      case 0: return ' الثالث';
+      case 1: return ' الرابع';
+      case 2: return ' الخامس';
+      case 3: return 'السادس';
+      case 4: return 'السابع';
+      case 5: return 'الثامن';
+      default: return '';
+    }
+  }
+  function getIndexInArabic(index: number) {
+    switch (index) {
+      case 0: return ['ثالثا', 'ثالث'];
+      case 1: return ['رابعا', 'رابع'];
+      case 2: return ['خامسا', 'خامس'];
+      case 3: return ['سادسا', 'سادس'];
+      case 4: return ['سابعا', 'سابع'];
+      case 5: return ['ثامنا', 'ثامن'];
+      default: return ['', '']
+    }
+  }
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">
@@ -53,7 +89,7 @@ const LoanContract = (props) => {
                                                     تجاري استثمار
                                                     القاهره تحت رقم ٨٤٢٠٩ والكائن مقرها 3 شارع الزهور - المهندسين - الجيزه
                                                     والمقيده تحت رقم ٢
-                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ بصفته مدير الفرع بموجب
+                                                    بهيئة الرقابه الماليه ويمثلها في هذا العقد السيد/ _______________________________ بصفته مدير الفرع بموجب
                                                     تفويض صادر له من
                                                     السيد/ منير اكرام نخله - رئيس مجلس الإداره بتاريخ ٢٠١٦/٠٥/١٠
 										</div>
@@ -90,7 +126,7 @@ const LoanContract = (props) => {
                       <td>
                         <div>
                           <b>تليفون</b>
-                          <div style={{ display: 'inline-block', width: '80px' }}>{props.data.customer.mobilePhoneNumber}</div>
+                          <div style={{ display: 'inline-block', width: '80px' }}>{numbersToArabic(props.data.customer.mobilePhoneNumber) + "-" + numbersToArabic(props.data.customer.homePhoneNumber) + "-" + numbersToArabic(props.data.customer.businessPhoneNumber)}</div>
                         </div>
                       </td>
                     </tr>
@@ -104,10 +140,10 @@ const LoanContract = (props) => {
                           <tr>
                             <td>
                               <div>
-                                <b>ثالثا:- السيد :-</b>
+                                <b>{getIndexInArabic(index)[0]}:- السيد :-</b>
                                 <span>{guarantor.customerName}</span>
                               </div>
-                            </td>individualInGroup
+                            </td>
                             <td>
                               <div>
                                 <b>الكائن:</b>
@@ -128,13 +164,13 @@ const LoanContract = (props) => {
                               <div>
                                 <b>تليفون</b>
                                 <span>
-                                {guarantor.mobilePhoneNumber}
+                                  {numbersToArabic(guarantor.mobilePhoneNumber) + "-" + numbersToArabic(guarantor.homePhoneNumber) + "-" + numbersToArabic(guarantor.businessPhoneNumber)}
                                 </span>
                               </div>
                             </td>
                           </tr>
                           <tr style={{ textAlign: 'left' }}>
-                            <td colSpan={4}>&quot;طرف ثالث - ضامن متضامن&quot;</td>
+                            <td colSpan={4}>&quot;طرف {getIndexInArabic(index)[1]} - ضامن متضامن&quot;</td>
                           </tr>
                         </>
                       )
@@ -151,14 +187,14 @@ const LoanContract = (props) => {
                   بالتمويل
 								متناهي الصغر ..</div>
                   <div>
-                    وقد تقدم الطرف الثاني صاحب نشاط خدمي - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
+                    وقد تقدم الطرف الثاني صاحب نشاط {props.data.customer.businessSector} - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
                     {props.branchDetails.name} - {props.data.customer.governorate} الكائن
                     {props.branchDetails.address} لحاجته للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال
                     العامل وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
                     الطرف
-                    الثالث والرابع وقد
+                    {getNumbersOfGuarantor()} وقد
                     وافقه الطرف الأول علي ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
                     الأطراف
                     بأهليتهم القانونيه
@@ -178,7 +214,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثاني</div>
-                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {numbersToArabic(props.data.principal)} جنيه فقط لا غير ويقر
+                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} ويقر
                   الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم بسداده للطرف الأول وفقا لما هو وارد
                   بالبند الثالث من هذا
                   العقد
@@ -187,15 +223,15 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثالث</div>
-                  <div>يلتزم الطرفان الثاني والثالث والرابع ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
+                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {numbersToArabic(props.data.principal)} جنيه
-                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.adminFees)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
+                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.applicationFee)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه فقط لاغير، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
                   سداده
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
-                  قيمة كل قسط {numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه فقط لا غير، تبدأ في
+                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} = (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
                   {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.customer.governorate} الكائن
                     {props.branchDetails.address} أو
@@ -205,7 +241,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر الطرفان الثاني والثالث والرابع متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر الأطراف الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
@@ -213,18 +249,16 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الخامس</div>
-                  <div>يلتزم الأطراف الثاني والثالث والرابع متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
-                  من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقع يلتزموا بسداد
+                  من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقه يلتزموا بسداد
                   غرامة
                   تأخير ٥% من قيمة
                   القسط في اليوم التالي لتاريخ الأستحقاق للقسط وابتداء من اليوم الذي يليه كالتالي :-
 							</div>
                   <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ٢٠٠٠ جنيها</div>
-                  <div>يتم تحصيل ٧.٥ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي
-                  ٣٠٠٠
-								جنيها</div>
+                  <div>يتم تحصيل ٧.٥ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي أقل من ٣٠٠٠ جنيها</div>
                   <div>يتم تحصيل ١٠ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٣٠٠٠ جنيها</div>
                 </section>
 
@@ -244,20 +278,18 @@ const LoanContract = (props) => {
                   الوارده بهذا العقد
                   وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
                   الأطراف
-                  الثاني والثالث
-                  والرابع مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                  الثاني وا{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الأطراف
-                  الثاني أو الثالث أو
-								الرابع أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
+                  الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
                   <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                   <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                   <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>
-                  <div>٧/٣ في حالة تقديم الطرف الثاني أو الثالث أو الرابع بيانات أو معلومات مخالفه للواقع
+                  <div>٧/٣ في حالة تقديم الطرف الثاني أو {getNumbersOfGuarantor()} بيانات أو معلومات مخالفه للواقع
                   او
                   غير سليمه وذلك الي
 								المقرض.</div>
-                  <div>٧/٤ في حاله فقد الطرف الثاني أو الثالث أو الرابع اهليته أو اشهار افلاسه او اعساره
+                  <div>٧/٤ في حاله فقد الطرف الثاني أو {getNumbersOfGuarantor()} اهليته أو اشهار افلاسه او اعساره
                   او
                   وفاته او وضعه تحت
                   الحراسه او توقيع الحجز علي امواله او وضع امواله تحت التحفظ ومنعه من التصرف فيها او
@@ -266,9 +298,9 @@ const LoanContract = (props) => {
                   <div>٧/٥ اذا تم اتخاذ اجراءات نزع الملكيه او توقيع الحجز الادارى او البيع الجبري علي
                   المشروع
                   الممول بالقرض كله
-                  او بعضه، او اذا تم التصرف في جزء او كل من المشروعالممول او اذا تم تأجيره للغير.
+                  او بعضه، او اذا تم التصرف في جزء او كل من المشروع الممول او اذا تم تأجيره للغير.
 							</div>
-                  <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو الثالث أو الرابع علي سداد الاقساط في مواعيدها
+                  <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو {getNumbersOfGuarantor()} علي سداد الاقساط في مواعيدها
                   او
                   توقف اعمال المشروع
 								الممول لاي سبب من الاسباب</div>
@@ -282,13 +314,13 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند التاسع</div>
-                  <div>يقر الطرف الثالث والرابع الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
+                  <div>يقر الطرف {getNumbersOfGuarantor()} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
                   لقيمة هذا القرض من
                   اصل وعوائد وعمولات وكافة المصروفات المستحقه بموجب هذا العقد وايا من ملحقاته، ويحق
                   للمقرض
                   الرجوع عليه بكامل
-                  قيمة المديونيات المستحقه علي هذا القرض، ولا يحق للطرف الثالث او الرابع الدفع
+                  قيمة المديونيات المستحقه علي هذا القرض، ولا يحق للطرف {getNumbersOfGuarantor()} الدفع
                   بالتجريد أو
                   التقسيم أو اي دوافع
                   اخرى في مواجهة المقرض ويحق للمقرض الرجوع عليه وحده او الرجوع عليه وعلي المقترض
@@ -347,17 +379,18 @@ const LoanContract = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
-                        <div><b>الطرف الثالث</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
-                      </td>
-                      <td>
-                        <div><b>الطرف الرابع</b></div>
-                        <div><b>الأسم:</b></div>
-                        <div><b>التوقيع:</b></div>
-                      </td>
+
+                      {props.data.guarantors.map((_guarantor, index) => {
+                        return (
+                          <td key={index}>
+                            <div><b>الطرف {getIndexOfGuarantorInAr(index)}</b></div>
+                            <div><b>الأسم:</b></div>
+                            <div><b>التوقيع:</b></div>
+                          </td>
+                        )
+                      })}
                     </tr>
+
                   </tbody>
                 </table>
 
@@ -419,7 +452,7 @@ const LoanContract = (props) => {
 
                 <div>
                   <div className="title_last">
-                    <Barcode value={props.data.applicationKey}/>
+                    <Barcode value={props.data.applicationKey} />
                     <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
@@ -456,7 +489,7 @@ const LoanContract = (props) => {
                     <tr>
                       <td>١</td>
                       <td>{props.data.customer.customerName}</td>
-                      <td>{props.data.customer.key}</td>
+                      <td>{numbersToArabic(props.data.customer.key)}</td>
                     </tr>
                     {props.data.guarantors.map((guarantor, index) => {
                       return (
@@ -505,12 +538,13 @@ const LoanContract = (props) => {
                       </td>
                     </tr>
                     <tr>
-                    {props.data.guarantors.map((guarantor, index) => {
-                      return (
-                      <td key={index}>
-                        <div>ضامن أول/ {guarantor.customerName}</div>
-                      </td>
-                      )})}
+                      {props.data.guarantors.map((guarantor, index) => {
+                        return (
+                          <td key={index}>
+                            <div>ضامن/ {guarantor.customerName}</div>
+                          </td>
+                        )
+                      })}
                     </tr>
                     <tr>
                       <td>
@@ -522,9 +556,8 @@ const LoanContract = (props) => {
                     </tr>
                   </tbody>
                 </table>
-
-                <div>بأنني قد استلمت تمويل قدره: {numbersToArabic(props.data.principal)} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
-							{timeToArabicDate(0,false)}</div>
+                <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
+							{timeToArabicDate(0, false)}</div>
                 <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
                 تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات
 							البيع والشراء.</div>
@@ -545,31 +578,29 @@ const LoanContract = (props) => {
                       </td>
                       <td style={{ width: "100px" }}></td>
                     </tr>
-                    <tr>
-                      <td>
-                        <div>الضامن الأول /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div>الضامن الثاني /</div>
-                      </td>
-                      <td style={{ width: "100px" }}></td>
-                    </tr>
+                    {props.data.guarantors.map((_guarantor, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <div>الضامن {getIndexOfGuarantorInAr(index-2)}/</div>
+                          </td>
+                          <td style={{ width: "100px" }}></td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
               <div className="main">
                 <div className="last">
                   <div className="title_last">
-                    <Barcode value={props.data.applicationKey}/>
+                    <Barcode value={props.data.applicationKey} />
                     <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>
 
                     <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
-                    <Barcode value={props.data.applicationKey}/>
+                    <Barcode value={props.data.applicationKey} />
                     <div>{props.data.applicationKey}</div>
                     <div>{timeToArabicDate(0, false)}</div>
                     <div>{props.data.customer.customerName}</div>

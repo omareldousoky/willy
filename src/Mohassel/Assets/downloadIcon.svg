@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+    <defs>
+        <style>
+            .prefix__cls-2{fill:#2f2f2f}
+        </style>
+    </defs>
+    <g id="prefix__download_ic_15px">
+        <path id="prefix__boundary" d="M0 0H15V15H0z" style="fill:none"/>
+        <g id="prefix__multimedia">
+            <g id="prefix__Group_9449" data-name="Group 9449">
+                <g id="prefix__Group_9448" data-name="Group 9448">
+                    <path id="prefix__Path_8160" d="M11.924 5.332h-2.2V.439A.439.439 0 0 0 9.287 0H5.713a.439.439 0 0 0-.439.439v4.893h-2.2a.44.44 0 0 0-.338.721l4.453 5.273a.44.44 0 0 0 .675 0l4.395-5.273a.44.44 0 0 0-.335-.721z" class="prefix__cls-2" data-name="Path 8160"/>
+                </g>
+            </g>
+            <g id="prefix__Group_9451" data-name="Group 9451">
+                <g id="prefix__Group_9450" data-name="Group 9450">
+                    <path id="prefix__Path_8161" d="M14.561 8.848H12.8a.439.439 0 0 0-.439.439v3.076H2.637V9.287a.439.439 0 0 0-.437-.439H.439A.439.439 0 0 0 0 9.287v4.395A1.32 1.32 0 0 0 1.318 15h12.364A1.32 1.32 0 0 0 15 13.682V9.287a.439.439 0 0 0-.439-.439z" class="prefix__cls-2" data-name="Path 8161"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

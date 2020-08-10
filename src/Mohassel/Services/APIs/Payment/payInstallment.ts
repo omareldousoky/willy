@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const payInstallment = async (id: string, payAmount: number, truthDate: number) => {
+export const payInstallment = async (id: string, payAmount: number, truthDate: number, byInsurance: boolean) => {
     const url = process.env.REACT_APP_BASE_URL + `/loan/pay-installment/${id}`;
     try {
-        const res = await axios.put(url, {payAmount: payAmount, truthDate: truthDate});
+        const res = await axios.put(url, {payAmount: payAmount, truthDate: truthDate, byInsurance: byInsurance});
         return { status: "success", body: res.data }
     }
     catch (error) {

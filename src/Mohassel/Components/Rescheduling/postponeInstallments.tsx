@@ -3,7 +3,7 @@ import { LoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
-import { testFreeRescheduling, freeRescheduling } from '../../Services/APIs/loanApplication/freeRescheduling';
+import { testPostponeInstallment, postponeInstallment } from '../../Services/APIs/loanApplication/postponeInstallment';
 import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import { reschedulingValidation } from './reschedulingValidations';
@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
+import { getStatus } from '../../Services/utils';
 
 interface Props {
     application: any;
@@ -70,7 +71,7 @@ class PostponeInstallments extends Component<Props, State>{
             {
                 title: local.loanStatus,
                 key: "loanStatus",
-                render: data => data.status
+                render: data => getStatus(data)
             },
         ];
     }
@@ -89,7 +90,7 @@ class PostponeInstallments extends Component<Props, State>{
             installmentNumber: Number(values.installmentNumber),
             shiftInstallments:true
         }
-        const res = await testFreeRescheduling(this.props.application._id, obj);
+        const res = await testPostponeInstallment(this.props.application._id, obj);
         if (res.status === "success") {
             this.setState({ loading: false })
             this.setState({
@@ -132,7 +133,7 @@ class PostponeInstallments extends Component<Props, State>{
             shiftInstallments:true
 
         }
-        const res = await freeRescheduling(this.props.application._id, obj);
+        const res = await postponeInstallment(this.props.application._id, obj);
         if (res.status === "success") {
             this.setState({ loading: false })
             Swal.fire('', 'Installment has been pushed.', 'success').then(() => window.location.reload());

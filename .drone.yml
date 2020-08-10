@@ -91,7 +91,7 @@ steps:
       - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
     tags:
-      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
   when:
     branch:
@@ -99,11 +99,43 @@ steps:
     - master
     - staging
     - test
-    - prod
     - einshams-v2
     - fintech
     event:
       - push
+
+
+
+- name: publish-login-prod
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/login.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/login
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    region: us-east-1
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - REACT_APP_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_MOHASSEL_URL=https://mohassel.fintech.halan.io
+      - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - prod
+    event:
+      - push
+
+
 
 - name: publish-mohassel
   image: plugins/ecr
@@ -126,7 +158,7 @@ steps:
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
-      - ${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
   when:
     branch:
@@ -134,11 +166,40 @@ steps:
     - master
     - staging
     - test
-    - prod
     - einshams-v2
     - fintech
     event:
       - push
+
+- name: publish-mohassel-prod
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/mohassel.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/mohassel
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - REACT_APP_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_MOHASSEL_URL=https://mohassel.fintech.halan.io
+      - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
+    region: us-east-1
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - prod
+    event:
+      - push
+
 
 depends_on:
   - unit-test
@@ -164,7 +225,7 @@ steps:
     deployment: fe-login
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/login
     container: fe-login
-    tag: "${DRONE_COMMIT_SHA:0:8}"
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
 
   when:
     branch:
@@ -187,7 +248,7 @@ steps:
     deployment: fe-mohassel
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
     container: fe-mohassel
-    tag: "${DRONE_COMMIT_SHA:0:8}"
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
 
   when:
     branch:

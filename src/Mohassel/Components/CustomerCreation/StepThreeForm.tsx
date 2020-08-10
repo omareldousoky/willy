@@ -21,7 +21,7 @@ interface LoanOfficer {
 }
 export const StepThreeForm = (props: any) => {
     const [loading, setLoading] = useState(false);
-    const [loanOfficers, setLoanOfficers] = useState<Array<LoanOfficer>>([]);
+    const [loanOfficers, setLoanOfficers] = useState<Array<any>>([]);
     const [geoDivisions, setgeoDivisions] = useState<Array<GeoDivision>>([{
         majorGeoDivisionName: { ar: '' },
         majorGeoDivisionLegacyCode: 0
@@ -63,7 +63,7 @@ export const StepThreeForm = (props: any) => {
                                 value={values.geographicalDistribution}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                             >
                                 <option value="" disabled></option>
@@ -87,13 +87,16 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
-                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
+                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative :  values.representative ?  values.representative._id: ""))}
                                 onBlur={handleBlur}
-                                onChange={(id) => setFieldValue("representative", id)}
+                                onChange={(representative) => {
+                                    if(props.edit && values.representative !== representative._id) {setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id)}
+                                    else setFieldValue("representative", representative._id)}
+                                }
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}
                                 loadOptions={getLoanOfficers}
-                                isDisabled={(!allowed && props.hasLoan)}
+                                isDisabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 cacheOptions defaultOptions
                             />}
                         </Can>
@@ -113,7 +116,7 @@ export const StepThreeForm = (props: any) => {
                                 value={values.applicationDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.applicationDate && touched.applicationDate}
                             />}
                         </Can>
@@ -140,7 +143,7 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('permanentEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
                             />}
                         </Can>
@@ -165,7 +168,7 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
                             />}
                         </Can>
@@ -218,7 +221,6 @@ export const StepThreeForm = (props: any) => {
                                     value={values.allowMultiGuarantee}
                                     label={local.allowMultiGuarantee}
                                     onChange={handleChange}
-                                    disabled
                                 />
                             </Form.Group>
                         </Col>
@@ -236,7 +238,7 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="comments"
                                 value={values.comments}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.hasLoan)}
+                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                 isInvalid={errors.comments && touched.comments}
                             />}
                         </Can>

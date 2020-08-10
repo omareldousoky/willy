@@ -20,6 +20,18 @@ export function parseJwt(token: string) {
     return null;
   }
 };
+export function documentTypeLocalization(val: string) {
+  switch (val) {
+    case 'customer':
+      return local.customer
+    case 'loanApplication':
+      return local.loanApplicationId
+    case 'issuedLoan':
+      return local.issuedLoan
+    default:
+      return ''
+  }
+}
 export function beneficiaryType(val: string) {
   switch (val) {
     case 'individual':
@@ -209,7 +221,7 @@ export const pathTo = route => {
 };
 
 export const numbersToArabic = (input: number | string) => {
-  if (input  || input === 0) {
+  if (input || input === 0) {
     const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
     const inputStr = input.toString();
     return inputStr.replace(/[0-9]/g, (number) => {
@@ -220,11 +232,119 @@ export const numbersToArabic = (input: number | string) => {
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
   if (timeStamp > 0)
-    return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleString('ar-EG').slice(0, 12)
-  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleString('ar-EG').slice(0, 12)
+    return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
+  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
+}
+export const dayToArabic = (index: number): string => {
+  const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
+  return weekday[index];
+}
+export const customFilterOption = (option, rawInput) => {
+  if (option.label) {
+    const words = rawInput.split(' ');
+    return words.reduce(
+      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
+      true,
+    );
+  }
+};
+export function arabicGender(gender: string) {
+  switch (gender) {
+    case 'male': return local.male;
+    case 'female': return local.female;
+    default: return ''
+  }
 }
 
-export const dayToArabic = (index: number): string => {
-  const weekday = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-  return weekday[index];
+
+export const download = (url, fileName: string): void => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  a.remove();
+}
+
+export const getStatus = (installment) => {
+  const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
+  switch (installment.status) {
+      case 'unpaid':
+          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      default: return '';
+  }
+}
+
+export const actionsList = [
+  "cancelApplication",
+  "createLoanApplication",
+  "createLoan",
+  "undoReviewLoan",
+  "issueLoan",
+  "reviewLoan",
+  "editLoanApplication",
+  "payLoanInstallment",
+  "earlyPayLoan",
+  "rejectLoan",
+  "approveLoan",
+  "splitfromGroup",
+  "rollback",
+  "traditionalRescheduling",
+  "FreeReschedule",
+  "manualPayment",
+  "editManualPayment",
+  "approveManualPayment",
+  "rejectManualPayment",
+  "payPenalties",
+  "createBranch",
+  "updateBranch",
+  "createCustomer",
+  "updateCustomer",
+  "createUser",
+  "updateUser",
+  "createRole",
+  "updateRole",
+  "createProduct",
+  "reschedule",
+  "writeOff",
+  "setDoubtfulLoan",
+  "setUnDoubtfulLoan",
+  "cancelPenalties",
+  "rollbackCreateLoan",
+  "rollbackIssueLoan",
+  "rollbackPayLoanInstallment",
+  "rollbackRejectLoan",
+  "rollbackApproveLoan",
+  "rollbackManualPayment",
+  "rollbackApproveManualPayment",
+  "rollbackRejectManualPayment",
+  "rollbackPayPenalties",
+  "rollbackReschedule",
+  "postpone",
+  "rollbackPostpone",
+  "payClearanceFees",
+  "payCollectionCommission",
+  "payLegalFees",
+  "payReissuingFees",
+  "payToktokStamp",
+  "payTricycleStamp",
+  "activateUser",
+  "deactivateUser"
+]
+
+export const iscoreDate = (date: any) => {
+  const MyDate = new Date(date);
+  const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
+  + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
+  + MyDate.getFullYear();
+  return MyDateString
 }

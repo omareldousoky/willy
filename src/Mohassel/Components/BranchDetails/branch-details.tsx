@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json'
 import BranchDetailsView from './branchDetailsView';
@@ -15,12 +14,15 @@ import TrackLoanApplications from '../TrackLoanApplications/trackLoanApplication
 import LoanList from '../LoanList/loanList';
 import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { Loader } from '../../../Shared/Components/Loader';
+import Can from '../../config/Can';
+import ability from '../../config/ability';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
     loading: boolean;
     step: number;
     branch: any;
+
 }
 
 const tabs = [
@@ -48,10 +50,11 @@ const tabs = [
 ]
 
 interface State {
-    step: number;
     data: BranchBasicsView;
     _id: string;
     productsLoading: boolean;
+    tabsArray: Array<Tab>;
+    activeTab: string;
 }
 
  class BranchDetails extends Component<Props ,State> {
@@ -59,8 +62,9 @@ interface State {
     constructor (props: Props) {
         super(props);
         this.state = {
-            step: 1,
             _id: '',
+            activeTab: 'branchDetails',
+            tabsArray: [],
             data: {
                 _id: '',
                 created: {at: 0, by: ''},
@@ -99,7 +103,41 @@ interface State {
     }
 
     componentDidMount() {
-        this.getBranch();
+        const tabsToRender = [{
+            header: local.basicInfo,
+            stringKey: 'branchDetails',
+        },
+    ];
+    if(ability.can('getUser','user')) {
+      tabsToRender.push({
+          header: local.users,
+          stringKey: 'users',
+      })
+    }
+    if(ability.can('getCustomer','customer')) {
+        tabsToRender.push({
+            header: local.customers,
+            stringKey: 'customers',
+        })
+    }
+    if(ability.can('getLoanApplication','application')) {
+        tabsToRender.push({
+            header: local.loanApplication,
+            stringKey: 'loanApplication',
+        })
+    }
+    if(ability.can('getIssuedLoan','application')) {
+        tabsToRender.push({
+            header: local.issueLoan,
+            stringKey: 'issuedLoan',
+        })
+    }
+
+      this.setState({
+          tabsArray: tabsToRender
+      },
+      () => this.getBranch())
+        
     }
     async getProductsByBranch(_id: string) {
         this.setState({productsLoading: true})
@@ -118,14 +156,13 @@ interface State {
        
     }
     renderTabs() {
-        switch(this.state.step){
-            case 1:
+        switch(this.state.activeTab){
+            case 'branchDetails':
                 return(<BranchDetailsView data = {this.state.data} />);
-             case 2: return ( <UsersList {...{branchId: this.state._id , withHeader: false} }
-                 />)
-             case 3:   return (<CustomersList {...{branchId: this.state._id}} />)
-             case 4: return (<TrackLoanApplications {...{branchId: this.state._id}} />)
-             case 5: return (<LoanList {...{branchId: this.state._id}}/>)
+             case 'users': return (<Can I='getUser' a='user'><UsersList {...{branchId: this.state._id , withHeader: false}}/></Can>)
+             case 'customers':   return (<Can I='getCustomer' a='customer'><CustomersList {...{branchId: this.state._id}}/></Can>)
+             case 'loanApplication': return (<Can I='getLoanApplication' a='application'><TrackLoanApplications {...{branchId: this.state._id}}/></Can>)
+             case 'issuedLoan': return (<Can I='getIssuedLoan' a='application'> <LoanList {...{branchId: this.state._id, fromBranch: true}}/></Can>)
              default: return null;   
         }
     }
@@ -154,17 +191,12 @@ interface State {
             </div>
             <Card  className={'card'}>
             <Loader type="fullscreen" open={this.props.loading || this.state.productsLoading}  />
-            <Tabs activeKey={this.state.step}  id="branch-tabs-details" style={{ margin: 0 }} onSelect={(key: string) => this.setState({ step: Number(key) })} >
-                 {
-                     tabs.map((tab , index) =>  {
-                         return(
-                            <Tab  tabClassName={'tab'} key ={index} eventKey = {tab.eventKey
-                            } title = {tab.title}> </Tab>
-                         );
-                         
-                     } )
-                 }
-            </Tabs>
+              <CardNavBar 
+              header = {'here'}
+              array ={this.state.tabsArray}
+              active = {this.state.activeTab}
+              selectTab={(index: string) => this.setState({ activeTab: index })}
+              />
             <Card.Body>
                 {this.renderTabs()}
             </Card.Body>

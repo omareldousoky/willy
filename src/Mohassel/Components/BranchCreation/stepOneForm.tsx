@@ -24,7 +24,7 @@ interface Props {
 }
 const StepOneForm = (props: Props) => {
     const [mapState, openCloseMap] = useState(false);
-    const  [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     return (
         <Form
             className={'branch-data-form'}
@@ -32,7 +32,7 @@ const StepOneForm = (props: Props) => {
         >
             {mapState && <Map show={mapState}
                 handleClose={() => openCloseMap(false)}
-                save={(branchAddressLatLong: {lat: number ; lng: number})=>{props.setFieldValue('branchAddressLatLong',branchAddressLatLong);openCloseMap(false)}}
+                save={(branchAddressLatLong: { lat: number; lng: number }) => { props.setFieldValue('branchAddressLatLong', branchAddressLatLong); openCloseMap(false) }}
                 location={props.values.branchAddressLatLong}
                 header={local.branchOnMap}
             />}
@@ -53,16 +53,16 @@ const StepOneForm = (props: Props) => {
                             data-qc={"name"}
                             value={props.values.name}
                             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
-                                props.setFieldValue('name',event.currentTarget.value );
+                                props.setFieldValue('name', event.currentTarget.value);
                                 setLoading(true);
-                                const res = await checkBranchNameDuplicates({branchName:event.currentTarget.value});
-                                  
+                                const res = await checkBranchNameDuplicates({ branchName: event.currentTarget.value });
+
                                 if (res.status === 'success') {
                                     setLoading(false);
                                     props.setFieldValue('branchNameChecker', res.body.Exists);
                                 } else setLoading(false);
-                        
-                        }}
+
+                            }}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.name && props.touched.name) as boolean}
                         />
@@ -88,9 +88,9 @@ const StepOneForm = (props: Props) => {
                             {`${local.governorate}*`}
                         </Form.Label>
 
-                        <Governorates 
-                         values = {props.values}
-                
+                        <Governorates
+                            values={props.values}
+
                         />
                     </Form.Group>
                 </Col>
@@ -246,51 +246,6 @@ const StepOneForm = (props: Props) => {
                         <Form.Control.Feedback
                             type="invalid">
                             {props.errors.licenseDate}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-            </Row>
- 
-            <Row>
-                <Col>
-                    <Form.Group className={'branch-data-group'}>
-                        <Form.Label className={'branch-data-label'}>
-                            {`${local.costCenter}*`}
-                        </Form.Label>
-                        <Form.Control
-                            type={"text"}
-                            name={"costCenter"}
-                            placeholder={local.costCenter}
-                            data-qc={"costCenter"}
-                            value={props.values.costCenter}
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            isInvalid={(props.errors.costCenter && props.touched.costCenter) as boolean}
-                        />
-                        <Form.Control.Feedback
-                            type="invalid">
-                            {props.errors.costCenter}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-                <Col>
-                    <Form.Group className={'branch-data-group'}>
-                        <Form.Label className={'branch-data-label'}>
-                            {`${local.bankAccount}*`}
-                        </Form.Label>
-                        <Form.Control
-                            type={"text"}
-                            name={"bankAccount"}
-                            placeholder={local.bankAccount}
-                            data-qc={"bankAccount"}
-                            value={props.values.bankAccount}
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            isInvalid={(props.errors.bankAccount && props.touched.bankAccount) as boolean}
-                        />
-                        <Form.Control.Feedback
-                            type="invalid">
-                            {props.errors.bankAccount}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

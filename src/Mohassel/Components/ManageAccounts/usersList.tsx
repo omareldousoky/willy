@@ -36,11 +36,11 @@ interface State {
 }
 
 class UsersList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       manageAccountTabs:[],
     }
@@ -48,7 +48,13 @@ class UsersList extends Component<Props, State> {
       {
         title: local.username,
         key: "username",
+        sortable: true,
         render: data => data.username
+      },
+      {
+        title: local.code,
+        key: "userCode",
+        render: data => data.loanOfficerKey
       },
       {
         title: local.name,
@@ -67,7 +73,8 @@ class UsersList extends Component<Props, State> {
       },
       {
         title: local.creationDate,
-        key: "creationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => data.created?.at ? getDateAndTime(data.created.at) : ''
       },
       {
@@ -78,8 +85,7 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    
-    this.getUsers();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
@@ -96,15 +102,15 @@ class UsersList extends Component<Props, State> {
       Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
     } else {
       this.props.setLoading(false);
-      Swal.fire("error");
+      Swal.fire(res.error.error,res.error.details,"error");
     }
 
   }
   renderIcons(data: any) {
     return (
       <>
-        <span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} className='fa fa-eye icon'></span>
-        <Can I="createUser" a="user"><span onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} className='fa fa-pencil-alt icon'></span></Can>
+        <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} ></img>
+        <Can I="createUser" a="user"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} ></img></Can>
         <Can I="userActivation" a="user"><span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span></Can>
       </>
     );
@@ -138,12 +144,13 @@ class UsersList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'nationalId']} 
-            searchPlaceholder = {local.searchByNameOrNationalId}
+            dropDownKeys={['name', 'nationalId', 'key']} 
+            searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             url="user" from={this.state.from} size={this.state.size} 
             hqBranchIdRequest={this.props.branchId} />
 
             <DynamicTable
+              url="user" from={this.state.from} size={this.state.size} 
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}

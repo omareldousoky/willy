@@ -28,11 +28,11 @@ interface Props {
 }
 
 class BranchesList extends Component<Props, State> {
-  mappers: { title: string; key: string; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       manageAccountTabs: [],
     }
@@ -44,34 +44,37 @@ class BranchesList extends Component<Props, State> {
       },
       {
         title: local.oneBranch,
-        key: "branch",
+        key: "name",
+        sortable: true,
         render: data =>  data.name
       },
       {
         title: local.governorate,
         key: "governorate",
+        sortable: true,
         render: data =>  data.governorate
 
       },
       {
         title: local.creationDate,
-        key: "creationDate",
+        key: "createdAt",
+        sortable: true,
         render: data => data.created? getDateAndTime(data.created.at) : ''
       },
       {
         title: '',
         key: "actions",
-        render: data => <><span 
-        onClick ={()=>{this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } })}}
-        className='fa fa-eye icon'></span>
-         <span
-          onClick = {()=>{this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } })}}
-          className='fa fa-pencil-alt icon'></span></>
+        render: data => <>
+          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')}
+            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } }) }}></img>
+          <img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } }) }}></img>
+        </>
       },
     ]
   }
   componentDidMount() {
-    this.getBranches();
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' });
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
@@ -82,34 +85,37 @@ class BranchesList extends Component<Props, State> {
   render() {
     return (
       <div>
-      (<HeaderWithCards
-      header={local.manageAccounts}
-      array = {this.state.manageAccountTabs}
-      active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('branch')}
-      />
+        (<HeaderWithCards
+          header={local.manageAccounts}
+          array={this.state.manageAccountTabs}
+          active={this.state.manageAccountTabs.map(item => { return item.icon }).indexOf('branches')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.branches}</Card.Title>
-                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
+                <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
               </div>
               <div>
-              <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
+                <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>
             <hr className="dashed-line" />
             <Search
-            searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'code']} 
-            searchPlaceholder={local.searchByBranchNameOrCode}
-            url="branch"
+              searchKeys={['keyword', 'dateFromTo']} 
+              dropDownKeys={['name', 'code']} 
+              searchPlaceholder={local.searchByBranchNameOrCode}
+              url="branch"
              from={this.state.from} 
              size={this.state.size} />
             {this.props.data &&
               <DynamicTable
+                url="branch"
+                from={this.state.from} 
+                size={this.state.size}
                 totalCount={this.props.totalCount}
                 mappers={this.mappers}
                 pagination={true}
