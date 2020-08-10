@@ -92,7 +92,7 @@ class LoanRollBack extends Component<Props, State>{
                         {this.sortByKey(this.state.actions, 'insertedAt').map((action, i) => <div key={action._id} className="d-flex" style={{ margin: '10px 0px' }}>
                             <p style={{ width: '40%', margin: 0 }}>{action.action}</p>
                             <p style={{ width: '40%', margin: 0 }}>{getDateAndTime(action.insertedAt)}</p>
-                            <div className="d-flex align-items-center" style={{ width: '20%' }}>{i === 0 && <span className="fa fa-undo" style={{ cursor: 'pointer' }} onClick={() => this.rollbackConfirmation(action._id)}></span>}</div>
+                            <div className="d-flex align-items-center" style={{ width: '20%' }}>{i === 0 && <img alt="rollback" src={require('../../Assets/rollback-icon.svg')} style={{ cursor: 'pointer' }} onClick={() => this.rollbackConfirmation(action._id)} />}</div>
                         </div>)}
                     </div> : <p>{local.noRollableActions}</p>}
                 </Card>

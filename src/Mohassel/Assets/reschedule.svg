@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+    <defs>
+        <style>
+            .cls-2{fill:#2f2f2f}
+        </style>
+    </defs>
+    <g id="reschedule" transform="translate(-88 -1957)">
+        <path id="Rectangle_2180" fill="none" d="M0 0H15V15H0z" data-name="Rectangle 2180" transform="translate(88 1957)"/>
+        <g id="clock" transform="translate(87.992 1957)">
+            <path id="Path_8239" d="M14.584 7.321a.439.439 0 0 0-.455.423A6.618 6.618 0 1 1 11.3 2.069h-.977a.439.439 0 0 0 0 .879H12.5a.439.439 0 0 0 .43-.531L12.493.348a.439.439 0 1 0-.86.183l.175.82A7.5 7.5 0 0 0 2.205 12.8a7.5 7.5 0 0 0 12.8-5.027.439.439 0 0 0-.421-.452zm0 0" class="cls-2" data-name="Path 8239"/>
+            <path id="Path_8240" d="M7.508 3.07a4.43 4.43 0 1 0 4.431 4.43 4.435 4.435 0 0 0-4.431-4.43zm1.147 5.038H7.508a.439.439 0 0 1-.439-.439V5.683a.439.439 0 0 1 .879 0v1.546h.707a.439.439 0 1 1 0 .879zm0 0" class="cls-2" data-name="Path 8240"/>
+        </g>
+    </g>
+</svg>
