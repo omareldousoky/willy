@@ -22,6 +22,7 @@ interface State {
   pdfsArray?: Array<PDF>;
   selectedPdf: PDF;
   data: any;
+  loading: boolean;
 }
 
 class Reports extends Component<{}, State> {
@@ -37,7 +38,8 @@ class Reports extends Component<{}, State> {
 
       ],
       selectedPdf: {},
-      data: {}
+      data: {},
+      loading: false,
     }
   }
   handlePrint(selectedPdf: PDF) {
@@ -52,6 +54,7 @@ class Reports extends Component<{}, State> {
     }
   }
   async getCustomerDetails(values) {
+    this.setState({loading: true, showModal: false})
     const res = await getCustomerDetails(values.key);
     this.setState({
       data: {
@@ -1427,16 +1430,24 @@ class Reports extends Component<{}, State> {
     }, () => window.print())
     // if(res.status === 'success') {
     //   this.setState({data: res.body, print: 'customerDetails'})
-    // } else console.log(res)
+    // } else {
+    //   this.setState({loading: false});
+    //   console.log(res)
+    // }
   }
 
   async getLoanDetails(values) {
+    this.setState({loading: true, showModal: false})
     const res = await getLoanDetails(values.key);
-    if(res.status === 'success') {
-      this.setState({data: res.body, print: 'loanDetails', showModal: false}, () => window.print())
-    } else console.log(res)
+    if (res.status === 'success') {
+      this.setState({ loading: false, data: res.body, print: 'loanDetails' }, () => window.print())
+    } else {
+      this.setState({loading: false});
+      console.log(res)
+    }
   }
   async getBranchLoanList(values) {
+    this.setState({loading: true, showModal: false})
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
@@ -1552,17 +1563,20 @@ class Reports extends Component<{}, State> {
       showModal: false,
       print: 'branchLoanList'
     }, () => window.print())
-    // const res = await getBranchLoanList(obj);
+    const res = await getBranchLoanList(obj);
     // if (res.status === 'success') {
-    //   this.setState({ print: 'branchLoanList', data: res.body })
+    //   this.setState({ print: 'branchLoanList', data: res.body }, () => window.print())
     // }
-    // else console.log(res)
+    // else {
+    //   this.setState({loading: false});
+    //   console.log(res)
+    // }
   }
   render() {
     return (
       <>
         <Card style={{ margin: '20px 50px' }} className="print-none">
-          {/* <Loader type="fullsection" open={this.props.loading} /> */}
+          <Loader type="fullscreen" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
