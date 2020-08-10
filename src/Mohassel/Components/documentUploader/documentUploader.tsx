@@ -245,7 +245,7 @@ class DocumentUploader extends Component<Props, State> {
   }
   renderPhotoByName(key: number, name: string) {
     return (
-      <Card.Body key={key} className="document-upload-container" style={{ cursor: this.state.imagesFiles[key].valid && this.props.documentType.active ? "pointer" : 'not-allowed' }}>
+      <Card.Body key={key} className="document-upload-container" >
         <div data-qc="document-actions" className="document-actions" >
          
           {(this.props.documentType.active && this.state.imagesFiles[key].valid) &&  !this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img  className= {this.props.documentType.updatable ?"": "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
@@ -275,10 +275,8 @@ class DocumentUploader extends Component<Props, State> {
         overflowX: "scroll",
         flexDirection: "row",
         flexFlow: "nowrap",
-
         justifyContent: "flex-start",
-        backgroundColor: '#fafafa', cursor: this.state.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4,
-      }}
+       backgroundColor: '#fafafa', cursor: this.state.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4}}
          data-qc={`upload-${name}`}
         onDrag={this.overrideEventDefaults}
         onDragStart={this.overrideEventDefaults}
@@ -328,12 +326,12 @@ class DocumentUploader extends Component<Props, State> {
           flexFlow: "nowrap",
           justifyContent: "space-between",
           backgroundColor: '#fafafa',
-          cursor: 'not-allowed',
+          cursor: 'pointer',
           border: '#e5e5e5 solid 1px',
           borderRadius: 4,
-          filter: "invert(15%)",
-         WebkitBackdropFilter: "invert(15%)",
-          opacity: .4,
+          filter: "invert(25%)",
+         WebkitBackdropFilter: "invert(25%)",
+          opacity: .5,
         }}
           data-qc={`inactiveDoc-${name}`}>
           {this.state.loading ? this.renderLoading()
