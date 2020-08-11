@@ -21,6 +21,10 @@ interface FormValues {
   paymentType: string;
   penaltyAction: string;
   byInsurance: boolean;
+  payerType: string;
+  payerNationalId: string;
+  payerName: string;
+  payerId: string;
 }
 interface Installment {
   id: number;
@@ -35,6 +39,9 @@ interface Installment {
 }
 interface Application {
   installmentsObject: InstallmentsObject;
+  group: any;
+  product: any;
+  beneficiaryType: string;
 }
 interface InstallmentsObject {
   totalInstallments: TotalInstallments;
@@ -66,6 +73,9 @@ interface State {
   randomPaymentTypes: Array<SelectObject>;
   penaltyAction: string;
   payerType: string;
+  payerNationalId: string;
+  payerName: string;
+  payerId: string;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -85,7 +95,10 @@ class PayInstallment extends Component<Props, State> {
         { label: local.tricycleStamp, value: "tricycleStamp" }
       ],
       penaltyAction: this.props.penaltyAction,
-      payerType: ''
+      payerType: '',
+      payerNationalId: '',
+      payerName: '',
+      payerId: ''
     };
   }
   componentDidUpdate(prevProps, prevState) {
@@ -133,8 +146,7 @@ class PayInstallment extends Component<Props, State> {
             enableReinitialize
             initialValues={{
               ...this.state,
-              max: this.props.application.installmentsObject.totalInstallments
-                .installmentSum,
+              max: this.props.application.installmentsObject.totalInstallments.installmentSum,
               byInsurance: this.props.byInsurance
             }}
             onSubmit={this.props.handleSubmit}
@@ -300,24 +312,83 @@ class PayInstallment extends Component<Props, State> {
                         </Col>
                       </Form.Group>
                     ) : null}
-                  </Form.Group>
-                  <Form.Group as={Col} md={6} controlId="whoPaid">
-                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
-                    <Col>
-                      <Form.Control
-                        as="select"
-                        name="payerType"
-                        data-qc="payerType"
-                        onChange={event => { formikBag.setFieldValue("payerType", event.currentTarget.value) }}
-                      >
-                        <option value={''}></option>
-                        <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                        <option value='employee' data-qc='employee'>{local.employee}</option>
-                        <option value='family' data-qc='family'>{local.familyMember}</option>
-                        <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
-                        <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
-                      </Form.Control>
-                    </Col>
+                    <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerType"
+                          data-qc="payerType"
+                          onChange={event => { formikBag.setFieldValue("payerType", event.currentTarget.value) }}
+                        >
+                          <option value={''}></option>
+                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
+                          <option value='employee' data-qc='employee'>{local.employee}</option>
+                          <option value='family' data-qc='family'>{local.familyMember}</option>
+                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
+                    {console.log(formikBag.values)}
+                    {formikBag.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikBag.handleChange}
+                        >
+                          <option value={''}></option>
+                          {this.props.application.group.individualsInGroup.map((member, index) => {
+                            return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
+                          })}
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>}
+                    {formikBag.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikBag.handleChange}
+                        >
+                          <option value={''}></option>
+                          <option value={'employee'}>employee</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>}
+                    {(formikBag.values.payerType === 'family' || formikBag.values.payerType === 'nonFamily') &&
+                      <>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              name="payerName"
+                              data-qc="payerName"
+                              value={formikBag.values.payerName.toString()}
+                              onBlur={formikBag.handleBlur}
+                              onChange={formikBag.handleChange} />
+                          </Col>
+                        </Form.Group>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              type="number"
+                              name="payerNationalId"
+                              data-qc="payerNationalId"
+                              maxLength={14}
+                              value={formikBag.values.payerNationalId.toString()}
+                              onBlur={formikBag.handleBlur}
+                              onChange={formikBag.handleChange} />
+                          </Col>
+                        </Form.Group>
+                      </>
+                    }
                   </Form.Group>
                 </Container>
                 {this.props.penaltyAction === "normal" ? (
