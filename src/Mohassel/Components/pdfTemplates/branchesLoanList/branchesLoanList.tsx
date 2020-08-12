@@ -159,7 +159,7 @@ const BranchesLoanList = (props) => {
                         }
                     })}
                     {props.data.result[1].rows.map((row, index) => {
-                        if (row.branchName !== "Total") {
+                        if (row.branchName === "Total") {
                             return (
                                 <tr key={index}>
                                     <td colSpan={2}>إجمالي فردي</td>

@@ -1,11 +1,11 @@
 import React from 'react';
 import './customerStatusDetails.scss';
-import { timeToArabicDate, currency, periodType, getStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
+import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
 
 const CustomerStatusDetails = (props) => {
-    function getSum(key: string, index: number, subtractFromKey?: string ) {
+    function getSum(key: string, index: number, subtractFromKey?: string) {
         let max = 0;
-        if(subtractFromKey) {
+        if (subtractFromKey) {
             props.data.Loans[index].installments.forEach(installment => {
                 max = max + (Number(installment[subtractFromKey]) - Number(installment[key]));
             })
@@ -39,11 +39,11 @@ const CustomerStatusDetails = (props) => {
                         <th className="gray frame">الأسم</th>
                         <td className="frame">{props.data.customerName}</td>
                         <th className="gray frame">الكود</th>
-                        <td className="frame">047/0014719</td>
+                        <td className="frame">{props.customerKey}</td>
                         <th className="gray frame">الحاله</th>
-                        <td className="frame">عميل بدون التزامات</td>
+                        <td className="frame"></td>
                         <th className="gray frame">حالة التعامل مع العميل</th>
-                        <td className="frame">مسموح بالتعامل معه</td>
+                        <td className="frame">{props.data.customerStatus === "commited" ? 'مسموح بالتعامل معه' : ''}</td>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
@@ -52,47 +52,47 @@ const CustomerStatusDetails = (props) => {
                 <tbody>
                     <tr>
                         <td className="borderless" colSpan={100}>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th className="frame gray" colSpan={100}>بيانات العميل</th>
-                                    </tr>
-                                    <tr>
-                                        <th>الفرع الحالي</th>
-                                        <td>{props.data.accountBranch}</td>
-                                        <th>نوع الاقتراض</th>
-                                        <td>{beneficiaryType(props.data.Loans[0].beneficiaryType)}</td>
-                                        <th>المندوب الحالي</th>
-                                        <td>{props.data.officerName}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>الرقم القومي</th>
-                                        <td>{numbersToArabic(props.data.nationalId)}</td>
-                                        <th>بتاريخ</th>
-                                        <td>{timeToArabicDate(props.data.nationalIdIssueDate, false)}</td>
-                                        <th>النوع</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th>تاريخ الميلاد</th>
-                                        <td>{timeToArabicDate(props.data.birthDate, false)}</td>
-                                        <th>البطاقه</th>
-                                        <td></td>
-                                        <th>صادره من</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th>ملاحظات</th>
-                                        <td colSpan={3}></td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={100} className="horizontal-line"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
                             {props.data.Loans.map((loan, index) => {
                                 return (
                                     <div key={index} style={{ pageBreakAfter: 'always' }}>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <th className="frame gray" colSpan={100}>بيانات العميل</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>الفرع الحالي</th>
+                                                    <td>{props.data.accountBranch}</td>
+                                                    <th>نوع الاقتراض</th>
+                                                    <td>{beneficiaryType(loan.beneficiaryType)}</td>
+                                                    <th>المندوب الحالي</th>
+                                                    <td>{props.data.officerName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>الرقم القومي</th>
+                                                    <td>{numbersToArabic(props.data.nationalId)}</td>
+                                                    <th>بتاريخ</th>
+                                                    <td>{timeToArabicDate(props.data.nationalIdIssueDate, false)}</td>
+                                                    <th>النوع</th>
+                                                    <td>{arabicGender(props.data.gender)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>تاريخ الميلاد</th>
+                                                    <td>{timeToArabicDate(props.data.birthDate, false)}</td>
+                                                    <th>البطاقه</th>
+                                                    <td>{props.data.nationalId}</td>
+                                                    <th>صادره من</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>ملاحظات</th>
+                                                    <td colSpan={3}></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colSpan={100} className="horizontal-line"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                         <table>
                                             <tbody>
                                                 <tr>
@@ -100,7 +100,7 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <th>رقم القرض</th>
-                                                    <td>{index}</td>
+                                                    <td>{loan.idx}</td>
                                                     <th>تاريخ القرض</th>
                                                     <td>{timeToArabicDate(loan.creationDate, false)}</td>
                                                     <th>القيمة</th>
@@ -136,30 +136,33 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <th>حالة القرض</th>
-                                                    <td>{getStatus(loan.status)}</td>
+                                                    <td>{getLoanStatus(loan.status)}</td>
                                                     <th>غرامات مسدده</th>
                                                     <td>{loan.penaltiesPaid}</td>
                                                     <th>غرامات معفاه</th>
-                                                    <td>{loan.canceledPenalties}</td>
+                                                    <td>{loan.penaltiesCanceled}</td>
                                                     <th>غرامات مستحقه</th>
                                                     <td>{loan.penalties}</td>
                                                 </tr>
-                                                <tr>
-                                                    <th>سبب الإلغاء</th>
-                                                    <td>تغيير شروط القرض</td>
-                                                    <td>مندوب التنميه السابق</td>
-                                                </tr>
-
+                                                {loan.rejectionReason !== "None" ?
+                                                    <tr>
+                                                        <th>سبب الإلغاء</th>
+                                                        <td>{loan.rejectionReason}</td>
+                                                        <td>مندوب التنميه السابق</td>
+                                                    </tr>
+                                                    : null
+                                                }
                                                 <tr>
                                                     <td colSpan={100} className="horizontal-line"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
 
-                                        <table>
+                                        {loan.beneficiaryType === "individual" && <table>
                                             <tbody>
                                                 <tr>
-                                                    {props.data.beneficiaryType === "individual" && loan.guarantors.map((guarantor, index) => {
+                                                    {loan.guarantors.map((guarantor, index) => {
+                                                        return(
                                                         <td key={index}>
                                                             <table>
                                                                 <thead>
@@ -203,6 +206,7 @@ const CustomerStatusDetails = (props) => {
                                                                 </tbody>
                                                             </table>
                                                         </td>
+                                                        )
                                                     })}
                                                 </tr>
                                                 <tr>
@@ -210,9 +214,9 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        }
 
-                                        <table>
-
+                                        {loan.beneficiaryType === "group" && <table>
                                             <tbody>
                                                 <tr>
                                                     <th className="frame gray" colSpan={100}>اسماء اعضاء المجموعه لهذا القرض</th>
@@ -223,7 +227,7 @@ const CustomerStatusDetails = (props) => {
                                                     <th>حصة العضو من القرض</th>
                                                     <th></th>
                                                 </tr>
-                                                {loan.beneficiaryType === "group" && loan.groupMembers.map((member, index) => {
+                                                {loan.groupMembers.map((member, index) => {
                                                     return (
                                                         <tr key={index}>
                                                             <td>{member.key}</td>
@@ -238,6 +242,7 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        }
                                         <table>
                                             <tbody>
                                                 <tr>
@@ -256,13 +261,13 @@ const CustomerStatusDetails = (props) => {
                                                     return (
                                                         <tr key={index}>
                                                             <td>{installment.idx}</td>
-                                                            <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                                                            <td>{timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false)}</td>
                                                             <td style={{ direction: 'ltr' }}>{Number(installment.instTotal) - Number(installment.instFees)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.instFees}</td>
                                                             <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid) - Number(installment.feesPaid)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
-                                                            <td>{getStatus(installment.status)}</td>
-                                                            <td>{timeToArabicDate(installment.paidAt, false)}</td>
+                                                            <td>{getStatus(installment)}</td>
+                                                            <td>{timeToArabicDate(new Date(installment.paidAt).valueOf(), false)}</td>
                                                             <td>{installment.delay}</td>
                                                             <td>خزينة فرع {props.data.accountBranch}</td>
                                                         </tr>
