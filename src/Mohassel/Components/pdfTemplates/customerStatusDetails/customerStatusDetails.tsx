@@ -262,12 +262,12 @@ const CustomerStatusDetails = (props) => {
                                                         <tr key={index}>
                                                             <td>{installment.idx}</td>
                                                             <td>{timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false)}</td>
-                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal) - Number(installment.instFees)}</td>
-                                                            <td style={{ direction: 'ltr' }}>{installment.instFees}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal) - Number(installment.feesInstallment)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{installment.feesInstallment}</td>
                                                             <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid) - Number(installment.feesPaid)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
                                                             <td>{getStatus(installment)}</td>
-                                                            <td>{timeToArabicDate(new Date(installment.paidAt).valueOf(), false)}</td>
+                                                            <td>{installment.paidAt? timeToArabicDate(new Date(installment.paidAt).valueOf(), false): ''}</td>
                                                             <td>{installment.delay}</td>
                                                             <td>خزينة فرع {props.data.accountBranch}</td>
                                                         </tr>
@@ -275,8 +275,8 @@ const CustomerStatusDetails = (props) => {
                                                 })}
                                                 <tr>
                                                     <td className="borderless" colSpan={2}></td>
-                                                    <td>{getSum('instFees', index, 'instTotal')}</td>
-                                                    <td>{getSum('instFees', index)}</td>
+                                                    <td>{getSum('feesInstallment', index, 'instTotal')}</td>
+                                                    <td>{getSum('feesInstallment', index)}</td>
                                                     <td>{getSum('feesPaid', index, 'totalPaid')}</td>
                                                     <td>{getSum('feesPaid', index)}</td>
                                                     <th>رصيد العميل</th>
@@ -284,7 +284,6 @@ const CustomerStatusDetails = (props) => {
                                                     <th>أيام التأخير والتبكير</th>
                                                     <td>{getSum('delay', index)}</td>
                                                 </tr>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -294,8 +293,7 @@ const CustomerStatusDetails = (props) => {
                     </tr>
                 </tbody>
             </table>
-
-        </div >
+        </div>
     );
 }
 

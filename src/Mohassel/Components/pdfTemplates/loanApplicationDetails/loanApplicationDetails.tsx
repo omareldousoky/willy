@@ -46,7 +46,7 @@ const LoanApplicationDetails = (props) => {
                         <tbody>
                             <tr>
                                 <th>كود طلب القرض</th>
-                                <td>{loan.loanId}</td>
+                                <td>{loan.applicationKey}</td>
                                 {/*  <td></td> */}
                                 <th>حالة طلب القرض</th>
                                 <td>{getStatus(loan.status)}</td>
@@ -89,7 +89,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>تاريخ الميلاد</th>
                                 <td>{props.data.customerBirthDate}</td>
                                 <th>التليفون</th>
-                                <td>{props.data.customerHomePhoneNumber}</td>
+                                <td>{props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>تاريخ الاصدار</th>
@@ -121,7 +121,7 @@ const LoanApplicationDetails = (props) => {
                         <tbody>
                             <tr>
                                 <th>اسم المنشأه</th>
-                                <td></td>
+                                <td>{props.data.customerWorkName}</td>
                                 <th>تليفون العمل</th>
                                 <td>{props.data.customerWorkPhone}</td>
                             </tr>
@@ -129,7 +129,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>رقم الرخصه</th>
                                 <td></td>
                                 <th>منطقة العمل</th>
-                                <td>أبو قرقاص</td>
+                                <td>{props.data.customerGeo}</td>
                             </tr>
                             <tr>
                                 <th>عمال دائمين</th>
@@ -181,7 +181,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>العمله</th>
                                 <td>{currency(loan.currency)}</td>
                                 <th>تاريخ الإدخال</th>
-                                <td>{loan.creationDate}</td>
+                                <td>{loan.entryDate}</td>
                             </tr>
                             <tr>
                                 <th>نوع القرض</th>
@@ -221,13 +221,13 @@ const LoanApplicationDetails = (props) => {
                                                 <th>قيمه</th>
                                                 <td>{loan.principal}</td>
                                                 <th>حصة العضو</th>
-                                                <td>0.00</td>
+                                                <td>{loan.beneficiaryType === "group"? loan.members[0].amount : loan.principal}</td>
                                                 <th>نسبه من قيمة القرض</th>
-                                                <td>1.50</td>
+                                                <td>{loan.beneficiaryType === "group"? (Number(loan.members[0].amount)/Number(loan.principal))*100 + "%" : '100%'}</td>
                                                 <th>نسبة حصة العضو من قيمة القرض</th>
-                                                <td>0.00</td>
+                                                <td>{loan.applicationFeePercentPerPerson}</td>
                                                 <th>القيمة الكامله</th>
-                                                <td>150.0000</td>
+                                                <td>{loan.principal}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -240,15 +240,15 @@ const LoanApplicationDetails = (props) => {
                                 <th>حساب السداد</th>
                                 <td></td>
                                 <th>مصاريف إداريه القسط</th>
-                                <td>0</td>
+                                <td>{loan.applicationFees}</td>
                             </tr>
 
 
                             <tr>
                                 <th>المصاريف الموزعه</th>
-                                <td>38 % سنويا</td>
+                                <td>{loan.interest} % {interestPeriod(loan.interestPeriod)}</td>
                                 <th>المصاريف المقدمه</th>
-                                <td>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
                             </tr>
 
                             <tr>
@@ -261,16 +261,16 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>نائب مدير ميداني</th>
-                                <td>{loan.enquirorName}</td>
+                                <td></td>
                                 <th>تاريخ الزياره</th>
-                                <td>2020/05/11</td>
+                                <td></td>
                             </tr>
 
                             <tr>
                                 <th>مدير الفرع</th>
                                 <td>{loan.enquirorName}</td>
                                 <th>تاريخ الزياره</th>
-                                <td>2020/05/11</td>
+                                <td>{loan.visitationDate}</td>
                             </tr>
 
                             <tr>

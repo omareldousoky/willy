@@ -59,7 +59,6 @@ class Reports extends Component<{}, State> {
     this.setState({ loading: true, showModal: false })
     const res = await getCustomerDetails(values.key);
     if (res.status === 'success') {
-      console.log(res.body)
       this.setState({
         data: res.body, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
       }, () => window.print())
@@ -72,7 +71,6 @@ class Reports extends Component<{}, State> {
   async getLoanDetails(values) {
     this.setState({ loading: true, showModal: false })
     const res = await getLoanDetails(values.key);
-    console.log(res.body)
     if (res.status === 'success') {
       this.setState({ loading: false, data: res.body, print: 'loanDetails', customerKey: values.key }, () => window.print())
     } else {
@@ -88,7 +86,6 @@ class Reports extends Component<{}, State> {
       branches: values.branches.map((branch) => branch._id)
     }
     const res = await getBranchLoanList(obj);
-    console.log(res.body)
     if (res.status === 'success') {
       this.setState({
         data: res.body,
