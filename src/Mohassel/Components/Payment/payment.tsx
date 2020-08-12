@@ -214,12 +214,16 @@ class Payment extends Component<Props, State>{
     if (this.props.paymentState === 1) {
       if (this.props.paymentType === "normal") {
         if (Number(values.installmentNumber) === -1) {
-          const res = await payInstallment(
-            this.props.applicationId,
-            values.payAmount,
-            new Date(values.truthDate).valueOf(), 
-            values.byInsurance
-          );
+          const obj = {
+            id: this.props.applicationId,
+            payAmount: values.payAmount,
+            truthDate: new Date(values.truthDate).valueOf(), 
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId.toString(),
+          }
+          const res = await payInstallment(obj);
           if (res.status === "success") {
             this.props.setReceiptData(res.body);
           this.props.print({print: 'payment'});
@@ -228,13 +232,17 @@ class Payment extends Component<Props, State>{
             this.setState({ loadingFullScreen: false });
           }
         } else {
-          const res = await payFutureInstallment(
-            this.props.applicationId,
-            values.payAmount,
-            new Date(values.truthDate).valueOf(),
-            Number(values.installmentNumber), 
-            values.byInsurance
-          );
+          const obj = {
+            id: this.props.applicationId,
+            payAmount: values.payAmount,
+            truthDate: new Date(values.truthDate).valueOf(), 
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId.toString(),
+            installmentNumber: Number(values.installmentNumber)
+          }
+          const res = await payFutureInstallment(obj);
           if (res.status === "success") {
             this.props.setReceiptData(res.body);
             this.props.print({print: 'payment'});

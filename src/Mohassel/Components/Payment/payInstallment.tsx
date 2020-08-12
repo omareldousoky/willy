@@ -147,6 +147,7 @@ class PayInstallment extends Component<Props, State> {
             initialValues={{
               ...this.state,
               max: this.props.application.installmentsObject.totalInstallments.installmentSum,
+              beneficiaryType: this.props.application.product.beneficiaryType,
               byInsurance: this.props.byInsurance
             }}
             onSubmit={this.props.handleSubmit}
@@ -319,18 +320,23 @@ class PayInstallment extends Component<Props, State> {
                           as="select"
                           name="payerType"
                           data-qc="payerType"
-                          onChange={event => { formikBag.setFieldValue("payerType", event.currentTarget.value) }}
+                          value={formikBag.values.payerType}
+                          onChange={formikBag.handleChange}
+                          onBlur={formikBag.handleBlur}
+                          isInvalid={Boolean(formikBag.errors.payerType) && Boolean(formikBag.touched.payerType)}
                         >
                           <option value={''}></option>
                           <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          <option value='employee' data-qc='employee'>{local.employee}</option>
+                          {/* <option value='employee' data-qc='employee'>{local.employee}</option> */}
                           <option value='family' data-qc='family'>{local.familyMember}</option>
                           <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
                           <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
                         </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.payerType}
+                        </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                    {console.log(formikBag.values)}
                     {formikBag.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
                       <Col>
@@ -339,12 +345,17 @@ class PayInstallment extends Component<Props, State> {
                           name="payerId"
                           data-qc="payerId"
                           onChange={formikBag.handleChange}
+                          onBlur={formikBag.handleBlur}
+                          isInvalid={Boolean(formikBag.errors.payerId) && Boolean(formikBag.touched.payerId)}
                         >
                           <option value={''}></option>
                           {this.props.application.group.individualsInGroup.map((member, index) => {
                             return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
                           })}
                         </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.payerId}
+                        </Form.Control.Feedback>
                       </Col>
                     </Form.Group>}
                     {formikBag.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
@@ -371,7 +382,11 @@ class PayInstallment extends Component<Props, State> {
                               data-qc="payerName"
                               value={formikBag.values.payerName.toString()}
                               onBlur={formikBag.handleBlur}
-                              onChange={formikBag.handleChange} />
+                              onChange={formikBag.handleChange}
+                              isInvalid={Boolean(formikBag.errors.payerName) && Boolean(formikBag.touched.payerName)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikBag.errors.payerName}
+                            </Form.Control.Feedback>
                           </Col>
                         </Form.Group>
                         <Form.Group as={Col} md={6} controlId="whoPaid">
@@ -384,7 +399,11 @@ class PayInstallment extends Component<Props, State> {
                               maxLength={14}
                               value={formikBag.values.payerNationalId.toString()}
                               onBlur={formikBag.handleBlur}
-                              onChange={formikBag.handleChange} />
+                              onChange={formikBag.handleChange}
+                              isInvalid={Boolean(formikBag.errors.payerNationalId) && Boolean(formikBag.touched.payerNationalId)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikBag.errors.payerNationalId}
+                            </Form.Control.Feedback>
                           </Col>
                         </Form.Group>
                       </>

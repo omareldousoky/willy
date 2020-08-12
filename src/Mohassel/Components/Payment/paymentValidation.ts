@@ -26,7 +26,23 @@ export const paymentValidation = Yup.object().shape({
              .trim()
              .required(local.required),
            otherwise: Yup.string()
-         })
+         }),
+         payerType: Yup.string().required(local.required),
+         payerId: Yup.string().when(["payerType", "beneficiaryType"], {
+           is: (payerType, beneficiaryType) => (payerType === "beneficiary" && beneficiaryType === "group"),
+           then: Yup.string().required(local.required),
+           otherwise: Yup.string()
+         }),
+         payerName: Yup.string().when("payerType", {
+           is: payerType => (payerType === "family" || payerType === "nonFamily"),
+           then: Yup.string().required(local.required),
+           otherwise: Yup.string()
+         }),
+         payerNationalId: Yup.number().when("payerType", {
+          is: payerType => (payerType === "family" || payerType === "nonFamily"),
+          then: Yup.number().min(10000000000000, local.nationalIdLengthShouldBe14).max(99999999999999, local.nationalIdLengthShouldBe14).required(local.required),
+          otherwise: Yup.number()
+        })
        });
 
 export const earlyPaymentValidation = Yup.object().shape({
