@@ -133,6 +133,8 @@
     "maxLength5": "لا يمكن ان يكون اكثر من 5",
     "nationalIdLengthShouldBe14": "رقم البطاقة يجب ان يكون 14 رقم",
     "dateShouldBeBeforeToday": "التاريخ يجب ان يكون في الماضي",
+    "mustBeOneOrMore": "يجب أن يكون ١ أو أكثر",
+    "mustBeNotMoreThanHundred":"يجب أن لا يزيد عن ١٠٠",
     "save": "حفظ",
     "cancel": "الغاء",
     "edit": "تعديل",

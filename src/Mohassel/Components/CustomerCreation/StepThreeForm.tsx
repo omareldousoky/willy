@@ -186,7 +186,7 @@ export const StepThreeForm = (props: any) => {
                         <Form.Group controlId="guarantorMaxLoans">
                             <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     name="guarantorMaxLoans"
                                     data-qc=""
                                     value={values.guarantorMaxLoans}
@@ -204,7 +204,7 @@ export const StepThreeForm = (props: any) => {
                         <Form.Group controlId="maxLoansAllowed">
                             <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     name="maxLoansAllowed"
                                     data-qc=""
                                     value={values.maxLoansAllowed}
