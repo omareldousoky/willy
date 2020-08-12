@@ -368,7 +368,7 @@ class CustomerCreation extends Component<Props, State>{
     )
   }
   renderDocuments() {
-    return (
+    return ( 
       <DocumentsUpload
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
