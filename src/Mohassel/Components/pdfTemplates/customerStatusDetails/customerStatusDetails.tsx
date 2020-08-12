@@ -1,7 +1,19 @@
 import React from 'react';
 import './customerStatusDetails.scss';
+import { timeToArabicDate, currency, periodType, getStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
 
 const CustomerStatusDetails = (props) => {
+    function getSum(key: string, index: number, subtractFromKey?: string ) {
+        let max = 0;
+        if(subtractFromKey) {
+            props.data.Loans[index].installments.forEach(installment => {
+                max = max + (Number(installment[subtractFromKey]) - Number(installment[key]));
+            })
+        } else props.data.Loans[index].installments.forEach(installment => {
+            max = max + Number(installment[key]);
+        })
+        return max;
+    }
     return (
         <div className="customer-status-details" lang="ar">
             <table>
@@ -18,14 +30,14 @@ const CustomerStatusDetails = (props) => {
                         <th colSpan={3}>المركز الرئيسي</th>
                     </tr>
                     <tr className="headtitle">
-                        <th colSpan={3}>12:17:26 &emsp; 2020/07/05</th>
+                        <th colSpan={3}>{timeToArabicDate(0, true)}</th>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
                     </tr>
                     <tr>
                         <th className="gray frame">الأسم</th>
-                        <td className="frame">نجوى مصطفي المتولي قاسم</td>
+                        <td className="frame">{props.data.customerName}</td>
                         <th className="gray frame">الكود</th>
                         <td className="frame">047/0014719</td>
                         <th className="gray frame">الحاله</th>
@@ -47,23 +59,23 @@ const CustomerStatusDetails = (props) => {
                                     </tr>
                                     <tr>
                                         <th>الفرع الحالي</th>
-                                        <td>دمياط - فارسكور</td>
+                                        <td>{props.data.accountBranch}</td>
                                         <th>نوع الاقتراض</th>
-                                        <td>مجموعه</td>
+                                        <td>{beneficiaryType(props.data.Loans[0].beneficiaryType)}</td>
                                         <th>المندوب الحالي</th>
-                                        <td>امل عطا محمد السقا</td>
+                                        <td>{props.data.officerName}</td>
                                     </tr>
                                     <tr>
                                         <th>الرقم القومي</th>
-                                        <td></td>
+                                        <td>{numbersToArabic(props.data.nationalId)}</td>
                                         <th>بتاريخ</th>
-                                        <td></td>
+                                        <td>{timeToArabicDate(props.data.nationalIdIssueDate, false)}</td>
                                         <th>النوع</th>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <th>تاريخ الميلاد</th>
-                                        <td>1975/04/12</td>
+                                        <td>{timeToArabicDate(props.data.birthDate, false)}</td>
                                         <th>البطاقه</th>
                                         <td></td>
                                         <th>صادره من</th>
@@ -78,370 +90,206 @@ const CustomerStatusDetails = (props) => {
                                     </tr>
                                 </tbody>
                             </table>
+                            {props.data.Loans.map((loan, index) => {
+                                return (
+                                    <div key={index} style={{ pageBreakAfter: 'always' }}>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <th className="frame gray" colSpan={100}>بيانات القرض</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>رقم القرض</th>
+                                                    <td>{index}</td>
+                                                    <th>تاريخ القرض</th>
+                                                    <td>{timeToArabicDate(loan.creationDate, false)}</td>
+                                                    <th>القيمة</th>
+                                                    <td>{loan.principal}</td>
+                                                    <th>العمله</th>
+                                                    <td>{currency(loan.currency)}</td>
+                                                    <th>رسوم الطوابع</th>
+                                                    <td>{loan.stamps}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>رسوم طلب القرض</th>
+                                                    <td>{loan.applicationFees}</td>
+                                                    <th>عدد الأقساط</th>
+                                                    <td>{loan.installments.length}</td>
+                                                    <th>فترة السداد</th>
+                                                    <td>{loan.periodLength + " " + periodType(loan.periodType)}</td>
+                                                    <th>فترة السماح</th>
+                                                    <td>{loan.gracePeriod}</td>
+                                                    <th>عمولة المندوب</th>
+                                                    <td>{loan.representativeFees}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>مصاريف القسط</th>
+                                                    <td>{loan.feesInstallment}</td>
+                                                    <th>المصاريف الموزعه</th>
+                                                    <td>{loan.interest} % سنويا</td>
+                                                    <th>المصاريف المقدمه</th>
+                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>مندوب التنميه الحالي</th>
+                                                    <td colSpan={2}>{loan.representativeName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>حالة القرض</th>
+                                                    <td>{getStatus(loan.status)}</td>
+                                                    <th>غرامات مسدده</th>
+                                                    <td>{loan.penaltiesPaid}</td>
+                                                    <th>غرامات معفاه</th>
+                                                    <td>{loan.canceledPenalties}</td>
+                                                    <th>غرامات مستحقه</th>
+                                                    <td>{loan.penalties}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>سبب الإلغاء</th>
+                                                    <td>تغيير شروط القرض</td>
+                                                    <td>مندوب التنميه السابق</td>
+                                                </tr>
 
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th className="frame gray" colSpan={100}>بيانات القرض</th>
-                                    </tr>
-                                    <tr>
-                                        <th>رقم القرض</th>
-                                        <td>001</td>
-                                        <th>تاريخ القرض</th>
-                                        <td>2018/11/22</td>
-                                        <th>القيمة</th>
-                                        <td>17000.00</td>
-                                        <th>العمله</th>
-                                        <td>جنيه مصري</td>
-                                        <th>رسوم الطوابع</th>
-                                        <td>0.00</td>
-                                    </tr>
-                                    <tr>
-                                        <th>رسوم طلب القرض</th>
-                                        <td>20.00</td>
-                                        <th>عدد الأقساط</th>
-                                        <td>25</td>
-                                        <th>فترة السداد</th>
-                                        <td>14 يوم</td>
-                                        <th>فترة السماح</th>
-                                        <td>0</td>
-                                        <th>عمولة المندوب</th>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr>
-                                        <th>مصاريف القسط</th>
-                                        <td>0</td>
-                                        <th>المصاريف الموزعه</th>
-                                        <td>54 % سنويا</td>
-                                        <th>المصاريف المقدمه</th>
-                                        <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
-                                    </tr>
-                                    <tr>
-                                        <th>مندوب التنميه الحالي</th>
-                                        <td colSpan={2}>امل عطا محمد السقا</td>
-                                    </tr>
-                                    <tr>
-                                        <th>حالة القرض</th>
-                                        <td>ملغي</td>
-                                        <th>غرامات مسدده</th>
-                                        <td>0.00</td>
-                                        <th>غرامات معفاه</th>
-                                        <td>0.00</td>
-                                        <th>غرامات مستحقه</th>
-                                        <td>0.00</td>
-                                    </tr>
-                                    <tr>
-                                        <th>سبب الإلغاء</th>
-                                        <td>تغيير شروط القرض</td>
-                                        <td>مندوب التنميه السابق</td>
-                                    </tr>
+                                                <tr>
+                                                    <td colSpan={100} className="horizontal-line"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
-                                    <tr>
-                                        <td colSpan={100} className="horizontal-line"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    {props.data.beneficiaryType === "individual" && loan.guarantors.map((guarantor, index) => {
+                                                        <td key={index}>
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th>الأسم</th>
+                                                                        <td>{guarantor.customerName}</td>
+                                                                        <th>النوع</th>
+                                                                        <td>{arabicGender(guarantor.gender)}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>الرقم القومي</th>
+                                                                        <td>{guarantor.nationalId}</td>
+                                                                        <th>تاريخ الأصدار</th>
+                                                                        <td>{timeToArabicDate(guarantor.nationalIdIssueDate, false)}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>تاريخ الميلاد</th>
+                                                                        <td>{guarantor.birthDate}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>العنوان</th>
+                                                                        <td>{guarantor.customerHomeAddress}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>التليفون</th>
+                                                                        <td>{guarantor.mobilePhoneNumber}</td>
+                                                                        <th>الرقم البريدي</th>
+                                                                        <td>{guarantor.homePostalCode}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>البطاقه صادره من</th>
+                                                                        <td></td>
+                                                                        <th>الرقم المطبوع</th>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    })}
+                                                </tr>
+                                                <tr>
+                                                    <td colSpan={100} className="horizontal-line"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th>الأسم</th>
-                                                        <td>محمد رمضان محمد راغب</td>
-                                                        <th>النوع</th>
-                                                        <td>ذكر</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>الرقم القومي</th>
-                                                        <td>27907012400974</td>
-                                                        <th>تاريخ الأصدار</th>
-                                                        <td>2017/07/01</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>تاريخ الميلاد</th>
-                                                        <td>2017/07/01</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>العنوان</th>
-                                                        <td>شارع الابطال متفرع من ش عمر بجوار جامع عمر</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>التليفون</th>
-                                                        <td>01064515448</td>
-                                                        <th>الرقم البريدي</th>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>البطاقه صادره من</th>
-                                                        <td></td>
-                                                        <th>الرقم المطبوع</th>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                        <td>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th className="frame gray" colSpan={100}>الضامن الثاني</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th>الأسم</th>
-                                                        <td>محمد رمضان محمد راغب</td>
-                                                        <th>النوع</th>
-                                                        <td>ذكر</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>الرقم القومي</th>
-                                                        <td>27907012400974</td>
-                                                        <th>تاريخ الأصدار</th>
-                                                        <td>2017/07/01</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>تاريخ الميلاد</th>
-                                                        <td>2017/07/01</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>العنوان</th>
-                                                        <td>شارع الابطال متفرع من ش عمر بجوار جامع عمر</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>التليفون</th>
-                                                        <td>01064515448</td>
-                                                        <th>الرقم البريدي</th>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>البطاقه صادره من</th>
-                                                        <td></td>
-                                                        <th>الرقم المطبوع</th>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={100} className="horizontal-line"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <table>
 
-                            <table>
+                                            <tbody>
+                                                <tr>
+                                                    <th className="frame gray" colSpan={100}>اسماء اعضاء المجموعه لهذا القرض</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>كود العضو</th>
+                                                    <th>أسم العضو</th>
+                                                    <th>حصة العضو من القرض</th>
+                                                    <th></th>
+                                                </tr>
+                                                {loan.beneficiaryType === "group" && loan.groupMembers.map((member, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{member.key}</td>
+                                                            <td>{member.customerName}</td>
+                                                            <td>{member.amount}</td>
+                                                            {member.type === "leader" ? <td>رئيس المجموعه</td> : null}
+                                                        </tr>
+                                                    )
+                                                })}
+                                                <tr>
+                                                    <td colSpan={100} className="horizontal-line"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <th>رقم</th>
+                                                    <th>تاريخ الأستحقاق</th>
+                                                    <th>قيمة</th>
+                                                    <th>المصاريف</th>
+                                                    <th>قيمة مسدده</th>
+                                                    <th>المصاريف المسدده</th>
+                                                    <th>الحاله</th>
+                                                    <th>تاريخ الحاله</th>
+                                                    <th>عدد أيام التأخير / التبكير</th>
+                                                    <th>بنك/حزينة التحصيل</th>
+                                                </tr>
+                                                {loan.installments.map((installment, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{installment.idx}</td>
+                                                            <td>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal) - Number(installment.instFees)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{installment.instFees}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid) - Number(installment.feesPaid)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
+                                                            <td>{getStatus(installment.status)}</td>
+                                                            <td>{timeToArabicDate(installment.paidAt, false)}</td>
+                                                            <td>{installment.delay}</td>
+                                                            <td>خزينة فرع {props.data.accountBranch}</td>
+                                                        </tr>
+                                                    )
+                                                })}
+                                                <tr>
+                                                    <td className="borderless" colSpan={2}></td>
+                                                    <td>{getSum('instFees', index, 'instTotal')}</td>
+                                                    <td>{getSum('instFees', index)}</td>
+                                                    <td>{getSum('feesPaid', index, 'totalPaid')}</td>
+                                                    <td>{getSum('feesPaid', index)}</td>
+                                                    <th>رصيد العميل</th>
+                                                    <td></td>
+                                                    <th>أيام التأخير والتبكير</th>
+                                                    <td>{getSum('delay', index)}</td>
+                                                </tr>
 
-                                <tbody>
-                                    <tr>
-                                        <th className="frame gray" colSpan={100}>اسماء اعضاء المجموعه لهذا القرض</th>
-                                    </tr>
-                                    <tr>
-                                        <th>كود العضو</th>
-                                        <th>أسم العضو</th>
-                                        <th>حصة العضو من القرض</th>
-                                        <th></th>
-                                    </tr>
-                                    <tr>
-                                        <td>047/0001563</td>
-                                        <td>نجوى مصطفي المتولي قاسم</td>
-                                        <td>6000.00</td>
-                                        <td>رئيس المجموعه</td>
-                                    </tr>
-                                    <tr>
-                                        <td>047/0001563</td>
-                                        <td>سميه محمد عبدالغفار عبدالكريم بحيري</td>
-                                        <td>5000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>047/0001563</td>
-                                        <td>مياده سامي حامد الدالي</td>
-                                        <td>3000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>047/0001563</td>
-                                        <td>عبير جمال محمود السيد قنفد</td>
-                                        <td>3000.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={100} className="horizontal-line"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th>رقم</th>
-                                        <th>تاريخ الأستحقاق</th>
-                                        <th>قيمة</th>
-                                        <th>المصاريف</th>
-                                        <th>قيمة مسدده</th>
-                                        <th>المصاريف المسدده</th>
-                                        <th>الحاله</th>
-                                        <th>تاريخ الحاله</th>
-                                        <th>عدد أيام التأخير / التبكير</th>
-                                        <th>بنك/حزينة التحصيل</th>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td>001</td>
-                                        <td>2018/12/06</td>
-                                        <td>883.00</td>
-                                        <td>357.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <td>ملغي</td>
-                                        <td>2018/11/22</td>
-                                        <td>0</td>
-                                        <td>خزينة فرع فارسكور</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="borderless" colSpan={2}></td>
-                                        <td>22075.00</td>
-                                        <td>5075.00</td>
-                                        <td>0.00</td>
-                                        <td>0.00</td>
-                                        <th>رصيد العميل</th>
-                                        <td>0.00</td>
-                                        <th>أيام التأخير والتبكير</th>
-                                        <td>0</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )
+                            })}
                         </td>
                     </tr>
                 </tbody>
             </table>
+
         </div >
     );
 }
