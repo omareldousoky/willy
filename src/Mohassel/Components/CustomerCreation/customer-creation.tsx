@@ -44,7 +44,7 @@ interface CustomerExtraDetails {
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
   representative: any;
-  allowMultiLoans: boolean;
+  maxLoansAllowed: number;
   allowGuarantorLoan: boolean;
   guarantorMaxLoans: number;
 }
@@ -107,6 +107,7 @@ interface State {
     partTimeEmployeeCount: any;
     comments: string;
     guarantorMaxLoans: number;
+    maxLoansAllowed: number;
   };
   customerId: string;
   selectedCustomer: any;
@@ -215,9 +216,9 @@ class CustomerCreation extends Component<Props, State>{
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
         comments: res.body.comments,
-        allowMultiLoans: res.body.allowMultiLoans,
+        maxLoansAllowed: res.body.maxLoansAllowed? Number(res.body.guarantorMaxLoans) : 1,
         allowGuarantorLoan: res.body.allowGuarantorLoan,
-        guarantorMaxLoans: res.body.guarantorMaxLoans? res.body.guarantorMaxLoans : 1,
+        guarantorMaxLoans: res.body.guarantorMaxLoans? Number(res.body.guarantorMaxLoans ): 1,
       };
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
@@ -274,6 +275,8 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.newRepresentative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? objToSubmit.newRepresentative : '';
     if(objToSubmit?.guarantorMaxLoans && objToSubmit.guarantorMaxLoans > 0) objToSubmit.guarantorMaxLoans = Number(objToSubmit.guarantorMaxLoans);
     else  objToSubmit.guarantorMaxLoans = 1;
+    if(objToSubmit?.maxLoansAllowed && objToSubmit.maxLoansAllowed > 0) objToSubmit.maxLoansAllowed = Number(objToSubmit.maxLoansAllowed);
+    else  objToSubmit.maxLoansAllowed = 1;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {

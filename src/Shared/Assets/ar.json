@@ -528,7 +528,7 @@
     "doneMoving": "تم نقل",
     "customerSuccess": "عميل بنجاح",
     "customersSuccess": "عملاء بنجاح",
-    "allowMultiLoans": "عميل يمكنه أخذ اكثر من قرض",
+    "maxLoansAllowed": "عدد القروض التي يمكن أن يأخذها العميل",
     "allowGuarantorLoan": "ضامن يمكنه أخذ قرض",
     "allowMultiGuarantee": "ضامن يضمن اكثر من عميل",
     "guarantorMaxLoans": "عدد القروض التي يمكن أن يضمنها العميل",

@@ -56,7 +56,8 @@ export const step3 = {
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
     comments: '',
-    guarantorMaxLoans: 0
+    guarantorMaxLoans: 1,
+    maxLoansAllowed: 1
 };
 
 const endOfDay: Date = new Date();

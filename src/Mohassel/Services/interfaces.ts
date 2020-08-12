@@ -65,7 +65,7 @@ export interface Customer {
     ruralUrban?: string;
     taxCardNumber?: string;
     village?: string;
-    allowMultiLoans?: boolean;
+    maxLoansAllowed?: number;
     allowGuarantorLoan?: boolean;
     guarantorMaxLoans?: number;
     _id?: string;
