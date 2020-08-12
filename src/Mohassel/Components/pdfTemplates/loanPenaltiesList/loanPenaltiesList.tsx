@@ -2,6 +2,8 @@ import React from 'react';
 import './loanPenaltiesList.scss';
 
 const LoanPenaltiesList = (props) => {
+    console.log('oh hey there', props);
+    
     return (
         <div className="loan-penalties-list" dir="rtl" lang="ar">
             <table className="report-container">

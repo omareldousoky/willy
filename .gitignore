@@ -124,6 +124,6 @@ dist
 
 # vscode
 .vscode
-
+.zshrc.save
 # webstorm
 .idea

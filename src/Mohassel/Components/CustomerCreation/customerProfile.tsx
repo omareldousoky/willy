@@ -13,6 +13,8 @@ import DocumentsUpload from './documentsUpload';
 import { guaranteed, collectionReport, penalties, writeOffs } from "../../Services/APIs/Reports";
 import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
+import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
+import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -53,9 +55,10 @@ const CustomerProfile = (props: Props) => {
   const [guaranteeedLoansData, changeGuaranteeedLoansData] = useState<GuaranteedLoans>()
   const getGuaranteeedLoans = async (customer)=> {
     changeLoading(true);
-    const res = await guaranteed(customer?.key)
-    if (res.status === 'success') {
-      console.log('bye', res.body);
+    // const res = await guaranteed(customer?.key)
+    if (true) {
+      // if (res.status === 'success') {
+      // console.log('bye', res.body);
       const response = {
         data: [
           {
@@ -81,15 +84,37 @@ const CustomerProfile = (props: Props) => {
         ],
         GuarantorName: "سعاد محمد مصطفي ناجي"
       }
-      const resCollectionReport = await collectionReport();
+      // const resCollectionReport = await collectionReport();
+      // changeLoading(false);
+      // if(resCollectionReport.body){
+      //   _changePrint("CollectionStatement")
+      //   const data = {
+      //     startDate: "2020-03-01",
+      //     endDate: "2020-07-1",
+      //     data: resCollectionReport.body.data
+      //   }
+      //   changeDataToBePrinted(data)
+      //   window.print(); 
+      // }
       const resPenalties = await penalties();
-      const resWriteOffs = await writeOffs();
-      console.log('resCollectionReport', resCollectionReport);
-      console.log('resPenalties', resPenalties);
-      console.log('resWriteOffs', resWriteOffs);
-      
-      changeGuaranteeedLoansData(response);
       changeLoading(false);
+      if(resPenalties.body){
+        _changePrint("Penalties")
+        const data = {
+          startDate: "2020-03-01",
+          endDate: "2020-07-1",
+          data: resPenalties.body.data
+        }
+        changeDataToBePrinted(data)
+        window.print(); 
+      }
+      // const resWriteOffs = await writeOffs();
+      // console.log('resCollectionReport', resCollectionReport);
+      // console.log('resPenalties', resPenalties);
+      // console.log('resWriteOffs', resWriteOffs);
+     
+      changeGuaranteeedLoansData(response);
+      // changeLoading(false);
     } else {
       changeLoading(false);
       console.log("failed to get customer data")
@@ -120,6 +145,8 @@ const CustomerProfile = (props: Props) => {
     if (ruralUrban === 'rural') return local.rural;
     else return local.urban;
   }
+  console.log('hi boom', dataToBePrinted);
+  
   return (
     <>
       <Loader open={loading} type="fullscreen" />
@@ -314,6 +341,8 @@ const CustomerProfile = (props: Props) => {
         </Card.Body>
       </Card>
       {print === "ClientGuaranteedLoans" && ( <ClientGuaranteedLoans data={dataToBePrinted} /> )}
+      {(print === "CollectionStatement" && dataToBePrinted) && ( <CollectionStatement data={dataToBePrinted} /> )}
+      {(print === "Penalties" && dataToBePrinted) && ( <LoanPenaltiesList data={dataToBePrinted} /> )}
     </>
   )
 }
