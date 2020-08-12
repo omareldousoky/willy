@@ -21,7 +21,7 @@ const DocumentsUploadedPercentage = (props) => {
             <Row>
                 {parentArr.map((arr, index) => {
                     return (
-                        <Col sm={6}>
+                        <Col key={index} sm={6}>
                             <table key={index}>
                                 <thead>
                                     <tr>
