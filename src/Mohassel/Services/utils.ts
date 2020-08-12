@@ -340,3 +340,12 @@ export const actionsList = [
   "activateUser",
   "deactivateUser"
 ]
+
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const date = dateTime[0].split("-");
+  const time = dateTime[1].split(":");
+  const datum = new Date(dateTime[0]).valueOf();
+  console.log(datum)
+  return datum
+}
