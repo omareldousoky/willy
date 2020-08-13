@@ -38,6 +38,7 @@ import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
+import Reports from '../Components/Reports/reports';
 
 const appRoutes = [
   {
@@ -289,6 +290,11 @@ const appRoutes = [
         path: "/logs",
         label: local.logs,
         render: (props) => <Can I = "viewActionLogs" a = 'user' ><ActionLogs {...props} /></Can>,
+      }, 
+      {
+        path: "/reports",
+        label: local.reports,
+        render: () => <Reports/>
       }
     ]
   },

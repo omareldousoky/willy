@@ -1,0 +1,32 @@
+@media screen, print {
+  .CollectionStatement {
+    font-size: 12px;
+    font-weight: bold;
+    direction: rtl;
+    page-break-after: always;
+    & tbody tr th {
+      background-color: lightgrey;
+      -webkit-print-color-adjust: exact;
+      border: 1px solid black;
+    }
+    ​ & tbody tr td {
+      border: 1px solid black;
+    }
+    ​ & .headtitle {
+      font-size: 14px;
+    }
+    ​ & table {
+      width: 100%;
+      text-align: center;
+    }
+    ​ & thead.report-header {
+      display: table-header-group;
+    }
+  }
+}
+@media screen {
+  .CollectionStatement {
+    max-width: 700px;
+    display: none;
+  }
+}
