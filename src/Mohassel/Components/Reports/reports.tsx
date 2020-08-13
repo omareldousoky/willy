@@ -24,6 +24,8 @@ interface State {
   data: any;
   loading: boolean;
   customerKey: string;
+  fromDate: string;
+  toDate: string;
 }
 
 class Reports extends Component<{}, State> {
@@ -41,7 +43,9 @@ class Reports extends Component<{}, State> {
       selectedPdf: {},
       data: {},
       loading: false,
-      customerKey: ''
+      customerKey: '',
+      fromDate: '',
+      toDate: ''
     }
   }
   handlePrint(selectedPdf: PDF) {
@@ -79,11 +83,11 @@ class Reports extends Component<{}, State> {
     }
   }
   async getBranchLoanList(values) {
-    this.setState({ loading: true, showModal: false })
+    this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: values.branches.map((branch) => branch._id)
+      branches: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
     }
     const res = await getBranchLoanList(obj);
     if (res.status === 'success') {
@@ -129,7 +133,7 @@ class Reports extends Component<{}, State> {
         {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}
         {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} customerKey={this.state.customerKey}/>}
         {this.state.print === "loanDetails" && <LoanApplicationDetails data={this.state.data} />}
-        {this.state.print === "branchLoanList" && <BranchesLoanList data={this.state.data} />}
+        {this.state.print === "branchLoanList" && <BranchesLoanList data={this.state.data} fromDate={this.state.fromDate} toDate={this.state.toDate}/>}
       </>
     )
   }
