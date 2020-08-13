@@ -1,9 +1,27 @@
 import React from 'react'
 import './randomPayment.scss';
-const RandomPayment = () => {
+interface Props{
+ branches: {rows: {
+	customerKey: string;
+	customerName: string;
+	trxCode: string;
+	trxDate: string;
+	trxAmount: string;
+	trxAction: string;
+ }[];
+ trxCount: string;
+ trxSum: string;
+ branchName: string;
+}[];
+
+ 
+ };
+ 
+const RandomPayment = (props: Props) => {
     return (
 
 <div dir="rtl" lang="ar" className = "random-payment-print">
+
 	<table className="report-container">
 		<thead className="report-header">
 			<tr>
@@ -31,11 +49,12 @@ const RandomPayment = () => {
 			</tr>
 		</thead>
 	</table>
-
-	<table style={{padding:"10px"}}>
+{ props.branches?.map( (branch, index) =>{
+	return (
+	<table key = {index}  style={{padding:"10px"}}>
 		<thead>
 			<tr>
-				<th colSpan={3}><div className="frame" > المنيا - ابو قرقاص </div></th>
+				<th colSpan={3}><div className="frame" >{branch.branchName} </div></th>
 			</tr>
 			<tr>
 				<td colSpan={10} className="border"></td>
@@ -56,109 +75,46 @@ const RandomPayment = () => {
 				<td colSpan={10} className="border"></td>
 			</tr>
 		</thead>
-		<tbody>
+		{branch.rows.map((row,index) =>{
+			return(
+		<tbody key={index}>
 			<tr>
-				<td>1</td>
-				<td>110680001713</td>
-				<td>روماني بطرس باسيلي بطرس</td>
-				<td>598</td>
-				<td>2020-06-24</td>
-				<td>100.00</td>
 				<td></td>
-				<td>رسوم تحرير مخالصه</td>
+				<td>{row.customerKey}</td>
+				<td>{row.customerName}</td>
+				<td>{row.trxCode}</td>
+				<td>{row.trxDate}</td>
+				<td>{row.trxAmount}</td>
+				<td></td>
+				<td>{row.trxAction}</td>
 				<td>خزينه 4 فرع ابو قرقاص</td>
 				<td>منفذ</td>
 			</tr>
 			<tr>
 				<td colSpan={4}></td>
 				<td>1</td>
-				<td>100.00</td>
+				<td>{row.trxAmount}</td>
 			</tr>
 			<tr>
 				<td colSpan={10} className="border"></td>
 			</tr>
 		</tbody>
-		<tbody>
+		)})
+}  
+<tbody className="tbody-border">
 			<tr>
-				<td>1</td>
-				<td>110680001713</td>
-				<td>روماني بطرس باسيلي بطرس</td>
-				<td>598</td>
-				<td>2020-06-24</td>
-				<td>100.00</td>
+<td colSpan={3}>إجمالي الحركه {branch.branchName}</td>
 				<td></td>
-				<td>رسوم تحرير مخالصه</td>
-				<td>خزينه 4 فرع ابو قرقاص</td>
-				<td>منفذ</td>
-			</tr>
-			<tr>
-				<td colSpan={4}></td>
-				<td>1</td>
-				<td>100.00</td>
-			</tr>
-			<tr>
-				<td colSpan={10} className="border"></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td>1</td>
-				<td>110680001713</td>
-				<td>روماني بطرس باسيلي بطرس</td>
-				<td>598</td>
-				<td>2020-06-24</td>
-				<td>100.00</td>
-				<td></td>
-				<td>رسوم تحرير مخالصه</td>
-				<td>خزينه 4 فرع ابو قرقاص</td>
-				<td>منفذ</td>
-			</tr>
-			<tr>
-				<td colSpan={4}></td>
-				<td>1</td>
-				<td>100.00</td>
-			</tr>
-			<tr>
-				<td colSpan={10} className="border"></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td>1</td>
-				<td>110680001713</td>
-				<td>روماني بطرس باسيلي بطرس</td>
-				<td>598</td>
-				<td>2020-06-24</td>
-				<td>100.00</td>
-				<td></td>
-				<td>رسوم تحرير مخالصه</td>
-				<td>خزينه 4 فرع ابو قرقاص</td>
-				<td>منفذ</td>
-			</tr>
-			<tr>
-				<td colSpan={4}></td>
-				<td>1</td>
-				<td>100.00</td>
-			</tr>
-			<tr>
-				<td colSpan={10} className="border"></td>
-			</tr>
-			<tr>
-				<td colSpan={10} ></td>
-			</tr>
-		</tbody>
-		<tbody className="tbody-border">
-			<tr>
-				<td colSpan={3}>إجمالي الحركه المنيا - ابو قرقاص</td>
-				<td></td>
-				<td>عدد 4</td>
-				<td>المبلغ 400.00</td>
+				<td>عدد {branch.trxCount}</td>
+				<td>المبلغ {branch.trxSum}</td>
 			</tr>
 		</tbody>
 	</table>
-
-</div>
-    )
+	
+)})
 }
+</div>
+	)}
+
 
 export default RandomPayment

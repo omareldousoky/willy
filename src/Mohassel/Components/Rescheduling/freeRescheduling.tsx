@@ -196,13 +196,15 @@ class FreeRescheduling extends Component<Props, State>{
     }
     getRescheuleDate(values, index){
         const reschedFreeInsts = values.installments.slice(0,index-1).filter(i => i.status !== 'rescheduled');
-        let maxDate = reschedFreeInsts[0].dateOfPayment;
-        reschedFreeInsts.forEach(element => {
-            if(element.dateOfPayment>maxDate){
-                maxDate = element.dateOfPayment;
-            }
-        });
-        return maxDate
+        if(reschedFreeInsts.length > 0){
+            let maxDate = reschedFreeInsts[0].dateOfPayment;
+            reschedFreeInsts.forEach(element => {
+                if(element.dateOfPayment>maxDate){
+                    maxDate = element.dateOfPayment;
+                }
+            });
+            return maxDate
+        } else return 0
     }
     render() {
         return (

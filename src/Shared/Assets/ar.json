@@ -672,6 +672,6 @@
     "employeeName": "إسم الموظف",
     "transactionDate": "تاريخ المعاملة",
     "searchByEmp": "البحث بإسم الموظف",
-    "noIScore":"لا يوجد iScore",
-    "paymentsReports": "التقارير المالية"
+    "paymentsReports": "التقارير المالية",
+    "noIScore":"لا يوجد iScore"
 }

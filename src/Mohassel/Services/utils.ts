@@ -8,9 +8,8 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp > 0)
+  if (timeStamp)
     return new Date(timeStamp).toISOString().slice(0, 10)
-  else return new Date().toISOString().slice(0, 10);
 }
 
 export function parseJwt(token: string) {
@@ -357,6 +356,11 @@ export const actionsList = [
   "deactivateUser"
 ]
 
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
 export const iscoreDate = (date: any) => {
   const MyDate = new Date(date);
   const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
