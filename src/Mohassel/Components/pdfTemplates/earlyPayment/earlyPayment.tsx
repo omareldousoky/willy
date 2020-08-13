@@ -10,6 +10,7 @@ interface Props {
 interface State {
     totalDaysLate: number;
     totalDaysEarly: number;
+    latePrincipal: number;
 }
 class EarlyPaymentPDF extends Component<Props, State> {
     constructor(props) {
@@ -17,12 +18,20 @@ class EarlyPaymentPDF extends Component<Props, State> {
         this.state = {
             totalDaysLate: 0,
             totalDaysEarly: 0,
+            latePrincipal: 0,
         }
     }
     UNSAFE_componentWillMount() {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
+        let latePrincipal = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
+            console.log(installment.dateOfPayment)
+            if ((new Date(installment.dateOfPayment).getMonth() === new Date().getMonth()
+                && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear()) 
+                || getStatus(installment) === local.late) {
+                latePrincipal = latePrincipal + installment.principalInstallment;
+            }
             if (installment.status !== "rescheduled") {
                 if (installment.paidAt) {
                     const number = Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24));
@@ -35,7 +44,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 }
             }
         });
-        this.setState({ totalDaysEarly, totalDaysLate })
+        this.setState({ totalDaysEarly, totalDaysLate, latePrincipal })
     }
     
     getSum(key: string) {
@@ -223,7 +232,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <th>السداد المعجل</th>
                             <td className="border">{this.getInstallmentsRemaining()}</td>
-                            <td className="border">{numbersToArabic(this.props.earlyPaymentData.remainingPrincipal)}</td>
+                            <td className="border">{numbersToArabic(this.props.earlyPaymentData.remainingPrincipal - this.state.latePrincipal)}</td>
                             <td className="border">{numbersToArabic((this.props.data.product.earlyPaymentFees * this.props.earlyPaymentData.remainingPrincipal) / 100)}</td>
                             <td className="border">{numbersToArabic(this.props.earlyPaymentData.requiredAmount)}</td>
                             <td></td>
