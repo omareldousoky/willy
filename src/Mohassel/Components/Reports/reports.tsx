@@ -9,6 +9,14 @@ import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails';
 import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails';
 import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList';
 import { getBranchLoanList } from '../../Services/APIs/Reports/branchLoanList';
+import { installments } from '../../Services/APIs/Reports/installments';
+import PaymentsDone from '../pdfTemplates/paymentsDone/paymentsDone';
+import IssuedLoanList from '../pdfTemplates/issuedLoanList/issuedLoanList';
+import { getIssuedLoanList } from '../../Services/APIs/Reports/issuedLoansList';
+import { getCreatedLoanList } from '../../Services/APIs/Reports/createdLoansList';
+import { getRescheduledLoanList } from '../../Services/APIs/Reports/rescheduledLoansList';
+import LoanCreationList from '../pdfTemplates/loanCreationList/loanCreationList';
+import RescheduledLoanList from '../pdfTemplates/rescheduledLoanList/rescheduledLoanList';
 
 export interface PDF {
   key?: string;
@@ -36,6 +44,11 @@ class Reports extends Component<{}, State> {
         { key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey'] },
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'] },
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'] },
+        { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'] },
+        { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'] },
+        { key: 'rescheduledLoanList', local: 'قائمة حركات جدولة القروض المنفذه', inputs: ['dateFromTo', 'branches'] },
+        { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'] },
+
 
       ],
       selectedPdf: {},
@@ -52,6 +65,11 @@ class Reports extends Component<{}, State> {
       case 'customerDetails': return this.getCustomerDetails(values);
       case 'loanDetails': return this.getLoanDetails(values);
       case 'branchLoanList': return this.getBranchLoanList(values);
+      case 'issuedLoanList': return this.getIssuedLoanList(values);
+      case 'createdLoanList': return this.getCreatedLoanList(values);
+      case 'rescheduledLoanList': return this.getRescheduledLoanList(values);
+      case 'paymentsDoneList': return this.getInstallments(values);
+
       default: return null;
     }
   }
@@ -98,6 +116,91 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getInstallments(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes("") ? [""] : branches,
+      all: branches.includes("") ? "1" : "0"
+    }
+    const res = await installments(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: { data: res.body, from: values.fromDate, to: values.toDate },
+        showModal: false,
+        print: 'paymentsDoneList',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getIssuedLoanList(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes("") ? [] : branches
+    }
+    const res = await getIssuedLoanList(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: { data: res.body, from: values.fromDate, to: values.toDate },
+        showModal: false,
+        print: 'issuedLoanList',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getCreatedLoanList(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes("") ? [] : branches
+    }
+    const res = await getCreatedLoanList(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: { data: res.body, from: values.fromDate, to: values.toDate },
+        showModal: false,
+        print: 'createdLoanList',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getRescheduledLoanList(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: branches.includes("") ? [] : branches
+    }
+    const res = await getRescheduledLoanList(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: { data: res.body, from: values.fromDate, to: values.toDate },
+        showModal: false,
+        print: 'rescheduledLoanList',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
   render() {
     return (
       <>
@@ -127,9 +230,13 @@ class Reports extends Component<{}, State> {
           </Card.Body>
         </Card>
         {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}
-        {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} customerKey={this.state.customerKey}/>}
+        {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} customerKey={this.state.customerKey} />}
         {this.state.print === "loanDetails" && <LoanApplicationDetails data={this.state.data} />}
         {this.state.print === "branchLoanList" && <BranchesLoanList data={this.state.data} />}
+        {this.state.print === "issuedLoanList" && <IssuedLoanList data={this.state.data} />}
+        {this.state.print === "createdLoanList" && <LoanCreationList data={this.state.data} />}
+        {this.state.print === "rescheduledLoanList" && <RescheduledLoanList data={this.state.data} />}
+        {this.state.print === "paymentsDoneList" && <PaymentsDone data={this.state.data} />}
       </>
     )
   }

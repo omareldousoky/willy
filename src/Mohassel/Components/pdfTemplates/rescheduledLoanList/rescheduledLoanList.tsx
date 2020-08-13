@@ -1,10 +1,11 @@
 import React from 'react';
 import './rescheduledLoanList.scss';
 import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
-import { tempdata } from './../issuedLoanList/tempdata';
 import { englishToArabic } from '../../../Services/statusLanguage';
 
 const RescheduledLoanList = (props) => {
+    const tempData = props.data.data;
+    const reportDate = (props.data.from === props.data.to) ? props.data.from : `من ${props.data.from} الي ${props.data.to}`
     return (
         <div className="rescheduled-loan-list" lang="ar">
             <table className="report-container">
@@ -20,7 +21,7 @@ const RescheduledLoanList = (props) => {
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>المركز الرئيسي</th>
-                        <th colSpan={6}>تاريخ الحركه من 2020/07/01 الي 2020/07/05 </th>
+                        <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>{timeToArabicDate(0, true)}</th>
@@ -50,12 +51,12 @@ const RescheduledLoanList = (props) => {
 
                 </thead>
 
-                {tempdata.result.map((day, x) =>
+                {tempData.result.map((day, x) =>
                     <React.Fragment key={x}>
                         <tbody>
                             <tr>
                                 <th colSpan={2}>تاريخ الحركه</th>
-                                <th colSpan={2}>{timeToArabicDate(new Date(day.day).valueOf(),false)}</th>
+                                <th colSpan={2}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</th>
                             </tr>
                         </tbody>
                         {day.branches.map((branch, i) =>
@@ -87,7 +88,7 @@ const RescheduledLoanList = (props) => {
                                     <tr>
                                         <td colSpan={2}>إجمالي بنك / خزينه</td>
                                         <td colSpan={2}>{branch.branchName}</td>
-                                        <td colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(),false)}</td>
+                                        <td colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                         <td>{branch.df.length}</td>
                                         <td colSpan={2} style={{ border: "0px" }}></td>
                                         <td>إجمالي المبلغ</td>
@@ -124,7 +125,7 @@ const RescheduledLoanList = (props) => {
                             <tr style={{ height: "0.5em" }}></tr>
                             <tr>
                                 <th colSpan={2}>إجمالي تاريخ الحركه</th>
-                                <th>{timeToArabicDate(new Date(day.day).valueOf(),false)}</th>
+                                <th>{timeToArabicDate(new Date(day.day).valueOf(), false)}</th>
                                 <td colSpan={2}>إجمالي عدد الحركات</td>
                                 <td>{day.trx}</td>
                                 <td colSpan={2} style={{ border: "0px" }}></td>
@@ -161,12 +162,12 @@ const RescheduledLoanList = (props) => {
                         <th colSpan={2}>إجمالي بالعمله</th>
                         <th>جنيه مصري</th>
                         <td colSpan={2}>إجمالي عدد الحركات</td>
-                        <td>{tempdata.trx}</td>
+                        <td>{tempData.trx}</td>
                         <td colSpan={2} style={{ border: "0px" }}></td>
                         <td>إجمالي المبلغ</td>
-                        <td>{tempdata.total[0]}</td>
-                        <td>{tempdata.total[1]}</td>
-                        <td>{tempdata.total[2]}</td>
+                        <td>{tempData.total[0]}</td>
+                        <td>{tempData.total[1]}</td>
+                        <td>{tempData.total[2]}</td>
                     </tr>
 
                     <tr>
@@ -179,9 +180,9 @@ const RescheduledLoanList = (props) => {
                     <tr>
                         <td colSpan={8} style={{ border: "0px" }}></td>
                         <td>صافي المبلغ</td>
-                        <td>{tempdata.total[0]}</td>
-                        <td>{tempdata.total[1]}</td>
-                        <td>{tempdata.total[2]}</td>
+                        <td>{tempData.total[0]}</td>
+                        <td>{tempData.total[1]}</td>
+                        <td>{tempData.total[2]}</td>
                     </tr>
                     <tr style={{ height: "0.5em" }}></tr>
                 </tbody>

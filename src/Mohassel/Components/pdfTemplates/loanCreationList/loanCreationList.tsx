@@ -1,10 +1,11 @@
 import React from 'react';
 import './loanCreationList.scss';
-import { tempdata } from './../issuedLoanList/tempdata';
 import { englishToArabic } from '../../../Services/statusLanguage';
 import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
 
 const LoanCreationList = (props) => {
+    const tempData = props.data.data;
+    const reportDate = (props.data.from === props.data.to) ? props.data.from : `من ${props.data.from} الي ${props.data.to}`
     return (
         <div className="loan-creation-list" lang="ar">
             <table className="report-container">
@@ -20,7 +21,7 @@ const LoanCreationList = (props) => {
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>المركز الرئيسي</th>
-                        <th colSpan={6}>تاريخ الحركه من 2020/07/05 الي 2020/07/05</th>
+                        <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>{timeToArabicDate(0, true)}</th>
@@ -48,12 +49,12 @@ const LoanCreationList = (props) => {
                         <th colSpan={100} className="horizontal-line"></th>
                     </tr>
                 </thead>
-                {tempdata.result.map((day, x) =>
+                {tempData.result.map((day, x) =>
                     <React.Fragment key={x}>
                         <tbody>
                             <tr>
                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                                <th className="gray frame" colSpan={2}>{timeToArabicDate(new Date(day.day).valueOf(),false)}</th>
+                                <th className="gray frame" colSpan={2}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</th>
                             </tr>
                         </tbody>
                         {day.branches.map((branch, i) =>
@@ -85,7 +86,7 @@ const LoanCreationList = (props) => {
                                     <tr>
                                         <td className="frame" colSpan={2}>إجمالي بنك / خزينه</td>
                                         <td className="frame" colSpan={2}>{branch.branchName}</td>
-                                        <td className="frame" colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(),false)}</td>
+                                        <td className="frame" colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                         <td className="frame">{branch.df.length}</td>
                                         <td></td>
                                         <td></td>
@@ -122,7 +123,7 @@ const LoanCreationList = (props) => {
                             <tr style={{ height: "0.5em" }}></tr>
                             <tr>
                                 <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
-                                <td className="gray frame">{timeToArabicDate(new Date(day.day).valueOf(),false)}</td>
+                                <td className="gray frame">{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                 <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
                                 <td className="frame">{day.trx}</td>
                                 <td></td>
@@ -160,13 +161,13 @@ const LoanCreationList = (props) => {
                         <td className="gray frame" colSpan={2}>إجمالي بالعمله</td>
                         <td className="gray frame">جنيه مصري</td>
                         <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                        <td className="frame">{tempdata.trx}</td>
+                        <td className="frame">{tempData.trx}</td>
                         <td></td>
                         <td></td>
                         <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">{tempdata.total[0]}</td>
-                        <td className="frame">{tempdata.total[1]}</td>
-                        <td className="frame">{tempdata.total[2]}</td>
+                        <td className="frame">{tempData.total[0]}</td>
+                        <td className="frame">{tempData.total[1]}</td>
+                        <td className="frame">{tempData.total[2]}</td>
                     </tr>
 
                     <tr>
@@ -179,9 +180,9 @@ const LoanCreationList = (props) => {
                     <tr>
                         <td colSpan={8}></td>
                         <td className="frame">صافي المبلغ</td>
-                        <td className="frame">{tempdata.total[0]}</td>
-                        <td className="frame">{tempdata.total[1]}</td>
-                        <td className="frame">{tempdata.total[2]}</td>
+                        <td className="frame">{tempData.total[0]}</td>
+                        <td className="frame">{tempData.total[1]}</td>
+                        <td className="frame">{tempData.total[2]}</td>
                     </tr>
                     <tr style={{ height: "0.5em" }}></tr>
                 </tbody>

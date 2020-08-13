@@ -1,8 +1,9 @@
 import React from 'react';
 import './paymentsDone.scss';
-import { tempData } from './tempData'
 import { timeToArabicDate } from '../../../Services/utils';
 const PaymentsDone = (props) => {
+    const tempData = props.data.data;
+    const reportDate = (props.data.from === props.data.to) ? props.data.from : `من ${props.data.from} الي ${props.data.to}`;
     return (
         <div className="payments-done" lang="ar">
             <table className="report-container">
@@ -18,7 +19,7 @@ const PaymentsDone = (props) => {
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>المركز الرئيسي</th>
-                        <th colSpan={6}>تاريخ الحركه من 2020/06/01 الي 2020/07/05</th>
+                        <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>{timeToArabicDate(0, true)}</th>
