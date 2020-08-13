@@ -33,24 +33,24 @@ const CollectionStatement = (props) => {
         {branch.rows.map((row, idx) => (
           <tr key={idx}>
             <td>{row.truthDate.substring(0, 10)}</td>
-            <td>{row.fees}</td>
-            <td>{row.installmentsPrincipal}</td>
-            <td>{row.installmentsInterest}</td>
-            <td>{row.installmentsTotal}</td>
-            <td>{row.penalties}</td>
-            <td>{row.otherIncome}</td>
-            <td>{row.totalCollected}</td>
+            <td>{trimmedValue(row.fees)}</td>
+            <td>{trimmedValue(row.installmentsPrincipal)}</td>
+            <td>{trimmedValue(row.installmentsInterest)}</td>
+            <td>{trimmedValue(row.installmentsTotal)}</td>
+            <td>{trimmedValue(row.penalties)}</td>
+            <td>{trimmedValue(row.otherIncome)}</td>
+            <td>{trimmedValue(row.totalCollected)}</td>
           </tr>
         ))}
         <tr>
           <td>{branch.branchName}</td>
-          <td>{branch.fees}</td>
-          <td>{branch.installmentsPrincipal}</td>
-          <td>{branch.installmentsInterest}</td>
-          <td>{branch.installmentsTotal}</td>
-          <td>{branch.penalties}</td>
-          <td>{branch.otherIncome}</td>
-          <td>{branch.totalCollected}</td>
+          <td>{trimmedValue(branch.fees)}</td>
+          <td>{trimmedValue(branch.installmentsPrincipal)}</td>
+          <td>{trimmedValue(branch.installmentsInterest)}</td>
+          <td>{trimmedValue(branch.installmentsTotal)}</td>
+          <td>{trimmedValue(branch.penalties)}</td>
+          <td>{trimmedValue(branch.otherIncome)}</td>
+          <td>{trimmedValue(branch.totalCollected)}</td>
         </tr>
       </>
     );
@@ -58,7 +58,7 @@ const CollectionStatement = (props) => {
 
   return (
     <div className="CollectionStatement">
-       <table>
+      <table>
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
@@ -67,21 +67,21 @@ const CollectionStatement = (props) => {
             </th>
           </tr>
         </thead>
-        </table>
+      </table>
       <table>
         <tbody>
           {branches.map((branch, idx) => (
             <BranchComponent key={idx} branch={branch} />
           ))}
           <tr>
-            <td>{'إجمالى عام'}</td>
-            <td>{total.fees}</td>
-            <td>{total.installmentsPrincipal}</td>
-            <td>{total.installmentsInterest}</td>
-            <td>{total.installmentsTotal}</td>
-            <td>{total.penalties}</td>
-            <td>{total.otherIncome}</td>
-            <td>{total.totalCollected}</td>
+            <td>{"إجمالى عام"}</td>
+            <td>{trimmedValue(total.fees)}</td>
+            <td>{trimmedValue(total.installmentsPrincipal)}</td>
+            <td>{trimmedValue(total.installmentsInterest)}</td>
+            <td>{trimmedValue(total.installmentsTotal)}</td>
+            <td>{trimmedValue(total.penalties)}</td>
+            <td>{trimmedValue(total.otherIncome)}</td>
+            <td>{trimmedValue(total.totalCollected)}</td>
           </tr>
         </tbody>
       </table>
