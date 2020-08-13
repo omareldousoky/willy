@@ -670,5 +670,6 @@
     "nOfActionLogs": "إجمالي عدد المعاملات",
     "employeeName": "إسم الموظف",
     "transactionDate": "تاريخ المعاملة",
-    "searchByEmp": "البحث بإسم الموظف"
+    "searchByEmp": "البحث بإسم الموظف",
+    "paymentsReports": "التقارير المالية"
 }

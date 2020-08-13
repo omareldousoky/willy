@@ -55,59 +55,53 @@ const BranchesLoanList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>68</td>
-                        <td>المنيا - ابو قرقاص</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>0</th>
-                        <th>0.0</th>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>0</th>
-                        <th>0.0</th>
-                        <th>0</th>
-                        <th>0.0</th>
-                    </tr>
-                    <tr>
-                        <td>129</td>
-                        <td>المنيا - ابو قرقاص ثان</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>46</td>
-                        <td>908.5</td>
-                        <th>46</th>
-                        <th>908.5</th>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>0</th>
-                        <th>0.0</th>
-                        <th>46</th>
-                        <th>908.5</th>
-                    </tr>
-                    <tr>
-                        <td colSpan={2}>إجمالي المجموعه</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>46</td>
-                        <td>908.5</td>
-                        <th>46</th>
-                        <th>908.5</th>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>0</th>
-                        <th>0.0</th>
-                        <th>46</th>
-                        <th>908.5</th>
-                    </tr>
+                    {props.data.result[0].rows.map((row, index) => {
+                        if (row.branchName !== "Total") {
+                            return (
+                                <tr key={index}>
+                                    <td></td>
+                                    <td>{row.branchName}</td>
+                                    <td>{row.createdCount}</td>
+                                    <td>{row.createdSum}</td>
+                                    <td>{row.issuedCount}</td>
+                                    <td>{row.issuedSum}</td>
+                                    <th>{row.totalCreatedIssuedCount}</th>
+                                    <th>{row.totalCreatedIssuedSum}</th>
+                                    <td>{row.reviewedCount}</td>
+                                    <td>{row.reviewedSum}</td>
+                                    <td>{row.approvedCount}</td>
+                                    <td>{row.approvedSum}</td>
+                                    <th>{row.totalReviewedApprovedCount}</th>
+                                    <th>{row.totalReviewedApprovedSum}</th>
+                                    <th>{row.totalAllCount}</th>
+                                    <th>{row.totalAllSum}</th>
+                                </tr>
+                            )
+                        }
+                    })}
+                    {props.data.result[0].rows.map((row, index) => {
+                        if (row.branchName === "Total") {
+                            return (
+                                <tr key={index}>
+                                    <td colSpan={2}>إجمالي المجموعه</td>
+                                    <td>{row.createdCount}</td>
+                                    <td>{row.createdSum}</td>
+                                    <td>{row.issuedCount}</td>
+                                    <td>{row.issuedSum}</td>
+                                    <th>{row.totalCreatedIssuedCount}</th>
+                                    <th>{row.totalCreatedIssuedSum}</th>
+                                    <td>{row.reviewedCount}</td>
+                                    <td>{row.reviewedSum}</td>
+                                    <td>{row.approvedCount}</td>
+                                    <td>{row.approvedSum}</td>
+                                    <th>{row.totalReviewedApprovedCount}</th>
+                                    <th>{row.totalReviewedApprovedSum}</th>
+                                    <th>{row.totalAllCount}</th>
+                                    <th>{row.totalAllSum}</th>
+                                </tr>
+                            )
+                        }
+                    })}
                 </tbody>
 
                 <thead>
@@ -140,79 +134,78 @@ const BranchesLoanList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>68</td>
-                        <td>المنيا - ابو قرقاص</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>134</td>
-                        <td>2983.0</td>
-                        <th>134</th>
-                        <th>2893.0</th>
-                        <td>5</td>
-                        <td>165.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>5</th>
-                        <th>165.0</th>
-                        <th>139</th>
-                        <th>3058.0</th>
-                    </tr>
-                    <tr>
-                        <td>129</td>
-                        <td>المنيا - ابو قرقاص ثان</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>15</td>
-                        <td>131.5</td>
-                        <th>15</th>
-                        <th>131.5</th>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>0</th>
-                        <th>0.0</th>
-                        <th>15</th>
-                        <th>131.5</th>
-                    </tr>
-                    <tr>
-                        <td colSpan={2}>إجمالي فردي</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>149</td>
-                        <td>3024.5</td>
-                        <th>149</th>
-                        <th>3024.5</th>
-                        <td>5</td>
-                        <td>165.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>5</th>
-                        <th>165.0</th>
-                        <th>154</th>
-                        <th>3189.0</th>
-                    </tr>
+                    {props.data.result[1].rows.map((row, index) => {
+                        if (row.branchName !== "Total") {
+                            return (
+                                <tr key={index}>
+                                    <td></td>
+                                    <td>{row.branchName}</td>
+                                    <td>{row.createdCount}</td>
+                                    <td>{row.createdSum}</td>
+                                    <td>{row.issuedCount}</td>
+                                    <td>{row.issuedSum}</td>
+                                    <th>{row.totalCreatedIssuedCount}</th>
+                                    <th>{row.totalCreatedIssuedSum}</th>
+                                    <td>{row.reviewedCount}</td>
+                                    <td>{row.reviewedSum}</td>
+                                    <td>{row.approvedCount}</td>
+                                    <td>{row.approvedSum}</td>
+                                    <th>{row.totalReviewedApprovedCount}</th>
+                                    <th>{row.totalReviewedApprovedSum}</th>
+                                    <th>{row.totalAllCount}</th>
+                                    <th>{row.totalAllSum}</th>
+                                </tr>
+                            )
+                        }
+                    })}
+                    {props.data.result[1].rows.map((row, index) => {
+                        if (row.branchName === "Total") {
+                            return (
+                                <tr key={index}>
+                                    <td colSpan={2}>إجمالي فردي</td>
+                                    <td>{row.createdCount}</td>
+                                    <td>{row.createdSum}</td>
+                                    <td>{row.issuedCount}</td>
+                                    <td>{row.issuedSum}</td>
+                                    <th>{row.totalCreatedIssuedCount}</th>
+                                    <th>{row.totalCreatedIssuedSum}</th>
+                                    <td>{row.reviewedCount}</td>
+                                    <td>{row.reviewedSum}</td>
+                                    <td>{row.approvedCount}</td>
+                                    <td>{row.approvedSum}</td>
+                                    <th>{row.totalReviewedApprovedCount}</th>
+                                    <th>{row.totalReviewedApprovedSum}</th>
+                                    <th>{row.totalAllCount}</th>
+                                    <th>{row.totalAllSum}</th>
+                                </tr>
+                            )
+                        }
+                    })}
+
                 </tbody>
 
                 <tbody>
-                    <tr>
-                        <th colSpan={2}>إﺟﻣﺎﻟﻰ ﺷرﻛﺔ ﺗﺳﺎھﯾل ﻟﻠﺗﻣوﯾل ﻣﺗﻧﺎھﻰ اﻟﺻﻐر</th>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <td>195</td>
-                        <td>3932.5</td>
-                        <th>195</th>
-                        <th>3932.5</th>
-                        <td>5</td>
-                        <td>165.0</td>
-                        <td>0</td>
-                        <td>0.0</td>
-                        <th>5</th>
-                        <th>165.0</th>
-                        <th>200</th>
-                        <th>4097.5</th>
-                    </tr>
+                    {props.data.result[2].rows.map((row, index) => {
+                        return (
+                            <tr key={index}>
+                                <th colSpan={2}>إﺟﻣﺎﻟﻰ ﺷرﻛﺔ ﺗﺳﺎھﯾل ﻟﻠﺗﻣوﯾل ﻣﺗﻧﺎھﻰ اﻟﺻﻐر</th>
+                                <td>{row.createdCount}</td>
+                                <td>{row.createdSum}</td>
+                                <td>{row.issuedCount}</td>
+                                <td>{row.issuedSum}</td>
+                                <th>{row.totalCreatedIssuedCount}</th>
+                                <th>{row.totalCreatedIssuedSum}</th>
+                                <td>{row.reviewedCount}</td>
+                                <td>{row.reviewedSum}</td>
+                                <td>{row.approvedCount}</td>
+                                <td>{row.approvedSum}</td>
+                                <th>{row.totalReviewedApprovedCount}</th>
+                                <th>{row.totalReviewedApprovedSum}</th>
+                                <th>{row.totalAllCount}</th>
+                                <th>{row.totalAllSum}</th>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </div>

@@ -14,7 +14,7 @@ import { Branch } from '../../Services/interfaces';
 interface InitialFormikState {
   fromDate?: string;
   toDate?: string;
-  branches?: Array<Branch>;
+  branches: Array<Branch>;
   key?: string;
 }
 
@@ -22,15 +22,15 @@ interface Props {
   pdf: PDF;
   show: boolean;
   hideModal: () => void;
+  submit: (values) => void;
 }
 
 const ReportsModal = (props: Props) => {
   function handleSubmit(values) {
-    console.log(values)
-  
+    props.submit(values);
   }
   function getInitialValues() {
-    const initValues: InitialFormikState = {}
+    const initValues: InitialFormikState = {branches: []}
     props.pdf.inputs?.forEach(input => {
       switch(input) {
         case 'dateFromTo': initValues.fromDate = ''; initValues.toDate = '';
@@ -102,7 +102,7 @@ const ReportsModal = (props: Props) => {
                   if (input === 'branches') {
                     return (
                       <Col key={index} sm={12} style={{ marginTop: 20 }}>
-                        <BranchesDropDown multiselect={true} onSelectBranch={(branch) => { formikProps.setFieldValue('branches', branch) }} />                        
+                        <BranchesDropDown multiselect={true} onSelectBranch={(branch) => {formikProps.setFieldValue('branches', [...formikProps.values.branches, branch]) }} />                        
                         <span style={{ color: 'red' }}>
                           {formikProps.errors.branches}
                         </span>
