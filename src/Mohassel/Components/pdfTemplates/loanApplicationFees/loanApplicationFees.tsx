@@ -1,7 +1,35 @@
 import React from 'react';
 import './loanApplicationFees.scss';
 
-const LoanApplicationFees = (props) => {
+interface Props{
+    result: {
+    branches: {
+      df: {
+        truthDate: string;
+        branchName: string;
+        serialNo: number;
+        customerKey: string;
+        customerName: string;
+        loanSerial: number;
+        principal: number;
+        status: string;
+        principalAmount: number;
+        transactionInterest: number;
+        transactionAmount: number;
+
+      }[];
+      total: number[];
+      branchName: string;
+
+    }[];
+    trx: number;
+    day: string;
+    total: number[];
+}[];
+total: number[];
+trx: number;
+}
+const LoanApplicationFees = (props: Props) => {
     return (
         <div className="loan-application-fees" lang="ar">
             <table className="report-container">
@@ -26,6 +54,16 @@ const LoanApplicationFees = (props) => {
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
                     </tr>
+                    </thead>
+                    </table>
+                    <table>
+                 {props.result.map((res)   => {  
+                     return (
+                 <>  
+                 {res.branches.map((branch) =>{
+                 return (
+                     <>
+                             <thead>
                     <tr>
                         <th>رقم مسلسل</th>
                         <th>كود الحركه</th>
@@ -46,43 +84,50 @@ const LoanApplicationFees = (props) => {
                     </tr>
                     <tr>
                         <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                        <th className="gray frame" colSpan={2}>2020/06/09</th>
+                        <th className="gray frame" colSpan={2}>{res.day}</th>
+                    </tr>
+                    <tr>
+                        <th className="gray frame" colSpan={2}>إسم الفرع</th>
+                        <th className="gray frame" colSpan={2}>{branch.branchName}</th>
                     </tr>
                 </thead>
+                  {branch.df.map((row) => { 
+                      return (
+                 <>
 
                 <tbody>
                     <tr>
-                        <th className="gray frame" colSpan={2}>بنك / خرينه </th>
-                        <th className="gray frame" colSpan={2}>بنك 1 - الجيزه - الصف</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>068/00112121</td>
-                        <td>068/0019762</td>
-                        <td>رومة زكري موسي تادرس</td>
-                        <td>001</td>
-                        <td>0007809</td>
-                        <td>50000.00</td>
-                        <td>2020/06/04</td>
-                        <td>مصدر _</td>
-                        <td>500.00</td>
-                        <td>0.00</td>
-                        <td>500.00</td>
+                      <td>{row.serialNo}</td>
+                        <td></td>
+                      <td>{row.customerKey}</td>
+                      <td>{row.customerName}</td>
+                      <td>{row.loanSerial}</td>
+                        <td></td>
+                        <td>{row.principal}</td>
+                        <td>{row.truthDate}</td>
+                        <td>{row.status}</td>
+                       <td>{row.principalAmount}</td>
+                        <td>{row.transactionInterest}</td>
+                        <td>{row.transactionAmount}</td>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
                     </tr>
+                </tbody>
+                </>
+                      )})}
+                <tbody>
                     <tr>
-                        <td className="frame" colSpan={2}>إجمالي بنك / خزينه</td>
-                        <td className="frame" colSpan={2}>بنك 1 - الجيزه - الصف</td>
-                        <td className="frame" colSpan={1}>2020/06/04</td>
-                        <td className="frame">1</td>
+                        <td className="frame" colSpan={2}>إجمالي الفرع</td>
+                       <td className="frame" colSpan={2}>{branch.branchName}</td>
+                        <td className="frame" colSpan={1}>{res.day}</td>
+                        <td className="frame">{""}</td>
                         <td></td>
                         <td></td>
                         <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">500.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">500.00</td>
+                      <td className="frame">{branch.total[0]}</td>
+                        <td className="frame">{branch.total[1]}</td>
+                        <td className="frame">{branch.total[2]}</td>
                     </tr>
 
                     <tr>
@@ -95,29 +140,30 @@ const LoanApplicationFees = (props) => {
                     <tr>
                         <td colSpan={8}></td>
                         <td className="frame">صافي المبلغ</td>
-                        <td className="frame">500.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">500.00</td>
+                      <td className="frame">{branch.total[0]}</td>
+                        <td className="frame">{branch.total[1]}</td>
+                      <td className="frame">{branch.total[2]}</td>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
                     </tr>
                 </tbody>
-
+                </>
+                 )})}
                 <tr style={{ height: "1em" }} ></tr>
 
                 <tbody className="tbodyborder">
                     <tr>
                         <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
-                        <td className="gray frame">2020/06/09</td>
+                        <td className="gray frame">{res.day}</td>
                         <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                        <td className="frame">1</td>
+                     <td className="frame">{res.trx}</td>
                         <td></td>
                         <td></td>
                         <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">500.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">500.00</td>
+                        <td className="frame">{res.total[0]}</td>
+                        <td className="frame">{res.total[1]}</td>
+                        <td className="frame">{res.total[2]}</td>
                     </tr>
 
                     <tr>
@@ -130,11 +176,13 @@ const LoanApplicationFees = (props) => {
                     <tr>
                         <td colSpan={8}></td>
                         <td className="frame">صافي المبلغ</td>
-                        <td className="frame">500.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">500.00</td>
+                        <td className="frame">{res.total[0]}</td>
+                        <td className="frame">{res.total[1]}</td>
+                        <td className="frame">{res.total[2]}</td>
                     </tr>
                 </tbody>
+                </>
+                 )})}
 
                 <tr style={{ height: "1em" }} ></tr>
 
@@ -143,13 +191,13 @@ const LoanApplicationFees = (props) => {
                         <td className="gray frame" colSpan={2}>إجمالي بالعمله</td>
                         <td className="gray frame">جنيه مصري</td>
                         <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                        <td className="frame">1</td>
+                     <td className="frame">{props.trx}</td>
                         <td></td>
                         <td></td>
                         <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">500.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">500.00</td>
+                     <td className="frame">{props.total[0]}</td>
+                        <td className="frame">{props.total[1]}</td>
+                        <td className="frame">{props.total[2]}</td>
                     </tr>
 
                     <tr>
@@ -162,9 +210,9 @@ const LoanApplicationFees = (props) => {
                     <tr>
                         <td colSpan={8}></td>
                         <td className="frame">صافي المبلغ</td>
-                        <td className="frame">500.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">500.00</td>
+                        <td className="frame">{props.total[0]}</td>
+                        <td className="frame">{props.total[1]}</td>
+                        <td className="frame">{props.total[2]}</td>
                     </tr>
                 </tbody>
             </table>
