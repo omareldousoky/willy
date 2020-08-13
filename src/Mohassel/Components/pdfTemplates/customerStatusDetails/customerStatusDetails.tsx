@@ -52,7 +52,7 @@ const CustomerStatusDetails = (props) => {
                 <tbody>
                     <tr>
                         <td className="borderless" colSpan={100}>
-                            {props.data.Loans.map((loan, index) => {
+                            {props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
                                 return (
                                     <div key={index} style={{ pageBreakAfter: 'always' }}>
                                         <table>
@@ -132,17 +132,17 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
-                                                    <td colSpan={2}>{loan.representativeName}</td>
+                                                    <td colSpan={2}>{loan.representativeName === "None"? '': loan.representativeName}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>حالة القرض</th>
                                                     <td>{getLoanStatus(loan.status)}</td>
                                                     <th>غرامات مسدده</th>
-                                                    <td>{loan.penaltiesPaid}</td>
+                                                    <td>{loan.penaltiesPaid  === "None"? '': loan.penaltiesPaid}</td>
                                                     <th>غرامات معفاه</th>
-                                                    <td>{loan.penaltiesCanceled}</td>
+                                                    <td>{loan.penaltiesCanceled  === "None"? '': loan.penaltiesCanceled}</td>
                                                     <th>غرامات مستحقه</th>
-                                                    <td>{loan.penalties}</td>
+                                                    <td>{loan.penalties === "None"? '': loan.penalties}</td>
                                                 </tr>
                                                 {loan.rejectionReason !== "None" ?
                                                     <tr>
@@ -153,6 +153,11 @@ const CustomerStatusDetails = (props) => {
                                                     : null
                                                 }
                                                 <tr>
+                                                    <th>طريقة الحساب</th>
+                                                    <td>{loan.calculationFormulaName}</td>
+
+                                                </tr>
+                                                <tr>
                                                     <td colSpan={100} className="horizontal-line"></td>
                                                 </tr>
                                             </tbody>
@@ -161,7 +166,7 @@ const CustomerStatusDetails = (props) => {
                                         {loan.beneficiaryType === "individual" && <table>
                                             <tbody>
                                                 <tr>
-                                                    {loan.guarantors.map((guarantor, index) => {
+                                                    {loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
                                                         return(
                                                         <td key={index}>
                                                             <table>
@@ -181,7 +186,7 @@ const CustomerStatusDetails = (props) => {
                                                                         <th>الرقم القومي</th>
                                                                         <td>{guarantor.nationalId}</td>
                                                                         <th>تاريخ الأصدار</th>
-                                                                        <td>{timeToArabicDate(guarantor.nationalIdIssueDate, false)}</td>
+                                                                        <td>{guarantor.nationalIdIssueDate? timeToArabicDate(guarantor.nationalIdIssueDate, false): ''}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>تاريخ الميلاد</th>
@@ -255,7 +260,6 @@ const CustomerStatusDetails = (props) => {
                                                     <th>الحاله</th>
                                                     <th>تاريخ الحاله</th>
                                                     <th>عدد أيام التأخير / التبكير</th>
-                                                    <th>بنك/حزينة التحصيل</th>
                                                 </tr>
                                                 {loan.installments.map((installment, index) => {
                                                     return (
@@ -269,7 +273,6 @@ const CustomerStatusDetails = (props) => {
                                                             <td>{getStatus(installment)}</td>
                                                             <td>{installment.paidAt? timeToArabicDate(new Date(installment.paidAt).valueOf(), false): ''}</td>
                                                             <td>{installment.delay}</td>
-                                                            <td>خزينة فرع {props.data.accountBranch}</td>
                                                         </tr>
                                                     )
                                                 })}
@@ -282,7 +285,7 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رصيد العميل</th>
                                                     <td></td>
                                                     <th>أيام التأخير والتبكير</th>
-                                                    <td>{getSum('delay', index)}</td>
+                                                    <td>{isNaN(getSum('delay', index))? '' : getSum('delay', index)}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
