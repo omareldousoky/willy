@@ -1,17 +1,12 @@
 import axios from "../axios-instance";
 
-export const writeOffs = async () => {
+export const writeOffs = async (data) => {
   const url = process.env.REACT_APP_BASE_URL + `/report/write-offs`;
   try {
     const res = await axios({
       method: "POST",
       url,
-      data: {
-        "startDate": "2020-02-01",
-        "endDate": "2020-02-15",
-        all: "1",
-        branchList: [],
-      },
+      data,
     });
     return { status: "success", body: res.data };
   } catch (error) {

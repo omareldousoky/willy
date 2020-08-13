@@ -2,10 +2,8 @@ import React from "react";
 import "./ClientGuaranteedLoans.scss";
 
 const ClientGuaranteedLoans = (props) => {
-  console.log("props", props);
   const GuarantorName = props.data.GuarantorName;
   const data = props.data.data;
-  console.log("wp", props, GuarantorName, data);
   const getLoanStatusFromLocal = (value) => {
     if (value === 1) return "";
     // مصدر

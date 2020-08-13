@@ -2,7 +2,6 @@ import React from "react";
 import "./CollectionStatement.scss";
 
 const CollectionStatement = (props) => {
-  console.log("props", props);
   const branches = props.data.data.branches;
   const total = props.data.data.total;
   const startDate = props.data.startDate;
@@ -59,7 +58,7 @@ const CollectionStatement = (props) => {
 
   return (
     <div className="CollectionStatement">
-      <table>
+       <table>
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
@@ -68,6 +67,8 @@ const CollectionStatement = (props) => {
             </th>
           </tr>
         </thead>
+        </table>
+      <table>
         <tbody>
           {branches.map((branch, idx) => (
             <BranchComponent key={idx} branch={branch} />

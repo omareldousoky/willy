@@ -29,7 +29,6 @@ export class CustomerReportsTab extends Component<Props, State> {
     };
   }
   handlePrint = (pdf) => {
-    console.log("here", pdf);
     this.props.changePrint(pdf.key);
     this.props.changeDataToBePrinted(pdf.data);
   };

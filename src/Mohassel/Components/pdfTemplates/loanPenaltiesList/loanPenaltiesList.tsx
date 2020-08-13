@@ -2,7 +2,7 @@ import React from "react";
 import "./loanPenaltiesList.scss";
 
 const LoanPenaltiesList = (props) => {
-  const data = props.data.data;
+  const data = props.data;
   const days = data.days;
   const totalNumberOfTransactions = Number(data.totalNumberOfTransactions);
   const totalTransactionAmount = Number(data.totalTransactionAmount);
