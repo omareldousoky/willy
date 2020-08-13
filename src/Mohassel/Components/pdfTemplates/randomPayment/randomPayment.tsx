@@ -8,10 +8,12 @@ interface Props{
 	trxDate: string;
 	trxAmount: string;
 	trxAction: string;
- }[];}[];
+ }[];
  trxCount: string;
  trxSum: string;
  branchName: string;
+}[];
+
  
  };
  
@@ -47,12 +49,12 @@ const RandomPayment = (props: Props) => {
 			</tr>
 		</thead>
 	</table>
-{ props.branches.map( (branch, index) =>{
+{ props.branches?.map( (branch, index) =>{
 	return (
 	<table key = {index}  style={{padding:"10px"}}>
 		<thead>
 			<tr>
-				<th colSpan={3}><div className="frame" >{props.branchName} </div></th>
+				<th colSpan={3}><div className="frame" >{branch.branchName} </div></th>
 			</tr>
 			<tr>
 				<td colSpan={10} className="border"></td>
@@ -77,7 +79,7 @@ const RandomPayment = (props: Props) => {
 			return(
 		<tbody key={index}>
 			<tr>
-				<td>1</td>
+				<td></td>
 				<td>{row.customerKey}</td>
 				<td>{row.customerName}</td>
 				<td>{row.trxCode}</td>
@@ -101,10 +103,10 @@ const RandomPayment = (props: Props) => {
 }  
 <tbody className="tbody-border">
 			<tr>
-<td colSpan={3}>إجمالي الحركه {props.branchName}</td>
+<td colSpan={3}>إجمالي الحركه {branch.branchName}</td>
 				<td></td>
-				<td>عدد {props.trxCount}</td>
-				<td>المبلغ {props.trxSum}</td>
+				<td>عدد {branch.trxCount}</td>
+				<td>المبلغ {branch.trxSum}</td>
 			</tr>
 		</tbody>
 	</table>

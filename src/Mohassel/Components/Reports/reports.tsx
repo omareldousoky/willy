@@ -9,6 +9,11 @@ import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails';
 import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails';
 import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList';
 import { getBranchLoanList } from '../../Services/APIs/Reports/branchLoanList';
+import { getRandomPayments } from '../../Services/APIs/Reports/randomPayment';
+import RandomPayment from '../pdfTemplates/randomPayment/randomPayment';
+import { getLoanApplicationFees } from '../../Services/APIs/Reports/loanApplicationFees';
+import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees';
+import Swal from 'sweetalert2';
 
 export interface PDF {
   key?: string;
@@ -36,6 +41,8 @@ class Reports extends Component<{}, State> {
         { key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey'] },
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'] },
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'] },
+        {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches']},
+        {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches']},
 
       ],
       selectedPdf: {},
@@ -52,6 +59,8 @@ class Reports extends Component<{}, State> {
       case 'customerDetails': return this.getCustomerDetails(values);
       case 'loanDetails': return this.getLoanDetails(values);
       case 'branchLoanList': return this.getBranchLoanList(values);
+      case 'randomPayments' : return this.getRandomPayments(values);
+      case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       default: return null;
     }
   }
@@ -98,6 +107,47 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getRandomPayments(values){
+    this.setState({loading: true , showModal: false})
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.map((branch) => branch._id),
+      all: values.branches[0]._id == "" ? "1" :"0",
+    }
+    const res = await getRandomPayments(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: res.body,
+        showModal: false,
+        print: 'randomPayments',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getLoanApplicationFees(values){
+    this.setState({loading: true , showModal: false})
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.filter((branch)=> branch._id !== "").map((branch) => branch._id ),
+    }
+    const res = await getLoanApplicationFees(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: res.body,
+        showModal: false,
+        print: 'loanApplicationFees',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
   render() {
     return (
       <>
@@ -130,6 +180,9 @@ class Reports extends Component<{}, State> {
         {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} customerKey={this.state.customerKey}/>}
         {this.state.print === "loanDetails" && <LoanApplicationDetails data={this.state.data} />}
         {this.state.print === "branchLoanList" && <BranchesLoanList data={this.state.data} />}
+        {this.state.print ==="randomPayments"? this.state.data.branches ? <RandomPayment branches = {this.state.data.branches}/> : Swal.fire("error",local.noResults) : null}
+        {this.state.print==="loanApplicationFees" ? this.state.data.result  ? <LoanApplicationFees result = {this.state.data.result} total = {this.state.data.total} trx = {this.state.data.trx} />  : Swal.fire("error", local.noResults) : null}
+       
       </>
     )
   }
