@@ -196,13 +196,15 @@ class FreeRescheduling extends Component<Props, State>{
     }
     getRescheuleDate(values, index){
         const reschedFreeInsts = values.installments.slice(0,index-1).filter(i => i.status !== 'rescheduled');
-        let maxDate = reschedFreeInsts[0].dateOfPayment;
-        reschedFreeInsts.forEach(element => {
-            if(element.dateOfPayment>maxDate){
-                maxDate = element.dateOfPayment;
-            }
-        });
-        return maxDate
+        if(reschedFreeInsts.length > 0){
+            let maxDate = reschedFreeInsts[0].dateOfPayment;
+            reschedFreeInsts.forEach(element => {
+                if(element.dateOfPayment>maxDate){
+                    maxDate = element.dateOfPayment;
+                }
+            });
+            return maxDate
+        } else return 0
     }
     render() {
         return (
@@ -306,7 +308,7 @@ class FreeRescheduling extends Component<Props, State>{
                                                         </td>
                                                         <td>
                                                             {formikProps.values.installments[index].new && <span onClick={() => formikProps.setFieldValue('installments', this.removeNew(formikProps.values, index))}><span className="fa fa-trash" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
-                                                            {!formikProps.values.installments[index].new && this.editable(item) && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span></span>}
+                                                            {!formikProps.values.installments[index].new && this.editable(item) && <span onClick={() => formikProps.setFieldValue('installments', this.rescheduleInstallment(formikProps.values, index))}><img alt="reschedule" src={require('../../Assets/reschedule.svg')} style={{ margin: "0px 0px 0px 5px" }} /></span>}
                                                         </td>
                                                     </tr>
                                                 )

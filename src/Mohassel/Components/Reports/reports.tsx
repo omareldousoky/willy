@@ -17,6 +17,11 @@ import { getCreatedLoanList } from '../../Services/APIs/Reports/createdLoansList
 import { getRescheduledLoanList } from '../../Services/APIs/Reports/rescheduledLoansList';
 import LoanCreationList from '../pdfTemplates/loanCreationList/loanCreationList';
 import RescheduledLoanList from '../pdfTemplates/rescheduledLoanList/rescheduledLoanList';
+import { getRandomPayments } from '../../Services/APIs/Reports/randomPayment';
+import RandomPayment from '../pdfTemplates/randomPayment/randomPayment';
+import { getLoanApplicationFees } from '../../Services/APIs/Reports/loanApplicationFees';
+import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees';
+import Swal from 'sweetalert2';
 
 export interface PDF {
   key?: string;
@@ -32,6 +37,8 @@ interface State {
   data: any;
   loading: boolean;
   customerKey: string;
+  fromDate: string;
+  toDate: string;
 }
 
 class Reports extends Component<{}, State> {
@@ -48,13 +55,16 @@ class Reports extends Component<{}, State> {
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'] },
         { key: 'rescheduledLoanList', local: 'قائمة حركات جدولة القروض المنفذه', inputs: ['dateFromTo', 'branches'] },
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'] },
-
+        {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches']},
+        {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches']},
 
       ],
       selectedPdf: {},
       data: {},
       loading: false,
-      customerKey: ''
+      customerKey: '',
+      fromDate: '',
+      toDate: ''
     }
   }
   handlePrint(selectedPdf: PDF) {
@@ -69,7 +79,8 @@ class Reports extends Component<{}, State> {
       case 'createdLoanList': return this.getCreatedLoanList(values);
       case 'rescheduledLoanList': return this.getRescheduledLoanList(values);
       case 'paymentsDoneList': return this.getInstallments(values);
-
+      case 'randomPayments' : return this.getRandomPayments(values);
+      case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       default: return null;
     }
   }
@@ -97,11 +108,11 @@ class Reports extends Component<{}, State> {
     }
   }
   async getBranchLoanList(values) {
-    this.setState({ loading: true, showModal: false })
+    this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: values.branches.map((branch) => branch._id)
+      branches: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
     }
     const res = await getBranchLoanList(obj);
     if (res.status === 'success') {
@@ -131,6 +142,27 @@ class Reports extends Component<{}, State> {
         data: { data: res.body, from: values.fromDate, to: values.toDate },
         showModal: false,
         print: 'paymentsDoneList',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getRandomPayments(values){
+    this.setState({loading: true , showModal: false})
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.map((branch) => branch._id),
+      all: values.branches[0]._id == "" ? "1" :"0",
+    }
+    const res = await getRandomPayments(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: res.body,
+        showModal: false,
+        print: 'randomPayments',
         loading: false,
       }, () => window.print())
     } else {
@@ -201,6 +233,26 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getLoanApplicationFees(values){
+    this.setState({loading: true , showModal: false})
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.filter((branch)=> branch._id !== "").map((branch) => branch._id ),
+    }
+    const res = await getLoanApplicationFees(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: res.body,
+        showModal: false,
+        print: 'loanApplicationFees',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
   render() {
     return (
       <>
@@ -237,6 +289,10 @@ class Reports extends Component<{}, State> {
         {this.state.print === "createdLoanList" && <LoanCreationList data={this.state.data} />}
         {this.state.print === "rescheduledLoanList" && <RescheduledLoanList data={this.state.data} />}
         {this.state.print === "paymentsDoneList" && <PaymentsDone data={this.state.data} />}
+        {this.state.print === "branchLoanList" && <BranchesLoanList data={this.state.data} fromDate={this.state.fromDate} toDate={this.state.toDate}/>}
+        {this.state.print ==="randomPayments"? this.state.data.branches ? <RandomPayment branches = {this.state.data.branches}/> : Swal.fire("error",local.noResults) : null}
+        {this.state.print==="loanApplicationFees" ? this.state.data.result  ? <LoanApplicationFees result = {this.state.data.result} total = {this.state.data.total} trx = {this.state.data.trx} />  : Swal.fire("error", local.noResults) : null}
+       
       </>
     )
   }
