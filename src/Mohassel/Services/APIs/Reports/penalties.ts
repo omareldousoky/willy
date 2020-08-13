@@ -11,6 +11,8 @@ export const penalties = async () => {
         "endDate": "2020-07-02"
       },
     });
+    console.log('response', res);
+    
     return { status: "success", body: res.data };
   } catch (error) {
     return { status: "error", error: error.response.data };

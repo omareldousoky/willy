@@ -15,6 +15,7 @@ import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
 import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList';
+import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -84,31 +85,47 @@ const CustomerProfile = (props: Props) => {
         ],
         GuarantorName: "سعاد محمد مصطفي ناجي"
       }
-      // const resCollectionReport = await collectionReport();
-      // changeLoading(false);
-      // if(resCollectionReport.body){
-      //   _changePrint("CollectionStatement")
-      //   const data = {
-      //     startDate: "2020-03-01",
-      //     endDate: "2020-07-1",
-      //     data: resCollectionReport.body.data
-      //   }
-      //   changeDataToBePrinted(data)
-      //   window.print(); 
-      // }
-      const resPenalties = await penalties();
+      const resCollectionReport = await collectionReport();
+      console.log('resCollectionReport',resCollectionReport);
       changeLoading(false);
-      if(resPenalties.body){
-        _changePrint("Penalties")
+      if(resCollectionReport.body){
+        _changePrint("CollectionStatement")
         const data = {
           startDate: "2020-03-01",
           endDate: "2020-07-1",
-          data: resPenalties.body.data
+          data: resCollectionReport.body.data
         }
         changeDataToBePrinted(data)
         window.print(); 
       }
+      // const resPenalties = await penalties();
+      // changeLoading(false);
+      // if(resPenalties.body){
+      //   _changePrint("Penalties")
+      //   const data = {
+      //     startDate: "2020-03-01",
+      //     endDate: "2020-07-1",
+      //     data: {
+      //       days: resPenalties.body.days,
+      //       totalNumberOfTransactions: "934.0",
+      //       totalTransactionAmount: "87433.5"
+      //     }
+      //   }
+      //   changeDataToBePrinted(data)
+      //   window.print(); 
+      // }
       // const resWriteOffs = await writeOffs();
+      // console.log('resWriteOffs', resWriteOffs);
+      // changeLoading(false);
+      // if(resWriteOffs.body){
+      //     _changePrint("CrossedOutLoans")
+      //     const data = {
+      //     req: {  startDate: "2020-03-01",  endDate: "2020-07-1" },
+      //     data: {...resWriteOffs.body}
+      //     }
+      //     changeDataToBePrinted(data)
+      //   window.print(); 
+      //   }
       // console.log('resCollectionReport', resCollectionReport);
       // console.log('resPenalties', resPenalties);
       // console.log('resWriteOffs', resWriteOffs);
@@ -343,6 +360,7 @@ const CustomerProfile = (props: Props) => {
       {print === "ClientGuaranteedLoans" && ( <ClientGuaranteedLoans data={dataToBePrinted} /> )}
       {(print === "CollectionStatement" && dataToBePrinted) && ( <CollectionStatement data={dataToBePrinted} /> )}
       {(print === "Penalties" && dataToBePrinted) && ( <LoanPenaltiesList data={dataToBePrinted} /> )}
+      {(print === "CrossedOutLoans" && dataToBePrinted) && (<CrossedOutLoansList data={dataToBePrinted} /> )}
     </>
   )
 }
