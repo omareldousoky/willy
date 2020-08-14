@@ -216,7 +216,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <td></td>
                             <td></td>
                             <th className="border">الخصم</th>
-                            <td className="border">{numbersToArabic(Math.ceil((this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid')) + (this.props.earlyPaymentData.remainingPrincipal - this.state.latePrincipal)) - this.props.earlyPaymentData.requiredAmount)}</td>
+                            <td className="border">{(this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid')+ this.props.earlyPaymentData.remainingPrincipal) - ((this.props.earlyPaymentData.remainingPrincipal - this.state.latePrincipal) + ((this.props.data.product.earlyPaymentFees * (this.props.earlyPaymentData.remainingPrincipal - this.state.latePrincipal)) / 100))}</td>
                         </tr>
                         <tr>
                             <td></td>
