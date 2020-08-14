@@ -8,7 +8,9 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp)
+  if (timeStamp === 0) {
+    return new Date().toISOString().slice(0, 10)
+  } else if (timeStamp)
     return new Date(timeStamp).toISOString().slice(0, 10)
 }
 
