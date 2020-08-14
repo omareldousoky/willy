@@ -1,7 +1,25 @@
 import React from "react";
 import "./ClientGuaranteedLoans.scss";
 
-const ClientGuaranteedLoans = props => {
+const ClientGuaranteedLoans = (props) => {
+  const GuarantorName = props.data.GuarantorName;
+  const data = props.data.data;
+  const getLoanStatusFromLocal = (value) => {
+    if (value === 1) return "";
+    // مصدر
+    // مدفوع
+    // تحت التحقيق
+  };
+  const getApplicationStatusFromLocal = (value) => {
+    if (value === 1) return "";
+    // تحت التحرير
+    // رجعت
+    // مرفوضه
+    // ملغيه
+    // موافق عليها
+    // تم الانشاء
+  };
+
   return (
     <div className="ClientGuaranteedLoans">
       <table className="report-container">
@@ -40,21 +58,25 @@ const ClientGuaranteedLoans = props => {
           <tr>
             <th colSpan={100} className="border"></th>
           </tr>
-          ​
         </thead>
-        ​
         <tbody>
-          <tr>
-            <td className="gray frame">سعاد محمد مصطفي ناجي _ ضامن اول</td>
-            <td>111120001923</td>
-            <td>1</td>
-            <td>حسن محمد عبدالفتاح محمد</td>
-            <td>موافقه</td>
-            <td>2019/11/25</td>
-            <td>مسدد بالكامل</td>
-            <td>2019/11/25</td>
-          </tr>
-          ​
+          {data &&
+            data.map((record, idx) => {
+              return (
+                <tr key={idx}>
+                  <td className="gray frame">{GuarantorName}</td>
+                  <td>{record.customerKey}</td>
+                  <td>{record.applicationCode}</td>
+                  <td>{record.customerName}</td>
+                  {/* record.appStatus */}
+                  <td>موافقه</td>
+                  <td>{record.approvalDate}</td>
+                  {/* record.loanStatus */}
+                  <td>مسدد بالكامل</td>
+                  <td>{record.issueDates}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>
