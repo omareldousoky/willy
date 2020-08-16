@@ -671,5 +671,9 @@
     "employeeName": "إسم الموظف",
     "transactionDate": "تاريخ المعاملة",
     "searchByEmp": "البحث بإسم الموظف",
-    "noIScore":"لا يوجد iScore"
+    "noIScore":"لا يوجد iScore",
+    "changeSourceOfFund": "تغيير مصدر التمويل",
+    "noOfSelectedLoans": "عدد القروض المختارة",
+    "changeFund": "تغيير التمويل",
+    "chooseSourceOfFund": "إختر مصدر التمويل"
 }
