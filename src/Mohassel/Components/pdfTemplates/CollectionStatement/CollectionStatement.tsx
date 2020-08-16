@@ -58,7 +58,7 @@ const CollectionStatement = (props) => {
 
   return (
     <div className="CollectionStatement">
-      <table>
+      <table style={{ width: "100%" }}>
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
@@ -68,7 +68,7 @@ const CollectionStatement = (props) => {
           </tr>
         </thead>
       </table>
-      <table>
+      <table style={{ width: "100%" }}>
         <tbody>
           {branches.map((branch, idx) => (
             <BranchComponent key={idx} branch={branch} />
