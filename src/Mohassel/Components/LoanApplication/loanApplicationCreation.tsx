@@ -384,7 +384,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async searchCustomers() {
         this.setState({ loading: true, branchCustomers: [] });
-        const query = { from: 0, size: 1000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
+        const query = { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
