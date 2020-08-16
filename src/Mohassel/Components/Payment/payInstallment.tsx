@@ -24,6 +24,7 @@ interface FormValues {
   payerNationalId: string;
   payerName: string;
   payerId: string;
+  installmentNumber: number;
 }
 interface Installment {
   id: number;
@@ -74,6 +75,7 @@ interface State {
   payerNationalId: string;
   payerName: string;
   payerId: string;
+  installmentNumber: number;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -96,7 +98,8 @@ class PayInstallment extends Component<Props, State> {
       payerType: '',
       payerNationalId: '',
       payerName: '',
-      payerId: ''
+      payerId: '',
+      installmentNumber: -1
     };
   }
   componentDidUpdate(prevProps, prevState) {
