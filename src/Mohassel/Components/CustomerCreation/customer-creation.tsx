@@ -102,6 +102,7 @@ interface State {
     geographicalDistribution: string;
     representative: any;
     newRepresentative: any;
+    representativeName: string;
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
@@ -210,6 +211,7 @@ class CustomerCreation extends Component<Props, State>{
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,
         representative: res.body.representative,
+        representativeName: res.body.representativeName,
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
