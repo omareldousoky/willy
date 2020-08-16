@@ -78,7 +78,10 @@ interface State {
   installmentNumber: number;
   penalty: number;
   penaltyAction: string;
-  byInsurance: boolean;
+  payerType: string;
+  payerNationalId: string;
+  payerName: string;
+  payerId: string;
 }
 
 class Payment extends Component<Props, State>{
@@ -146,7 +149,10 @@ class Payment extends Component<Props, State>{
       installmentNumber: -1,
       penalty: -1,
       penaltyAction: '',
-      byInsurance: false,
+      payerType: '',
+      payerNationalId: '',
+      payerName: '',
+      payerId: '',
     }
        this.mappers = normalTableMappers;
   }
@@ -255,7 +261,11 @@ class Payment extends Component<Props, State>{
         const data = {
           payAmount: values.payAmount,
           truthDate: new Date(values.truthDate).valueOf(),
-          type: values.randomPaymentType
+          type: values.randomPaymentType,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId.toString(),
         };
         const res = await otherPayment({ id: this.props.applicationId, data });
         if (res.status === "success") {
@@ -273,7 +283,11 @@ class Payment extends Component<Props, State>{
         if(this.state.penaltyAction==='pay'){
           const data = {
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf()
+            truthDate: new Date(values.truthDate).valueOf(),
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId.toString(),
           };
           const res = await payPenalties({ id: this.props.applicationId, data });
           if (res.status === "success") {
@@ -304,10 +318,15 @@ class Payment extends Component<Props, State>{
         }
       }
     } else if (this.props.paymentState === 2) {
-      const res = await earlyPayment(
-        this.props.applicationId,
-        values.payAmount
-      );
+      const obj = {
+        id: this.props.applicationId,
+        payAmount: values.payAmount,
+        payerType: values.payerType,
+        payerId: values.payerId,
+        payerName: values.payerName,
+        payerNationalId: values.payerNationalId.toString(),
+      }
+      const res = await earlyPayment(obj);
       this.setState({ payAmount: res.body.requiredAmount });
       if (res.status === "success") {
         this.props.setReceiptData(res.body);
@@ -318,13 +337,17 @@ class Payment extends Component<Props, State>{
       }
     } else {
       if (this.props.manualPaymentEditId === "") {
-        const res = await manualPayment(
-          this.props.applicationId,
-          values.payAmount,
-          values.receiptNumber,
-          new Date(values.truthDate).valueOf(), 
-          values.byInsurance
-        );
+        const obj = {
+          id: this.props.applicationId,
+          receiptNumber: values.receiptNumber,
+          truthDate: new Date(values.truthDate).valueOf(), 
+          payAmount: values.payAmount,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId.toString(),
+        }
+        const res = await manualPayment(obj);
         if (res.status === "success") {
           this.setState({ loadingFullScreen: false });
           Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
@@ -332,13 +355,13 @@ class Payment extends Component<Props, State>{
           this.setState({ loadingFullScreen: false });
         }
       } else {
-        const res = await editManualPayment(
-          this.props.applicationId,
-          values.payAmount,
-          values.receiptNumber,
-          new Date(values.truthDate).valueOf(),
-          values.byInsurance
-        );
+        const obj = {
+          id: this.props.applicationId,
+          payAmount: values.payAmount,
+          receiptNumber: values.receiptNumber,
+          truthDate: new Date(values.truthDate).valueOf(),
+        }
+        const res = await editManualPayment(obj);
         if (res.status === "success") {
           this.setState({ loadingFullScreen: false });
           Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
@@ -502,7 +525,6 @@ class Payment extends Component<Props, State>{
         truthDate={this.state.truthDate}
         paymentType={this.props.paymentType}
         penaltyAction={this.state.penaltyAction}
-        byInsurance={this.state.byInsurance}
         />
       case 2: return (
         <Card className="payment-menu">
@@ -612,6 +634,101 @@ class Payment extends Component<Props, State>{
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
+                    <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerType"
+                          data-qc="payerType"
+                          value={formikProps.values.payerType}
+                          onChange={formikProps.handleChange}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.payerType) && Boolean(formikProps.touched.payerType)}
+                        >
+                          <option value={''}></option>
+                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
+                          {/* <option value='employee' data-qc='employee'>{local.employee}</option> */}
+                          <option value='family' data-qc='family'>{local.familyMember}</option>
+                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payerType}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    {formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikProps.handleChange}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.payerId) && Boolean(formikProps.touched.payerId)}
+                        >
+                          <option value={''}></option>
+                          {this.props.application.group.individualsInGroup.map((member, index) => {
+                            return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
+                          })}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payerId}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>}
+                    {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikProps.handleChange}
+                        >
+                          <option value={''}></option>
+                          <option value={'employee'}>employee</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>}
+                    {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&
+                      <>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              name="payerName"
+                              data-qc="payerName"
+                              value={formikProps.values.payerName.toString()}
+                              onBlur={formikProps.handleBlur}
+                              onChange={formikProps.handleChange}
+                              isInvalid={Boolean(formikProps.errors.payerName) && Boolean(formikProps.touched.payerName)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikProps.errors.payerName}
+                            </Form.Control.Feedback>
+                          </Col>
+                        </Form.Group>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              type="number"
+                              name="payerNationalId"
+                              data-qc="payerNationalId"
+                              maxLength={14}
+                              value={formikProps.values.payerNationalId.toString()}
+                              onBlur={formikProps.handleBlur}
+                              onChange={formikProps.handleChange}
+                              isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikProps.errors.payerNationalId}
+                            </Form.Control.Feedback>
+                          </Col>
+                        </Form.Group>
+                      </>
+                    }
                   </Form.Group>
                   <div className="payments-buttons-container">
                     <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
@@ -679,7 +796,7 @@ class Payment extends Component<Props, State>{
                     </Form.Group>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Group as={Col} controlId="payAmount">
+                    <Form.Group as={Col} md={6} controlId="payAmount">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
                       <Col>
                         <Form.Control
@@ -697,7 +814,7 @@ class Payment extends Component<Props, State>{
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Col} controlId="receiptNumber">
+                    <Form.Group as={Col} md={6} controlId="receiptNumber">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.receiptNumber}`}</Form.Label>
                       <Col>
                         <Form.Control
@@ -719,18 +836,102 @@ class Payment extends Component<Props, State>{
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
+                    <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerType"
+                          data-qc="payerType"
+                          value={formikProps.values.payerType}
+                          onChange={formikProps.handleChange}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.payerType) && Boolean(formikProps.touched.payerType)}
+                        >
+                          <option value={''}></option>
+                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
+                          {/* <option value='employee' data-qc='employee'>{local.employee}</option> */}
+                          <option value='family' data-qc='family'>{local.familyMember}</option>
+                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payerType}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    {formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikProps.handleChange}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.payerId) && Boolean(formikProps.touched.payerId)}
+                        >
+                          <option value={''}></option>
+                          {this.props.application.group.individualsInGroup.map((member, index) => {
+                            return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
+                          })}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.payerId}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>}
+                    {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikProps.handleChange}
+                        >
+                          <option value={''}></option>
+                          <option value={'employee'}>employee</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>}
+                    {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&
+                      <>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              name="payerName"
+                              data-qc="payerName"
+                              value={formikProps.values.payerName.toString()}
+                              onBlur={formikProps.handleBlur}
+                              onChange={formikProps.handleChange}
+                              isInvalid={Boolean(formikProps.errors.payerName) && Boolean(formikProps.touched.payerName)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikProps.errors.payerName}
+                            </Form.Control.Feedback>
+                          </Col>
+                        </Form.Group>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              type="number"
+                              name="payerNationalId"
+                              data-qc="payerNationalId"
+                              maxLength={14}
+                              value={formikProps.values.payerNationalId.toString()}
+                              onBlur={formikProps.handleBlur}
+                              onChange={formikProps.handleChange}
+                              isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikProps.errors.payerNationalId}
+                            </Form.Control.Feedback>
+                          </Col>
+                        </Form.Group>
+                      </>
+                    }
                   </Form.Group>
-                  <div style={{ display: 'flex' }}>
-                    <Form.Label style={{ textAlign: 'right', paddingRight: 0 }}>{`${local.byInsurance}`}</Form.Label>
-                    <Form.Check
-                      name="byInsurance"
-                      id="byInsurance"
-                      data-qc="byInsurance"
-                      type='checkbox'
-                      checked={formikProps.values.byInsurance}
-                      onChange={formikProps.handleChange}
-                    />
-                  </div>
                   <div className="payments-buttons-container">
                     <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
                     <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
