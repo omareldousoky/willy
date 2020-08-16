@@ -1,5 +1,6 @@
 import React from "react";
 import "./crossedOutLoansList.scss";
+import * as local from "../../../../Shared/Assets/ar.json";
 
 const CrossedOutLoansList = (props) => {
   const data = props.data.data;
@@ -10,6 +11,31 @@ const CrossedOutLoansList = (props) => {
   const totalTransactionPrincipal = Number(data.transactionPrincipal);
   const startDate = props.data.req.startDate;
   const endDate = props.data.req.endDate;
+
+  const getStatus = (value) => {
+    switch (value) {
+      case "unpaid":
+        return local.unpaid;
+      case "pending":
+        return local.pending;
+      case "paid":
+        return local.paid;
+      case "partiallyPaid":
+        return local.partiallyPaid;
+      case "rescheduled":
+        return local.rescheduled;
+      case "cancelled":
+        return local.cancelled;
+      case "issued":
+        return local.issued;
+      case "created":
+        return local.created;
+      case "approved":
+        return local.approved;
+      default:
+        return "";
+    }
+  };
 
   const DayComponent = ({ day }) => {
     return (
@@ -104,7 +130,7 @@ const CrossedOutLoansList = (props) => {
             <td>{row.loanSerial}</td>
             <td>{row.loanPrincipal}</td>
             <td>{row.issueDate}</td>
-            <td>{row.loanStatus}</td>
+            <td>{getStatus(row.loanStatus)}</td>
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
             <td>{row.transactionAmount}</td>
@@ -180,14 +206,14 @@ const CrossedOutLoansList = (props) => {
             </th>
           </tr>
           <tr className="headtitle">
-            <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
+            <th colSpan={4}>{new Date().toDateString()}</th>
             <th colSpan={6}>جنيه مصري</th>
           </tr>
           <tr>
             <th colSpan={100} className="horizontal-line"></th>
           </tr>
           <tr>
-            <th>رقم مسلسل</th>
+            {/* <th>رقم مسلسل</th> */}
             <th>كود الحركه</th>
             <th>كود العميل</th>
             <th className="name">أسم العميل</th>
@@ -202,14 +228,14 @@ const CrossedOutLoansList = (props) => {
           <tr>
             <th colSpan={100} className="horizontal-line"></th>
           </tr>
-          <tr>
+          {/* <tr>
             <th className="gray frame" colSpan={2}>
               تاريخ الحركه
             </th>
             <th className="gray frame" colSpan={2}>
               2020/06/09
             </th>
-          </tr>
+          </tr> */}
         </thead>
 
         {days.map((day, idx) => (

@@ -16,8 +16,8 @@
       font-size: 14px;
     }
     ​ & table {
-      width: 100%;
-      text-align: center;
+      width: 100% !important;
+      text-align: right;
     }
     ​ & thead.report-header {
       display: table-header-group;
@@ -25,11 +25,14 @@
     & tr th {
       text-align: right;
     }
+    & tr td {
+      text-align: right;
+    }
   }
 }
 @media screen {
   .CollectionStatement {
     max-width: 700px;
-    // display: none;
+    display: none;
   }
 }

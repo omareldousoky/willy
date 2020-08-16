@@ -1,36 +1,26 @@
 import React, { Component } from "react";
 import Card from "react-bootstrap/Card";
 import * as local from "../../../Shared/Assets/ar.json";
-import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 import { GuaranteedLoans } from "../../Services/interfaces";
 
 interface State {
-  pdfsArray: Array<any>;
+  PDFsArray: Array<any>;
   selectedPdf: any;
 }
 interface Props {
-  guaranteeedLoansData: GuaranteedLoans | undefined;
-  changeDataToBePrinted: (data) => void;
+  PDFsArray: Array<any>;
   changePrint: (data) => void;
 }
 export class CustomerReportsTab extends Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      pdfsArray: [
-        {
-          key: "ClientGuaranteedLoans",
-          local: local.ClientGuaranteedLoans,
-          //   inputs: ["dateFromTo", "branches"],
-          data: this.props.guaranteeedLoansData,
-        },
-      ],
+      PDFsArray: this.props.PDFsArray,
       selectedPdf: {},
     };
   }
   handlePrint = (pdf) => {
-    this.props.changePrint(pdf.key);
-    this.props.changeDataToBePrinted(pdf.data);
+    this.props.changePrint(pdf);
   };
   render() {
     return (
@@ -43,7 +33,7 @@ export class CustomerReportsTab extends Component<Props, State> {
               </Card.Title>
             </div>
           </div>
-          {this.state.pdfsArray?.map((pdf, index) => {
+          {this.state.PDFsArray?.map((pdf, index) => {
             return (
               <Card key={index}>
                 <Card.Body>
