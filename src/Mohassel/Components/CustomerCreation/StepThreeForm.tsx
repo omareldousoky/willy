@@ -87,11 +87,13 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
-                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative : values.representative._id))}
+                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative :  values.representative ?  values.representative._id: ""))}
                                 onBlur={handleBlur}
                                 onChange={(representative) => {
-                                    if(props.edit && values.representative !== representative._id) {setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id)}
-                                    else setFieldValue("representative", representative._id)}
+                                    if (props.edit && values.representative !== representative._id) { setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id) }
+                                    else setFieldValue("representative", representative._id)
+                                    setFieldValue("representativeName", representative.name)
+                                }
                                 }
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}

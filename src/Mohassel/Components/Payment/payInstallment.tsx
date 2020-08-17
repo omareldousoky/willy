@@ -21,6 +21,7 @@ interface FormValues {
   paymentType: string;
   penaltyAction: string;
   byInsurance: boolean;
+  installmentNumber: number;
 }
 interface Installment {
   id: number;
@@ -65,6 +66,7 @@ interface State {
   paymentType: string;
   randomPaymentTypes: Array<SelectObject>;
   penaltyAction: string;
+  installmentNumber: number;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -83,7 +85,8 @@ class PayInstallment extends Component<Props, State> {
         { label: local.toktokStamp, value: "toktokStamp" },
         { label: local.tricycleStamp, value: "tricycleStamp" }
       ],
-      penaltyAction: this.props.penaltyAction
+      penaltyAction: this.props.penaltyAction,
+      installmentNumber: -1
     };
   }
   componentDidUpdate(prevProps, prevState) {
