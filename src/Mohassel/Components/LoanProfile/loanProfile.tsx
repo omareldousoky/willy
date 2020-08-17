@@ -261,7 +261,10 @@ class LoanProfile extends Component<Props, State>{
                 if (res.status === "success") {
                     this.setState({ loading: false })
                     Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
-                } else this.setState({ loading: false })
+                } else {
+                    this.setState({ loading: false })
+                    Swal.fire('', 'حدث خطا', 'error');
+                }
             }
         })
     }
