@@ -160,7 +160,7 @@ class Reports extends Component<{}, State> {
     }
   }
   async getRandomPayments(values){
-    this.setState({loading: true , showModal: false})
+    this.setState({loading: true , showModal: false, fromDate: values.fromDate, toDate: values.toDate})
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
@@ -244,7 +244,7 @@ class Reports extends Component<{}, State> {
     }
   }
   async getLoanApplicationFees(values){
-    this.setState({loading: true , showModal: false})
+    this.setState({loading: true , showModal: false, fromDate: values.fromDate, toDate: values.toDate})
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
@@ -375,8 +375,8 @@ class Reports extends Component<{}, State> {
         {(this.state.print === "CollectionStatement") && ( <CollectionStatement data={this.state.data} /> )}
         {(this.state.print === "Penalties") && ( <LoanPenaltiesList data={this.state.data} /> )}
         {(this.state.print === "CrossedOutLoans") && (<CrossedOutLoansList data={this.state.data} /> )}
-        {this.state.print ==="randomPayments"? this.state.data.branches ? <RandomPayment branches = {this.state.data.branches}/> : Swal.fire("error",local.noResults) : null}
-        {this.state.print==="loanApplicationFees" ? this.state.data.result  ? <LoanApplicationFees result = {this.state.data.result} total = {this.state.data.total} trx = {this.state.data.trx} />  : Swal.fire("error", local.noResults) : null}
+        {this.state.print ==="randomPayments"? this.state.data.branches ? <RandomPayment branches = {this.state.data.branches} startDate= {this.state.fromDate} endDate = {this.state.toDate} /> : Swal.fire("error",local.noResults) : null}
+        {this.state.print==="loanApplicationFees" ? this.state.data.result  ? <LoanApplicationFees result = {this.state.data.result} total = {this.state.data.total} trx = {this.state.data.trx} startDate= {this.state.fromDate} endDate = {this.state.toDate} />  : Swal.fire("error", local.noResults) : null}
        
       </>
     )

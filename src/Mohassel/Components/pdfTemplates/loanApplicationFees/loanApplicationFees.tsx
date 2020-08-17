@@ -1,33 +1,48 @@
 import React from 'react';
 import './loanApplicationFees.scss';
+import { timeToArabicDate } from '../../../Services/utils';
 
-interface Props{
+interface Props {
     result: {
-    branches: {
-      df: {
-        truthDate: string;
-        branchName: string;
-        serialNo: number;
-        customerKey: string;
-        customerName: string;
-        loanSerial: number;
-        principal: number;
-        status: string;
-        principalAmount: number;
-        transactionInterest: number;
-        transactionAmount: number;
+        branches: {
+            df: {
+                truthDate: string;
+                branchName: string;
+                serialNo: number;
+                customerKey: string;
+                customerName: string;
+                loanSerial: number;
+                principal: number;
+                status: string;
+                principalAmount: number;
+                transactionInterest: number;
+                transactionAmount: number;
 
-      }[];
-      total: number[];
-      branchName: string;
+            }[];
+            total: number[];
+            branchName: string;
 
+        }[];
+        trx: number;
+        day: string;
+        total: number[];
     }[];
-    trx: number;
-    day: string;
     total: number[];
-}[];
-total: number[];
-trx: number;
+    trx: number;
+    startDate: string;
+    endDate: string;
+}
+
+const statusLocalization = (status: string) => {
+    switch (status) {
+        case 'paid':
+            return ('مدفوع');
+        case 'issued':
+            return ('مصدر');
+
+        default:
+            return null;
+    }
 }
 const LoanApplicationFees = (props: Props) => {
     return (
@@ -45,144 +60,147 @@ const LoanApplicationFees = (props: Props) => {
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>المركز الرئيسي</th>
-                        <th colSpan={6}>تاريخ الحركه من 2020/06/01 الي 2020/07/05</th>
+                        <th colSpan={6}>تاريخ الحركه من {props.startDate} الي {props.endDate}</th>
                     </tr>
                     <tr className="headtitle">
-                        <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
+                        <th colSpan={4}>{timeToArabicDate(0, true)}</th>
                         <th colSpan={6}>جنيه مصري</th>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
                     </tr>
-                    </thead>
-                    </table>
-                    <table>
-                 {props.result.map((res)   => {  
-                     return (
-                 <>  
-                 {res.branches.map((branch) =>{
-                 return (
-                     <>
-                             <thead>
-                    <tr>
-                        <th>رقم مسلسل</th>
-                        <th>كود الحركه</th>
-                        <th>كود العميل</th>
-                        <th>أسم العميل</th>
-                        <th>مسلسل القرض</th>
-                        <th>رقم الشيك</th>
-                        <th>قيمة</th>
-                        <th>تاريخ القرض</th>
-                        <th style={{ width: "10%" }}>الحالة الان</th>
-                        <th>أصل</th>
-                        <th>قيمة الحركة مصاريف</th>
-                        <th>إجمالي</th>
-                        <th>حالة الحركة</th>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                    <tr>
-                        <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                        <th className="gray frame" colSpan={2}>{res.day}</th>
-                    </tr>
-                    <tr>
-                        <th className="gray frame" colSpan={2}>إسم الفرع</th>
-                        <th className="gray frame" colSpan={2}>{branch.branchName}</th>
-                    </tr>
                 </thead>
-                  {branch.df.map((row) => { 
-                      return (
-                 <>
+            </table>
+            <table>
+                {props.result.map((res) => {
+                    return (
+                        <>
+                            {res.branches.map((branch) => {
+                                return (
+                                    <>
+                                        <thead>
+                                            <tr>
+                                                <th>رقم مسلسل</th>
+                                                <th>كود الحركه</th>
+                                                <th>كود العميل</th>
+                                                <th>أسم العميل</th>
+                                                <th>مسلسل القرض</th>
+                                                <th>رقم الشيك</th>
+                                                <th>قيمة</th>
+                                                <th>تاريخ القرض</th>
+                                                <th style={{ width: "10%" }}>الحالة الان</th>
+                                                <th>أصل</th>
+                                                <th>قيمة الحركة مصاريف</th>
+                                                <th>إجمالي</th>
+                                                <th>حالة الحركة</th>
+                                            </tr>
+                                            <tr>
+                                                <th colSpan={100} className="horizontal-line"></th>
+                                            </tr>
+                                            <tr>
+                                                <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
+                                                <th className="gray frame" colSpan={2}>{res.day}</th>
+                                            </tr>
+                                            <tr>
+                                                <th className="gray frame" colSpan={2}>إسم الفرع</th>
+                                                <th className="gray frame" colSpan={2}>{branch.branchName}</th>
+                                            </tr>
+                                        </thead>
+                                        {branch.df.map((row) => {
+                                            return (
+                                                <>
 
-                <tbody>
-                    <tr>
-                      <td>{row.serialNo}</td>
-                        <td></td>
-                      <td>{row.customerKey}</td>
-                      <td>{row.customerName}</td>
-                      <td>{row.loanSerial}</td>
-                        <td></td>
-                        <td>{row.principal}</td>
-                        <td>{row.truthDate}</td>
-                        <td>{row.status}</td>
-                       <td>{row.principalAmount}</td>
-                        <td>{row.transactionInterest}</td>
-                        <td>{row.transactionAmount}</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
-                </>
-                      )})}
-                <tbody>
-                    <tr>
-                        <td className="frame" colSpan={2}>إجمالي الفرع</td>
-                       <td className="frame" colSpan={2}>{branch.branchName}</td>
-                        <td className="frame" colSpan={1}>{res.day}</td>
-                        <td className="frame">{""}</td>
-                        <td></td>
-                        <td></td>
-                        <td className="frame">إجمالي المبلغ</td>
-                      <td className="frame">{branch.total[0]}</td>
-                        <td className="frame">{branch.total[1]}</td>
-                        <td className="frame">{branch.total[2]}</td>
-                    </tr>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{row.serialNo}</td>
+                                                            <td></td>
+                                                            <td>{row.customerKey}</td>
+                                                            <td>{row.customerName}</td>
+                                                            <td>{row.loanSerial}</td>
+                                                            <td></td>
+                                                            <td>{row.principal}</td>
+                                                            <td>{row.truthDate}</td>
+                                                            <td>{statusLocalization(row.status)}</td>
+                                                            <td>{row.principalAmount}</td>
+                                                            <td>{row.transactionInterest}</td>
+                                                            <td>{row.transactionAmount}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colSpan={100} className="horizontal-line"></th>
+                                                        </tr>
+                                                    </tbody>
+                                                </>
+                                            )
+                                        })}
+                                        <tbody style={{marginTop:'1rem'}}> 
+                                            <tr>
+                                                <td className="frame" colSpan={2}>إجمالي الفرع</td>
+                                                <td className="frame" colSpan={2}>{branch.branchName}</td>
+                                                <td className="frame" colSpan={1}>{res.day}</td>
+                                                <td className="frame">{""}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td className="frame">إجمالي المبلغ</td>
+                                                <td className="frame">{branch.total[0]}</td>
+                                                <td className="frame">{branch.total[1]}</td>
+                                                <td className="frame">{branch.total[2]}</td>
+                                            </tr>
 
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">القيمة الملغاه</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                    </tr>
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">صافي المبلغ</td>
-                      <td className="frame">{branch.total[0]}</td>
-                        <td className="frame">{branch.total[1]}</td>
-                      <td className="frame">{branch.total[2]}</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
-                </>
-                 )})}
-                <tr style={{ height: "1em" }} ></tr>
+                                            <tr>
+                                                <td colSpan={8}></td>
+                                                <td className="frame">القيمة الملغاه</td>
+                                                <td className="frame">0.00</td>
+                                                <td className="frame">0.00</td>
+                                                <td className="frame">0.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={8}></td>
+                                                <td className="frame">صافي المبلغ</td>
+                                                <td className="frame">{branch.total[0]}</td>
+                                                <td className="frame">{branch.total[1]}</td>
+                                                <td className="frame">{branch.total[2]}</td>
+                                            </tr>
+                                            <tr>
+                                                <th colSpan={100} className="horizontal-line"></th>
+                                            </tr>
+                                        </tbody>
+                                    </>
+                                )
+                            })}
+                            <tr style={{ height: "1em" }} ></tr>
 
-                <tbody className="tbodyborder">
-                    <tr>
-                        <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
-                        <td className="gray frame">{res.day}</td>
-                        <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                     <td className="frame">{res.trx}</td>
-                        <td></td>
-                        <td></td>
-                        <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">{res.total[0]}</td>
-                        <td className="frame">{res.total[1]}</td>
-                        <td className="frame">{res.total[2]}</td>
-                    </tr>
+                            <tbody className="tbodyborder">
+                                <tr>
+                                    <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
+                                    <td className="gray frame">{res.day}</td>
+                                    <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
+                                    <td className="frame">{res.trx}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td className="frame">إجمالي المبلغ</td>
+                                    <td className="frame">{res.total[0]}</td>
+                                    <td className="frame">{res.total[1]}</td>
+                                    <td className="frame">{res.total[2]}</td>
+                                </tr>
 
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">القيمة الملغاه</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                    </tr>
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">صافي المبلغ</td>
-                        <td className="frame">{res.total[0]}</td>
-                        <td className="frame">{res.total[1]}</td>
-                        <td className="frame">{res.total[2]}</td>
-                    </tr>
-                </tbody>
-                </>
-                 )})}
+                                <tr>
+                                    <td colSpan={8}></td>
+                                    <td className="frame">القيمة الملغاه</td>
+                                    <td className="frame">0.00</td>
+                                    <td className="frame">0.00</td>
+                                    <td className="frame">0.00</td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={8}></td>
+                                    <td className="frame">صافي المبلغ</td>
+                                    <td className="frame">{res.total[0]}</td>
+                                    <td className="frame">{res.total[1]}</td>
+                                    <td className="frame">{res.total[2]}</td>
+                                </tr>
+                            </tbody>
+                        </>
+                    )
+                })}
 
                 <tr style={{ height: "1em" }} ></tr>
 
@@ -191,11 +209,11 @@ const LoanApplicationFees = (props: Props) => {
                         <td className="gray frame" colSpan={2}>إجمالي بالعمله</td>
                         <td className="gray frame">جنيه مصري</td>
                         <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                     <td className="frame">{props.trx}</td>
+                        <td className="frame">{props.trx}</td>
                         <td></td>
                         <td></td>
                         <td className="frame">إجمالي المبلغ</td>
-                     <td className="frame">{props.total[0]}</td>
+                        <td className="frame">{props.total[0]}</td>
                         <td className="frame">{props.total[1]}</td>
                         <td className="frame">{props.total[2]}</td>
                     </tr>
