@@ -177,7 +177,7 @@ class Payment extends Component<Props, State>{
         payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
         receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
         truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
-      }, ()=> console.log(this.state))
+      })
     }
   }
 
