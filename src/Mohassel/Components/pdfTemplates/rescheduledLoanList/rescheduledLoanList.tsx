@@ -73,20 +73,20 @@ const RescheduledLoanList = (props) => {
                                         <td>{transaction.customerName}</td>
                                         <td>{transaction.loanSerial}</td>
                                         <td></td>
-                                        <td>{transaction.principalAmount}</td>
+                                        <td>{transaction.principal}</td>
                                         <td>{timeToArabicDate(getTimestamp(transaction.truthDate), false)}</td>
                                         <td>{englishToArabic(transaction.status).text}</td>
                                         <td>{transaction.principalAmount}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
                                     </tr>)}
-                                    <tr>
+                                    {/* <tr>
                                         <td colSpan={100} className="horizontal-line"></td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                                 <tbody className="framecell">
                                     <tr>
-                                        <td colSpan={2}>إجمالي بنك / خزينه</td>
+                                        <td colSpan={2}>إجمالي فرع</td>
                                         <td colSpan={2}>{branch.branchName}</td>
                                         <td colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                         <td>{branch.df.length}</td>
@@ -115,9 +115,9 @@ const RescheduledLoanList = (props) => {
                             </React.Fragment>
                         )}
                         <tbody>
-                            <tr>
+                            {/* <tr>
                                 <td className="horizontal-line" colSpan={100}></td>
-                            </tr>
+                            </tr> */}
                             <tr style={{ height: "0.5em" }}></tr>
                         </tbody>
 

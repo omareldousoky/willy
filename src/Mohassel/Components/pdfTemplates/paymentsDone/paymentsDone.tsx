@@ -82,7 +82,7 @@ const PaymentsDone = (props) => {
                                 <th colSpan={100} className="horizontal-line"></th>
                             </tr>
                             <tr>
-                                <td className="frame" colSpan={2}>إجمالي بنك / خزينه</td>
+                                <td className="frame" colSpan={2}>إجمالي فرع</td>
                                 <td className="frame" colSpan={2}>{branch.branchName}</td>
                                 <td className="frame" colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                 <td className="frame">{branch.numTrx}</td>
