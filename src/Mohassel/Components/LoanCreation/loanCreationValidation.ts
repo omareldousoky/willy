@@ -12,9 +12,10 @@ export const loanCreationValidation = Yup.object().shape({
 
 export const loanIssuanceValidation = Yup.object().shape({
     loanIssuanceDate: Yup.string().test("Should not be before creation date", local.issuanceDateCannotBeBeforeCreationDate,
-    function (this: any, value: string) {
-        const { loanCreationDate } = this.parent;
-        return (new Date(value).valueOf() >= loanCreationDate)
-    }
-).required(local.required)
+        function (this: any, value: string) {
+            const { loanCreationDate } = this.parent;
+            return (new Date(value).valueOf() >= loanCreationDate)
+        }
+    ).required(local.required),
+    fieldManagerId: Yup.string().required(local.required)
 })

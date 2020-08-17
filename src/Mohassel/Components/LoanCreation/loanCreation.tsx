@@ -17,6 +17,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
+import { Employee } from '../Payment/payment';
+import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -44,6 +46,8 @@ interface State {
   application: any;
   print: boolean;
   receiptData: any;
+  employees: Array<Employee>;
+  fieldManagerId: string;
 }
 export interface Location {
   pathname: string;
@@ -84,7 +88,9 @@ class LoanCreation extends Component<Props, State> {
       installmentsData: {},
       application: {},
       print: false,
-      receiptData: {}
+      receiptData: {},
+      employees: [],
+      fieldManagerId: '',
     }
   }
   async componentDidMount() {
@@ -95,7 +101,7 @@ class LoanCreation extends Component<Props, State> {
       if (res.status === "success") {
         this.setState({ installmentsData: res.body })
       } else console.log(res)
-    }
+    } else this.getEmployees();
     const res = await getApplication(id);
     if (res.status === "success") {
       this.setState({
@@ -124,6 +130,19 @@ class LoanCreation extends Component<Props, State> {
       }
     } else this.setState({ loading: false })
   }
+  async getEmployees() {
+    this.setState({loading: true})
+    const obj = {
+      size: 1000,
+      from: 0,
+      serviceKey:'halan.com/application',
+      action:'actFieldManager',
+    }
+    const res = await searchUserByAction(obj);
+    if(res.status === 'success') {
+      this.setState({ employees: res.body.data, loading: false });
+    } else this.setState({ loading: false });
+  }
   handleSubmit = async (values) => {
     this.setState({ loading: true })
     if (this.state.type === "create") {
@@ -137,7 +156,7 @@ class LoanCreation extends Component<Props, State> {
         Swal.fire('', local.loanCreationError, 'error');
       }
     } else {
-      const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf());
+      const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf(), values.fieldManagerId);
       if (res.status === "success") {
         this.setState({ loading: false, print: true, receiptData: res.body }, () => window.print());
         Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => {this.props.history.push('/track-loan-applications')});
@@ -266,6 +285,7 @@ class LoanCreation extends Component<Props, State> {
                   </Col>
                 </Form.Group>
                 :
+                <>
                 <Form.Group as={Row} controlId="loanIssuanceDate">
                   <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.loanIssuanceDate}*`}</Form.Label>
                   <Col sm={6}>
@@ -283,6 +303,31 @@ class LoanCreation extends Component<Props, State> {
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>
+                <Form.Group as={Row} controlId="fieldManagerId">
+                  <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.fieldManager}*`}</Form.Label>
+                  <Col sm={6}>
+                    <Form.Control
+                      as="select"
+                      name="fieldManagerId"
+                      data-qc="fieldManagerId"
+                      onChange={formikProps.handleChange}
+                      value={formikProps.values.fieldManagerId}
+                      onBlur={formikProps.handleBlur}
+                      isInvalid={Boolean(formikProps.errors.fieldManagerId) && Boolean(formikProps.touched.fieldManagerId)}
+                    >
+                      <option value={''}></option>
+                      {this.state.employees.map((employee, index) => {
+                        return (
+                          <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                        )
+                      })}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      {formikProps.errors.fieldManagerId}
+                    </Form.Control.Feedback>
+                  </Col>
+                </Form.Group>
+                </>
               }
               <Button type="submit">{local.submit}</Button>
             </Form>

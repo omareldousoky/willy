@@ -11,6 +11,7 @@ import { paymentValidation } from "./paymentValidation";
 import { connect } from "react-redux";
 import { payment } from "../../redux/payment/actions";
 import "./styles.scss";
+import { Employee } from "./payment";
 
 interface FormValues {
   requiredAmount: number;
@@ -58,6 +59,7 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
+  employees: Array<Employee>
 }
 interface SelectObject {
   label: string;
@@ -327,7 +329,7 @@ class PayInstallment extends Component<Props, State> {
                         >
                           <option value={''}></option>
                           <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          {/* <option value='employee' data-qc='employee'>{local.employee}</option> */}
+                          <option value='employee' data-qc='employee'>{local.employee}</option>
                           <option value='family' data-qc='family'>{local.familyMember}</option>
                           <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
                           <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
@@ -368,7 +370,11 @@ class PayInstallment extends Component<Props, State> {
                           onChange={formikBag.handleChange}
                         >
                           <option value={''}></option>
-                          <option value={'employee'}>employee</option>
+                          {this.props.employees.map((employee, index) => {
+                            return(
+                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                            )
+                          })}
                         </Form.Control>
                       </Col>
                     </Form.Group>}
@@ -393,13 +399,17 @@ class PayInstallment extends Component<Props, State> {
                           <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
                           <Col>
                             <Form.Control
-                              type="number"
+                              type="text"
                               name="payerNationalId"
                               data-qc="payerNationalId"
                               maxLength={14}
                               value={formikBag.values.payerNationalId.toString()}
                               onBlur={formikBag.handleBlur}
-                              onChange={formikBag.handleChange}
+                              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                const re = /^\d*$/;
+                                if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                  formikBag.setFieldValue('payerNationalId', event.currentTarget.value)
+                                }}}
                               isInvalid={Boolean(formikBag.errors.payerNationalId) && Boolean(formikBag.touched.payerNationalId)} />
                             <Form.Control.Feedback type="invalid">
                               {formikBag.errors.payerNationalId}

@@ -21,7 +21,7 @@ import './styles.scss';
 import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
-
+import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 
 interface Installment {
   id: number;
@@ -64,6 +64,11 @@ interface Props {
   manualPaymentEditId: string;
   paymentType: string;
 }
+export interface Employee {
+  _id: string;
+  username: string;
+  name: string;
+}
 interface State {
   receiptData: any;
   payAmount: number;
@@ -82,6 +87,7 @@ interface State {
   payerNationalId: string;
   payerName: string;
   payerId: string;
+  employees: Array<Employee>;
 }
 
 class Payment extends Component<Props, State>{
@@ -153,10 +159,12 @@ class Payment extends Component<Props, State>{
       payerNationalId: '',
       payerName: '',
       payerId: '',
+      employees: []
     }
        this.mappers = normalTableMappers;
   }
   componentDidMount() {
+    this.getUsersByAction();
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
     }
@@ -179,7 +187,19 @@ class Payment extends Component<Props, State>{
         }
   }
   
-  
+  async getUsersByAction() {
+    this.setState({loading: true})
+    const obj = {
+      size: 1000,
+      from: 0,
+      serviceKey:'halan.com/application',
+      action:'acceptPayment',
+    }
+    const res = await searchUserByAction(obj);
+    if(res.status === 'success') {
+      this.setState({ employees: res.body.data, loading: false });
+    } else this.setState({ loading: false });
+  }
   getStatus(data) {
     const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
     switch (data.status) {
@@ -525,6 +545,7 @@ class Payment extends Component<Props, State>{
         truthDate={this.state.truthDate}
         paymentType={this.props.paymentType}
         penaltyAction={this.state.penaltyAction}
+        employees={this.state.employees}
         />
       case 2: return (
         <Card className="payment-menu">
@@ -598,7 +619,7 @@ class Payment extends Component<Props, State>{
                     </Form.Group>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Group as={Col} controlId="payAmount">
+                    <Form.Group as={Col} md={6} controlId="payAmount">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
                       <Col>
                         <Form.Control
@@ -616,7 +637,7 @@ class Payment extends Component<Props, State>{
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Col} controlId="truthDate">
+                    <Form.Group as={Col} md={6} controlId="truthDate">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
                       <Col>
                         <Form.Control
@@ -648,7 +669,7 @@ class Payment extends Component<Props, State>{
                         >
                           <option value={''}></option>
                           <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          {/* <option value='employee' data-qc='employee'>{local.employee}</option> */}
+                          <option value='employee' data-qc='employee'>{local.employee}</option>
                           <option value='family' data-qc='family'>{local.familyMember}</option>
                           <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
                           <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
@@ -689,7 +710,11 @@ class Payment extends Component<Props, State>{
                           onChange={formikProps.handleChange}
                         >
                           <option value={''}></option>
-                          <option value={'employee'}>employee</option>
+                          {this.state.employees.map((employee, index) => {
+                            return(
+                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                            )
+                          })}
                         </Form.Control>
                       </Col>
                     </Form.Group>}
@@ -713,15 +738,20 @@ class Payment extends Component<Props, State>{
                         <Form.Group as={Col} md={6} controlId="whoPaid">
                           <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
                           <Col>
-                            <Form.Control
-                              type="number"
-                              name="payerNationalId"
-                              data-qc="payerNationalId"
-                              maxLength={14}
-                              value={formikProps.values.payerNationalId.toString()}
-                              onBlur={formikProps.handleBlur}
-                              onChange={formikProps.handleChange}
-                              isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
+                          <Form.Control
+                            type="text"
+                            name="payerNationalId"
+                            data-qc="payerNationalId"
+                            maxLength={14}
+                            value={formikProps.values.payerNationalId.toString()}
+                            onBlur={formikProps.handleBlur}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              const re = /^\d*$/;
+                              if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                formikProps.setFieldValue('payerNationalId', event.currentTarget.value)
+                              }
+                            }}
+                            isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
                             <Form.Control.Feedback type="invalid">
                               {formikProps.errors.payerNationalId}
                             </Form.Control.Feedback>
@@ -822,12 +852,7 @@ class Payment extends Component<Props, State>{
                           data-qc="receiptNumber"
                           value={formikProps.values.receiptNumber}
                           onBlur={formikProps.handleBlur}
-                          onChange={(e) => {
-                            const re = /^\d*$/;
-                            if (e.currentTarget.value === '' || re.test(e.currentTarget.value)) {
-                              formikProps.setFieldValue('receiptNumber', e.currentTarget.value)
-                            }
-                          }}
+                          onChange={formikProps.handleChange}
                           isInvalid={Boolean(formikProps.errors.receiptNumber) && Boolean(formikProps.touched.receiptNumber)}
                         >
                         </Form.Control>
@@ -850,7 +875,7 @@ class Payment extends Component<Props, State>{
                         >
                           <option value={''}></option>
                           <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          {/* <option value='employee' data-qc='employee'>{local.employee}</option> */}
+                          <option value='employee' data-qc='employee'>{local.employee}</option>
                           <option value='family' data-qc='family'>{local.familyMember}</option>
                           <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
                           <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
@@ -891,7 +916,11 @@ class Payment extends Component<Props, State>{
                           onChange={formikProps.handleChange}
                         >
                           <option value={''}></option>
-                          <option value={'employee'}>employee</option>
+                          {this.state.employees.map((employee, index) => {
+                            return(
+                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                            )
+                          })}
                         </Form.Control>
                       </Col>
                     </Form.Group>}
@@ -915,15 +944,20 @@ class Payment extends Component<Props, State>{
                         <Form.Group as={Col} md={6} controlId="whoPaid">
                           <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
                           <Col>
-                            <Form.Control
-                              type="number"
-                              name="payerNationalId"
-                              data-qc="payerNationalId"
-                              maxLength={14}
-                              value={formikProps.values.payerNationalId.toString()}
-                              onBlur={formikProps.handleBlur}
-                              onChange={formikProps.handleChange}
-                              isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
+                          <Form.Control
+                            type="text"
+                            name="payerNationalId"
+                            data-qc="payerNationalId"
+                            maxLength={14}
+                            value={formikProps.values.payerNationalId.toString()}
+                            onBlur={formikProps.handleBlur}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              const re = /^\d*$/;
+                              if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                formikProps.setFieldValue('payerNationalId', event.currentTarget.value)
+                              }
+                            }}
+                            isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
                             <Form.Control.Feedback type="invalid">
                               {formikProps.errors.payerNationalId}
                             </Form.Control.Feedback>

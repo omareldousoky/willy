@@ -674,5 +674,7 @@
     "noIScore":"لا يوجد iScore",
     "familyMember": "قريب",
     "nonFamilyMember": "غير قريب",
-    "whoMadeThePayment": "من قام بالسداد"
+    "whoMadeThePayment": "من قام بالسداد",
+    "paymentsReports": "التقارير المالية",
+    "fieldManager": "مدير ميداني"
 }
