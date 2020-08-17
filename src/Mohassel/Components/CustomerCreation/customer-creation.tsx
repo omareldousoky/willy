@@ -217,7 +217,7 @@ class CustomerCreation extends Component<Props, State>{
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
         comments: res.body.comments,
-        maxLoansAllowed: res.body.maxLoansAllowed? Number(res.body.guarantorMaxLoans) : 1,
+        maxLoansAllowed: res.body.maxLoansAllowed? Number(res.body.maxLoansAllowed) : 1,
         allowGuarantorLoan: res.body.allowGuarantorLoan,
         guarantorMaxLoans: res.body.guarantorMaxLoans? Number(res.body.guarantorMaxLoans ): 1,
       };
