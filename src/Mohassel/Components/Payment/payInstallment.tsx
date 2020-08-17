@@ -59,7 +59,7 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
-  employees: Array<Employee>
+  employees: Array<Employee>;
 }
 interface SelectObject {
   label: string;
