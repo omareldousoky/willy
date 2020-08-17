@@ -578,6 +578,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const defaultApplication = { ...this.state.application };
             defaultApplication.guarantors = guarsArr;
             defaultApplication.productID = id;
+            defaultApplication.guarantorIds = [];
             this.setState({ loading: false, application: defaultApplication });
         } else {
             Swal.fire("error", local.searchError, 'error')
