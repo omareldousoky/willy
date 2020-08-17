@@ -244,7 +244,7 @@ class Reports extends Component<{}, State> {
     }
   }
   async getLoanApplicationFees(values){
-    this.setState({loading: true , showModal: false})
+    this.setState({loading: true , showModal: false, fromDate: values.fromDate, toDate: values.toDate})
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
