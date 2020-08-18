@@ -214,7 +214,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثاني</div>
-                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} ويقر
+                  <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} ويقر
                   الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم بسداده للطرف الأول وفقا لما هو وارد
                   بالبند الثالث من هذا
                   العقد
@@ -223,15 +223,15 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الثالث</div>
-                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
+                  <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
-                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.applicationFee)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
+                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
                   سداده
-                  علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
-                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} = (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
+                   علي عدد {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
+                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
                   {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.customer.governorate} الكائن
                     {props.branchDetails.address} أو
@@ -241,7 +241,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر الأطراف الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر الطرفان الثاني و{getNumbersOfGuarantor()} بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
@@ -274,13 +274,13 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند السابع</div>
-                  <div>في حالة عدم التزام المقترض او الضامنين بأي من التزامتاتهم التعاقديه او القانونيه
+                  <div>في حالة عدم التزام المقترض او الضامن بأي من التزاماتهم التعاقديه او القانونيه
                   الوارده بهذا العقد
                   وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
-                  الأطراف
-                  الثاني وا{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                  الطرفين
+                  الثاني وا{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
-                  للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الأطراف
+                  للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الطرفين
                   الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
                   <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                   <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
@@ -314,7 +314,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند التاسع</div>
-                  <div>يقر الطرف {getNumbersOfGuarantor()} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
+                  <div>يقر الطرف {getNumbersOfGuarantor()} الضامن المتضامن بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
                   لقيمة هذا القرض من
                   اصل وعوائد وعمولات وكافة المصروفات المستحقه بموجب هذا العقد وايا من ملحقاته، ويحق

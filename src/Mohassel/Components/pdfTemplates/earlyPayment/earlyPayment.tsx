@@ -27,9 +27,11 @@ class EarlyPaymentPDF extends Component<Props, State> {
         let latePrincipal = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
             if ((new Date(installment.dateOfPayment).getMonth() === new Date().getMonth()
-                && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear()) 
-                || getStatus(installment) === local.late) {
-                latePrincipal = latePrincipal + installment.principalInstallment;
+                    && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear() && (getStatus(installment) === local.unpaid)) 
+                || (getStatus(installment) === local.late) 
+                || ((new Date(installment.dateOfPayment).getMonth() <= new Date().getMonth()
+                    && new Date(installment.dateOfPayment).getFullYear() <= new Date().getFullYear()) && (getStatus(installment) === local.partiallyPaid))) {
+                latePrincipal = latePrincipal + (installment.principalInstallment - installment.principalPaid)
             }
             if (installment.status !== "rescheduled") {
                 if (installment.paidAt) {
