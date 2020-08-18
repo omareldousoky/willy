@@ -79,7 +79,7 @@ class LoanRollBack extends Component<Props, State>{
             confirmButtonText: local.rollBackAction
         }).then((result) => {
             if (result.value) {
-                this.rollbackAction(this.state.actionToRollback._id, new Date(values.truthDate).valueOf())
+                this.rollbackAction(this.state.actionToRollback._id, new Date(values.truthDate).setHours(23,59,59,999).valueOf())
             }
         })
     }
