@@ -30,7 +30,8 @@ interface State {
   from: number;
   openModal: boolean;
   loading: boolean;
-  selectedCustomers: Array<string>
+  selectedCustomers: Array<string>;
+  selectedFund: string;
 }
 
 class SourceOfFund extends Component<Props, State> {
@@ -42,7 +43,8 @@ class SourceOfFund extends Component<Props, State> {
       from: 0,
       openModal: false,
       loading: false,
-      selectedCustomers: []
+      selectedCustomers: [],
+      selectedFund: ''
     }
     this.mappers = [
       {
@@ -140,6 +142,9 @@ class SourceOfFund extends Component<Props, State> {
   componentWillUnmount() {
     this.props.setSearchFilters({})
   }
+  async submit() {
+    console.log(this.state.selectedCustomers, )
+  }
   // downloadFile(fileURL) {
   //   const link = document.createElement('a');
   //   link.href = fileURL;
@@ -191,17 +196,21 @@ class SourceOfFund extends Component<Props, State> {
           </Card.Body>
         </Card>
         <Modal show={this.state.openModal} backdrop="static">
-          <Modal.Header>
+          <Modal.Header style={{ padding: '20px 30px' }}>
             <Modal.Title>{local.chooseSourceOfFund}</Modal.Title>
+            <div style={{ cursor: 'pointer' }} onClick={() => this.setState({ openModal: false })}>X</div>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ padding: '20px 60px' }}>
             <Loader type="fullsection" open={this.state.loading} />
-            <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-              <Form.Control as="select" data-qc="change-fund">
-                <option value="tasaheel" data-qc="tasaheel">Tasaheel</option>
-                <option value="CIB" data-qc="CIB">CIB</option>
+            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+              <Form.Control as="select" data-qc="change-fund" 
+              style={{ marginLeft: 20 }} onChange={(e) => console.log(e.currentTarget.value) } value={this.state.selectedFund}
+              >
+                <option value="" data-qc=""></option>
+                <option value="tasaheel" data-qc="tasaheel">{local.tasaheel}</option>
+                <option value="CIB" data-qc="CIB">البنك التجاري الدولي – مصر - CIB</option>
               </Form.Control>
-              <Button className="big-button" data-qc="submit">{local.submit}</Button>
+              <Button className="big-button" data-qc="submit" onClick={()=> this.submit()}>{local.submit}</Button>
             </div>
           </Modal.Body>
         </Modal>
