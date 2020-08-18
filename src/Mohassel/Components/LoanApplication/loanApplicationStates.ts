@@ -137,12 +137,12 @@ export const LoanApplicationValidation = Yup.object().shape({
             amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").nullable()
         })
     ).nullable(),
-    viceCustomers: Yup.array().of(
-        Yup.object().shape({
-            name: Yup.string(),
-            phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11)
-        })
-    ),
+    // viceCustomers: Yup.array().of(
+    //     Yup.object().shape({
+    //         name: Yup.string(),
+    //         phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11).nullable()
+    //     })
+    // ).nullable(),
 });
 export const ReviewLoanValidation = Yup.object().shape({
     reviewStatus: Yup.string().required(local.required),
