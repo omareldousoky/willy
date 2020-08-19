@@ -34,8 +34,8 @@ interface State {
     size: number;
     from: number;
     openModal: boolean;
-    selectedLO: { _id?: string, name?: string } | undefined;
-    newSelectedLO: { _id?: string, name?: string } | undefined;
+    selectedLO: { _id?: string;name?: string } | undefined;
+    newSelectedLO: { _id?: string;name?: string } | undefined;
     filterCustomers: string;
     LoanOfficerSelectLoader: boolean;
     moveMissing: boolean;
