@@ -30,7 +30,7 @@ export const paymentValidation = Yup.object().shape({
   }),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
-    is: (payerType, beneficiaryType) => (payerType === "beneficiary" && beneficiaryType === "group"),
+    is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
     then: Yup.string().required(local.required),
     otherwise: Yup.string()
   }),
@@ -68,7 +68,7 @@ export const earlyPaymentValidation = Yup.object().shape({
   truthDate: Yup.string().required(local.required),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
-    is: (payerType, beneficiaryType) => (payerType === "beneficiary" && beneficiaryType === "group"),
+    is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
     then: Yup.string().required(local.required),
     otherwise: Yup.string()
   }),
@@ -102,7 +102,7 @@ export const manualPaymentValidation = Yup.object().shape({
   receiptNumber: Yup.string().required(local.required),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
-    is: (payerType, beneficiaryType) => (payerType === "beneficiary" && beneficiaryType === "group"),
+    is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
     then: Yup.string().required(local.required),
     otherwise: Yup.string()
   }),

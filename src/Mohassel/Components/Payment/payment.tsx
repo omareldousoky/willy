@@ -22,6 +22,7 @@ import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalti
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
+import AsyncSelect from 'react-select/async';
 
 interface Installment {
   id: number;
@@ -164,7 +165,6 @@ class Payment extends Component<Props, State>{
        this.mappers = normalTableMappers;
   }
   componentDidMount() {
-    this.getUsersByAction();
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
     }
@@ -191,18 +191,22 @@ class Payment extends Component<Props, State>{
         }
   }
   
-  async getUsersByAction() {
-    this.setState({loading: true})
+  getUsersByAction = async (input: string) => {
     const obj = {
-      size: 1000,
+      size: 100,
       from: 0,
       serviceKey:'halan.com/application',
       action:'acceptPayment',
+      name: input
     }
     const res = await searchUserByAction(obj);
     if(res.status === 'success') {
-      this.setState({ employees: res.body.data, loading: false });
-    } else this.setState({ loading: false });
+      this.setState({ employees: res.body.data, payerType: 'employee' });
+      return res.body.data;
+    } else { 
+      this.setState({ employees: [] });
+      return [];
+    }
   }
   getStatus(data) {
     const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
@@ -549,7 +553,6 @@ class Payment extends Component<Props, State>{
         truthDate={this.state.truthDate}
         paymentType={this.props.paymentType}
         penaltyAction={this.state.penaltyAction}
-        employees={this.state.employees}
         />
       case 2: return (
         <Card className="payment-menu">
@@ -707,19 +710,21 @@ class Payment extends Component<Props, State>{
                     {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
                       <Col>
-                        <Form.Control
-                          as="select"
+                        <AsyncSelect
+                          className={formikProps.errors.payerId ? "error" : ""}
                           name="payerId"
                           data-qc="payerId"
-                          onChange={formikProps.handleChange}
-                        >
-                          <option value={''}></option>
-                          {this.state.employees.map((employee, index) => {
-                            return(
-                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
-                            )
-                          })}
-                        </Form.Control>
+                          value={this.state.employees.find(employee => employee._id === formikProps.values.payerId)}
+                          onBlur={formikProps.handleBlur}
+                          onChange={(employee: any) => formikProps.setFieldValue("payerId", employee._id)}
+                          getOptionLabel={(option) => option.name}
+                          getOptionValue={(option) => option._id}
+                          loadOptions={this.getUsersByAction}
+                          cacheOptions defaultOptions
+                        />
+                        {formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
+                          {formikProps.errors.payerId}
+                        </div>}
                       </Col>
                     </Form.Group>}
                     {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&
@@ -913,19 +918,21 @@ class Payment extends Component<Props, State>{
                     {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
                       <Col>
-                        <Form.Control
-                          as="select"
+                        <AsyncSelect
+                          className={formikProps.errors.payerId ? "error" : ""}
                           name="payerId"
                           data-qc="payerId"
-                          onChange={formikProps.handleChange}
-                        >
-                          <option value={''}></option>
-                          {this.state.employees.map((employee, index) => {
-                            return(
-                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
-                            )
-                          })}
-                        </Form.Control>
+                          value={this.state.employees.find(employee => employee._id === formikProps.values.payerId)}
+                          onFocus={formikProps.handleBlur}
+                          onChange={(employee: any) => formikProps.setFieldValue("payerId", employee._id)}
+                          getOptionLabel={(option) => option.name}
+                          getOptionValue={(option) => option._id}
+                          loadOptions={this.getUsersByAction}
+                          cacheOptions defaultOptions
+                        />
+                        {formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
+                          {formikProps.errors.payerId}
+                        </div>}
                       </Col>
                     </Form.Group>}
                     {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&

@@ -5,9 +5,11 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import AsyncSelect from 'react-select/async';
 import { Formik, FormikProps } from "formik";
 import * as local from "../../../Shared/Assets/ar.json";
 import { paymentValidation } from "./paymentValidation";
+import { searchUserByAction } from "../../Services/APIs/UserByAction/searchUserByAction";
 import { connect } from "react-redux";
 import { payment } from "../../redux/payment/actions";
 import "./styles.scss";
@@ -59,7 +61,6 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
-  employees: Array<Employee>;
 }
 interface SelectObject {
   label: string;
@@ -78,6 +79,7 @@ interface State {
   payerName: string;
   payerId: string;
   installmentNumber: number;
+  employees: Array<Employee>;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -101,12 +103,30 @@ class PayInstallment extends Component<Props, State> {
       payerNationalId: '',
       payerName: '',
       payerId: '',
-      installmentNumber: -1
+      installmentNumber: -1,
+      employees: [],
     };
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.penaltyAction !== this.props.penaltyAction)
       this.setState({ penaltyAction: prevProps.penaltyAction });
+  }
+  getUsersByAction = async (input: string) => {
+    const obj = {
+      size: 100,
+      from: 0,
+      serviceKey:'halan.com/application',
+      action:'acceptPayment',
+      name: input
+    }
+    const res = await searchUserByAction(obj);
+    if(res.status === 'success') {
+      this.setState({ employees: res.body.data, payerType: 'employee' });
+      return res.body.data;
+    } else { 
+      this.setState({ employees: [] });
+      return [];
+    }
   }
 
   getRequiredAmount() {
@@ -363,19 +383,21 @@ class PayInstallment extends Component<Props, State> {
                     {formikBag.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
                       <Col>
-                        <Form.Control
-                          as="select"
+                        <AsyncSelect
+                          className={formikBag.errors.payerId ? "error" : ""}
                           name="payerId"
                           data-qc="payerId"
-                          onChange={formikBag.handleChange}
-                        >
-                          <option value={''}></option>
-                          {this.props.employees.map((employee, index) => {
-                            return(
-                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
-                            )
-                          })}
-                        </Form.Control>
+                          value={this.state.employees.find(employee => employee._id === formikBag.values.payerId)}
+                          onBlur={formikBag.handleBlur}
+                          onChange={(employee: any) => formikBag.setFieldValue("payerId", employee._id)}
+                          getOptionLabel={(option) => option.name}
+                          getOptionValue={(option) => option._id}
+                          loadOptions={this.getUsersByAction}
+                          cacheOptions defaultOptions
+                        />
+                        {formikBag.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
+                          {formikBag.errors.payerId}
+                        </div>}
                       </Col>
                     </Form.Group>}
                     {(formikBag.values.payerType === 'family' || formikBag.values.payerType === 'nonFamily') &&
