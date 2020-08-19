@@ -671,5 +671,9 @@
     "employeeName": "إسم الموظف",
     "transactionDate": "تاريخ المعاملة",
     "searchByEmp": "البحث بإسم الموظف",
-    "noIScore":"لا يوجد iScore"
+    "noIScore":"لا يوجد iScore",
+    "chooseLoanOfficer":"إختر المندوب",
+    "moveCustomers": "نقل العملاء",
+    "chooseCurrentLoanOfficer":"إختر المندوب الحالي",
+    "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب"
 }
