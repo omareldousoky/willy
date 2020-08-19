@@ -36,6 +36,7 @@ interface CustomerData {
 interface State {
   loanCreationDate: string;
   loanIssuanceDate: string;
+  managerVisitDate: string;
   customerData: CustomerData;
   id: string;
   type: string;
@@ -69,6 +70,7 @@ class LoanCreation extends Component<Props, State> {
       approvalDate: '',
       loanCreationDate: timeToDateyyymmdd(0),
       loanIssuanceDate: timeToDateyyymmdd(0),
+      managerVisitDate: timeToDateyyymmdd(0),
       loading: false,
       customerData: {
         id: '',
@@ -156,7 +158,15 @@ class LoanCreation extends Component<Props, State> {
         Swal.fire('', local.loanCreationError, 'error');
       }
     } else {
-      const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf(), values.fieldManagerId);
+      const obj = {
+        id: this.state.id,
+        loanIssuanceDate: new Date(values.loanIssuanceDate).valueOf()
+      }
+      if(this.state.application.product.branchManagerAndDate) {
+        obj['fieldManagerId'] = values.fieldManagerId;
+        obj['managerVisitDate'] = new Date(values.managerVisitDate).valueOf();
+      }
+      const res = await issueLoan(obj);
       if (res.status === "success") {
         this.setState({ loading: false, print: true, receiptData: res.body }, () => window.print());
         Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => {this.props.history.push('/track-loan-applications')});
@@ -254,7 +264,7 @@ class LoanCreation extends Component<Props, State> {
         </Table>
         <Formik
           enableReinitialize
-          initialValues={this.state}
+          initialValues={{...this.state, branchManagerAndDate: this.state.application?.product?.branchManagerAndDate}}
           onSubmit={this.handleSubmit}
           validationSchema={this.state.type === "create" ? loanCreationValidation : loanIssuanceValidation}
           validateOnBlur
@@ -303,30 +313,52 @@ class LoanCreation extends Component<Props, State> {
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId="fieldManagerId">
-                  <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.fieldManager}*`}</Form.Label>
-                  <Col sm={6}>
-                    <Form.Control
-                      as="select"
-                      name="fieldManagerId"
-                      data-qc="fieldManagerId"
-                      onChange={formikProps.handleChange}
-                      value={formikProps.values.fieldManagerId}
-                      onBlur={formikProps.handleBlur}
-                      isInvalid={Boolean(formikProps.errors.fieldManagerId) && Boolean(formikProps.touched.fieldManagerId)}
-                    >
-                      <option value={''}></option>
-                      {this.state.employees.map((employee, index) => {
-                        return (
-                          <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
-                        )
-                      })}
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.fieldManagerId}
-                    </Form.Control.Feedback>
-                  </Col>
-                </Form.Group>
+                {this.state.application?.product?.branchManagerAndDate ?
+                  <>
+                    <Form.Group as={Row} controlId="fieldManagerId">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.branchManager}*`}</Form.Label>
+                      <Col sm={6}>
+                        <Form.Control
+                          as="select"
+                          name="fieldManagerId"
+                          data-qc="fieldManagerId"
+                          onChange={formikProps.handleChange}
+                          value={formikProps.values.fieldManagerId}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.fieldManagerId) && Boolean(formikProps.touched.fieldManagerId)}
+                        >
+                          <option value={''}></option>
+                          {this.state.employees.map((employee, index) => {
+                            return (
+                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                            )
+                          })}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.fieldManagerId}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="managerVisitDate">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.visitationDate}*`}</Form.Label>
+                      <Col sm={6}>
+                        <Form.Control
+                          type="date"
+                          name="managerVisitDate"
+                          data-qc="managerVisitDate"
+                          value={formikProps.values.managerVisitDate}
+                          onChange={formikProps.handleChange}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.managerVisitDate) && Boolean(formikProps.touched.managerVisitDate)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.managerVisitDate}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                  </>
+                  : null
+                }
                 </>
               }
               <Button type="submit">{local.submit}</Button>
