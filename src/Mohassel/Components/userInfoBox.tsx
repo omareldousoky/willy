@@ -65,7 +65,7 @@ class InfoBox extends Component<Props, State>{
                         </Row>
                         <Row>
                             <Form.Label>{iscore.iscore} </Form.Label>
-                            {iscore.iscore !== 'not_in_cache' && <Col>
+                            {iscore.url && <Col>
                                 <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iscore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
                             </Col>}
                             {this.props.getIscore && <Col>

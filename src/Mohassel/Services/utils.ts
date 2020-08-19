@@ -343,11 +343,11 @@ export const actionsList = [
 ]
 
 export const iscoreDate = (date: any) => {
-  const MyDate = new Date(date);
-  const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
-    + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '/'
-    + MyDate.getFullYear();
-  return MyDateString
+  const iscoreDate = new Date(date);
+  const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
+    + ('0' + (iscoreDate.getMonth() + 1)).slice(-2) + '/'
+    + iscoreDate.getFullYear();
+  return iscoreDateString
 }
 
 export const getDateString = (date: any) => {

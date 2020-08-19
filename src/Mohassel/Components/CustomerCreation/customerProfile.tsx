@@ -58,7 +58,6 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     } else {
       changeLoading(false);
-      console.log("failed to get iScore data")
     }
   }
 
