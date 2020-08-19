@@ -29,7 +29,7 @@ export const StepThreeForm = (props: any) => {
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
         if (res.status === "success") {
-            setLoanOfficers(res.body.data);
+            setLoanOfficers([...res.body.data, {_id: props.representativeDetails.representative, name: props.representativeDetails.representativeName}]);
             return res.body.data;
         } else {
             setLoanOfficers([]);
