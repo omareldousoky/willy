@@ -38,6 +38,7 @@ import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
+import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
 
 const appRoutes = [
   {
@@ -267,7 +268,19 @@ const appRoutes = [
 
         ]
 
-      }, {
+      },
+      {
+        path: "/manage-finances",
+        label: local.manageFinances,
+        render: (props) => <Can I='getRoles' a='user'><PrincipleThreshold {...props} /></Can>,
+        routes: [
+          { path: "/principleRange",
+          label: local.principalRange,
+          render: (props) => <Can I='getRoles' a='user'><PrincipleThreshold {...props} /> </Can>,
+          }
+        ]
+      }
+      , {
         path: "/loans",
         label: local.issuedLoans,
         render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,

@@ -679,5 +679,13 @@
     "searchByEmp": "البحث بإسم الموظف",
     "noIScore":"لا يوجد iScore",
     "loanApprovalDate":"تاريخ الموافقة",
-    "doubtfulLoans":"قروض مشكوك فيها"
+    "doubtfulLoans":"قروض مشكوك فيها",
+    "manageFinances":"إدارة التمويل",
+    "principalRange":"حدود قيمة القرض",
+    "maxIndividualPrincipal":"الحد الاقصى للفرد",
+    "maxGroupIndividualPrincipal":"الحد الاقصى للفرد فالمجموعة",
+    "maxGroupPrincipal":"الحد الاقصى للمجموعة",
+    "principalMaxWillChange":"سيتم تغيير الحد الاقصى لقيم القروض",
+    "principalMaxChangeSuccess":"تم تغيير الحد الاقصى لقيم القروض بنجاح",
+    "principalMaxChangeError":"حدث خطأ في تغيير الحد الاقصى لقيم القروض"
 }
