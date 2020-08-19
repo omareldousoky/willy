@@ -40,6 +40,7 @@ import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
 import { getIscore } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
+import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt';
 
@@ -370,6 +371,47 @@ class LoanProfile extends Component<Props, State>{
             })
         }
     }
+    async doubtApplication() {
+        const { value: text } = await Swal.fire({
+            title: local.doubtReason,
+            input: 'text',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.doubtLoan,
+            cancelButtonText: local.cancel,
+            inputValidator: (value) => {
+                if (!value) {
+                    return local.required
+                } else return ''
+            }
+        })
+        if (text) {
+
+            Swal.fire({
+                title: local.areYouSure,
+                text: `${local.loanWillBeDoubted}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: local.doubtLoan,
+                cancelButtonText: local.cancel
+            }).then(async (result) => {
+                if (result.value) {
+                    this.setState({ loading: true });
+                    const res = await doubtLoan(this.props.history.location.state.id, { doubtReason: text });
+                    if (res.status === "success") {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanDoubtSuccess, 'success').then(() => window.location.reload());
+                    } else {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanDoubtError, 'error');
+                    }
+                }
+            })
+        }
+    }
     getSumOfPendingActions() {
         let sum = 0;
         this.state.pendingActions.transactions?.forEach((transaction) => {
@@ -390,7 +432,10 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                                 {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
-                                    <p style={{ margin: 0, color: 'red' }}>{local.writtenOffLoan}</p>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}</p>
+                                </span>}
+                                {this.state.application.isDoubtful && !this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
                                 </span>}
                             </div>
                             <div className="d-flex justify-content-end" style={{ width: '70%' }}>
@@ -404,7 +449,9 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
                                 {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span> }
-                                {this.state.application.status === 'issued' && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
+                                {this.state.application.status === 'issued' && this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
+                                {this.state.application.status === 'issued' && !this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='setDoubtfulLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.doubtApplication()}> <img alt="doubt" src={require('../../Assets/minus.svg')} style={{ height: 20, marginLeft: 5 }} />{local.doubtLoan}</span></Can>}
+
 
                             </div>
                         </div>

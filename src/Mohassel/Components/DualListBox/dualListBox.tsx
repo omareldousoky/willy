@@ -155,6 +155,7 @@ class DualBox extends Component<Props, State> {
                                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                                     </InputGroup.Append>
                                 </InputGroup>
+                                {(this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <>
                                 <div className="list-group-item" style={{ background: '#FAFAFA' }} onClick={() => this.selectAllOptions()} >
                                     <Form.Check
                                         type='checkbox'
@@ -182,15 +183,16 @@ class DualBox extends Component<Props, State> {
                                         }
                                         )}
                                 </div>
+                                </>}
                             </ul>
                         </div>
                     </div>
-                    <div className="list-button">
+                    { (this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <div className="list-button">
                         <Button className="btn btn-default btn-md" style={{ height: 45, width: 95, margin: '20px 0px' }} disabled={this.state.selectionArray.length < 1} onClick={() => this.addToSelectedList()}>
                             {local.add}<span className={!this.props.vertical ? "fa fa-arrow-left" : "fa fa-arrow-down"}></span>
                         </Button>
-                    </div>
-                    <div className={!this.props.vertical ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
+                    </div>}
+                    { (this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <div className={!this.props.vertical ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
                         <div className="well text-right">
                             <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
@@ -222,7 +224,7 @@ class DualBox extends Component<Props, State> {
                                 </div>
                             </ul>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         )

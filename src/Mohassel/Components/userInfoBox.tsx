@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
-import { arabicGender } from '../Services/utils';
+import { arabicGender, timeToArabicDate } from '../Services/utils';
 import Can from '../config/Can';
 
 interface Props {
@@ -70,7 +70,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.birthDate}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{getRenderDate(values.birthDate)} </Form.Label>
+                            <Form.Label>{timeToArabicDate(values.birthDate, false)} </Form.Label>
                         </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">
@@ -88,7 +88,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label style={{ color: '#6e6e6e' }}>{local.nationalIdIssueDate}</Form.Label>
                         </Row>
                         <Row>
-                            <Form.Label>{getRenderDate(values.nationalIdIssueDate)} </Form.Label>
+                            <Form.Label>{timeToArabicDate(values.nationalIdIssueDate, false)} </Form.Label>
                         </Row>
                     </Form.Group>
                     <Form.Group as={Col} md="4">

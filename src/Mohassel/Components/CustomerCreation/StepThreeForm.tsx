@@ -29,7 +29,7 @@ export const StepThreeForm = (props: any) => {
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
         if (res.status === "success") {
-            setLoanOfficers(res.body.data);
+            setLoanOfficers([...res.body.data, {_id: props.representativeDetails.representative, name: props.representativeDetails.representativeName}]);
             return res.body.data;
         } else {
             setLoanOfficers([]);
@@ -90,8 +90,10 @@ export const StepThreeForm = (props: any) => {
                                 value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative :  values.representative ?  values.representative._id: ""))}
                                 onBlur={handleBlur}
                                 onChange={(representative) => {
-                                    if(props.edit && values.representative !== representative._id) {setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id)}
-                                    else setFieldValue("representative", representative._id)}
+                                    if (props.edit && values.representative !== representative._id) { setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id) }
+                                    else setFieldValue("representative", representative._id)
+                                    setFieldValue("representativeName", representative.name)
+                                }
                                 }
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}
