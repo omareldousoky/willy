@@ -20,7 +20,7 @@ interface Props {
     };
   };
 };
-interface Score {
+export interface Score {
   activeLoans?: string;
   iscore: string;
   nationalId: string;

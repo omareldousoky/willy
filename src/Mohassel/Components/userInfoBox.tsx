@@ -6,6 +6,7 @@ import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
 import { arabicGender, timeToArabicDate, downloadFile } from '../Services/utils';
 import Can from '../config/Can';
+import { Score } from './CustomerCreation/customerProfile';
 
 interface Props {
     values: any;
@@ -31,8 +32,12 @@ class InfoBox extends Component<Props, State>{
     }
     render() {
         const values = this.props.values;
+        let iscore: Score = {
+            iscore: '',
+            nationalId: ''
+        }
         if(this.props.iScores){
-            const iscore = this.props.iScores.filter(score => score.nationalId === values.nationalId)[0];
+            iscore = this.props.iScores.filter(score => score.nationalId === values.nationalId)[0];
         }
         return (
             <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width: '100%' }}>
@@ -54,13 +59,13 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
-                    {this.props.iScores && this.props.iScores.find(score => score.nationalId === values.nationalId) && <Form.Group as={Col} md="4">
+                    {this.props.iScores.length > 0 && iscore.nationalId.length > 0 && <Form.Group as={Col} md="4">
                         <Row>
                             <Form.Label style={{ color: '#6e6e6e' }}>iScore</Form.Label>
                         </Row>
                         <Row>
                             <Form.Label>{iscore.iscore} </Form.Label>
-                            {iscore.iscore !== 'not_in_cache' && iscore.iscore !== 'unavailable' && <Col>
+                            {iscore.iscore !== 'not_in_cache' && <Col>
                                 <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iscore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
                             </Col>}
                             {this.props.getIscore && <Col>
