@@ -9,6 +9,10 @@ import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails';
 import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails';
 import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList';
 import { getBranchLoanList } from '../../Services/APIs/Reports/branchLoanList';
+import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
+import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList';
+import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList';
+import { collectionReport, penalties, writeOffs } from "../../Services/APIs/Reports";
 import { installments } from '../../Services/APIs/Reports/installments';
 import PaymentsDone from '../pdfTemplates/paymentsDone/paymentsDone';
 import IssuedLoanList from '../pdfTemplates/issuedLoanList/issuedLoanList';
@@ -17,6 +21,11 @@ import { getCreatedLoanList } from '../../Services/APIs/Reports/createdLoansList
 import { getRescheduledLoanList } from '../../Services/APIs/Reports/rescheduledLoansList';
 import LoanCreationList from '../pdfTemplates/loanCreationList/loanCreationList';
 import RescheduledLoanList from '../pdfTemplates/rescheduledLoanList/rescheduledLoanList';
+import { getRandomPayments } from '../../Services/APIs/Reports/randomPayment';
+import RandomPayment from '../pdfTemplates/randomPayment/randomPayment';
+import { getLoanApplicationFees } from '../../Services/APIs/Reports/loanApplicationFees';
+import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees';
+import Swal from 'sweetalert2';
 
 export interface PDF {
   key?: string;
@@ -32,6 +41,8 @@ interface State {
   data: any;
   loading: boolean;
   customerKey: string;
+  fromDate: string;
+  toDate: string;
 }
 
 class Reports extends Component<{}, State> {
@@ -44,17 +55,23 @@ class Reports extends Component<{}, State> {
         { key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey'] },
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'] },
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'] },
+        { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'] },
+        { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo'] },
+        { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'] },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'] },
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'] },
         { key: 'rescheduledLoanList', local: 'قائمة حركات جدولة القروض المنفذه', inputs: ['dateFromTo', 'branches'] },
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'] },
-
+        {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches']},
+        {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches']},
 
       ],
       selectedPdf: {},
       data: {},
       loading: false,
-      customerKey: ''
+      customerKey: '',
+      fromDate: '',
+      toDate: ''
     }
   }
   handlePrint(selectedPdf: PDF) {
@@ -69,11 +86,15 @@ class Reports extends Component<{}, State> {
       case 'customerDetails': return this.getCustomerDetails(values);
       case 'loanDetails': return this.getLoanDetails(values);
       case 'branchLoanList': return this.getBranchLoanList(values);
+      case 'CollectionStatement': return this.getCollectionReport(values);
+      case 'Penalties': return this.getLoanPenaltiesReport(values);
+      case 'CrossedOutLoans': return this.getWriteOffsReport(values);
       case 'issuedLoanList': return this.getIssuedLoanList(values);
       case 'createdLoanList': return this.getCreatedLoanList(values);
       case 'rescheduledLoanList': return this.getRescheduledLoanList(values);
       case 'paymentsDoneList': return this.getInstallments(values);
-
+      case 'randomPayments' : return this.getRandomPayments(values);
+      case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       default: return null;
     }
   }
@@ -101,11 +122,11 @@ class Reports extends Component<{}, State> {
     }
   }
   async getBranchLoanList(values) {
-    this.setState({ loading: true, showModal: false })
+    this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: values.branches.map((branch) => branch._id)
+      branches: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
     }
     const res = await getBranchLoanList(obj);
     if (res.status === 'success') {
@@ -135,6 +156,27 @@ class Reports extends Component<{}, State> {
         data: { data: res.body, from: values.fromDate, to: values.toDate },
         showModal: false,
         print: 'paymentsDoneList',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getRandomPayments(values){
+    this.setState({loading: true , showModal: false, fromDate: values.fromDate, toDate: values.toDate})
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.map((branch) => branch._id),
+      all: values.branches[0]._id == "" ? "1" :"0",
+    }
+    const res = await getRandomPayments(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: res.body,
+        showModal: false,
+        print: 'randomPayments',
         loading: false,
       }, () => window.print())
     } else {
@@ -205,6 +247,98 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getLoanApplicationFees(values){
+    this.setState({loading: true , showModal: false, fromDate: values.fromDate, toDate: values.toDate})
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.filter((branch)=> branch._id !== "").map((branch) => branch._id ),
+    }
+    const res = await getLoanApplicationFees(obj);
+    if (res.status === 'success') {
+      this.setState({
+        data: res.body,
+        showModal: false,
+        print: 'loanApplicationFees',
+        loading: false,
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+
+
+
+  async getCollectionReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await collectionReport({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      all: values.branches.some(branch => branch._id === "") ? "1" : "0",
+      branchList: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
+    });
+    if (res.status === 'success') {
+      const data = {
+        startDate: values.fromDate,
+        endDate: values.toDate,
+        data: res.body
+      }
+      this.setState({
+        data: data, showModal: false, print: 'CollectionStatement', loading: false
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+
+  async getLoanPenaltiesReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await penalties({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+    });
+    if (res.status === 'success') {
+      const data= {
+            days: res.body.days,
+            totalNumberOfTransactions: res.body.numTrx,
+            totalTransactionAmount: res.body.transactionAmount,
+            startDate: values.fromDate,
+            endDate: values.toDate
+          }
+      this.setState({
+        data, showModal: false, print: 'Penalties', loading: false
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+
+  async getWriteOffsReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await writeOffs({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      all:  values.branches.some(branch => branch._id === "")? "1": "0",
+      branchList: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
+    });
+    if (res.status === 'success') {
+      const data = {
+            req: {  startDate: values.fromDate,  endDate: values.toDate },
+            data: {...res.body}
+        }
+      this.setState({
+        data: data, showModal: false, print: 'CrossedOutLoans', loading: false
+      }, () => window.print())
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  
+
   render() {
     return (
       <>
@@ -241,6 +375,13 @@ class Reports extends Component<{}, State> {
         {this.state.print === "createdLoanList" && <LoanCreationList data={this.state.data} />}
         {this.state.print === "rescheduledLoanList" && <RescheduledLoanList data={this.state.data} />}
         {this.state.print === "paymentsDoneList" && <PaymentsDone data={this.state.data} />}
+        {this.state.print === "branchLoanList" && <BranchesLoanList data={this.state.data} fromDate={this.state.fromDate} toDate={this.state.toDate}/>}
+        {(this.state.print === "CollectionStatement") && ( <CollectionStatement data={this.state.data} /> )}
+        {(this.state.print === "Penalties") && ( <LoanPenaltiesList data={this.state.data} /> )}
+        {(this.state.print === "CrossedOutLoans") && (<CrossedOutLoansList data={this.state.data} /> )}
+        {this.state.print ==="randomPayments"? this.state.data.branches ? <RandomPayment branches = {this.state.data.branches} startDate= {this.state.fromDate} endDate = {this.state.toDate} /> : Swal.fire("error",local.noResults) : null}
+        {this.state.print==="loanApplicationFees" ? this.state.data.result  ? <LoanApplicationFees result = {this.state.data.result} total = {this.state.data.total} trx = {this.state.data.trx} startDate= {this.state.fromDate} endDate = {this.state.toDate} />  : Swal.fire("error", local.noResults) : null}
+       
       </>
     )
   }

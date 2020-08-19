@@ -121,7 +121,7 @@ const LoanContractForGroup = (props) => {
                   بالتمويل
 								متناهي الصغر ..</div>
                   <div>
-                    وقد تقدم افراض الطرف الثاني بطلب للحصول علي قرض من بطلب للحصول علي قرض من فرع
+                    وقد تقدم افراد الطرف الثاني بطلب للحصول علي قرض من بطلب للحصول علي قرض من فرع
                     {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن
                     {props.branchDetails.address} لحاجتهم للسيوله النقديه يخصص
                     استخدامه في
@@ -148,7 +148,7 @@ const LoanContractForGroup = (props) => {
                 <section>
                   <div className="title">البند الثاني</div>
                   <div>
-                    يقر أفراد الطرف الثاني (المقرضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
+                    يقر أفراد الطرف الثاني (المقترضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
                   </div>
                   <table className="stakeholders">
                     <tbody>
@@ -164,7 +164,7 @@ const LoanContractForGroup = (props) => {
                               <div>
                                 <b>مبلغ التمويل:</b>
                                 <span>
-                                  {numbersToArabic(individualInGroup.amount)}
+                                  {`${numbersToArabic(individualInGroup.amount)} = (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`}
                                 </span>
                               </div>
                             </td>
@@ -189,7 +189,7 @@ const LoanContractForGroup = (props) => {
                   <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
-                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.product.applicationFee * props.data.group.individualsInGroup.length)} جنيه بواقع {numbersToArabic(props.data.product.applicationFee)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه بواقع {numbersToArabic(props.data.applicationFeesRequired / props.data.group.individualsInGroup.length)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} ، يتم
                   سداده
@@ -204,7 +204,7 @@ const LoanContractForGroup = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر افراض الطرف الثاني متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر افراد الطرف الثاني متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
@@ -212,10 +212,10 @@ const LoanContractForGroup = (props) => {
 
                 <section>
                   <div className="title">البند الخامس</div>
-                  <div>يلتزم افراض الطرف الثاني متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                  <div>يلتزم افراد الطرف الثاني متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
-                  من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقع يلتزموا بسداد
+                  من هذا العقد وفي حالة تأخير أي منهم في سداد قيمه أي قسط في تاريخ استحقاقه تلتزم الأعضاء بسداد
                   غرامة
                   تأخير ٥% من قيمة
                   القسط في اليوم التالي لتاريخ الأستحقاق للقسط وابتداء من اليوم الذي يليه كالتالي :-
@@ -240,12 +240,10 @@ const LoanContractForGroup = (props) => {
                   <div className="title">البند السابع</div>
                   <div>في حالة عدم التزام ايا من المقترضين بأي من التزامتاتهم التعاقديه او القانونيه
                   الوارده بهذا العقد
-                  وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
-                  الأطراف
-                  الثاني
-                  مخفقين في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                  وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد جميع افراد الطرف الثانى ضامنين متضامنين
+                  في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
-                  للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة الطرف
+                  للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة افراد الطرف
                   الثاني بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
                   <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                   <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
@@ -332,15 +330,13 @@ const LoanContractForGroup = (props) => {
                 <div className="headtitle textcenter"><u>إقرار وتعهد</u></div>
                 <div>نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة الاقساط المستحقه في مواعيدها
                 المحدده بموجب عقد
-                القرض المؤرخ {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق العميل او من
-                ينوب عنه الي شركة
-                تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو عبر وسائل الدفع
+                القرض المؤرخ {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو عبر وسائل الدفع
                 الالكتروني المعتمده
                 من هيئة الرقابة المالية ولا يحق لنا بأى حال من الاحوال سداد قيمة أي قسط من الاقساط الي
                 شخص اخر غير خزينة فرع
                 الشركة طبقا لما سبق ذكره، وأيا كان هذا الصدد وتكون مسئوليتنا كاملة ويعتبر السداد المخالف
                 لذلك لم يتم ويحق
-                للشركة الرجوع علي العميل والضامنين في أي وقت من الاوقات بقيمة مالم يتم سداده لخزينة فرع
+                للشركة الرجوع علي الاعضاء بالمجموعة في أي وقت من الاوقات بقيمة مالم يتم سداده لخزينة فرع
                 الشركة ودون أدني
 							اعتراض مننا علي ذلك وهذا اقرار منا بذلك ولا يحق لنا الرجوع فيه حاليا او مستقبلا.</div>
                 <div>

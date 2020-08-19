@@ -650,7 +650,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 adminFees: obj.adminFees,
                 entryDate: new Date(obj.entryDate).valueOf(),
                 usage: obj.usage,
-                representative: obj.representative,
+                representativeId: obj.representative,
                 enquirorId: obj.enquirorId,
                 visitationDate: new Date(obj.visitationDate).valueOf(),
                 individualDetails: individualsToSend,
@@ -666,7 +666,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         this.setState({ loading: false });
                         Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
                     } else {
-                        Swal.fire("error", local.loanApplicationCreationError, 'error')
+                        Swal.fire("error", res.error.details, 'error')
                         this.setState({ loading: false });
                     }
                 } else if (this.props.edit) {
@@ -676,7 +676,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         this.setState({ loading: false });
                         Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/track-loan-applications") })
                     } else {
-                        Swal.fire("error", local.loanApplicationEditError, 'error')
+                        Swal.fire("error", res.error.details, 'error')
                         this.setState({ loading: false });
                     }
                 }

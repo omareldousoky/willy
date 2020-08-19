@@ -1,12 +1,12 @@
 import axios from "../axios-instance";
 
-export const guaranteed = async (guarantorId: number) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/guaranteed`;
+export const writeOffs = async (data) => {
+  const url = process.env.REACT_APP_BASE_URL + `/report/write-offs`;
   try {
     const res = await axios({
       method: "POST",
       url,
-      data: { guarantorId: guarantorId.toString() },
+      data,
     });
     return { status: "success", body: res.data };
   } catch (error) {

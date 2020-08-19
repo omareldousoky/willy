@@ -1,4 +1,5 @@
 import React from 'react';
+import store from '../../../redux/store';
 import './branchesLoanList.scss';
 
 const BranchesLoanList = (props) => {
@@ -13,7 +14,8 @@ const BranchesLoanList = (props) => {
                                     <tbody>
                                         <tr className="headtitle">
                                             <th>شركة تساهيل للتمويل متناهي الصغر</th>
-                                            <th>القروض والحالات للفتره من : 2020/06/01 الي : 2020/07/06</th>
+                                            <td>{store.getState().auth.name}</td>
+                                            <th>القروض والحالات للفتره من : {props.fromDate} الي : {props.toDate}</th>
                                             <th>1/1</th>
                                         </tr>
                                     </tbody>
@@ -55,7 +57,7 @@ const BranchesLoanList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.data.result[0].rows.map((row, index) => {
+                    {props.data.result[0] && props.data.result[0].rows.map((row, index) => {
                         if (row.branchName !== "Total") {
                             return (
                                 <tr key={index}>
@@ -79,7 +81,7 @@ const BranchesLoanList = (props) => {
                             )
                         }
                     })}
-                    {props.data.result[0].rows.map((row, index) => {
+                    {props.data.result[0] && props.data.result[0].rows.map((row, index) => {
                         if (row.branchName === "Total") {
                             return (
                                 <tr key={index}>
@@ -134,7 +136,7 @@ const BranchesLoanList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.data.result[1].rows.map((row, index) => {
+                    {props.data.result[1] && props.data.result[1].rows.map((row, index) => {
                         if (row.branchName !== "Total") {
                             return (
                                 <tr key={index}>
@@ -158,7 +160,7 @@ const BranchesLoanList = (props) => {
                             )
                         }
                     })}
-                    {props.data.result[1].rows.map((row, index) => {
+                    {props.data.result[1] && props.data.result[1].rows.map((row, index) => {
                         if (row.branchName === "Total") {
                             return (
                                 <tr key={index}>
@@ -185,7 +187,7 @@ const BranchesLoanList = (props) => {
                 </tbody>
 
                 <tbody>
-                    {props.data.result[2].rows.map((row, index) => {
+                    {props.data.result[2] && props.data.result[2].rows.map((row, index) => {
                         return (
                             <tr key={index}>
                                 <th colSpan={2}>إﺟﻣﺎﻟﻰ ﺷرﻛﺔ ﺗﺳﺎھﯾل ﻟﻠﺗﻣوﯾل ﻣﺗﻧﺎھﻰ اﻟﺻﻐر</th>

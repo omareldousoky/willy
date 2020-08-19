@@ -102,7 +102,7 @@ const ReportsModal = (props: Props) => {
                   if (input === 'branches') {
                     return (
                       <Col key={index} sm={12} style={{ marginTop: 20 }}>
-                        <BranchesDropDown multiselect={true} onSelectBranch={(branch) => {formikProps.setFieldValue('branches', [...formikProps.values.branches, branch]) }} />                        
+                        <BranchesDropDown multiselect={true} onSelectBranch={(branches) => {formikProps.setFieldValue('branches', branches) }} />                        
                         <span style={{ color: 'red' }}>
                           {formikProps.errors.branches}
                         </span>
@@ -114,7 +114,7 @@ const ReportsModal = (props: Props) => {
                       <Col sm={12} key={index} style={{ marginTop: 20 }}>
                         <Form.Group controlId="key">
                           <div className="dropdown-container">
-                            <p className="dropdown-label">{local.code}</p>
+                            <p className="dropdown-label" style={{width: 150}}>{local.customerCode}</p>
                             <Form.Control
                               className="dropdown-select"
                               name="key"
