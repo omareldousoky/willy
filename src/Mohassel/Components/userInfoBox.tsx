@@ -4,13 +4,14 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
-import { arabicGender, timeToArabicDate } from '../Services/utils';
+import { arabicGender, timeToArabicDate, downloadFile } from '../Services/utils';
 import Can from '../config/Can';
 
 interface Props {
     values: any;
     noHeader?: boolean;
     getIscore?: Function;
+    iScores?: any;
 };
 
 interface State {
@@ -30,6 +31,9 @@ class InfoBox extends Component<Props, State>{
     }
     render() {
         const values = this.props.values;
+        if(this.props.iScores){
+            const iscore = this.props.iScores.filter(score => score.nationalId === values.nationalId)[0];
+        }
         return (
             <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width: '100%' }}>
                 {!this.props.noHeader && <h5>{local.mainInfo}</h5>}
@@ -50,11 +54,23 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
-                    {this.props.getIscore && <Col>
-                        <Can I='getIscore' a='customer'>
-                            <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.props.values)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScorePDF</span>
-                        </Can>
-                    </Col>}
+                    {this.props.iScores && this.props.iScores.find(score => score.nationalId === values.nationalId) && <Form.Group as={Col} md="4">
+                        <Row>
+                            <Form.Label style={{ color: '#6e6e6e' }}>iScore</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{iscore.iscore} </Form.Label>
+                            {iscore.iscore !== 'not_in_cache' && iscore.iscore !== 'unavailable' && <Col>
+                                <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iscore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
+                            </Col>}
+                            {this.props.getIscore && <Col>
+                                <Can I='getIscore' a='customer'>
+                                    <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.props.values)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span>
+                                </Can>
+                            </Col>}
+                        </Row>
+                    </Form.Group>}
+
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} md="4">

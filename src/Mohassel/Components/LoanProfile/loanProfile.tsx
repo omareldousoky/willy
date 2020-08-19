@@ -38,7 +38,7 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
-import { getIscore } from '../../Services/APIs/iScore/iScore';
+import { getIscore, getIscoreCached } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt';
@@ -60,6 +60,7 @@ interface State {
     manualPaymentEditId: string;
     branchDetails: any;
     receiptData: any;
+    iscores: any;
 }
 
 interface Props {
@@ -82,7 +83,8 @@ class LoanProfile extends Component<Props, State>{
             pendingActions: {},
             manualPaymentEditId: '',
             branchDetails: {},
-            receiptData: {}
+            receiptData: {},
+            iscores: []
         };
     }
     componentDidMount() {
@@ -99,6 +101,23 @@ class LoanProfile extends Component<Props, State>{
                     this.setTabsToRender(application)
                 })
             } else this.setTabsToRender(application)
+            this.getCachediScores(application.body)
+        } else {
+            Swal.fire('', 'fetch error', 'error')
+            this.setState({ loading: false })
+        }
+    }
+    async getCachediScores(application){
+        const ids: string[] = []
+        if(application.product.beneficiaryType === 'group'){
+            application.group.individualsInGroup.forEach(member => ids.push(member.customer.nationalId))
+        } else {
+            ids.push(application.customer.nationalId)
+        }
+        this.setState({ loading: true });
+        const iScores = await getIscoreCached({nationalIds:ids});
+        if (iScores.status === "success") {
+            this.setState({ iscores: iScores.body.data, loading: false })
         } else {
             Swal.fire('', 'fetch error', 'error')
             this.setState({ loading: false })
@@ -290,19 +309,12 @@ class LoanProfile extends Component<Props, State>{
         }
         const iScore = await getIscore(obj);
         if (iScore.status === 'success') {
-            this.downloadFile(iScore.body.url)
+            this.getCachediScores(this.state.application)
             this.setState({ loading: false })
         } else {
             Swal.fire('', local.noIScore, 'error')
             this.setState({ loading: false })
         }
-    }
-    downloadFile(fileURL) {
-        const link = document.createElement('a');
-        link.href = fileURL;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
     cancelApplication() {
         Swal.fire({
@@ -441,8 +453,8 @@ class LoanProfile extends Component<Props, State>{
                             </div>
                             : null}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} /> :
-                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} />
+                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} /> :
+                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores}/>
                             }
                         </div>
                         <Card style={{ marginTop: 15 }}>

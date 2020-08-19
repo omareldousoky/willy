@@ -349,3 +349,11 @@ export const iscoreDate = (date: any) => {
   + MyDate.getFullYear();
   return MyDateString
 }
+
+export const downloadFile = (fileURL) => {
+  const link = document.createElement('a');
+  link.href = fileURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
