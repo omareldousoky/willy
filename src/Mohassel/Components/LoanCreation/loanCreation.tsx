@@ -15,10 +15,11 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import { Employee } from '../Payment/payment';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
+import { getCookie } from '../../Services/getCookie';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -133,12 +134,15 @@ class LoanCreation extends Component<Props, State> {
     } else this.setState({ loading: false })
   }
   async getEmployees() {
+    const token = getCookie('token');
+    const tokenData = parseJwt(token);
     this.setState({loading: true})
     const obj = {
       size: 1000,
       from: 0,
       serviceKey:'halan.com/application',
       action:'actFieldManager',
+      branchId: tokenData?.branch
     }
     const res = await searchUserByAction(obj);
     if(res.status === 'success') {
