@@ -59,7 +59,7 @@ class InfoBox extends Component<Props, State>{
                             <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                         </Row>
                     </Form.Group>
-                    {this.props.iScores.length > 0 && iscore.nationalId.length > 0 && <Form.Group as={Col} md="4">
+                    {this.props.iScores && this.props.iScores.length > 0 && iscore.nationalId.length > 0 && <Form.Group as={Col} md="4">
                         <Row>
                             <Form.Label style={{ color: '#6e6e6e' }}>iScore</Form.Label>
                         </Row>

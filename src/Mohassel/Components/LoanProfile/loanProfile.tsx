@@ -102,7 +102,7 @@ class LoanProfile extends Component<Props, State>{
                     this.setTabsToRender(application)
                 })
             } else this.setTabsToRender(application)
-            this.getCachediScores(application.body)
+            if (ability.can('getIscore', 'customer')) this.getCachediScores(application.body)
         } else {
             Swal.fire('', 'fetch error', 'error')
             this.setState({ loading: false })
