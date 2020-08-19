@@ -294,7 +294,7 @@ const appRoutes = [
       {
         path: "/source-of-fund",
         label: local.changeSourceOfFund,
-        render : () => <SourceOfFund/>
+        render : () => <Can I="cibScreen" a='report' ><SourceOfFund/></Can>
       }
     ]
   },
