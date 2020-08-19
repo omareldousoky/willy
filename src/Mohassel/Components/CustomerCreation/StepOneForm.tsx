@@ -35,7 +35,7 @@ export const StepOneForm = (props: any) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isInvalid={errors.customerName && touched.customerName}
-                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                disabled={(!allowed)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -74,7 +74,7 @@ export const StepOneForm = (props: any) => {
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}
                 maxLength={14}
-                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                disabled={(!allowed)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -127,7 +127,7 @@ export const StepOneForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-              disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+              disabled={(!allowed)}
             />}
             </Can>
             <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !==""? {display: 'block'}: {}}>
@@ -238,7 +238,7 @@ export const StepOneForm = (props: any) => {
               maxLength={11}
               minLength={10}
               isInvalid={errors.faxNumber && touched.faxNumber}
-              disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+              disabled={(!allowed)}
             />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -281,7 +281,7 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.emailAddress && touched.emailAddress}
-          disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+          disabled={(!allowed)}
           />}
         </Can>
         <Form.Control.Feedback type="invalid">
@@ -299,7 +299,7 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.customerWebsite && touched.customerWebsite}
-          disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+          disabled={(!allowed)}
         />}
         </Can>
         <Form.Control.Feedback type="invalid">
