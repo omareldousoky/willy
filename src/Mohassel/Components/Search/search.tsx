@@ -35,6 +35,7 @@ interface Props {
   searchPlaceholder: string;
   datePlaceholder?: string;
   hqBranchIdRequest?: string;
+  status?: string;
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
   search: (data) => void;
@@ -82,6 +83,7 @@ class Search extends Component<Props, State> {
     if(obj.key) obj.key = Number(obj.key);
     if(obj.code) obj.code = Number(obj.code);
     if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
+    if(this.props.status) obj.status = this.props.status;
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }

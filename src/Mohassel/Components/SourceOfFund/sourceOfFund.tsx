@@ -13,6 +13,8 @@ import Button from 'react-bootstrap/Button';
 import Can from '../../config/Can';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Form from 'react-bootstrap/Form';
+import { loading } from '../../redux/loading/actions';
+import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund';
 
 interface Props {
   history: Array<any>;
@@ -24,12 +26,12 @@ interface Props {
   searchFilters: any;
   search: (data) => void;
   setSearchFilters: (data) => void;
+  setLoading: (data) => void;
 };
 interface State {
   size: number;
   from: number;
   openModal: boolean;
-  loading: boolean;
   selectedCustomers: Array<string>;
   selectedFund: string;
 }
@@ -42,7 +44,6 @@ class SourceOfFund extends Component<Props, State> {
       size: 10,
       from: 0,
       openModal: false,
-      loading: false,
       selectedCustomers: [],
       selectedFund: ''
     }
@@ -77,7 +78,7 @@ class SourceOfFund extends Component<Props, State> {
       {
         title: local.fundSource,
         key: "fundSource",
-        render: data => data.application.fundSource
+        render: data => this.getSourceOfFund(data.application.fundSource)
       },
       {
         title: local.productName,
@@ -104,7 +105,14 @@ class SourceOfFund extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued" });
+  }
+  getSourceOfFund(SourceOfFund: string) {
+    switch (SourceOfFund) {
+      case 'tasaheel': return local.tasaheel;
+      case 'cib': return local.cib;
+      default: return '';
+    }
   }
   getStatus(status: string) {
     switch (status) {
@@ -133,9 +141,9 @@ class SourceOfFund extends Component<Props, State> {
   async getLoans() {
     let query = {};
     if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate" }
+      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", status: "issued" }
     } else {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }
+      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued" }
     }
     this.props.search(query);
   }
@@ -143,15 +151,19 @@ class SourceOfFund extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
   async submit() {
-    console.log(this.state.selectedCustomers, )
+    this.setState({ openModal: false, selectedFund: '', selectedCustomers: [] })
+    this.props.setLoading(true);
+    const obj = {
+      fundSource: this.state.selectedFund,
+      applicationIds: this.state.selectedCustomers
+    }
+    const res = await changeSourceFund(obj);
+    if (res.status === "success") {
+      console.log(res.body);
+      this.props.setLoading(false);
+      this.getLoans();
+    } else this.props.setLoading(false);
   }
-  // downloadFile(fileURL) {
-  //   const link = document.createElement('a');
-  //   link.href = fileURL;
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // }
   render() {
     return (
       <>
@@ -173,13 +185,14 @@ class SourceOfFund extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'status', 'branch']}
+              searchKeys={['keyword', 'dateFromTo', 'branch']}
               dropDownKeys={['name', 'nationalId', 'key']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               datePlaceholder={local.issuanceDate}
               url="loan"
               from={this.state.from}
               size={this.state.size}
+              status="issued"
               hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               from={this.state.from}
@@ -201,16 +214,15 @@ class SourceOfFund extends Component<Props, State> {
             <div style={{ cursor: 'pointer' }} onClick={() => this.setState({ openModal: false })}>X</div>
           </Modal.Header>
           <Modal.Body style={{ padding: '20px 60px' }}>
-            <Loader type="fullsection" open={this.state.loading} />
             <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-              <Form.Control as="select" data-qc="change-fund" 
-              style={{ marginLeft: 20 }} onChange={(e) => console.log(e.currentTarget.value) } value={this.state.selectedFund}
+              <Form.Control as="select" data-qc="change-fund"
+                style={{ marginLeft: 20 }} onChange={(e) => this.setState({ selectedFund: e.currentTarget.value })} value={this.state.selectedFund}
               >
                 <option value="" data-qc=""></option>
                 <option value="tasaheel" data-qc="tasaheel">{local.tasaheel}</option>
-                <option value="CIB" data-qc="CIB">البنك التجاري الدولي – مصر - CIB</option>
+                <option value="cib" data-qc="cib">{local.cib}</option>
               </Form.Control>
-              <Button className="big-button" data-qc="submit" onClick={()=> this.submit()}>{local.submit}</Button>
+              <Button className="big-button" data-qc="submit" onClick={() => this.submit()} disabled={this.state.selectedFund === ""}>{local.submit}</Button>
             </div>
           </Modal.Body>
         </Modal>
@@ -223,6 +235,7 @@ const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
     setSearchFilters: data => dispatch(searchFilters(data)),
+    setLoading: data => dispatch(loading(data))
   };
 };
 const mapStateToProps = state => {
