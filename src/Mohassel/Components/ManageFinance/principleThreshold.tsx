@@ -99,7 +99,7 @@ class PrincipleThreshold extends Component<Props, State> {
                         onSubmit={this.update}
                         validationSchema={Yup.object().shape({
                             maxIndividualPrincipal: Yup.number().integer().required(local.required),
-                            maxGroupIndividualPrincipal: Yup.number().integer().required(local.required),
+                            maxGroupIndividualPrincipal: Yup.number().lessThan(Yup.ref('maxGroupPrincipal'),local.individualInGroupPrincipalMustBeLessThanGroupPrincipal).integer().required(local.required),
                             maxGroupPrincipal: Yup.number().integer().required(local.required)
                         })}
                         validateOnBlur

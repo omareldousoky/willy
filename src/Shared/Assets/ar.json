@@ -687,5 +687,6 @@
     "maxGroupPrincipal":"الحد الاقصى للمجموعة",
     "principalMaxWillChange":"سيتم تغيير الحد الاقصى لقيم القروض",
     "principalMaxChangeSuccess":"تم تغيير الحد الاقصى لقيم القروض بنجاح",
-    "principalMaxChangeError":"حدث خطأ في تغيير الحد الاقصى لقيم القروض"
+    "principalMaxChangeError":"حدث خطأ في تغيير الحد الاقصى لقيم القروض",
+    "individualInGroupPrincipalMustBeLessThanGroupPrincipal":"يجب أن يكون الحد الاقصى للفرد أقل من الحد الاقصى للمجموعة"
 }
