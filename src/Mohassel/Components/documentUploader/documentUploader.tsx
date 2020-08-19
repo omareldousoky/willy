@@ -16,19 +16,19 @@ interface Props {
   documentType: DocumentType;
   uploadDocumentFun: any;
   deleteDocumentFun: any;
-  checkAll?: boolean;
   keyName: string;
   keyId: string;
   edit: boolean;
   view?: boolean;
   uploadedImageFile: Array<Document>;
-}
+  onChange?: any;
+  selectionArray: any[];
 
+}
 
 interface State {
   loading: boolean;
   dragging: boolean;
-  selectionArray: Array<any>;
   imagesFiles: Array<Document>;
 }
 class DocumentUploader extends Component<Props, State> {
@@ -41,7 +41,6 @@ class DocumentUploader extends Component<Props, State> {
       loading: false,
       dragging: false,
       imagesFiles: [],
-      selectionArray: [],
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -243,7 +242,25 @@ class DocumentUploader extends Component<Props, State> {
     const fileName = document.key.split('/');
     download(document.url, fileName[1]);
   }
+  selectItem = (option) => {
+    if (! this.props.selectionArray.find((element) => option.key === element.key)) {
+      console.log(option)
+      this.props.selectionArray.push({
+        createdAt: option.createdAt,
+        key: option.key,
+        url: option.url,
+        valid: option.valid,
+      });
+
+    } else {
+        const index =   this.props.selectionArray.indexOf(option);
+        if (index !== -1) { 
+           this.props.selectionArray.splice(index, 1); 
+         }
+    }
+}
   renderPhotoByName(key: number, name: string) {
+
     return (
       <Card.Body key={key} className="document-upload-container" >
         <div data-qc="document-actions" className="document-actions" >
@@ -255,8 +272,9 @@ class DocumentUploader extends Component<Props, State> {
             <Form.Check 
                 type='checkbox'
                 id={`${name+ key.toString()}`}
-                // onChange={() => this.selectItem(option)}
-                checked={this.state.selectionArray.find((item) => item._id ===  (name + key.toString()))}
+                onChange={() => this.selectItem(this.state.imagesFiles[key])}
+                label={""}
+                checked={this.props.selectionArray.find((item) => item.key === this.state.imagesFiles[key].key)}
             />
             </span>}
         </div>

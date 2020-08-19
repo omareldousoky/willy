@@ -326,8 +326,8 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 }
 .invalid-image{
   opacity: 0.3;
-  filter: invert(15%);
-  -webkit-filter: invert(15%);
+  // filter: invert(15%);
+  // -webkit-filter: invert(15%);
 }
 .invalid-document {
   position: absolute;
