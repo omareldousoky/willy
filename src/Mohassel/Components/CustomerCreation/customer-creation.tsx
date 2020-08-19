@@ -286,7 +286,7 @@ class CustomerCreation extends Component<Props, State>{
       const res = await createCustomer(objToSubmit);
       if (res.status === 'success') {
         this.setState({ loading: false });
-        Swal.fire("", local.customerCreated, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+        Swal.fire("", local.customerCreated + ' ' + local.withCode + ' ' + res.body.customerKey, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
       } else {
         Swal.fire("error", local.customerCreationError)
         this.setState({ loading: false });

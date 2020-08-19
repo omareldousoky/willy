@@ -671,5 +671,6 @@
     "employeeName": "إسم الموظف",
     "transactionDate": "تاريخ المعاملة",
     "searchByEmp": "البحث بإسم الموظف",
-    "noIScore":"لا يوجد iScore"
+    "noIScore":"لا يوجد iScore",
+    "withCode":"بكود"
 }
