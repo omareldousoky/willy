@@ -203,7 +203,7 @@
     "rejectLoan": "رفض قرض",
     "committeeDecision": "قرار اللجنة",
     "theDecision": "القرار",
-    "decisionDate": "تاريخ القرار",
+    "decisionDate": "تاريخ الرفض",
     "rejectionReason": "سبب الرفض",
     "editLoan": "تعديل قرض",
     "reviewStatus": "حالة المراجعة",
@@ -672,5 +672,6 @@
     "transactionDate": "تاريخ المعاملة",
     "searchByEmp": "البحث بإسم الموظف",
     "noIScore":"لا يوجد iScore",
+    "loanApprovalDate":"تاريخ الموافقة",
     "withCode":"بكود"
 }

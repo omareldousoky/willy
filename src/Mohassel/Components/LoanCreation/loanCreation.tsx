@@ -140,7 +140,7 @@ class LoanCreation extends Component<Props, State> {
       const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf());
       if (res.status === "success") {
         this.setState({ loading: false, print: true, receiptData: res.body }, () => window.print());
-        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => {this.props.history.push('/track-loan-applications')});
+        Swal.fire('', local.loanIssuanceSuccess + ` ${local.withCode} ` , 'success').then(() => {this.props.history.push('/track-loan-applications')});
       } else {
         this.setState({ loading: false });
         Swal.fire('', local.loanIssuanceError, 'error');
