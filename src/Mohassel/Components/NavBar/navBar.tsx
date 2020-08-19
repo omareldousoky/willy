@@ -178,7 +178,7 @@ class NavBar extends Component<Props, State> {
               {<Can I='documentTypes' a='config'><Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
             {<Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}
-            {<Can I = "changeOfficer" a  ="customer"><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can>}
+            {<Can I = "changeOfficer" a  ="customer"><Can  I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can></Can>}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
