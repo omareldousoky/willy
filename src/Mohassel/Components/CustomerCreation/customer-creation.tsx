@@ -338,7 +338,7 @@ class CustomerCreation extends Component<Props, State>{
           }
 
           return (
-            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>);
+            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} edit={this.props.edit}/>);
         }
         }
 

@@ -63,7 +63,7 @@ export const StepThreeForm = (props: any) => {
                                 value={values.geographicalDistribution}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed)}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                             >
                                 <option value="" disabled></option>
@@ -98,7 +98,7 @@ export const StepThreeForm = (props: any) => {
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}
                                 loadOptions={getLoanOfficers}
-                                isDisabled={(!allowed)}
+                                isDisabled={(!allowed && props.edit)}
                                 cacheOptions defaultOptions
                             />}
                         </Can>
@@ -118,7 +118,7 @@ export const StepThreeForm = (props: any) => {
                                 value={values.applicationDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed)}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.applicationDate && touched.applicationDate}
                             />}
                         </Can>
@@ -145,7 +145,7 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('permanentEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed)}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
                             />}
                         </Can>
@@ -170,7 +170,7 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed)}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
                             />}
                         </Can>
@@ -240,7 +240,7 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="comments"
                                 value={values.comments}
                                 onChange={handleChange}
-                                disabled={(!allowed)}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.comments && touched.comments}
                             />}
                         </Can>
