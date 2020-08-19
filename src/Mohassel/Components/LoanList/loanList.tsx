@@ -7,7 +7,15 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import { getIscore } from '../../Services/APIs/iScore/iScore';
+import Swal from 'sweetalert2';
+import Table from 'react-bootstrap/Table';
+import store from '../../redux/store';
+import Can from '../../config/Can';
+import ability from '../../config/ability';
 
 interface Props {
   history: Array<any>;
@@ -26,6 +34,7 @@ interface State {
   iScoreModal: boolean;
   iScoreCustomers: any;
   loading: boolean;
+  searchKeys: any;
 }
 
 class LoanList extends Component<Props, State> {
@@ -37,7 +46,8 @@ class LoanList extends Component<Props, State> {
       from: 0,
       iScoreModal: false,
       iScoreCustomers: [],
-      loading: false
+      loading: false,
+      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch']
     }
     this.mappers = [
       {
@@ -98,7 +108,12 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" });
+  const searchKeys = this.state.searchKeys
+    if(ability.can('viewDoubtfulLoans','application')){
+      searchKeys.push('doubtful')
+      this.setState({searchKeys})
+    }
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -145,7 +160,7 @@ class LoanList extends Component<Props, State> {
           </div>
           <hr className="dashed-line" />
           <Search
-            searchKeys={['keyword', 'dateFromTo', 'status', 'branch']}
+            searchKeys={this.state.searchKeys}
             dropDownKeys={['name', 'nationalId', 'key']}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}

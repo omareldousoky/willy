@@ -271,17 +271,17 @@ export const download = (url, fileName: string): void => {
 export const getStatus = (installment) => {
   const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
   switch (installment.status) {
-      case 'unpaid':
-          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
-              return local.late
-          else
-              return local.unpaid
-      case 'pending': return local.pending;
-      case 'paid': return local.paid;
-      case 'partiallyPaid': return local.partiallyPaid;
-      case 'rescheduled': return local.rescheduled;
-      case 'cancelled': return local.cancelled;
-      default: return '';
+    case 'unpaid':
+      if (new Date(installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
+        return local.late
+      else
+        return local.unpaid
+    case 'pending': return local.pending;
+    case 'paid': return local.paid;
+    case 'partiallyPaid': return local.partiallyPaid;
+    case 'rescheduled': return local.rescheduled;
+    case 'cancelled': return local.cancelled;
+    default: return '';
   }
 }
 
@@ -345,9 +345,15 @@ export const actionsList = [
 export const iscoreDate = (date: any) => {
   const MyDate = new Date(date);
   const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
-  + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
-  + MyDate.getFullYear();
+    + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '/'
+    + MyDate.getFullYear();
   return MyDateString
+}
+
+export const getDateString = (date: any) => {
+  return (
+    new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+  )
 }
 
 export const downloadFile = (fileURL) => {
