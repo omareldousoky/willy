@@ -49,7 +49,7 @@ interface State {
   print: boolean;
   receiptData: any;
   employees: Array<Employee>;
-  fieldManagerId: string;
+  branchManagerId: string;
 }
 export interface Location {
   pathname: string;
@@ -93,7 +93,7 @@ class LoanCreation extends Component<Props, State> {
       print: false,
       receiptData: {},
       employees: [],
-      fieldManagerId: '',
+      branchManagerId: '',
     }
   }
   async componentDidMount() {
@@ -141,7 +141,7 @@ class LoanCreation extends Component<Props, State> {
       size: 1000,
       from: 0,
       serviceKey:'halan.com/application',
-      action:'actFieldManager',
+      action:'actBranchManager',
       branchId: tokenData?.branch
     }
     const res = await searchUserByAction(obj);
@@ -167,12 +167,12 @@ class LoanCreation extends Component<Props, State> {
         loanIssuanceDate: new Date(values.loanIssuanceDate).valueOf()
       }
       if(this.state.application.product.branchManagerAndDate) {
-        obj['fieldManagerId'] = values.fieldManagerId;
+        obj['branchManagerId'] = values.branchManagerId;
         obj['managerVisitDate'] = new Date(values.managerVisitDate).valueOf();
       }
       const res = await issueLoan(obj);
       if (res.status === "success") {
-        this.setState({ loading: false, print: true, receiptData: res.body }, () => window.print());
+        this.setState({ loading: false, print: true, receiptData: res.body.receipts }, () => window.print());
         Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => {this.props.history.push('/track-loan-applications')});
       } else {
         this.setState({ loading: false });
@@ -319,17 +319,17 @@ class LoanCreation extends Component<Props, State> {
                 </Form.Group>
                 {this.state.application?.product?.branchManagerAndDate ?
                   <>
-                    <Form.Group as={Row} controlId="fieldManagerId">
+                    <Form.Group as={Row} controlId="branchManagerId">
                       <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.branchManager}*`}</Form.Label>
                       <Col sm={6}>
                         <Form.Control
                           as="select"
-                          name="fieldManagerId"
-                          data-qc="fieldManagerId"
+                          name="branchManagerId"
+                          data-qc="branchManagerId"
                           onChange={formikProps.handleChange}
-                          value={formikProps.values.fieldManagerId}
+                          value={formikProps.values.branchManagerId}
                           onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.fieldManagerId) && Boolean(formikProps.touched.fieldManagerId)}
+                          isInvalid={Boolean(formikProps.errors.branchManagerId) && Boolean(formikProps.touched.branchManagerId)}
                         >
                           <option value={''}></option>
                           {this.state.employees.map((employee, index) => {
@@ -339,7 +339,7 @@ class LoanCreation extends Component<Props, State> {
                           })}
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.fieldManagerId}
+                          {formikProps.errors.branchManagerId}
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>

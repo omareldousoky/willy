@@ -2,7 +2,7 @@ import axios from '../axios-instance';
 interface LoanIssuanceObj {
     id: string;
     loanIssuanceDate: number;
-    fieldManagerId?: string;
+    branchManagerId?: string;
     managerVisitDate?: number;
 }
 export const issueLoan = async (obj: LoanIssuanceObj) => {

@@ -17,7 +17,7 @@ export const loanIssuanceValidation = Yup.object().shape({
             return (new Date(value).valueOf() >= loanCreationDate)
         }
     ).required(local.required),
-    fieldManagerId: Yup.string().when('branchManagerAndDate', {
+    branchManagerId: Yup.string().when('branchManagerAndDate', {
         is: true,
         then: Yup.string().required(local.required),
         otherwise: Yup.string()
