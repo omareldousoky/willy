@@ -271,7 +271,7 @@ const appRoutes = [
       }, {
         path: "/loans",
         label: local.issuedLoans,
-        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,
+        render: (props) => <LoanList {...props} />,
         routes: [
           {
             path: "/loan-profile",
