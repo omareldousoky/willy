@@ -65,9 +65,9 @@ export interface Customer {
     ruralUrban?: string;
     taxCardNumber?: string;
     village?: string;
-    allowMultiLoans?: boolean;
+    maxLoansAllowed?: number;
     allowGuarantorLoan?: boolean;
-    allowMultiGuarantee?: boolean;
+    guarantorMaxLoans?: number;
     _id?: string;
 }
 
@@ -87,6 +87,10 @@ export interface PendingActions {
     receiptNumber?: string;
     transactions?: Array<Action>;
     beneficiaryId?: string;
+    payerId?: string;
+    payerNationalId?: string;
+    payerType?: string;
+    payerName?: string;
     _id?: string;
 }
 

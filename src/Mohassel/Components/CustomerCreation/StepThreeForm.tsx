@@ -184,22 +184,8 @@ export const StepThreeForm = (props: any) => {
                 {allowed =>
                     props.edit && allowed &&
                     <Row>
-                        <Col sm={4}>
-                            <Form.Group>
-                                <Form.Check
-                                    name="allowMultiLoans"
-                                    id="allowMultiLoans"
-                                    data-qc="allowMultiLoans"
-                                    type='checkbox'
-                                    checked={values.allowMultiLoans}
-                                    value={values.allowMultiLoans}
-                                    label={local.allowMultiLoans}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col sm={4}>
-                            <Form.Group>
+                        <Col sm={6}>
+                            <Form.Group style={{textAlign:'right'}}>
                                 <Form.Check
                                     name="allowGuarantorLoan"
                                     id="allowGuarantorLoan"
@@ -212,22 +198,51 @@ export const StepThreeForm = (props: any) => {
                                 />
                             </Form.Group>
                         </Col>
-                        <Col sm={4}>
-                            <Form.Group>
-                                <Form.Check
-                                    name="allowMultiGuarantee"
-                                    id="allowMultiGuarantee"
-                                    data-qc="allowMultiGuarantee"
-                                    type='checkbox'
-                                    checked={values.allowMultiGuarantee}
-                                    value={values.allowMultiGuarantee}
-                                    label={local.allowMultiGuarantee}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
                     </Row>
                 }
+            </Can>
+            <Can I="updateNationalId" a="customer" passThrough>
+            {allowed =>
+                    props.edit && allowed &&
+                <Row>
+                    <Col sm={6}>
+                        <Form.Group controlId="maxLoansAllowed">
+                            <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="maxLoansAllowed"
+                                    data-qc=""
+                                    value={values.maxLoansAllowed}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                    isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
+                                />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.maxLoansAllowed}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group controlId="guarantorMaxLoans">
+                            <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="guarantorMaxLoans"
+                                    data-qc=""
+                                    value={values.guarantorMaxLoans}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                    isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
+                                />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.guarantorMaxLoans}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            }
             </Can>
             <Row>
                 <Col sm={12}>
