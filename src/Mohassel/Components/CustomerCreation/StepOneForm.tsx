@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
-import {checkIssueDate} from '../../Services/utils';
+import { checkIssueDate } from '../../Services/utils';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -67,6 +67,9 @@ export const StepOneForm = (props: any) => {
                     if (res.status === 'success') {
                       setLoading(false);
                       setFieldValue('nationalIdChecker', res.body.Exists);
+                      if (res.body.Exists) {
+                        setFieldValue('nationalIdCheckerDupKey', res.body.CustomerKey);
+                      }
                       setFieldValue('birthDate', getBirthdateFromNationalId(value));
                       setFieldValue('gender', getGenderFromNationalId(value));
                     } else setLoading(false);
@@ -78,7 +81,7 @@ export const StepOneForm = (props: any) => {
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
-              {errors.nationalId}
+              {(errors.nationalId === local.duplicateNationalIdMessage) ? local.duplicateNationalIdMessage + local.withCode + values.nationalIdCheckerDupKey : errors.nationalId}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
@@ -130,7 +133,7 @@ export const StepOneForm = (props: any) => {
               disabled={(!allowed && props.edit)}
             />}
             </Can>
-            <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !==""? {display: 'block'}: {}}>
+            <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
               {errors.nationalIdIssueDate || checkIssueDate(values.nationalIdIssueDate)}
             </Form.Control.Feedback>
           </Form.Group>
@@ -165,7 +168,7 @@ export const StepOneForm = (props: any) => {
               name="customerHomeAddressLocation"
               data-qc="customerHomeAddressLocation"
               style={{ cursor: 'pointer', color: '#7dc356', textDecoration: 'underline' }}
-              value = {values.customerAddressLatLongNumber?.lat !== 0 && values.customerAddressLatLongNumber?.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
+              value={values.customerAddressLatLongNumber?.lat !== 0 && values.customerAddressLatLongNumber?.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
               // value={values.customerHomeAddressLocationTitle}
               onClick={() => openCloseMap(true)}
             />
