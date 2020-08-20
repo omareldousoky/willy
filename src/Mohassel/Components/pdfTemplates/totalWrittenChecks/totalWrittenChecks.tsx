@@ -78,7 +78,7 @@ const TotalWrittenChecks = (props) => {
                             <div>بطاقه رقم قومي: {numbersToArabic(individualInGroup.customer.nationalId)}</div>
                             <div>والمقيم في: {individualInGroup.customer.customerHomeAddress}</div>
                             <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
-                            <div>مبلغاً وقدره {`${numbersToArabic(individualInGroup.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(individualInGroup.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
+                            <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
                             <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الأفريقي الدولي فرع مدينه نصر</div>
                             <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائننا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
 			الفعل ولا تبرأ ذمتي الا بإستلام هذا الايصال</div>
