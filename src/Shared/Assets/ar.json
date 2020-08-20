@@ -678,6 +678,11 @@
     "transactionDate": "تاريخ المعاملة",
     "searchByEmp": "البحث بإسم الموظف",
     "noIScore":"لا يوجد iScore",
+    "familyMember": "قريب",
+    "nonFamilyMember": "غير قريب",
+    "whoMadeThePayment": "من قام بالسداد",
+    "paymentsReports": "التقارير المالية",
+    "branchManager": "مدير الفرع",
     "loanApprovalDate":"تاريخ الموافقة",
     "doubtfulLoans":"قروض مشكوك فيها"
 }
