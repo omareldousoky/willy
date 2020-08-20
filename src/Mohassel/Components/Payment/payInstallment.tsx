@@ -130,19 +130,10 @@ class PayInstallment extends Component<Props, State> {
   }
 
   getRequiredAmount() {
-    // const todaysDate = new Date("2020-06-30").valueOf();
-    const todaysDate = new Date().valueOf();
-    let total = 0;
-    const installments: Array<number> = [];
-    this.props.installments.forEach(installment => {
-      if (todaysDate >= installment.dateOfPayment) {
-        if (installment.status !== "paid")
-          total =
-            total + installment.installmentResponse - installment.totalPaid;
-        installments.push(installment.id);
-      } else return total;
+    const installment = this.props.installments.find(installment => {
+        return (installment.status !== "paid" && installment.status !== "rescheduled" && installment.status !== "pending")
     });
-    return { total: total, installments: installments };
+    return installment? installment.installmentResponse - installment.totalPaid : 0;
   }
   render() {
     return (
@@ -244,7 +235,7 @@ class PayInstallment extends Component<Props, State> {
                               name="requiredAmount"
                               value={
                                 formikBag.values.requiredAmount ||
-                                this.getRequiredAmount().total
+                                this.getRequiredAmount()
                               }
                               disabled
                             ></Form.Control>
