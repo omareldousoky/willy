@@ -687,5 +687,6 @@
     "paymentsReports": "التقارير المالية",
     "branchManager": "مدير الفرع",
     "loanApprovalDate":"تاريخ الموافقة",
-    "doubtfulLoans":"قروض مشكوك فيها"
+    "doubtfulLoans":"قروض مشكوك فيها",
+    "withCode":" بكود "
 }
