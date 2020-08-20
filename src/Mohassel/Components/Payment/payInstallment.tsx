@@ -5,12 +5,15 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import AsyncSelect from 'react-select/async';
 import { Formik, FormikProps } from "formik";
 import * as local from "../../../Shared/Assets/ar.json";
 import { paymentValidation } from "./paymentValidation";
+import { searchUserByAction } from "../../Services/APIs/UserByAction/searchUserByAction";
 import { connect } from "react-redux";
 import { payment } from "../../redux/payment/actions";
 import "./styles.scss";
+import { Employee } from "./payment";
 
 interface FormValues {
   requiredAmount: number;
@@ -20,7 +23,10 @@ interface FormValues {
   max: number;
   paymentType: string;
   penaltyAction: string;
-  byInsurance: boolean;
+  payerType: string;
+  payerNationalId: string;
+  payerName: string;
+  payerId: string;
   installmentNumber: number;
 }
 interface Installment {
@@ -36,6 +42,9 @@ interface Installment {
 }
 interface Application {
   installmentsObject: InstallmentsObject;
+  group: any;
+  product: any;
+  beneficiaryType: string;
 }
 interface InstallmentsObject {
   totalInstallments: TotalInstallments;
@@ -52,7 +61,6 @@ interface Props {
   truthDate: string;
   paymentType: string;
   penaltyAction: string;
-  byInsurance: boolean;
 }
 interface SelectObject {
   label: string;
@@ -66,7 +74,12 @@ interface State {
   paymentType: string;
   randomPaymentTypes: Array<SelectObject>;
   penaltyAction: string;
+  payerType: string;
+  payerNationalId: string;
+  payerName: string;
+  payerId: string;
   installmentNumber: number;
+  employees: Array<Employee>;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -86,12 +99,34 @@ class PayInstallment extends Component<Props, State> {
         { label: local.tricycleStamp, value: "tricycleStamp" }
       ],
       penaltyAction: this.props.penaltyAction,
+      payerType: '',
+      payerNationalId: '',
+      payerName: '',
+      payerId: '',
       installmentNumber: -1,
+      employees: [],
     };
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.penaltyAction !== this.props.penaltyAction)
       this.setState({ penaltyAction: prevProps.penaltyAction });
+  }
+  getUsersByAction = async (input: string) => {
+    const obj = {
+      size: 100,
+      from: 0,
+      serviceKey:'halan.com/application',
+      action:'acceptPayment',
+      name: input
+    }
+    const res = await searchUserByAction(obj);
+    if(res.status === 'success') {
+      this.setState({ employees: res.body.data, payerType: 'employee' });
+      return res.body.data;
+    } else { 
+      this.setState({ employees: [] });
+      return [];
+    }
   }
 
   getRequiredAmount() {
@@ -125,9 +160,8 @@ class PayInstallment extends Component<Props, State> {
             enableReinitialize
             initialValues={{
               ...this.state,
-              max: this.props.application.installmentsObject.totalInstallments
-                .installmentSum,
-              byInsurance: this.props.byInsurance
+              max: this.props.application.installmentsObject.totalInstallments.installmentSum,
+              beneficiaryType: this.props.application.product.beneficiaryType,
             }}
             onSubmit={this.props.handleSubmit}
             validationSchema={paymentValidation}
@@ -292,23 +326,113 @@ class PayInstallment extends Component<Props, State> {
                         </Col>
                       </Form.Group>
                     ) : null}
+                    <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerType"
+                          data-qc="payerType"
+                          value={formikBag.values.payerType}
+                          onChange={formikBag.handleChange}
+                          onBlur={formikBag.handleBlur}
+                          isInvalid={Boolean(formikBag.errors.payerType) && Boolean(formikBag.touched.payerType)}
+                        >
+                          <option value={''}></option>
+                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
+                          <option value='employee' data-qc='employee'>{local.employee}</option>
+                          <option value='family' data-qc='family'>{local.familyMember}</option>
+                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.payerType}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    {formikBag.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          name="payerId"
+                          data-qc="payerId"
+                          onChange={formikBag.handleChange}
+                          onBlur={formikBag.handleBlur}
+                          isInvalid={Boolean(formikBag.errors.payerId) && Boolean(formikBag.touched.payerId)}
+                        >
+                          <option value={''}></option>
+                          {this.props.application.group.individualsInGroup.map((member, index) => {
+                            return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
+                          })}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.payerId}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>}
+                    {formikBag.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
+                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
+                      <Col>
+                        <AsyncSelect
+                          className={formikBag.errors.payerId ? "error" : ""}
+                          name="payerId"
+                          data-qc="payerId"
+                          value={this.state.employees.find(employee => employee._id === formikBag.values.payerId)}
+                          onBlur={formikBag.handleBlur}
+                          onChange={(employee: any) => formikBag.setFieldValue("payerId", employee._id)}
+                          getOptionLabel={(option) => option.name}
+                          getOptionValue={(option) => option._id}
+                          loadOptions={this.getUsersByAction}
+                          cacheOptions defaultOptions
+                        />
+                        {formikBag.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
+                          {formikBag.errors.payerId}
+                        </div>}
+                      </Col>
+                    </Form.Group>}
+                    {(formikBag.values.payerType === 'family' || formikBag.values.payerType === 'nonFamily') &&
+                      <>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              name="payerName"
+                              data-qc="payerName"
+                              value={formikBag.values.payerName.toString()}
+                              onBlur={formikBag.handleBlur}
+                              onChange={formikBag.handleChange}
+                              isInvalid={Boolean(formikBag.errors.payerName) && Boolean(formikBag.touched.payerName)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikBag.errors.payerName}
+                            </Form.Control.Feedback>
+                          </Col>
+                        </Form.Group>
+                        <Form.Group as={Col} md={6} controlId="whoPaid">
+                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
+                          <Col>
+                            <Form.Control
+                              type="text"
+                              name="payerNationalId"
+                              data-qc="payerNationalId"
+                              maxLength={14}
+                              value={formikBag.values.payerNationalId.toString()}
+                              onBlur={formikBag.handleBlur}
+                              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                const re = /^\d*$/;
+                                if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                  formikBag.setFieldValue('payerNationalId', event.currentTarget.value)
+                                }}}
+                              isInvalid={Boolean(formikBag.errors.payerNationalId) && Boolean(formikBag.touched.payerNationalId)} />
+                            <Form.Control.Feedback type="invalid">
+                              {formikBag.errors.payerNationalId}
+                            </Form.Control.Feedback>
+                          </Col>
+                        </Form.Group>
+                      </>
+                    }
                   </Form.Group>
                 </Container>
-                {this.props.penaltyAction === "normal" ? (
-                  <div style={{ display: "flex" }}>
-                    <Form.Label
-                      style={{ textAlign: "right", paddingRight: 0 }}
-                    >{`${local.byInsurance}`}</Form.Label>
-                    <Form.Check
-                      name="byInsurance"
-                      id="byInsurance"
-                      data-qc="byInsurance"
-                      type="checkbox"
-                      checked={formikBag.values.byInsurance}
-                      onChange={formikBag.handleChange}
-                    />
-                  </div>
-                ) : null}
                 <div className="payments-buttons-container">
                   <Button
                     variant="outline-primary"
