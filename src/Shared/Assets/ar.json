@@ -688,5 +688,9 @@
     "branchManager": "مدير الفرع",
     "loanApprovalDate":"تاريخ الموافقة",
     "doubtfulLoans":"قروض مشكوك فيها",
-    "withCode":" بكود "
+    "withCode":" بكود ",
+    "chooseLoanOfficer":"إختر المندوب",
+    "moveCustomers": "نقل العملاء",
+    "chooseCurrentLoanOfficer":"إختر المندوب الحالي",
+    "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب"
 }
