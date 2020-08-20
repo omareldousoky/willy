@@ -8,7 +8,7 @@ import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
-import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
+import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree, customerCreationValidationStepThreeEdit , } from './customerFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
@@ -16,6 +16,7 @@ import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 import { timeToDateyyymmdd } from '../../Services/utils';
+import ability from '../../config/ability';
 
 interface CustomerInfo {
   birthDate: number;
@@ -44,9 +45,9 @@ interface CustomerExtraDetails {
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
   representative: any;
-  allowMultiLoans: boolean;
+  maxLoansAllowed: number;
   allowGuarantorLoan: boolean;
-  allowMultiGuarantee: boolean;
+  guarantorMaxLoans: number;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -107,6 +108,8 @@ interface State {
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
     comments: string;
+    guarantorMaxLoans: number;
+    maxLoansAllowed: number;
   };
   customerId: string;
   selectedCustomer: any;
@@ -216,9 +219,9 @@ class CustomerCreation extends Component<Props, State>{
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
         comments: res.body.comments,
-        allowMultiLoans: res.body.allowMultiLoans,
+        maxLoansAllowed: res.body.maxLoansAllowed? Number(res.body.maxLoansAllowed) : 1,
         allowGuarantorLoan: res.body.allowGuarantorLoan,
-        allowMultiGuarantee: res.body.allowMultiGuarantee,
+        guarantorMaxLoans: res.body.guarantorMaxLoans? Number(res.body.guarantorMaxLoans ): 1,
       };
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerInfo },
@@ -273,6 +276,10 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
     objToSubmit.representative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? this.state.oldRepresentative : objToSubmit.representative;
     objToSubmit.newRepresentative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? objToSubmit.newRepresentative : '';
+    if(objToSubmit?.guarantorMaxLoans && objToSubmit.guarantorMaxLoans > 0) objToSubmit.guarantorMaxLoans = Number(objToSubmit.guarantorMaxLoans);
+    else  objToSubmit.guarantorMaxLoans = 1;
+    if(objToSubmit?.maxLoansAllowed && objToSubmit.maxLoansAllowed > 0) objToSubmit.maxLoansAllowed = Number(objToSubmit.maxLoansAllowed);
+    else  objToSubmit.maxLoansAllowed = 1;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
@@ -352,22 +359,24 @@ class CustomerCreation extends Component<Props, State>{
         enableReinitialize
         initialValues={this.state.step3}
         onSubmit={this.submit}
-        validationSchema={customerCreationValidationStepThree}
+        validationSchema={
+          (ability.can("updateNationalId", "customer") && this.props.edit)
+            ? customerCreationValidationStepThreeEdit
+            : customerCreationValidationStepThree
+        }
         validateOnBlur
         validateOnChange
       >
         {(formikProps) => {
           if (this.props.edit) {
-
             this.formikStep3 = formikProps;
-
           }
           return (
             <StepThreeForm {...formikProps} representativeDetails={this.state.step3} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>
           )
         }}
       </Formik>
-    )
+    );
   }
   renderDocuments() {
     return ( 
