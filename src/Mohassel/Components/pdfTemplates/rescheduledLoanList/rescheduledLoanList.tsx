@@ -80,9 +80,9 @@ const RescheduledLoanList = (props) => {
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
                                     </tr>)}
-                                    {/* <tr>
+                                    <tr>
                                         <td colSpan={100} className="horizontal-line"></td>
-                                    </tr> */}
+                                    </tr>
                                 </tbody>
                                 <tbody className="framecell">
                                     <tr>
@@ -115,9 +115,9 @@ const RescheduledLoanList = (props) => {
                             </React.Fragment>
                         )}
                         <tbody>
-                            {/* <tr>
+                            <tr>
                                 <td className="horizontal-line" colSpan={100}></td>
-                            </tr> */}
+                            </tr>
                             <tr style={{ height: "0.5em" }}></tr>
                         </tbody>
 

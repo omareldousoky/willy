@@ -78,10 +78,10 @@ class Reports extends Component<{}, State> {
     this.setState({ showModal: true, selectedPdf: selectedPdf })
   }
   handleSubmit(values) {
-    // const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf();
-    // const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf();
-    // values.fromDate = from;
-    // values.toDate = to;
+    const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf();
+    const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf();
+    values.fromDate = from;
+    values.toDate = to;
     switch (this.state.selectedPdf.key) {
       case 'customerDetails': return this.getCustomerDetails(values);
       case 'loanDetails': return this.getLoanDetails(values);
