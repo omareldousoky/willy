@@ -16,6 +16,7 @@ interface Props {
     leftHeader?: string;
     search?: Function;
     viewSelected?: Function;
+    disabled?: Function;
 }
 
 interface State {
@@ -112,7 +113,7 @@ class DualBox extends Component<Props, State> {
             })
         } else {
             this.setState({
-                selectionArray: [...this.state.options],
+                selectionArray: (this.props.disabled) ? this.state.options.filter(option => this.props.disabled && this.props.disabled(option) === false) : [...this.state.options],
                 checkAll: true
             })
         }
@@ -178,6 +179,7 @@ class DualBox extends Component<Props, State> {
                                                     onChange={() => this.selectItem(option)}
                                                     label={option[this.props.labelKey]}
                                                     checked={this.state.selectionArray.find((item) => item._id === option._id)}
+                                                    disabled={(this.props.disabled && this.props.disabled(option))}
                                                 />
                                             </div>
                                         }

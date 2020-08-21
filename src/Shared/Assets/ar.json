@@ -679,5 +679,7 @@
     "searchByEmp": "البحث بإسم الموظف",
     "noIScore":"لا يوجد iScore",
     "loanApprovalDate":"تاريخ الموافقة",
-    "doubtfulLoans":"قروض مشكوك فيها"
+    "doubtfulLoans":"قروض مشكوك فيها",
+    "individualAgeError":"يجب أن لا يقل عمر العميل الفردي عن ٢١ و لا يزيد عن ٦٥",
+    "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧"
 }
