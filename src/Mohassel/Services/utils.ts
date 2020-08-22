@@ -358,6 +358,11 @@ export const actionsList = [
   "deactivateUser"
 ]
 
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
 export const iscoreDate = (date: any) => {
   const MyDate = new Date(date);
   const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
