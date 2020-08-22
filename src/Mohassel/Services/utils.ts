@@ -281,6 +281,22 @@ export const getStatus = (installment) => {
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getLoanStatus = (status: string) => {
+  switch (status) {
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      case 'created': return local.created;
+      case 'underReview': return local.underReview;
+      case 'reviewed': return local.reviewed;
+      case 'approved': return local.approved;
       default: return '';
   }
 }
