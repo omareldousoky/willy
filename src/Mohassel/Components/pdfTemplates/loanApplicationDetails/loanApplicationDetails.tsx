@@ -59,7 +59,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>نوع الأقتراض</th>
                                 <td>{beneficiaryType(loan.beneficiaryType)}</td>
                                 <th>المندوب الحالي</th>
-                                <td>{loan.officerName}</td>
+                                <td>{loan.officerName === "None" ? "" : loan.officerName}</td>
                             </tr>
                             <tr>
                                 <th colSpan={100} className="horizontal-line"></th>
@@ -89,7 +89,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>تاريخ الميلاد</th>
                                 <td>{props.data.customerBirthDate}</td>
                                 <th>التليفون</th>
-                                <td>{props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? "" : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>تاريخ الاصدار</th>
@@ -123,7 +123,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>اسم المنشأه</th>
                                 <td>{props.data.customerWorkName}</td>
                                 <th>تليفون العمل</th>
-                                <td>{props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None"? "" : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>رقم الرخصه</th>
@@ -283,7 +283,7 @@ const LoanApplicationDetails = (props) => {
                     <table>
                         <tbody>
                             <tr>
-                                {loan.beneficiaryType === "individual" && loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
+                                {loan.beneficiaryType === "individual" && loan.guarantors && loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
                                     return (
                                         <td key={index}>
                                             <table>
@@ -324,7 +324,7 @@ const LoanApplicationDetails = (props) => {
                                         </td>
                                     )
                                 })}
-                                {loan.beneficiaryType === "group" && loan.members.map((member, index) => {
+                                {loan.beneficiaryType === "group" && loan.members && loan.members.map((member, index) => {
                                     return (
                                         <td key={index}>
                                             <table>

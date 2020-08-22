@@ -370,3 +370,9 @@ export const iscoreDate = (date: any) => {
   + MyDate.getFullYear();
   return MyDateString
 }
+
+export const getDateString = (date: any) => {
+  return (
+      new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+  )
+}
