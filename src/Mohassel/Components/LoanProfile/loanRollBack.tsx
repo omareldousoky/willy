@@ -7,11 +7,21 @@ import Card from 'react-bootstrap/Card';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import BackButton from '../BackButton/back-button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+import Col from 'react-bootstrap/Col';
+import { Formik } from 'formik';
+import Button from 'react-bootstrap/Button';
+import * as Yup from "yup";
+import Row from 'react-bootstrap/Row';
+import { timeToDateyyymmdd, getDateString } from '../../Services/utils';
 
 interface State {
     loading: boolean;
     actions: any;
     applicationId: string;
+    showModal: boolean;
+    actionToRollback: any;
 }
 interface Props {
     history: any;
@@ -23,7 +33,9 @@ class LoanRollBack extends Component<Props, State>{
         this.state = {
             loading: false,
             actions: [],
-            applicationId: ''
+            applicationId: '',
+            showModal: false,
+            actionToRollback: {}
         }
     }
     componentDidMount() {
@@ -44,9 +56,9 @@ class LoanRollBack extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
-    async rollbackAction(id) {
+    async rollbackAction(id, date) {
         this.setState({ loading: true });
-        const application = await rollbackActionByID({ actionId: id }, this.state.applicationId);
+        const application = await rollbackActionByID({ actionId: id, truthDate: date }, this.state.applicationId);
         if (application.status === 'success') {
             this.setState({ loading: false })
             Swal.fire('', local.rollbackSuccess, 'success').then(() => this.props.history.goBack())
@@ -55,7 +67,8 @@ class LoanRollBack extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
-    rollbackConfirmation(id) {
+    rollbackConfirmation = (values) => {
+        this.setState({ showModal: false})
         Swal.fire({
             title: local.areYouSure,
             text: `${local.willBeRolledBAck}`,
@@ -66,8 +79,14 @@ class LoanRollBack extends Component<Props, State>{
             confirmButtonText: local.rollBackAction
         }).then((result) => {
             if (result.value) {
-                this.rollbackAction(id)
+                this.rollbackAction(this.state.actionToRollback._id, new Date(values.truthDate).setHours(23,59,59,999).valueOf())
             }
+        })
+    }
+    rollbackModal(action){
+        this.setState({
+            showModal: true,
+            actionToRollback: action
         })
     }
     sortByKey(array, key) {
@@ -92,10 +111,51 @@ class LoanRollBack extends Component<Props, State>{
                         {this.sortByKey(this.state.actions, 'insertedAt').map((action, i) => <div key={action._id} className="d-flex" style={{ margin: '10px 0px' }}>
                             <p style={{ width: '40%', margin: 0 }}>{action.action}</p>
                             <p style={{ width: '40%', margin: 0 }}>{getDateAndTime(action.insertedAt)}</p>
-                            <div className="d-flex align-items-center" style={{ width: '20%' }}>{i === 0 && <span className="fa fa-undo" style={{ cursor: 'pointer' }} onClick={() => this.rollbackConfirmation(action._id)}></span>}</div>
+                            <div className="d-flex align-items-center" style={{ width: '20%' }}>{i === 0 && <img alt="rollback" src={require('../../Assets/rollback-icon.svg')} style={{ cursor: 'pointer' }} onClick={() => this.rollbackModal(action)} />}</div>
                         </div>)}
                     </div> : <p>{local.noRollableActions}</p>}
                 </Card>
+                {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
+                    <Formik
+                        initialValues={{ truthDate: timeToDateyyymmdd(0) }}
+                        onSubmit={this.rollbackConfirmation}
+                        validationSchema={Yup.object().shape({ truthDate: Yup.date().required(local.required) })}
+                        validateOnBlur
+                        validateOnChange
+                    >
+                        {(formikProps) =>
+                            <Form onSubmit={formikProps.handleSubmit}>
+                                <Modal.Header>
+                                    <Modal.Title>{local.rollBackAction}</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Form.Group as={Row} controlId="truthDate">
+                                        <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.actionDate}*`}</Form.Label>
+                                        <Col sm={6}>
+                                            <Form.Control
+                                                type="date"
+                                                name="truthDate"
+                                                data-qc="truthDate"
+                                                value={formikProps.values.truthDate}
+                                                onBlur={formikProps.handleBlur}
+                                                onChange={formikProps.handleChange}
+                                                min={this.state.actionToRollback.transactions && this.state.actionToRollback.transactions[0] ? getDateString(this.state.actionToRollback.transactions[0].truthDate) : getDateString(this.state.actionToRollback.insertedAt)}
+                                                isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {formikProps.errors.truthDate}
+                                            </Form.Control.Feedback>
+                                        </Col>
+                                    </Form.Group>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={() => this.setState({ showModal: false })}>{local.cancel}</Button>
+                                    <Button type="submit" variant="primary">{local.submit}</Button>
+                                </Modal.Footer>
+                            </Form>
+                        }
+                    </Formik>
+                </Modal>}
             </>
         )
     }
