@@ -38,6 +38,7 @@ import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
+import MoveCustomers from '../Components/MoveCustomers/move-customers';
 
 const appRoutes = [
   {
@@ -270,7 +271,7 @@ const appRoutes = [
       }, {
         path: "/loans",
         label: local.issuedLoans,
-        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,
+        render: (props) => <LoanList {...props} />,
         routes: [
           {
             path: "/loan-profile",
@@ -289,6 +290,12 @@ const appRoutes = [
         path: "/logs",
         label: local.logs,
         render: (props) => <Can I = "viewActionLogs" a = 'user' ><ActionLogs {...props} /></Can>,
+      },
+      {
+        path: "/move-customers",
+        label: local.moveCustomers,
+        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
+
       }
     ]
   },
