@@ -252,6 +252,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   font-weight: bold; 
   margin: 10px 0;
   font-size: 14px;
+  text-align: right;
 }
 .data-check-label{
   font-weight: bold; 
@@ -330,3 +331,9 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   vertical-align: middle;
   margin-right: 5px;
 }
+
+@media print {
+		.print-none {
+			display: none !important;
+    }
+  }
