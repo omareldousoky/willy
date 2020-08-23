@@ -10,7 +10,7 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { beneficiaryType, currency, interestPeriod, periodType } from '../../Services/utils';
+import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate } from '../../Services/utils';
 
 interface Props {
     application: any;
@@ -48,6 +48,10 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 <tr>
                     <td>{local.currency}</td>
                     <td>{currency(props.application.product.currency)}</td>
+                </tr>
+                <tr>
+                    <td>{local.productName}</td>
+                    <td>{props.application.product.productName}</td>
                 </tr>
                 <tr>
                     <td>{local.calculationFormulaId}</td>
@@ -110,10 +114,6 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                     <td>{props.application.product.adminFees}</td>
                 </tr>
                 <tr>
-                    <td>{local.entryDate}</td>
-                    <td>{getRenderDate(props.application.entryDate)}</td>
-                </tr>
-                <tr>
                     <td>{local.usage}</td>
                     <td>{loanUse}</td>
                 </tr>
@@ -127,8 +127,36 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>
-                    <td>{getRenderDate(props.application.visitationDate)}</td>
+                    <td>{timeToArabicDate(props.application.visitationDate, false)}</td>
                 </tr>
+                <tr>
+                    <td>{local.entryDate}</td>
+                    <td>{timeToArabicDate(props.application.entryDate, false)}</td>
+                </tr>
+                {props.application.reviewedDate > 0 && <tr>
+                    <td>{local.reviewDate}</td>
+                    <td>{timeToArabicDate(props.application.reviewedDate, false)}</td>
+                </tr>}
+                {props.application.undoReviewDate > 0 && <tr>
+                    <td>{local.unreviewDate}</td>
+                    <td>{timeToArabicDate(props.application.undoReviewDate, false)}</td>
+                </tr>}
+                {props.application.rejectionDate > 0 && <tr>
+                    <td>{local.decisionDate}</td>
+                    <td>{timeToArabicDate(props.application.rejectionDate, false)}</td>
+                </tr>}
+                {props.application.approvalDate > 0 && <tr>
+                    <td>{local.loanApprovalDate}</td>
+                    <td>{timeToArabicDate(props.application.approvalDate, false)}</td>
+                </tr>}
+                {props.application.creationDate > 0 && <tr>
+                    <td>{local.loanCreationDate}</td>
+                    <td>{timeToArabicDate(props.application.creationDate, false)}</td>
+                </tr>}
+                {props.application.issueDate > 0 && <tr>
+                    <td>{local.loanIssuanceDate}</td>
+                    <td>{timeToArabicDate(props.application.issueDate, false)}</td>
+                </tr>}
             </tbody>
         </Table>
     )

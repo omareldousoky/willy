@@ -26,6 +26,7 @@ interface InitialFormikState {
   status?: string;
   action?: string;
   branchId?: string;
+  isDoubtful?: boolean;
 }
 interface Props {
   size: number;
@@ -99,6 +100,8 @@ class Search extends Component<Props, State> {
           initialState.branchId = '';
         case 'status-application':
           initialState.status = '';
+        case 'doubtful':
+          initialState.isDoubtful = false;
       }
     })
     return initialState;
@@ -287,6 +290,22 @@ class Search extends Component<Props, State> {
                           }
                         </Form.Control>
                       </div>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'doubtful') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId='branchManagerAndDate'>
+                        <Form.Check
+                            type='checkbox'
+                            name='isDoubtful'
+                            data-qc='branchManagerAndDate'
+                            checked={formikProps.values.isDoubtful}
+                            onChange={formikProps.handleChange}
+                            label={local.doubtfulLoans}
+                        />
+                    </Form.Group>
                     </Col>
                   )
                 }

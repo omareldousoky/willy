@@ -52,7 +52,7 @@ const CustomerStatusDetails = (props) => {
                 <tbody>
                     <tr>
                         <td className="borderless" colSpan={100}>
-                            {props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
+                            {props.data.Loans && props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
                                 return (
                                     <div key={index} style={{ pageBreakAfter: 'always' }}>
                                         <table>

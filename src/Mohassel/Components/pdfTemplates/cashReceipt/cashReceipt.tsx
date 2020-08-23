@@ -89,7 +89,7 @@ const CashReceipt = (props) => {
                                 <div>  تحريرا في
                                     <span>{' ' + timeToArabicDate(0, false) + ' '}</span>
                                 </div>
-                                <div>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
+                                <div>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} = (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
                                  تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)
                                 </div>
                                 <table>
