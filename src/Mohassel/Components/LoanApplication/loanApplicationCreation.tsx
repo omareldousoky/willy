@@ -795,6 +795,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 viewSelected={(id) => this.viewCustomer(id)}
                                 search={(keyword) => this.searchCustomers(keyword)}
                                 disabled={(customer) => this.checkGroupAge(customer)}
+                                disabledMessage={local.groupAgeError}
                             />
                             {this.state.selectedCustomers.length <= 7 && this.state.selectedCustomers.length >= 3 ? <Form.Group controlId="leaderSelector" style={{ margin: 'auto', width: '60%' }}>
                                 <Form.Label>{local.groupLeaderName}</Form.Label>

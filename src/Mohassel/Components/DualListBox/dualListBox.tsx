@@ -17,6 +17,8 @@ interface Props {
     search?: Function;
     viewSelected?: Function;
     disabled?: Function;
+    disabledMessage?: string;
+
 }
 
 interface State {
@@ -171,7 +173,7 @@ class DualBox extends Component<Props, State> {
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
                                         .map(option => {
                                             return <div key={option._id} 
-                                                className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected" : "list-group-item"}>
+                                                className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected d-flex" : "list-group-item d-flex"}>
                                                 <Form.Check
                                                     type='checkbox'
                                                     // readOnly
@@ -181,6 +183,7 @@ class DualBox extends Component<Props, State> {
                                                     checked={this.state.selectionArray.find((item) => item._id === option._id)}
                                                     disabled={(this.props.disabled && this.props.disabled(option))}
                                                 />
+                                                {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage}</span>}
                                             </div>
                                         }
                                         )}
