@@ -2,9 +2,13 @@ import React from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
+import { downloadFile } from '../../Services/utils';
+import Can from '../../config/Can';
 
 interface Props {
     guarantors: any;
+    iScores?: any;
+    getIscore?: Function;
 }
 
 export const GuarantorView = (props: Props) => {
@@ -51,6 +55,11 @@ export const GuarantorView = (props: Props) => {
     )
 }
 export const GuarantorTableView = (props: Props) => {
+    function getIscore(data) {
+        if (props.getIscore) {
+            props.getIscore(data)
+        }
+    }
     return (
         <div className="d-flex justify-content-center">
             {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
@@ -61,17 +70,26 @@ export const GuarantorTableView = (props: Props) => {
                         <th>{local.area}</th>
                         <th>{local.customerHomeAddress}</th>
                         <th>{local.telephone}</th>
+                        {props.iScores && props.iScores.length > 0 && <th>iScore</th>}
+                        {props.iScores && props.iScores.length > 0 && <th></th>}
+                        {props.iScores && props.iScores.length > 0 && <th></th>}
                     </tr>
                 </thead>
                 <tbody>
-                    {props.guarantors.length > 0 && props.guarantors.map((guar, i) =>
-                        <tr key={i}>
+                    {props.guarantors.length > 0 && props.guarantors.map((guar, i) =>{
+                        const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
+                        return (<tr key={i}>
                             <td>{guar.key}</td>
                             <td>{guar.customerName}</td>
                             <td>{guar.geographicalDistribution}</td>
                             <td>{guar.customerHomeAddress}</td>
                             <td>{guar.mobilePhoneNumber}</td>
-                        </tr>
+                            {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.iscore}</td>}
+                            {props.iScores && props.iScores.length > 0 && iScore.url && <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>}
+                            {props.iScores && props.iScores.length > 0 && props.getIscore && <Can I='getIscore' a='customer'>
+                                    <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
+                                </Can>}
+                        </tr>)}
                     )}
                 </tbody>
             </Table>

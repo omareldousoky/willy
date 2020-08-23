@@ -139,8 +139,19 @@ class TrackLoanApplications extends Component<Props, State>{
     } else {
       ids.push(application.customer.nationalId)
     }
+    const obj: { nationalIds: string[]; date?: Date } = {
+      nationalIds: ids
+  }
+  if(["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(application.status)){
+     obj.date = (application.status === 'approved') ? application.approvalDate : 
+     (application.status === 'created') ? application.creationDate : 
+     (['issued', 'pending'].includes(application.status)) ? application.issueDate :
+     (application.status === 'rejected') ? application.rejectionDate :
+     (['paid', 'canceled'].includes(application.status)) ? application.updated.at : 0
+      // paid & canceled => updated.at, pending,issued =>issuedDate
+    }
     this.setState({ loading: true });
-    const iScores = await getIscoreCached({ nationalIds: ids });
+    const iScores = await getIscoreCached(obj);
     if (iScores.status === "success") {
       const customers: Score[] = [];
       iScores.body.data.forEach(score => {
