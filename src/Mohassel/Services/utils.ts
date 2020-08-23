@@ -271,17 +271,33 @@ export const download = (url, fileName: string): void => {
 export const getStatus = (installment) => {
   const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
   switch (installment.status) {
-    case 'unpaid':
-      if (new Date(installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
-        return local.late
-      else
-        return local.unpaid
-    case 'pending': return local.pending;
-    case 'paid': return local.paid;
-    case 'partiallyPaid': return local.partiallyPaid;
-    case 'rescheduled': return local.rescheduled;
-    case 'cancelled': return local.cancelled;
-    default: return '';
+      case 'unpaid':
+          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getLoanStatus = (status: string) => {
+  switch (status) {
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      case 'created': return local.created;
+      case 'underReview': return local.underReview;
+      case 'reviewed': return local.reviewed;
+      case 'approved': return local.approved;
+      default: return '';
   }
 }
 
@@ -342,6 +358,11 @@ export const actionsList = [
   "deactivateUser"
 ]
 
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
 export const iscoreDate = (date: any) => {
   const iscoreDate = new Date(date);
   const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
