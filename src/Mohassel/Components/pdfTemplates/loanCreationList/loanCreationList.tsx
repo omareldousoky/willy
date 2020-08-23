@@ -84,7 +84,7 @@ const LoanCreationList = (props) => {
                                 </tbody>
                                 <tbody>
                                     <tr>
-                                        <td className="frame" colSpan={2}>إجمالي بنك / خزينه</td>
+                                        <td className="frame" colSpan={2}>إجمالي فرع</td>
                                         <td className="frame" colSpan={2}>{branch.branchName}</td>
                                         <td className="frame" colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                         <td className="frame">{branch.df.length}</td>
