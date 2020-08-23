@@ -282,7 +282,8 @@ const CustomerProfile = (props: Props) => {
                 key: "ClientGuaranteedLoans",
                 local: local.ClientGuaranteedLoans,
                 //   inputs: ["dateFromTo", "branches"],
-                data: guaranteeedLoansData
+                data: guaranteeedLoansData,
+                permission: 'guaranteed'
               },
             ]
           }

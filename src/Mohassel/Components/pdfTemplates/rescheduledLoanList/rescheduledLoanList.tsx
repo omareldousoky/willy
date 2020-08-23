@@ -73,7 +73,7 @@ const RescheduledLoanList = (props) => {
                                         <td>{transaction.customerName}</td>
                                         <td>{transaction.loanSerial}</td>
                                         <td></td>
-                                        <td>{transaction.principalAmount}</td>
+                                        <td>{transaction.principal}</td>
                                         <td>{timeToArabicDate(getTimestamp(transaction.truthDate), false)}</td>
                                         <td>{englishToArabic(transaction.status).text}</td>
                                         <td>{transaction.principalAmount}</td>
@@ -86,7 +86,7 @@ const RescheduledLoanList = (props) => {
                                 </tbody>
                                 <tbody className="framecell">
                                     <tr>
-                                        <td colSpan={2}>إجمالي بنك / خزينه</td>
+                                        <td colSpan={2}>إجمالي فرع</td>
                                         <td colSpan={2}>{branch.branchName}</td>
                                         <td colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                         <td>{branch.df.length}</td>
