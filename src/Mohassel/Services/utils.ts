@@ -232,7 +232,7 @@ export const numbersToArabic = (input: number | string) => {
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp > 0)
+  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
