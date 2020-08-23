@@ -232,7 +232,7 @@ export const numbersToArabic = (input: number | string) => {
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp > 0)
+  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
@@ -281,6 +281,22 @@ export const getStatus = (installment) => {
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getLoanStatus = (status: string) => {
+  switch (status) {
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      case 'created': return local.created;
+      case 'underReview': return local.underReview;
+      case 'reviewed': return local.reviewed;
+      case 'approved': return local.approved;
       default: return '';
   }
 }
@@ -342,6 +358,11 @@ export const actionsList = [
   "deactivateUser"
 ]
 
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
 export const iscoreDate = (date: any) => {
   const MyDate = new Date(date);
   const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'

@@ -670,7 +670,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     const res = await newApplication(objToSubmit);
                     if (res.status === 'success') {
                         this.setState({ loading: false });
-                        Swal.fire("success", local.loanApplicationCreated).then(() => { this.props.history.push("/track-loan-applications") })
+                        Swal.fire("success", local.loanApplicationCreated + ` ${local.withCode} ` + res.body.applicationKey).then(() => { this.props.history.push("/track-loan-applications") })
                     } else {
                         Swal.fire("error", res.error.details, 'error')
                         this.setState({ loading: false });
