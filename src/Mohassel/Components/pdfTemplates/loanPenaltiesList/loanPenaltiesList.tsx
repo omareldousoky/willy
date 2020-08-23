@@ -1,5 +1,6 @@
 import React from "react";
 import "./loanPenaltiesList.scss";
+import * as local from "../../../../Shared/Assets/ar.json";
 
 const LoanPenaltiesList = (props) => {
   const data = props.data;
@@ -8,6 +9,31 @@ const LoanPenaltiesList = (props) => {
   const totalTransactionAmount = Number(data.totalTransactionAmount);
   const startDate = props.data.startDate;
   const endDate = props.data.endDate;
+
+  const getStatus = (value) => {
+    switch (value) {
+      case "unpaid":
+        return local.unpaid;
+      case "pending":
+        return local.pending;
+      case "paid":
+        return local.paid;
+      case "partiallyPaid":
+        return local.partiallyPaid;
+      case "rescheduled":
+        return local.rescheduled;
+      case "cancelled":
+        return local.cancelled;
+      case "issued":
+        return local.issued;
+      case "created":
+        return local.created;
+      case "approved":
+        return local.approved;
+      default:
+        return "";
+    }
+  };
 
   const DayComponent = ({ day }) => {
     return (
@@ -69,7 +95,7 @@ const LoanPenaltiesList = (props) => {
             {/* <td>0004519</td> */}
             <td>{row.loanPrincipal}</td>
             <td>{row.issueDate}</td>
-            <td>{row.loanStatus}</td>
+            <td>{getStatus(row.loanStatus)}</td>
             {/* <td>ترحيل</td> */}
             <td>{row.transactionAmount}</td>
             {/* <td></td> */}

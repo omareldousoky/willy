@@ -55,7 +55,7 @@ class Reports extends Component<{}, State> {
         { key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey'] },
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'] },
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'] },
-        { key: 'CollectionStatement', local: 'حركات السداد', inputs: ['dateFromTo', 'branches'] },
+        { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'] },
         { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo'] },
         { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'] },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'] },
@@ -299,7 +299,9 @@ class Reports extends Component<{}, State> {
       const data= {
             days: res.body.days,
             totalNumberOfTransactions: res.body.numTrx,
-            totalTransactionAmount: res.body.transactionAmount
+            totalTransactionAmount: res.body.transactionAmount,
+            startDate: values.fromDate,
+            endDate: values.toDate
           }
       this.setState({
         data, showModal: false, print: 'Penalties', loading: false

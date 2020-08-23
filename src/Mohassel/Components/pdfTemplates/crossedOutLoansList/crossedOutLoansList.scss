@@ -40,6 +40,12 @@ print {
         & .horizontal-line {
             border-bottom: 1px solid black;
         }
+        & th {
+            text-align: right;
+        }
+        & td {
+            text-align: right;
+        }
     }
 }
 

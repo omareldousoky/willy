@@ -55,36 +55,10 @@ const CustomerProfile = (props: Props) => {
     changeLoading(true);
     const res = await guaranteed(customer?.key)
       if (res.status === 'success') {
-      const response = {
-        data: [
-          {
-            guarantorOrder: "0",
-            customerKey: "111120001923",
-            applicationCode: "1",
-            customerName: "حسن محمد عبدالفتاح محمد",
-            appStatus: "paid",
-            approvalDate: "2019-11-25",
-            loanStatus: "paid",
-            issueDate: "2019-11-25"
-          },
-          {
-            guarantorOrder: "0",
-            customerKey: "111120001923",
-            applicationCode: "1",
-            customerName: "حسن محمد عبدالفتاح محمد",
-            appStatus: "paid",
-            approvalDate: "2019-11-25",
-            loanStatus: "paid",
-            issueDate: "2019-11-25"
-          }
-        ],
-        GuarantorName: "سعاد محمد مصطفي ناجي"
-      }
-      changeGuaranteeedLoansData(response);
+      changeGuaranteeedLoansData(res.body);
       changeLoading(false);
     } else {
       changeLoading(false);
-      console.log("failed to get customer data")
     }
   }
   async function getCustomerDetails() {
@@ -297,14 +271,26 @@ const CustomerProfile = (props: Props) => {
         }
         {activeTab === 'reports' &&  (
         <CustomerReportsTab 
-          changePrint={(data)=> _changePrint(data)}  
-          changeDataToBePrinted={(data)=>{ changeDataToBePrinted(data); window.print(); }}
-          guaranteeedLoansData={guaranteeedLoansData} 
+          changePrint={async (pdf)=> {
+            await changeDataToBePrinted(pdf.data);
+            await _changePrint(pdf.key);
+            window.print();
+          }}  
+          PDFsArray={
+            [
+              {
+                key: "ClientGuaranteedLoans",
+                local: local.ClientGuaranteedLoans,
+                //   inputs: ["dateFromTo", "branches"],
+                data: guaranteeedLoansData
+              },
+            ]
+          }
         />
         )}
         </Card.Body>
       </Card>
-      {print === "ClientGuaranteedLoans" && ( <ClientGuaranteedLoans data={dataToBePrinted} /> )}
+      {(print === "ClientGuaranteedLoans" && dataToBePrinted) && ( <ClientGuaranteedLoans data={dataToBePrinted} /> )}
     </>
   )
 }
