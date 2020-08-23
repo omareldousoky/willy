@@ -9,7 +9,6 @@ const LoanPenaltiesList = (props) => {
   const totalTransactionAmount = Number(data.totalTransactionAmount);
   const startDate = props.data.startDate;
   const endDate = props.data.endDate;
-  console.log(props, props.data);
 
   const getStatus = (value) => {
     switch (value) {
