@@ -676,5 +676,6 @@
     "noOfSelectedLoans": "عدد القروض المختارة",
     "changeFund": "تغيير التمويل",
     "chooseSourceOfFund": "إختر مصدر التمويل",
-    "cib": "البنك التجاري الدولي – مصر - CIB"
+    "cib": "البنك التجاري الدولي – مصر - CIB",
+    "loansSelectedAmount": "قيمة القروض المختارة"
 }

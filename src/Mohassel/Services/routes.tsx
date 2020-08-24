@@ -39,6 +39,7 @@ import DocumentTypeCreation from '../Components/documentTypeCreation/documentTyp
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
+import CIB from '../Components/CIB/cib';
 
 const appRoutes = [
   {
@@ -295,6 +296,11 @@ const appRoutes = [
         path: "/source-of-fund",
         label: local.changeSourceOfFund,
         render : () => <Can I="cibScreen" a='report' ><SourceOfFund/></Can>
+      },
+      {
+        path: "/cib",
+        label: local.cib,
+        render : () => <Can I="cibScreen" a='report' ><CIB/></Can>
       }
     ]
   },
