@@ -364,19 +364,26 @@ export const getTimestamp = (datetimeString: string) => {
   return datum
 }
 export const iscoreDate = (date: any) => {
-  const MyDate = new Date(date);
-  const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
-  + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
-  + MyDate.getFullYear();
-  return MyDateString
+  const iscoreDate = new Date(date);
+  const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
+    + ('0' + (iscoreDate.getMonth() + 1)).slice(-2) + '/'
+    + iscoreDate.getFullYear();
+  return iscoreDateString
 }
 
 export const getDateString = (date: any) => {
   return (
-      new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
   )
 }
 
+export const downloadFile = (fileURL) => {
+  const link = document.createElement('a');
+  link.href = fileURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 export const getAge = (DOB) => {
   const today = new Date();
   const birthDate = new Date(DOB);

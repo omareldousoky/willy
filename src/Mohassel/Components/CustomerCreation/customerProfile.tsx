@@ -4,12 +4,13 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { Customer, GuaranteedLoans } from '../../Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd, downloadFile } from '../../Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
 import DocumentsUpload from './documentsUpload';
+import { getIscoreCached } from '../../Services/APIs/iScore/iScore';
 import { guaranteed } from "../../Services/APIs/Reports";
 import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
@@ -22,6 +23,12 @@ interface Props {
     };
   };
 };
+export interface Score {
+  activeLoans?: string;
+  iscore: string;
+  nationalId: string;
+  url?: string;
+}
 const tabs: Array<Tab> = [
   {
     header: local.mainInfo,
@@ -47,7 +54,19 @@ const tabs: Array<Tab> = [
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
+  const [iScoreDetails, changeiScoreDetails] = useState<Score>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
+
+  async function getCachediScores(id) {
+    changeLoading(true);
+    const iScores = await getIscoreCached({ nationalIds: [id] });
+    if (iScores.status === "success") {
+      changeiScoreDetails(iScores.body.data[0])
+      changeLoading(false);
+    } else {
+      changeLoading(false);
+    }
+  }
   const [print, _changePrint] = useState<any>();
   const [dataToBePrinted, changeDataToBePrinted] = useState<any>();
   const [guaranteeedLoansData, changeGuaranteeedLoansData] = useState<GuaranteedLoans>()
@@ -66,6 +85,7 @@ const CustomerProfile = (props: Props) => {
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
       changeCustomerDetails(res.body);
+      getCachediScores(res.body.nationalId)
       changeLoading(false);
       getGuaranteeedLoans(res.body);
     } else {
@@ -107,6 +127,13 @@ const CustomerProfile = (props: Props) => {
             <tr>
               <td>{local.customerName}</td>
               <td>{customerDetails?.customerName}</td>
+            </tr>
+            <tr>
+              <td>iScore</td>
+              <td>
+                {iScoreDetails?.iscore}
+                {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
+              </td>
             </tr>
             <tr>
               <td>{local.customerCode}</td>
