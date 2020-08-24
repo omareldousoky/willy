@@ -4,7 +4,7 @@
     font-weight: bold;
     direction: rtl;
     page-break-after: always;
-    & tbody tr th {
+    & thead tr th.styled {
       background-color: lightgrey;
       -webkit-print-color-adjust: exact;
       border: 1px solid black;
@@ -16,11 +16,17 @@
       font-size: 14px;
     }
     ​ & table {
-      width: 100%;
-      text-align: center;
+      width: 100% !important;
+      text-align: right;
     }
     ​ & thead.report-header {
       display: table-header-group;
+    }
+    & tr th {
+      text-align: right;
+    }
+    & tr td {
+      text-align: right;
     }
   }
 }

@@ -1,7 +1,25 @@
 import React from "react";
 import "./ClientGuaranteedLoans.scss";
+import * as local from '../../../../Shared/Assets/ar.json';
 
-const ClientGuaranteedLoans = props => {
+const ClientGuaranteedLoans = (props) => {
+  const GuarantorName = props.data.GuarantorName;
+  const data = props.data.data;
+  const getStatus = (value) => {
+    switch (value) {
+        case 'unpaid': return local.unpaid
+        case 'pending': return local.pending;
+        case 'paid': return local.paid;
+        case 'partiallyPaid': return local.partiallyPaid;
+        case 'rescheduled': return local.rescheduled;
+        case 'cancelled': return local.cancelled;
+        case 'issued': return local.issued;
+        case 'created': return local.created;
+        case 'approved': return local.approved;
+        default: return '';
+    }
+  }
+
   return (
     <div className="ClientGuaranteedLoans">
       <table className="report-container">
@@ -21,7 +39,7 @@ const ClientGuaranteedLoans = props => {
             <th colSpan={3}></th>
           </tr>
           <tr className="headtitle">
-            <th colSpan={3}>12:17:26 &emsp; 2020/07/05</th>
+            <th colSpan={3}>{new Date().toDateString()}</th>
             <th colSpan={3}>تقرير طلبات القروض التي ضمنها العميل</th>
           </tr>
           <tr>
@@ -40,21 +58,23 @@ const ClientGuaranteedLoans = props => {
           <tr>
             <th colSpan={100} className="border"></th>
           </tr>
-          ​
         </thead>
-        ​
         <tbody>
-          <tr>
-            <td className="gray frame">سعاد محمد مصطفي ناجي _ ضامن اول</td>
-            <td>111120001923</td>
-            <td>1</td>
-            <td>حسن محمد عبدالفتاح محمد</td>
-            <td>موافقه</td>
-            <td>2019/11/25</td>
-            <td>مسدد بالكامل</td>
-            <td>2019/11/25</td>
-          </tr>
-          ​
+          {data &&
+            data.map((record, idx) => {
+              return (
+                <tr key={idx}>
+                  <td className="gray frame">{GuarantorName}</td>
+                  <td>{record.customerKey}</td>
+                  <td>{record.applicationCode}</td>
+                  <td>{record.customerName}</td>
+                  <td>{getStatus(record.appStatus)}</td>
+                  <td>{record.approvalDate}</td>
+                  <td>{getStatus(record.loanStatus)}</td>
+                  <td>{record.issueDate}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>

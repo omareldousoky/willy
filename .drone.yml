@@ -27,6 +27,7 @@ steps:
     - prod
     - einshams-v2
     - fintech
+    - ds
     event:
       - push
 
@@ -61,6 +62,7 @@ trigger:
   - prod
   - einshams-v2
   - fintech
+  - ds
   event:
   - push
   - pull_request
@@ -101,6 +103,7 @@ steps:
     - test
     - einshams-v2
     - fintech
+    - ds
     event:
       - push
 
@@ -168,6 +171,7 @@ steps:
     - test
     - einshams-v2
     - fintech
+    - ds
     event:
       - push
 
@@ -293,6 +297,7 @@ steps:
     - prod
     - einshams-v2
     - fintech
+    - ds
     event:
       - push
 

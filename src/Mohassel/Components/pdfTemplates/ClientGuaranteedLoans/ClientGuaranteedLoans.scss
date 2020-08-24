@@ -2,9 +2,10 @@
   .ClientGuaranteedLoans {
     font-size: 10px;
     font-weight: bold;
-    text-align: center;
+    text-align: right;
     direction: rtl;
     page-break-after: always;
+    width: 100%;
     & tbody {
       page-break-inside: avoid;
     }
@@ -31,11 +32,14 @@
     ​ & .border {
       border-bottom: 1px solid black;
     }
+    & .report-container{
+      width: 100%;
+    }
   }
 }
 @media screen {
   .ClientGuaranteedLoans {
-    max-width: 624px;
-    font-size: 8px;
+    max-width: 700px;
+    display: none;
   }
 }
