@@ -3,7 +3,7 @@ import "./crossedOutLoansList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
 
 const CrossedOutLoansList = (props) => {
-  const data = props.data;
+  const data = props.data.data;
   const days = data.days;
   const totalNumberOfTransactions = Number(data.numTrx);
   const totalTransactionAmount = Number(data.transactionAmount);
