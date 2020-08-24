@@ -12,6 +12,7 @@ interface Props {
     group: any;
     getIscore?: Function;
     iScores?: any;
+    status?: string;
 };
 
 interface State {
@@ -58,7 +59,7 @@ class GroupInfoBox extends Component<Props, State>{
                     selectTab={(index: number) => this.setState({ activeCustomer: this.state.group[index], activeTab: index.toString() })}
                 />
                 <div style={{ padding: 20 }}>
-                    <InfoBox noHeader values={this.state.activeCustomer} getIscore={(data)=> this.props.getIscore && this.props.getIscore(data)} iScores={this.props.iScores}/>
+                    <InfoBox noHeader values={this.state.activeCustomer} getIscore={(data)=> this.props.getIscore && this.props.getIscore(data)} iScores={this.props.iScores} status={this.props.status} />
                 </div>
             </div>
         )
