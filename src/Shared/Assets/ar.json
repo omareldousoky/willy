@@ -693,5 +693,7 @@
     "chooseLoanOfficer":"إختر المندوب",
     "moveCustomers": "نقل العملاء",
     "chooseCurrentLoanOfficer":"إختر المندوب الحالي",
-    "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب"
+    "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب",
+    "individualAgeError":"يجب أن لا يقل عمر العميل الفردي عن ٢١ و لا يزيد عن ٦٥",
+    "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧"
 }
