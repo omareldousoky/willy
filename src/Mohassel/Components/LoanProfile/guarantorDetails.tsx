@@ -9,6 +9,7 @@ interface Props {
     guarantors: any;
     iScores?: any;
     getIscore?: Function;
+    status?: string;
 }
 
 export const GuarantorView = (props: Props) => {
@@ -86,7 +87,7 @@ export const GuarantorTableView = (props: Props) => {
                             <td>{guar.mobilePhoneNumber}</td>
                             {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.iscore}</td>}
                             {props.iScores && props.iScores.length > 0 && iScore.url && <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>}
-                            {props.iScores && props.iScores.length > 0 && props.getIscore && <Can I='getIscore' a='customer'>
+                            {props.iScores && props.iScores.length > 0 && props.getIscore && props.status &&  !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
                                 </Can>}
                         </tr>)}

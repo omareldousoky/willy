@@ -13,6 +13,7 @@ interface Props {
     noHeader?: boolean;
     getIscore?: Function;
     iScores?: any;
+    status?: string;
 };
 
 interface State {
@@ -68,7 +69,7 @@ class InfoBox extends Component<Props, State>{
                             {iscore.url && <Col>
                                 <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iscore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
                             </Col>}
-                            {this.props.getIscore && <Col>
+                            {this.props.getIscore && this.props.status &&  !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.props.status) && <Col>
                                 <Can I='getIscore' a='customer'>
                                     <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.props.values)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span>
                                 </Can>

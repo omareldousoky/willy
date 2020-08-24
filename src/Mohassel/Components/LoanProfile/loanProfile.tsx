@@ -221,7 +221,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanDetails':
                 return <LoanDetailsTableView application={this.state.application} />
             case 'loanGuarantors':
-                return <GuarantorTableView guarantors={this.state.application.guarantors} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} />
+                return <GuarantorTableView guarantors={this.state.application.guarantors} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -514,8 +514,8 @@ class LoanProfile extends Component<Props, State>{
                             </div>
                             : null}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} /> :
-                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores}/>
+                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} /> :
+                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
                             }
                         </div>
                         <Card style={{ marginTop: 15 }}>
