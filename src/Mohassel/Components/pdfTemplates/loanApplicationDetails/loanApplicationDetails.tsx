@@ -157,7 +157,7 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>قطاع العمل والنشاط والتخصص</th>
-                                <td>{loan.customerActivity}</td>
+                                <td>{props.data.customerActivity}</td>
                                 <th>السجل الصناعي</th>
                                 <td></td>
                             </tr>
