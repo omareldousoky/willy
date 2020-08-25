@@ -59,7 +59,7 @@ class Reports extends Component<{}, State> {
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'], permission: 'loanDetails' },
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
-        { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo'], permission: 'penalties' },
+        { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo','branches'], permission: 'penalties' },
         { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'], permission: 'loansIssued' },
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'], permission: 'loansCreated' },
@@ -376,8 +376,8 @@ class Reports extends Component<{}, State> {
     const res = await writeOffs({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: values.branches.some(branch => branch._id === "") ? "1" : "0",
-      branchList: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
+      all: values.branches[0]._id == "" ? "1" : "0",
+      branchList: values.branches.map((branch) => branch._id)
     });
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {

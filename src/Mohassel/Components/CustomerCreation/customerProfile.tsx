@@ -13,6 +13,7 @@ import DocumentsUpload from './documentsUpload';
 import { guaranteed } from "../../Services/APIs/Reports";
 import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
+import ability from '../../config/ability';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -39,10 +40,6 @@ const tabs: Array<Tab> = [
     header: local.documents,
     stringKey: 'documents'
   },
-  {
-    header: local.reports,
-    stringKey: 'reports'
-  }
 ]
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
@@ -76,6 +73,12 @@ const CustomerProfile = (props: Props) => {
 
   useEffect(() => {
     getCustomerDetails();
+    if(ability.can('guaranteed','report')){
+      tabs.push({
+         header: local.reports,
+         stringKey: 'reports'
+      })
+    }
   }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
