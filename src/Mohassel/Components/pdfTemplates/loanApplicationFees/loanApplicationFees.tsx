@@ -39,8 +39,8 @@ const statusLocalization = (status: string) => {
             return ('مدفوع');
         case 'issued':
             return ('مصدر');
-        case 'cancelled':
-            return ('ملغية')
+        case 'canceled':
+            return ('ملغي')
         default:
             return status;
     }
