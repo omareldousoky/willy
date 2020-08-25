@@ -11,6 +11,7 @@ interface Props {
     values: any;
     noHeader?: boolean;
     getIscore?: Function;
+    leader?: boolean;
 };
 
 interface State {
@@ -36,7 +37,7 @@ class InfoBox extends Component<Props, State>{
                 <Form.Row>
                     <Form.Group as={Col} md="4">
                         <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.name}</Form.Label>
+                            <Form.Label style={{ color: '#6e6e6e' }}>{(this.props.leader) ? local.groupLeaderName : local.name}</Form.Label>
                         </Row>
                         <Row>
                             <Form.Label>{values.customerName} </Form.Label>

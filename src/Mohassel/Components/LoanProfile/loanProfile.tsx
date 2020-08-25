@@ -141,7 +141,7 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
             if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
-            if (ability.can('pushInstallment', 'application') && !this.state.application.writeOff) tabsToRender.push(reschedulingTab)
+            if ((ability.can('pushInstallment', 'application') || ability.can('traditionRescheduling', 'application') || ability.can('freeRescheduling', 'application') ) && !this.state.application.writeOff) tabsToRender.push(reschedulingTab)
             // if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
         }
        
