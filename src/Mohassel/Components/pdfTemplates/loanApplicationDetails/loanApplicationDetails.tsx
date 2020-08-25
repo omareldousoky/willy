@@ -49,7 +49,10 @@ const LoanApplicationDetails = (props) => {
                                 <td>{loan.applicationKey}</td>
                                 {/*  <td></td> */}
                                 <th>حالة طلب القرض</th>
-                                <td>{getStatus(loan.status)}</td>
+                                {getStatus(loan.reviewStatus) ? <td>{getStatus(loan.reviewStatus)}</td> : null}
+                                {getStatus(loan.approvalStatus) ? <td>{getStatus(loan.approvalStatus)}</td> : null}
+                                {getStatus(loan.creationStatus) ? <td>{getStatus(loan.creationStatus)}</td> : null}
+                                {getStatus(loan.status) ? <td>{getStatus(loan.status)}</td> : null}
                             </tr>
                             <tr>
                                 <th>إسم الطالب</th>
@@ -101,7 +104,7 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>تليفون محمول</th>
-                                <td>{props.data.customerMobile}</td>
+                                <td>{props.data.mobilePhoneNumber}</td>
                             </tr>
                             <tr>
                                 <th>الموقع الالكتروني</th>
@@ -123,7 +126,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>اسم المنشأه</th>
                                 <td>{props.data.customerWorkName}</td>
                                 <th>تليفون العمل</th>
-                                <td>{props.data.customerWorkPhone === "None"? "" : props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? "" : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>رقم الرخصه</th>
@@ -151,7 +154,7 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>العنوان</th>
-                                <td>{loan.customerWorkAddress}</td>
+                                <td>{props.data.customerWorkAddress}</td>
                                 <th>السجل التجارى</th>
                                 <td></td>
                             </tr>
@@ -240,7 +243,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>حساب السداد</th>
                                 <td></td>
                                 <th>مصاريف إداريه القسط</th>
-                                <td>{loan.applicationFees}</td>
+                                <td>{loan.adminFees}</td>
                             </tr>
 
 
@@ -253,7 +256,7 @@ const LoanApplicationDetails = (props) => {
 
                             <tr>
                                 <th>الأستخدام</th>
-                                <td>تمويل رأس المال العامل</td>
+                                <td>{loan.loanUsage}</td>
                                 <th>حساب الإصدار</th>
                             </tr>
                             <tr>
