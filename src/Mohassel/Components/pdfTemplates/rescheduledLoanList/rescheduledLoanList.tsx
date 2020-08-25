@@ -1,11 +1,11 @@
 import React from 'react';
 import './rescheduledLoanList.scss';
-import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp, timeToDateyyymmdd } from '../../../Services/utils';
 import { englishToArabic } from '../../../Services/statusLanguage';
 
 const RescheduledLoanList = (props) => {
     const tempData = props.data.data;
-    const reportDate = (props.data.from === props.data.to) ? props.data.from : `من ${props.data.from} الي ${props.data.to}`
+    const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()): `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
     return (
         <div className="rescheduled-loan-list" lang="ar">
             <table className="report-container">
