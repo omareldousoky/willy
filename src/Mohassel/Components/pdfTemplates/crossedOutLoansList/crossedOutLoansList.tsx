@@ -131,6 +131,8 @@ const CrossedOutLoansList = (props) => {
             <td>{row.loanPrincipal}</td>
             <td>{row.issueDate}</td>
             <td>{getStatus(row.loanStatus)}</td>
+            <td></td>
+            <td></td>
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
             <td>{row.transactionAmount}</td>
@@ -221,6 +223,8 @@ const CrossedOutLoansList = (props) => {
             <th>قيمة</th>
             <th>تاريخ القرض</th>
             <th style={{ width: "10%" }}>الحالة الان</th>
+            <th></th>
+            <th></th>
             <th>أصل</th>
             <th>قيمة الحركة مصاريف</th>
             <th>إجمالي</th>
