@@ -24,7 +24,7 @@ import { Location } from '../LoanCreation/loanCreation';
 import { getCookie } from '../../Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { parseJwt, beneficiaryType } from '../../Services/utils';
+import { parseJwt, beneficiaryType, getAge } from '../../Services/utils';
 import { getBusinessSectors } from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm';
 import DualBox from '../DualListBox/dualListBox';
@@ -371,7 +371,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const products = await getProductsByBranch(this.tokenData.branch);
             if (products.status === 'success') {
                 this.setState({
-                    products: (products.body.data.productIds)?products.body.data.productIds:[],
+                    products: (products.body.data.productIds) ? products.body.data.productIds : [],
                     loading: false
                 })
             } else {
@@ -474,14 +474,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
-            const defaultApplication = this.state.application;
-            defaultApplication.customerID = customer._id;
-            this.populateCustomer(selectedCustomer.body)
-            this.setState({
-                loading: false,
-                selectedCustomer: selectedCustomer.body,
-                application: defaultApplication
-            });
+            if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
+                const defaultApplication = this.state.application;
+                defaultApplication.customerID = customer._id;
+                this.populateCustomer(selectedCustomer.body)
+                this.setState({
+                    loading: false,
+                    selectedCustomer: selectedCustomer.body,
+                    application: defaultApplication
+                });
+            } else {
+                this.setState({ loading: false })
+                Swal.fire("error", local.individualAgeError, 'error')
+            }
 
         } else {
             Swal.fire("error", local.searchError, 'error')
@@ -742,6 +747,14 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             selectedGroupLeader: id
         })
     }
+    checkGroupAge(customer) {
+        const age = getAge(customer.birthDate);
+        if (age <= 67 && age >= 18) {
+            return false
+        } else {
+            return true
+        }
+    }
     renderStepOne() {
         return (
             <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
@@ -769,7 +782,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 </Form.Control>
                             </Form.Group>
                         </div>
-                        { this.state.selectedLoanOfficer.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
+                        {this.state.selectedLoanOfficer.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
@@ -780,7 +793,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 rightHeader={local.allCustomers}
                                 leftHeader={local.selectedCustomers}
                                 viewSelected={(id) => this.viewCustomer(id)}
-                                search={(keyword)=> this.searchCustomers(keyword)}
+                                search={(keyword) => this.searchCustomers(keyword)}
+                                disabled={(customer) => this.checkGroupAge(customer)}
+                                disabledMessage={local.groupAgeError}
                             />
                             {this.state.selectedCustomers.length <= 7 && this.state.selectedCustomers.length >= 3 ? <Form.Group controlId="leaderSelector" style={{ margin: 'auto', width: '60%' }}>
                                 <Form.Label>{local.groupLeaderName}</Form.Label>

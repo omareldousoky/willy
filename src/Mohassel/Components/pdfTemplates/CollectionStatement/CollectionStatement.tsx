@@ -1,11 +1,12 @@
 import React from "react";
 import "./CollectionStatement.scss";
+import { timeToDateyyymmdd } from "../../../Services/utils";
 
 const CollectionStatement = (props) => {
   const branches = props.data.data.branches;
   const total = props.data.data.total;
-  const startDate = props.data.startDate;
-  const endDate = props.data.endDate;
+  const startDate = timeToDateyyymmdd(props.data.startDate);
+  const endDate = timeToDateyyymmdd(props.data.endDate);
 
   const trimmedValue = (value: string) => {
     if(value.includes(".")){
