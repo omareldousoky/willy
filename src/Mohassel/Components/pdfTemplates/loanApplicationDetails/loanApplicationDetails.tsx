@@ -92,7 +92,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>تاريخ الميلاد</th>
                                 <td>{props.data.customerBirthDate}</td>
                                 <th>التليفون</th>
-                                <td>{props.data.customerWorkPhone === "None" ? "" : props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? props.data.homePhoneNumber === "None" ? '' : props.data.homePhoneNumber : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>تاريخ الاصدار</th>
@@ -314,7 +314,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{guarantor.homePhoneNumber}</td>
+                                                        <td>{guarantor.homePhoneNumber + guarantor.mobilePhoneNumber ? ` - ${guarantor.mobilePhoneNumber}` : ''}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{guarantor.homePostalCode}</td>
                                                     </tr>
@@ -355,7 +355,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{member.homePhoneNumber}</td>
+                                                        <td>{member.homePhoneNumber + member.mobilePhoneNumber ? ` - ${member.mobilePhoneNumber}` : ''}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{member.homePostalCode}</td>
                                                     </tr>
