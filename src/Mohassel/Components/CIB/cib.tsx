@@ -22,6 +22,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport';
+import Table from 'react-bootstrap/Table';
 
 interface Props {
   history: Array<any>;
@@ -46,6 +47,7 @@ interface CibLoan {
   customerBirthDate: string;
   iscore: string;
   activeLoans: string;
+  numInst: string;
 }
 interface State {
   size: number;
@@ -120,6 +122,11 @@ class CIB extends Component<Props, State> {
         key: "principal",
         render: data => data.principal
       },
+      {
+        title: local.noOfInstallments,
+        key: "numInst",
+        render: data => data.numInst
+      }
       // {
       //   title: local.status,
       //   key: "status",
@@ -177,7 +184,8 @@ class CIB extends Component<Props, State> {
           "customerName": "سهير محمود احمد احمد",
           "customerBirthDate": "NaT",
           "iscore": "unavailable",
-          "activeLoans": "unavailable"
+          "activeLoans": "unavailable",
+          "numInst": "12"
         },
         {
           "loanId": "5f35de801569254885562d9b",
@@ -189,7 +197,8 @@ class CIB extends Component<Props, State> {
           "customerName": "نجوي ابراهيم فرحات ابراهيم",
           "customerBirthDate": "1977-10-14 00:00:00",
           "iscore": "###",
-          "activeLoans": "3"
+          "activeLoans": "3",
+          "numInst": "20"
         },
         {
           "loanId": "5f35de931569254885566b8b",
@@ -201,7 +210,8 @@ class CIB extends Component<Props, State> {
           "customerName": "فايزه احمدرشدي عثمان عبدالله",
           "customerBirthDate": "1970-01-25 00:00:00",
           "iscore": "unavailable",
-          "activeLoans": "unavailable"
+          "activeLoans": "unavailable",
+          "numInst": "10"
         },
         {
           "loanId": "5f35de931569254885566d15",
@@ -213,7 +223,162 @@ class CIB extends Component<Props, State> {
           "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
           "customerBirthDate": "1981-12-05 00:00:00",
           "iscore": "unavailable",
-          "activeLoans": "unavailable"
+          "activeLoans": "unavailable",
+          "numInst": "15"
+        },
+        {
+          "loanId": "5f35de741569254885561f65",
+          "principal": "15000.0",
+          "loanBranch": "5effe4a25ca43661b65b6357",
+          "customerNationalId": "26411120103588",
+          "customerKey": "110010012072.0",
+          "gender": "female",
+          "customerName": "سهير محمود احمد احمد",
+          "customerBirthDate": "NaT",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "12"
+        },
+        {
+          "loanId": "5f35de801569254885562d9b",
+          "principal": "20000.0",
+          "loanBranch": "5effe4a25ca43661b65b6357",
+          "customerNationalId": "27710140103381",
+          "customerKey": "110020001089.0",
+          "gender": "female",
+          "customerName": "نجوي ابراهيم فرحات ابراهيم",
+          "customerBirthDate": "1977-10-14 00:00:00",
+          "iscore": "###",
+          "activeLoans": "3",
+          "numInst": "20"
+        },
+        {
+          "loanId": "5f35de931569254885566b8b",
+          "principal": "5000.0",
+          "loanBranch": "5effe4a25ca43661b65b6322",
+          "customerNationalId": "27001252401324",
+          "customerKey": "110030005293.0",
+          "gender": "female",
+          "customerName": "فايزه احمدرشدي عثمان عبدالله",
+          "customerBirthDate": "1970-01-25 00:00:00",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "10"
+        },
+        {
+          "loanId": "5f35de931569254885566d15",
+          "principal": "15000.0",
+          "loanBranch": "5effe4a25ca43661b65b6322",
+          "customerNationalId": "28112052404141",
+          "customerKey": "110030005882.0",
+          "gender": "female",
+          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
+          "customerBirthDate": "1981-12-05 00:00:00",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "15"
+        },{
+          "loanId": "5f35de741569254885561f65",
+          "principal": "15000.0",
+          "loanBranch": "5effe4a25ca43661b65b6357",
+          "customerNationalId": "26411120103588",
+          "customerKey": "110010012072.0",
+          "gender": "female",
+          "customerName": "سهير محمود احمد احمد",
+          "customerBirthDate": "NaT",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "12"
+        },
+        {
+          "loanId": "5f35de801569254885562d9b",
+          "principal": "20000.0",
+          "loanBranch": "5effe4a25ca43661b65b6357",
+          "customerNationalId": "27710140103381",
+          "customerKey": "110020001089.0",
+          "gender": "female",
+          "customerName": "نجوي ابراهيم فرحات ابراهيم",
+          "customerBirthDate": "1977-10-14 00:00:00",
+          "iscore": "###",
+          "activeLoans": "3",
+          "numInst": "20"
+        },
+        {
+          "loanId": "5f35de931569254885566b8b",
+          "principal": "5000.0",
+          "loanBranch": "5effe4a25ca43661b65b6322",
+          "customerNationalId": "27001252401324",
+          "customerKey": "110030005293.0",
+          "gender": "female",
+          "customerName": "فايزه احمدرشدي عثمان عبدالله",
+          "customerBirthDate": "1970-01-25 00:00:00",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "10"
+        },
+        {
+          "loanId": "5f35de931569254885566d15",
+          "principal": "15000.0",
+          "loanBranch": "5effe4a25ca43661b65b6322",
+          "customerNationalId": "28112052404141",
+          "customerKey": "110030005882.0",
+          "gender": "female",
+          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
+          "customerBirthDate": "1981-12-05 00:00:00",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "15"
+        },{
+          "loanId": "5f35de741569254885561f65",
+          "principal": "15000.0",
+          "loanBranch": "5effe4a25ca43661b65b6357",
+          "customerNationalId": "26411120103588",
+          "customerKey": "110010012072.0",
+          "gender": "female",
+          "customerName": "سهير محمود احمد احمد",
+          "customerBirthDate": "NaT",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "12"
+        },
+        {
+          "loanId": "5f35de801569254885562d9b",
+          "principal": "20000.0",
+          "loanBranch": "5effe4a25ca43661b65b6357",
+          "customerNationalId": "27710140103381",
+          "customerKey": "110020001089.0",
+          "gender": "female",
+          "customerName": "نجوي ابراهيم فرحات ابراهيم",
+          "customerBirthDate": "1977-10-14 00:00:00",
+          "iscore": "###",
+          "activeLoans": "3",
+          "numInst": "20"
+        },
+        {
+          "loanId": "5f35de931569254885566b8b",
+          "principal": "5000.0",
+          "loanBranch": "5effe4a25ca43661b65b6322",
+          "customerNationalId": "27001252401324",
+          "customerKey": "110030005293.0",
+          "gender": "female",
+          "customerName": "فايزه احمدرشدي عثمان عبدالله",
+          "customerBirthDate": "1970-01-25 00:00:00",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "10"
+        },
+        {
+          "loanId": "5f35de931569254885566d15",
+          "principal": "15000.0",
+          "loanBranch": "5effe4a25ca43661b65b6322",
+          "customerNationalId": "28112052404141",
+          "customerKey": "110030005882.0",
+          "gender": "female",
+          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
+          "customerBirthDate": "1981-12-05 00:00:00",
+          "iscore": "unavailable",
+          "activeLoans": "unavailable",
+          "numInst": "15"
         }
       ]
     })
@@ -246,8 +411,8 @@ class CIB extends Component<Props, State> {
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.cib}</Card.Title>
-                <span style={{fontWeight: 'bold', marginLeft: 10}}>{local.noOfSelectedLoans} <span style={{fontWeight: 'bold', color: '#7dc356'}}>{` (${this.state.selectedCustomers.length})`}</span></span>
-                <span style={{fontWeight: 'bold'}}>{local.loansSelectedAmount} <span style={{fontWeight: 'bold', color: '#7dc356'}}>{` (${this.state.principalSelectedSum})`}</span></span>
+                <span style={{ fontWeight: 'bold', marginLeft: 10 }}>{local.noOfSelectedLoans} <span style={{ fontWeight: 'bold', color: '#7dc356' }}>{` (${this.state.selectedCustomers.length})`}</span></span>
+                <span style={{ fontWeight: 'bold' }}>{local.loansSelectedAmount} <span style={{ fontWeight: 'bold', color: '#7dc356' }}>{` (${this.state.principalSelectedSum})`}</span></span>
               </div>
               <Button onClick={() => this.submit()}
                 disabled={!Boolean(this.state.selectedCustomers.length)}
@@ -337,18 +502,54 @@ class CIB extends Component<Props, State> {
                 </Form>
               }
             </Formik>
-            <DynamicTable
-              from={this.state.from}
-              size={this.state.size}
-              url="loan"
-              totalCount={this.props.totalCount}
-              mappers={this.mappers}
-              pagination={true}
-              data={this.state.data}
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getLoans());
-              }}
-            />
+            {this.state.data.length ?
+              <Table striped hover style={{ textAlign: 'right' }}>
+                <thead>
+                  <tr>
+                    {this.mappers?.map((mapper, index: number) => {
+                      return (
+                        <th style={mapper.sortable ? { cursor: 'pointer' } : {}} key={index}>
+                          {mapper.title}
+                        </th>
+                      )
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.data.map((item, index: number) => {
+                    return (
+                      <tr key={index}>
+                        {this.mappers?.slice(this.state.from * this.state.size, this.state.from * this.state.size + this.state.size)
+                        .map((mapper, index: number) => {
+                          return (
+                            <td key={index}>
+                              {(mapper.render || (data => data[mapper.key]))(item, index)}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </Table>
+              :
+              <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+                <h4>{local.noResultsFound}</h4>
+              </div>
+            }
+            {/* <DynamicTable
+                from={this.state.from}
+                size={this.state.size}
+                url="loan"
+                totalCount={this.props.totalCount}
+                mappers={this.mappers}
+                pagination={true}
+                data={this.state.data}
+                changeNumber={(key: string, number: number) => {
+                  this.setState({ [key]: number } as any, () => this.getLoans());
+                }}
+              /> */}
           </Card.Body>
         </Card>
       </>
