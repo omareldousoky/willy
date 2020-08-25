@@ -155,7 +155,8 @@ class SourceOfFund extends Component<Props, State> {
     this.props.setLoading(true);
     const obj = {
       fundSource: this.state.selectedFund,
-      applicationIds: this.state.selectedCustomers
+      applicationIds: this.state.selectedCustomers,
+      returnDetails: false
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {

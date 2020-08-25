@@ -226,7 +226,8 @@ class CIB extends Component<Props, State> {
     this.setState({ loading: true });
     const obj = {
       fundSource: 'cib',
-      applicationIds: this.state.selectedCustomers
+      applicationIds: this.state.selectedCustomers,
+      returnDetails: true
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
