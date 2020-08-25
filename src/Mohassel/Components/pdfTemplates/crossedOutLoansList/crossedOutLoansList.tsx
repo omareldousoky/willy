@@ -48,20 +48,6 @@ const CrossedOutLoansList = (props) => {
         <tr style={{ height: "1em" }}></tr>
 
         <tbody className="tbodyborder">
-
-          <tr>
-            <td colSpan={8}></td>
-            <td className="horizontal-line">القيمة الملغاه</td>
-            <td className="horizontal-line">0.00</td>
-          </tr>
-          <tr>
-            <td colSpan={8}></td>
-            <td className="horizontal-line">القيمة المسدده</td>
-            <td className="horizontal-line">{day.transactionAmount}</td>
-          </tr>
-        </tbody>
-
-        <tbody className="tbodyborder">
           <tr>
             <td></td>
             <td className="gray frame" colSpan={2}>

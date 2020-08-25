@@ -8,10 +8,14 @@ const CollectionStatement = (props) => {
   const startDate = timeToDateyyymmdd(props.data.startDate);
   const endDate = timeToDateyyymmdd(props.data.endDate);
 
-  const trimmedValue = (string) => {
-    const splitted = string.split(".", 2);
+  const trimmedValue = (value: string) => {
+    if(value.includes(".")){
+    const splitted = value.split(".", 2);
     splitted[1] = splitted[1].substring(0, 2);
     return splitted.join("");
+    } else{
+      return value;
+    }
   };
 
   const BranchComponent = ({ branch }) => {
