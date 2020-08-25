@@ -693,5 +693,8 @@
     "chooseLoanOfficer":"إختر المندوب",
     "moveCustomers": "نقل العملاء",
     "chooseCurrentLoanOfficer":"إختر المندوب الحالي",
-    "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب"
+    "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب",
+    "writtenOffLoans":"قروض مشطوبة",
+    "customerPartialCode":"كود العميل الجزئي",
+    "partialCode":"الكود الجزئي"
 }
