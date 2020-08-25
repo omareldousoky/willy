@@ -61,7 +61,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownArray: ['name', 'key', 'nationalId'],
+            dropDownArray: ['name', 'key', 'nationalId', 'code'],
             dropDownValue: 'name'
         }
     }
@@ -81,15 +81,16 @@ class CustomerSearch extends Component<Props, State>{
             case 'name': return local.name;
             case 'nationalId': return local.nationalId;
             case 'key': return local.code;
+            case 'code': return local.partialCode;
             default: return '';
         }
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        if ((this.state.dropDownValue === 'nationalId' || this.state.dropDownValue === 'key') && isNaN(Number(this.state.searchKey))) {
+        if ((this.state.dropDownValue === 'nationalId' || this.state.dropDownValue === 'key' || this.state.dropDownValue === 'code') && isNaN(Number(this.state.searchKey))) {
             Swal.fire("", local.SearchOnlyNumbers, "error");
         } else {
-            this.props.handleSearch(this.state.dropDownValue, this.state.searchKey)
+            this.props.handleSearch(this.state.dropDownValue, (this.state.dropDownValue === 'code') ? Number(this.state.searchKey) : this.state.searchKey)
         }
     };
     render() {
