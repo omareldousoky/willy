@@ -39,9 +39,10 @@ const statusLocalization = (status: string) => {
             return ('مدفوع');
         case 'issued':
             return ('مصدر');
-
+        case 'cancelled':
+            return ('ملغية')
         default:
-            return null;
+            return status;
     }
 }
 const LoanApplicationFees = (props: Props) => {
