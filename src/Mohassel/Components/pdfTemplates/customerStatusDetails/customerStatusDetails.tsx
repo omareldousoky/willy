@@ -3,18 +3,6 @@ import './customerStatusDetails.scss';
 import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
 
 const CustomerStatusDetails = (props) => {
-    function getSum(key: string, index: number, subtractFromKey?: string) {
-        let max = 0;
-        if (subtractFromKey) {
-            props.data.Loans[index].installments.forEach(installment => {
-                max = max + (Number(installment[subtractFromKey]) - Number(installment[key]));
-            })
-        } else props.data.Loans[index].installments.forEach(installment => {
-            if(!isNaN(Number(installment[key])))
-                max = max + Number(installment[key]);
-        })
-        return max;
-    }
     return (
         <div className="customer-status-details" lang="ar">
             <table>
@@ -133,7 +121,7 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
-                                                    <td colSpan={2}>{loan.representativeName === "None"? '': loan.representativeName}</td>
+                                                    <td colSpan={2}>{loan.prevRepName === "None" ? loan.representativeName === "None" ? '' : loan.representativeName : loan.prevRepName}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>حالة القرض</th>
@@ -279,10 +267,10 @@ const CustomerStatusDetails = (props) => {
                                                 })}
                                                 <tr>
                                                     <td className="borderless" colSpan={2}></td>
-                                                    <td>{getSum('feesInstallment', index, 'instTotal')}</td>
-                                                    <td>{getSum('feesInstallment', index)}</td>
-                                                    <td>{getSum('feesPaid', index, 'totalPaid')}</td>
-                                                    <td>{getSum('feesPaid', index)}</td>
+                                                    <td>{loan.instTotalDue}</td>
+                                                    <td>{loan.feesInstallmentDue}</td>
+                                                    <td>{loan.totalPaid}</td>
+                                                    <td>{loan.totalFeesPaid}</td>
                                                     <th>رصيد العميل</th>
                                                     <td></td>
                                                     <th>أيام التأخير والتبكير</th>
