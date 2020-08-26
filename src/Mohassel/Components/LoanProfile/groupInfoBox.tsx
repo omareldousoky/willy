@@ -65,7 +65,7 @@ class GroupInfoBox extends Component<Props, State>{
                     selectTab={(index: number) => this.setState({ activeCustomer: this.state.group[index], activeTab: index.toString() })}
                 />
                 <div style={{ padding: 20 }}>
-                    <InfoBox noHeader values={this.state.activeCustomer.customer} getIscore={(data)=> this.props.getIscore && this.props.getIscore(data)} iScores={this.props.iScores} status={this.props.status} leader={(this.state.activeCustomer.type === 'leader') ? true : false }/>
+                    <InfoBox noHeader values={this.state.activeCustomer.customer} getIscore={(data)=> this.props.getIscore && this.props.getIscore(data)} iScores={this.props.iScores} status={this.props.status} leader={(this.state.activeCustomer.type === 'leader')}/>
                 </div>
             </div>
         )
