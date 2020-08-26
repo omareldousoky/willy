@@ -49,7 +49,10 @@ const LoanApplicationDetails = (props) => {
                                 <td>{loan.applicationKey}</td>
                                 {/*  <td></td> */}
                                 <th>حالة طلب القرض</th>
-                                <td>{getStatus(loan.status)}</td>
+                                {getStatus(loan.reviewStatus) ? <td>{getStatus(loan.reviewStatus)}</td> : null}
+                                {getStatus(loan.approvalStatus) ? <td>{getStatus(loan.approvalStatus)}</td> : null}
+                                {getStatus(loan.creationStatus) ? <td>{getStatus(loan.creationStatus)}</td> : null}
+                                {getStatus(loan.status) ? <td>{getStatus(loan.status)}</td> : null}
                             </tr>
                             <tr>
                                 <th>إسم الطالب</th>
@@ -59,7 +62,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>نوع الأقتراض</th>
                                 <td>{beneficiaryType(loan.beneficiaryType)}</td>
                                 <th>المندوب الحالي</th>
-                                <td>{loan.officerName}</td>
+                                <td>{loan.officerName === "None" ? "" : loan.officerName}</td>
                             </tr>
                             <tr>
                                 <th colSpan={100} className="horizontal-line"></th>
@@ -89,7 +92,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>تاريخ الميلاد</th>
                                 <td>{props.data.customerBirthDate}</td>
                                 <th>التليفون</th>
-                                <td>{props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? props.data.homePhoneNumber === "None" ? '' : props.data.homePhoneNumber : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>تاريخ الاصدار</th>
@@ -101,7 +104,7 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>تليفون محمول</th>
-                                <td>{props.data.customerMobile}</td>
+                                <td>{props.data.mobilePhoneNumber}</td>
                             </tr>
                             <tr>
                                 <th>الموقع الالكتروني</th>
@@ -123,7 +126,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>اسم المنشأه</th>
                                 <td>{props.data.customerWorkName}</td>
                                 <th>تليفون العمل</th>
-                                <td>{props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? "" : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>رقم الرخصه</th>
@@ -151,13 +154,13 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>العنوان</th>
-                                <td>{loan.customerWorkAddress}</td>
+                                <td>{props.data.customerWorkAddress}</td>
                                 <th>السجل التجارى</th>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>قطاع العمل والنشاط والتخصص</th>
-                                <td>{loan.customerActivity}</td>
+                                <td>{props.data.customerActivity}</td>
                                 <th>السجل الصناعي</th>
                                 <td></td>
                             </tr>
@@ -240,7 +243,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>حساب السداد</th>
                                 <td></td>
                                 <th>مصاريف إداريه القسط</th>
-                                <td>{loan.applicationFees}</td>
+                                <td>{loan.adminFees}</td>
                             </tr>
 
 
@@ -253,7 +256,7 @@ const LoanApplicationDetails = (props) => {
 
                             <tr>
                                 <th>الأستخدام</th>
-                                <td>تمويل رأس المال العامل</td>
+                                <td>{loan.loanUsage}</td>
                                 <th>حساب الإصدار</th>
                             </tr>
                             <tr>
@@ -283,7 +286,7 @@ const LoanApplicationDetails = (props) => {
                     <table>
                         <tbody>
                             <tr>
-                                {loan.beneficiaryType === "individual" && loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
+                                {loan.beneficiaryType === "individual" && loan.guarantors && loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
                                     return (
                                         <td key={index}>
                                             <table>
@@ -311,7 +314,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{guarantor.homePhoneNumber}</td>
+                                                        <td>{guarantor.homePhoneNumber + guarantor.mobilePhoneNumber ? ` - ${guarantor.mobilePhoneNumber}` : ''}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{guarantor.homePostalCode}</td>
                                                     </tr>
@@ -324,7 +327,7 @@ const LoanApplicationDetails = (props) => {
                                         </td>
                                     )
                                 })}
-                                {loan.beneficiaryType === "group" && loan.members.map((member, index) => {
+                                {loan.beneficiaryType === "group" && loan.members && loan.members.map((member, index) => {
                                     return (
                                         <td key={index}>
                                             <table>
@@ -352,7 +355,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{member.homePhoneNumber}</td>
+                                                        <td>{member.homePhoneNumber + member.mobilePhoneNumber ? ` - ${member.mobilePhoneNumber}` : ''}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{member.homePostalCode}</td>
                                                     </tr>

@@ -205,7 +205,7 @@ class CustomersForUser extends Component<Props, State> {
       if (!sameBranch)
         res = await searchLoanOfficer({
           from: 0,
-          size: 100,
+          size: 1000,
           name: searchKeyWord,
           status: "active",
           excludedIds: [this.props.id],
@@ -214,7 +214,7 @@ class CustomersForUser extends Component<Props, State> {
       else
         res = await searchLoanOfficer({
           from: 0,
-          size: 100,
+          size: 1000,
           name: searchKeyWord,
           status: "active",
           excludedIds: [this.props.id],
@@ -334,6 +334,7 @@ class CustomersForUser extends Component<Props, State> {
           </Modal.Header>
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
+               <Form.Label className="data-label">{local.chooseBranch}</Form.Label>
               <Col sm={12}>
                 <Select
                   placeholder={local.chooseBranch}
@@ -355,6 +356,7 @@ class CustomersForUser extends Component<Props, State> {
               </Col>
             </Row>
             <Row style={{ padding: "10px 40px" }}>
+                <Form.Label className="data-label">{local.chooseLoanOfficer}</Form.Label>
               <Col sm={12}>
                 <LoanOfficersDropDown
                   onSelectLoanOfficer={LO => {

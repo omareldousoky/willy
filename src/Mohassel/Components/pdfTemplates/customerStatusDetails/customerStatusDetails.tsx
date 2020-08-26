@@ -10,7 +10,8 @@ const CustomerStatusDetails = (props) => {
                 max = max + (Number(installment[subtractFromKey]) - Number(installment[key]));
             })
         } else props.data.Loans[index].installments.forEach(installment => {
-            max = max + Number(installment[key]);
+            if(!isNaN(Number(installment[key])))
+                max = max + Number(installment[key]);
         })
         return max;
     }
@@ -52,7 +53,7 @@ const CustomerStatusDetails = (props) => {
                 <tbody>
                     <tr>
                         <td className="borderless" colSpan={100}>
-                            {props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
+                            {props.data.Loans && props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
                                 return (
                                     <div key={index} style={{ pageBreakAfter: 'always' }}>
                                         <table>
@@ -266,9 +267,9 @@ const CustomerStatusDetails = (props) => {
                                                         <tr key={index}>
                                                             <td>{installment.idx}</td>
                                                             <td>{timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false)}</td>
-                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal) - Number(installment.feesInstallment)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesInstallment}</td>
-                                                            <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid) - Number(installment.feesPaid)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
                                                             <td>{getStatus(installment)}</td>
                                                             <td>{installment.paidAt? timeToArabicDate(new Date(installment.paidAt).valueOf(), false): ''}</td>
@@ -285,7 +286,7 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رصيد العميل</th>
                                                     <td></td>
                                                     <th>أيام التأخير والتبكير</th>
-                                                    <td>{isNaN(getSum('delay', index))? '' : getSum('delay', index)}</td>
+                                                    <td>{loan.earlyDays}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

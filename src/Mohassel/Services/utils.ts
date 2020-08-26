@@ -8,9 +8,10 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp > 0)
+  if (timeStamp === 0) {
+    return new Date().toISOString().slice(0, 10)
+  } else if (timeStamp)
     return new Date(timeStamp).toISOString().slice(0, 10)
-  else return new Date().toISOString().slice(0, 10);
 }
 
 export function parseJwt(token: string) {
@@ -231,7 +232,7 @@ export const numbersToArabic = (input: number | string) => {
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp > 0)
+  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
@@ -357,10 +358,40 @@ export const actionsList = [
   "deactivateUser"
 ]
 
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
 export const iscoreDate = (date: any) => {
-  const MyDate = new Date(date);
-  const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
-  + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
-  + MyDate.getFullYear();
-  return MyDateString
+  const iscoreDate = new Date(date);
+  const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
+    + ('0' + (iscoreDate.getMonth() + 1)).slice(-2) + '/'
+    + iscoreDate.getFullYear();
+  return iscoreDateString
+}
+
+export const getDateString = (date: any) => {
+  return (
+    new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+  )
+}
+
+export const downloadFile = (fileURL) => {
+  const link = document.createElement('a');
+  link.href = fileURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+export const getAge = (DOB) => {
+  const today = new Date();
+  const birthDate = new Date(DOB);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age = age - 1;
+  }
+
+  return age;
 }

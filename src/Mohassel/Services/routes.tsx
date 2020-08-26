@@ -39,6 +39,7 @@ import DocumentTypeCreation from '../Components/documentTypeCreation/documentTyp
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import Reports from '../Components/Reports/reports';
+import MoveCustomers from '../Components/MoveCustomers/move-customers';
 
 const appRoutes = [
   {
@@ -271,7 +272,7 @@ const appRoutes = [
       }, {
         path: "/loans",
         label: local.issuedLoans,
-        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,
+        render: (props) => <LoanList {...props} />,
         routes: [
           {
             path: "/loan-profile",
@@ -295,6 +296,12 @@ const appRoutes = [
         path: "/reports",
         label: local.reports,
         render: () => <Reports/>
+      },
+      {
+        path: "/move-customers",
+        label: local.moveCustomers,
+        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
+
       }
     ]
   },

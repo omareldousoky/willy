@@ -1,7 +1,9 @@
 import React from 'react';
 import './paymentsDone.scss';
-
+import { timeToArabicDate, timeToDateyyymmdd } from '../../../Services/utils';
 const PaymentsDone = (props) => {
+    const tempData = props.data.data;
+    const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()): `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
     return (
         <div className="payments-done" lang="ar">
             <table className="report-container">
@@ -17,10 +19,10 @@ const PaymentsDone = (props) => {
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>المركز الرئيسي</th>
-                        <th colSpan={6}>تاريخ الحركه من 2020/06/01 الي 2020/07/05</th>
+                        <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
                     </tr>
                     <tr className="headtitle">
-                        <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
+                        <th colSpan={4}>{timeToArabicDate(0, true)}</th>
                         <th colSpan={6}>جنيه مصري</th>
                     </tr>
                     <tr>
@@ -47,155 +49,108 @@ const PaymentsDone = (props) => {
 
                 </thead>
 
-                <tbody>
-                    <tr>
-                        <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                        <th className="gray frame" colSpan={2}>2020/06/09</th>
-                    </tr>
-                    <tr>
-                        <th className="gray frame" colSpan={2}>بنك / خرينه </th>
-                        <th className="gray frame" colSpan={2}>بنك 1 - الجيزه - الصف</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>001/00171760</td>
-                        <td>068/0014733/002/004</td>
-                        <td>تامر مجدي محمد فؤاد ابراهيم</td>
-                        <td>1020.00</td>
-                        <td></td>
-                        <td>2020/07/02</td>
-                        <td>مسدد بالخزينه</td>
-                        <td>24190</td>
-                        <td>500.00</td>
-                        <td>0.00</td>
-                        <td>500.00</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>001/00171760</td>
-                        <td>068/0014733/002/004</td>
-                        <td>تامر مجدي محمد فؤاد ابراهيم</td>
-                        <td>1020.00</td>
-                        <td></td>
-                        <td>2020/07/02</td>
-                        <td>مسدد بالخزينه</td>
-                        <td>24190</td>
-                        <td>500.00</td>
-                        <td>0.00</td>
-                        <td>500.00</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>001/00171760</td>
-                        <td>068/0014733/002/004</td>
-                        <td>تامر مجدي محمد فؤاد ابراهيم</td>
-                        <td>1020.00</td>
-                        <td></td>
-                        <td>2020/07/02</td>
-                        <td>مسدد بالخزينه</td>
-                        <td>24190</td>
-                        <td>500.00</td>
-                        <td>0.00</td>
-                        <td>500.00</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>001/00171760</td>
-                        <td>068/0014733/002/004</td>
-                        <td>تامر مجدي محمد فؤاد ابراهيم</td>
-                        <td>1020.00</td>
-                        <td></td>
-                        <td>2020/07/02</td>
-                        <td>مسدد بالخزينه</td>
-                        <td>24190</td>
-                        <td>500.00</td>
-                        <td>0.00</td>
-                        <td>500.00</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>001/00171760</td>
-                        <td>068/0014733/002/004</td>
-                        <td>تامر مجدي محمد فؤاد ابراهيم</td>
-                        <td>1020.00</td>
-                        <td></td>
-                        <td>2020/07/02</td>
-                        <td>مسدد بالخزينه</td>
-                        <td>24190</td>
-                        <td>500.00</td>
-                        <td>0.00</td>
-                        <td>500.00</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                    <tr>
-                        <td className="frame" colSpan={2}>إجمالي بنك / خزينه</td>
-                        <td className="frame" colSpan={2}>بنك 1 - الجيزه - الصف</td>
-                        <td className="frame" colSpan={1}>2020/07/02</td>
-                        <td className="frame">16</td>
-                        <td></td>
-                        <td></td>
-                        <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">22840.00</td>
-                        <td className="frame">9393.00</td>
-                        <td className="frame">32233.00</td>
-                    </tr>
+                {tempData.days.map((day, x) =>
+                    <React.Fragment key={x}>
+                        <tbody>
+                            <tr>
+                                <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
+                                <th className="gray frame" colSpan={2}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</th>
+                            </tr>
+                        </tbody>
+                        {day.branches.map((branch, i) => <tbody key={i}>
+                            <tr>
+                                <th className="gray frame" colSpan={2}>بنك / خرينه </th>
+                                <th className="gray frame" colSpan={2}>{branch.branchName}</th>
+                            </tr>
+                            {branch.rows.map((transaction, z) =>
+                                <tr key={z}>
+                                    <td>{z + 1}</td>
+                                    <td>{transaction.transactionCode}</td>
+                                    <td>{transaction.installmentSerial}</td>
+                                    <td>{transaction.customerName}</td>
+                                    <td>{transaction.totalInstallment}</td>
+                                    <td></td>
+                                    <td>{timeToArabicDate(new Date(transaction.dateOfPayment).valueOf(), false)}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{transaction.transactionPrincipal}</td>
+                                    <td>{transaction.transactionInterest}</td>
+                                    <td>{transaction.transactionAmount}</td>
+                                </tr>
+                            )}
+                            <tr>
+                                <th colSpan={100} className="horizontal-line"></th>
+                            </tr>
+                            <tr>
+                                <td className="frame" colSpan={2}>إجمالي فرع</td>
+                                <td className="frame" colSpan={2}>{branch.branchName}</td>
+                                <td className="frame" colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
+                                <td className="frame">{branch.numTrx}</td>
+                                <td></td>
+                                <td></td>
+                                <td className="frame">إجمالي المبلغ</td>
+                                <td className="frame">{branch.totalPrincipal}</td>
+                                <td className="frame">{branch.totalFees}</td>
+                                <td className="frame">{branch.totalPaid}</td>
+                            </tr>
 
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">القيمة الملغاه</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                    </tr>
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">صافي المبلغ</td>
-                        <td className="frame">22840.00</td>
-                        <td className="frame">9393.00</td>
-                        <td className="frame">32233.00</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={100} className="horizontal-line"></th>
-                    </tr>
-                </tbody>
+                            <tr>
+                                <td colSpan={8}></td>
+                                <td className="frame">القيمة الملغاه</td>
+                                <td className="frame">0.00</td>
+                                <td className="frame">0.00</td>
+                                <td className="frame">0.00</td>
+                            </tr>
+                            <tr>
+                                <td colSpan={8}></td>
+                                <td className="frame">صافي المبلغ</td>
+                                <td className="frame">{branch.totalPrincipal}</td>
+                                <td className="frame">{branch.totalFees}</td>
+                                <td className="frame">{branch.totalPaid}</td>
+                            </tr>
+                            <tr>
+                                <th colSpan={100} className="horizontal-line"></th>
+                            </tr>
+                        </tbody>
+                        )}
 
-                <tr style={{ height: "1em" }}></tr>
+                        {/* <tr style={{ height: "1em" }}></tr> */}
 
-                <tbody className="tbodyborder">
-                    <tr>
-                        <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
-                        <td className="gray frame">2020/06/09</td>
-                        <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                        <td className="frame">162</td>
-                        <td></td>
-                        <td></td>
-                        <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">22840.00</td>
-                        <td className="frame">9393.00</td>
-                        <td className="frame">32233.00</td>
-                    </tr>
+                        <tbody className="tbodyborder">
+                            <tr>
+                                <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
+                                <td className="gray frame">{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
+                                <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
+                                <td className="frame">{day.numTrx}</td>
+                                <td></td>
+                                <td></td>
+                                <td className="frame">إجمالي المبلغ</td>
+                                <td className="frame">{day.totalPrincipal}</td>
+                                <td className="frame">{day.totalFees}</td>
+                                <td className="frame">{day.totalPaid}</td>
+                            </tr>
 
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">القيمة الملغاه</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                        <td className="frame">0.00</td>
-                    </tr>
-                    <tr>
-                        <td colSpan={8}></td>
-                        <td className="frame">صافي المبلغ</td>
-                        <td className="frame">22840.00</td>
-                        <td className="frame">9393.00</td>
-                        <td className="frame">32233.00</td>
-                    </tr>
-                </tbody>
+                            <tr>
+                                <td colSpan={8}></td>
+                                <td className="frame">القيمة الملغاه</td>
+                                <td className="frame">0.00</td>
+                                <td className="frame">0.00</td>
+                                <td className="frame">0.00</td>
+                            </tr>
+                            <tr>
+                                <td colSpan={8}></td>
+                                <td className="frame">صافي المبلغ</td>
+                                <td className="frame">{day.totalPrincipal}</td>
+                                <td className="frame">{day.totalFees}</td>
+                                <td className="frame">{day.totalPaid}</td>
+                            </tr>
+                        </tbody>
+                    </React.Fragment>
+                )}
 
-                <tr style={{ height: "1em" }}></tr>
+                {/* <tr style={{ height: "1em" }}></tr> */}
 
-                <tbody className="tbodyborder">
+                {/* <tbody className="tbodyborder">
                     <tr>
                         <td className="gray frame" colSpan={2}>إجمالي بالعمله</td>
                         <td className="gray frame">جنيه مصري</td>
@@ -223,7 +178,7 @@ const PaymentsDone = (props) => {
                         <td className="frame">9393.00</td>
                         <td className="frame">32233.00</td>
                     </tr>
-                </tbody>
+                </tbody> */}
             </table>
 
         </div>

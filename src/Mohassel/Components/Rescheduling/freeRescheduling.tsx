@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import Table from 'react-bootstrap/Table';
-import { getStatus } from '../../Services/utils';
+import { getStatus, getDateString } from '../../Services/utils';
 
 interface Props {
     application: any;
@@ -175,11 +175,6 @@ class FreeRescheduling extends Component<Props, State>{
             }
         })
     }
-    getDateString(date) {
-        return (
-            new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-        )
-    }
     async pushInstallments() {
         this.setState({ loading: true })
         const obj = {
@@ -196,13 +191,15 @@ class FreeRescheduling extends Component<Props, State>{
     }
     getRescheuleDate(values, index){
         const reschedFreeInsts = values.installments.slice(0,index-1).filter(i => i.status !== 'rescheduled');
-        let maxDate = reschedFreeInsts[0].dateOfPayment;
-        reschedFreeInsts.forEach(element => {
-            if(element.dateOfPayment>maxDate){
-                maxDate = element.dateOfPayment;
-            }
-        });
-        return maxDate
+        if(reschedFreeInsts.length > 0){
+            let maxDate = reschedFreeInsts[0].dateOfPayment;
+            reschedFreeInsts.forEach(element => {
+                if(element.dateOfPayment>maxDate){
+                    maxDate = element.dateOfPayment;
+                }
+            });
+            return maxDate
+        } else return 0
     }
     render() {
         return (
@@ -290,10 +287,10 @@ class FreeRescheduling extends Component<Props, State>{
                                                                 type="date"
                                                                 name={`installments[${index}].dateOfPayment`}
                                                                 data-qc="dateOfPayment"
-                                                                value={this.getDateString(formikProps.values.installments[index].dateOfPayment)}
+                                                                value={getDateString(formikProps.values.installments[index].dateOfPayment)}
                                                                 onBlur={formikProps.handleBlur}
                                                                 onChange={(e) => { formikProps.setFieldValue(`installments[${index}].dateOfPayment`, new Date(e.currentTarget.value).valueOf()) }}
-                                                                min={index > 0 ? formikProps.values.installments[index - 1] && formikProps.values.installments[index - 1].status !== 'rescheduled' ? this.getDateString(formikProps.values.installments[index - 1].dateOfPayment) : this.getDateString(this.getRescheuleDate(formikProps.values, index)) : undefined}
+                                                                min={index > 0 ? formikProps.values.installments[index - 1] && formikProps.values.installments[index - 1].status !== 'rescheduled' ? getDateString(formikProps.values.installments[index - 1].dateOfPayment) : getDateString(this.getRescheuleDate(formikProps.values, index)) : undefined}
                                                                 // max={index < formikProps.values.installments.length - 1 ? this.getDateString(formikProps.values.installments[index + 1].dateOfPayment) : undefined}
                                                                 isInvalid={formikProps.errors.installments && formikProps.errors.installments[index] && formikProps.errors.installments[index].dateOfPayment}
                                                             />}
