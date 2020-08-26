@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
 import DynamicTable from '../DynamicTable/dynamicTable';
@@ -62,11 +62,11 @@ interface State {
 }
 
 class CIB extends Component<Props, State> {
-  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
+  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => ReactNode }[]
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 10,
+      size: 5,
       from: 0,
       selectedCustomers: [],
       loading: false,
@@ -277,7 +277,7 @@ class CIB extends Component<Props, State> {
           "iscore": "unavailable",
           "activeLoans": "unavailable",
           "numInst": "15"
-        },{
+        }, {
           "loanId": "5f35de741569254885561f65",
           "principal": "15000.0",
           "loanBranch": "5effe4a25ca43661b65b6357",
@@ -328,7 +328,7 @@ class CIB extends Component<Props, State> {
           "iscore": "unavailable",
           "activeLoans": "unavailable",
           "numInst": "15"
-        },{
+        }, {
           "loanId": "5f35de741569254885561f65",
           "principal": "15000.0",
           "loanBranch": "5effe4a25ca43661b65b6357",
@@ -516,20 +516,20 @@ class CIB extends Component<Props, State> {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.data.map((item, index: number) => {
-                    return (
-                      <tr key={index}>
-                        {this.mappers?.slice(this.state.from * this.state.size, this.state.from * this.state.size + this.state.size)
-                        .map((mapper, index: number) => {
-                          return (
-                            <td key={index}>
-                              {(mapper.render || (data => data[mapper.key]))(item, index)}
-                            </td>
-                          )
-                        })}
-                      </tr>
-                    )
-                  })}
+                  {this.state.data.slice((this.state.from * this.state.size), ((this.state.from * this.state.size) + this.state.size))
+                    .map((item, index: number) => {
+                      return (
+                        <tr key={index}>
+                          {this.mappers?.map((mapper, index: number) => {
+                            return (
+                              <td key={index}>
+                                {mapper.render(item)}
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      )
+                    })}
                 </tbody>
               </Table>
               :
@@ -550,6 +550,52 @@ class CIB extends Component<Props, State> {
                   this.setState({ [key]: number } as any, () => this.getLoans());
                 }}
               /> */}
+            <div className="footer-container" style={{ marginBottom: 20, marginRight: 30 }}>
+              <div className="dropdown-container">
+                <p className="dropdown-label">{local.show}</p>
+                <Form.Control as="select" className="dropdown-select" onChange={(event) => {
+                  this.setState({size: Number(event.currentTarget.value)}
+                  props.changeNumber && props.changeNumber('size', Number(event.currentTarget.value))
+                  props.changeNumber && props.changeNumber('from', 0)
+                  changePage(0)
+                }}>
+                  <option value={10} data-qc={10}>10</option>
+                  <option value={25} data-qc={25}>25</option>
+                  <option value={50} data-qc={50}>50</option>
+                  <option value={100} data-qc={100}>100</option>
+                </Form.Control>
+              </div>
+              <div className="pagination-container">
+                <div className={page === 0 ? "pagination-next-prev-disabled" : "pagination-next-prev-enabled"}
+                  onClick={() => {
+                    if (page !== 0) {
+                      changePage(page - 1);
+                      props.changeNumber && props.changeNumber('from', (page * rowsPerPage - rowsPerPage));
+                    }
+                  }}>{local.previous}</div>
+                <div className="pagination-numbers">
+                  {getArrayOfNumbers().map(number => {
+                    return (
+                      <div key={number}
+                        className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
+                        onClick={() => {
+                          changePage(number - 1);
+                          props.changeNumber && props.changeNumber('from', (number - 1) * rowsPerPage)
+                        }}>
+                        <p>{number}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className={page + 1 !== Math.ceil(props.totalCount / rowsPerPage) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
+                  onClick={() => {
+                    if (page + 1 !== Math.ceil(props.totalCount / rowsPerPage)) {
+                      changePage(page + 1);
+                      props.changeNumber && props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
+                    }
+                  }}>{local.next}</div>
+              </div>
+            </div>
           </Card.Body>
         </Card>
       </>
