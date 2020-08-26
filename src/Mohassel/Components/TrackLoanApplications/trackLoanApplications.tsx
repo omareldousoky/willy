@@ -220,7 +220,7 @@ class TrackLoanApplications extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search
               searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode', 'code']}
+              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
               url="application"
               from={this.state.from}
               size={this.state.size}

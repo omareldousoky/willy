@@ -156,7 +156,7 @@ class LoanList extends Component<Props, State> {
           <hr className="dashed-line" />
           <Search
             searchKeys={this.state.searchKeys}
-            dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode', 'code']}
+            dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode']}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}
             url="loan"
