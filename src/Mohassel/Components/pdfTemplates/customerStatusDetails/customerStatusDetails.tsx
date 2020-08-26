@@ -3,6 +3,15 @@ import './customerStatusDetails.scss';
 import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
 
 const CustomerStatusDetails = (props) => {
+    function getCustomerStatus(status: string) {
+        switch(status) {
+            case 'no commitment': return 'ليس عليه إلتزامات';
+            case 'open loan': return'قرض مفتوح';
+            case 'open application': return'طلب مفتوح';
+            default: return '';
+        }
+    }
+    console.log(props)
     return (
         <div className="customer-status-details" lang="ar">
             <table>
@@ -30,9 +39,9 @@ const CustomerStatusDetails = (props) => {
                         <th className="gray frame">الكود</th>
                         <td className="frame">{props.customerKey}</td>
                         <th className="gray frame">الحاله</th>
-                        <td className="frame"></td>
+                        <td className="frame">{getCustomerStatus(props.data.customerStatus)}</td>
                         <th className="gray frame">حالة التعامل مع العميل</th>
-                        <td className="frame">{props.data.customerStatus === "commited" ? 'مسموح بالتعامل معه' : ''}</td>
+                        <td className="frame"></td>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
@@ -121,23 +130,24 @@ const CustomerStatusDetails = (props) => {
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
-                                                    <td colSpan={2}>{loan.prevRepName === "None" ? loan.representativeName === "None" ? '' : loan.representativeName : loan.prevRepName}</td>
+                                                    <td colSpan={2}>{loan.representativeName}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>حالة القرض</th>
                                                     <td>{getLoanStatus(loan.status)}</td>
                                                     <th>غرامات مسدده</th>
-                                                    <td>{loan.penaltiesPaid  === "None"? '': loan.penaltiesPaid}</td>
+                                                    <td>{loan.penaltiesPaid === "None" ? '' : loan.penaltiesPaid}</td>
                                                     <th>غرامات معفاه</th>
-                                                    <td>{loan.penaltiesCanceled  === "None"? '': loan.penaltiesCanceled}</td>
+                                                    <td>{loan.penaltiesCanceled === "None" ? '' : loan.penaltiesCanceled}</td>
                                                     <th>غرامات مستحقه</th>
-                                                    <td>{loan.penalties === "None"? '': loan.penalties}</td>
+                                                    <td>{loan.penalties === "None" ? '' : loan.penalties}</td>
                                                 </tr>
                                                 {loan.rejectionReason !== "None" ?
                                                     <tr>
                                                         <th>سبب الإلغاء</th>
                                                         <td>{loan.rejectionReason}</td>
                                                         <td>مندوب التنميه السابق</td>
+                                                        <td>{loan.prevRepName ? loan.prevRepName : loan.representativeName ? loan.representativeName : ''}</td>
                                                     </tr>
                                                     : null
                                                 }
@@ -260,7 +270,7 @@ const CustomerStatusDetails = (props) => {
                                                             <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
                                                             <td>{getStatus(installment)}</td>
-                                                            <td>{installment.paidAt? timeToArabicDate(new Date(installment.paidAt).valueOf(), false): ''}</td>
+                                                            <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>
                                                             <td>{installment.delay}</td>
                                                         </tr>
                                                     )
@@ -273,7 +283,9 @@ const CustomerStatusDetails = (props) => {
                                                     <td>{loan.totalFeesPaid}</td>
                                                     <th>رصيد العميل</th>
                                                     <td></td>
-                                                    <th>أيام التأخير والتبكير</th>
+                                                    <th>أيام التأخير </th>
+                                                    <td>{loan.lateDays}</td>
+                                                    <th> أيام التبكير </th>
                                                     <td>{loan.earlyDays}</td>
                                                 </tr>
                                             </tbody>
