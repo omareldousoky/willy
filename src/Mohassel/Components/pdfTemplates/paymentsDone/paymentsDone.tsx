@@ -39,7 +39,7 @@ const PaymentsDone = (props) => {
                         <th style={{ width: "10%" }}>حالة القسط</th>
                         <th style={{ width: "10%" }}>مستند الحركه</th>
                         <th>أصل</th>
-                        <th>القيمه المسدده المصاريف</th>
+                        <th>القيمه المسدده الفايده</th>
                         <th>إجمالي</th>
                         <th>حالة الحركة</th>
                     </tr>
