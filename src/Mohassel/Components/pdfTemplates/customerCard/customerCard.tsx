@@ -129,7 +129,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <th>القسط</th>
                             <th>تاريخ الآستحقاق</th>
                             <th> قيمة القسط</th>
-                            <th>المصاريف</th>
+                            <th>الفايده</th>
                             <th>اجمالي القيمة</th>
                             <th>قيمه مسدده</th>
                             <th>مصاريف مسدده</th>

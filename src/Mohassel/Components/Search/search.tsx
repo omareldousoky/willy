@@ -27,6 +27,7 @@ interface InitialFormikState {
   action?: string;
   branchId?: string;
   isDoubtful?: boolean;
+  isWrittenOff?: boolean;
 }
 interface Props {
   size: number;
@@ -82,6 +83,8 @@ class Search extends Component<Props, State> {
     obj.from = 0;
     if(obj.key) obj.key = Number(obj.key);
     if(obj.code) obj.code = Number(obj.code);
+    if(obj.customerKey) obj.customerKey = Number(obj.customerKey);
+    if(obj.customerCode) obj.customerCode = Number(obj.customerCode);
     if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
@@ -102,6 +105,8 @@ class Search extends Component<Props, State> {
           initialState.status = '';
         case 'doubtful':
           initialState.isDoubtful = false;
+        case 'writtenOff' :
+          initialState.isWrittenOff = false;
       }
     })
     return initialState;
@@ -120,8 +125,10 @@ class Search extends Component<Props, State> {
       case 'name': return local.name;
       case 'nationalId': return local.nationalId;
       case 'key': return local.code;
-      case 'code': return local.code;
+      case 'code': return local.partialCode;
       case 'authorName': return local.employeeName;
+      case 'customerKey': return local.customerCode;
+      case 'customerCode': return local.customerPartialCode;
       default: return '';
     }
   }
@@ -300,10 +307,28 @@ class Search extends Component<Props, State> {
                         <Form.Check
                             type='checkbox'
                             name='isDoubtful'
-                            data-qc='branchManagerAndDate'
+                            data-qc='isDoubtfulCheck'
                             checked={formikProps.values.isDoubtful}
                             onChange={formikProps.handleChange}
                             label={local.doubtfulLoans}
+                            disabled={formikProps.values.isWrittenOff}
+                        />
+                    </Form.Group>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'writtenOff') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId='branchManagerAndDate'>
+                        <Form.Check
+                            type='checkbox'
+                            name='isWrittenOff'
+                            data-qc='isWrittenOffCheck'
+                            checked={formikProps.values.isWrittenOff}
+                            onChange={formikProps.handleChange}
+                            label={local.writtenOffLoans}
+                            disabled={formikProps.values.isDoubtful}
                         />
                     </Form.Group>
                     </Col>
