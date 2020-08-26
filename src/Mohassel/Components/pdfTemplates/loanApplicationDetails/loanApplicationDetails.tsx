@@ -248,10 +248,10 @@ const LoanApplicationDetails = (props) => {
 
 
                             <tr>
-                                <th>المصاريف الموزعه</th>
+                                <th>الفايده الموزعه</th>
                                 <td>{loan.productInterest}% {interestPeriod(loan.interestPeriod)}</td>
-                                <th>المصاريف المقدمه</th>
-                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                <th>الفايده المقدمه</th>
+                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفايده الموزعه</td>
                             </tr>
 
                             <tr>
