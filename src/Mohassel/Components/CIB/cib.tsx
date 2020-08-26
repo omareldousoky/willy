@@ -200,7 +200,6 @@ class CIB extends Component<Props, State> {
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
-      console.log(res.body);
       this.setState({ selectedCustomers: [], loading: false, principalSelectedSum: 0 }, () => downloadTxtFile(res.body.loans))
       this.handleSearch(this.state);
     } else this.setState({ loading: false });
