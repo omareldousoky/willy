@@ -1,19 +1,11 @@
 import React, { Component, ReactNode } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
-import DynamicTable from '../DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import Search from '../Search/search';
-import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Can from '../../config/Can';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Form from 'react-bootstrap/Form';
-import { loading } from '../../redux/loading/actions';
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund';
 import { Formik } from 'formik';
 import Row from 'react-bootstrap/Row';
@@ -23,6 +15,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport';
 import Table from 'react-bootstrap/Table';
+import { downloadTxtFile } from './textFiles';
 
 interface Props {
   history: Array<any>;
@@ -66,7 +59,7 @@ class CIB extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      size: 5,
+      size: 10,
       from: 0,
       selectedCustomers: [],
       loading: false,
@@ -90,33 +83,13 @@ class CIB extends Component<Props, State> {
         title: local.customerCode,
         key: "customerCode",
         render: data => Number(data.customerKey)
-        // data.application.product.beneficiaryType === 'individual' ? data.application.customer.key :
-        //   data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer.key : null)
       },
       {
         title: local.customerName,
         key: "name",
         sortable: true,
         render: data => data.customerName
-        // <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
-        //   {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
-        //     <div style={{ display: 'flex', flexDirection: 'column' }}>
-        //       {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
-        //     </div>)
-        //   }
-        // </div>
       },
-      // {
-      //   title: local.productName,
-      //   key: "productName",
-      //   render: data => data.application.product.productName
-      // },
-      // {
-      //   title: local.loanIssuanceDate,
-      //   key: "issueDate",
-      //   sortable: true,
-      //   render: data => data.application.issueDate ? timeToDateyyymmdd(data.application.issueDate) : ''
-      // },
       {
         title: local.principal,
         key: "principal",
@@ -127,12 +100,6 @@ class CIB extends Component<Props, State> {
         key: "numInst",
         render: data => data.numInst
       }
-      // {
-      //   title: local.status,
-      //   key: "status",
-      //   sortable: true,
-      //   render: data => this.getStatus(data.application.status)
-      // },
     ]
   }
 
@@ -162,20 +129,11 @@ class CIB extends Component<Props, State> {
       });
     }
   }
-  async getLoans() {
-    let query = {};
-    if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", status: "issued" }
-    } else {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued" }
-    }
-    this.props.search(query);
-  }
   handleSearch = async (values) => {
     this.setState({
       data: [
         {
-          "loanId": "5f35de741569254885561f65",
+          "loanId": "5f3d0206408e43f2d47856a1",
           "principal": "15000.0",
           "loanBranch": "5effe4a25ca43661b65b6357",
           "customerNationalId": "26411120103588",
@@ -188,7 +146,7 @@ class CIB extends Component<Props, State> {
           "numInst": "12"
         },
         {
-          "loanId": "5f35de801569254885562d9b",
+          "loanId": "5f3b9dc06a8313b21a492e0d",
           "principal": "20000.0",
           "loanBranch": "5effe4a25ca43661b65b6357",
           "customerNationalId": "27710140103381",
@@ -201,7 +159,7 @@ class CIB extends Component<Props, State> {
           "numInst": "20"
         },
         {
-          "loanId": "5f35de931569254885566b8b",
+          "loanId": "5f3b8e841fb69bd8d7748426",
           "principal": "5000.0",
           "loanBranch": "5effe4a25ca43661b65b6322",
           "customerNationalId": "27001252401324",
@@ -214,7 +172,7 @@ class CIB extends Component<Props, State> {
           "numInst": "10"
         },
         {
-          "loanId": "5f35de931569254885566d15",
+          "loanId": "5f148a100f13de7cc5b96c32",
           "principal": "15000.0",
           "loanBranch": "5effe4a25ca43661b65b6322",
           "customerNationalId": "28112052404141",
@@ -226,160 +184,6 @@ class CIB extends Component<Props, State> {
           "activeLoans": "unavailable",
           "numInst": "15"
         },
-        {
-          "loanId": "5f35de741569254885561f65",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "26411120103588",
-          "customerKey": "110010012072.0",
-          "gender": "female",
-          "customerName": "سهير محمود احمد احمد",
-          "customerBirthDate": "NaT",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "12"
-        },
-        {
-          "loanId": "5f35de801569254885562d9b",
-          "principal": "20000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "27710140103381",
-          "customerKey": "110020001089.0",
-          "gender": "female",
-          "customerName": "نجوي ابراهيم فرحات ابراهيم",
-          "customerBirthDate": "1977-10-14 00:00:00",
-          "iscore": "###",
-          "activeLoans": "3",
-          "numInst": "20"
-        },
-        {
-          "loanId": "5f35de931569254885566b8b",
-          "principal": "5000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "27001252401324",
-          "customerKey": "110030005293.0",
-          "gender": "female",
-          "customerName": "فايزه احمدرشدي عثمان عبدالله",
-          "customerBirthDate": "1970-01-25 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "10"
-        },
-        {
-          "loanId": "5f35de931569254885566d15",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "28112052404141",
-          "customerKey": "110030005882.0",
-          "gender": "female",
-          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
-          "customerBirthDate": "1981-12-05 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "15"
-        }, {
-          "loanId": "5f35de741569254885561f65",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "26411120103588",
-          "customerKey": "110010012072.0",
-          "gender": "female",
-          "customerName": "سهير محمود احمد احمد",
-          "customerBirthDate": "NaT",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "12"
-        },
-        {
-          "loanId": "5f35de801569254885562d9b",
-          "principal": "20000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "27710140103381",
-          "customerKey": "110020001089.0",
-          "gender": "female",
-          "customerName": "نجوي ابراهيم فرحات ابراهيم",
-          "customerBirthDate": "1977-10-14 00:00:00",
-          "iscore": "###",
-          "activeLoans": "3",
-          "numInst": "20"
-        },
-        {
-          "loanId": "5f35de931569254885566b8b",
-          "principal": "5000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "27001252401324",
-          "customerKey": "110030005293.0",
-          "gender": "female",
-          "customerName": "فايزه احمدرشدي عثمان عبدالله",
-          "customerBirthDate": "1970-01-25 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "10"
-        },
-        {
-          "loanId": "5f35de931569254885566d15",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "28112052404141",
-          "customerKey": "110030005882.0",
-          "gender": "female",
-          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
-          "customerBirthDate": "1981-12-05 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "15"
-        }, {
-          "loanId": "5f35de741569254885561f65",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "26411120103588",
-          "customerKey": "110010012072.0",
-          "gender": "female",
-          "customerName": "سهير محمود احمد احمد",
-          "customerBirthDate": "NaT",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "12"
-        },
-        {
-          "loanId": "5f35de801569254885562d9b",
-          "principal": "20000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "27710140103381",
-          "customerKey": "110020001089.0",
-          "gender": "female",
-          "customerName": "نجوي ابراهيم فرحات ابراهيم",
-          "customerBirthDate": "1977-10-14 00:00:00",
-          "iscore": "###",
-          "activeLoans": "3",
-          "numInst": "20"
-        },
-        {
-          "loanId": "5f35de931569254885566b8b",
-          "principal": "5000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "27001252401324",
-          "customerKey": "110030005293.0",
-          "gender": "female",
-          "customerName": "فايزه احمدرشدي عثمان عبدالله",
-          "customerBirthDate": "1970-01-25 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "10"
-        },
-        {
-          "loanId": "5f35de931569254885566d15",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "28112052404141",
-          "customerKey": "110030005882.0",
-          "gender": "female",
-          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
-          "customerBirthDate": "1981-12-05 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "15"
-        }
       ]
     })
     const res = await cibReport({ startDate: new Date(values.fromDate).valueOf(), endDate: new Date(values.toDate).valueOf() })
@@ -397,10 +201,16 @@ class CIB extends Component<Props, State> {
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
       console.log(res.body);
-      this.setState({ selectedCustomers: [], loading: false })
-      this.getLoans();
+      this.setState({ selectedCustomers: [], loading: false, principalSelectedSum: 0 }, () => downloadTxtFile(res.body.loans))
+      this.handleSearch(this.state);
     } else this.setState({ loading: false });
-
+  }
+  getArrayOfNumbers() {
+    const totalPages: Array<number> = [];
+    for (let index = 0; index < Math.ceil(this.state.data.length / this.state.size); index++) {
+      totalPages.push(index)
+    }
+    return totalPages;
   }
   render() {
     return (
@@ -446,19 +256,6 @@ class CIB extends Component<Props, State> {
                         <InputGroup.Append>
                           <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                         </InputGroup.Append>
-                        {/* {this.props.dropDownKeys && this.props.dropDownKeys.length ?
-                          <DropdownButton
-                            as={InputGroup.Append}
-                            variant="outline-secondary"
-                            title={this.getArValue(this.state.dropDownValue)}
-                            id="input-group-dropdown-2"
-                            data-qc="search-dropdown"
-                          >
-                            {this.props.dropDownKeys.map((key, index) =>
-                              <Dropdown.Item data-qc={key} onClick={() => this.setState({ dropDownValue: key })}>{this.getArValue(key)}</Dropdown.Item>
-                            )}
-                          </DropdownButton>
-                          : null} */}
                       </InputGroup>
                     </Col>
                     <Col sm={6}>
@@ -538,71 +335,52 @@ class CIB extends Component<Props, State> {
                 <h4>{local.noResultsFound}</h4>
               </div>
             }
-            {/* <DynamicTable
-                from={this.state.from}
-                size={this.state.size}
-                url="loan"
-                totalCount={this.props.totalCount}
-                mappers={this.mappers}
-                pagination={true}
-                data={this.state.data}
-                changeNumber={(key: string, number: number) => {
-                  this.setState({ [key]: number } as any, () => this.getLoans());
-                }}
-              /> */}
-            <div className="footer-container" style={{ marginBottom: 20, marginRight: 30 }}>
-              <div className="dropdown-container">
-                <p className="dropdown-label">{local.show}</p>
-                <Form.Control as="select" className="dropdown-select" onChange={(event) => {
-                  this.setState({size: Number(event.currentTarget.value)}
-                  props.changeNumber && props.changeNumber('size', Number(event.currentTarget.value))
-                  props.changeNumber && props.changeNumber('from', 0)
-                  changePage(0)
-                }}>
-                  <option value={10} data-qc={10}>10</option>
-                  <option value={25} data-qc={25}>25</option>
-                  <option value={50} data-qc={50}>50</option>
-                  <option value={100} data-qc={100}>100</option>
-                </Form.Control>
-              </div>
-              <div className="pagination-container">
-                <div className={page === 0 ? "pagination-next-prev-disabled" : "pagination-next-prev-enabled"}
-                  onClick={() => {
-                    if (page !== 0) {
-                      changePage(page - 1);
-                      props.changeNumber && props.changeNumber('from', (page * rowsPerPage - rowsPerPage));
-                    }
-                  }}>{local.previous}</div>
-                <div className="pagination-numbers">
-                  {getArrayOfNumbers().map(number => {
-                    return (
-                      <div key={number}
-                        className={page === number - 1 ? "pagination-number-active" : "pagination-number-inactive"}
-                        onClick={() => {
-                          changePage(number - 1);
-                          props.changeNumber && props.changeNumber('from', (number - 1) * rowsPerPage)
-                        }}>
-                        <p>{number}</p>
-                      </div>
-                    )
-                  })}
+            {this.state.data.length ?
+              <div className="footer-container" style={{ marginBottom: 20, marginRight: 30 }}>
+                <div className="dropdown-container">
+                  <p className="dropdown-label">{local.show}</p>
+                  <Form.Control as="select" className="dropdown-select" onChange={(event) => {
+                    this.setState({ size: Number(event.currentTarget.value) })
+                  }}>
+                    <option value={10} data-qc={10}>10</option>
+                    <option value={25} data-qc={25}>25</option>
+                    <option value={50} data-qc={50}>50</option>
+                    <option value={100} data-qc={100}>100</option>
+                  </Form.Control>
                 </div>
-                <div className={page + 1 !== Math.ceil(props.totalCount / rowsPerPage) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
-                  onClick={() => {
-                    if (page + 1 !== Math.ceil(props.totalCount / rowsPerPage)) {
-                      changePage(page + 1);
-                      props.changeNumber && props.changeNumber('from', (page * rowsPerPage + rowsPerPage));
-                    }
-                  }}>{local.next}</div>
-              </div>
-            </div>
+                <div className="pagination-container">
+                  <div className={this.state.from === 0 ? "pagination-next-prev-disabled" : "pagination-next-prev-enabled"}
+                    onClick={() => {
+                      if (this.state.from !== 0) {
+                        this.setState({ from: this.state.from - 1 })
+                      }
+                    }}>{local.previous}</div>
+                  <div className="pagination-numbers">
+                    {this.getArrayOfNumbers().map((number) => {
+                      return (
+                        <div key={number}
+                          className={this.state.from === number ? "pagination-number-active" : "pagination-number-inactive"}
+                          onClick={() => {
+                            this.setState({ from: number })
+                          }}>
+                          <p>{number + 1}</p>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className={this.state.from + 1 !== Math.ceil(this.state.data.length / this.state.size) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
+                    onClick={() => {
+                      if (this.state.from + 1 !== Math.ceil(this.state.data.length / this.state.size)) {
+                        this.setState({ from: this.state.from + 1 })
+                      }
+                    }}>{local.next}</div>
+                </div>
+              </div> : null}
           </Card.Body>
         </Card>
       </>
     )
   }
 }
-
-
 
 export default withRouter(CIB);
