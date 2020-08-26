@@ -13,6 +13,7 @@ const LoanApplicationDetails = (props) => {
             case 'reviewed': return local.reviewed;
             case 'approved': return local.approved;
             case 'rejected': return local.rejected;
+            case 'created': return local.created;
             default: return '';
         }
     }
@@ -314,7 +315,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{guarantor.homePhoneNumber + guarantor.mobilePhoneNumber ? ` - ${guarantor.mobilePhoneNumber}` : ''}</td>
+                                                        <td>{`${guarantor.homePhoneNumber} ${guarantor.mobilePhoneNumber? ` - ${guarantor.mobilePhoneNumber}`: ''}`}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{guarantor.homePostalCode}</td>
                                                     </tr>

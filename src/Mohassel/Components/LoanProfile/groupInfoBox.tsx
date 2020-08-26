@@ -14,13 +14,16 @@ interface Props {
     iScores?: any;
     status?: string;
 };
-
+interface Member {
+    customer: Customer;
+    type: string;
+}
 interface State {
     loading: boolean;
     tabsArray: Array<Tab>;
     activeTab: string;
-    activeCustomer: Customer;
-    group: Array<Customer>;
+    activeCustomer: Member;
+    group: Array<Member>;
 }
 class GroupInfoBox extends Component<Props, State>{
     constructor(props: Props) {
@@ -29,16 +32,19 @@ class GroupInfoBox extends Component<Props, State>{
             loading: false,
             tabsArray: [],
             activeTab: '0',
-            activeCustomer: {},
+            activeCustomer: {
+                customer: {},
+                type: '' 
+            },
             group: []
         }
     }
     componentDidMount(){
-        const group: Customer[] = [];
-        this.props.group.individualsInGroup.forEach(member => group.push(member.customer))
+        const group: Member[] = [];
+        this.props.group.individualsInGroup.forEach(member => group.push({ customer: member.customer, type: member.type}))
         const tabsArray: Tab[] = [];
         group.forEach((member,i)  => tabsArray.push({
-            header: member.customerName,
+            header: member.customer.customerName,
             stringKey: i.toString()
         }))
         this.setState({
@@ -59,7 +65,7 @@ class GroupInfoBox extends Component<Props, State>{
                     selectTab={(index: number) => this.setState({ activeCustomer: this.state.group[index], activeTab: index.toString() })}
                 />
                 <div style={{ padding: 20 }}>
-                    <InfoBox noHeader values={this.state.activeCustomer} getIscore={(data)=> this.props.getIscore && this.props.getIscore(data)} iScores={this.props.iScores} status={this.props.status} />
+                    <InfoBox noHeader values={this.state.activeCustomer.customer} getIscore={(data)=> this.props.getIscore && this.props.getIscore(data)} iScores={this.props.iScores} status={this.props.status} leader={(this.state.activeCustomer.type === 'leader')}/>
                 </div>
             </div>
         )

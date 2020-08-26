@@ -111,7 +111,7 @@ export interface GuaranteedLoan{
     appStatus: string;
     approvalDate: string;
     loanStatus: string;
-    issueDate: string;
+    issueDate?: string;
 }
 export interface GuaranteedLoans {
         data: Array<GuaranteedLoan>;

@@ -40,7 +40,9 @@ const statusLocalization = (status: string) => {
         case 'issued':
             return ('مصدر');
         case 'canceled':
-            return ('ملغي')
+            return ('ملغي');
+         case 'pending':
+             return('قيد التحقيق');
         default:
             return status;
     }
