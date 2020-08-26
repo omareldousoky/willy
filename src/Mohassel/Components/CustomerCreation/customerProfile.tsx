@@ -133,6 +133,13 @@ const CustomerProfile = (props: Props) => {
                 <td>{customerDetails?.customerName}</td>
               </tr>
               <tr>
+                <td>iScore</td>
+                <td>
+                  {iScoreDetails?.iscore}
+                  {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
+                </td>
+              </tr>
+              <tr>
                 <td>{local.customerCode}</td>
                 <td>{customerDetails?.code}</td>
               </tr>
