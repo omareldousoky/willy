@@ -11,7 +11,6 @@ const CustomerStatusDetails = (props) => {
             default: return '';
         }
     }
-    console.log(props)
     return (
         <div className="customer-status-details" lang="ar">
             <table>
@@ -123,10 +122,10 @@ const CustomerStatusDetails = (props) => {
                                                 <tr>
                                                     <th>مصاريف القسط</th>
                                                     <td>{loan.feesInstallment}</td>
-                                                    <th>المصاريف الموزعه</th>
+                                                    <th>الفايده الموزعه</th>
                                                     <td>{loan.interest} % سنويا</td>
-                                                    <th>المصاريف المقدمه</th>
-                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                                    <th>الفايده المقدمه</th>
+                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من الفايده الموزعه</td>
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
@@ -253,9 +252,9 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رقم</th>
                                                     <th>تاريخ الأستحقاق</th>
                                                     <th>قيمة</th>
-                                                    <th>المصاريف</th>
+                                                    <th>الفايده</th>
                                                     <th>قيمة مسدده</th>
-                                                    <th>المصاريف المسدده</th>
+                                                    <th>الفايده المسدده</th>
                                                     <th>الحاله</th>
                                                     <th>تاريخ الحاله</th>
                                                     <th>عدد أيام التأخير / التبكير</th>

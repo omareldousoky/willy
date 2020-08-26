@@ -47,7 +47,7 @@ class LoanList extends Component<Props, State> {
       iScoreModal: false,
       iScoreCustomers: [],
       loading: false,
-      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch']
+      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch','doubtful', 'writtenOff']
     }
     this.mappers = [
       {
@@ -108,11 +108,6 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-  const searchKeys = this.state.searchKeys
-    if(ability.can('viewDoubtfulLoans','application')){
-      searchKeys.push('doubtful')
-      this.setState({searchKeys})
-    }
     this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
@@ -161,7 +156,7 @@ class LoanList extends Component<Props, State> {
           <hr className="dashed-line" />
           <Search
             searchKeys={this.state.searchKeys}
-            dropDownKeys={['name', 'nationalId', 'key']}
+            dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode']}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             datePlaceholder={local.issuanceDate}
             url="loan"
