@@ -165,7 +165,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes("") ? [""] : branches,
-      all: branches.includes("") ? "1" : "0"
+      all: branches.includes("")|| branches === [] ? "1" : "0"
     }
     const res = await installments(obj);
     if (res.status === 'success') {
@@ -187,11 +187,12 @@ class Reports extends Component<{}, State> {
   }
   async getRandomPayments(values) {
     this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
+    const branches = values.branches.map((branch) => branch._id)
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: values.branches.map((branch) => branch._id),
-      all: values.branches[0]._id == "" ? "1" : "0",
+      branches: branches.includes("") ? [""] : branches,
+      all: branches.includes("") ? "1" : "0",
     }
     const res = await getRandomPayments(obj);
     if (res.status === 'success') {
@@ -344,10 +345,13 @@ class Reports extends Component<{}, State> {
   }
 
   async getLoanPenaltiesReport(values) {
+    const branches = values.branches.map((branch) => branch._id)
     this.setState({ loading: true, showModal: false })
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
+      all: branches.includes("")|| branches === [] ? "1" : "0",
+      branchList:branches.includes("") ? [""] : branches,
     });
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {
@@ -373,11 +377,12 @@ class Reports extends Component<{}, State> {
 
   async getWriteOffsReport(values) {
     this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
     const res = await writeOffs({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: values.branches[0]._id == "" ? "1" : "0",
-      branchList: values.branches.map((branch) => branch._id)
+      all:  branches.includes("")|| branches === [] ? "1" : "0",
+      branchList: values.branches.filter((branch) => branch._id !== "").map((branch) => branch._id),
     });
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {
