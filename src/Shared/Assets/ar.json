@@ -695,5 +695,8 @@
     "errorOnMovingCustomers":"خدث خطأ ولم يتم تغير المندوب",
     "withCode":" بكود ",
     "individualAgeError":"يجب أن لا يقل عمر العميل الفردي عن ٢١ و لا يزيد عن ٦٥",
-    "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧"
+    "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧",
+    "writtenOffLoans":"قروض مشطوبة",
+    "customerPartialCode":"كود العميل الجزئي",
+    "partialCode":"الكود الجزئي"
 }
