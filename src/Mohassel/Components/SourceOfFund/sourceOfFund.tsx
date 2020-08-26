@@ -15,6 +15,7 @@ import FormCheck from 'react-bootstrap/FormCheck';
 import Form from 'react-bootstrap/Form';
 import { loading } from '../../redux/loading/actions';
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund';
+import Swal from 'sweetalert2';
 
 interface Props {
   history: Array<any>;
@@ -160,16 +161,15 @@ class SourceOfFund extends Component<Props, State> {
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
-      console.log(res.body);
       this.props.setLoading(false);
-      this.getLoans();
+      Swal.fire("", local.changeSourceFundSuccess, "success").then(() => this.getLoans());
     } else this.props.setLoading(false);
   }
   render() {
     return (
       <>
         <Card style={{ margin: '20px 50px' }}>
-          <Loader type="fullsection" open={this.props.loading} />
+          <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
