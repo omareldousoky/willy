@@ -32,7 +32,7 @@ const LoanApplicationDetails = (props) => {
         }
     }
     return (
-        props.data.loans.map((loan, index) => {
+        props.data.loans? props.data.loans.map((loan, index) => {
             return (
                 <div className="loan-application-details" lang="ar" key={index}>
                     <table className="report-container">
@@ -388,7 +388,7 @@ const LoanApplicationDetails = (props) => {
                     </table>
                 </div>
             )
-        })
+        }): <h1 style={{textAlign: 'right'}}>هذا العميل ليس لديه قروض </h1>
     )
 }
 
