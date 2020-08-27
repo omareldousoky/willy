@@ -71,7 +71,7 @@ const CustomerProfile = (props: Props) => {
     changeLoading(true);
     const res = await guaranteed(customer?.key)
     if (res.status === 'success') {
-      changeGuaranteeedLoansData(res.body);
+      await changeGuaranteeedLoansData(res.body);
       changeLoading(false);
     } else {
       changeLoading(false);
@@ -81,13 +81,11 @@ const CustomerProfile = (props: Props) => {
     changeLoading(true);
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
-      changeCustomerDetails(res.body);
-      getCachediScores(res.body.nationalId)
-      changeLoading(false);
-      getGuaranteeedLoans(res.body);
+      await changeCustomerDetails(res.body);
+      await getCachediScores(res.body.nationalId);
+      await getGuaranteeedLoans(res.body); 
     } else {
       changeLoading(false);
-      console.log("failed to get customer data")
     }
   }
 
