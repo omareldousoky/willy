@@ -56,7 +56,7 @@ export const BranchesDropDown = props => {
   const getBranches = async searchKeyWord => {
     const res = await searchBranches({
       from: 0,
-      size: 100,
+      size: 1000,
       name: searchKeyWord
     });
     if (res.status === "success") {
@@ -76,6 +76,7 @@ export const BranchesDropDown = props => {
         placeholder={local.chooseBranch}
         // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
         // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
+        isMulti={props.multiselect}
         onChange={branch => props.onSelectBranch(branch)}
         getOptionLabel={option => option.name}
         getOptionValue={option => option._id}

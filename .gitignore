@@ -124,6 +124,7 @@ dist
 
 # vscode
 .vscode
+.zshrc.save
 
 # WebStorm
 .idea

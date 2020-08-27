@@ -3,8 +3,13 @@ import DynamicTable from '../DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import { CustomerLoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { numbersToArabic } from '../../Services/utils';
 interface Props {
   application: any;
+  penalty?: number;
   print: () => void;
 }
 function getStatus(data) {
@@ -82,6 +87,38 @@ export const CustomerCardView = (props: Props) => {
       <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
         onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
       <CustomerLoanDetailsBoxView application={props.application} />
+      {props.penalty && <div>
+        <h6>{local.penalties}</h6>
+        <Form style={{ margin: '20px 0' }}>
+          <Form.Row>
+            <Form.Group as={Col} md="3">
+              <Row>
+                <Form.Label style={{ color: '#6e6e6e' }}>غرامات مسددة</Form.Label>
+              </Row>
+              <Row>
+                <Form.Label>{numbersToArabic(props.application.penaltiesPaid)}</Form.Label>
+              </Row>
+            </Form.Group>
+            <Form.Group as={Col} md="3">
+              <Row>
+                <Form.Label style={{ color: '#6e6e6e' }}>غرامات مطلوبة</Form.Label>
+              </Row>
+              <Row>
+                <Form.Label>{numbersToArabic(props.penalty)}</Form.Label>
+              </Row>
+            </Form.Group>
+            <Form.Group as={Col} md="3">
+              <Row>
+                <Form.Label style={{ color: '#6e6e6e' }}>غرامات معفاة</Form.Label>
+              </Row>
+              <Row>
+                <Form.Label>{numbersToArabic(props.application.penaltiesCanceled)}</Form.Label>
+              </Row>
+            </Form.Group>
+          </Form.Row>
+        </Form>
+      </div>
+      }
       <DynamicTable totalCount={0} pagination={false} data={props.application.installmentsObject.installments} mappers={mappers} />
     </div>
   )

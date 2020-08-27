@@ -38,10 +38,12 @@ import { cancelApplication } from '../../Services/APIs/loanApplication/stateHand
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
 import store from '../../redux/store';
 import UploadDocuments from './uploadDocuments';
-import { getIscore } from '../../Services/APIs/iScore/iScore';
+import { getIscore, getIscoreCached } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
+import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt';
+import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -60,6 +62,8 @@ interface State {
     manualPaymentEditId: string;
     branchDetails: any;
     receiptData: any;
+    iscores: any;
+    penalty: number;
 }
 
 interface Props {
@@ -82,7 +86,9 @@ class LoanProfile extends Component<Props, State>{
             pendingActions: {},
             manualPaymentEditId: '',
             branchDetails: {},
-            receiptData: {}
+            receiptData: {},
+            iscores: [],
+            penalty:  0
         };
     }
     componentDidMount() {
@@ -99,6 +105,37 @@ class LoanProfile extends Component<Props, State>{
                     this.setTabsToRender(application)
                 })
             } else this.setTabsToRender(application)
+            if (ability.can('getIscore', 'customer')) this.getCachediScores(application.body)
+        } else {
+            Swal.fire('', 'fetch error', 'error')
+            this.setState({ loading: false })
+        }
+    }
+    async getCachediScores(application){
+        const ids: string[] = []
+        if(application.product.beneficiaryType === 'group'){
+            application.group.individualsInGroup.forEach(member => ids.push(member.customer.nationalId))
+        } else {
+            if(application.guarantors.length > 0){
+                application.guarantors.forEach( guar => ids.push(guar.nationalId))
+            }
+            ids.push(application.customer.nationalId)
+        }
+        const obj: { nationalIds: string[]; date?: Date } = {
+            nationalIds: ids
+        }
+        if(["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status)){
+           obj.date = (this.state.application.status === 'approved') ? this.state.application.approvalDate : 
+           (this.state.application.status === 'created') ? this.state.application.creationDate : 
+           (['issued', 'pending'].includes(this.state.application.status)) ? this.state.application.issueDate :
+           (this.state.application.status === 'rejected') ? this.state.application.rejectionDate :
+           (['paid', 'canceled'].includes(this.state.application.status)) ? this.state.application.updated.at : 0
+            // paid & canceled => updated.at, pending,issued =>issuedDate
+        }
+        this.setState({ loading: true });
+        const iScores = await getIscoreCached(obj);
+        if (iScores.status === "success") {
+            this.setState({ iscores: iScores.body.data, loading: false })
         } else {
             Swal.fire('', 'fetch error', 'error')
             this.setState({ loading: false })
@@ -140,7 +177,7 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
             if (ability.can('payInstallment', 'application') || ability.can('payEarly', 'application')) tabsToRender.push(paymentTab)
-            if (ability.can('pushInstallment', 'application') && !this.state.application.writeOff) tabsToRender.push(reschedulingTab)
+            if ((ability.can('pushInstallment', 'application') || ability.can('traditionRescheduling', 'application') || ability.can('freeRescheduling', 'application') ) && !this.state.application.writeOff) tabsToRender.push(reschedulingTab)
             // if (ability.can('pushInstallment', 'application')) tabsToRender.push(reschedulingTestTab)
         }
        
@@ -182,12 +219,22 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ branchDetails: res.body.data })
         } else console.log('error getting branch details')
     }
+    async calculatePenalties() {
+        this.setState({ loading: true });
+        const res = await calculatePenalties({
+          id: this.state.application._id,
+          truthDate: new Date().getTime()
+        });
+        if (res.body) {
+          this.setState({ penalty: res.body.penalty, loading: false });
+        } else this.setState({ loading: false });
+      }
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
                 return <LoanDetailsTableView application={this.state.application} />
             case 'loanGuarantors':
-                return <GuarantorTableView guarantors={this.state.application.guarantors} />
+                return <GuarantorTableView guarantors={this.state.application.guarantors} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -199,7 +246,7 @@ class LoanProfile extends Component<Props, State>{
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
                     paymentType={"normal"} />
             case 'customerCard':
-                return <CustomerCardView application={this.state.application} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
+                return <CustomerCardView application={this.state.application} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
             case 'loanRescheduling':
                 return <Rescheduling application={this.state.application} test={false} />
             case 'loanReschedulingTest':
@@ -290,19 +337,12 @@ class LoanProfile extends Component<Props, State>{
         }
         const iScore = await getIscore(obj);
         if (iScore.status === 'success') {
-            this.downloadFile(iScore.body.url)
+            this.getCachediScores(this.state.application)
             this.setState({ loading: false })
         } else {
             Swal.fire('', local.noIScore, 'error')
             this.setState({ loading: false })
         }
-    }
-    downloadFile(fileURL) {
-        const link = document.createElement('a');
-        link.href = fileURL;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
     cancelApplication() {
         Swal.fire({
@@ -370,6 +410,47 @@ class LoanProfile extends Component<Props, State>{
             })
         }
     }
+    async doubtApplication() {
+        const { value: text } = await Swal.fire({
+            title: local.doubtReason,
+            input: 'text',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.doubtLoan,
+            cancelButtonText: local.cancel,
+            inputValidator: (value) => {
+                if (!value) {
+                    return local.required
+                } else return ''
+            }
+        })
+        if (text) {
+
+            Swal.fire({
+                title: local.areYouSure,
+                text: `${local.loanWillBeDoubted}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: local.doubtLoan,
+                cancelButtonText: local.cancel
+            }).then(async (result) => {
+                if (result.value) {
+                    this.setState({ loading: true });
+                    const res = await doubtLoan(this.props.history.location.state.id, { doubtReason: text });
+                    if (res.status === "success") {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanDoubtSuccess, 'success').then(() => window.location.reload());
+                    } else {
+                        this.setState({ loading: false })
+                        Swal.fire('', local.loanDoubtError, 'error');
+                    }
+                }
+            })
+        }
+    }
     getSumOfPendingActions() {
         let sum = 0;
         this.state.pendingActions.transactions?.forEach((transaction) => {
@@ -384,16 +465,19 @@ class LoanProfile extends Component<Props, State>{
                 {Object.keys(this.state.application).length > 0 &&
                     <div className="print-none">
                         <div className="d-flex justify-content-between">
-                            <div className="d-flex justify-content-start" style={{ width: '30%' }}>
+                            <div className="d-flex justify-content-start" style={{ width: '35%' }}>
                                 <h3>{local.loanDetails}</h3>
                                 <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid ${englishToArabic(this.state.application.status).color}` }}>
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                                 {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
-                                    <p style={{ margin: 0, color: 'red' }}>{local.writtenOffLoan}</p>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}</p>
+                                </span>}
+                                {this.state.application.isDoubtful && !this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
                                 </span>}
                             </div>
-                            <div className="d-flex justify-content-end" style={{ width: '70%' }}>
+                            <div className="d-flex justify-content-end" style={{ width: '65%' }}>
                                 {this.state.application.status === 'issued' && this.state.application.group.individualsInGroup && this.state.application.group.individualsInGroup.length > 1 && <Can I='splitFromGroup' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.memberSeperation}</span></Can>}
                                 {this.state.application.status === "created" && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => { this.setState({ print: 'all' }, () => window.print()) }}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>}
                                 {this.state.application.status === 'underReview' && <Can I='assignProductToCustomer' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/edit-loan-application', { id: this.props.history.location.state.id, action: 'edit' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.editLoan}</span></Can>}
@@ -404,7 +488,9 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
                                 {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span> }
-                                {this.state.application.status === 'issued' && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
+                                {this.state.application.status === 'issued' && this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
+                                {this.state.application.status === 'issued' && !this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='setDoubtfulLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.doubtApplication()}> <img alt="doubt" src={require('../../Assets/minus.svg')} style={{ height: 20, marginLeft: 5 }} />{local.doubtLoan}</span></Can>}
+
 
                             </div>
                         </div>
@@ -441,8 +527,8 @@ class LoanProfile extends Component<Props, State>{
                             </div>
                             : null}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} /> :
-                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} />
+                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} /> :
+                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
                             }
                         </div>
                         <Card style={{ marginTop: 15 }}>
@@ -450,7 +536,9 @@ class LoanProfile extends Component<Props, State>{
                                 header={'here'}
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
-                                selectTab={(index: string) => this.setState({ activeTab: index },()=> this.props.changePaymentState(0))}
+                                selectTab={(index: string) => this.setState({ activeTab: index },()=> {
+                                    if(index === 'customerCard') this.calculatePenalties();
+                                    this.props.changePaymentState(0)})}
                             />
                             <div style={{ padding: 20, marginTop: 15 }}>
                                 {this.renderContent()}
@@ -461,7 +549,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
-                        <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />
+                        <CustomerCardPDF data={this.state.application} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <TotalWrittenChecksPDF data={this.state.application} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />
@@ -470,7 +558,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application}/>}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application}/>}

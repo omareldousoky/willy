@@ -40,6 +40,8 @@ import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
+import Reports from '../Components/Reports/reports';
+import MoveCustomers from '../Components/MoveCustomers/move-customers';
 
 const appRoutes = [
   {
@@ -272,7 +274,7 @@ const appRoutes = [
       }, {
         path: "/loans",
         label: local.issuedLoans,
-        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,
+        render: (props) => <LoanList {...props} />,
         routes: [
           {
             path: "/loan-profile",
@@ -301,6 +303,17 @@ const appRoutes = [
         path: "/cib",
         label: local.cib,
         render : () => <Can I="cibScreen" a='report' ><CIB/></Can>
+      }, 
+      {
+        path: "/reports",
+        label: local.reports,
+        render: () => <Reports/>
+      },
+      {
+        path: "/move-customers",
+        label: local.moveCustomers,
+        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
+
       }
     ]
   },

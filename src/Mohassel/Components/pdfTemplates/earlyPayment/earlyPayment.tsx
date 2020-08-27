@@ -27,9 +27,11 @@ class EarlyPaymentPDF extends Component<Props, State> {
         let latePrincipal = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
             if ((new Date(installment.dateOfPayment).getMonth() === new Date().getMonth()
-                && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear()) 
-                || getStatus(installment) === local.late) {
-                latePrincipal = latePrincipal + installment.principalInstallment;
+                    && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear() && (getStatus(installment) === local.unpaid)) 
+                || (getStatus(installment) === local.late) 
+                || ((new Date(installment.dateOfPayment).getMonth() <= new Date().getMonth()
+                    && new Date(installment.dateOfPayment).getFullYear() <= new Date().getFullYear()) && (getStatus(installment) === local.partiallyPaid))) {
+                latePrincipal = latePrincipal + (installment.principalInstallment - installment.principalPaid)
             }
             if (installment.status !== "rescheduled") {
                 if (installment.paidAt) {
@@ -149,10 +151,10 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <th className="border">القسط</th>
                             <th className="border">تاريخ الآستحقاق</th>
                             <th className="border"> قيمة القسط</th>
-                            <th className="border">المصاريف</th>
+                            <th className="border">الفائدة</th>
                             <th className="border">اجمالي القيمة</th>
                             <th className="border">قيمه مسدده</th>
-                            <th className="border">مصاريف مسدده</th>
+                            <th className="border">فائدة مسدده</th>
                             <th className="border">الحاله</th>
                             <th className="border">تاريخ الحاله</th>
                             <th className="border">ايام التأخير</th>
@@ -201,7 +203,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <td></td>
                             <th className="border">الاجمالي</th>
-                            <th className="border">مصاريف</th>
+                            <th className="border">فائدة</th>
                             <th className="border">الأصل</th>
                             <td></td>
                             <td></td>

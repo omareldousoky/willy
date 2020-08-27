@@ -1,9 +1,14 @@
 import axios from '../axios-instance';
-
-export const issueLoan = async (id: string, issueDate: number) => {
-    const url = process.env.REACT_APP_BASE_URL + `/application/issue/${id}`;
+interface LoanIssuanceObj {
+    id: string;
+    issueDate: number;
+    branchManagerId?: string;
+    managerVisitDate?: number;
+}
+export const issueLoan = async (obj: LoanIssuanceObj) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/issue/${obj.id}`;
     try {
-        const res = await axios.put(url, { issueDate: issueDate });
+        const res = await axios.put(url, obj);
         return { status: "success", body: res.data }
     }
     catch (error) {

@@ -16,6 +16,9 @@ interface Props {
     leftHeader?: string;
     search?: Function;
     viewSelected?: Function;
+    disabled?: Function;
+    disabledMessage?: string;
+
 }
 
 interface State {
@@ -112,7 +115,7 @@ class DualBox extends Component<Props, State> {
             })
         } else {
             this.setState({
-                selectionArray: [...this.state.options],
+                selectionArray: (this.props.disabled) ? this.state.options.filter(option => this.props.disabled && this.props.disabled(option) === false) : [...this.state.options],
                 checkAll: true
             })
         }
@@ -155,6 +158,7 @@ class DualBox extends Component<Props, State> {
                                         <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
                                     </InputGroup.Append>
                                 </InputGroup>
+                                {(this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <>
                                 <div className="list-group-item" style={{ background: '#FAFAFA' }} onClick={() => this.selectAllOptions()} >
                                     <Form.Check
                                         type='checkbox'
@@ -169,7 +173,7 @@ class DualBox extends Component<Props, State> {
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchKeyword.toLocaleLowerCase()))
                                         .map(option => {
                                             return <div key={option._id} 
-                                                className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected" : "list-group-item"}>
+                                                className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected d-flex" : "list-group-item d-flex"}>
                                                 <Form.Check
                                                     type='checkbox'
                                                     // readOnly
@@ -177,20 +181,23 @@ class DualBox extends Component<Props, State> {
                                                     onChange={() => this.selectItem(option)}
                                                     label={option[this.props.labelKey]}
                                                     checked={this.state.selectionArray.find((item) => item._id === option._id)}
+                                                    disabled={(this.props.disabled && this.props.disabled(option))}
                                                 />
+                                                {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage}</span>}
                                             </div>
                                         }
                                         )}
                                 </div>
+                                </>}
                             </ul>
                         </div>
                     </div>
-                    <div className="list-button">
+                    { (this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <div className="list-button">
                         <Button className="btn btn-default btn-md" style={{ height: 45, width: 95, margin: '20px 0px' }} disabled={this.state.selectionArray.length < 1} onClick={() => this.addToSelectedList()}>
                             {local.add}<span className={!this.props.vertical ? "fa fa-arrow-left" : "fa fa-arrow-down"}></span>
                         </Button>
-                    </div>
-                    <div className={!this.props.vertical ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
+                    </div>}
+                    { (this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <div className={!this.props.vertical ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
                         <div className="well text-right">
                             <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
@@ -222,7 +229,7 @@ class DualBox extends Component<Props, State> {
                                 </div>
                             </ul>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         )
