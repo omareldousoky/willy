@@ -39,15 +39,16 @@ const getBeneficiaryType = (type: string) => {
 }
 
 const numTo2Decimal = (num: number | string) => {
-    if(typeof num === 'string') num = Number(num);
+    if (typeof num === 'string') num = Number(num);
     return (Math.round(num * 100) / 100).toFixed(2);
 }
 
 const cusTxt = (textData) => {
     return (`H|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n` +
         textData.map(application => {
+            const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer
             return (
-                `${getYearMonthDay(application.customer.created.at)}|${application.customer.key}    |N|D|${application.customer.customerName}|SINGLE|${getGender(application.customer.gender)}|${getYearMonthDay(application.customer.birthDate)}|${application.customer.nationalId}|National ID|EG||${application.customer.customerHomeAddress}|${getYearMonthDay(application.created.at)}|990|1| M5| 097|199|2|516|4100|||EG|||${application.customer.customerName}|${application.customer.customerHomeAddress}|29|15|9|1|5|1|other||\n`
+                `${getYearMonthDay(customer.created.at)}|${customer.key}    |N|D|${customer.customerName}|SINGLE|${getGender(customer.gender)}|${getYearMonthDay(customer.birthDate)}|${customer.nationalId}|National ID|EG||${customer.customerHomeAddress}|${getYearMonthDay(application.created.at)}|990|1| M5| 097|199|2|516|4100|||EG|||${customer.customerName}|${customer.customerHomeAddress}|29|15|9|1|5|1|other||\n`
             )
         })).split(',').join('')
 }
@@ -55,8 +56,9 @@ const cusTxt = (textData) => {
 const finText = (textData) => {
     return (`H|${getYearMonthDay(0)}|${getTotalPrincipals(textData)}|${textData.length}|TDIS_FIN|\n` +
         textData.map(application => {
+            const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer
             return (
-                `D|${application.customer.key}          |N|${getYearMonthDay(application.issueDate)}|${application.principal ? numTo2Decimal(application.principal) : numTo2Decimal(0)}|${application.product.currency.toUpperCase()}|D|0||${application.product.interest ? (application.product.interest + ".0000000") : '0.0000000'}|${getYearMonthDay(application.installmentsObject.output[application.installmentsObject.output.length - 1].dateOfPayment)}|${application.installmentsObject.output.length}|${application.installmentsObject.output[0].principalInstallment ? numTo2Decimal(application.installmentsObject.output[0].principalInstallment) : numTo2Decimal(0)}|${application.installmentsObject.output[0].feesInstallment ? numTo2Decimal(application.installmentsObject.output[0].feesInstallment) : numTo2Decimal(0)}|M|${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}      |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                `D|${customer.key}          |N|${getYearMonthDay(application.issueDate)}|${application.principal ? numTo2Decimal(application.principal) : numTo2Decimal(0)}|${application.product.currency.toUpperCase()}|D|0||${application.product.interest ? (application.product.interest + ".0000000") : '0.0000000'}|${getYearMonthDay(application.installmentsObject.output[application.installmentsObject.output.length - 1].dateOfPayment)}|${application.installmentsObject.output.length}|${application.installmentsObject.output[0].principalInstallment ? numTo2Decimal(application.installmentsObject.output[0].principalInstallment) : numTo2Decimal(0)}|${application.installmentsObject.output[0].feesInstallment ? numTo2Decimal(application.installmentsObject.output[0].feesInstallment) : numTo2Decimal(0)}|M|${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}      |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
             )
         })).split(',').join('')
 }
@@ -80,27 +82,28 @@ const payText = (textData) => {
         application.installmentsObject.output.forEach(installment => {
             if (installment.status === "paid") {
                 totalNoOfInstallments += 1;
-                totalPrincipal += (installment.principalInstallment? Number(installment.principalInstallment) : 0);
-                totalInterest += (installment.feesInstallment? Number(installment.feesInstallment) : 0);
+                totalPrincipal += (installment.principalInstallment ? Number(installment.principalInstallment) : 0);
+                totalInterest += (installment.feesInstallment ? Number(installment.feesInstallment) : 0);
             }
         })
     });
-    return (`H|${getYearMonthDay(0)}|${numTo2Decimal(totalPrincipal)}|${numTo2Decimal(totalInterest)}|${totalNoOfInstallments*3}|TPAY|\n` +
+    return (`H|${getYearMonthDay(0)}|${numTo2Decimal(totalPrincipal)}|${numTo2Decimal(totalInterest)}|${totalNoOfInstallments * 3}|TPAY|\n` +
         textData.map(application => {
+            const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer;
             let final = '';
             application.installmentsObject.output.map(installment => {
                 if (installment.status === "paid") {
-                    final = final + `D|${application.customer.key}      |I|${getYearMonthDay(application.issueDate)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                    final = final + `D|${customer.key}      |I|${getYearMonthDay(application.issueDate)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
             application.installmentsObject.output.map(installment => {
                 if (installment.status === "paid") {
-                    final = final + `D|${application.customer.key}      |T|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.40)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                    final = final + `D|${customer.key}      |T|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.40)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
             application.installmentsObject.output.map(installment => {
                 if (installment.status === "paid") {
-                    final = final + `D|${application.customer.key}      |R|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.60)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                    final = final + `D|${customer.key}      |R|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.60)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
             return final;
@@ -119,7 +122,7 @@ const trfText = (textData) => {
     return (`H|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${Object.keys(branchData).length}|TDIS_TRF|\n` +
         Object.keys(branchData).map(branch => {
             return `D|100005743642      |100005143076     |EGP|${numTo2Decimal(branchData[branch])}|${getYearMonthDay(0)}|0.00|\n`
-        }) + 
+        }) +
         `T|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${Object.keys(branchData).length}|TDIS_TRF|\n`
     )
 }
