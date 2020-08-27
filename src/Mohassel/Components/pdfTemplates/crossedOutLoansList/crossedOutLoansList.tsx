@@ -198,7 +198,7 @@ const CrossedOutLoansList = (props) => {
             <th></th>
             <th></th>
             <th>أصل</th>
-            <th>قيمة الحركة مصاريف</th>
+            <th>قيمة الحركة فايده</th>
             <th>إجمالي</th>
           </tr>
           <tr>

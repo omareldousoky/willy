@@ -242,7 +242,7 @@ const LoanApplicationDetails = (props) => {
                                 <td>{loan.periodLength} {periodType(loan.periodType)}</td>
                                 <th>حساب السداد</th>
                                 <td></td>
-                                <th>مصاريف إداريه القسط</th>
+                                <th>فايده إداريه القسط</th>
                                 <td>{loan.adminFees}</td>
                             </tr>
 
