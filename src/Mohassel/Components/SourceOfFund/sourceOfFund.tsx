@@ -221,7 +221,6 @@ class SourceOfFund extends Component<Props, State> {
               >
                 <option value="" data-qc=""></option>
                 <option value="tasaheel" data-qc="tasaheel">{local.tasaheel}</option>
-                <option value="cib" data-qc="cib">{local.cib}</option>
               </Form.Control>
               <Button className="big-button" data-qc="submit" onClick={() => this.submit()} disabled={this.state.selectedFund === ""}>{local.submit}</Button>
             </div>

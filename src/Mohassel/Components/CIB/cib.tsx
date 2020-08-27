@@ -16,6 +16,7 @@ import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import { cibReport } from '../../Services/APIs/loanApplication/cibReport';
 import Table from 'react-bootstrap/Table';
 import { downloadTxtFile } from './textFiles';
+import Swal from 'sweetalert2';
 
 interface Props {
   history: Array<any>;
@@ -51,11 +52,13 @@ interface State {
   toDate: string;
   keyword: string;
   data: Array<CibLoan>;
+  filteredData: Array<CibLoan>;
+  filteredBranch: string;
   principalSelectedSum: number;
 }
 
 class CIB extends Component<Props, State> {
-  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => ReactNode }[]
+  mappers: { title: string | ReactNode; key: string; sortable?: boolean; render: (data: any) => ReactNode }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -67,11 +70,16 @@ class CIB extends Component<Props, State> {
       toDate: '',
       keyword: '',
       data: [],
+      filteredData: [],
+      filteredBranch: '',
       principalSelectedSum: 0,
     }
     this.mappers = [
       {
-        title: '',
+        title: <FormCheck
+          type="checkbox"
+          onChange={e => this.checkAll(e)}
+        ></FormCheck>,
         key: 'selected',
         render: data => <FormCheck
           type="checkbox"
@@ -129,66 +137,26 @@ class CIB extends Component<Props, State> {
       });
     }
   }
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({
+        selectedCustomers: this.state.data.map(el => el.loanId),
+        principalSelectedSum: this.state.data.reduce((a, b) => a + (Number(b.principal) || 0), 0)
+      });
+    } else this.setState({ selectedCustomers: [], principalSelectedSum: 0 });
+  }
   handleSearch = async (values) => {
-    this.setState({
-      data: [
-        {
-          "loanId": "5f3d0206408e43f2d47856a1",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "26411120103588",
-          "customerKey": "110010012072.0",
-          "gender": "female",
-          "customerName": "سهير محمود احمد احمد",
-          "customerBirthDate": "NaT",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "12"
-        },
-        {
-          "loanId": "5f3b9dc06a8313b21a492e0d",
-          "principal": "20000.0",
-          "loanBranch": "5effe4a25ca43661b65b6357",
-          "customerNationalId": "27710140103381",
-          "customerKey": "110020001089.0",
-          "gender": "female",
-          "customerName": "نجوي ابراهيم فرحات ابراهيم",
-          "customerBirthDate": "1977-10-14 00:00:00",
-          "iscore": "###",
-          "activeLoans": "3",
-          "numInst": "20"
-        },
-        {
-          "loanId": "5f3b8e841fb69bd8d7748426",
-          "principal": "5000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "27001252401324",
-          "customerKey": "110030005293.0",
-          "gender": "female",
-          "customerName": "فايزه احمدرشدي عثمان عبدالله",
-          "customerBirthDate": "1970-01-25 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "10"
-        },
-        {
-          "loanId": "5f148a100f13de7cc5b96c32",
-          "principal": "15000.0",
-          "loanBranch": "5effe4a25ca43661b65b6322",
-          "customerNationalId": "28112052404141",
-          "customerKey": "110030005882.0",
-          "gender": "female",
-          "customerName": "صابرين عبدالرحمن محمد عبدالرحمن",
-          "customerBirthDate": "1981-12-05 00:00:00",
-          "iscore": "unavailable",
-          "activeLoans": "unavailable",
-          "numInst": "15"
-        },
-      ]
-    })
-    const res = await cibReport({ startDate: new Date(values.fromDate).valueOf(), endDate: new Date(values.toDate).valueOf() })
+    this.setState({ loading: true })
+    const res = await cibReport({ startDate: new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf(), endDate: new Date(values.toDate).setHours(23, 59, 59, 59).valueOf() })
     if (res.status === "success") {
-
+      this.setState({
+        data: res.body.loans,
+        filteredData: res.body.loans,
+        loading: false,
+      })
+    } else {
+      this.setState({ loading: false })
+      console.log(res);
     }
   }
   async submit() {
@@ -200,13 +168,13 @@ class CIB extends Component<Props, State> {
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
-      this.setState({ selectedCustomers: [], loading: false, principalSelectedSum: 0 }, () => downloadTxtFile(res.body.loans))
-      this.handleSearch(this.state);
+      this.setState({ selectedCustomers: [], loading: false, principalSelectedSum: 0, data: [], filteredData: [] });
+      Swal.fire("", local.changeSourceFundSuccess, "success").then(() => downloadTxtFile(res.body.loans));
     } else this.setState({ loading: false });
   }
   getArrayOfNumbers() {
     const totalPages: Array<number> = [];
-    for (let index = 0; index < Math.ceil(this.state.data.length / this.state.size); index++) {
+    for (let index = 0; index < Math.ceil(this.state[(this.state.keyword || this.state.filteredBranch) ? 'filteredData' : 'data'].length / this.state.size); index++) {
       totalPages.push(index)
     }
     return totalPages;
@@ -227,7 +195,8 @@ class CIB extends Component<Props, State> {
                 disabled={!Boolean(this.state.selectedCustomers.length)}
                 className="big-button"
                 style={{ marginLeft: 20 }}
-              > {local.downloadPDF}
+              > {local.changeFund}
+                <span className="fa fa-exchange-alt" style={{ verticalAlign: 'middle', marginRight: 10 }}></span>
               </Button>
             </div>
             <hr className="dashed-line" />
@@ -247,7 +216,13 @@ class CIB extends Component<Props, State> {
                           type="text"
                           name="keyword"
                           data-qc="searchKeyword"
-                          onChange={formikProps.handleChange}
+                          onChange={(e) => {
+                            this.setState({
+                              keyword: e.currentTarget.value,
+                              filteredData: this.state.data.filter(el => el.customerName.includes(e.currentTarget.value))
+                            });
+                            formikProps.setFieldValue("keyword", e.currentTarget.value)
+                          }}
                           style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                           placeholder={local.name}
                           value={formikProps.values.keyword}
@@ -288,7 +263,10 @@ class CIB extends Component<Props, State> {
                       </div>
                     </Col>
                     <Col sm={6} style={{ marginTop: 20 }}>
-                      <BranchesDropDown onSelectBranch={(branch) => { formikProps.setFieldValue('branchId', branch._id) }} />
+                      <BranchesDropDown onSelectBranch={(branch) => {
+                        formikProps.setFieldValue('branchId', branch._id);
+                        this.setState({ filteredBranch: branch._id, filteredData: this.state.data.filter(item => item.loanBranch === branch._id) })
+                      }} />
                     </Col>
 
                     <Col>
@@ -312,7 +290,8 @@ class CIB extends Component<Props, State> {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.data.slice((this.state.from * this.state.size), ((this.state.from * this.state.size) + this.state.size))
+                  {this.state[(this.state.keyword || this.state.filteredBranch) ? 'filteredData' : 'data']
+                    .slice((this.state.from * this.state.size), ((this.state.from * this.state.size) + this.state.size))
                     .map((item, index: number) => {
                       return (
                         <tr key={index}>
@@ -334,7 +313,7 @@ class CIB extends Component<Props, State> {
                 <h4>{local.noResultsFound}</h4>
               </div>
             }
-            {this.state.data.length ?
+            {this.state[(this.state.keyword || this.state.filteredBranch) ? 'filteredData' : 'data'].length ?
               <div className="footer-container" style={{ marginBottom: 20, marginRight: 30 }}>
                 <div className="dropdown-container">
                   <p className="dropdown-label">{local.show}</p>
@@ -367,9 +346,9 @@ class CIB extends Component<Props, State> {
                       )
                     })}
                   </div>
-                  <div className={this.state.from + 1 !== Math.ceil(this.state.data.length / this.state.size) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
+                  <div className={this.state.from + 1 !== Math.ceil(this.state[(this.state.keyword || this.state.filteredBranch) ? 'filteredData' : 'data'].length / this.state.size) ? "pagination-next-prev-enabled" : "pagination-next-prev-disabled"}
                     onClick={() => {
-                      if (this.state.from + 1 !== Math.ceil(this.state.data.length / this.state.size)) {
+                      if (this.state.from + 1 !== Math.ceil(this.state[(this.state.keyword || this.state.filteredBranch) ? 'filteredData' : 'data'].length / this.state.size)) {
                         this.setState({ from: this.state.from + 1 })
                       }
                     }}>{local.next}</div>
