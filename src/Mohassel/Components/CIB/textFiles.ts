@@ -18,7 +18,7 @@ const getGender = (gender: string) => {
 }
 
 const periodType = (periodType: string) => {
-    if(periodType === "days") return "D";
+    if (periodType === "days") return "D";
     else return "M"
 }
 
@@ -73,7 +73,7 @@ const instText = (textData) => {
         textData.map(application => {
             return application.installmentsObject.output.map(installment => {
                 return (
-                    `D|${application.loanApplicationKey}      |${installment.id}|${application.installmentsObject.output.length}|${getYearMonthDay(installment.dateOfPayment)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|${installment.feesInstallment ? numTo2Decimal(installment.feesInstallment) : numTo2Decimal(0)}|${installment.installmentResponse ? numTo2Decimal(installment.installmentResponse) : numTo2Decimal(0)}|\n`
+                    `D|${application.loanApplicationKey}      |${installment.id? installment.id: 0}|${application.installmentsObject.output.length}|${getYearMonthDay(installment.dateOfPayment)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|${installment.feesInstallment ? numTo2Decimal(installment.feesInstallment) : numTo2Decimal(0)}|${installment.installmentResponse ? numTo2Decimal(installment.installmentResponse) : numTo2Decimal(0)}|\n`
                 )
             })
         })).split(',').join('')
@@ -96,19 +96,19 @@ const payText = (textData) => {
         textData.map(application => {
             const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer;
             let final = '';
-            application.installmentsObject.output.map(installment => {
+            application.installmentsObject.output.map((installment, index) => {
                 if (installment.status === "paid") {
-                    final = final + `D|${customer.key}      |I|${getYearMonthDay(application.issueDate)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                    final = final + `D|${customer.key}      |I|${getYearMonthDay(application.issueDate)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|EGP|C|0||||${installment.id ? installment.id : 0}||||${getYearMonthDay(application.installmentsObject.output[(index + 1) > application.installmentsObject.output.length - 1 ? index : index + 1].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
-            application.installmentsObject.output.map(installment => {
+            application.installmentsObject.output.map((installment, index) => {
                 if (installment.status === "paid") {
-                    final = final + `D|${customer.key}      |T|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.40)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                    final = final + `D|${customer.key}      |T|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.40)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id ? installment.id : 0}||||${getYearMonthDay(application.installmentsObject.output[(index + 1) > application.installmentsObject.output.length - 1 ? index : index + 1].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
-            application.installmentsObject.output.map(installment => {
+            application.installmentsObject.output.map((installment, index) => {
                 if (installment.status === "paid") {
-                    final = final + `D|${customer.key}      |R|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.60)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id}||||${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
+                    final = final + `D|${customer.key}      |R|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.60)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id ? installment.id : 0}||||${getYearMonthDay(application.installmentsObject.output[(index + 1) > application.installmentsObject.output.length - 1 ? index : index + 1].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
             return final;
