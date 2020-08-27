@@ -1,6 +1,6 @@
 import React from 'react';
 import './paymentsDone.scss';
-import { timeToArabicDate } from '../../../Services/utils';
+import { timeToArabicDate, getInstallmentStatus } from '../../../Services/utils';
 const PaymentsDone = (props) => {
     const tempData = props.data.data;
     const reportDate = (props.data.from === props.data.to) ? props.data.from : `من ${props.data.from} الي ${props.data.to}`;
@@ -71,7 +71,7 @@ const PaymentsDone = (props) => {
                                     <td>{transaction.totalInstallment}</td>
                                     <td></td>
                                     <td>{timeToArabicDate(new Date(transaction.dateOfPayment).valueOf(), false)}</td>
-                                    <td></td>
+                                    <td>{getInstallmentStatus(transaction.instStatus)}</td>
                                     <td></td>
                                     <td>{transaction.transactionPrincipal}</td>
                                     <td>{transaction.transactionInterest}</td>
