@@ -124,12 +124,12 @@ const CustomerStatusDetails = (props) => {
                                                     <td>{loan.representativeFees}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>فايده القسط</th>
+                                                    <th>فائدة القسط</th>
                                                     <td>{loan.feesInstallment}</td>
-                                                    <th>الفايده الموزعه</th>
+                                                    <th>الفائدة الموزعه</th>
                                                     <td>{loan.interest} % سنويا</td>
-                                                    <th>الفايده المقدمه</th>
-                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من الفايده الموزعه</td>
+                                                    <th>الفائدة المقدمه</th>
+                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
@@ -255,9 +255,9 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رقم</th>
                                                     <th>تاريخ الأستحقاق</th>
                                                     <th>قيمة</th>
-                                                    <th>الفايده</th>
+                                                    <th>الفائدة</th>
                                                     <th>قيمة مسدده</th>
-                                                    <th>الفايده المسدده</th>
+                                                    <th>الفائدة المسدده</th>
                                                     <th>الحاله</th>
                                                     <th>تاريخ الحاله</th>
                                                     <th>عدد أيام التأخير / التبكير</th>
