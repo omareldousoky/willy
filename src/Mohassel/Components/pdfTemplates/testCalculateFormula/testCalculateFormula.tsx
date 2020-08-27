@@ -32,7 +32,7 @@ const TestCalculateFormulaPDF = (props) => {
                         <th>الرقم المسلسل</th>
                         <th>قيمة القسط</th>
                         <th>الأصل</th>
-                        <th>المصاريف</th>
+                        <th>الفايده</th>
                         <th>تاريخ الآستحقاق</th>
                     </tr>
                     {props.data.result?.output.map(installment => {

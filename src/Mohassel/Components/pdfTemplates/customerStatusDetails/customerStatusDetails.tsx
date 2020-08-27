@@ -3,16 +3,13 @@ import './customerStatusDetails.scss';
 import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
 
 const CustomerStatusDetails = (props) => {
-    function getSum(key: string, index: number, subtractFromKey?: string) {
-        let max = 0;
-        if (subtractFromKey) {
-            props.data.Loans[index].installments.forEach(installment => {
-                max = max + (Number(installment[subtractFromKey]) - Number(installment[key]));
-            })
-        } else props.data.Loans[index].installments.forEach(installment => {
-            max = max + Number(installment[key]);
-        })
-        return max;
+    function getCustomerStatus(status: string) {
+        switch(status) {
+            case 'no commitment': return 'ليس عليه إلتزامات';
+            case 'open loan': return'قرض مفتوح';
+            case 'open application': return'طلب مفتوح';
+            default: return '';
+        }
     }
     return (
         <div className="customer-status-details" lang="ar">
@@ -41,9 +38,9 @@ const CustomerStatusDetails = (props) => {
                         <th className="gray frame">الكود</th>
                         <td className="frame">{props.customerKey}</td>
                         <th className="gray frame">الحاله</th>
-                        <td className="frame"></td>
+                        <td className="frame">{getCustomerStatus(props.data.customerStatus)}</td>
                         <th className="gray frame">حالة التعامل مع العميل</th>
-                        <td className="frame">{props.data.customerStatus === "commited" ? 'مسموح بالتعامل معه' : ''}</td>
+                        <td className="frame"></td>
                     </tr>
                     <tr>
                         <th colSpan={100} className="horizontal-line"></th>
@@ -125,30 +122,31 @@ const CustomerStatusDetails = (props) => {
                                                 <tr>
                                                     <th>مصاريف القسط</th>
                                                     <td>{loan.feesInstallment}</td>
-                                                    <th>المصاريف الموزعه</th>
+                                                    <th>الفايده الموزعه</th>
                                                     <td>{loan.interest} % سنويا</td>
-                                                    <th>المصاريف المقدمه</th>
-                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                                    <th>الفايده المقدمه</th>
+                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من الفايده الموزعه</td>
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
-                                                    <td colSpan={2}>{loan.representativeName === "None"? '': loan.representativeName}</td>
+                                                    <td colSpan={2}>{loan.representativeName}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>حالة القرض</th>
                                                     <td>{getLoanStatus(loan.status)}</td>
                                                     <th>غرامات مسدده</th>
-                                                    <td>{loan.penaltiesPaid  === "None"? '': loan.penaltiesPaid}</td>
+                                                    <td>{loan.penaltiesPaid === "None" ? '' : loan.penaltiesPaid}</td>
                                                     <th>غرامات معفاه</th>
-                                                    <td>{loan.penaltiesCanceled  === "None"? '': loan.penaltiesCanceled}</td>
+                                                    <td>{loan.penaltiesCanceled === "None" ? '' : loan.penaltiesCanceled}</td>
                                                     <th>غرامات مستحقه</th>
-                                                    <td>{loan.penalties === "None"? '': loan.penalties}</td>
+                                                    <td>{loan.penalties === "None" ? '' : loan.penalties}</td>
                                                 </tr>
                                                 {loan.rejectionReason !== "None" ?
                                                     <tr>
                                                         <th>سبب الإلغاء</th>
                                                         <td>{loan.rejectionReason}</td>
                                                         <td>مندوب التنميه السابق</td>
+                                                        <td>{loan.prevRepName ? loan.prevRepName : loan.representativeName ? loan.representativeName : ''}</td>
                                                     </tr>
                                                     : null
                                                 }
@@ -254,9 +252,9 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رقم</th>
                                                     <th>تاريخ الأستحقاق</th>
                                                     <th>قيمة</th>
-                                                    <th>المصاريف</th>
+                                                    <th>الفايده</th>
                                                     <th>قيمة مسدده</th>
-                                                    <th>المصاريف المسدده</th>
+                                                    <th>الفايده المسدده</th>
                                                     <th>الحاله</th>
                                                     <th>تاريخ الحاله</th>
                                                     <th>عدد أيام التأخير / التبكير</th>
@@ -266,26 +264,28 @@ const CustomerStatusDetails = (props) => {
                                                         <tr key={index}>
                                                             <td>{installment.idx}</td>
                                                             <td>{timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false)}</td>
-                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal) - Number(installment.feesInstallment)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.instTotal)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesInstallment}</td>
-                                                            <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid) - Number(installment.feesPaid)}</td>
+                                                            <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid)}</td>
                                                             <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
                                                             <td>{getStatus(installment)}</td>
-                                                            <td>{installment.paidAt? timeToArabicDate(new Date(installment.paidAt).valueOf(), false): ''}</td>
+                                                            <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>
                                                             <td>{installment.delay}</td>
                                                         </tr>
                                                     )
                                                 })}
                                                 <tr>
                                                     <td className="borderless" colSpan={2}></td>
-                                                    <td>{getSum('feesInstallment', index, 'instTotal')}</td>
-                                                    <td>{getSum('feesInstallment', index)}</td>
-                                                    <td>{getSum('feesPaid', index, 'totalPaid')}</td>
-                                                    <td>{getSum('feesPaid', index)}</td>
+                                                    <td>{loan.instTotalDue}</td>
+                                                    <td>{loan.feesInstallmentDue}</td>
+                                                    <td>{loan.totalPaid}</td>
+                                                    <td>{loan.totalFeesPaid}</td>
                                                     <th>رصيد العميل</th>
                                                     <td></td>
-                                                    <th>أيام التأخير والتبكير</th>
-                                                    <td>{isNaN(getSum('delay', index))? '' : getSum('delay', index)}</td>
+                                                    <th>أيام التأخير </th>
+                                                    <td>{loan.lateDays}</td>
+                                                    <th> أيام التبكير </th>
+                                                    <td>{loan.earlyDays}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

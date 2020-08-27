@@ -205,7 +205,7 @@ class CustomersForUser extends Component<Props, State> {
       if (!sameBranch)
         res = await searchLoanOfficer({
           from: 0,
-          size: 100,
+          size: 1000,
           name: searchKeyWord,
           status: "active",
           excludedIds: [this.props.id],
@@ -214,7 +214,7 @@ class CustomersForUser extends Component<Props, State> {
       else
         res = await searchLoanOfficer({
           from: 0,
-          size: 100,
+          size: 1000,
           name: searchKeyWord,
           status: "active",
           excludedIds: [this.props.id],
