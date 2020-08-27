@@ -37,7 +37,7 @@ const ExecutedPaymentsList = (props) => {
                         <th className="frame">حالة القسط</th>
                         <th className="frame">مستند الحركه</th>
                         <th className="frame">أصل</th>
-                        <th className="frame">القيمة المسدده الفايده</th>
+                        <th className="frame">القيمة المسدده الفائدة</th>
                         <th className="frame">إجمالي</th>
                     </tr>
                     <tr>
