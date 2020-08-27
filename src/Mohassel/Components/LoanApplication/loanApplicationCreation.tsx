@@ -847,6 +847,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         loanOfficers={this.state.loanOfficers}
                         step={(key) => this.step(key)}
                         getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
+                        customer={(this.state.customerType === 'individual') ? this.state.selectedCustomer : this.state.selectedCustomers}
                     />
                 }
             </Formik>
@@ -870,6 +871,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
+                        customer={(this.state.customerType === 'individual') ? this.state.selectedCustomer : this.state.selectedCustomers}
                     />
                 }
             </Formik>

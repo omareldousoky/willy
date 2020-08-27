@@ -1,7 +1,7 @@
 import React from 'react';
 import './loanApplicationDetails.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType } from '../../../Services/utils';
+import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd } from '../../../Services/utils';
 
 const LoanApplicationDetails = (props) => {
     function getStatus(status: string) {
@@ -13,11 +13,26 @@ const LoanApplicationDetails = (props) => {
             case 'reviewed': return local.reviewed;
             case 'approved': return local.approved;
             case 'rejected': return local.rejected;
+            case 'created': return local.created;
             default: return '';
         }
     }
+    function getNumberInArabic(number: number) {
+        switch(number) {
+            case 2: return 'الضامن الثاني';
+            case 3: return 'الضامن الثالث';
+            case 4: return 'الضامن الرابع';
+            case 5: return 'الضامن الخامس';
+            case 6: return 'الضامن السادس';
+            case 7: return 'الضامن السابع';
+            case 8: return 'الضامن الثامن';
+            case 9: return 'الضامن التاسع';
+            case 10: return 'الضامن العاشر';
+            default: return'';
+        }
+    }
     return (
-        props.data.loans.map((loan, index) => {
+        props.data.loans? props.data.loans.map((loan, index) => {
             return (
                 <div className="loan-application-details" lang="ar" key={index}>
                     <table className="report-container">
@@ -49,7 +64,10 @@ const LoanApplicationDetails = (props) => {
                                 <td>{loan.applicationKey}</td>
                                 {/*  <td></td> */}
                                 <th>حالة طلب القرض</th>
-                                <td>{getStatus(loan.status)}</td>
+                                {getStatus(loan.reviewStatus) ? <td>{getStatus(loan.reviewStatus)}</td> : null}
+                                {getStatus(loan.approvalStatus) ? <td>{getStatus(loan.approvalStatus)}</td> : null}
+                                {getStatus(loan.creationStatus) ? <td>{getStatus(loan.creationStatus)}</td> : null}
+                                {getStatus(loan.status) ? <td>{getStatus(loan.status)}</td> : null}
                             </tr>
                             <tr>
                                 <th>إسم الطالب</th>
@@ -89,7 +107,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>تاريخ الميلاد</th>
                                 <td>{props.data.customerBirthDate}</td>
                                 <th>التليفون</th>
-                                <td>{props.data.customerWorkPhone === "None" ? "" : props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? props.data.homePhoneNumber === "None" ? '' : props.data.homePhoneNumber : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>تاريخ الاصدار</th>
@@ -101,7 +119,7 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>تليفون محمول</th>
-                                <td>{props.data.customerMobile}</td>
+                                <td>{props.data.mobilePhoneNumber}</td>
                             </tr>
                             <tr>
                                 <th>الموقع الالكتروني</th>
@@ -123,7 +141,7 @@ const LoanApplicationDetails = (props) => {
                                 <th>اسم المنشأه</th>
                                 <td>{props.data.customerWorkName}</td>
                                 <th>تليفون العمل</th>
-                                <td>{props.data.customerWorkPhone === "None"? "" : props.data.customerWorkPhone}</td>
+                                <td>{props.data.customerWorkPhone === "None" ? "" : props.data.customerWorkPhone}</td>
                             </tr>
                             <tr>
                                 <th>رقم الرخصه</th>
@@ -151,13 +169,13 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>العنوان</th>
-                                <td>{loan.customerWorkAddress}</td>
+                                <td>{props.data.customerWorkAddress}</td>
                                 <th>السجل التجارى</th>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>قطاع العمل والنشاط والتخصص</th>
-                                <td>{loan.customerActivity}</td>
+                                <td>{props.data.customerActivity}</td>
                                 <th>السجل الصناعي</th>
                                 <td></td>
                             </tr>
@@ -239,21 +257,21 @@ const LoanApplicationDetails = (props) => {
                                 <td>{loan.periodLength} {periodType(loan.periodType)}</td>
                                 <th>حساب السداد</th>
                                 <td></td>
-                                <th>مصاريف إداريه القسط</th>
-                                <td>{loan.applicationFees}</td>
+                                <th>فائدة إداريه القسط</th>
+                                <td>{loan.adminFees}</td>
                             </tr>
 
 
                             <tr>
-                                <th>المصاريف الموزعه</th>
+                                <th>الفائدة الموزعه</th>
                                 <td>{loan.productInterest}% {interestPeriod(loan.interestPeriod)}</td>
-                                <th>المصاريف المقدمه</th>
-                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                <th>الفائدة المقدمه</th>
+                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
                             </tr>
 
                             <tr>
                                 <th>الأستخدام</th>
-                                <td>تمويل رأس المال العامل</td>
+                                <td>{loan.loanUsage}</td>
                                 <th>حساب الإصدار</th>
                             </tr>
                             <tr>
@@ -268,9 +286,9 @@ const LoanApplicationDetails = (props) => {
 
                             <tr>
                                 <th>مدير الفرع</th>
-                                <td></td>
+                                <td>{loan.mgrName}</td>
                                 <th>تاريخ الزياره</th>
-                                <td></td>
+                                <td>{timeToDateyyymmdd(new Date(loan.mgrVisitationDate).valueOf())}</td>
                             </tr>
 
                             <tr>
@@ -289,7 +307,7 @@ const LoanApplicationDetails = (props) => {
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
+                                                        <th className="frame gray" colSpan={100}>{index === 0? 'الضامن الرئيسي': getNumberInArabic(index + 1)}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -311,7 +329,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{guarantor.homePhoneNumber}</td>
+                                                        <td>{`${guarantor.homePhoneNumber? guarantor.homePhoneNumber: ''} ${guarantor.mobilePhoneNumber? ` - ${guarantor.mobilePhoneNumber}`: ''}`}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{guarantor.homePostalCode}</td>
                                                     </tr>
@@ -352,7 +370,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{member.homePhoneNumber}</td>
+                                                        <td>{member.homePhoneNumber + member.mobilePhoneNumber ? ` - ${member.mobilePhoneNumber}` : ''}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{member.homePostalCode}</td>
                                                     </tr>
@@ -370,7 +388,7 @@ const LoanApplicationDetails = (props) => {
                     </table>
                 </div>
             )
-        })
+        }): <h1 style={{textAlign: 'right'}}>هذا العميل ليس لديه قروض </h1>
     )
 }
 

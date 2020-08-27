@@ -1,6 +1,7 @@
 import React from "react";
 import "./crossedOutLoansList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
+import { timeToDateyyymmdd } from "../../../Services/utils";
 
 const CrossedOutLoansList = (props) => {
   const data = props.data.data;
@@ -9,8 +10,8 @@ const CrossedOutLoansList = (props) => {
   const totalTransactionAmount = Number(data.transactionAmount);
   const totalTransactionInterest = Number(data.transactionInterest);
   const totalTransactionPrincipal = Number(data.transactionPrincipal);
-  const startDate = props.data.req.startDate;
-  const endDate = props.data.req.endDate;
+  const startDate = timeToDateyyymmdd(props.data.startDate);
+  const endDate = timeToDateyyymmdd(props.data.endDate);
 
   const getStatus = (value) => {
     switch (value) {
@@ -45,35 +46,6 @@ const CrossedOutLoansList = (props) => {
         ))}
 
         <tr style={{ height: "1em" }}></tr>
-
-        <tbody className="tbodyborder">
-          <tr>
-            <td></td>
-            <td className="gray horizontal-line" colSpan={2}>
-              إجمالي تاريخ الحركه
-            </td>
-            <td className="gray horizontal-line">
-              {day.truthDate.substring(0, 10)}
-            </td>
-            <td></td>
-            <td className="horizontal-line">إجمالي عدد الحركات</td>
-            <td className="horizontal-line">{day.numTrx}</td>
-            <td></td>
-            <td className="horizontal-line">إجمالي المبلغ</td>
-            <td className="horizontal-line">{day.transactionAmount}</td>
-          </tr>
-
-          <tr>
-            <td colSpan={8}></td>
-            <td className="horizontal-line">القيمة الملغاه</td>
-            <td className="horizontal-line">0.00</td>
-          </tr>
-          <tr>
-            <td colSpan={8}></td>
-            <td className="horizontal-line">القيمة المسدده</td>
-            <td className="horizontal-line">{day.transactionAmount}</td>
-          </tr>
-        </tbody>
 
         <tbody className="tbodyborder">
           <tr>
@@ -131,6 +103,8 @@ const CrossedOutLoansList = (props) => {
             <td>{row.loanPrincipal}</td>
             <td>{row.issueDate}</td>
             <td>{getStatus(row.loanStatus)}</td>
+            <td></td>
+            <td></td>
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
             <td>{row.transactionAmount}</td>
@@ -152,7 +126,7 @@ const CrossedOutLoansList = (props) => {
           <td className="frame" colSpan={1}>
             {branch.truthDate.substring(0, 10)}
           </td>
-          <td className="frame">1</td>
+        <td className="frame">{branch.numTrx}</td>
           <td></td>
           <td className="frame">إجمالي المبلغ</td>
           <td className="frame">{branch.transactionPrincipal}</td>
@@ -221,8 +195,10 @@ const CrossedOutLoansList = (props) => {
             <th>قيمة</th>
             <th>تاريخ القرض</th>
             <th style={{ width: "10%" }}>الحالة الان</th>
+            <th></th>
+            <th></th>
             <th>أصل</th>
-            <th>قيمة الحركة مصاريف</th>
+            <th>قيمة الحركة فائدة</th>
             <th>إجمالي</th>
           </tr>
           <tr>
