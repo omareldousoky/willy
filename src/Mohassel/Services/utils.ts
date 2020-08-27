@@ -285,6 +285,18 @@ export const getStatus = (installment) => {
       default: return '';
   }
 }
+export const getInstallmentStatus = (status: string) => {
+  switch (status) {
+      case 'unpaid': return local.unpaid;
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
 export const getLoanStatus = (status: string) => {
   switch (status) {
       case 'pending': return local.pending;

@@ -56,7 +56,7 @@ export const BranchesDropDown = props => {
   const getBranches = async searchKeyWord => {
     const res = await searchBranches({
       from: 0,
-      size: 100,
+      size: 1000,
       name: searchKeyWord
     });
     if (res.status === "success") {

@@ -43,6 +43,7 @@ import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
 import { doubtLoan } from '../../Services/APIs/Loan/doubtLoan';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import RandomPaymentReceipt from '../pdfTemplates/randomPaymentReceipt/randomPaymentReceipt';
+import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -62,6 +63,7 @@ interface State {
     branchDetails: any;
     receiptData: any;
     iscores: any;
+    penalty: number;
 }
 
 interface Props {
@@ -85,7 +87,8 @@ class LoanProfile extends Component<Props, State>{
             manualPaymentEditId: '',
             branchDetails: {},
             receiptData: {},
-            iscores: []
+            iscores: [],
+            penalty:  0
         };
     }
     componentDidMount() {
@@ -216,6 +219,16 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ branchDetails: res.body.data })
         } else console.log('error getting branch details')
     }
+    async calculatePenalties() {
+        this.setState({ loading: true });
+        const res = await calculatePenalties({
+          id: this.state.application._id,
+          truthDate: new Date().getTime()
+        });
+        if (res.body) {
+          this.setState({ penalty: res.body.penalty, loading: false });
+        } else this.setState({ loading: false });
+      }
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
@@ -233,7 +246,7 @@ class LoanProfile extends Component<Props, State>{
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)} 
                     paymentType={"normal"} />
             case 'customerCard':
-                return <CustomerCardView application={this.state.application} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
+                return <CustomerCardView application={this.state.application} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
             case 'loanRescheduling':
                 return <Rescheduling application={this.state.application} test={false} />
             case 'loanReschedulingTest':
@@ -523,7 +536,9 @@ class LoanProfile extends Component<Props, State>{
                                 header={'here'}
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
-                                selectTab={(index: string) => this.setState({ activeTab: index },()=> this.props.changePaymentState(0))}
+                                selectTab={(index: string) => this.setState({ activeTab: index },()=> {
+                                    if(index === 'customerCard') this.calculatePenalties();
+                                    this.props.changePaymentState(0)})}
                             />
                             <div style={{ padding: 20, marginTop: 15 }}>
                                 {this.renderContent()}
@@ -534,7 +549,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
-                        <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />
+                        <CustomerCardPDF data={this.state.application} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <TotalWrittenChecksPDF data={this.state.application} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />
@@ -543,7 +558,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application}/>}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application}/>}

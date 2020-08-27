@@ -32,7 +32,7 @@ const LoanApplicationDetails = (props) => {
         }
     }
     return (
-        props.data.loans.map((loan, index) => {
+        props.data.loans? props.data.loans.map((loan, index) => {
             return (
                 <div className="loan-application-details" lang="ar" key={index}>
                     <table className="report-container">
@@ -257,16 +257,16 @@ const LoanApplicationDetails = (props) => {
                                 <td>{loan.periodLength} {periodType(loan.periodType)}</td>
                                 <th>حساب السداد</th>
                                 <td></td>
-                                <th>مصاريف إداريه القسط</th>
+                                <th>فائدة إداريه القسط</th>
                                 <td>{loan.adminFees}</td>
                             </tr>
 
 
                             <tr>
-                                <th>الفايده الموزعه</th>
+                                <th>الفائدة الموزعه</th>
                                 <td>{loan.productInterest}% {interestPeriod(loan.interestPeriod)}</td>
-                                <th>الفايده المقدمه</th>
-                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفايده الموزعه</td>
+                                <th>الفائدة المقدمه</th>
+                                <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
                             </tr>
 
                             <tr>
@@ -388,7 +388,7 @@ const LoanApplicationDetails = (props) => {
                     </table>
                 </div>
             )
-        })
+        }): <h1 style={{textAlign: 'right'}}>هذا العميل ليس لديه قروض </h1>
     )
 }
 
