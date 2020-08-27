@@ -81,7 +81,6 @@ const CustomerProfile = (props: Props) => {
     changeLoading(true);
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
-      changeCustomerDetails(res.body);
       await changeCustomerDetails(res.body.nationalId);
       await getCachediScores(res.body)    
       await getGuaranteeedLoans(res.body); 
