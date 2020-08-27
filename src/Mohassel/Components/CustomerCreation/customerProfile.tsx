@@ -82,11 +82,10 @@ const CustomerProfile = (props: Props) => {
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
       await changeCustomerDetails(res.body);
-      await getCachediScores(res.body.nationalId)    
+      await getCachediScores(res.body.nationalId);
       await getGuaranteeedLoans(res.body); 
     } else {
       changeLoading(false);
-      console.log("failed to get customer data")
     }
   }
 
