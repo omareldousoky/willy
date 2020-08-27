@@ -13,7 +13,7 @@ const CollectionStatement = (props) => {
     if (value.includes(".")) {
       const splitted = value.split(".", 2);
       splitted[1] = splitted[1].substring(0, 2);
-      return splitted.join("");
+      return splitted.join(".");
     } else {
       return value;
     }
