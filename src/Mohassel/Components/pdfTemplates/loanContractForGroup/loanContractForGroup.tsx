@@ -148,7 +148,7 @@ const LoanContractForGroup = (props) => {
                 <section>
                   <div className="title">البند الثاني</div>
                   <div>
-                    يقر أفراد الطرف الثاني (المقترضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
+                    يقر أفراد الطرف الثاني (المقترضين) باستلامهم من الطرف الاول (المقرض) مبلغ وقدره {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} نقداً موزع بينهم على النحو التالي:
                   </div>
                   <table className="stakeholders">
                     <tbody>
@@ -188,13 +188,13 @@ const LoanContractForGroup = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
+                  البالغة {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه بواقع {numbersToArabic(props.data.applicationFeesRequired / props.data.group.individualsInGroup.length)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} ، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} ، يتم
                   سداده
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
-                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} = (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} جنيه فقط لا غير، تبدأ في
+                  قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه = (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} جنيه فقط لا غير، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
                   {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن
                     {props.branchDetails.address} أو
@@ -204,7 +204,7 @@ const LoanContractForGroup = (props) => {
 
                 <section>
                   <div className="title">البند الرابع</div>
-                  <div>يقر افراد الطرف الثاني متضامنين فيما بينهم بسداد كافة المبالغ الوارده
+                  <div>يقر افراد الطرف الثاني بأنهم ضامنين متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
                   للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
 							</div>
@@ -212,7 +212,7 @@ const LoanContractForGroup = (props) => {
 
                 <section>
                   <div className="title">البند الخامس</div>
-                  <div>يلتزم افراد الطرف الثاني متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                  <div>يلتزم افراد الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
                   من هذا العقد وفي حالة تأخير أي منهم في سداد قيمه أي قسط في تاريخ استحقاقه تلتزم الأعضاء بسداد
@@ -240,7 +240,7 @@ const LoanContractForGroup = (props) => {
                   <div className="title">البند السابع</div>
                   <div>في حالة عدم التزام ايا من المقترضين بأي من التزاماته التعاقديه او القانونيه
                   الوارده بهذا العقد
-                  وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد جميع افراد الطرف الثانى ضامنين متضامنين
+                  وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد جميع افراد الطرف الثانى ضامنين مخفقين
                   في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة افراد الطرف
@@ -278,7 +278,7 @@ const LoanContractForGroup = (props) => {
                 <section>
                   <div className="title">البند التاسع</div>
                   <div>تسري أحكام القانون رقم ١٤١ لسنة ٢٠١٤ بشأن تمويل منتناهي الصغر و لائحته التنفيذية وتعديلاته (إن وجد) على هذا العقد وتعتبر مكمله له وتختص المحاكم الإقتصادية بالفصل في أي نزاع قد ينشأ بخصوص تفسير أو تنفيذ أي بند من بنود هذا العقد
-                  كما تطبق أحكام القوانين السارية بجمهرية مصر العربية في حالة خلو القانون المشار إليه من تنظيم النزاع المطروح على المحكمة
+                  كما تطبق أحكام القوانين السارية بجمهورية مصر العربية في حالة خلو القانون المشار إليه من تنظيم النزاع المطروح على المحكمة
                   </div>
                 </section>
 
@@ -292,7 +292,7 @@ const LoanContractForGroup = (props) => {
 
                 <section>
                   <div className="title">البند الحادي عشر</div>
-                  <div>اتخد كل أطراف العنوان المبين قرين كل منهما يصدر هذا العقد محلاً مختار له وفي حالة تغير أياً منهم لعنوانه يلتزم بأخطار الطرف الاخر بموجب الخطاب المسجل بعلم الوصول وإلا اعتبر إعلانه على العنوان الاول صحيحاً ونافذاً ومنتجاً لكافة اثاره القانونية.</div>
+                  <div>اتخد كل طرف العنوان المبين قرين كل منهما يصدر هذا العقد محلاً مختار له وفي حالة تغيير أياً منهم لعنوانه يلتزم بأخطار الطرف الاخر بموجب الخطاب مسجل بعلم الوصول وإلا اعتبر إعلانه على العنوان الاول صحيحاً ونافذاً ومنتجاً لكافة اثاره القانونية.</div>
                 </section>
 
                 <table className="signature_space">
@@ -309,14 +309,14 @@ const LoanContractForGroup = (props) => {
                       </td>
                       <td></td>
                       <td></td>
-                      {props.data.group.individualsInGroup.map((individualInGroup, index) => {
-                        return (
+                    {props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                      return (
                           <td key={index}>
                             <div><b>الأسم: {individualInGroup.customer.customerName}</b></div>
                             <div><b>التوقيع:</b></div>
                           </td>
-                        )
-                      })}
+                      )
+                    })}
                     </tr>
 
                   </tbody>
@@ -343,7 +343,7 @@ const LoanContractForGroup = (props) => {
                   ونقر بأن الغرض من التمويل هو تطوير وزيادة رأس مال النشاط، و اننا غير متضررين من الظروف الحالية والتي لها تأثير عام على جميع الأنشطة الإقتصادية والمشروعات وقد ينتج عن هذه الأحداث ركود في حركات البيع و الشراء
               </div>
                 <div>
-                  لذا و بناءً على رغبتنا جميعاً نرفض عمل أي جدولة للتمويل أو التأجيل للاقساط أو الحصول على فترة سماح لأي اقساط مستحقة طوال فترة التمويل وبأننا ملتزمون جميعاً بسداد الأقساط طبقاً لجدول المسلم لي من الشركة
+                  لذا و بناءً على رغبتنا جميعاً نرفض عمل أي جدولة للتمويل أو تأجيل للاقساط أو الحصول على فترة سماح لأي اقساط مستحقة طوال فترة التمويل وبأننا ملتزمون جميعاً بسداد الأقساط طبقاً لجدول الأقساط المسلم لي من الشركة
               </div>
                 <div>تحريرا في {timeToArabicDate(0, false)}</div>
 
