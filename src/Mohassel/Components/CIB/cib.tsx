@@ -150,8 +150,8 @@ class CIB extends Component<Props, State> {
     const res = await cibReport({ startDate: new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf(), endDate: new Date(values.toDate).setHours(23, 59, 59, 59).valueOf() })
     if (res.status === "success") {
       this.setState({
-        data: res.body.loans,
-        filteredData: res.body.loans,
+        data: res.body.loans ? res.body.loans : [],
+        filteredData: res.body.loans ? res.body.loans : [],
         loading: false,
       })
     } else {
