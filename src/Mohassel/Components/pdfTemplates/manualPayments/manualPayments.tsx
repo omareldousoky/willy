@@ -1,6 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
+import { timeToDateyyymmdd, timeToArabicDate } from '../../../Services/utils'
 
 interface Props {
     result: {
@@ -40,7 +41,8 @@ interface Props {
         transactionPrincipal: string;
         transactionInterest: string;
     };
-
+  fromDate: string;
+  toDate: string;
 }
 const ManualPayments = (props: Props) => {
     return (
@@ -67,10 +69,10 @@ const ManualPayments = (props: Props) => {
                                             <thead>
                                                 <tr className="headtitle">
                                                     <th colSpan={4}>اسيوط ابوتيج</th>
-                                                    <th colSpan={6}>تاريخ الحركه من 1900/01/01 الي 2020/07/02</th>
+                                                    <th colSpan={6}>تاريخ الحركه من {timeToDateyyymmdd(new Date(props.fromDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.toDate).valueOf())}</th>
                                                 </tr>
                                                 <tr className="headtitle">
-                                                    <th colSpan={4}>12:17:26 &emsp; 2020/07/05</th>
+                                                    <th colSpan={4}>{timeToArabicDate(0, true)}</th>
                                                     <th colSpan={6}>جنيه مصري</th>
                                                 </tr>
                                             </thead>
@@ -103,7 +105,7 @@ const ManualPayments = (props: Props) => {
                                                         <tbody>
                                                             <tr>
                                                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                                                                <th className="gray frame" colSpan={2}>2020/07/02</th>
+                                                                <th className="gray frame" colSpan={2}>{row.truthDate}</th>
                                                             </tr>
                                                             <tr>
                                                                 <td></td>
