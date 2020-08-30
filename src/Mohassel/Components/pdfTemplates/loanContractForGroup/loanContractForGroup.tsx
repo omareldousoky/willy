@@ -304,20 +304,22 @@ const LoanContractForGroup = (props) => {
                         <div><b>الأسم:</b></div>
                         <div><b>التوقيع:</b></div>
                       </td>
+                    </tr>
+                    <tr>
                       <td>
                         <div><b>افراد الطرف الثاني</b></div>
                       </td>
-                      <td></td>
-                      <td></td>
+                    </tr>
                     {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                       return (
-                          <td key={index}>
+                        <tr key={index}>
+                          <td >
                             <div><b>الأسم: {individualInGroup.customer.customerName}</b></div>
                             <div><b>التوقيع:</b></div>
                           </td>
+                        </tr>
                       )
                     })}
-                    </tr>
 
                   </tbody>
                 </table>
@@ -394,7 +396,7 @@ const LoanContractForGroup = (props) => {
                 <div>الاسم <div style={{ display: 'inline-block', width: '150px' }}></div> الموظف بشركة تساهيل للتمويل
 							المتناهي الصغر فرع:{props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate}</div>
                 <div>بوظيفة</div>
-                <div>بأن توقيع كل من عضو من اعضاء المجموعة المدرجين بالجدول تم امامي وان جميع بيانات ايصالات
+                <div>بأن توقيع كل من عضوة من اعضاء المجموعة المدرجين بالجدول تم امامي وان جميع بيانات ايصالات
                 الامانه الخاصه بهم صحيحة
                 وتحت مسئوليتي وانني قمت بمطابقة اصول بطاقات الرقم القومي لجميع اعضاء المجموعه مع الصور
                 المرفقه بطلب التمويل
