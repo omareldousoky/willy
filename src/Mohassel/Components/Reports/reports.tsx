@@ -28,6 +28,7 @@ import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplica
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import Can from '../../config/Can';
+import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 
 export interface PDF {
   key?: string;
@@ -67,6 +68,7 @@ class Reports extends Component<{}, State> {
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'], permission: 'installments' },
         {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches'], permission: 'randomPayments' },
         {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
+        {key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo'], permission: 'installments'}
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -97,6 +99,7 @@ class Reports extends Component<{}, State> {
       case 'paymentsDoneList': return this.getInstallments(values);
       case 'randomPayments': return this.getRandomPayments(values);
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
+      case 'manualPayments': return this.getManualPayments();
       default: return null;
     }
   }
@@ -402,6 +405,12 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getManualPayments() {
+    this.setState({
+      showModal: false,
+      print: 'manualPayments',
+    })
+  }
   render() {
     return (
       <>
@@ -445,6 +454,13 @@ class Reports extends Component<{}, State> {
         {this.state.print === "CrossedOutLoans" && <CrossedOutLoansList data={this.state.data} />}
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} startDate={this.state.fromDate} endDate={this.state.toDate} />}
+        {this.state.print === "manualPayments" && <ManualPayments result={{
+          days: [{
+            branches: [{
+              
+            }]
+          }]
+        }} />}
 
       </>
     )
