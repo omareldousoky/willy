@@ -84,7 +84,7 @@ const payText = (textData) => {
     let totalInterest = 0;
     let totalNoOfInstallments = 0;
     textData.forEach(application => {
-        application.installmentsObject.output.forEach(installment => {
+        application.installmentsObject.output?.forEach(installment => {
             if (installment.status === "paid") {
                 totalNoOfInstallments += 1;
                 totalPrincipal += (installment.principalInstallment ? Number(installment.principalInstallment) : 0);
@@ -96,17 +96,17 @@ const payText = (textData) => {
         textData.map(application => {
             const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer;
             let final = '';
-            application.installmentsObject.output.map((installment, index) => {
+            application.installmentsObject.output?.map((installment, index) => {
                 if (installment.status === "paid") {
                     final = final + `D|${customer.key}      |I|${getYearMonthDay(application.issueDate)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|EGP|C|0||||${installment.id ? installment.id : 0}||||${getYearMonthDay(application.installmentsObject.output[(index + 1) > application.installmentsObject.output.length - 1 ? index : index + 1].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
-            application.installmentsObject.output.map((installment, index) => {
+            application.installmentsObject.output?.map((installment, index) => {
                 if (installment.status === "paid") {
                     final = final + `D|${customer.key}      |T|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.40)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id ? installment.id : 0}||||${getYearMonthDay(application.installmentsObject.output[(index + 1) > application.installmentsObject.output.length - 1 ? index : index + 1].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
             })
-            application.installmentsObject.output.map((installment, index) => {
+            application.installmentsObject.output?.map((installment, index) => {
                 if (installment.status === "paid") {
                     final = final + `D|${customer.key}      |R|${getYearMonthDay(application.issueDate)}|${installment.feesInstallment ? numTo2Decimal((Number(installment.feesInstallment) * 0.60)) : numTo2Decimal(0)}|EGP|C|0||||${installment.id ? installment.id : 0}||||${getYearMonthDay(application.installmentsObject.output[(index + 1) > application.installmentsObject.output.length - 1 ? index : index + 1].dateOfPayment)}|${application.loanApplicationKey}    |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
                 }
@@ -133,14 +133,21 @@ const trfText = (textData) => {
 }
 
 
-export const downloadTxtFile = (textData) => {
-    const filesArr: Array<TextReport> = [
-        { name: 'TDIS_CUS', func: (textData) => cusTxt(textData) },
-        { name: 'TDIS_FIN', func: (textData) => finText(textData) },
-        { name: 'TDIS_INST', func: (textData) => instText(textData) },
-        { name: 'TPAY', func: (textData) => payText(textData) },
-        // { name: 'TDIS_TRF', func: (textData) => trfText(textData) }
-    ];
+export const downloadTxtFile = (textData, tPay: boolean) => {
+    let filesArr: Array<TextReport> = [];
+    if (tPay) {
+        filesArr = [
+            { name: 'TPAY', func: (textData) => payText(textData) },
+        ];
+    } else {
+        filesArr = [
+            { name: 'TDIS_CUS', func: (textData) => cusTxt(textData) },
+            { name: 'TDIS_FIN', func: (textData) => finText(textData) },
+            { name: 'TDIS_INST', func: (textData) => instText(textData) },
+            // { name: 'TPAY', func: (textData) => payText(textData) },
+            // { name: 'TDIS_TRF', func: (textData) => trfText(textData) }
+        ];
+    }
     filesArr.forEach(item => {
         const element = document.createElement("a");
         const file = new Blob([item.func(textData)], { type: 'text/plain' });
