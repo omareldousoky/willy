@@ -12,6 +12,7 @@ import { getBranchLoanList } from '../../Services/APIs/Reports/branchLoanList';
 import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
 import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList';
 import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList';
+import DoubtfulPayments from '../pdfTemplates/doubtfulPayments/doubtfulPayments';
 import { collectionReport, penalties, writeOffs } from "../../Services/APIs/Reports";
 import { installments } from '../../Services/APIs/Reports/installments';
 import PaymentsDone from '../pdfTemplates/paymentsDone/paymentsDone';
@@ -28,6 +29,7 @@ import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplica
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import Can from '../../config/Can';
+import { doubtfulLoans } from '../../Services/APIs/Reports/doubtfulLoans';
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport';
 import { downloadTxtFile } from '../CIB/textFiles';
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
@@ -63,8 +65,9 @@ class Reports extends Component<{}, State> {
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'], permission: 'loanDetails' },
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
-        { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo','branches'], permission: 'penalties' },
+        { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo', 'branches'], permission: 'penalties' },
         { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
+        { key: 'DoubtfulLoans', local: 'قائمة حركة القروض المشكوك في سدادها', inputs: ['dateFromTo', 'branches'], permission: 'loanDoubts' },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'], permission: 'loansIssued' },
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'], permission: 'loansCreated' },
         { key: 'rescheduledLoanList', local: 'قائمة حركات جدولة القروض المنفذه', inputs: ['dateFromTo', 'branches'], permission: 'loanRescheduling' },
@@ -97,6 +100,7 @@ class Reports extends Component<{}, State> {
       case 'CollectionStatement': return this.getCollectionReport(values);
       case 'Penalties': return this.getLoanPenaltiesReport(values);
       case 'CrossedOutLoans': return this.getWriteOffsReport(values);
+      case 'DoubtfulLoans': return this.getDoubtfulLoansReport(values);
       case 'issuedLoanList': return this.getIssuedLoanList(values);
       case 'createdLoanList': return this.getCreatedLoanList(values);
       case 'rescheduledLoanList': return this.getRescheduledLoanList(values);
@@ -173,7 +177,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes("") ? [""] : branches,
-      all: branches.includes("")|| branches === [] ? "1" : "0"
+      all: branches.includes("") || branches === [] ? "1" : "0"
     }
     const res = await installments(obj);
     if (res.status === 'success') {
@@ -358,8 +362,8 @@ class Reports extends Component<{}, State> {
     const res = await penalties({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all: branches.includes("")|| branches === [] ? "1" : "0",
-      branchList:branches.includes("") ? [""] : branches,
+      all: branches.includes("") || branches === [] ? "1" : "0",
+      branchList: branches.includes("") ? [""] : branches,
     });
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {
@@ -382,14 +386,40 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
-
+  async getDoubtfulLoansReport(values) {
+    this.setState({ loading: true, showModal: false })
+    const branches = values.branches.map((branch) => branch._id)
+    const res = await doubtfulLoans({
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      all: branches.includes("") || branches === [] ? "1" : "0",
+      branchList: values.branches.filter((branch) => branch._id !== "").map((branch) => branch._id),
+    });
+    if (res.status === 'success') {
+      if (Object.keys(res.body).length === 0) {
+        this.setState({ loading: false });
+        Swal.fire("error", local.noResults)
+      } else {
+        const data = {
+          req: { startDate: values.fromDate, endDate: values.toDate },
+          data: { ...res.body }
+        }
+        this.setState({
+          data: data, showModal: false, print: 'DoubtfulLoans', loading: false
+        }, () => window.print())
+      }
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
   async getWriteOffsReport(values) {
     this.setState({ loading: true, showModal: false })
     const branches = values.branches.map((branch) => branch._id)
     const res = await writeOffs({
       startDate: values.fromDate,
       endDate: values.toDate,
-      all:  branches.includes("")|| branches === [] ? "1" : "0",
+      all: branches.includes("") || branches === [] ? "1" : "0",
       branchList: values.branches.filter((branch) => branch._id !== "").map((branch) => branch._id),
     });
     if (res.status === 'success') {
@@ -494,6 +524,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "CollectionStatement" && <CollectionStatement data={this.state.data} />}
         {this.state.print === "Penalties" && <LoanPenaltiesList data={this.state.data} />}
         {this.state.print === "CrossedOutLoans" && <CrossedOutLoansList data={this.state.data} />}
+        {this.state.print === "DoubtfulLoans" && <DoubtfulPayments data={this.state.data} />}
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result = {this.state.data.result} fromDate ={this.state.fromDate} toDate = {this.state.toDate} />}

@@ -6,7 +6,7 @@ import store from '../../../redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal(){
         let sum = 0;
-        props.data.forEach(application => sum += (application.application.principal ? application.application.principal : 0))
+        props.data.forEach(application => sum += (application.principal ? application.principal : 0))
         return sum
     }
     return (
@@ -51,15 +51,15 @@ const ReviewedApplicationsPDF = (props) => {
                         {/* <th>المبلغ بالحروف</th> */}
                     </tr>
                     {props.data.map((application, i) => <tr key={application.id}>
-                        <td>{i + 1}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.key : application.application.customer.key}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName : application.application.customer.customerName}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? ageCalculate(application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.birthDate) : ageCalculate(application.application.customer.birthDate)}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.businessSector : application.application.customer.businessSector}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : application.application.customer.representative}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.nationalId : application.application.customer.nationalId}</td>
-                        <td>{(application.application.principal) ? application.application.principal : 0}</td>
-                        <td>{application.application.product.noOfInstallments}</td>
+                        <td>{application.serialNumber}</td>
+                        <td>{application.customerKey}</td>
+                        <td>{application.customerName}</td>
+                        <td>{application.customerAge}</td>
+                        <td>{application.businessSector}</td>
+                        <td>{application.representativeName}</td>
+                        <td>{application.nationalId}</td>
+                        <td>{application.principal}</td>
+                        <td>{application.noOfInstallments}</td>
                         {/* <td>فقط عشرة آلاف جنيه لاغير</td> */}
                     </tr>)}
                 </tbody>
