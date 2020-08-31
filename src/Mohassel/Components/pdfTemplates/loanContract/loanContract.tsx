@@ -228,7 +228,7 @@ const LoanContract = (props) => {
                   البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
                   سداده
                    علي عدد {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
@@ -249,7 +249,7 @@ const LoanContract = (props) => {
 
                 <section>
                   <div className="title">البند الخامس</div>
-                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                  <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
                   من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقه يلتزموا بسداد
@@ -278,7 +278,7 @@ const LoanContract = (props) => {
                   الوارده بهذا العقد
                   وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
                   الطرفين
-                  الثاني وا{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                   الثاني و{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الطرفين
                   الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>

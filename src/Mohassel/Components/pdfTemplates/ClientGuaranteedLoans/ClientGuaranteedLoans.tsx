@@ -26,6 +26,10 @@ const ClientGuaranteedLoans = (props) => {
         return local.created;
       case "approved":
         return local.approved;
+      case "underReview":
+        return local.underReview;
+      case "reviewed":
+        return local.reviewed;
       default:
         return "";
     }
@@ -86,9 +90,9 @@ const ClientGuaranteedLoans = (props) => {
                   </td>
                   <td>{record.applicationCode}</td>
                   <td>{record.customerName}</td>
-                  <td>{getStatus(record.appStatus)}</td>
-                  <td>{record.approvalDate}</td>
-                  <td>{getStatus(record.loanStatus)}</td>
+                  <td>{record.appStatus? getStatus(record.appStatus): '-'}</td>
+                  <td>{record.approvalDate? record.approvalDate: '-'}</td>
+                  <td>{record.loanStatus? getStatus(record.loanStatus): '-'}</td>
                   <td>{record.issueDate ? record.issueDate : "-"}</td>
                 </tr>
               );
