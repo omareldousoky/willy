@@ -10,9 +10,9 @@ import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { search, searchFilters } from '../../redux/search/actions';
+import { search, searchFilters, issuedLoansSearchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
-import { parseJwt, actionsList } from '../../Services/utils';
+import { parseJwt, actionsList, timeToDateyyymmdd } from '../../Services/utils';
 import { getCookie } from '../../Services/getCookie';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
@@ -38,8 +38,10 @@ interface Props {
   hqBranchIdRequest?: string;
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
+  issuedLoansSearchFilters: any;
   search: (data) => void;
   searchFilters: (data) => void;
+  setIssuedLoansSearchFilters: (data) => void;
   setLoading: (data) => void;
 }
 interface State {
@@ -83,6 +85,7 @@ class Search extends Component<Props, State> {
     if(obj.key) obj.key = Number(obj.key);
     if(obj.code) obj.code = Number(obj.code);
     if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
+    if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
@@ -90,16 +93,19 @@ class Search extends Component<Props, State> {
     const initialState: InitialFormikState = {};
     this.props.searchKeys.forEach(searchkey => {
       switch (searchkey) {
+        case 'dateFromTo': 
+          initialState.fromDate = this.props.url === "loan" ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.fromDate) : '';
+          initialState.toDate = this.props.url === "loan" ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.toDate) : '';
         case 'keyword':
-          initialState.keyword = '';
+          initialState.keyword = this.props.url === "loan" ? this.props.issuedLoansSearchFilters[this.state.dropDownValue]: '';
         case 'governorate':
           initialState.governorate = '';
         case 'status':
-          initialState.status = '';
+          initialState.status = this.props.url === "loan" ? this.props.issuedLoansSearchFilters.status : '';
         case 'branch':
-          initialState.branchId = '';
+          initialState.branchId = this.props.url === "loan"? this.props.issuedLoansSearchFilters.branchId : '';
         case 'status-application':
-          initialState.status = '';
+          initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'doubtful':
           initialState.isDoubtful = false;
       }
@@ -270,7 +276,7 @@ class Search extends Component<Props, State> {
                 if (searchKey === 'branch' && this.viewBranchDropdown()) {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <BranchesDropDown onSelectBranch={(branch) => { formikProps.setFieldValue('branchId', branch._id) }} />
+                      <BranchesDropDown value={formikProps.values.branchId} onSelectBranch={(branch) => { formikProps.setFieldValue('branchId', branch._id) }} />
                     </Col>
                   )
                 }
@@ -321,13 +327,18 @@ class Search extends Component<Props, State> {
     );
   }
 }
-
+const mapStateToProps = (state) => {
+  return {
+    issuedLoansSearchFilters: state.issuedLoansSearchFilters
+  }
+}
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
     searchFilters: data => dispatch(searchFilters(data)),
-    setLoading: data => dispatch(loading(data))
+    setLoading: data => dispatch(loading(data)),
+    setIssuedLoansSearchFilters: data => dispatch(issuedLoansSearchFilters(data)),
   };
 };
 
-export default connect(null, addSearchToProps)(Search);
+export default connect(mapStateToProps, addSearchToProps)(Search);

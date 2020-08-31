@@ -25,6 +25,7 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  issuedLoansSearchFilters: any;
   search: (data) => void;
   setSearchFilters: (data) => void;
 };
@@ -113,7 +114,7 @@ class LoanList extends Component<Props, State> {
       searchKeys.push('doubtful')
       this.setState({searchKeys})
     }
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -182,9 +183,9 @@ class LoanList extends Component<Props, State> {
   async getLoans() {
      let query = {};
      if(this.props.fromBranch){
-       query = {...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" }
+       query = {...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort:"issueDate" }
      } else {
-      query = {...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate"}
+      query = {...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate"}
      }
     this.props.search(query);
   }
@@ -295,7 +296,8 @@ const mapStateToProps = state => {
     data: state.search.applications,
     totalCount: state.search.totalCount,
     loading: state.loading,
-    searchFilters: state.searchFilters
+    searchFilters: state.searchFilters,
+    issuedLoansSearchFilters: state.issuedLoansSearchFilters
   };
 };
 
