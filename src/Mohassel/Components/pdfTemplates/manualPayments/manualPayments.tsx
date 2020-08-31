@@ -14,7 +14,10 @@ interface Props {
                         customerKey: string;
                         customerName: string;
                         loanSerial: string;
-                        loanPrincipal: string;
+                        dateOfPayment: string;
+                        installmentStatus: string;
+                        loanApplicationKey: string;
+                        installmentValue: string;
                         issueDate: string;
                         loanStatus: string;
                         transactionPrincipal: string;
@@ -44,6 +47,21 @@ interface Props {
   fromDate: string;
   toDate: string;
 }
+const statusLocalization = (status: string) => {
+    switch (status) {
+        case 'paid':
+            return ('مدفوع');
+        case 'partiallyPaid"':
+            return ('مدفوع جزئيا');
+        case 'unpaid':
+            return ('لم يستحق');
+         case 'pending':
+             return('قيد التحقيق');
+        default:
+            return status;
+    }
+}
+
 const ManualPayments = (props: Props) => {
     return (
         <div className="manual-payments" dir="rtl" lang="ar">
@@ -105,17 +123,17 @@ const ManualPayments = (props: Props) => {
                                                         <tbody>
                                                             <tr>
                                                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                                                                <th className="gray frame" colSpan={2}>{row.truthDate}</th>
+                                                                <th className="gray frame" colSpan={2}>{row.dateOfPayment}</th>
                                                             </tr>
                                                             <tr>
+                                                                <td>{row.loanSerial}</td>
                                                                 <td></td>
-                                                                <td></td>
-                                                                <td></td>
+                                                                <td>{row.loanApplicationKey}</td>
                                                                 <td>{row.customerName}</td>
                                                                 <td></td>
-                                                                <td></td>
+                                                                <td>{row.installmentValue}</td>
                                                                 <td>{row.truthDate}</td>
-                                                                <td></td>
+                                                                <td>{statusLocalization(row.installmentStatus)}</td>
                                                                 <td></td>
                                                                 <td>{row.transactionPrincipal}</td>
                                                                 <td>{row.transactionInterest}</td>
