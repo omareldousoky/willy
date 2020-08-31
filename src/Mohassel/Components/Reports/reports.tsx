@@ -29,6 +29,7 @@ import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplica
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import Can from '../../config/Can';
+import { doubtfulLoans } from '../../Services/APIs/Reports/doubtfulLoans';
 
 export interface PDF {
   key?: string;
@@ -62,7 +63,7 @@ class Reports extends Component<{}, State> {
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
         { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo', 'branches'], permission: 'penalties' },
         { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
-        { key: 'DoubtfulLoans', local: 'قائمة حركة القروض المشكوك في سدادها', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
+        { key: 'DoubtfulLoans', local: 'قائمة حركة القروض المشكوك في سدادها', inputs: ['dateFromTo', 'branches'], permission: 'loanDoubts' },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'], permission: 'loansIssued' },
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'], permission: 'loansCreated' },
         { key: 'rescheduledLoanList', local: 'قائمة حركات جدولة القروض المنفذه', inputs: ['dateFromTo', 'branches'], permission: 'loanRescheduling' },
@@ -380,7 +381,7 @@ class Reports extends Component<{}, State> {
   async getDoubtfulLoansReport(values) {
     this.setState({ loading: true, showModal: false })
     const branches = values.branches.map((branch) => branch._id)
-    const res = await writeOffs({
+    const res = await doubtfulLoans({
       startDate: values.fromDate,
       endDate: values.toDate,
       all: branches.includes("") || branches === [] ? "1" : "0",
