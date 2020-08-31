@@ -169,7 +169,7 @@ class CIB extends Component<Props, State> {
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
       this.setState({ selectedCustomers: [], loading: false, principalSelectedSum: 0, data: [], filteredData: [] });
-      Swal.fire("", local.changeSourceFundSuccess, "success").then(() => downloadTxtFile(res.body.loans));
+      Swal.fire("", local.changeSourceFundSuccess, "success").then(() => downloadTxtFile(res.body.loans, false));
     } else this.setState({ loading: false });
   }
   getArrayOfNumbers() {
