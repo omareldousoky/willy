@@ -503,7 +503,7 @@ class Payment extends Component<Props, State>{
                         </div>
                       </Can>
                     ) : null}
-                    {this.props.paymentType === "normal" ? (
+                    {(this.props.paymentType === "normal" && !this.props.application.writeOff) ? (
                       <Can I="payEarly" a="application">
                         <div className="payment-icon">
                           <img
