@@ -11,15 +11,15 @@ const TotalWrittenChecks = (props) => {
                 <>
                     <div className="check">
                         <div>شركة تساهيل للتمويل متناهي الصغر ش. م. م.</div>
-                        <div className="title">ايصال استلام مبلغ نقدى علي سبيل الامانه</div>
+                        <div className="title">إيصال استلام مبلغ نقدى علي سبيل الامانه</div>
                         <div>استلمت انا الموقع ادناه / {props.data.customer.customerName}</div>
                         <div>بطاقه رقم قومي: {numbersToArabic(props.data.customer.nationalId)}</div>
                         <div>والمقيم في: {props.data.customer.customerHomeAddress}</div>
                         <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
-                        <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
-                        <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الأفريقي الدولي فرع مدينه نصر</div>
-                        <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائننا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
-			الفعل ولا تبرأ ذمتي الا بإستلام هذا الايصال</div>
+                        <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
+                        <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الافريقي الدولي فرع مدينه نصر</div>
+                        <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائنا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
+			الفعل ولا تبرأ ذمتي الا باستلام هذا الإيصال</div>
                         <table>
                             <tbody>
                                 <tr>
@@ -40,15 +40,15 @@ const TotalWrittenChecks = (props) => {
                         return (
                             <div className="check" key={index}>
                                 <div>شركة تساهيل للتمويل متناهي الصغر ش. م. م.</div>
-                                <div className="title">ايصال استلام مبلغ نقدى علي سبيل الامانه</div>
+                                <div className="title">إيصال استلام مبلغ نقدى علي سبيل الامانه</div>
                                 <div>استلمت انا الموقع ادناه / {guarantor.customerName}</div>
                                 <div>بطاقه رقم قومي: {numbersToArabic(guarantor.nationalId)}</div>
                                 <div>والمقيم في: {guarantor.customerHomeAddress}</div>
                                 <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
-                                <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
-                                <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الأفريقي الدولي فرع مدينه نصر</div>
-                                <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائننا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
-			الفعل ولا تبرأ ذمتي الا بإستلام هذا الايصال</div>
+                                <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
+                                <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الافريقي الدولي فرع مدينه نصر</div>
+                                <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائنا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
+			الفعل ولا تبرأ ذمتي الا باستلام هذا الإيصال</div>
                                 <table>
                                     <tbody>
                                         <tr>
@@ -73,15 +73,15 @@ const TotalWrittenChecks = (props) => {
                     return (
                         <div className="check" key={index}>
                             <div>شركة تساهيل للتمويل متناهي الصغر ش. م. م.</div>
-                            <div className="title">ايصال استلام مبلغ نقدى علي سبيل الامانه</div>
+                            <div className="title">إيصال استلام مبلغ نقدى علي سبيل الامانه</div>
                             <div>استلمت انا الموقع ادناه / {individualInGroup.customer.customerName}</div>
                             <div>بطاقه رقم قومي: {numbersToArabic(individualInGroup.customer.nationalId)}</div>
                             <div>والمقيم في: {individualInGroup.customer.customerHomeAddress}</div>
                             <div>من شركة تساهيل للتمويل متناهي الصغر &quot;تساهيل&quot;</div>
-                            <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
-                            <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الأفريقي الدولي فرع مدينه نصر</div>
-                            <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائننا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
-			الفعل ولا تبرأ ذمتي الا بإستلام هذا الايصال</div>
+                            <div>مبلغاً وقدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum)} جنيه = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} </div>
+                            <div>وذلك علي سبيل الأمانه لأقوم بسداده الي حساب رقم: ٥٢٢٩٩٤ ببنك العربي الافريقي الدولي فرع مدينه نصر</div>
+                            <div>وإذا لم اقم بسداد المبلغ المذكور أكون مبددا وخائنا للأمانه واتحمل المسئوليتين المدنيه والجنائيه عن هذا
+			الفعل ولا تبرأ ذمتي الا باستلام هذا الإيصال</div>
                             <table>
                                 <tbody>
                                     <tr>

@@ -28,6 +28,8 @@ import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplica
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import Can from '../../config/Can';
+import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport';
+import { downloadTxtFile } from '../CIB/textFiles';
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 import { getManualPayments } from '../../Services/APIs/Reports/manualPayments';
 
@@ -69,7 +71,8 @@ class Reports extends Component<{}, State> {
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'], permission: 'installments' },
         {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches'], permission: 'randomPayments' },
         {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
-        {key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo','branches'], permission: 'manualPayments'}
+        {key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen'},
+        {key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo','branches'], permission: 'manualPayments'},
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -100,6 +103,7 @@ class Reports extends Component<{}, State> {
       case 'paymentsDoneList': return this.getInstallments(values);
       case 'randomPayments': return this.getRandomPayments(values);
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
+      case 'cibPaymentReport': return this.getCibPaymentReport(values);
       case 'manualPayments': return this.getManualPayments(values);
       default: return null;
     }
@@ -404,6 +408,20 @@ class Reports extends Component<{}, State> {
     } else {
       this.setState({ loading: false });
       console.log(res)
+    }
+  }
+  async getCibPaymentReport(values) {
+    this.setState({ loading: true, showModal: false });
+    const res = await cibPaymentReport({ startDate: values.fromDate, endDate: values.toDate });
+    if (res.status === "success") {
+      if (res.body.loans.length === 0) {
+        this.setState({ loading: false }, () => Swal.fire("error", local.noResults));
+      }
+      this.setState({ loading: false });
+      downloadTxtFile(res.body.loans, true);
+    } else {
+      this.setState({ loading: false });
+      console.log(res);
     }
   }
   async getManualPayments(values) {

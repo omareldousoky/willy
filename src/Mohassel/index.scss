@@ -333,6 +333,9 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 }
 
 @media print {
+    * {
+      font-size: 14px;
+    }
 		.print-none {
 			display: none !important;
     }
