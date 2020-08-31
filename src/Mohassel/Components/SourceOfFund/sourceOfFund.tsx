@@ -106,7 +106,7 @@ class SourceOfFund extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued" });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib' });
   }
   getSourceOfFund(SourceOfFund: string) {
     switch (SourceOfFund) {
@@ -142,9 +142,9 @@ class SourceOfFund extends Component<Props, State> {
   async getLoans() {
     let query = {};
     if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", status: "issued" }
+      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", status: "issued", fundSource: 'cib' }
     } else {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued" }
+      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib' }
     }
     this.props.search(query);
   }
@@ -194,6 +194,7 @@ class SourceOfFund extends Component<Props, State> {
               from={this.state.from}
               size={this.state.size}
               status="issued"
+              fundSource="cib"
               hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               from={this.state.from}
