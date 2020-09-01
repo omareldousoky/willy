@@ -1,7 +1,7 @@
 import axios from '../axios-instance';
 interface LoanIssuanceObj {
     id: string;
-    loanIssuanceDate: number;
+    issueDate: number;
     branchManagerId?: string;
     managerVisitDate?: number;
 }

@@ -1,24 +1,39 @@
 import React from "react";
 import "./ClientGuaranteedLoans.scss";
-import * as local from '../../../../Shared/Assets/ar.json';
+import * as local from "../../../../Shared/Assets/ar.json";
+import Col from "react-bootstrap/Col";
 
 const ClientGuaranteedLoans = (props) => {
   const GuarantorName = props.data.GuarantorName;
   const data = props.data.data;
   const getStatus = (value) => {
     switch (value) {
-        case 'unpaid': return local.unpaid
-        case 'pending': return local.pending;
-        case 'paid': return local.paid;
-        case 'partiallyPaid': return local.partiallyPaid;
-        case 'rescheduled': return local.rescheduled;
-        case 'cancelled': return local.cancelled;
-        case 'issued': return local.issued;
-        case 'created': return local.created;
-        case 'approved': return local.approved;
-        default: return '';
+      case "unpaid":
+        return local.unpaid;
+      case "pending":
+        return local.pending;
+      case "paid":
+        return local.paid;
+      case "partiallyPaid":
+        return local.partiallyPaid;
+      case "rescheduled":
+        return local.rescheduled;
+      case "cancelled":
+        return local.cancelled;
+      case "issued":
+        return local.issued;
+      case "created":
+        return local.created;
+      case "approved":
+        return local.approved;
+      case "underReview":
+        return local.underReview;
+      case "reviewed":
+        return local.reviewed;
+      default:
+        return "";
     }
-  }
+  };
 
   return (
     <div className="ClientGuaranteedLoans">
@@ -65,13 +80,20 @@ const ClientGuaranteedLoans = (props) => {
               return (
                 <tr key={idx}>
                   <td className="gray frame">{GuarantorName}</td>
-                  <td>{record.customerKey}</td>
+                  <td>
+                    <Col>{record.customerKey}</Col>{" "}
+                    <Col>
+                      <small>
+                        {record.guarantorOrder == 0 ? "ضامن أول" : "ضامن ثاني"}
+                      </small>
+                    </Col>
+                  </td>
                   <td>{record.applicationCode}</td>
                   <td>{record.customerName}</td>
-                  <td>{getStatus(record.appStatus)}</td>
-                  <td>{record.approvalDate}</td>
-                  <td>{getStatus(record.loanStatus)}</td>
-                  <td>{record.issueDate}</td>
+                  <td>{record.appStatus? getStatus(record.appStatus): '-'}</td>
+                  <td>{record.approvalDate? record.approvalDate: '-'}</td>
+                  <td>{record.loanStatus? getStatus(record.loanStatus): '-'}</td>
+                  <td>{record.issueDate ? record.issueDate : "-"}</td>
                 </tr>
               );
             })}

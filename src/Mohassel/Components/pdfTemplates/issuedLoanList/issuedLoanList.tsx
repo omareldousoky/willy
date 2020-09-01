@@ -1,10 +1,10 @@
 import React from 'react';
 import './issuedLoanList.scss';
 import { englishToArabic } from '../../../Services/statusLanguage';
-import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp, timeToDateyyymmdd } from '../../../Services/utils';
 const IssuedLoanList = (props) => {
     const tempData = props.data.data;
-    const reportDate = (props.data.from === props.data.to) ? props.data.from : `من ${props.data.from} الي ${props.data.to}`;
+    const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()): `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
     return (
         <div className="issued-loan-list" lang="ar">
             <table className="report-container">
@@ -39,7 +39,7 @@ const IssuedLoanList = (props) => {
                         <th>تاريخ القرض</th>
                         <th>الحالة الان</th>
                         <th>أصل</th>
-                        <th>قيمة الحركة مصاريف</th>
+                        <th>قيمة الحركة فائدة</th>
                         <th>إجمالي</th>
                         <th>حالة الحركة</th>
                     </tr>
@@ -85,7 +85,7 @@ const IssuedLoanList = (props) => {
                                 </tbody>
                                 <tbody className="framecell">
                                     <tr>
-                                        <td colSpan={2}>إجمالي بنك / خزينه</td>
+                                        <td colSpan={2}>إجمالي فرع</td>
                                         <td colSpan={2}>{branch.branchName}</td>
                                         <td colSpan={1}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</td>
                                         <td>{branch.df.length}</td>

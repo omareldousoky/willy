@@ -38,6 +38,8 @@ import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
+import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
+import CIB from '../Components/CIB/cib';
 import Reports from '../Components/Reports/reports';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 
@@ -291,6 +293,16 @@ const appRoutes = [
         path: "/logs",
         label: local.logs,
         render: (props) => <Can I = "viewActionLogs" a = 'user' ><ActionLogs {...props} /></Can>,
+      },
+      {
+        path: "/source-of-fund",
+        label: local.changeSourceOfFund,
+        render : () => <Can I="cibScreen" a='report' ><SourceOfFund/></Can>
+      },
+      {
+        path: "/cib",
+        label: local.cib,
+        render : () => <Can I="cibScreen" a='report' ><CIB/></Can>
       }, 
       {
         path: "/reports",
