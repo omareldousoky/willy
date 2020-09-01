@@ -214,7 +214,7 @@ class TrackLoanApplications extends Component<Props, State>{
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
-        this.setState({ reviewedResults: res.body.data, loading: false }, () => { this.setState({ print: true }, () => window.print()) });
+        this.setState({ reviewedResults: res.body.result, loading: false }, () => { this.setState({ print: true }, () => window.print()) });
       }
     } else {
       this.setState({ loading: false });

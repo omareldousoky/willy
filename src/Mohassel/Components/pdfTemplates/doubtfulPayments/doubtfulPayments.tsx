@@ -4,7 +4,7 @@ import { timeToArabicDate, timeToDateyyymmdd, getTimestamp } from '../../../Serv
 import { englishToArabic } from '../../../Services/statusLanguage';
 
 const DoubtfulPayments = (props) => {
-    const tempData = props.data.data;
+    const tempData = props.data.result;
     const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()) : `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
     return (
         <div className="doubtful-payments" lang="ar">
