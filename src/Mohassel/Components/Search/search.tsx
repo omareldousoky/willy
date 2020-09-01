@@ -321,7 +321,7 @@ class Search extends Component<Props, State> {
                             name='isDoubtful'
                             data-qc='isDoubtfulCheck'
                             checked={formikProps.values.isDoubtful}
-                            onChange={formikProps.handleChange}
+                            onChange={(e) => formikProps.setFieldValue('isDoubtful', e.currentTarget.checked)}
                             label={local.doubtfulLoans}
                             disabled={formikProps.values.isWrittenOff}
                         />
@@ -338,7 +338,7 @@ class Search extends Component<Props, State> {
                             name='isWrittenOff'
                             data-qc='isWrittenOffCheck'
                             checked={formikProps.values.isWrittenOff}
-                            onChange={formikProps.handleChange}
+                            onChange={(e) => formikProps.setFieldValue('isWrittenOff', e.currentTarget.checked)}
                             label={local.writtenOffLoans}
                             disabled={formikProps.values.isDoubtful}
                         />
