@@ -36,7 +36,7 @@ interface CustomerData {
 }
 interface State {
   loanCreationDate: string;
-  loanIssuanceDate: string;
+  issueDate: string;
   managerVisitDate: string;
   customerData: CustomerData;
   id: string;
@@ -70,7 +70,7 @@ class LoanCreation extends Component<Props, State> {
       type: '',
       approvalDate: '',
       loanCreationDate: timeToDateyyymmdd(0),
-      loanIssuanceDate: timeToDateyyymmdd(0),
+      issueDate: timeToDateyyymmdd(0),
       managerVisitDate: timeToDateyyymmdd(0),
       loading: false,
       customerData: {
@@ -164,7 +164,7 @@ class LoanCreation extends Component<Props, State> {
     } else {
       const obj = {
         id: this.state.id,
-        loanIssuanceDate: new Date(values.loanIssuanceDate).valueOf()
+        issueDate: new Date(values.issueDate).valueOf()
       }
       if(this.state.application.product.branchManagerAndDate) {
         obj['branchManagerId'] = values.branchManagerId;
@@ -300,20 +300,20 @@ class LoanCreation extends Component<Props, State> {
                 </Form.Group>
                 :
                 <>
-                <Form.Group as={Row} controlId="loanIssuanceDate">
+                <Form.Group as={Row} controlId="issueDate">
                   <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.loanIssuanceDate}*`}</Form.Label>
                   <Col sm={6}>
                     <Form.Control
                       type="date"
-                      name="loanIssuanceDate"
-                      data-qc="loanIssuanceDate"
-                      value={formikProps.values.loanIssuanceDate}
+                      name="issueDate"
+                      data-qc="issueDate"
+                      value={formikProps.values.issueDate}
                       onChange={formikProps.handleChange}
                       onBlur={formikProps.handleBlur}
-                      isInvalid={Boolean(formikProps.errors.loanIssuanceDate) && Boolean(formikProps.touched.loanIssuanceDate)}
+                      isInvalid={Boolean(formikProps.errors.issueDate) && Boolean(formikProps.touched.issueDate)}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.loanIssuanceDate}
+                      {formikProps.errors.issueDate}
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>

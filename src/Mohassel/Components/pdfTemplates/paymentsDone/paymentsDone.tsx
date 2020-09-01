@@ -1,6 +1,6 @@
 import React from 'react';
 import './paymentsDone.scss';
-import { timeToArabicDate, timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate, timeToDateyyymmdd, getInstallmentStatus } from '../../../Services/utils';
 const PaymentsDone = (props) => {
     const tempData = props.data.data;
     const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()): `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
@@ -39,7 +39,7 @@ const PaymentsDone = (props) => {
                         <th style={{ width: "10%" }}>حالة القسط</th>
                         <th style={{ width: "10%" }}>مستند الحركه</th>
                         <th>أصل</th>
-                        <th>القيمه المسدده المصاريف</th>
+                        <th>القيمه المسدده الفائدة</th>
                         <th>إجمالي</th>
                         <th>حالة الحركة</th>
                     </tr>
@@ -71,7 +71,7 @@ const PaymentsDone = (props) => {
                                     <td>{transaction.totalInstallment}</td>
                                     <td></td>
                                     <td>{timeToArabicDate(new Date(transaction.dateOfPayment).valueOf(), false)}</td>
-                                    <td></td>
+                                    <td>{getInstallmentStatus(transaction.instStatus)}</td>
                                     <td></td>
                                     <td>{transaction.transactionPrincipal}</td>
                                     <td>{transaction.transactionInterest}</td>

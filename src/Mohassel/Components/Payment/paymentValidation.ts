@@ -40,16 +40,6 @@ export const paymentValidation = Yup.object().shape({
     otherwise: Yup.string()
   }),
   payerNationalId: Yup.string()
-  // .when(["payerType"], {
-  //   is: payerType => (payerType === "family" || payerType === "nonFamily"),
-  //   then: Yup.string().test(
-  //     "Wrong national Id", local.nationalIdLengthShouldBe14,
-  //     (value: any) => { return Boolean(value.length === 14) })
-  //     .test(
-  //       "Wrong national Id", local.wrongNationalId,
-  //       (value: any) => { return Boolean(getBirthdateFromNationalId(value) !== "1800-01-01") }).required(local.required),
-  //   otherwise: Yup.string()
-  // })
 });
 
 export const earlyPaymentValidation = Yup.object().shape({
@@ -79,16 +69,6 @@ export const earlyPaymentValidation = Yup.object().shape({
     otherwise: Yup.string()
   }),
   payerNationalId: Yup.string()
-  // .when(["payerType"], {
-  //   is: payerType => (payerType === "family" || payerType === "nonFamily"),
-  //   then: Yup.string().test(
-  //     "Wrong national Id", local.nationalIdLengthShouldBe14,
-  //     (value: any) => { return Boolean(value.length === 14) })
-  //     .test(
-  //       "Wrong national Id", local.wrongNationalId,
-  //       (value: any) => { return Boolean(getBirthdateFromNationalId(value) !== "1800-01-01") }).required(local.required),
-  //   otherwise: Yup.string()
-  // })
 })
 
 export const manualPaymentValidation = Yup.object().shape({
@@ -114,14 +94,4 @@ export const manualPaymentValidation = Yup.object().shape({
     otherwise: Yup.string()
   }),
   payerNationalId: Yup.string()
-  // .when(["payerType"], {
-  //   is: payerType => (payerType === "family" || payerType === "nonFamily"),
-  //   then: Yup.string().test(
-  //     "Wrong national Id", local.nationalIdLengthShouldBe14,
-  //     (value: any) => { return Boolean(value.length === 14) })
-  //     .test(
-  //       "Wrong national Id", local.wrongNationalId,
-  //       (value: any) => { return Boolean(getBirthdateFromNationalId(value) !== "1800-01-01") }).required(local.required),
-  //   otherwise: Yup.string()
-  // })
 })
