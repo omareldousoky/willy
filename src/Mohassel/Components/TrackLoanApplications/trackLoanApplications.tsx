@@ -18,6 +18,7 @@ import { getIscoreCached } from '../../Services/APIs/iScore/iScore';
 import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
 import { Score } from '../CustomerCreation/customerProfile';
+import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications';
 
 interface Product {
   productName: string;
@@ -44,6 +45,7 @@ interface State {
   size: number;
   from: number;
   branchDetails: any;
+  reviewedResults: any;
   iScoreModal: boolean;
   iScoreCustomers: any;
   loading: boolean;
@@ -67,6 +69,7 @@ class TrackLoanApplications extends Component<Props, State>{
       size: 10,
       from: 0,
       branchDetails: {},
+      reviewedResults: [],
       iScoreModal: false,
       iScoreCustomers: [],
       loading: false
@@ -141,13 +144,13 @@ class TrackLoanApplications extends Component<Props, State>{
     }
     const obj: { nationalIds: string[]; date?: Date } = {
       nationalIds: ids
-  }
-  if(["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(application.status)){
-     obj.date = (application.status === 'approved') ? application.approvalDate : 
-     (application.status === 'created') ? application.creationDate : 
-     (['issued', 'pending'].includes(application.status)) ? application.issueDate :
-     (application.status === 'rejected') ? application.rejectionDate :
-     (['paid', 'canceled'].includes(application.status)) ? application.updated.at : 0
+    }
+    if (["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(application.status)) {
+      obj.date = (application.status === 'approved') ? application.approvalDate :
+        (application.status === 'created') ? application.creationDate :
+          (['issued', 'pending'].includes(application.status)) ? application.issueDate :
+            (application.status === 'rejected') ? application.rejectionDate :
+              (['paid', 'canceled'].includes(application.status)) ? application.updated.at : 0
       // paid & canceled => updated.at, pending,issued =>issuedDate
     }
     this.setState({ loading: true });
@@ -192,20 +195,37 @@ class TrackLoanApplications extends Component<Props, State>{
       default: return null;
     }
   }
-  async getBranchData() {
-    const token = getCookie('token');
-    const details = parseJwt(token)
-    const res = await getBranch(details.branch);
+  async getBranchData(id) {
+    const res = await getBranch(id);
     if (res.status === 'success') {
-      this.setState({ branchDetails: res.body.data, print: true }, () => window.print())
+      this.setState({ branchDetails: res.body.data })
     } else console.log('error getting branch details')
   }
+  async getReviewedData() {
+    const token = getCookie('token');
+    const details = parseJwt(token)
+    if (details.branch.length > 0) {
+      this.getBranchData(details.branch)
+    }
+    this.setState({ loading: true })
+    const res = await getReviewedApplications();
+    if (res.status === 'success') {
+      if (Object.keys(res.body).length === 0) {
+        this.setState({ loading: false });
+        Swal.fire("error", local.noResults)
+      } else {
+        this.setState({ reviewedResults: res.body.result, loading: false }, () => { this.setState({ print: true }, () => window.print()) });
+      }
+    } else {
+      this.setState({ loading: false });
+      console.log('error getting branch details')
+    }
+  }
   render() {
-    const reviewedResults = (this.props.data) ? this.props.data.filter(result => result.application.status === "reviewed") : [];
     return (
       <>
         <Card className="print-none" style={{ margin: '20px 50px' }}>
-          <Loader type="fullsection" open={this.props.loading} />
+          <Loader type="fullsection" open={this.props.loading || this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -214,7 +234,7 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
               <div>
                 {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
-                <Button disabled={reviewedResults.length === 0} style={{ marginRight: 10 }} onClick={() => { this.getBranchData() }}>{local.downloadPDF}</Button>
+                <Can I="loansReviewed" a="report"><Button style={{ marginRight: 10 }} onClick={() => { this.getReviewedData() }}>{local.downloadPDF}</Button></Can>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -273,7 +293,7 @@ class TrackLoanApplications extends Component<Props, State>{
             <Button variant="secondary" onClick={() => this.setState({ iScoreModal: false, iScoreCustomers: [] })}>{local.cancel}</Button>
           </Modal.Footer>
         </Modal>
-        {this.state.print && <ReviewedApplicationsPDF data={reviewedResults} branchDetails={this.state.branchDetails} />}
+        {this.state.print && <ReviewedApplicationsPDF data={this.state.reviewedResults} branchDetails={this.state.branchDetails} />}
       </>
     )
   }

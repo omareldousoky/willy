@@ -37,6 +37,8 @@ interface Props {
   searchPlaceholder: string;
   datePlaceholder?: string;
   hqBranchIdRequest?: string;
+  status?: string;
+  fundSource?: string;
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
   search: (data) => void;
@@ -86,6 +88,8 @@ class Search extends Component<Props, State> {
     if(obj.customerKey) obj.customerKey = Number(obj.customerKey);
     if(obj.customerCode) obj.customerCode = Number(obj.customerCode);
     if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
+    if(this.props.status) obj.status = this.props.status;
+    if(this.props.fundSource) obj.fundSource = this.props.fundSource
     this.props.searchFilters(obj);
     this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }

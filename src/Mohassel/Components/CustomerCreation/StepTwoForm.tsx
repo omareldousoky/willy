@@ -302,7 +302,11 @@ export const StepTwoForm = (props: any) => {
                                 data-qc="businessSector"
                                 value={values.businessSector}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    setFieldValue('businessSector', e.currentTarget.value);
+                                    setFieldValue('businessActivity', '');
+                                    setFieldValue('businessSpeciality', '');
+                                }}
                                 isInvalid={errors.businessSector && touched.businessSector}
                                 disabled={(!allowed && props.edit)}
                             >
@@ -327,7 +331,10 @@ export const StepTwoForm = (props: any) => {
                                 value={values.businessActivity}
                                 // disabled={!values.businessSector}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    setFieldValue('businessActivity', e.currentTarget.value);
+                                    setFieldValue('businessSpeciality', '');
+                                }}
                                 isInvalid={errors.businessActivity && touched.businessActivity}
                                 disabled={!values.businessSector || (!allowed && props.edit)}
                             >

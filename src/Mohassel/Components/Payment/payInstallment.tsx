@@ -162,6 +162,7 @@ class PayInstallment extends Component<Props, State> {
               ...this.state,
               max: this.props.application.installmentsObject.totalInstallments.installmentSum,
               beneficiaryType: this.props.application.product.beneficiaryType,
+              payAmount: this.props.paymentType === "normal" ? this.getRequiredAmount() : this.state.payAmount
             }}
             onSubmit={this.props.handleSubmit}
             validationSchema={paymentValidation}

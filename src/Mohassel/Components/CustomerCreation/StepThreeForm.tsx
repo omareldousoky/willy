@@ -98,7 +98,7 @@ export const StepThreeForm = (props: any) => {
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}
                                 loadOptions={getLoanOfficers}
-                                isDisabled={(!allowed && props.edit)}
+                                isDisabled={(props.edit)}
                                 cacheOptions defaultOptions
                             />}
                         </Can>
