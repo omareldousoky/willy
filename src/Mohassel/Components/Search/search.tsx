@@ -118,7 +118,7 @@ class Search extends Component<Props, State> {
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
-          initialState.isWrittenOff = false;
+          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;;
       }
     })
     return initialState;

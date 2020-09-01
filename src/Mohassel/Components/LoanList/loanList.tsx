@@ -8,14 +8,6 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import { getIscore } from '../../Services/APIs/iScore/iScore';
-import Swal from 'sweetalert2';
-import Table from 'react-bootstrap/Table';
-import store from '../../redux/store';
-import Can from '../../config/Can';
-import ability from '../../config/ability';
 
 interface Props {
   history: Array<any>;
@@ -109,11 +101,6 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-  const searchKeys = this.state.searchKeys
-    if(ability.can('viewDoubtfulLoans','application')){
-      searchKeys.push('doubtful')
-      this.setState({searchKeys})
-    }
     this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {

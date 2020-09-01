@@ -27,7 +27,9 @@ const DynamicTable = (props: Props) => {
   const [selectedSortKey, changeSortKey] = useState('');
   const totalPages: Array<number> = [];
   useEffect(() => {
-    changePage(props.from ? props.from : 0);
+    if(props.from === 0) {
+      changePage(0);
+    }
   }, [props.from])
   for (let index = 1; index <= Math.ceil(props.totalCount / rowsPerPage); index++) {
     totalPages.push(index)
