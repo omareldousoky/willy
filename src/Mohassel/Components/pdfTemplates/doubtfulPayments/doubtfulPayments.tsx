@@ -4,7 +4,7 @@ import { timeToArabicDate, timeToDateyyymmdd, getTimestamp } from '../../../Serv
 import { englishToArabic } from '../../../Services/statusLanguage';
 
 const DoubtfulPayments = (props) => {
-    const tempData = props.data.result;
+    const tempData = props.data.data;
     const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()) : `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
     return (
         <div className="doubtful-payments" lang="ar">
@@ -50,12 +50,12 @@ const DoubtfulPayments = (props) => {
                     </tr>
                 </thead>
 
-                {tempData.result.map((day, x) =>
+                {tempData.days.map((day, x) =>
                     <React.Fragment key={x}>
                         <tbody>
                             <tr>
                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                                <th className="gray frame" colSpan={2}>{timeToArabicDate(new Date(day.day).valueOf(), false)}</th>
+                                <th className="gray frame" colSpan={2}>{timeToArabicDate(new Date(day.truthDate).valueOf(), false)}</th>
                             </tr>
                         </tbody>
                         {day.branches.map((branch, i) =>
@@ -65,8 +65,8 @@ const DoubtfulPayments = (props) => {
                                         <th className="gray frame" colSpan={2}>بنك / خرينه </th>
                                         <th className="gray frame" colSpan={2}>{branch.branchName}</th>
                                     </tr>
-                                    {branch.df.map((transaction, z) => <tr key={z}>
-                                    <td>{transaction.serialNo}</td>
+                                    {branch.rows.map((transaction, z) => <tr key={z}>
+                                        <td>{transaction.serialNo}</td>
                                         <td></td>
                                         <td>{transaction.customerKey}</td>
                                         <td>{transaction.customerName}</td>
@@ -83,16 +83,16 @@ const DoubtfulPayments = (props) => {
                                         <th colSpan={100} className="horizontal-line"></th>
                                     </tr>
                                     <tr>
-                                        <td className="frame" colSpan={2}>إجمالي بنك / خزينه</td>
-                                        <td className="frame" colSpan={2}>بنك 1 - الجيزه - الصف</td>
-                                        <td className="frame" colSpan={1}>2020/07/02</td>
-                                        <td className="frame">6</td>
+                                        <td className="frame" colSpan={2}>إجمالي فرع</td>
+                                        <td className="frame" colSpan={2}>{branch.branchName}</td>
+                                        <td className="frame" colSpan={1}>{timeToArabicDate(getTimestamp(branch.truthDate), false)}</td>
+                                        <td className="frame">{branch.numTrx}</td>
                                         <td></td>
                                         <td></td>
                                         <td className="frame">إجمالي المبلغ</td>
-                                        <td className="frame">83000.00</td>
-                                        <td className="frame">20416.00</td>
-                                        <td className="frame">103416.00</td>
+                                        <td className="frame">{branch.transactionPrincipal}</td>
+                                        <td className="frame">{branch.transactionInterest}</td>
+                                        <td className="frame">{branch.transactionAmount}</td>
                                     </tr>
 
                                     <tr>
@@ -105,9 +105,9 @@ const DoubtfulPayments = (props) => {
                                     <tr>
                                         <td colSpan={8}></td>
                                         <td className="frame">صافي المبلغ</td>
-                                        <td className="frame">83000.00</td>
-                                        <td className="frame">20416.00</td>
-                                        <td className="frame">103416.00</td>
+                                        <td className="frame">{branch.transactionPrincipal}</td>
+                                        <td className="frame">{branch.transactionInterest}</td>
+                                        <td className="frame">{branch.transactionAmount}</td>
                                     </tr>
                                     <tr>
                                         <th colSpan={100} className="horizontal-line"></th>
@@ -120,15 +120,15 @@ const DoubtfulPayments = (props) => {
                         <tbody className="tbodyborder">
                             <tr>
                                 <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
-                                <td className="gray frame">2020/06/09</td>
+                                <td className="gray frame">{timeToArabicDate(new Date(day.truthDate).valueOf(), false)}</td>
                                 <td className="frame" colSpan={2}>إجمالي عدد الحركات</td>
-                                <td className="frame">162</td>
+                                <td className="frame">{day.numTrx}</td>
                                 <td></td>
                                 <td></td>
                                 <td className="frame">إجمالي المبلغ</td>
-                                <td className="frame">829250.00</td>
-                                <td className="frame">148308.00</td>
-                                <td className="frame">977558.00</td>
+                                <td className="frame">{day.transactionPrincipal}</td>
+                                <td className="frame">{day.transactionInterest}</td>
+                                <td className="frame">{day.transactionAmount}</td>
                             </tr>
 
                             <tr>
@@ -141,9 +141,9 @@ const DoubtfulPayments = (props) => {
                             <tr>
                                 <td colSpan={8}></td>
                                 <td className="frame">صافي المبلغ</td>
-                                <td className="frame">829250.00</td>
-                                <td className="frame">148308.00</td>
-                                <td className="frame">977558.00</td>
+                                <td className="frame">{day.transactionPrincipal}</td>
+                                <td className="frame">{day.transactionInterest}</td>
+                                <td className="frame">{day.transactionAmount}</td>
                             </tr>
                         </tbody>
                     </React.Fragment>
@@ -160,9 +160,9 @@ const DoubtfulPayments = (props) => {
                         <td></td>
                         <td></td>
                         <td className="frame">إجمالي المبلغ</td>
-                        <td className="frame">{tempData.total[0]}</td>
-                        <td className="frame">{tempData.total[1]}</td>
-                        <td className="frame">{tempData.total[2]}</td>
+                        <td className="frame">{tempData.transactionPrincipal}</td>
+                        <td className="frame">{tempData.transactionInterest}</td>
+                        <td className="frame">{tempData.transactionAmount}</td>
                     </tr>
 
                     <tr>
@@ -175,9 +175,9 @@ const DoubtfulPayments = (props) => {
                     <tr>
                         <td colSpan={8}></td>
                         <td className="frame">صافي المبلغ</td>
-                        <td className="frame">{tempData.total[0]}</td>
-                        <td className="frame">{tempData.total[1]}</td>
-                        <td className="frame">{tempData.total[2]}</td>
+                        <td className="frame">{tempData.transactionPrincipal}</td>
+                        <td className="frame">{tempData.transactionInterest}</td>
+                        <td className="frame">{tempData.transactionAmount}</td>
                     </tr>
                 </tbody>
             </table>
