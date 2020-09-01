@@ -3,7 +3,7 @@ import { LoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
-import { testPostponeInstallment, postponeInstallment } from '../../Services/APIs/loanApplication/postponeInstallment';
+import { testPostponeHalfInstallment, postponeHalfInstallment } from '../../Services/APIs/loanApplication/postponeHalfInstallment';
 import { Formik } from 'formik';
 import Form from 'react-bootstrap/Form';
 import { reschedulingValidation } from './reschedulingValidations';
@@ -27,7 +27,7 @@ interface State {
     payWhere: string;
     installmentNumber: number;
 }
-class PostponeInstallments extends Component<Props, State>{
+class PostponeHalfInstallment extends Component<Props, State>{
     mappers: { title: string; key: string; render: (data: any) => any }[]
     constructor(props: Props) {
         super(props);
@@ -88,9 +88,9 @@ class PostponeInstallments extends Component<Props, State>{
             postponementInterest: values.postponementInterest,
             payWhere: values.payWhere,
             installmentNumber: Number(values.installmentNumber),
-            shiftInstallments:true
+            // shiftInstallments:true
         }
-        const res = await testPostponeInstallment(this.props.application._id, obj);
+        const res = await testPostponeHalfInstallment(this.props.application._id, obj);
         if (res.status === "success") {
             this.setState({ loading: false })
             this.setState({
@@ -115,7 +115,7 @@ class PostponeInstallments extends Component<Props, State>{
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.postponeInstallments
+            confirmButtonText: local.postponeHalfInstallment
         }).then((result) => {
             if (result.value) {
                 this.pushInstallments()
@@ -130,10 +130,10 @@ class PostponeInstallments extends Component<Props, State>{
             postponementInterest: this.state.postponementInterest,
             payWhere: this.state.payWhere,
             installmentNumber: Number(this.state.installmentNumber),
-            shiftInstallments:true
+            // shiftInstallments:true
 
         }
-        const res = await postponeInstallment(this.props.application._id, obj);
+        const res = await postponeHalfInstallment(this.props.application._id, obj);
         if (res.status === "success") {
             this.setState({ loading: false })
             Swal.fire('', 'Installment has been pushed.', 'success').then(() => window.location.reload());
@@ -292,4 +292,4 @@ class PostponeInstallments extends Component<Props, State>{
         )
     }
 }
-export default PostponeInstallments;
+export default PostponeHalfInstallment;
