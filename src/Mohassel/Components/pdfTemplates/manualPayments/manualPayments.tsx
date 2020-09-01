@@ -44,19 +44,19 @@ interface Props {
         transactionPrincipal: string;
         transactionInterest: string;
     };
-  fromDate: string;
-  toDate: string;
+    fromDate: string;
+    toDate: string;
 }
 const statusLocalization = (status: string) => {
     switch (status) {
         case 'paid':
             return ('مدفوع');
-        case 'partiallyPaid"':
+        case 'partiallyPaid':
             return ('مدفوع جزئيا');
         case 'unpaid':
             return ('لم يستحق');
-         case 'pending':
-             return('قيد التحقيق');
+        case 'pending':
+            return ('قيد التحقيق');
         default:
             return status;
     }
@@ -77,49 +77,49 @@ const ManualPayments = (props: Props) => {
                         </th>
                     </tr>
                 </thead>
+                <thead>
+                    <tr className="headtitle">
+                        <th colSpan={6}>تاريخ الحركه من {timeToDateyyymmdd(new Date(props.fromDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.toDate).valueOf())}</th>
+                    </tr>
+                    <tr className="headtitle">
+                        <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                        <th colSpan={6}>جنيه مصري</th>
+                    </tr>
+                </thead>
                 {
                     props.result.days.map((day) => {
                         return (
                             <>
+                                <tr>
+                                    <th colSpan={12} className="border"></th>
+                                </tr>
+                                <thead>
+                                    <tr>
+                                        <th>رقم مسلسل</th>
+                                        <th>كود الحركه</th>
+                                        <th>مسلسل القسط</th>
+                                        <th className="name">أسم العميل</th>
+                                        <th>مستند الضمان</th>
+                                        <th>قيمة القسط</th>
+                                        <th>تاريخ استحقاق القسط</th>
+                                        <th>حالة القسط</th>
+                                        <th>مستند الحركه</th>
+                                        <th>أصل</th>
+                                        <th>القيمه المسدده مصاريف</th>
+                                        <th>إجمالي</th>
+                                    </tr>
+                                    <tr>
+                                        <th colSpan={12} className="border"></th>
+                                    </tr>
+                                </thead>
                                 {day.branches.map((branch) => {
                                     return (
                                         <>
-                                            <thead>
-                                                <tr className="headtitle">
-                                                    <th colSpan={4}>اسيوط ابوتيج</th>
-                                                    <th colSpan={6}>تاريخ الحركه من {timeToDateyyymmdd(new Date(props.fromDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.toDate).valueOf())}</th>
-                                                </tr>
-                                                <tr className="headtitle">
-                                                    <th colSpan={4}>{timeToArabicDate(0, true)}</th>
-                                                    <th colSpan={6}>جنيه مصري</th>
-                                                </tr>
-                                            </thead>
+
                                             {branch.rows.map((row) => {
                                                 return (
                                                     <>
-                                                        <tr>
-                                                            <th colSpan={12} className="border"></th>
-                                                        </tr>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>رقم مسلسل</th>
-                                                                <th>كود الحركه</th>
-                                                                <th>مسلسل القسط</th>
-                                                                <th className="name">أسم العميل</th>
-                                                                <th>مستند الضمان</th>
-                                                                <th>قيمة القسط</th>
-                                                                <th>تاريخ استحقاق القسط</th>
-                                                                <th>حالة القسط</th>
-                                                                <th>مستند الحركه</th>
-                                                                <th>أصل</th>
-                                                                <th>القيمه المسدده مصاريف</th>
-                                                                <th>إجمالي</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th colSpan={12} className="border"></th>
-                                                            </tr>
-                                                        </thead>
-
+                                                    <tr style={{ height: "1em" }}></tr>
                                                         <tbody>
                                                             <tr>
                                                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
@@ -168,12 +168,12 @@ const ManualPayments = (props: Props) => {
                                     )
                                 })}
 
-                                <tr style={{ height: "1em;" }}></tr>
+                                <tr style={{ height: "1em" }}></tr>
 
                                 <tbody className="tbodyborder">
                                     <tr>
                                         <td className="gray frame" colSpan={2}>إجمالي تاريخ الحركه</td>
-                            <td className="gray frame">{day.truthDate}</td>
+                                        <td className="gray frame">{day.truthDate}</td>
                                         <td></td>
                                         <td className="frame">إجمالي عدد الحركات</td>
                                         <td className="frame">{day.numTrx}</td>
@@ -187,10 +187,11 @@ const ManualPayments = (props: Props) => {
 
                                 </tbody>
 
-                                <tr style={{ height: "1em;" }}></tr>
+                                <tr style={{ height: "1em" }}></tr>
                             </>
                         )
                     })}
+                <tr style={{ height: "1em" }} ></tr>
                 <tbody className="tbodyborder">
                     <tr>
                         <td className="gray frame" colSpan={2}>إجمالي بالعمله</td>
@@ -203,7 +204,7 @@ const ManualPayments = (props: Props) => {
                         <td></td>
                         <td className="frame">{props.result.transactionPrincipal}</td>
                         <td className="frame">{props.result.transactionInterest}</td>
-                <td className="frame">{props.result.transactionAmount}</td>
+                        <td className="frame">{props.result.transactionAmount}</td>
                     </tr>
 
                 </tbody>
