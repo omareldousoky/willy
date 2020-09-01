@@ -247,6 +247,7 @@ class TrackLoanApplications extends Component<Props, State>{
             url="application" 
             from={this.state.from} 
             size={this.state.size} 
+            setFrom= {(from) => this.setState({from: from})}
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             hqBranchIdRequest={this.props.branchId} />
             <DynamicTable

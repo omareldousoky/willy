@@ -228,6 +228,7 @@ class LoanList extends Component<Props, State> {
             searchKeys={this.state.searchKeys} 
             dropDownKeys={['name', 'nationalId', 'key']}
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
+            setFrom= {(from) => this.setState({from: from})}
             datePlaceholder={local.issuanceDate}
              url="loan" 
              from={this.state.from} 

@@ -109,6 +109,7 @@ class BranchesList extends Component<Props, State> {
               dropDownKeys={['name', 'code']} 
               searchPlaceholder={local.searchByBranchNameOrCode}
               url="branch"
+              setFrom= {(from) => this.setState({from: from})}
              from={this.state.from} 
              size={this.state.size} />
             {this.props.data &&

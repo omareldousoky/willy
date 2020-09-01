@@ -39,6 +39,7 @@ interface Props {
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
   issuedLoansSearchFilters: any;
+  setFrom?: (from: number) => void;
   search: (data) => void;
   searchFilters: (data) => void;
   setIssuedLoansSearchFilters: (data) => void;
@@ -82,12 +83,13 @@ class Search extends Component<Props, State> {
     if (this.props.roleId)
       obj.roleId = this.props.roleId;
     obj.from = 0;
-    if(obj.key) obj.key = Number(obj.key);
-    if(obj.code) obj.code = Number(obj.code);
+    if(obj.key) obj.key = isNaN(Number(obj.key)) ? 10 : Number(obj.key);
+    if(obj.code) obj.code = isNaN(Number(obj.code)) ? 10 : Number(obj.code);
     if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
+    this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
-    this.props.search({ ...obj, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
+    this.props.search({ ...obj, from: 0, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
   getInitialState() {
     const initialState: InitialFormikState = {};
@@ -107,7 +109,7 @@ class Search extends Component<Props, State> {
         case 'status-application':
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'doubtful':
-          initialState.isDoubtful = false;
+          initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
       }
     })
     return initialState;
