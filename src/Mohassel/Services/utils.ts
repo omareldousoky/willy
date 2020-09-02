@@ -8,9 +8,10 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp > 0)
+  if (timeStamp === 0) {
+    return new Date().toISOString().slice(0, 10)
+  } else if (timeStamp)
     return new Date(timeStamp).toISOString().slice(0, 10)
-  else return new Date().toISOString().slice(0, 10);
 }
 
 export function parseJwt(token: string) {
@@ -231,7 +232,7 @@ export const numbersToArabic = (input: number | string) => {
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp > 0)
+  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
@@ -254,4 +255,155 @@ export function arabicGender(gender: string) {
     case 'female': return local.female;
     default: return ''
   }
+}
+
+
+export const download = (url, fileName: string): void => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  a.remove();
+}
+
+export const getStatus = (installment) => {
+  const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
+  switch (installment.status) {
+      case 'unpaid':
+          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getInstallmentStatus = (status: string) => {
+  switch (status) {
+      case 'unpaid': return local.unpaid;
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getLoanStatus = (status: string) => {
+  switch (status) {
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      case 'created': return local.created;
+      case 'underReview': return local.underReview;
+      case 'reviewed': return local.reviewed;
+      case 'approved': return local.approved;
+      default: return '';
+  }
+}
+
+export const actionsList = [
+  "cancelApplication",
+  "createLoanApplication",
+  "createLoan",
+  "undoReviewLoan",
+  "issueLoan",
+  "reviewLoan",
+  "editLoanApplication",
+  "payLoanInstallment",
+  "earlyPayLoan",
+  "rejectLoan",
+  "approveLoan",
+  "splitfromGroup",
+  "rollback",
+  "traditionalRescheduling",
+  "FreeReschedule",
+  "manualPayment",
+  "editManualPayment",
+  "approveManualPayment",
+  "rejectManualPayment",
+  "payPenalties",
+  "createBranch",
+  "updateBranch",
+  "createCustomer",
+  "updateCustomer",
+  "createUser",
+  "updateUser",
+  "createRole",
+  "updateRole",
+  "createProduct",
+  "reschedule",
+  "writeOff",
+  "setDoubtfulLoan",
+  "setUnDoubtfulLoan",
+  "cancelPenalties",
+  "rollbackCreateLoan",
+  "rollbackIssueLoan",
+  "rollbackPayLoanInstallment",
+  "rollbackRejectLoan",
+  "rollbackApproveLoan",
+  "rollbackManualPayment",
+  "rollbackApproveManualPayment",
+  "rollbackRejectManualPayment",
+  "rollbackPayPenalties",
+  "rollbackReschedule",
+  "postpone",
+  "rollbackPostpone",
+  "payClearanceFees",
+  "payCollectionCommission",
+  "payLegalFees",
+  "payReissuingFees",
+  "payToktokStamp",
+  "payTricycleStamp",
+  "activateUser",
+  "deactivateUser"
+]
+
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
+export const iscoreDate = (date: any) => {
+  const iscoreDate = new Date(date);
+  const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
+    + ('0' + (iscoreDate.getMonth() + 1)).slice(-2) + '/'
+    + iscoreDate.getFullYear();
+  return iscoreDateString
+}
+
+export const getDateString = (date: any) => {
+  return (
+    new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+  )
+}
+
+export const downloadFile = (fileURL) => {
+  const link = document.createElement('a');
+  link.href = fileURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+export const getAge = (DOB) => {
+  const today = new Date();
+  const birthDate = new Date(DOB);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age = age - 1;
+  }
+
+  return age;
 }

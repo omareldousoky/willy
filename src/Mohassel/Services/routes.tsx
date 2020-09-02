@@ -37,6 +37,11 @@ import LoanRollBack from '../Components/LoanProfile/loanRollBack';
 import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
 import CustomerProfile from '../Components/CustomerCreation/customerProfile';
+import ActionLogs from '../Components/ActionLogs/action-logs';
+import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
+import CIB from '../Components/CIB/cib';
+import Reports from '../Components/Reports/reports';
+import MoveCustomers from '../Components/MoveCustomers/move-customers';
 
 const appRoutes = [
   {
@@ -70,21 +75,21 @@ const appRoutes = [
       {
         path: "/tools",
         label: local.tools,
-        render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
+        render: (props) => <Can I='documentTypes' a='config'><EncodingFiles {...props} /> </Can>,
         routes: [{
           path: "/encoding-files",
           label: local.encodingFiles,
-          render: (props) => <Can I ='documentTypes' a='config'><EncodingFiles {...props}/> </Can>,
-          routes:[
+          render: (props) => <Can I='documentTypes' a='config'><EncodingFiles {...props} /> </Can>,
+          routes: [
             {
               path: "/create-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={false} /> </Can>
+              render: (props) => <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={false} /> </Can>
             },
             {
               path: "/edit-encoding-files",
               label: local.createEncodingFiles,
-              render: (props) =>  <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
+              render: (props) => <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
             }
           ]
         }
@@ -220,7 +225,7 @@ const appRoutes = [
           {
             path: "/users",
             label: local.users,
-            render: (props) => <Can I='getUser' a='user'> <UsersList  {...props} withHeader={true}  /></Can>,
+            render: (props) => <Can I='getUser' a='user'> <UsersList  {...props} withHeader={true} /></Can>,
             routes: [
               {
                 path: "/new-user",
@@ -243,7 +248,7 @@ const appRoutes = [
           {
             path: "/branches",
             label: local.branches,
-            render: (props) => <Can I='getBranch' a='branch'> <BranchesList {...props} withHeader={true}  /> </Can>,
+            render: (props) => <Can I='getBranch' a='branch'> <BranchesList {...props} withHeader={true} /> </Can>,
             routes: [
               {
                 path: "/new-branch",
@@ -269,7 +274,7 @@ const appRoutes = [
       }, {
         path: "/loans",
         label: local.issuedLoans,
-        render: (props) => <Can I='getIssuedLoan' a='application'> <LoanList {...props} /></Can>,
+        render: (props) => <LoanList {...props} />,
         routes: [
           {
             path: "/loan-profile",
@@ -283,9 +288,35 @@ const appRoutes = [
         path: "/assign-branch-products",
         label: local.assignProductToBranch,
         render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductToBranch {...props} /> </Can>,
+      },
+      {
+        path: "/logs",
+        label: local.logs,
+        render: (props) => <Can I = "viewActionLogs" a = 'user' ><ActionLogs {...props} /></Can>,
+      },
+      {
+        path: "/source-of-fund",
+        label: local.changeSourceOfFund,
+        render : () => <Can I="cibScreen" a='report' ><SourceOfFund/></Can>
+      },
+      {
+        path: "/cib",
+        label: local.cib,
+        render : () => <Can I="cibScreen" a='report' ><CIB/></Can>
+      }, 
+      {
+        path: "/reports",
+        label: local.reports,
+        render: () => <Reports/>
+      },
+      {
+        path: "/move-customers",
+        label: local.moveCustomers,
+        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
+
       }
     ]
-  }
+  },
 ];
 
 export const routes = generateAppRoutes(appRoutes);

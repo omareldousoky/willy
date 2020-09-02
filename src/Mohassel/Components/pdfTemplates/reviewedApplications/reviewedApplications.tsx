@@ -1,12 +1,12 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate } from './../../../Services/utils';
+import { ageCalculate, timeToArabicDate } from './../../../Services/utils';
 import store from '../../../redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal(){
         let sum = 0;
-        props.data.forEach(application => sum += (application.application.principal ? application.application.principal : 0))
+        props.data.forEach(application => sum += (application.principal ? application.principal : 0))
         return sum
     }
     return (
@@ -21,7 +21,7 @@ const ReviewedApplicationsPDF = (props) => {
                         <td className="title">{props.branchDetails.name}</td>
                     </tr>
                     <tr>
-                        <td>١٦:٢٦:٠١ &emsp; ٢٠٢٠/٠٥/٠٥</td>
+                        <td>{timeToArabicDate(0,true)}</td>
                         <td></td>
                         <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                     </tr>
@@ -33,7 +33,8 @@ const ReviewedApplicationsPDF = (props) => {
             </table>
 
             <div className="title titleborder titlebackground titlestyle">
-                قرارات الموافقه على صرف التمويلات - فردى - لدفعة ( &emsp; / &emsp; / &emsp; )
+                قرارات الموافقه على صرف التمويلات 
+                {/* - فردى - لدفعة ( &emsp; / &emsp; / &emsp; ) */}
 	</div>
             <table className="tablestyle" style={{ border: "1px black solid" }}>
                 <tbody>
@@ -50,15 +51,15 @@ const ReviewedApplicationsPDF = (props) => {
                         {/* <th>المبلغ بالحروف</th> */}
                     </tr>
                     {props.data.map((application, i) => <tr key={application.id}>
-                        <td>{i + 1}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer._id : application.application.customer._id}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName : application.application.customer.customerName}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? ageCalculate(application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.birthDate) : ageCalculate(application.application.customer.birthDate)}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.businessSector : application.application.customer.businessSector}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : application.application.customer.representative}</td>
-                        <td>{(application.application.product.beneficiaryType === 'group') ? application.application.group.individualsInGroup.find(member => member.type === 'leader').customer.nationalId : application.application.customer.nationalId}</td>
-                        <td>{(application.application.principal) ? application.application.principal : 0}</td>
-                        <td>{application.application.product.noOfInstallments}</td>
+                        <td>{application.serialNumber}</td>
+                        <td>{application.customerKey}</td>
+                        <td>{application.customerName}</td>
+                        <td>{application.customerAge}</td>
+                        <td>{application.businessSector}</td>
+                        <td>{application.representativeName}</td>
+                        <td>{application.nationalId}</td>
+                        <td>{application.principal}</td>
+                        <td>{application.noOfInstallments}</td>
                         {/* <td>فقط عشرة آلاف جنيه لاغير</td> */}
                     </tr>)}
                 </tbody>

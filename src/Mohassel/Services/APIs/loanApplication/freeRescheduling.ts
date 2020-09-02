@@ -1,7 +1,7 @@
 import axios from '../axios-instance';
 
 export const testFreeRescheduling = async (applicationId: string, obj) => {
-    const url = process.env.REACT_APP_BASE_URL + `/loan/test-push-installment/${applicationId}`;
+    const url = process.env.REACT_APP_BASE_URL + `/loan/calculate-free-rescheduling/${applicationId}`;
     try {
         const res = await axios.put(url,obj);
         return { status: "success", body: res.data }
@@ -11,7 +11,7 @@ export const testFreeRescheduling = async (applicationId: string, obj) => {
     }
 }
 export const freeRescheduling = async (applicationId: string, obj) => {
-    const url = process.env.REACT_APP_BASE_URL + `/loan/push-installment/${applicationId}`;
+    const url = process.env.REACT_APP_BASE_URL + `/loan/free-rescheduling/${applicationId}`;
     try {
         const res = await axios.put(url,obj);
         return { status: "success", body: res.data }

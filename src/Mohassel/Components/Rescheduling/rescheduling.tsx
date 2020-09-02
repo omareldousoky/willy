@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import PostponeInstallments from './postponeInstallments';
 import { timeToDateyyymmdd } from '../../Services/utils';
+import TraditionalLoanRescheduling from './traditionalLoanRescheduling';
+import FreeRescheduling from './freeRescheduling';
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
+import Can from '../../config/Can';
 
 interface Props {
     test: boolean;
@@ -9,7 +13,8 @@ interface Props {
 }
 interface State {
     id: string;
-    selectedOption: string;
+    activeTab: string;
+    tabsArray: Array<Tab>;
 }
 class Rescheduling extends Component<Props, State>{
     mappers: { title: string; key: string; render: (data: any) => any }[]
@@ -17,7 +22,25 @@ class Rescheduling extends Component<Props, State>{
         super(props);
         this.state = {
             id: '',
-            selectedOption: 'postponeInstallment'
+            activeTab: '',
+            tabsArray: [{
+                header: local.postponeInstallments,
+                stringKey: 'postponeInstallment',
+                permission: 'pushInstallment',
+                permissionKey: 'application'
+            },
+            {
+                header: local.traditionalRescheduling,
+                stringKey: 'traditionalRescheduling',
+                permission: 'traditionRescheduling',
+                permissionKey: 'application'
+            },
+            {
+                header: local.freeRescheduling,
+                stringKey: 'freeRescheduling',
+                permission: 'freeRescheduling',
+                permissionKey: 'application'
+            }]
         }
         this.mappers = [
             {
@@ -54,38 +77,33 @@ class Rescheduling extends Component<Props, State>{
     }
     handleOptionChange = (changeEvent) => {
         this.setState({
-          selectedOption: changeEvent.target.value
+            activeTab: changeEvent.target.value
         });
     }
-    renderContent(){
-        switch (this.state.selectedOption){
+    renderContent() {
+        switch (this.state.activeTab) {
             case "postponeInstallment":
-                return <PostponeInstallments application={this.props.application} test={this.props.test} />
+                return <Can I={'pushInstallment'} a={'application'}><PostponeInstallments application={this.props.application} test={this.props.test} /></Can>
+            case "traditionalRescheduling":
+                return <Can I={'traditionRescheduling'} a={'application'}><TraditionalLoanRescheduling application={this.props.application} test={this.props.test} /></Can>
+            case "freeRescheduling":
+                return <Can I={'freeRescheduling'} a={'application'}><FreeRescheduling application={this.props.application} test={this.props.test} /></Can>
             default:
-                return <PostponeInstallments application={this.props.application} test={this.props.test} />
+                return null
         }
     }
     render() {
         return (
             <>
-                <div className="d-flex justify-content-center" style={{ marginBottom: 20 }}>
-                        <label className='radio-item'>
-                            <input type="radio" value="postponeInstallment" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'postponeInstallment'} />
-                            <span className="checkmark"></span>
-                            {local.postponeInstallments}
-                        </label>
-                        <label className='radio-item'>
-                            <input type="radio" value="traditionalRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'traditionalRescheduling'} disabled />
-                            <span className="checkmark"></span>
-                            {local.traditionalRescheduling}
-                        </label>
-                        <label className='radio-item'>
-                            <input type="radio" value="freeRescheduling" onChange={this.handleOptionChange} checked={this.state.selectedOption === 'freeRescheduling'} disabled />
-                            <span className="checkmark"></span>
-                            {local.freeRescheduling}
-                        </label>
-                </div>
-                {this.renderContent()}
+                 <CardNavBar
+                                header={'here'}
+                                array={this.state.tabsArray}
+                                active={this.state.activeTab}
+                                selectTab={(index: string) => this.setState({ activeTab: index })}
+                            />
+                            <div style={{ padding: 20, marginTop: 15 }}>
+                                {this.renderContent()}
+                            </div>
             </>
         )
     }

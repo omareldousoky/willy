@@ -3,6 +3,7 @@ import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
+import {searchActionLogs} from '../../Services/APIs/ActionLogs/searchActionLogs';
 
 export const search = (obj) => {
     switch (obj.url) {
@@ -70,6 +71,20 @@ export const search = (obj) => {
                     dispatch({ type: 'SET_LOADING', payload: false })
                     console.log("Error!", "Disconnected, login again", "error")
                 }
+            }
+            case ('actionLogs'): 
+            return async (dispatch) => {
+                delete obj.url;
+                dispatch({type: 'SET_LOADING', payload: true})
+                const res = await searchActionLogs(obj);
+                if (res.status === "success") {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    dispatch({ type: 'SEARCH', payload: res.body })
+                } else {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    console.log("Error!", "Disconnected, login again", "error")
+                }
+
             }
         default: return null;
     }

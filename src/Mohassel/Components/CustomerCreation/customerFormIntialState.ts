@@ -51,10 +51,14 @@ export const step2 = {
 export const step3 = {
     geographicalDistribution: '',
     representative: '',
+    newRepresentative: '',
+    representativeName: '',
     applicationDate: timeToDateyyymmdd(0),
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
     comments: '',
+    guarantorMaxLoans: 1,
+    maxLoansAllowed: 1
 };
 
 const endOfDay: Date = new Date();
@@ -116,5 +120,18 @@ export const customerCreationValidationStepThree = Yup.object().shape({
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(local.required),
     permanentEmployeeCount: Yup.string().trim(),
     partTimeEmployeeCount: Yup.string().trim(),
+    comments: Yup.string().trim().max(500, local.maxLength100)
+})
+
+export const customerCreationValidationStepThreeEdit = Yup.object().shape({
+    geographicalDistribution: Yup.string().trim().required(local.required),
+    representative: Yup.string().trim().required(local.required),
+    applicationDate: Yup.string().test(
+        "Max Date", local.dateShouldBeBeforeToday,
+        (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(local.required),
+    permanentEmployeeCount: Yup.string().trim(),
+    partTimeEmployeeCount: Yup.string().trim(),
     comments: Yup.string().trim().max(500, local.maxLength100),
+    guarantorMaxLoans: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required),
+    maxLoansAllowed: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required)
 })

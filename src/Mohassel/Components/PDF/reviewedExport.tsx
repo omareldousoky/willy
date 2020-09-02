@@ -1,5 +1,6 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { getAge } from '../../Services/utils';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -26,17 +27,6 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 export const ReviewedApplicationsDocument = (props: any) => {
-    function getAge(DOB) {
-        const today = new Date();
-        const birthDate = new Date(DOB);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age = age - 1;
-        }
-
-        return age;
-    }
 
     const result = (props.pass) ? props.pass : 'no result';
     let total = 0;
