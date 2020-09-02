@@ -100,6 +100,7 @@ class CustomersList extends Component<Props, State> {
           searchPlaceholder ={local.searchByBranchNameOrNationalIdOrCode}
           url="customer" 
           from={this.state.from} size={this.state.size}  
+          setFrom= {(from) => this.setState({from: from})}
           hqBranchIdRequest = {this.props.branchId}/>
           {this.props.data &&
             <DynamicTable
