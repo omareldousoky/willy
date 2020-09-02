@@ -89,6 +89,7 @@ interface State {
   payerName: string;
   payerId: string;
   employees: Array<Employee>;
+  randomType: string;
 }
 
 class Payment extends Component<Props, State>{
@@ -160,7 +161,8 @@ class Payment extends Component<Props, State>{
       payerNationalId: '',
       payerName: '',
       payerId: '',
-      employees: []
+      employees: [],
+      randomType: 'normal',
     }
        this.mappers = normalTableMappers;
   }
@@ -244,6 +246,7 @@ class Payment extends Component<Props, State>{
     return { total: total, installments: installments };
   }
   handleSubmit = async (values) => {
+    console.log(values);
     this.setState({ loadingFullScreen: true })
     if (this.props.paymentState === 1) {
       if (this.props.paymentType === "normal") {
@@ -286,25 +289,38 @@ class Payment extends Component<Props, State>{
           }
         }
       } else if(this.props.paymentType === "random") {
-        const data = {
-          payAmount: values.payAmount,
-          truthDate: new Date(values.truthDate).valueOf(),
-          type: values.randomPaymentType,
-          payerType: values.payerType,
-          payerId: values.payerId,
-          payerName: values.payerName,
-          payerNationalId: values.payerNationalId.toString(),
-        };
-        const res = await otherPayment({ id: this.props.applicationId, data });
-        if (res.status === "success") {
-          const resBody = res.body;
-          resBody[0].type = "randomPayment";
-          resBody[0].randomPaymentType = values.randomPaymentType;
-          this.props.setReceiptData(resBody);
-          this.props.print({print: 'randomPayment'});
-          this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
+        if(this.state.randomType === "manual") {
+          const data = {
+            payAmount: values.payAmount,
+            truthDate: new Date(values.truthDate).valueOf(),
+            type: values.randomPaymentType,
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId.toString(),
+          }
+
         } else {
-          this.setState({ loadingFullScreen: false });
+          const data = {
+            payAmount: values.payAmount,
+            truthDate: new Date(values.truthDate).valueOf(),
+            type: values.randomPaymentType,
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId.toString(),
+          };
+          const res = await otherPayment({ id: this.props.applicationId, data });
+          if (res.status === "success") {
+            const resBody = res.body;
+            resBody[0].type = "randomPayment";
+            resBody[0].randomPaymentType = values.randomPaymentType;
+            this.props.setReceiptData(resBody);
+            this.props.print({print: 'randomPayment'});
+            this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         }
       }
       else if(this.props.paymentType === "penalties") {
@@ -536,6 +552,19 @@ class Payment extends Component<Props, State>{
                             onClick={() => this.props.changePaymentState(3)}
                             variant="primary"
                           >
+                            {local.manualPayment}
+                          </Button>
+                        </div>
+                      </Can>
+                    ) : null}
+                    {this.props.paymentType === "random" ? (
+                      <Can I="payInstallment" a="application">
+                        <div className="payment-icon">
+                          <img alt="pay-installment" src={require("../../Assets/payInstallment.svg")}/>
+                          <Button 
+                            disabled={ this.props.application.status === "pending"}
+                            onClick={() => {this.props.changePaymentState(3); this.setState({randomType: 'manual'})}}
+                            variant="primary">
                             {local.manualPayment}
                           </Button>
                         </div>
