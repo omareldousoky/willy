@@ -232,7 +232,6 @@ class Payment extends Component<Props, State>{
     }
   }
   getRequiredAmount() {
-    // const todaysDate = new Date("2020-06-30").valueOf();
     const todaysDate = new Date().valueOf();
     let total = 0;
     const installments: Array<number> = [];
