@@ -120,5 +120,12 @@ export const manualPaymentValidation = Yup.object().shape({
         "Wrong national Id", local.wrongNationalId,
         (value: any) => { return Boolean(getBirthdateFromNationalId(value) !== "1800-01-01") }).required(local.required),
     otherwise: Yup.string()
-  })
+  }),
+  randomPaymentType: Yup.string().when("paymentType", {
+    is: paymentType => paymentType === "random",
+    then: Yup.string()
+      .trim()
+      .required(local.required),
+    otherwise: Yup.string()
+  }),
 })
