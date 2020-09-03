@@ -251,7 +251,6 @@ class Payment extends Component<Props, State>{
           const obj = {
             id: this.props.applicationId,
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(), 
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -269,7 +268,6 @@ class Payment extends Component<Props, State>{
           const obj = {
             id: this.props.applicationId,
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(), 
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -288,7 +286,6 @@ class Payment extends Component<Props, State>{
       } else if(this.props.paymentType === "random") {
         const data = {
           payAmount: values.payAmount,
-          truthDate: new Date(values.truthDate).valueOf(),
           type: values.randomPaymentType,
           payerType: values.payerType,
           payerId: values.payerId,
@@ -311,7 +308,6 @@ class Payment extends Component<Props, State>{
         if(this.state.penaltyAction==='pay'){
           const data = {
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(),
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -641,24 +637,6 @@ class Payment extends Component<Props, State>{
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                           {formikProps.errors.payAmount}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="truthDate">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="date"
-                          name="truthDate"
-                          data-qc="truthDate"
-                          value={formikProps.values.truthDate}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.truthDate}
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
