@@ -118,3 +118,10 @@ export interface GuaranteedLoans {
         GuarantorName: string;
 }
 
+export interface Document {
+    key: string;
+    url: string | ArrayBuffer | null;
+    valid: boolean;
+    delete?: boolean;
+    selected?: boolean;
+  }
