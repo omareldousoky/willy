@@ -14,6 +14,7 @@ import { Employee } from "./payment";
 import { manualPaymentValidation } from "./paymentValidation";
 import * as local from "../../../Shared/Assets/ar.json";
 import "./styles.scss";
+import { PendingActions } from "../../Services/interfaces";
 
 interface SelectObject {
   label: string;
@@ -43,6 +44,7 @@ interface FormValues {
   payerNationalId: string;
   payerName: string;
   payerId: string;
+  paymentType: string;
 }
 interface Member {
   customer: {
@@ -74,6 +76,8 @@ interface Props {
   truthDate: string;
   receiptNumber: string;
   setPayerType: (data) => void;
+  randomPendingActions: Array<PendingActions>;
+  formikProps: any;
 }
 class ManualPayment extends Component<Props, State> {
   constructor(props: Props) {
@@ -119,23 +123,7 @@ class ManualPayment extends Component<Props, State> {
   }
   render() {
     return (
-      <Card className="payment-menu">
-        <div className="payment-info" style={{ textAlign: 'center' }}>
-          <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
-          <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.manualPayment}</span></h6>
-        </div>
-        <div className="verticalLine"></div>
-        <div style={{ width: '100%', padding: 20 }}>
-          <Formik
-            enableReinitialize
-            initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
-            onSubmit={this.props.handleSubmit}
-            validationSchema={manualPaymentValidation}
-            validateOnBlur
-            validateOnChange
-          >
-            {(formikProps: FormikProps<FormValues>) =>
-              <Form onSubmit={formikProps.handleSubmit}>
+              <Form onSubmit={this.props.formikProps.handleSubmit}>
                 {this.props.paymentType === "random" ? (
                   <Form.Group as={Row}>
                     <Form.Group as={Col} controlId="randomPaymentType">
@@ -145,10 +133,10 @@ class ManualPayment extends Component<Props, State> {
                           as="select"
                           name="randomPaymentType"
                           data-qc="randomPaymentType"
-                          value={formikProps.values.randomPaymentType}
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.randomPaymentType) && Boolean(formikProps.touched.randomPaymentType)}
+                          value={this.props.formikProps.values.randomPaymentType}
+                          onChange={this.props.formikProps.handleChange}
+                          onBlur={this.props.formikProps.handleBlur}
+                          isInvalid={Boolean(this.props.formikProps.errors.randomPaymentType) && Boolean(this.props.formikProps.touched.randomPaymentType)}
                         >
                           <option value=""></option>
                           {this.state.randomPaymentTypes.map(
@@ -158,7 +146,7 @@ class ManualPayment extends Component<Props, State> {
                           )}
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.randomPaymentType}
+                          {this.props.formikProps.errors.randomPaymentType}
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
@@ -172,14 +160,14 @@ class ManualPayment extends Component<Props, State> {
                         type="date"
                         name="truthDate"
                         data-qc="truthDate"
-                        value={formikProps.values.truthDate}
-                        onBlur={formikProps.handleBlur}
-                        onChange={formikProps.handleChange}
-                        isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
+                        value={this.props.formikProps.values.truthDate}
+                        onBlur={this.props.formikProps.handleBlur}
+                        onChange={this.props.formikProps.handleChange}
+                        isInvalid={Boolean(this.props.formikProps.errors.truthDate) && Boolean(this.props.formikProps.touched.truthDate)}
                       >
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.truthDate}
+                        {this.props.formikProps.errors.truthDate}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -190,13 +178,13 @@ class ManualPayment extends Component<Props, State> {
                         type="date"
                         name="dueDate"
                         data-qc="dueDate"
-                        value={formikProps.values.dueDate}
+                        value={this.props.formikProps.values.dueDate}
                         disabled
-                        isInvalid={Boolean(formikProps.errors.dueDate) && Boolean(formikProps.touched.dueDate)}
+                        isInvalid={Boolean(this.props.formikProps.errors.dueDate) && Boolean(this.props.formikProps.touched.dueDate)}
                       >
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.dueDate}
+                        {this.props.formikProps.errors.dueDate}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -209,14 +197,14 @@ class ManualPayment extends Component<Props, State> {
                         type="number"
                         name="payAmount"
                         data-qc="payAmount"
-                        value={formikProps.values.payAmount?.toString()}
-                        onBlur={formikProps.handleBlur}
-                        onChange={formikProps.handleChange}
-                        isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
+                        value={this.props.formikProps.values.payAmount?.toString()}
+                        onBlur={this.props.formikProps.handleBlur}
+                        onChange={this.props.formikProps.handleChange}
+                        isInvalid={Boolean(this.props.formikProps.errors.payAmount) && Boolean(this.props.formikProps.touched.payAmount)}
                       >
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.payAmount}
+                        {this.props.formikProps.errors.payAmount}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -226,14 +214,14 @@ class ManualPayment extends Component<Props, State> {
                       <Form.Control
                         name="receiptNumber"
                         data-qc="receiptNumber"
-                        value={formikProps.values.receiptNumber}
-                        onBlur={formikProps.handleBlur}
-                        onChange={formikProps.handleChange}
-                        isInvalid={Boolean(formikProps.errors.receiptNumber) && Boolean(formikProps.touched.receiptNumber)}
+                        value={this.props.formikProps.values.receiptNumber}
+                        onBlur={this.props.formikProps.handleBlur}
+                        onChange={this.props.formikProps.handleChange}
+                        isInvalid={Boolean(this.props.formikProps.errors.receiptNumber) && Boolean(this.props.formikProps.touched.receiptNumber)}
                       >
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.receiptNumber}
+                        {this.props.formikProps.errors.receiptNumber}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
@@ -244,10 +232,10 @@ class ManualPayment extends Component<Props, State> {
                         as="select"
                         name="payerType"
                         data-qc="payerType"
-                        value={formikProps.values.payerType}
-                        onChange={formikProps.handleChange}
-                        onBlur={formikProps.handleBlur}
-                        isInvalid={Boolean(formikProps.errors.payerType) && Boolean(formikProps.touched.payerType)}
+                        value={this.props.formikProps.values.payerType}
+                        onChange={this.props.formikProps.handleChange}
+                        onBlur={this.props.formikProps.handleBlur}
+                        isInvalid={Boolean(this.props.formikProps.errors.payerType) && Boolean(this.props.formikProps.touched.payerType)}
                       >
                         <option value={''}></option>
                         <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
@@ -257,20 +245,20 @@ class ManualPayment extends Component<Props, State> {
                         <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.payerType}
+                        {this.props.formikProps.errors.payerType}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
-                  {formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
+                  {this.props.formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
                     <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
                     <Col>
                       <Form.Control
                         as="select"
                         name="payerId"
                         data-qc="payerId"
-                        onChange={formikProps.handleChange}
-                        onBlur={formikProps.handleBlur}
-                        isInvalid={Boolean(formikProps.errors.payerId) && Boolean(formikProps.touched.payerId)}
+                        onChange={this.props.formikProps.handleChange}
+                        onBlur={this.props.formikProps.handleBlur}
+                        isInvalid={Boolean(this.props.formikProps.errors.payerId) && Boolean(this.props.formikProps.touched.payerId)}
                       >
                         <option value={''}></option>
                         {this.props.application.group.individualsInGroup.map((member, index) => {
@@ -278,33 +266,32 @@ class ManualPayment extends Component<Props, State> {
                         })}
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.payerId}
+                        {this.props.formikProps.errors.payerId}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>}
-                  {console.log("Elvalues", formikProps.values, this.state)}
-                  {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
+                  {this.props.formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
                     <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
                     <Col>
                       <AsyncSelect
-                        className={formikProps.errors.payerId ? "error" : ""}
+                        className={this.props.formikProps.errors.payerId ? "error" : ""}
                         name="payerId"
                         data-qc="payerId"
-                        value={this.state.employees.find(employee => employee._id === formikProps.values.payerId)}
-                        onFocus={formikProps.handleBlur}
-                        onChange={(employee: any) => formikProps.setFieldValue("payerId", employee._id)}
+                        value={this.state.employees.find(employee => employee._id === this.props.formikProps.values.payerId)}
+                        onFocus={this.props.formikProps.handleBlur}
+                        onChange={(employee: any) => this.props.formikProps.setFieldValue("payerId", employee._id)}
                         getOptionLabel={(option) => option.name}
                         getOptionValue={(option) => option._id}
-                        loadOptions={(input) => this.getUsersByAction(input, formikProps.values)}
+                        loadOptions={(input) => this.getUsersByAction(input, this.props.formikProps.values)}
                         cacheOptions
                         defaultOptions
                       />
-                      {formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
-                        {formikProps.errors.payerId}
+                      {this.props.formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
+                        {this.props.formikProps.errors.payerId}
                       </div>}
                     </Col>
                   </Form.Group>}
-                  {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&
+                  {(this.props.formikProps.values.payerType === 'family' || this.props.formikProps.values.payerType === 'nonFamily') &&
                     <>
                       <Form.Group as={Col} md={6} controlId="whoPaid">
                         <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
@@ -312,12 +299,12 @@ class ManualPayment extends Component<Props, State> {
                           <Form.Control
                             name="payerName"
                             data-qc="payerName"
-                            value={formikProps.values.payerName.toString()}
-                            onBlur={formikProps.handleBlur}
-                            onChange={formikProps.handleChange}
-                            isInvalid={Boolean(formikProps.errors.payerName) && Boolean(formikProps.touched.payerName)} />
+                            value={this.props.formikProps.values.payerName.toString()}
+                            onBlur={this.props.formikProps.handleBlur}
+                            onChange={this.props.formikProps.handleChange}
+                            isInvalid={Boolean(this.props.formikProps.errors.payerName) && Boolean(this.props.formikProps.touched.payerName)} />
                           <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.payerName}
+                            {this.props.formikProps.errors.payerName}
                           </Form.Control.Feedback>
                         </Col>
                       </Form.Group>
@@ -329,17 +316,17 @@ class ManualPayment extends Component<Props, State> {
                             name="payerNationalId"
                             data-qc="payerNationalId"
                             maxLength={14}
-                            value={formikProps.values.payerNationalId.toString()}
-                            onBlur={formikProps.handleBlur}
+                            value={this.props.formikProps.values.payerNationalId.toString()}
+                            onBlur={this.props.formikProps.handleBlur}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                               const re = /^\d*$/;
                               if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                formikProps.setFieldValue('payerNationalId', event.currentTarget.value)
+                                this.props.formikProps.setFieldValue('payerNationalId', event.currentTarget.value)
                               }
                             }}
-                            isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
+                            isInvalid={Boolean(this.props.formikProps.errors.payerNationalId) && Boolean(this.props.formikProps.touched.payerNationalId)} />
                           <Form.Control.Feedback type="invalid">
-                            {formikProps.errors.payerNationalId}
+                            {this.props.formikProps.errors.payerNationalId}
                           </Form.Control.Feedback>
                         </Col>
                       </Form.Group>
@@ -351,10 +338,6 @@ class ManualPayment extends Component<Props, State> {
                   <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
                 </div>
               </Form>
-            }
-          </Formik>
-        </div>
-      </Card>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Swal from 'sweetalert2';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
@@ -21,6 +21,7 @@ import PaymentIcons from './paymentIcons';
 import EarlyPayment from './earlyPayment';
 import ManualPayment from './manualPayment';
 import { randomManualPayment } from '../../Services/APIs/Payment/randomManualPayment';
+import { editManualOtherPayment } from '../../Services/APIs/Payment/editManualOtherPayment';
 
 interface Installment {
   id: number;
@@ -62,6 +63,7 @@ interface Props {
   setEarlyPaymentData: (data) => void;
   manualPaymentEditId: string;
   paymentType: string;
+  randomPendingActions: Array<any>
 }
 export interface Employee {
   _id: string;
@@ -167,18 +169,7 @@ class Payment extends Component<Props, State>{
   componentDidMount() {
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
-    }
-    if(Object.keys(this.props.pendingActions).length) {
-      this.setState({
-        payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
-        payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
-        payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
-        payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
-        payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
-        receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-        truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
-      })
-    }
+    } 
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -189,6 +180,34 @@ class Payment extends Component<Props, State>{
         ) {
           this.calculatePenalties();
         }
+        if(prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
+          this.setManualPaymentValues()
+        }
+  }
+  setManualPaymentValues() {
+      const pendingAction = this.props.randomPendingActions.find(el => el._id === this.props.manualPaymentEditId);
+      if(pendingAction){
+        this.setState({
+          randomType: pendingAction.transactions[0].action,
+          payAmount: pendingAction.transactions[0].transactionAmount,
+          payerType: pendingAction.payerType,
+          payerNationalId: pendingAction.payerNationalId,
+          payerName: pendingAction.transactions[0].payerName,
+          payerId: pendingAction.transactions[0].payerId,
+          receiptNumber: pendingAction.receiptNumber,
+          truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
+        })
+      } else {
+        this.setState({
+          payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
+          payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
+          payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
+          payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
+          payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
+          receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
+          truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+        })
+      }
   }
   
   getUsersByAction = async (input: string) => {
@@ -230,7 +249,6 @@ class Payment extends Component<Props, State>{
     }
   }
   handleSubmit = async (values) => {
-    console.log(values);
     this.setState({ loadingFullScreen: true })
     if (this.props.paymentState === 1) {
       if (this.props.paymentType === "normal") {
@@ -411,15 +429,26 @@ class Payment extends Component<Props, State>{
           payerType: values.payerType,
           payerId: values.payerId,
           payerName: values.payerName,
-          payerNationalId: values.payerNationalId.toString(),
+          payerNationalId: values.payerNationalId? values.payerNationalId.toString(): '',
           type: this.props.paymentType === "random" ? values.randomPaymentType : 'penalty',
+          actionId: this.props.manualPaymentEditId? this.props.manualPaymentEditId: '',
         }
-        const res = await randomManualPayment(obj);
-        if (res.status === "success") {
-          this.setState({ loadingFullScreen: false });
-          Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
+        if (this.props.manualPaymentEditId === "") {
+          const res = await randomManualPayment(obj);
+          if (res.status === "success") {
+            this.setState({ loadingFullScreen: false });
+            Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         } else {
-          this.setState({ loadingFullScreen: false });
+          const res = await editManualOtherPayment(obj);
+          if (res.status === "success") {
+            this.setState({ loadingFullScreen: false });
+            Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         }
       }
     }
@@ -502,15 +531,37 @@ class Payment extends Component<Props, State>{
         </Card>
       )
       case 3: return (
-        <ManualPayment 
-          payAmount={this.state.payAmount}
-          truthDate={this.state.truthDate}
-          paymentType={this.props.paymentType}
-          receiptNumber={this.state.receiptNumber}
-          setPayerType={(payerType: string) => this.setState({ payerType: payerType })}
-          application={this.props.application}
-          handleSubmit={this.handleSubmit}
-        />
+        <Card className="payment-menu">
+          <div className="payment-info" style={{ textAlign: 'center' }}>
+            <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.manualPayment}</span></h6>
+          </div>
+          <div className="verticalLine"></div>
+          <div style={{ width: '100%', padding: 20 }}>
+            <Formik
+              enableReinitialize
+              initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
+              onSubmit={this.handleSubmit}
+              validationSchema={manualPaymentValidation}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) =>
+                <ManualPayment
+                  payAmount={this.state.payAmount}
+                  truthDate={this.state.truthDate}
+                  paymentType={this.props.paymentType}
+                  receiptNumber={this.state.receiptNumber}
+                  setPayerType={(payerType: string) => this.setState({ payerType: payerType })}
+                  application={this.props.application}
+                  handleSubmit={this.handleSubmit}
+                  randomPendingActions={this.props.randomPendingActions}
+                  formikProps={formikProps}
+                />
+              }
+            </Formik>
+          </div>
+        </Card>
       )
       default: return null;
     }
@@ -525,17 +576,6 @@ class Payment extends Component<Props, State>{
       this.setState({ penalty: res.body.penalty, loadingFullScreen: false });
     } else this.setState({ loadingFullScreen: false });
   }
-  getValueFromLocalizationFileByKey = (key)=>{
-    if(key==='collectionCommission') return local.collectionCommission
-    else if(key==="payReissuingFees") return local.reissuingFees
-    else if(key==="payLegalFees") return local.legalFees
-    else if(key==="payClearanceFees") return local.clearanceFees
-    else if(key==='payToktokStamp') return local.toktokStamp
-    else if(key==='payTricycleStamp') return local.tricycleStamp
-    else if(key==='payPenalties') return local.payPenalty
-    else if(key==='cancelPenalties') return local.cancelPenalty
-    else if(key==="payRandomPayment") return local.financialTransactions
- }
   render() {
     return (
       <>

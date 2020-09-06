@@ -705,5 +705,7 @@
     "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧",
     "writtenOffLoans":"قروض مشطوبة",
     "customerPartialCode":"كود العميل الجزئي",
-    "partialCode":"الكود الجزئي"
+    "partialCode":"الكود الجزئي",
+    "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق"
+
 }

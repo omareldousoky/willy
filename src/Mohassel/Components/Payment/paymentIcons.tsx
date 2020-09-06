@@ -65,7 +65,7 @@ class PaymentIcons extends Component<Props, {}> {
                 src={this.props.paymentType === "penalties" ? require("../../Assets/payPenalty.svg") : require("../../Assets/payInstallment.svg")}
               />
               <Button
-                disabled={this.props.application.status === "pending"}
+                disabled={this.props.application.status === "pending" && this.props.paymentType === "normal"}
                 onClick={() => {
                   if (this.props.paymentType === "penalties") {
                     this.setState({ penaltyAction: "pay" });
@@ -84,7 +84,6 @@ class PaymentIcons extends Component<Props, {}> {
                 <div className="payment-icon">
                   <img alt="cancel-penalty" src={require("../../Assets/cancelPenalty.svg")} />
                   <Button
-                    disabled={this.props.application.status === "pending"}
                     onClick={() => { this.setState({ penaltyAction: "cancel" }); this.props.changePaymentState(1); }}
                     variant="primary">
                     {local.cancelPenalty}
@@ -95,7 +94,6 @@ class PaymentIcons extends Component<Props, {}> {
                 <div className="payment-icon">
                   <img alt="pay-installment" src={require("../../Assets/payInstallment.svg")} />
                   <Button
-                    disabled={this.props.application.status === "pending"}
                     onClick={() => { this.props.changePaymentState(3); this.setState({ randomType: 'manual' }) }}
                     variant="primary">
                     {local.manualPayment}
@@ -137,7 +135,6 @@ class PaymentIcons extends Component<Props, {}> {
               <div className="payment-icon">
                 <img alt="pay-installment" src={require("../../Assets/payInstallment.svg")} />
                 <Button
-                  disabled={this.props.application.status === "pending"}
                   onClick={() => { this.props.changePaymentState(3); this.setState({ randomType: 'manual' }) }}
                   variant="primary">
                   {local.manualPayment}
