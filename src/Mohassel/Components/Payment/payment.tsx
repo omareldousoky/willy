@@ -170,6 +170,7 @@ class Payment extends Component<Props, State>{
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
     } 
+    this.setManualPaymentValues();
   }
 
   componentDidUpdate(prevProps, prevState) {
