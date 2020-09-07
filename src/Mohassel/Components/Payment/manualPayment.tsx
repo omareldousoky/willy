@@ -316,7 +316,7 @@ class ManualPayment extends Component<Props, State> {
                             name="payerNationalId"
                             data-qc="payerNationalId"
                             maxLength={14}
-                            value={this.props.formikProps.values.payerNationalId.toString()}
+                            value={this.props.formikProps.values.payerNationalId?.toString()}
                             onBlur={this.props.formikProps.handleBlur}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                               const re = /^\d*$/;

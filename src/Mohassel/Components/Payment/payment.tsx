@@ -89,7 +89,7 @@ interface State {
   payerName: string;
   payerId: string;
   employees: Array<Employee>;
-  randomType: string;
+  randomPaymentType: string;
 }
 
 class Payment extends Component<Props, State>{
@@ -162,7 +162,7 @@ class Payment extends Component<Props, State>{
       payerName: '',
       payerId: '',
       employees: [],
-      randomType: 'normal',
+      randomPaymentType: '',
     }
        this.mappers = normalTableMappers;
   }
@@ -189,7 +189,7 @@ class Payment extends Component<Props, State>{
       const pendingAction = this.props.randomPendingActions.find(el => el._id === this.props.manualPaymentEditId);
       if(pendingAction){
         this.setState({
-          randomType: pendingAction.transactions[0].action,
+          randomPaymentType: pendingAction.transactions[0].action,
           payAmount: pendingAction.transactions[0].transactionAmount,
           payerType: pendingAction.payerType,
           payerNationalId: pendingAction.payerNationalId,
@@ -292,18 +292,6 @@ class Payment extends Component<Props, State>{
           }
         }
       } else if(this.props.paymentType === "random") {
-        if(this.state.randomType === "manual") {
-          const data = {
-            payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(),
-            type: values.randomPaymentType,
-            payerType: values.payerType,
-            payerId: values.payerId,
-            payerName: values.payerName,
-            payerNationalId: values.payerNationalId.toString(),
-          }
-
-        } else {
           const data = {
             payAmount: values.payAmount,
             truthDate: new Date(values.truthDate).valueOf(),
@@ -324,7 +312,6 @@ class Payment extends Component<Props, State>{
           } else {
             this.setState({ loadingFullScreen: false });
           }
-        }
       }
       else if(this.props.paymentType === "penalties") {
         if(this.state.penaltyAction==='pay'){
