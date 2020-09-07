@@ -15,7 +15,7 @@ interface Member {
   customer: {
     customerName: string;
     _id: string;
-  }
+  };
 }
 interface Props {
   loading: boolean;
@@ -33,8 +33,8 @@ interface Props {
       beneficiaryType: string;
     };
     group: {
-      individualsInGroup: Array<Member>
-    }
+      individualsInGroup: Array<Member>;
+    };
   };
   changePaymentState: (data) => void;
   setPayerType: (data) => void;

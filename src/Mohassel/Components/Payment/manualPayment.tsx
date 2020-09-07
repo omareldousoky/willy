@@ -50,7 +50,7 @@ interface Member {
   customer: {
     customerName: string;
     _id: string;
-  }
+  };
 }
 interface Application {
   installmentsObject: InstallmentsObject;
@@ -58,8 +58,8 @@ interface Application {
     beneficiaryType: string;
   };
   group: {
-    individualsInGroup: Array<Member>
-  }
+    individualsInGroup: Array<Member>;
+  };
 }
 interface InstallmentsObject {
   totalInstallments: TotalInstallments;

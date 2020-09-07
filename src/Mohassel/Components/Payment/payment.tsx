@@ -63,7 +63,7 @@ interface Props {
   setEarlyPaymentData: (data) => void;
   manualPaymentEditId: string;
   paymentType: string;
-  randomPendingActions: Array<any>
+  randomPendingActions: Array<any>;
 }
 export interface Employee {
   _id: string;
