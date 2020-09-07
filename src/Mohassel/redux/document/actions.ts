@@ -13,10 +13,10 @@ import { deleteDocument as customerDeleteDocument } from '../../Services/APIs/Cu
 import { deleteDocument as applicationDeleteDocument } from '../../Services/APIs/loanApplication/deleteDocument';
 import { getCustomerDocuments } from '../../Services/APIs/Customer-Creation/getDocuments';
 import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments';
+import {Document} from '../../Services/interfaces'
 
-
-const handleDocuments = (docs, id, type) => {
-    const documents: DocumentsState[] = []
+const handleDocuments = (docs: any[], id, type) => {
+    const documents: DocumentsState = []
     docs.map((doc) => {
         documents.push({
             docType: type,
@@ -28,19 +28,19 @@ const handleDocuments = (docs, id, type) => {
     return documents;
 }
 
-export const uploadDocument = (obj) => {
-    const documentType = obj.docType
-    switch (documentType) {
+export const uploadDocument = (obj,docType) => {
+    // const documentType = obj.docType
+    switch (docType) {
         case ('customer'):
             return async (dispatch) => {
                 delete obj.docType;
                 dispatch({ type: 'SET_LOADING', payload: true });
-                const res = await customerUploadDocument(obj);;
+                const res = await customerUploadDocument(obj);
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: ADD_DOCUMENT, payload: res.body })
+                    dispatch({ type: ADD_DOCUMENT, payload:{body: res.body , status: res.status} })
                 } else {
-                    console.log("Error!");
+                    dispatch({ type: ADD_DOCUMENT, payload:{error: res.error , status: res.status} })
                 }
             }
         case ('loanApplication'):
@@ -51,9 +51,9 @@ export const uploadDocument = (obj) => {
                 const res = await applicationUploadDocument(obj);;
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: ADD_DOCUMENT, payload: res.body })
+                    dispatch({ type: ADD_DOCUMENT, payload:{body: res.body , status: res.status} })
                 } else {
-                    console.log("Error!");
+                    dispatch({ type: ADD_DOCUMENT, payload:{error: res.error , status: res.status} })
                 }
             }
 
@@ -63,10 +63,8 @@ export const uploadDocument = (obj) => {
     }
 }
 
-export const deleteDocument = (obj) => {
-
-    const documentType = obj.docType
-    switch (documentType) {
+export const deleteDocument = (obj,docType) => {
+    switch (docType) {
         case ('customer'):
             return async (dispatch) => {
                 delete obj.docType;
@@ -74,9 +72,9 @@ export const deleteDocument = (obj) => {
                 const res = await customerDeleteDocument(obj);;
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: DELETE_DOCUMENT, payload: res.body })
+                    dispatch({ type: DELETE_DOCUMENT, payload:{body:res.body ,status: res.status } })
                 } else {
-                    console.log("Error!");
+                    dispatch({ type: DELETE_DOCUMENT, payload:{error:res.error ,status: res.status } })
                 }
             }
         case ('loanApplication'):
@@ -87,9 +85,9 @@ export const deleteDocument = (obj) => {
                 const res = await applicationDeleteDocument(obj);;
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: DELETE_DOCUMENT, payload: res.body })
+                    dispatch({ type: DELETE_DOCUMENT, payload:{body:res.body ,status: res.status } })
                 } else {
-                    console.log("Error!");
+                    dispatch({ type: DELETE_DOCUMENT, payload:{error:res.error ,status: res.status } })
                 }
             }
         default:
@@ -114,7 +112,7 @@ export const getDocuments = (obj) => {
         case ('loanApplication'):
         case ('issuedLoan'):
             return async (dispatch) => {
-                delete obj.docType;
+
                 dispatch({ type: 'SET_LOADING', payload: true })
                 const res = await getApplicationDocuments(obj.applicationId);
                 dispatch({ type: 'SET_LOADING', payload: false });
@@ -144,7 +142,7 @@ export const deleteFromDocuments = (key: string, docName: string) => {
     }
 }
 
-export const InvalidDocument  = (key: string, docName: string) => {
+export const invalidDocument  = (key: string, docName: string) => {
     return {
         type: INVALID_DOCUMENT,
         key: key,

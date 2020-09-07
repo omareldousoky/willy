@@ -1,3 +1,4 @@
+
 import {
     ADD_DOCUMENT,
     DELETE_DOCUMENT,
@@ -9,7 +10,7 @@ import {
     INVALID_DOCUMENT,
     DocumentActionType,
 } from './types';
-
+import produce from 'immer';
 const initialDocState: DocumentState = {
     document: {
         key: '',
@@ -18,7 +19,7 @@ const initialDocState: DocumentState = {
         selected: false,
     }
 }
-const initialDocsState: DocumentsState[] = [];
+
 export const DocumentReducer = (state = initialDocState, action) => {
     switch (action.type) {
         case ADD_DOCUMENT:
@@ -30,45 +31,51 @@ export const DocumentReducer = (state = initialDocState, action) => {
     }
 }
 
-export const DocumentsReducer = (state = initialDocsState, action: DocumentActionType) => {
+export const DocumentsReducer = produce((draft: any[] = [], action: DocumentActionType) => {
+
     switch (action.type) {
         case GET_DOCUMENTS: {
-            return { ...state, ...action.payload };
+
+          return  draft = action.payload
+            
         }
         case ADD_TO_DOCUMENTS: {
 
-            const newState = state;
-            for (const doc of newState) {
+            for (const doc of draft) {
                 if (doc.docName === action.name) {
                     doc.imagesFiles.push(action.payload)
                     break;
                 }
             }
-
-            return newState
+            break;
         }
         case REMOVE_FROM_DOCUMENTS: {
-            const newState = state;
-            for (const doc of newState) {
-                if (doc.docName === action.name ) {
-                    doc.imagesFiles.filter(item => item.key !== action.key)
+
+            let index =-1;
+            for (const doc of draft) {
+                if (doc.docName === action.name) {
+                   index= doc.imagesFiles.findIndex(item => item.key == action.key)
+                }
+                if(index!== -1)
+                {
+                    doc.imagesFiles.splice(index,1);
                 }
             }
-            return newState;
+            break;
         }
         case INVALID_DOCUMENT: {
-            const newState = state;
-            for(const doc of newState){
-                if(doc.docName === action.name){
-                   const index = doc.imagesFiles.findIndex(image=> image.key === action.key);
-                   if(index > -1) {
-                       doc.imagesFiles[index].valid = false;
-                   }
+
+            for (const doc of draft) {
+                if (doc.docName === action.name) {
+                    const index = doc.imagesFiles.findIndex(image => image.key === action.key);
+                    if (index > -1) {
+                        doc.imagesFiles[index].valid = false;
+                    }
                 }
             }
-            return newState;
+            break;
         }
         default:
-            return state;
+            return draft;
     }
-}
+})

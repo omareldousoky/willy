@@ -5,16 +5,18 @@ export const DELETE_DOCUMENT = "DELETE_DOCUMENT";
 export const GET_DOCUMENTS = "GET_DOCUMENTS";
 export const REMOVE_FROM_DOCUMENTS = "REMOVE_FROM_DOCUMENTS";
 export const ADD_TO_DOCUMENTS = "ADD_TO_DOCUMENTS";
+export const ADD_NEW_TO_DOCUMENTS = "ADD_NEW_TO_DOCUMENT";
 export const INVALID_DOCUMENT = "INVALID_DOCUMENT";
 export interface DocumentState {
     document: Document;
 }
-export interface DocumentsState {
+ interface DocumentsType {
     imagesFiles: Document[];
     docName: string;
     docType: string;
     _id: string;
-}
+ }
+export type DocumentsState = Array<DocumentsType>;
 
 interface AddDocumentAction {
     type: typeof ADD_DOCUMENT;
