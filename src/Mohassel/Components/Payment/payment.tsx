@@ -203,6 +203,7 @@ class Payment extends Component<Props, State>{
       } else {
         const payAmount = this.props.pendingActions.transactions?.reduce((accumulator, pendingAction) => { return accumulator + pendingAction.transactionAmount }, 0)
         this.setState({
+          randomPaymentType: '',
           payAmount: payAmount ? payAmount : 0,
           payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
           payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',

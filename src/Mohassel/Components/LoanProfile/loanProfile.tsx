@@ -592,7 +592,7 @@ class LoanProfile extends Component<Props, State>{
                                 header={'here'}
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
-                                selectTab={(index: string) => this.setState({ activeTab: index },()=> {
+                                selectTab={(index: string) => this.setState({ activeTab: index, manualPaymentEditId: '' },()=> {
                                     if(index === 'customerCard') this.calculatePenalties();
                                     this.props.changePaymentState(0)})}
                             />
