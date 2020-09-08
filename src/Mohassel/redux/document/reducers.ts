@@ -9,6 +9,7 @@ import {
     GET_DOCUMENTS,
     INVALID_DOCUMENT,
     DocumentActionType,
+    ADD_NEW_TO_DOCUMENTS,
 } from './types';
 import produce from 'immer';
 const initialDocState: DocumentState = {
@@ -47,6 +48,10 @@ export const DocumentsReducer = produce((draft: any[] = [], action: DocumentActi
                     break;
                 }
             }
+            break;
+        }
+        case ADD_NEW_TO_DOCUMENTS: {
+            draft.push(action.payload)
             break;
         }
         case REMOVE_FROM_DOCUMENTS: {

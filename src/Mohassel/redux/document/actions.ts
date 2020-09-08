@@ -6,6 +6,7 @@ import {
     REMOVE_FROM_DOCUMENTS,
     INVALID_DOCUMENT,
     DocumentsState,
+    ADD_NEW_TO_DOCUMENTS,
 } from './types';
 import { uploadDocument as customerUploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocument';
 import { uploadDocument as applicationUploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
@@ -19,8 +20,6 @@ const handleDocuments = (docs: any[], id, type) => {
     const documents: DocumentsState = []
     docs.map((doc) => {
         documents.push({
-            docType: type,
-            _id: id,
             docName: doc.name,
             imagesFiles: doc.docs,
         })
@@ -132,6 +131,12 @@ export const addToDocuments = (newDocument: Document, docName: string) => {
         type: ADD_TO_DOCUMENTS,
         payload: newDocument,
         name: docName,
+    }
+}
+export const addNewToDocuments = (newDoc: any) =>{
+    return {
+        type: ADD_NEW_TO_DOCUMENTS,
+        payload: newDoc,
     }
 }
 export const deleteFromDocuments = (key: string, docName: string) => {

@@ -13,8 +13,6 @@ export interface DocumentState {
  interface DocumentsType {
     imagesFiles: Document[];
     docName: string;
-    docType: string;
-    _id: string;
  }
 export type DocumentsState = Array<DocumentsType>;
 
@@ -48,4 +46,8 @@ interface InvalidDocumentStateAction {
     name: string;
 }
 
-export type DocumentActionType = AddDocumentAction | DeleteDocumentAction | GetDocumentsAction | RemoveFromDocumentsStateAction | AddToDocumentsStateAction | InvalidDocumentStateAction;
+interface AddNewToDocumentsStateAction {
+    type: typeof ADD_NEW_TO_DOCUMENTS;
+    payload: any;
+}
+export type DocumentActionType = AddDocumentAction | DeleteDocumentAction | GetDocumentsAction | RemoveFromDocumentsStateAction | AddToDocumentsStateAction | InvalidDocumentStateAction| AddNewToDocumentsStateAction;

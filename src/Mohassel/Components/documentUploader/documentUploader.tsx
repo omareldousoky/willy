@@ -8,7 +8,7 @@ import Card from 'react-bootstrap/Card';
 import { download,downloadAsZip } from '../../Services/utils';
 import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
-import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument } from '../../redux/document/actions'
+import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments } from '../../redux/document/actions'
 import { DocumentsState, DocumentState } from '../../redux/document/types';
 interface Props {
   documentType: DocumentType;
@@ -23,6 +23,7 @@ interface Props {
   deleteDocument: typeof deleteDocument;
   deleteFromDocuments: typeof deleteFromDocuments;
   invalidDocument: typeof invalidDocument;
+  addNewToDocuments: typeof addNewToDocuments;
   document: any;
   documents: any[];
 
@@ -140,7 +141,14 @@ class DocumentUploader extends Component<Props, State> {
               url: reader.result,
               valid: true,
             }
+            if(this.props.documents.find(doc => doc.docName ===name))
             this.props.addToDocuments(newDocument, name);
+            else {
+              this.props.addNewToDocuments({
+                docName: name,
+                imagesFiles: [newDocument],
+              })
+            }
           }
           reader.readAsDataURL(file)
         } else {
@@ -389,6 +397,7 @@ const addDocumentToProps = dispatch => {
     addToDocuments: (document, docName) => dispatch(addToDocuments(document, docName)),
     deleteFromDocuments: (key, docName) => dispatch(deleteFromDocuments(key, docName)),
     invalidDocument: (key, docName) => dispatch(invalidDocument(key, docName)),
+    addNewToDocuments: (document) => dispatch(addNewToDocuments(document))
   };
 }
 const mapStateToProps = (state) => {
