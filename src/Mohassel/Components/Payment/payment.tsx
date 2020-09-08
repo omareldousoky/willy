@@ -170,7 +170,9 @@ class Payment extends Component<Props, State>{
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
     } 
-    this.setManualPaymentValues();
+    if(this.props.manualPaymentEditId) {
+      this.setManualPaymentValues();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -199,8 +201,9 @@ class Payment extends Component<Props, State>{
           truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
         })
       } else {
+        const payAmount = this.props.pendingActions.transactions?.reduce((accumulator, pendingAction) => { return accumulator + pendingAction.transactionAmount }, 0)
         this.setState({
-          payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
+          payAmount: payAmount ? payAmount : 0,
           payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
           payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
           payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',

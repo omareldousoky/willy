@@ -115,7 +115,7 @@ class LoanProfile extends Component<Props, State>{
     }
     
     async getAppByID(id) {
-        this.setState({ loading: true, activeTab: 'loanDetails' });
+        this.setState({ loading: true, activeTab: 'loanDetails', manualPaymentEditId: '' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
         this.getManualOtherPayments(id);
