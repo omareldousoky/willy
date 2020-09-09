@@ -43,35 +43,27 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background-color: #ffffff;
   text-align: center;
   min-width: 250px;
-  min-height: 200px;
+  min-height: 250px;
   max-width: 250px;
-  max-height: 200px;
+  max-height: 250px;
   justify-content: center;
   align-items: center;
   border: #e5e5e5 dashed 1px;
+  opacity: 1;
 }
 
 .document-actions {
-  position: absolute;
-  display: flex;
   justify-content: space-between;
-  top: 0;
-  left: 0px;
-  padding: 5px;
+  height: 40px;
+  width: 250px;
+  padding-right:10px ;
+  padding-bottom: 5px;
   border-radius: 10px;
   cursor: pointer;
 }
 .document-action-icon{
   width: 20px;
   height: 20px;
-}
-.document-select{
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  top: 0;
-  right: -150px;
-  padding: 5px;
 }
 /*Loader Component*/
 .loader-full-screen, .loader-full-section {
@@ -320,21 +312,22 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   }
 }
 .uploaded-image {
-  padding-top: 35px;
+  // padding-top: 35px;
    width: 250px;
    height: 200px;
    object-fit: fill;
 }
 .invalid-image{
-  opacity: 0.3;
-  // filter: invert(15%);
-  // -webkit-filter: invert(15%);
+  opacity: 0.7;
+ pointer-events: all;
 }
 .invalid-document {
   position: absolute;
   padding: 5px;
+  top:120px;
+  left: 120px;
   border-radius: 10px;
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
 .sort-icons {

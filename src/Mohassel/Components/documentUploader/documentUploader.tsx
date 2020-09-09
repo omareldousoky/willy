@@ -10,6 +10,7 @@ import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
 import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments } from '../../redux/document/actions'
 import { DocumentsState, DocumentState } from '../../redux/document/types';
+import Row from 'react-bootstrap/Row';
 interface Props {
   documentType: DocumentType;
   keyName: string;
@@ -103,7 +104,7 @@ class DocumentUploader extends Component<Props, State> {
   };
 
   constructArr(name: string) {
-    const len = this.props.documentType.active ? this.props.documentType.pages + this.calculateNumOfValidDocuments(name) : this.props.documents.find(doc => doc.docName === name).length;
+    const len = this.props.documentType.active ? this.props.documentType.pages + this.calculateNumOfValidDocuments(name) : this.props.documents.find(doc => doc.docName === name).imagesFiles.length;
     const arr: number[] = [];
     for (let i = 0; i < len; i++) {
       arr.push(i);
@@ -121,7 +122,6 @@ class DocumentUploader extends Component<Props, State> {
     return flag;
   }
   async readFiles(files: Array<File> | FileList, name: string) {
-    console.log(files,"ff");
     const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
     const flag: boolean = this.checkFileType(files)
     if (flag) Swal.fire('', local.invalidFileType, 'error')
@@ -166,7 +166,6 @@ class DocumentUploader extends Component<Props, State> {
       key: this.props.documents.find(doc => doc.docName ===name)?.imagesFiles[key].key,
       delete: (this.props.documentType.updatable && this.props.documentType.active),
     }
-    console.log(data);
     await this.props.deleteDocument(data,'customer');
     if (this.props.document.status === "success" && this.props.documentType.updatable) {
       this.props.deleteFromDocuments( data.key, name);
@@ -265,14 +264,13 @@ class DocumentUploader extends Component<Props, State> {
   //   }
   // }
   renderPhotoByName(key: number, name: string) {
-    console.log(key, name , "tt")
     return (
       <Card.Body key={key} className="document-upload-container" >
-        <div data-qc="document-actions" className="document-actions" >
+        <Row data-qc="document-actions" className="document-actions" >
 
           {(this.props.documentType.active && this.props.documents.find(doc => doc.docName === name).imagesFiles[key]?.valid) && !this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img className={this.props.documentType.updatable ? "" : "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
-          {<span className="fa icon" onClick={() => { this.downloadPhoto(this.props.documents.find(doc => doc.docName === name)[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
-          {<span className="fa icon document-select">
+          {<span className="fa icon" onClick={() => { this.downloadPhoto(this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
+          {<span className="fa icon">
 
             <Form.Check
               type='checkbox'
@@ -281,11 +279,15 @@ class DocumentUploader extends Component<Props, State> {
               label={""}
             />
           </span>}
-        </div>
+        </Row>
+        <Row style={{height:""}}>
         {!this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid && <div className="invalid-document">
           <img src={require('../../Assets/deactivateIcon.svg')} />
         </div>}
-        <img className={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid ? "uploaded-image" : "uploaded-image invalid-image"} src={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.url as string} key={key} alt="" />
+        <div className={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid ? "" : "invalid-image"}>
+        <img className={"uploaded-image"} src={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.url as string} key={key} alt="" />
+        </div>
+        </Row>
       </Card.Body>
     )
   }
@@ -298,7 +300,8 @@ class DocumentUploader extends Component<Props, State> {
         flexDirection: "row",
         flexFlow: "nowrap",
         justifyContent: "flex-start",
-        backgroundColor: '#fafafa', cursor: this.props.documents.find(doc => doc.docName === name)?.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
+        backgroundColor: '#fafafa',
+         cursor: this.props.documents.find(doc => doc.docName === name)?.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
       }}
         data-qc={`upload-${name}`}
         onDrag={this.overrideEventDefaults}
@@ -352,9 +355,7 @@ class DocumentUploader extends Component<Props, State> {
           cursor: 'pointer',
           border: '#e5e5e5 solid 1px',
           borderRadius: 4,
-          filter: "invert(25%)",
-          WebkitBackdropFilter: "invert(25%)",
-          opacity: .5,
+          background: "rgba(51,51,51,0.85)",
         }}
           data-qc={`inactiveDoc-${name}`}>
           {this.props.loading ? this.renderLoading()

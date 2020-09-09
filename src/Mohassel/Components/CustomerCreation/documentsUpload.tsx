@@ -46,57 +46,36 @@ class DocumentsUpload extends Component<Props, State>{
     }
   }
   async componentDidMount() {
-    this.setState({ loading: true });
     const response = await getDocumentsTypes('customer');
     if (response.status === "success") {
       this.setState({
         documentTypes: response.body.documentTypes,
       })
-
     } else {
       Swal.fire("error", "error in getting customer documents", "error");
     }
-    this.setState({loading: false})
     if (this.props.edit || this.props.view) {
-      console.log('l')
       await this.props.getDocuments({ customerId: this.props.customerId, docType: 'customer' });
-    }
-  }
-  prepareCustomerDocuments(customerDocs: any[]) {
-
-    let ImageFiles: any[] = [];
-    customerDocs?.map((doc) => {
-      ImageFiles = doc.docs;
-    });
-    return ImageFiles;
-  }
-  selectAllOptions() {
-    if (this.state.checkAll) {
-      this.setState({
-        selectionArray: [],
-        checkAll: false
-      })
-    } else {
-      this.setState({
-        selectionArray: [...this.state.options],
-        checkAll: true
-      })
     }
   }
   render() {
     return (
       <>
-        <Loader type="fullscreen" open={this.props.loading || this.state.loading} />
-        <Row>  <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }} onClick={() => this.selectAllOptions()} >
-          <Form.Check
-            type='checkbox'
-            id='check-all'
-            label={local.checkAll}
-            checked={this.state.checkAll}
-          />
-        </div> </Row>
-        { this.state.documentTypes.map((documentType: DocumentType, index) => {
-          
+        <Loader type="fullscreen" open={this.props.loading } />
+        <Row style={{justifyContent:"space-between"}}>
+          <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
+            <Form.Check
+              type='checkbox'
+              id='check-all'
+              label={local.checkAll}
+              checked={this.state.checkAll}
+            />
+          </div>
+          <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
+          <Button style={{width:'150px'}}  variant="primary">{local.download}</Button> </div>
+        </Row>
+        {this.state.documentTypes.map((documentType: DocumentType, index) => {
+
           return (
             <DocumentUploader
               key={index}
