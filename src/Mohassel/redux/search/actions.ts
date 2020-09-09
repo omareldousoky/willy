@@ -98,3 +98,12 @@ export const searchFilters = (obj) => {
             dispatch({ type: 'SET_SEARCH_FILTERS', payload: obj })
     }
 }
+
+export const issuedLoansSearchFilters = (obj) => {
+    return (dispatch) => {
+        if (Object.keys(obj).length === 0)
+            dispatch({ type: 'RESET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
+        else
+            dispatch({ type: 'SET_ISSUED_LOANS_SEARCH_FILTERS', payload: obj })
+    }
+}

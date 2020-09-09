@@ -8,14 +8,6 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import { getIscore } from '../../Services/APIs/iScore/iScore';
-import Swal from 'sweetalert2';
-import Table from 'react-bootstrap/Table';
-import store from '../../redux/store';
-import Can from '../../config/Can';
-import ability from '../../config/ability';
 
 interface Props {
   history: Array<any>;
@@ -25,6 +17,7 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  issuedLoansSearchFilters: any;
   search: (data) => void;
   setSearchFilters: (data) => void;
 };
@@ -108,7 +101,7 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
   }
   getStatus(status: string) {
     switch (status) {
@@ -133,9 +126,9 @@ class LoanList extends Component<Props, State> {
   async getLoans() {
     let query = {};
     if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate" }
+      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate" }
     } else {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }
+      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }
     }
     this.props.search(query);
   }
@@ -158,6 +151,7 @@ class LoanList extends Component<Props, State> {
             searchKeys={this.state.searchKeys}
             dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode']}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+            setFrom= {(from) => this.setState({from: from})}
             datePlaceholder={local.issuanceDate}
             url="loan"
             from={this.state.from}
@@ -192,7 +186,8 @@ const mapStateToProps = state => {
     data: state.search.applications,
     totalCount: state.search.totalCount,
     loading: state.loading,
-    searchFilters: state.searchFilters
+    searchFilters: state.searchFilters,
+    issuedLoansSearchFilters: state.issuedLoansSearchFilters
   };
 };
 
