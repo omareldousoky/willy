@@ -256,6 +256,7 @@ class ManualPayment extends Component<Props, State> {
                         as="select"
                         name="payerId"
                         data-qc="payerId"
+                        value={this.props.formikProps.values.payerId}
                         onChange={this.props.formikProps.handleChange}
                         onBlur={this.props.formikProps.handleBlur}
                         isInvalid={Boolean(this.props.formikProps.errors.payerId) && Boolean(this.props.formikProps.touched.payerId)}
@@ -299,7 +300,7 @@ class ManualPayment extends Component<Props, State> {
                           <Form.Control
                             name="payerName"
                             data-qc="payerName"
-                            value={this.props.formikProps.values.payerName.toString()}
+                            value={this.props.formikProps.values.payerName?.toString()}
                             onBlur={this.props.formikProps.handleBlur}
                             onChange={this.props.formikProps.handleChange}
                             isInvalid={Boolean(this.props.formikProps.errors.payerName) && Boolean(this.props.formikProps.touched.payerName)} />
