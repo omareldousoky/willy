@@ -474,6 +474,7 @@ class Payment extends Component<Props, State>{
           application={this.props.application}
           installments={this.props.installments}
           handleClickEarlyPayment={() => this.handleClickEarlyPayment()}
+          handleChangePenaltyAction={(key: string) => this.setState({penaltyAction: key})}
         />
       );
       case 1:

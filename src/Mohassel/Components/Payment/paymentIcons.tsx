@@ -17,6 +17,7 @@ interface Props {
   installments: Array<Installment>;
   changePaymentState: (data) => void;
   handleClickEarlyPayment: () => void;
+  handleChangePenaltyAction: (key: string) => void;
 }
 class PaymentIcons extends Component<Props, {}> {
   constructor(props: Props) {
@@ -68,7 +69,7 @@ class PaymentIcons extends Component<Props, {}> {
                 disabled={this.props.application.status === "pending" && this.props.paymentType === "normal"}
                 onClick={() => {
                   if (this.props.paymentType === "penalties") {
-                    this.setState({ penaltyAction: "pay" });
+                    this.props.handleChangePenaltyAction("pay")
                     this.props.changePaymentState(1);
                   } else this.props.changePaymentState(1);
                 }}
@@ -84,7 +85,7 @@ class PaymentIcons extends Component<Props, {}> {
                 <div className="payment-icon">
                   <img alt="cancel-penalty" src={require("../../Assets/cancelPenalty.svg")} />
                   <Button
-                    onClick={() => { this.setState({ penaltyAction: "cancel" }); this.props.changePaymentState(1); }}
+                    onClick={() => { this.props.handleChangePenaltyAction("cancel"); this.props.changePaymentState(1); }}
                     variant="primary">
                     {local.cancelPenalty}
                   </Button>
