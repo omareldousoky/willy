@@ -1,3 +1,4 @@
+import iconv from 'iconv-lite';
 interface TextReport {
     name: string;
     func: (data) => string;
@@ -29,23 +30,24 @@ const getTotalNumberOfLines = (textData) => {
     });
     return total;
 }
+
+const numTo2Decimal = (num: number | string) => {
+    if (typeof num === 'string') num = Number(num);
+    return (Math.round(num * 100) / 100).toFixed(2);
+}
+
 const getTotalPrincipals = (textData) => {
     let total = 0;
     textData.forEach(application => {
         if (application.principal)
             total = total + Number(application.principal);
     });
-    return total;
+    return numTo2Decimal(total);
 }
 
 const getBeneficiaryType = (type: string) => {
     if (type === "group") return 'T101';
     else return 'T102'
-}
-
-const numTo2Decimal = (num: number | string) => {
-    if (typeof num === 'string') num = Number(num);
-    return (Math.round(num * 100) / 100).toFixed(2);
 }
 
 const sameDay = (paidAt: number, dateOfPay: number) => {
@@ -59,7 +61,7 @@ const cusTxt = (textData) => {
         textData.map(application => {
             const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer
             return (
-                `${getYearMonthDay(customer.created.at)}|${customer.key}    |N|D|${customer.customerName}|SINGLE|${getGender(customer.gender)}|${getYearMonthDay(customer.birthDate)}|${customer.nationalId}|National ID|EG||${customer.customerHomeAddress}|${getYearMonthDay(application.created.at)}|990|1| M5| 097|199|2|516|4100|||EG|||${customer.customerName}|${customer.customerHomeAddress}|29|15|9|1|5|1|other||\n`
+                `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}|${getGender(customer.gender)}|SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${customer.customerHomeAddress}|${customer.customerName}|1|5|1|other||\n`
             )
         }) + `T|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n`).split(',').join('')
 }
@@ -75,7 +77,7 @@ const finText = (textData) => {
 }
 
 const instText = (textData) => {
-    return (`H|${getYearMonthDay(0)}||${getTotalNumberOfLines(textData)}|TDIS_INST|\n` +
+    return (`H|${getYearMonthDay(0)}|${getTotalNumberOfLines(textData)}|TDIS_INST|\n` +
         textData.map(application => {
             return application.installmentsObject.output.map(installment => {
                 return (
@@ -124,7 +126,6 @@ const payText = (textData, dateOfPay: number) => {
 }
 
 const trfText = (textData) => {
-    
     const branchData = {};
     let total = 0;
     textData.forEach(application => {
@@ -140,7 +141,6 @@ const trfText = (textData) => {
         `T|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${Object.keys(branchData).length}|TDIS_TRF|\n`
     )
 }
-
 
 export const downloadTxtFile = (textData, tPay: boolean, dateOfPay: number) => {
     let filesArr: Array<TextReport> = [];
@@ -159,9 +159,14 @@ export const downloadTxtFile = (textData, tPay: boolean, dateOfPay: number) => {
     }
     filesArr.forEach(item => {
         const element = document.createElement("a");
-        const file = new Blob([item.func(textData)], { type: 'text/plain' });
+        let file;
+        if(item.name === "TDIS_CUS") {
+            file = new Blob([iconv.encode(item.func(textData), 'CP1256')], {type: 'text/plain'})
+        } else {
+            file = new Blob([item.func(textData)], {type: 'text/plain'})
+        }
         element.href = URL.createObjectURL(file);
-        element.download = `${item.name}${getYearMonthDay(0)}`;
+        element.download = `${item.name}${getYearMonthDay(dateOfPay)}`;
         document.body.appendChild(element);
         element.click();
     })
