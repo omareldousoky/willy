@@ -164,7 +164,7 @@ class NavBar extends Component<Props, State> {
         {this.state.selectedBranch._id && <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
               {<Can I='getLoanProduct' a='product'><Can I='getCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can></Can>}

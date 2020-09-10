@@ -1,7 +1,6 @@
 import React from 'react';
 import './doubtfulPayments.scss';
-import { timeToArabicDate, timeToDateyyymmdd, getTimestamp } from '../../../Services/utils';
-import { englishToArabic } from '../../../Services/statusLanguage';
+import { timeToArabicDate, timeToDateyyymmdd, getTimestamp, getLoanStatus } from '../../../Services/utils';
 
 const DoubtfulPayments = (props) => {
     const tempData = props.data.data;
@@ -72,10 +71,10 @@ const DoubtfulPayments = (props) => {
                                         <td>{transaction.customerName}</td>
                                         <td>{transaction.loanSerial}</td>
                                         <td></td>
-                                        <td>{transaction.principalAmount}</td>
-                                        <td>{timeToArabicDate(getTimestamp(transaction.truthDate), false)}</td>
-                                        <td>{englishToArabic(transaction.status).text}</td>
-                                        <td>{transaction.principalAmount}</td>
+                                        <td>{transaction.loanPrincipal}</td>
+                                        <td>{timeToArabicDate(getTimestamp(transaction.issueDate), false)}</td>
+                                        <td>{getLoanStatus(transaction.stateFlags)}</td>
+                                        <td>{transaction.transactionPrincipal}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
                                     </tr>)}

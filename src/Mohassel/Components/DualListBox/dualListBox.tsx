@@ -217,7 +217,7 @@ class DualBox extends Component<Props, State> {
                                 <div className="list-group-item delete-all-row" style={{ background: '#FAFAFA' }}>
                                     <span className="text-muted">{local.count}({this.state.selectedOptions.length})</span>
                                     <div onClick={() => this.removeAllFromList()}>
-                                        <span className="fa fa-trash"></span>
+                                        <span ><img src = {require('../../Assets/deleteIcon.svg')}/></span>
                                         <span>{local.deleteAll}</span>
                                     </div>
                                 </div>
@@ -225,7 +225,7 @@ class DualBox extends Component<Props, State> {
                                     {this.state.selectedOptions
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
                                         .map(option => <li key={option._id}
-                                            className="list-group-item"><span className="fa fa-times" onClick={() => this.removeItemFromList(option)}></span><span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon' style={{ float: 'left' }}></span>}</li>)}
+                                            className="list-group-item"><span  onClick={() => this.removeItemFromList(option)}><img style={{width:'15px', height:'15px'}} src = {require('../../Assets/closeIcon.svg')} /></span><span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon' style={{ float: 'left' }}></span>}</li>)}
                                 </div>
                             </ul>
                         </div>

@@ -261,7 +261,6 @@ class Payment extends Component<Props, State>{
           const obj = {
             id: this.props.applicationId,
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(), 
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -279,7 +278,6 @@ class Payment extends Component<Props, State>{
           const obj = {
             id: this.props.applicationId,
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(), 
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -303,7 +301,7 @@ class Payment extends Component<Props, State>{
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
-            payerNationalId: values.payerNationalId.toString(),
+            payerNationalId: values.payerNationalId?.toString(),
           };
           const res = await otherPayment({ id: this.props.applicationId, data });
           if (res.status === "success") {
@@ -321,7 +319,6 @@ class Payment extends Component<Props, State>{
         if(this.state.penaltyAction==='pay'){
           const data = {
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(),
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,

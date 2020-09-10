@@ -309,6 +309,7 @@
     "rescheduling": "إعادة جدولة",
     "reschedulingTest": "تجربة إعادة جدولة",
     "postponeInstallments": "ترحيل اقساط",
+    "postponeHalfInstallment": "ترحيل نصف قسط",
     "traditionalRescheduling": "جدولة تقليدية",
     "freeRescheduling": "جدولة حرة",
     "installmentsTableBeforeRescheduling": "جدول الاقساط قبل الترحيل",
@@ -706,6 +707,7 @@
     "writtenOffLoans":"قروض مشطوبة",
     "customerPartialCode":"كود العميل الجزئي",
     "partialCode":"الكود الجزئي",
-    "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق"
-
+    "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق",
+    "divide":"مقسمة",
+    "now":"الأن"
 }

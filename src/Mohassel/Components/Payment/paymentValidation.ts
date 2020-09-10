@@ -13,14 +13,6 @@ export const paymentValidation = Yup.object().shape({
       }
     )
     .required(local.required),
-  truthDate: Yup.string().when(["paymentType", "penaltyAction"], {
-    is: (paymentType, penaltyAction) =>
-      paymentType === "normal" ||
-      paymentType === "random" ||
-      (paymentType === "penalties" && penaltyAction === "pay"),
-    then: Yup.string().required(local.required),
-    otherwise: Yup.string()
-  }),
   randomPaymentType: Yup.string().when("paymentType", {
     is: paymentType => paymentType === "random",
     then: Yup.string()
@@ -56,7 +48,6 @@ export const earlyPaymentValidation = Yup.object().shape({
       }
     )
     .required(local.required),
-  truthDate: Yup.string().required(local.required),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
     is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
@@ -93,12 +84,5 @@ export const manualPaymentValidation = Yup.object().shape({
     then: Yup.string().required(local.required),
     otherwise: Yup.string()
   }),
-  payerNationalId: Yup.string(),
-  randomPaymentType: Yup.string().when("paymentType", {
-    is: paymentType => paymentType === "random",
-    then: Yup.string()
-      .trim()
-      .required(local.required),
-    otherwise: Yup.string()
-  }),
+  payerNationalId: Yup.string()
 })

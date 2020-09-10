@@ -123,7 +123,7 @@ const ManualPayments = (props: Props) => {
                                                         <tbody>
                                                             <tr>
                                                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>
-                                                                <th className="gray frame" colSpan={2}>{row.dateOfPayment}</th>
+                                                                <th className="gray frame" colSpan={2}>{row.truthDate}</th>
                                                             </tr>
                                                             <tr>
                                                                 <td>{row.loanSerial}</td>
@@ -132,7 +132,7 @@ const ManualPayments = (props: Props) => {
                                                                 <td>{row.customerName}</td>
                                                                 <td></td>
                                                                 <td>{row.installmentValue}</td>
-                                                                <td>{row.truthDate}</td>
+                                                                <td>{row.dateOfPayment}</td>
                                                                 <td>{statusLocalization(row.installmentStatus)}</td>
                                                                 <td></td>
                                                                 <td>{row.transactionPrincipal}</td>
