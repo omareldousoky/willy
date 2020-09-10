@@ -1,7 +1,7 @@
 import axios from "../axios-instance";
 
 export const doubtfulLoans = async (data) => {
-  const url = process.env.REACT_APP_BASE_URL + `/report/write-offs`;
+  const url = process.env.REACT_APP_BASE_URL + `/report/loan-doubts`;
   try {
     const res = await axios({
       method: "POST",
