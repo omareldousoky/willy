@@ -75,7 +75,7 @@ class AssignProductToBranch extends Component<Props, State>{
         const res = await assignProductToBranchAPI(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });
-            Swal.fire("success", local.productAssigned).then(() => { this.props.history.push("/") })
+            Swal.fire("success", local.productAssigned).then(() => {window.location.reload() })
         } else {
             Swal.fire("error", local.productAssignError, 'error')
             this.setState({ loading: false });

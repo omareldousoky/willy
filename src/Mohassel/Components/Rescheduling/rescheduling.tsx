@@ -6,6 +6,7 @@ import TraditionalLoanRescheduling from './traditionalLoanRescheduling';
 import FreeRescheduling from './freeRescheduling';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
+import PostponeHalfInstallment from './postponeHalfInstallment';
 
 interface Props {
     test: boolean;
@@ -26,6 +27,11 @@ class Rescheduling extends Component<Props, State>{
             tabsArray: [{
                 header: local.postponeInstallments,
                 stringKey: 'postponeInstallment',
+                permission: 'pushInstallment',
+                permissionKey: 'application'
+            },{
+                header: local.postponeHalfInstallment,
+                stringKey: 'postponeHalfInstallment',
                 permission: 'pushInstallment',
                 permissionKey: 'application'
             },
@@ -84,6 +90,8 @@ class Rescheduling extends Component<Props, State>{
         switch (this.state.activeTab) {
             case "postponeInstallment":
                 return <Can I={'pushInstallment'} a={'application'}><PostponeInstallments application={this.props.application} test={this.props.test} /></Can>
+                case "postponeHalfInstallment":
+                return <Can I={'pushInstallment'} a={'application'}><PostponeHalfInstallment application={this.props.application} test={this.props.test} /></Can>
             case "traditionalRescheduling":
                 return <Can I={'traditionRescheduling'} a={'application'}><TraditionalLoanRescheduling application={this.props.application} test={this.props.test} /></Can>
             case "freeRescheduling":

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
@@ -43,6 +43,8 @@ export const LoanOfficersDropDown = props => {
 };
 
 export const BranchesDropDown = props => {
+  const [options, setOptions] = useState<any>([]);
+  const [value, setValue] = useState(options.find(o => o._id === props.value));
   const customStyles = {
     control: provided => ({
       ...provided,
@@ -60,6 +62,7 @@ export const BranchesDropDown = props => {
       name: searchKeyWord
     });
     if (res.status === "success") {
+      setOptions([{ name: local.allBranches, _id: "" }, ...res.body.data]);
       return [{ name: local.allBranches, _id: "" }, ...res.body.data];
     } else {
       return [];
@@ -74,10 +77,9 @@ export const BranchesDropDown = props => {
         name="branches"
         data-qc="branches"
         placeholder={local.chooseBranch}
-        // value={loanOfficers?.find(loanOfficer => loanOfficer._id === values.representative)}
-        // onChange={(id) => {console.log(id);changeSearchKeyWord(id+"")}}
+        value={value || options.find(option => option._id === props.value)}
         isMulti={props.multiselect}
-        onChange={branch => props.onSelectBranch(branch)}
+        onChange={branch => {props.onSelectBranch(branch); setValue(branch);}}
         getOptionLabel={option => option.name}
         getOptionValue={option => option._id}
         loadOptions={getBranches}

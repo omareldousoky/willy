@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import './styles.scss';
@@ -26,6 +26,11 @@ const DynamicTable = (props: Props) => {
   const [order, changeOrder] = useState('');
   const [selectedSortKey, changeSortKey] = useState('');
   const totalPages: Array<number> = [];
+  useEffect(() => {
+    if(props.from === 0) {
+      changePage(0);
+    }
+  }, [props.from])
   for (let index = 1; index <= Math.ceil(props.totalCount / rowsPerPage); index++) {
     totalPages.push(index)
   }

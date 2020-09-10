@@ -309,6 +309,9 @@ export const getLoanStatus = (status: string) => {
       case 'underReview': return local.underReview;
       case 'reviewed': return local.reviewed;
       case 'approved': return local.approved;
+      case 'writtenOff': return local.writtenOffLoan;
+      case 'Doubtful': return local.doubtedLoan;
+      case 'doubt_cancelled': return local.cancelled;
       default: return '';
   }
 }
