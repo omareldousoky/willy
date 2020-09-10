@@ -124,6 +124,7 @@ const payText = (textData, dateOfPay: number) => {
 }
 
 const trfText = (textData) => {
+    
     const branchData = {};
     let total = 0;
     textData.forEach(application => {
