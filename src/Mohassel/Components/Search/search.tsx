@@ -315,7 +315,7 @@ class Search extends Component<Props, State> {
                 if (searchKey === 'doubtful') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <Form.Group className="row-nowrap" controlId='branchManagerAndDate'>
+                      <Form.Group className="row-nowrap" controlId='doubtful'>
                         <Form.Check
                             type='checkbox'
                             name='isDoubtful'
@@ -332,7 +332,7 @@ class Search extends Component<Props, State> {
                 if (searchKey === 'writtenOff') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <Form.Group className="row-nowrap" controlId='branchManagerAndDate'>
+                      <Form.Group className="row-nowrap" controlId='writtenOff'>
                         <Form.Check
                             type='checkbox'
                             name='isWrittenOff'
