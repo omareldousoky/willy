@@ -410,3 +410,13 @@ export const getAge = (DOB) => {
 
   return age;
 }
+
+export const getRandomPaymentByKey = (key)=>{
+  if(key==='collectionCommission') return local.collectionCommission
+  else if(key==="reissuingFees") return local.reissuingFees
+  else if(key==="legalFees") return local.legalFees
+  else if(key==="clearanceFees") return local.clearanceFees
+  else if(key==='toktokStamp') return local.toktokStamp
+  else if(key==='tricycleStamp') return local.tricycleStamp
+  else if(key==='penalty') return local.payPenalty
+}
