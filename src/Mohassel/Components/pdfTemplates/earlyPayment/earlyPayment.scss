@@ -51,6 +51,10 @@ print {
             padding: 2px;
             display: inline-block;
         }
+        & .due {
+            background-color: lightgrey;
+            -webkit-print-color-adjust: exact;
+        }
     }
 }
 
