@@ -7,6 +7,11 @@ import {
     INVALID_DOCUMENT,
     DocumentsState,
     ADD_NEW_TO_DOCUMENTS,
+    Image,
+    ADD_ALL_TO_SELECTION_ARRAY,
+    CLEAR_SELECTION_ARRAY,
+    ADD_TO_SELECTION_ARRAY,
+    REMOVE_FROM_SELECTION_ARRAY,
 } from './types';
 import { uploadDocument as customerUploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocument';
 import { uploadDocument as applicationUploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
@@ -152,5 +157,30 @@ export const invalidDocument  = (key: string, docName: string) => {
         type: INVALID_DOCUMENT,
         key: key,
         name: docName,
+    }
+}
+export const addAllToSelectionArray = (images: Image[]) => {
+    return {
+      type: ADD_ALL_TO_SELECTION_ARRAY,
+      payload: images,
+    }
+
+}
+export const clearSelectionArray = () => {
+    return {
+        type: CLEAR_SELECTION_ARRAY,
+    }
+}
+export const AddToSelectionArray = (newImage: Image) => {
+    return {
+        type: ADD_TO_SELECTION_ARRAY,
+        payload: newImage,
+    }
+}
+export const RemoveFromSelectionArray = (key: string) => {
+    return {
+        type: REMOVE_FROM_SELECTION_ARRAY,
+        payload: key,
+
     }
 }

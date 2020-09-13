@@ -7,6 +7,12 @@ export const REMOVE_FROM_DOCUMENTS = "REMOVE_FROM_DOCUMENTS";
 export const ADD_TO_DOCUMENTS = "ADD_TO_DOCUMENTS";
 export const ADD_NEW_TO_DOCUMENTS = "ADD_NEW_TO_DOCUMENT";
 export const INVALID_DOCUMENT = "INVALID_DOCUMENT";
+export const ADD_TO_SELECTION_ARRAY ="ADD_TO_SELECTION_ARRAY";
+export const REMOVE_FROM_SELECTION_ARRAY = "REMOVE_FROM_SELECTION_ARRAY";
+export const CLEAR_SELECTION_ARRAY = "CLEAR_SELECTION_ARRAY";
+export const ADD_ALL_TO_SELECTION_ARRAY = "ADD_ALL_TO_SELECTION_ARRAY";
+
+
 export interface DocumentState {
     document: Document;
 }
@@ -15,7 +21,10 @@ export interface DocumentState {
     docName: string;
  }
 export type DocumentsState = Array<DocumentsType>;
-
+export interface Image{
+    fileName: string;
+    url: string;
+}
 interface AddDocumentAction {
     type: typeof ADD_DOCUMENT;
     payload: string;
@@ -50,4 +59,23 @@ interface AddNewToDocumentsStateAction {
     type: typeof ADD_NEW_TO_DOCUMENTS;
     payload: any;
 }
-export type DocumentActionType = AddDocumentAction | DeleteDocumentAction | GetDocumentsAction | RemoveFromDocumentsStateAction | AddToDocumentsStateAction | InvalidDocumentStateAction| AddNewToDocumentsStateAction;
+interface AddToSelectionArrayAction {
+    type: typeof ADD_TO_SELECTION_ARRAY;
+    payload: Image;
+}
+interface RemoveFromSelectionArrayAction{
+    type:  typeof REMOVE_FROM_SELECTION_ARRAY;
+    payload: Image;
+}
+
+interface ClearSelectionArrayAction {
+  type: typeof CLEAR_SELECTION_ARRAY;
+}
+interface AddAllToSelectionArrayAction {
+   type: typeof ADD_ALL_TO_SELECTION_ARRAY;
+   payload: Image[];
+}
+export type DocumentActionType = AddDocumentAction | DeleteDocumentAction | GetDocumentsAction 
+| RemoveFromDocumentsStateAction | AddToDocumentsStateAction | InvalidDocumentStateAction| 
+AddNewToDocumentsStateAction| AddToSelectionArrayAction | RemoveFromSelectionArrayAction |
+ ClearSelectionArrayAction| AddAllToSelectionArrayAction;

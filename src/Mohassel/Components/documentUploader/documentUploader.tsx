@@ -5,11 +5,11 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
-import { download,downloadAsZip } from '../../Services/utils';
+import { download, downloadAsZip } from '../../Services/utils';
 import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
-import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments } from '../../redux/document/actions'
-import { DocumentsState, DocumentState } from '../../redux/document/types';
+import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments, AddToSelectionArray, RemoveFromSelectionArray } from '../../redux/document/actions'
+import { Image } from '../../redux/document/types';
 import Row from 'react-bootstrap/Row';
 interface Props {
   documentType: DocumentType;
@@ -25,8 +25,11 @@ interface Props {
   deleteFromDocuments: typeof deleteFromDocuments;
   invalidDocument: typeof invalidDocument;
   addNewToDocuments: typeof addNewToDocuments;
+  AddToSelectionArray: typeof AddToSelectionArray;
+  RemoveFromSelectionArray: typeof RemoveFromSelectionArray;
   document: any;
   documents: any[];
+  selectionArray: Image[];
 
 }
 interface InProps {
@@ -51,23 +54,13 @@ class DocumentUploader extends Component<Props, State> {
       dragging: false,
     }
   }
-  // static getDerivedStateFromProps(props, state) {
-  //   if ((props.edit || props.view) && props.uploadedImageFile?.length > 0)
-  //     if (props.uploadedImageFile !== state?.imagesFiles && state?.imagesFiles.length == 0) {
-  //       return {
-  //         imagesFiles: props.uploadedImageFile,
-  //       }
-  //     }
-  //   return null;
-  // }
-
   calculateNumOfValidDocuments(name: string): number {
     const numOfValidDocs: number = this.props.documents.find(doc => doc.docName === name)?.imagesFiles.filter((doc) => {
       return !doc.valid;
     }).length;
-    if( numOfValidDocs > 0)
-         return numOfValidDocs;
-         else return 0;
+    if (numOfValidDocs > 0)
+      return numOfValidDocs;
+    else return 0;
   }
   calculateLimit() {
 
@@ -77,7 +70,7 @@ class DocumentUploader extends Component<Props, State> {
   triggerInputFile() {
     const name = this.props.documentType.name;
     const limit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
-      this[`fileInput`].current?.click()
+    this[`fileInput`].current?.click()
   }
   overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -125,13 +118,13 @@ class DocumentUploader extends Component<Props, State> {
     const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
     const flag: boolean = this.checkFileType(files)
     if (flag) Swal.fire('', local.invalidFileType, 'error')
-    else if (files.length <= imagesLimit && this.getImageFilesLength()< imagesLimit) {
+    else if (files.length <= imagesLimit && this.getImageFilesLength() < imagesLimit) {
       for (let index = 0; index < files.length; index++) {
         const formData = new FormData();
         formData.append("docName", name);
         formData.append(this.props.keyName, this.props.keyId);
         formData.append("file", files[index]);
-        await this.props.uploadDocument(formData,'customer');
+        await this.props.uploadDocument(formData, 'customer');
         if (this.props.document.status === 'success') {
           const reader = new FileReader();
           const file = files[index];
@@ -141,8 +134,8 @@ class DocumentUploader extends Component<Props, State> {
               url: reader.result,
               valid: true,
             }
-            if(this.props.documents.find(doc => doc.docName ===name))
-            this.props.addToDocuments(newDocument, name);
+            if (this.props.documents.find(doc => doc.docName === name))
+              this.props.addToDocuments(newDocument, name);
             else {
               this.props.addNewToDocuments({
                 docName: name,
@@ -163,12 +156,12 @@ class DocumentUploader extends Component<Props, State> {
     const data = {
       [this.props.keyName]: this.props.keyId,
       docName: name,
-      key: this.props.documents.find(doc => doc.docName ===name)?.imagesFiles[key].key,
+      key: this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key].key,
       delete: (this.props.documentType.updatable && this.props.documentType.active),
     }
-    await this.props.deleteDocument(data,'customer');
+    await this.props.deleteDocument(data, 'customer');
     if (this.props.document.status === "success" && this.props.documentType.updatable) {
-      this.props.deleteFromDocuments( data.key, name);
+      this.props.deleteFromDocuments(data.key, name);
     } else if (this.props.document.status === "success" && !this.props.documentType.updatable) {
       this.props.invalidDocument(data.key, name);
     }
@@ -188,7 +181,7 @@ class DocumentUploader extends Component<Props, State> {
   handleOnChange = (event) => {
     event.preventDefault();
     const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
-    if (event.target.files.length <= imagesLimit && this.getImageFilesLength()<= imagesLimit && !this.props.view) {
+    if (event.target.files.length <= imagesLimit && this.getImageFilesLength() <= imagesLimit && !this.props.view) {
       this.readFiles(event.target.files, this.props.documentType.name);
     } else {
       Swal.fire('', local.numberOfDocumentsError + this.props.documentType.pages, 'error')
@@ -196,9 +189,9 @@ class DocumentUploader extends Component<Props, State> {
   }
 
   getImageFilesLength(): number {
-    const len: number =this.props.documents.find(doc => doc.docName ===  this.props.documentType.name)?.imagesFiles?.length
-    if(len >0) return len;
-   return 0;
+    const len: number = this.props.documents.find(doc => doc.docName === this.props.documentType.name)?.imagesFiles?.length
+    if (len > 0) return len;
+    return 0;
   }
   renderLoading() {
     return (
@@ -246,24 +239,8 @@ class DocumentUploader extends Component<Props, State> {
     const fileName = document.key.split('/');
     download(document.url, fileName[1]);
   }
-  // selectItem = (option) => {
-  //   if (!this.props.selectionArray.find((element) => option.key === element.key)) {
-  //     console.log(option)
-  //     this.props.selectionArray.push({
-  //       createdAt: option.createdAt,
-  //       key: option.key,
-  //       url: option.url,
-  //       valid: option.valid,
-  //     });
-
-  //   } else {
-  //     const index = this.props.selectionArray.indexOf(option);
-  //     if (index !== -1) {
-  //       this.props.selectionArray.splice(index, 1);
-  //     }
-  //   }
-  // }
   renderPhotoByName(key: number, name: string) {
+    const document = this.props.documents.find(doc => doc.docName === name).imagesFiles[key]
     return (
       <Card.Body key={key} className="document-upload-container" >
         <Row data-qc="document-actions" className="document-actions" >
@@ -274,22 +251,35 @@ class DocumentUploader extends Component<Props, State> {
 
             <Form.Check
               type='checkbox'
-              id={`${name + key.toString()}`}
-              // onChange={() => this.selectItem(this.state?.imagesFiles[key])}
+              id={document.key}
+              onChange={() => this.selectItem(document)}
+              checked={(this.props.selectionArray.find((image) => image.fileName === document.key) ? true : false)}
               label={""}
             />
           </span>}
         </Row>
-        <Row style={{height:""}}>
-        {!this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid && <div className="invalid-document">
-          <img src={require('../../Assets/deactivateIcon.svg')} />
-        </div>}
-        <div className={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid ? "" : "invalid-image"}>
-        <img className={"uploaded-image"} src={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.url as string} key={key} alt="" />
-        </div>
+        <Row style={{ height: "" }}>
+          {!this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid && <div className="invalid-document">
+            <img src={require('../../Assets/deactivateIcon.svg')} />
+          </div>}
+          <div className={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.valid ? "" : "invalid-image"}>
+            <img className={"uploaded-image"} src={this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]?.url as string} key={key} alt="" />
+          </div>
         </Row>
       </Card.Body>
     )
+  }
+  selectItem(document: any) {
+    console.log("FFFf");
+    if (!this.props.selectionArray.find((image) => image.fileName === document.key)) {
+      
+      this.props.AddToSelectionArray({
+        url: document.url,
+        fileName: document.key,
+      })
+    } else {
+      this.props.RemoveFromSelectionArray(document.key)
+    }
   }
   renderContainer(name: string) {
     const Limit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
@@ -301,7 +291,7 @@ class DocumentUploader extends Component<Props, State> {
         flexFlow: "nowrap",
         justifyContent: "flex-start",
         backgroundColor: '#fafafa',
-         cursor: this.props.documents.find(doc => doc.docName === name)?.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
+        cursor: this.props.documents.find(doc => doc.docName === name)?.imagesFiles.length === Limit ? 'not-allowed' : 'pointer', border: '#e5e5e5 solid 1px', borderRadius: 4
       }}
         data-qc={`upload-${name}`}
         onDrag={this.overrideEventDefaults}
@@ -322,7 +312,7 @@ class DocumentUploader extends Component<Props, State> {
         {this.props.loading ? this.renderLoading()
           :
           this.constructArr(name).map((_value: number, key: number) => {
-            if (this.props.documents.find(document =>  document.docName === name)?.imagesFiles[key] === undefined) {
+            if (this.props.documents.find(document => document.docName === name)?.imagesFiles[key] === undefined) {
               if (this.state.dragging) return this.renderDropHere(key)
               else return this.renderUploadPhoto(key)
             } else return this.renderPhotoByName(key, name)
@@ -380,8 +370,8 @@ class DocumentUploader extends Component<Props, State> {
               }
             }>{this.props.documentType.updatable ? local.updatable : local.nonUpdatable}</span></div>
             {!this.props.documentType.updatable &&
-              <small style={{ color: "#edb600", fontSize: "12px", fontWeight: 'bold' }}>{`${local.numOfInvalidImages} ( ${this.calculateNumOfValidDocuments( this.props.documentType.name)} )`}</small>}
-            <small style={{ color: "#6e6e6e", fontSize: "12px", fontWeight: 'bold'  }}>{`${local.numOfUploadedImages} ( ${this.getImageFilesLength() - this.calculateNumOfValidDocuments( this.props.documentType.name)} / ${this.props.documentType.pages} )`}</small>
+              <small style={{ color: "#edb600", fontSize: "12px", fontWeight: 'bold' }}>{`${local.numOfInvalidImages} ( ${this.calculateNumOfValidDocuments(this.props.documentType.name)} )`}</small>}
+            <small style={{ color: "#6e6e6e", fontSize: "12px", fontWeight: 'bold' }}>{`${local.numOfUploadedImages} ( ${this.getImageFilesLength() - this.calculateNumOfValidDocuments(this.props.documentType.name)} / ${this.props.documentType.pages} )`}</small>
           </div>
           {this.renderContainer(this.props.documentType.name)}
         </div>
@@ -393,19 +383,22 @@ class DocumentUploader extends Component<Props, State> {
 }
 const addDocumentToProps = dispatch => {
   return {
-    uploadDocument: document => dispatch(uploadDocument(document,'customer')),
-    deleteDocument: document => dispatch(deleteDocument(document,'customer')),
+    uploadDocument: document => dispatch(uploadDocument(document, 'customer')),
+    deleteDocument: document => dispatch(deleteDocument(document, 'customer')),
     addToDocuments: (document, docName) => dispatch(addToDocuments(document, docName)),
     deleteFromDocuments: (key, docName) => dispatch(deleteFromDocuments(key, docName)),
     invalidDocument: (key, docName) => dispatch(invalidDocument(key, docName)),
-    addNewToDocuments: (document) => dispatch(addNewToDocuments(document))
+    addNewToDocuments: (document) => dispatch(addNewToDocuments(document)),
+    AddToSelectionArray: (image) => dispatch(AddToSelectionArray(image)),
+    RemoveFromSelectionArray: (image) => dispatch(RemoveFromSelectionArray(image)),
   };
 }
 const mapStateToProps = (state) => {
   return {
-    document: state.document ,
+    document: state.document,
     documents: state.documents,
     loading: state.loading,
+    selectionArray: state.selectionArray,
 
   }
 }

@@ -408,16 +408,37 @@ export const getAge = (DOB) => {
 
   return age;
 }
-export const downloadAsZip = (images: Array<{url: string; fileName: string}>, folderName: string) => {
+export const getDataURL = async(url) => {
+
+  const blob = await fetch(url).then(r => r.blob());
+          const dataUrl: any = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
+          return  await dataUrl.replace("data:application/octet-stream;base64,","");
+}
+export const downloadAsZip = async (images: Array<{url: string; fileName: string}>, folderName: string) => {
   const zip =  new JsZip();
+  const base64Matcher = new RegExp("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$");
   try {
+    let counter = 0;
     images.forEach((image) => {
-     zip.file(image.fileName,image.url,{base64: true});
+      if(base64Matcher.test(image.url)){
+        zip.file(image.fileName,image.url.replace(/^data:image\/(png|jpg);base64,/, ""),{base64: true});
+        counter ++;
+      } else {
+        zip.file(image.fileName,getDataURL(image.url),{base64: true})
+        counter ++;
+      }
     });
-    zip.generateAsync({type:"blob"}).then((content)=>{
-      saveAs(content,folderName);
+    if(counter === images.length)
+   await zip.generateAsync({type:"blob"}).then(async(content)=>{
+        await saveAs(content,folderName)
     })
   } catch (error) {
-    
+    console.log(error);
   }
+ 
+  
 }

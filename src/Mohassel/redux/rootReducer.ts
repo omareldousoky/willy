@@ -7,6 +7,7 @@ import { paymentReducer } from './payment/reducers';
 import {
     DocumentReducer,
     DocumentsReducer,
+    selectionArrayReducer,
 } from './document/reducers';
 
 const rootReducer = combineReducers({
@@ -18,6 +19,8 @@ const rootReducer = combineReducers({
     payment: paymentReducer,
     document: DocumentReducer,
     documents: DocumentsReducer,
+    selectionArray: selectionArrayReducer,
+
 })
 
 export default rootReducer

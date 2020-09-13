@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
-import { uploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocument';
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes';
-import { deleteDocument } from '../../Services/APIs/Customer-Creation/deleteDocument';
 import * as local from '../../../Shared/Assets/ar.json';
 import DocumentUploader from '../documentUploader/documentUploader';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -12,23 +9,27 @@ import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import { DocumentType } from '../../Services/interfaces'
 import { connect } from 'react-redux';
-import { getDocuments } from '../../redux/document/actions'
+import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../redux/document/actions'
+import {Image} from '../../redux/document/types';
+import { downloadAsZip } from '../../Services/utils';
 interface State {
-  loading: boolean;
   docsOfImagesFiles: any[];
   documentTypes: any[];
-  selectionArray: any[];
   options: any[];
-  checkAll: boolean;
+  selectAll: boolean;
+  loading: boolean;
 }
 interface Props {
   customerId: string;
   previousStep?: () => void;
   getDocuments: typeof getDocuments;
+  addAllToSelectionArray: typeof addAllToSelectionArray;
+  clearSelectionArray: typeof clearSelectionArray;
   edit: boolean;
   view?: boolean;
   loading: boolean;
   documents: any[];
+  selectionArray: Image[];
 }
 class DocumentsUpload extends Component<Props, State>{
   constructor(props) {
@@ -39,10 +40,27 @@ class DocumentsUpload extends Component<Props, State>{
         key: '',
         url: '',
       }]],
-      selectionArray: [],
-      loading: false,
-      checkAll: false,
       options: [],
+      selectAll: false,
+      loading: false,
+    }
+  }
+  selectAllOptions() {
+    if(this.state.selectAll=== true) {
+      this.setState({selectAll:false});
+      this.props.clearSelectionArray();
+    } else {
+      this.setState({selectAll: true});
+      const images: Image[] = [];
+      this.props.documents.map((doc)=> {
+        doc.imagesFiles.map((image)=> {
+          images.push({
+            fileName: image.key,
+            url: image.url,
+          })
+        } )
+      });
+      this.props.addAllToSelectionArray(images);
     }
   }
   async componentDidMount() {
@@ -61,18 +79,24 @@ class DocumentsUpload extends Component<Props, State>{
   render() {
     return (
       <>
-        <Loader type="fullscreen" open={this.props.loading } />
+        <Loader type="fullscreen" open={this.props.loading  || this.state.loading } />
         <Row style={{justifyContent:"space-between"}}>
           <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
             <Form.Check
               type='checkbox'
               id='check-all'
               label={local.checkAll}
-              checked={this.state.checkAll}
+              checked={this.state.selectAll}
+              onChange ={()=>this.selectAllOptions()}
             />
           </div>
           <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
-          <Button style={{width:'150px'}}  variant="primary">{local.download}</Button> </div>
+          <Button style={{width:'150px'}}  variant="primary" disabled = {this.props.selectionArray.length <= 0} onClick={async ()=>{
+            this.setState({loading: true})
+             const res = await downloadAsZip(this.props.selectionArray,`customer-${this.props.customerId}-${new Date().valueOf()}`);
+             console.log(res);
+             this.setState({loading: false})
+          }}>{local.download}</Button> </div>
         </Row>
         {this.state.documentTypes.map((documentType: DocumentType, index) => {
 
@@ -96,13 +120,15 @@ class DocumentsUpload extends Component<Props, State>{
 const addDocumentToProps = dispatch => {
   return {
     getDocuments: (obj) => dispatch(getDocuments(obj)),
+    addAllToSelectionArray: (images) => dispatch(addAllToSelectionArray(images)),
+    clearSelectionArray: ()=> dispatch(clearSelectionArray()),
   };
 }
 const mapStateToProps = (state) => {
   return {
     loading: state.loading,
     documents: state.documents as any[],
-
+    selectionArray: state.selectionArray ,
   }
 }
 

@@ -10,6 +10,11 @@ import {
     INVALID_DOCUMENT,
     DocumentActionType,
     ADD_NEW_TO_DOCUMENTS,
+    Image,
+    ADD_TO_SELECTION_ARRAY,
+    ADD_ALL_TO_SELECTION_ARRAY,
+    REMOVE_FROM_SELECTION_ARRAY,
+    CLEAR_SELECTION_ARRAY,
 } from './types';
 import produce from 'immer';
 const initialDocState: DocumentState = {
@@ -17,7 +22,6 @@ const initialDocState: DocumentState = {
         key: '',
         url: '',
         valid: true,
-        selected: false,
     }
 }
 
@@ -37,8 +41,8 @@ export const DocumentsReducer = produce((draft: any[] = [], action: DocumentActi
     switch (action.type) {
         case GET_DOCUMENTS: {
 
-          return  draft = action.payload
-            
+            return draft = action.payload
+
         }
         case ADD_TO_DOCUMENTS: {
 
@@ -56,14 +60,13 @@ export const DocumentsReducer = produce((draft: any[] = [], action: DocumentActi
         }
         case REMOVE_FROM_DOCUMENTS: {
 
-            let index =-1;
+            let index = -1;
             for (const doc of draft) {
                 if (doc.docName === action.name) {
-                   index= doc.imagesFiles.findIndex(item => item.key == action.key)
+                    index = doc.imagesFiles.findIndex(item => item.key == action.key)
                 }
-                if(index!== -1)
-                {
-                    doc.imagesFiles.splice(index,1);
+                if (index !== -1) {
+                    doc.imagesFiles.splice(index, 1);
                 }
             }
             break;
@@ -80,6 +83,29 @@ export const DocumentsReducer = produce((draft: any[] = [], action: DocumentActi
             }
             break;
         }
+        default:
+            return draft;
+    }
+})
+export const selectionArrayReducer = produce((draft: Image[] = [], action) => {
+    switch (action.type) {
+        case ADD_ALL_TO_SELECTION_ARRAY:
+            return draft = action.payload
+        case ADD_TO_SELECTION_ARRAY:
+            draft.push(action.payload)
+            break;
+        case REMOVE_FROM_SELECTION_ARRAY:
+            {
+                let index = -1;
+                index = draft.findIndex(element => element.fileName === action.payload)
+               console.log(index , "index")
+                if (index !== -1) {
+                    draft.splice(index, 1);
+                }
+            }
+            break;
+        case CLEAR_SELECTION_ARRAY:
+           return [];
         default:
             return draft;
     }
