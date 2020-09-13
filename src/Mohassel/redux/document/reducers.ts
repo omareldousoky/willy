@@ -98,7 +98,6 @@ export const selectionArrayReducer = produce((draft: Image[] = [], action) => {
             {
                 let index = -1;
                 index = draft.findIndex(element => element.fileName === action.payload)
-               console.log(index , "index")
                 if (index !== -1) {
                     draft.splice(index, 1);
                 }

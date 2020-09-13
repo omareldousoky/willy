@@ -20,6 +20,7 @@ import { deleteDocument as applicationDeleteDocument } from '../../Services/APIs
 import { getCustomerDocuments } from '../../Services/APIs/Customer-Creation/getDocuments';
 import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments';
 import {Document} from '../../Services/interfaces'
+import Swal from 'sweetalert2';
 
 const handleDocuments = (docs: any[], id, type) => {
     const documents: DocumentsState = []
@@ -33,7 +34,6 @@ const handleDocuments = (docs: any[], id, type) => {
 }
 
 export const uploadDocument = (obj,docType) => {
-    // const documentType = obj.docType
     switch (docType) {
         case ('customer'):
             return async (dispatch) => {
@@ -110,7 +110,7 @@ export const getDocuments = (obj) => {
                 if (res.status === "success") {
                     dispatch({ type: GET_DOCUMENTS, payload: handleDocuments(res.body.docs, obj.customerId, documentType) })
                 } else {
-                    console.log("Error!");
+                    Swal.fire("error!",res.error);
                 }
             }
         case ('loanApplication'):
@@ -123,7 +123,7 @@ export const getDocuments = (obj) => {
                 if (res.status === "success") {
                     dispatch({ type: GET_DOCUMENTS, payload: handleDocuments(res.body.docs, obj.applicationId, documentType) })
                 } else {
-                    console.log("Error!");
+                    Swal.fire("error!",res.error);
                 }
             }
         default:

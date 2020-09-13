@@ -2,6 +2,7 @@ import * as local from '../../Shared/Assets/ar.json';
 import jwtDecode from 'jwt-decode';
 import JsZip from 'jszip';
 import {saveAs} from 'file-saver'
+import Swal from 'sweetalert2';
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -450,7 +451,8 @@ export const downloadAsZip = async (images: Array<{url: string; fileName: string
         await saveAs(content,folderName)
     })
   } catch (error) {
-    console.log(error);
+    Swal.fire("error", "Can't Download you folder");
+    console.log(error); // this log is for purpose
   }
  
   
