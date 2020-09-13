@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
     loading: loadingReducer,
     searchFilters: searchFiltersReducer,
     issuedLoansSearchFilters: issuedLoansSearchFiltersReducer,
-    payment: paymentReducer
+    payment: paymentReducer,
     document: DocumentReducer,
     documents: DocumentsReducer,
     selectionArray: selectionArrayReducer,
