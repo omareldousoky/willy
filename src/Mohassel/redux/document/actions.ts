@@ -23,7 +23,7 @@ import {Document} from '../../Services/interfaces'
 
 const handleDocuments = (docs: any[], id, type) => {
     const documents: DocumentsState = []
-    docs.map((doc) => {
+    docs?.map((doc) => {
         documents.push({
             docName: doc.name,
             imagesFiles: doc.docs,

@@ -433,7 +433,7 @@ export const getDataURL = async(url) => {
 }
 export const downloadAsZip = async (images: Array<{url: string; fileName: string}>, folderName: string) => {
   const zip =  new JsZip();
-  const base64Matcher = new RegExp("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$");
+  const base64Matcher = new RegExp(/^data:image\/(png|jpg);base64,/);
   try {
     let counter = 0;
     images.forEach((image) => {

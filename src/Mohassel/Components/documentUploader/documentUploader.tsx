@@ -124,7 +124,7 @@ class DocumentUploader extends Component<Props, State> {
         formData.append("docName", name);
         formData.append(this.props.keyName, this.props.keyId);
         formData.append("file", files[index]);
-        await this.props.uploadDocument(formData, 'customer');
+        await this.props.uploadDocument(formData, this.props.documentType.type);
         if (this.props.document.status === 'success') {
           const reader = new FileReader();
           const file = files[index];
@@ -159,7 +159,7 @@ class DocumentUploader extends Component<Props, State> {
       key: this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key].key,
       delete: (this.props.documentType.updatable && this.props.documentType.active),
     }
-    await this.props.deleteDocument(data, 'customer');
+    await this.props.deleteDocument(data, this.props.documentType.type);
     if (this.props.document.status === "success" && this.props.documentType.updatable) {
       this.props.deleteFromDocuments(data.key, name);
     } else if (this.props.document.status === "success" && !this.props.documentType.updatable) {
@@ -270,7 +270,6 @@ class DocumentUploader extends Component<Props, State> {
     )
   }
   selectItem(document: any) {
-    console.log("FFFf");
     if (!this.props.selectionArray.find((image) => image.fileName === document.key)) {
       
       this.props.AddToSelectionArray({
@@ -383,8 +382,8 @@ class DocumentUploader extends Component<Props, State> {
 }
 const addDocumentToProps = dispatch => {
   return {
-    uploadDocument: document => dispatch(uploadDocument(document, 'customer')),
-    deleteDocument: document => dispatch(deleteDocument(document, 'customer')),
+    uploadDocument: (document, docType) => dispatch(uploadDocument(document, docType)),
+    deleteDocument: (document, docType) => dispatch(deleteDocument(document, docType)),
     addToDocuments: (document, docName) => dispatch(addToDocuments(document, docName)),
     deleteFromDocuments: (key, docName) => dispatch(deleteFromDocuments(key, docName)),
     invalidDocument: (key, docName) => dispatch(invalidDocument(key, docName)),

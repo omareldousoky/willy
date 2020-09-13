@@ -94,9 +94,8 @@ class DocumentsUpload extends Component<Props, State>{
           <Button style={{width:'150px'}}  variant="primary" disabled = {this.props.selectionArray.length <= 0} onClick={async ()=>{
             this.setState({loading: true})
              const res = await downloadAsZip(this.props.selectionArray,`customer-${this.props.customerId}-${new Date().valueOf()}`);
-             console.log(res);
              this.setState({loading: false})
-          }}>{local.download}</Button> </div>
+          }}>{`${local.download}(${this.props.selectionArray.length})`}</Button> </div>
         </Row>
         {this.state.documentTypes.map((documentType: DocumentType, index) => {
 
