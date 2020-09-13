@@ -448,7 +448,7 @@ class Reports extends Component<{}, State> {
         this.setState({ loading: false }, () => Swal.fire("error", local.noResults));
       }
       this.setState({ loading: false });
-      downloadTxtFile(res.body.loans, true);
+      downloadTxtFile(res.body.loans, true, values.fromDate);
     } else {
       this.setState({ loading: false });
       console.log(res);
