@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import {branchReducer} from'./branch/reducers';
 import {authReducer} from './auth/reducers';
-import {searchReducer, searchFiltersReducer} from './search/reducers';
+import {searchReducer, searchFiltersReducer, issuedLoansSearchFiltersReducer} from './search/reducers';
 import {loadingReducer} from './loading/reducers';
 import { paymentReducer } from './payment/reducers';
 import {
@@ -16,11 +16,11 @@ const rootReducer = combineReducers({
     search: searchReducer,
     loading: loadingReducer,
     searchFilters: searchFiltersReducer,
-    payment: paymentReducer,
+    issuedLoansSearchFilters: issuedLoansSearchFiltersReducer,
+    payment: paymentReducer
     document: DocumentReducer,
     documents: DocumentsReducer,
     selectionArray: selectionArrayReducer,
-
 })
 
 export default rootReducer

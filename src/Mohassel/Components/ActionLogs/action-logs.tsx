@@ -68,7 +68,8 @@ class ActionLogs extends Component <Props, State>{
                     <Search 
                     searchKeys={['keyword', 'dateFromTo',  'actions']} 
                     dropDownKeys={['authorName' ]} 
-                    url="actionLogs" 
+                    url="actionLogs"
+                    setFrom= {(from) => this.setState({from: from})} 
                     from={this.state.from} 
                     size={this.state.size} 
                     datePlaceholder={local.transactionDate}

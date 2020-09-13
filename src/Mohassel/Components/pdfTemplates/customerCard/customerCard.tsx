@@ -123,7 +123,7 @@ class CustomerCardPDF extends Component<Props, State> {
                     </tbody>
                 </table>
 
-                <table className="tablestyle" style={{ width: '90%', border: "1px black solid" }}>
+                <table className="tablestyle" style={{ border: "1px black solid" }}>
                     <tbody>
                         <tr>
                             <th>القسط</th>
@@ -136,7 +136,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <th>الحاله</th>
                             <th>تاريخ الحاله</th>
                             <th>ايام التأخير</th>
-                            <th style={{ width: "30%" }}>ملاحظات</th>
+                            <th style={{ width: "15%" }}>ملاحظات</th>
                         </tr>
                         {this.props.data.installmentsObject.installments.map(installment => {
                             return (<tr key={installment.id}>

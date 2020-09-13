@@ -310,6 +310,9 @@ export const getLoanStatus = (status: string) => {
       case 'underReview': return local.underReview;
       case 'reviewed': return local.reviewed;
       case 'approved': return local.approved;
+      case 'writtenOff': return local.writtenOffLoan;
+      case 'Doubtful': return local.doubtedLoan;
+      case 'doubt_cancelled': return local.cancelled;
       default: return '';
   }
 }
@@ -407,6 +410,16 @@ export const getAge = (DOB) => {
   }
 
   return age;
+}
+
+export const getRandomPaymentByKey = (key)=>{
+  if(key==='collectionCommission') return local.collectionCommission
+  else if(key==="reissuingFees") return local.reissuingFees
+  else if(key==="legalFees") return local.legalFees
+  else if(key==="clearanceFees") return local.clearanceFees
+  else if(key==='toktokStamp') return local.toktokStamp
+  else if(key==='tricycleStamp') return local.tricycleStamp
+  else if(key==='penalty') return local.payPenalty
 }
 export const getDataURL = async(url) => {
 

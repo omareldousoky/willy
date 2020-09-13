@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Swal from 'sweetalert2';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
@@ -14,7 +10,6 @@ import { PendingActions } from '../../Services/interfaces';
 import { payment } from '../../redux/payment/actions';
 import { connect } from 'react-redux';
 import PayInstallment from "./payInstallment";
-import Can from '../../config/Can';
 import { calculateEarlyPayment, earlyPayment, editManualPayment, manualPayment, payFutureInstallment, payInstallment, otherPayment } from "../../Services/APIs/Payment";
 import * as local from '../../../Shared/Assets/ar.json';
 import './styles.scss';
@@ -22,7 +17,11 @@ import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalti
 import { payPenalties } from '../../Services/APIs/Payment/payPenalties';
 import { cancelPenalties } from '../../Services/APIs/Payment/cancelPenalties';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
-import AsyncSelect from 'react-select/async';
+import PaymentIcons from './paymentIcons';
+import EarlyPayment from './earlyPayment';
+import ManualPayment from './manualPayment';
+import { randomManualPayment } from '../../Services/APIs/Payment/randomManualPayment';
+import { editManualOtherPayment } from '../../Services/APIs/Payment/editManualOtherPayment';
 
 interface Installment {
   id: number;
@@ -64,6 +63,7 @@ interface Props {
   setEarlyPaymentData: (data) => void;
   manualPaymentEditId: string;
   paymentType: string;
+  randomPendingActions: Array<any>;
 }
 export interface Employee {
   _id: string;
@@ -89,6 +89,7 @@ interface State {
   payerName: string;
   payerId: string;
   employees: Array<Employee>;
+  randomPaymentType: string;
 }
 
 class Payment extends Component<Props, State>{
@@ -160,24 +161,17 @@ class Payment extends Component<Props, State>{
       payerNationalId: '',
       payerName: '',
       payerId: '',
-      employees: []
+      employees: [],
+      randomPaymentType: '',
     }
        this.mappers = normalTableMappers;
   }
   componentDidMount() {
     if(this.props.paymentType==='penalties' &&  this.state.penalty === -1){
       this.calculatePenalties()
-    }
-    if(Object.keys(this.props.pendingActions).length) {
-      this.setState({
-        payAmount:this.props.pendingActions.transactions? this.props.pendingActions.transactions[0].transactionAmount: 0,
-        payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
-        payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
-        payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
-        payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
-        receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-        truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
-      })
+    } 
+    if(this.props.manualPaymentEditId) {
+      this.setManualPaymentValues();
     }
   }
 
@@ -189,6 +183,36 @@ class Payment extends Component<Props, State>{
         ) {
           this.calculatePenalties();
         }
+        if(prevProps.manualPaymentEditId !== this.props.manualPaymentEditId) {
+          this.setManualPaymentValues()
+        }
+  }
+  setManualPaymentValues() {
+      const pendingAction = this.props.randomPendingActions.find(el => el._id === this.props.manualPaymentEditId);
+      if(pendingAction){
+        this.setState({
+          randomPaymentType: pendingAction.transactions[0].action,
+          payAmount: pendingAction.transactions[0].transactionAmount,
+          payerType: pendingAction.payerType,
+          payerNationalId: pendingAction.payerNationalId,
+          payerName: pendingAction.transactions[0].payerName,
+          payerId: pendingAction.transactions[0].payerId,
+          receiptNumber: pendingAction.receiptNumber,
+          truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
+        })
+      } else {
+        const payAmount = this.props.pendingActions.transactions?.reduce((accumulator, pendingAction) => { return accumulator + pendingAction.transactionAmount }, 0)
+        this.setState({
+          randomPaymentType: '',
+          payAmount: payAmount ? payAmount : 0,
+          payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
+          payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
+          payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
+          payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
+          receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
+          truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+        })
+      }
   }
   
   getUsersByAction = async (input: string) => {
@@ -229,20 +253,6 @@ class Payment extends Component<Props, State>{
       default: return null;
     }
   }
-  getRequiredAmount() {
-    // const todaysDate = new Date("2020-06-30").valueOf();
-    const todaysDate = new Date().valueOf();
-    let total = 0;
-    const installments: Array<number> = [];
-    this.props.installments.forEach(installment => {
-      if (todaysDate >= installment.dateOfPayment) {
-        if (installment.status !== "paid")
-          total = total + installment.installmentResponse - installment.totalPaid;
-        installments.push(installment.id);
-      } else return total;
-    })
-    return { total: total, installments: installments };
-  }
   handleSubmit = async (values) => {
     this.setState({ loadingFullScreen: true })
     if (this.props.paymentState === 1) {
@@ -251,7 +261,6 @@ class Payment extends Component<Props, State>{
           const obj = {
             id: this.props.applicationId,
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(), 
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -269,7 +278,6 @@ class Payment extends Component<Props, State>{
           const obj = {
             id: this.props.applicationId,
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(), 
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -286,32 +294,31 @@ class Payment extends Component<Props, State>{
           }
         }
       } else if(this.props.paymentType === "random") {
-        const data = {
-          payAmount: values.payAmount,
-          truthDate: new Date(values.truthDate).valueOf(),
-          type: values.randomPaymentType,
-          payerType: values.payerType,
-          payerId: values.payerId,
-          payerName: values.payerName,
-          payerNationalId: values.payerNationalId.toString(),
-        };
-        const res = await otherPayment({ id: this.props.applicationId, data });
-        if (res.status === "success") {
-          const resBody = res.body;
-          resBody[0].type = "randomPayment";
-          resBody[0].randomPaymentType = values.randomPaymentType;
-          this.props.setReceiptData(resBody);
-          this.props.print({print: 'randomPayment'});
-          this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
-        } else {
-          this.setState({ loadingFullScreen: false });
-        }
+          const data = {
+            payAmount: values.payAmount,
+            truthDate: new Date(values.truthDate).valueOf(),
+            type: values.randomPaymentType,
+            payerType: values.payerType,
+            payerId: values.payerId,
+            payerName: values.payerName,
+            payerNationalId: values.payerNationalId?.toString(),
+          };
+          const res = await otherPayment({ id: this.props.applicationId, data });
+          if (res.status === "success") {
+            const resBody = res.body;
+            resBody[0].type = "randomPayment";
+            resBody[0].randomPaymentType = values.randomPaymentType;
+            this.props.setReceiptData(resBody);
+            this.props.print({print: 'randomPayment'});
+            this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
       }
       else if(this.props.paymentType === "penalties") {
         if(this.state.penaltyAction==='pay'){
           const data = {
             payAmount: values.payAmount,
-            truthDate: new Date(values.truthDate).valueOf(),
             payerType: values.payerType,
             payerId: values.payerId,
             payerName: values.payerName,
@@ -364,6 +371,7 @@ class Payment extends Component<Props, State>{
         this.setState({ loadingFullScreen: false });
       }
     } else {
+      if (this.props.paymentType === "normal") {
       if (this.props.manualPaymentEditId === "") {
         const obj = {
           id: this.props.applicationId,
@@ -388,6 +396,10 @@ class Payment extends Component<Props, State>{
           payAmount: values.payAmount,
           receiptNumber: values.receiptNumber,
           truthDate: new Date(values.truthDate).valueOf(),
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId.toString(),
         }
         const res = await editManualPayment(obj);
         if (res.status === "success") {
@@ -395,6 +407,37 @@ class Payment extends Component<Props, State>{
           Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
           this.setState({ loadingFullScreen: false });
+        }
+      }
+      } else {
+        const obj = {
+          id: this.props.applicationId,
+          receiptNumber: values.receiptNumber,
+          truthDate: new Date(values.truthDate).valueOf(),
+          payAmount: values.payAmount,
+          payerType: values.payerType,
+          payerId: values.payerId,
+          payerName: values.payerName,
+          payerNationalId: values.payerNationalId? values.payerNationalId.toString(): '',
+          type: this.props.paymentType === "random" ? values.randomPaymentType : 'penalty',
+          actionId: this.props.manualPaymentEditId? this.props.manualPaymentEditId: '',
+        }
+        if (this.props.manualPaymentEditId === "") {
+          const res = await randomManualPayment(obj);
+          if (res.status === "success") {
+            this.setState({ loadingFullScreen: false });
+            Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
+        } else {
+          const res = await editManualOtherPayment(obj);
+          if (res.status === "success") {
+            this.setState({ loadingFullScreen: false });
+            Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
+          } else {
+            this.setState({ loadingFullScreen: false });
+          }
         }
       }
     }
@@ -416,134 +459,21 @@ class Payment extends Component<Props, State>{
       this.setState({ loading: false });
     }
   }
-  getInstallmentsRemaining() {
-    const installmentsRemaining: Array<number> = [];
-    this.props.installments.forEach(installment => {
-      if (installment.status !== 'paid')
-        installmentsRemaining.push(installment.id);
-    })
-    return installmentsRemaining.toString();
-  }
   componentWillUnmount() {
     this.props.changePaymentState(0)
   }
   renderPaymentMethods() {
     switch (this.props.paymentState) {
       case 0: return (
-                <Card className="payment-menu">
-                  {this.props.paymentType === "normal" ? (
-                    <div className="payment-info">
-                      <h6>{local.requiredAmount}</h6>
-                      <h6>{this.getRequiredAmount().total}</h6>
-                      <h6>{local.forInstallments}</h6>
-                      <h6>
-                        {this.getRequiredAmount().installments.toString()}
-                      </h6>
-                      <h6>{local.dateOfPayment}</h6>
-                      <h6>{}</h6>
-                    </div>
-                  ) : null}
-                  {this.props.paymentType === "penalties" ? (
-                    <div className="payment-info">
-                      <h6>{local.requiredAmount}</h6>
-                      <h6>{this.state.penalty}</h6>
-                    </div>
-                  ) : null}
-                  <div className="verticalLine"></div>
-                  <div className="payment-icons-container">
-                    <Can I="payInstallment" a="application">
-                      <div className="payment-icon">
-                        <img
-                          alt={
-                            this.props.paymentType === "penalties"
-                              ? "pay-penalty"
-                              : "pay-installment"
-                          }
-                          src={
-                            this.props.paymentType === "penalties"
-                              ? require("../../Assets/payPenalty.svg")
-                              : require("../../Assets/payInstallment.svg")
-                          }
-                        />
-                        <Button
-                          disabled={this.props.application.status === "pending"}
-                          onClick={() => {
-                            if (this.props.paymentType === "penalties") {
-                              this.setState({ penaltyAction: "pay" });
-                              this.props.changePaymentState(1);
-                            } else this.props.changePaymentState(1);
-                          }}
-                          variant="primary"
-                        >
-                          {this.props.paymentType === "penalties"
-                            ? local.payPenalty
-                            : local.payInstallment}
-                        </Button>
-                      </div>
-                    </Can>
-                    {this.props.paymentType === "penalties" ? (
-                      <Can I="rollback" a="application">
-                        <div className="payment-icon">
-                          <img
-                            alt="cancel-penalty"
-                            src={require("../../Assets/cancelPenalty.svg")}
-                          />
-                          <Button
-                            disabled={
-                              this.props.application.status === "pending"
-                            }
-                            onClick={() => {
-                              this.setState({ penaltyAction: "cancel" });
-                              this.props.changePaymentState(1);
-                            }}
-                            variant="primary"
-                          >
-                            {local.cancelPenalty}
-                          </Button>
-                        </div>
-                      </Can>
-                    ) : null}
-                    {(this.props.paymentType === "normal" && !this.props.application.writeOff) ? (
-                      <Can I="payEarly" a="application">
-                        <div className="payment-icon">
-                          <img
-                            alt="early-payment"
-                            src={require("../../Assets/earlyPayment.svg")}
-                          />
-                          <Button
-                            disabled={
-                              this.props.application.status === "pending"
-                            }
-                            onClick={() => this.handleClickEarlyPayment()}
-                            variant="primary"
-                          >
-                            {local.earlyPayment}
-                          </Button>
-                        </div>
-                      </Can>
-                    ) : null}
-                    {this.props.paymentType === "normal" ? (
-                      <Can I="payInstallment" a="application">
-                        <div className="payment-icon">
-                          <img
-                            alt="pay-installment"
-                            src={require("../../Assets/payInstallment.svg")}
-                          />
-                          <Button
-                            disabled={
-                              this.props.application.status === "pending"
-                            }
-                            onClick={() => this.props.changePaymentState(3)}
-                            variant="primary"
-                          >
-                            {local.manualPayment}
-                          </Button>
-                        </div>
-                      </Can>
-                    ) : null}
-                  </div>
-                </Card>
-              );
+        <PaymentIcons
+          paymentType={this.props.paymentType}
+          penalty={this.state.penalty}
+          application={this.props.application}
+          installments={this.props.installments}
+          handleClickEarlyPayment={() => this.handleClickEarlyPayment()}
+          handleChangePenaltyAction={(key: string) => this.setState({penaltyAction: key})}
+        />
+      );
       case 1:
         return <PayInstallment
         installments={this.props.installments}
@@ -575,205 +505,16 @@ class Payment extends Component<Props, State>{
               validateOnChange
             >
               {(formikProps) =>
-                <Form onSubmit={formikProps.handleSubmit}>
-                  <Form.Group as={Row} style={{marginTop: 45}}>
-                    <Form.Group as={Col} controlId="installmentsRemaining">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.installmentsRemaining}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          name="installmentsRemaining"
-                          value={this.getInstallmentsRemaining()}
-                          disabled
-                        >
-                        </Form.Control>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="installmentsRemaining">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.remainingPrincipal}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          name="installmentsRemaining"
-                          value={this.state.remainingPrincipal}
-                          disabled
-                        >
-                        </Form.Control>
-                      </Col>
-                    </Form.Group>
-                  </Form.Group>
-                  <Form.Group as={Row}>
-                    <Form.Group as={Col} controlId="earlyPaymentFees">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.earlyPaymentFees}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          name="earlyPaymentFees"
-                          value={this.state.earlyPaymentFees}
-                          disabled
-                        >
-                        </Form.Control>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="requiredAmount">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.requiredAmount}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="number"
-                          name="requiredAmount"
-                          value={this.state.requiredAmount}
-                          disabled
-                        >
-                        </Form.Control>
-                      </Col>
-                    </Form.Group>
-                  </Form.Group>
-                  <Form.Group as={Row}>
-                    <Form.Group as={Col} md={6} controlId="payAmount">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="number"
-                          name="payAmount"
-                          data-qc="payAmount"
-                          value={formikProps.values.payAmount?.toString()}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payAmount}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="truthDate">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="date"
-                          name="truthDate"
-                          data-qc="truthDate"
-                          value={formikProps.values.truthDate}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.truthDate}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          as="select"
-                          name="payerType"
-                          data-qc="payerType"
-                          value={formikProps.values.payerType}
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.payerType) && Boolean(formikProps.touched.payerType)}
-                        >
-                          <option value={''}></option>
-                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          <option value='employee' data-qc='employee'>{local.employee}</option>
-                          <option value='family' data-qc='family'>{local.familyMember}</option>
-                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
-                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payerType}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    {formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          as="select"
-                          name="payerId"
-                          data-qc="payerId"
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.payerId) && Boolean(formikProps.touched.payerId)}
-                        >
-                          <option value={''}></option>
-                          {this.props.application.group.individualsInGroup.map((member, index) => {
-                            return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
-                          })}
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payerId}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>}
-                    {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
-                      <Col>
-                        <AsyncSelect
-                          className={formikProps.errors.payerId ? "error" : ""}
-                          name="payerId"
-                          data-qc="payerId"
-                          value={this.state.employees.find(employee => employee._id === formikProps.values.payerId)}
-                          onBlur={formikProps.handleBlur}
-                          onChange={(employee: any) => formikProps.setFieldValue("payerId", employee._id)}
-                          getOptionLabel={(option) => option.name}
-                          getOptionValue={(option) => option._id}
-                          loadOptions={this.getUsersByAction}
-                          cacheOptions defaultOptions
-                        />
-                        {formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
-                          {formikProps.errors.payerId}
-                        </div>}
-                      </Col>
-                    </Form.Group>}
-                    {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&
-                      <>
-                        <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
-                          <Col>
-                            <Form.Control
-                              name="payerName"
-                              data-qc="payerName"
-                              value={formikProps.values.payerName.toString()}
-                              onBlur={formikProps.handleBlur}
-                              onChange={formikProps.handleChange}
-                              isInvalid={Boolean(formikProps.errors.payerName) && Boolean(formikProps.touched.payerName)} />
-                            <Form.Control.Feedback type="invalid">
-                              {formikProps.errors.payerName}
-                            </Form.Control.Feedback>
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
-                          <Col>
-                          <Form.Control
-                            type="text"
-                            name="payerNationalId"
-                            data-qc="payerNationalId"
-                            maxLength={14}
-                            value={formikProps.values.payerNationalId.toString()}
-                            onBlur={formikProps.handleBlur}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              const re = /^\d*$/;
-                              if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                formikProps.setFieldValue('payerNationalId', event.currentTarget.value)
-                              }
-                            }}
-                            isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
-                            <Form.Control.Feedback type="invalid">
-                              {formikProps.errors.payerNationalId}
-                            </Form.Control.Feedback>
-                          </Col>
-                        </Form.Group>
-                      </>
-                    }
-                  </Form.Group>
-                  <div className="payments-buttons-container">
-                    <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
-                    <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
-                  </div>
-                </Form>
+                <EarlyPayment
+                  loading={this.state.loading}
+                  application={this.props.application}
+                  formikProps={formikProps}
+                  installments={this.props.installments}
+                  remainingPrincipal={this.state.remainingPrincipal}
+                  earlyPaymentFees={this.state.earlyPaymentFees}
+                  requiredAmount={this.state.requiredAmount}
+                  setPayerType={(payerType: string) => this.setState({ payerType: payerType })}
+                />
               }
             </Formik>
           </div>
@@ -789,199 +530,24 @@ class Payment extends Component<Props, State>{
           <div style={{ width: '100%', padding: 20 }}>
             <Formik
               enableReinitialize
-              initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum }}
+              initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
               onSubmit={this.handleSubmit}
               validationSchema={manualPaymentValidation}
               validateOnBlur
               validateOnChange
             >
               {(formikProps) =>
-                <Form onSubmit={formikProps.handleSubmit}>
-                  <Form.Group as={Row}>
-                    <Form.Group as={Col} controlId="truthDate">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="date"
-                          name="truthDate"
-                          data-qc="truthDate"
-                          value={formikProps.values.truthDate}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.truthDate}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="dueDate">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.dueDate}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="date"
-                          name="dueDate"
-                          data-qc="dueDate"
-                          value={formikProps.values.dueDate}
-                          disabled
-                          isInvalid={Boolean(formikProps.errors.dueDate) && Boolean(formikProps.touched.dueDate)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.dueDate}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                  </Form.Group>
-                  <Form.Group as={Row}>
-                    <Form.Group as={Col} md={6} controlId="payAmount">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          type="number"
-                          name="payAmount"
-                          data-qc="payAmount"
-                          value={formikProps.values.payAmount?.toString()}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.payAmount) && Boolean(formikProps.touched.payAmount)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payAmount}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="receiptNumber">
-                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.receiptNumber}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          name="receiptNumber"
-                          data-qc="receiptNumber"
-                          value={formikProps.values.receiptNumber}
-                          onBlur={formikProps.handleBlur}
-                          onChange={formikProps.handleChange}
-                          isInvalid={Boolean(formikProps.errors.receiptNumber) && Boolean(formikProps.touched.receiptNumber)}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.receiptNumber}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          as="select"
-                          name="payerType"
-                          data-qc="payerType"
-                          value={formikProps.values.payerType}
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.payerType) && Boolean(formikProps.touched.payerType)}
-                        >
-                          <option value={''}></option>
-                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          <option value='employee' data-qc='employee'>{local.employee}</option>
-                          <option value='family' data-qc='family'>{local.familyMember}</option>
-                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
-                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payerType}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    {formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
-                      <Col>
-                        <Form.Control
-                          as="select"
-                          name="payerId"
-                          data-qc="payerId"
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.payerId) && Boolean(formikProps.touched.payerId)}
-                        >
-                          <option value={''}></option>
-                          {this.props.application.group.individualsInGroup.map((member, index) => {
-                            return <option key={index} value={member.customer._id}>{member.customer.customerName}</option>
-                          })}
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.payerId}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>}
-                    {formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
-                      <Col>
-                        <AsyncSelect
-                          className={formikProps.errors.payerId ? "error" : ""}
-                          name="payerId"
-                          data-qc="payerId"
-                          value={this.state.employees.find(employee => employee._id === formikProps.values.payerId)}
-                          onFocus={formikProps.handleBlur}
-                          onChange={(employee: any) => formikProps.setFieldValue("payerId", employee._id)}
-                          getOptionLabel={(option) => option.name}
-                          getOptionValue={(option) => option._id}
-                          loadOptions={this.getUsersByAction}
-                          cacheOptions defaultOptions
-                        />
-                        {formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
-                          {formikProps.errors.payerId}
-                        </div>}
-                      </Col>
-                    </Form.Group>}
-                    {(formikProps.values.payerType === 'family' || formikProps.values.payerType === 'nonFamily') &&
-                      <>
-                        <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
-                          <Col>
-                            <Form.Control
-                              name="payerName"
-                              data-qc="payerName"
-                              value={formikProps.values.payerName.toString()}
-                              onBlur={formikProps.handleBlur}
-                              onChange={formikProps.handleChange}
-                              isInvalid={Boolean(formikProps.errors.payerName) && Boolean(formikProps.touched.payerName)} />
-                            <Form.Control.Feedback type="invalid">
-                              {formikProps.errors.payerName}
-                            </Form.Control.Feedback>
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
-                          <Col>
-                          <Form.Control
-                            type="text"
-                            name="payerNationalId"
-                            data-qc="payerNationalId"
-                            maxLength={14}
-                            value={formikProps.values.payerNationalId.toString()}
-                            onBlur={formikProps.handleBlur}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              const re = /^\d*$/;
-                              if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                formikProps.setFieldValue('payerNationalId', event.currentTarget.value)
-                              }
-                            }}
-                            isInvalid={Boolean(formikProps.errors.payerNationalId) && Boolean(formikProps.touched.payerNationalId)} />
-                            <Form.Control.Feedback type="invalid">
-                              {formikProps.errors.payerNationalId}
-                            </Form.Control.Feedback>
-                          </Col>
-                        </Form.Group>
-                      </>
-                    }
-                  </Form.Group>
-                  <div className="payments-buttons-container">
-                    <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
-                    <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
-                  </div>
-                </Form>
+                <ManualPayment
+                  payAmount={this.state.payAmount}
+                  truthDate={this.state.truthDate}
+                  paymentType={this.props.paymentType}
+                  receiptNumber={this.state.receiptNumber}
+                  setPayerType={(payerType: string) => this.setState({ payerType: payerType })}
+                  application={this.props.application}
+                  handleSubmit={this.handleSubmit}
+                  randomPendingActions={this.props.randomPendingActions}
+                  formikProps={formikProps}
+                />
               }
             </Formik>
           </div>
@@ -1000,17 +566,6 @@ class Payment extends Component<Props, State>{
       this.setState({ penalty: res.body.penalty, loadingFullScreen: false });
     } else this.setState({ loadingFullScreen: false });
   }
-  getValueFromLocalizationFileByKey = (key)=>{
-    if(key==='collectionCommission') return local.collectionCommission
-    else if(key==="payReissuingFees") return local.reissuingFees
-    else if(key==="payLegalFees") return local.legalFees
-    else if(key==="payClearanceFees") return local.clearanceFees
-    else if(key==='payToktokStamp') return local.toktokStamp
-    else if(key==='payTricycleStamp') return local.tricycleStamp
-    else if(key==='payPenalties') return local.payPenalty
-    else if(key==='cancelPenalties') return local.cancelPenalty
-    else if(key==="payRandomPayment") return local.financialTransactions
- }
   render() {
     return (
       <>

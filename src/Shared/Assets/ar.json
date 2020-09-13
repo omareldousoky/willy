@@ -309,6 +309,7 @@
     "rescheduling": "إعادة جدولة",
     "reschedulingTest": "تجربة إعادة جدولة",
     "postponeInstallments": "ترحيل اقساط",
+    "postponeHalfInstallment": "ترحيل نصف قسط",
     "traditionalRescheduling": "جدولة تقليدية",
     "freeRescheduling": "جدولة حرة",
     "installmentsTableBeforeRescheduling": "جدول الاقساط قبل الترحيل",
@@ -705,5 +706,8 @@
     "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧",
     "writtenOffLoans":"قروض مشطوبة",
     "customerPartialCode":"كود العميل الجزئي",
-    "partialCode":"الكود الجزئي"
+    "partialCode":"الكود الجزئي",
+    "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق",
+    "divide":"مقسمة",
+    "now":"الأن"
 }
