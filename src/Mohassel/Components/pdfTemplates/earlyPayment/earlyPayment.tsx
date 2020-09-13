@@ -27,7 +27,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
         let totalDaysLate = 0;
         let totalDaysEarly = 0;
         let latePrincipal = 0;
-        let installmentsDue: Array<number> = []
+        const installmentsDue: Array<number> = []
         this.props.data.installmentsObject.installments.forEach(installment => {
             if ((new Date(installment.dateOfPayment).getMonth() === new Date().getMonth()
                     && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear() && (getStatus(installment) === local.unpaid)) 
