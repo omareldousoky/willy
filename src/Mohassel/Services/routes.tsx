@@ -42,6 +42,7 @@ import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
 import Reports from '../Components/Reports/reports';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
+import BranchAreas from '../Components/BranchAreas/branchAreas';
 
 const appRoutes = [
   {
@@ -143,6 +144,11 @@ const appRoutes = [
         path: "/loan-uses",
         label: local.loanUses,
         render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+      },
+      {
+        path: "/branch-areas",
+        label: local.branchAreas,
+        render: (props) => <Can I='loanUsage' a='config'><BranchAreas /></Can>
       },
       {
         path: "/bulk-approvals",

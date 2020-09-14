@@ -18,7 +18,7 @@ interface Props {
     title: string;
     history: Array<string>;
 };
-interface Branch {
+export interface Branch {
     _id: string;
     name: string;
 }

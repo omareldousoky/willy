@@ -708,5 +708,6 @@
     "customerPartialCode":"كود العميل الجزئي",
     "partialCode":"الكود الجزئي",
     "divide":"مقسمة",
-    "now":"الأن"
+    "now":"الأن",
+    "branchAreas":"التقسيم الجغرافي للفروع"
 }
