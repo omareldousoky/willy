@@ -63,7 +63,7 @@ class TransactionLogs extends Component<Props, State> {
     }
     async getLogs(id) {
         this.setState({ loading: true })
-        const res = await getApplicationTransactionLogs(id);
+        const res = await getApplicationTransactionLogs(id,this.state.size ,this.state.from);
         if (res.status === "success") {
             this.setState({
                 data: res.body.data?res.body.data:[],
@@ -82,12 +82,12 @@ class TransactionLogs extends Component<Props, State> {
                                   {this.state.data.length > 0 ?
                                         <DynamicTable 
                                         totalCount={this.state.totalCount} 
-                                        pagination={false}
+                                        pagination={true}
                                         data={this.state.data} 
                                         mappers={mappers}
-                                        // changeNumber={(key: string, number: number) => {
-                                        //     this.setState({ [key]: number } as any, () => this.getLogs(this.props.id));
-                                        // }}
+                                        changeNumber={(key: string, number: number) => {
+                                            this.setState({ [key]: number } as any, () => this.getLogs(this.props.id));
+                                        }}
                                          />
                     :
                 <p style={{textAlign: 'center'}}>{local.noLogsFound}</p>

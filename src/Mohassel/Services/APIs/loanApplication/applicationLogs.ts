@@ -10,8 +10,8 @@ export const getApplicationLogs = async (applicationId: string,size: number , fr
         return { status: "error", error: error.response.data }
     }
 }
-export const getApplicationTransactionLogs = async (applicationId: string) => {
-    const url = process.env.REACT_APP_BASE_URL + `/application/${applicationId}/transactions`;
+export const getApplicationTransactionLogs = async (applicationId: string,size: number , from: number ) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/${applicationId}/transactions?size=${size}&from=${from}`;
      try {
          const res = await axios.get(url);
          return { status: "success", body: res.data }
