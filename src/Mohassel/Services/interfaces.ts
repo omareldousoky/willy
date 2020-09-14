@@ -108,10 +108,10 @@ export interface GuaranteedLoan{
     customerKey: string;
     applicationCode: string;
     customerName: string;
-    appStatus: string;
-    approvalDate: string;
-    loanStatus: string;
-    issueDate: string;
+    appStatus?: string;
+    approvalDate?: string;
+    loanStatus?: string;
+    issueDate?: string;
 }
 export interface GuaranteedLoans {
         data: Array<GuaranteedLoan>;

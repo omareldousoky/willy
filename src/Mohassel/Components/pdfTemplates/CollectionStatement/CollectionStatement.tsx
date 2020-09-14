@@ -1,6 +1,7 @@
 import React from "react";
 import "./CollectionStatement.scss";
 import { timeToDateyyymmdd } from "../../../Services/utils";
+import Table from "react-bootstrap/Table";
 
 const CollectionStatement = (props) => {
   const branches = props.data.data.branches;
@@ -8,18 +9,22 @@ const CollectionStatement = (props) => {
   const startDate = timeToDateyyymmdd(props.data.startDate);
   const endDate = timeToDateyyymmdd(props.data.endDate);
 
-  const trimmedValue = (string) => {
-    const splitted = string.split(".", 2);
-    splitted[1] = splitted[1].substring(0, 2);
-    return splitted.join("");
+  const trimmedValue = (value: string) => {
+    if (value.includes(".")) {
+      const splitted = value.split(".", 2);
+      splitted[1] = splitted[1].substring(0, 2);
+      return splitted.join(".");
+    } else {
+      return value;
+    }
   };
 
   const BranchComponent = ({ branch }) => {
     return (
       <>
         <tr>
-          <th>{branch.branchCode}</th>
-          <th>{branch.branchName}</th>
+          <th style={{ fontSize: 16 }}>{branch.branchCode}</th>
+          <th style={{ fontSize: 16 }}>{branch.branchName}</th>
         </tr>
         <tr>
           <th>التاريخ</th>
@@ -69,12 +74,12 @@ const CollectionStatement = (props) => {
           </tr>
         </thead>
       </table>
-      <table style={{ width: "100%" }}>
+      <Table style={{ width: "100%" }} striped bordered hover>
         <tbody>
           {branches.map((branch, idx) => (
             <BranchComponent key={idx} branch={branch} />
           ))}
-          <tr>
+          <tr style={{ fontSize: 16 }}>
             <td>{"إجمالى عام"}</td>
             <td>{trimmedValue(total.fees)}</td>
             <td>{trimmedValue(total.installmentsPrincipal)}</td>
@@ -85,7 +90,7 @@ const CollectionStatement = (props) => {
             <td>{trimmedValue(total.totalCollected)}</td>
           </tr>
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };

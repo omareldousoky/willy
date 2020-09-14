@@ -235,9 +235,9 @@ class PostponeInstallments extends Component<Props, State>{
                                             disabled={!formikProps.values.withInterest}
                                         >
                                             <option value=''></option>
-                                            <option value='now'>Now</option>
-                                            <option value='divide'>Divide</option>
-                                            <option value='installment'>Installment</option>
+                                            <option value='now'>{local.now}</option>
+                                            <option value='divide'>{local.divide}</option>
+                                            <option value='installment'>{local.installment}</option>
                                         </Form.Control>
                                         <Form.Control.Feedback type="invalid">
                                             {formikProps.errors.payWhere}

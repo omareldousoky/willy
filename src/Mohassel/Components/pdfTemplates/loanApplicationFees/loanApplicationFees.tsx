@@ -39,9 +39,12 @@ const statusLocalization = (status: string) => {
             return ('مدفوع');
         case 'issued':
             return ('مصدر');
-
+        case 'canceled':
+            return ('ملغي');
+         case 'pending':
+             return('قيد التحقيق');
         default:
-            return null;
+            return status;
     }
 }
 const LoanApplicationFees = (props: Props) => {
@@ -90,7 +93,7 @@ const LoanApplicationFees = (props: Props) => {
                                                 <th>تاريخ القرض</th>
                                                 <th style={{ width: "10%" }}>الحالة الان</th>
                                                 <th>أصل</th>
-                                                <th>قيمة الحركة مصاريف</th>
+                                                <th>قيمة الحركة فائدة</th>
                                                 <th>إجمالي</th>
                                                 <th>حالة الحركة</th>
                                             </tr>

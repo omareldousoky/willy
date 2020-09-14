@@ -285,6 +285,18 @@ export const getStatus = (installment) => {
       default: return '';
   }
 }
+export const getInstallmentStatus = (status: string) => {
+  switch (status) {
+      case 'unpaid': return local.unpaid;
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
 export const getLoanStatus = (status: string) => {
   switch (status) {
       case 'pending': return local.pending;
@@ -297,6 +309,9 @@ export const getLoanStatus = (status: string) => {
       case 'underReview': return local.underReview;
       case 'reviewed': return local.reviewed;
       case 'approved': return local.approved;
+      case 'writtenOff': return local.writtenOffLoan;
+      case 'Doubtful': return local.doubtedLoan;
+      case 'doubt_cancelled': return local.cancelled;
       default: return '';
   }
 }
@@ -364,19 +379,26 @@ export const getTimestamp = (datetimeString: string) => {
   return datum
 }
 export const iscoreDate = (date: any) => {
-  const MyDate = new Date(date);
-  const MyDateString = ('0' + MyDate.getDate()).slice(-2) + '/'
-  + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
-  + MyDate.getFullYear();
-  return MyDateString
+  const iscoreDate = new Date(date);
+  const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
+    + ('0' + (iscoreDate.getMonth() + 1)).slice(-2) + '/'
+    + iscoreDate.getFullYear();
+  return iscoreDateString
 }
 
 export const getDateString = (date: any) => {
   return (
-      new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
   )
 }
 
+export const downloadFile = (fileURL) => {
+  const link = document.createElement('a');
+  link.href = fileURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 export const getAge = (DOB) => {
   const today = new Date();
   const birthDate = new Date(DOB);
@@ -387,4 +409,14 @@ export const getAge = (DOB) => {
   }
 
   return age;
+}
+
+export const getRandomPaymentByKey = (key)=>{
+  if(key==='collectionCommission') return local.collectionCommission
+  else if(key==="reissuingFees") return local.reissuingFees
+  else if(key==="legalFees") return local.legalFees
+  else if(key==="clearanceFees") return local.clearanceFees
+  else if(key==='toktokStamp') return local.toktokStamp
+  else if(key==='tricycleStamp') return local.tricycleStamp
+  else if(key==='penalty') return local.payPenalty
 }
