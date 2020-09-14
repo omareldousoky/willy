@@ -556,7 +556,7 @@ const LoanContract = (props) => {
                     </tr>
                   </tbody>
                 </table>
-                <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
+                <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
 							{timeToArabicDate(0, false)}</div>
                 <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
                 تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات

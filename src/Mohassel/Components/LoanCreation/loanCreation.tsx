@@ -71,7 +71,7 @@ class LoanCreation extends Component<Props, State> {
       approvalDate: '',
       loanCreationDate: timeToDateyyymmdd(0),
       loanIssuanceDate: timeToDateyyymmdd(0),
-      managerVisitDate: timeToDateyyymmdd(0),
+      managerVisitDate: '',
       loading: false,
       customerData: {
         id: '',
