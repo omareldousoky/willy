@@ -317,8 +317,6 @@ class LoanCreation extends Component<Props, State> {
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>
-                {this.state.application?.product?.branchManagerAndDate ?
-                  <>
                     <Form.Group as={Row} controlId="branchManagerId">
                       <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.branchManager}*`}</Form.Label>
                       <Col sm={6}>
@@ -360,9 +358,6 @@ class LoanCreation extends Component<Props, State> {
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                  </>
-                  : null
-                }
                 </>
               }
               <Button type="submit">{local.submit}</Button>
