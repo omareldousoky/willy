@@ -164,11 +164,9 @@ class LoanCreation extends Component<Props, State> {
     } else {
       const obj = {
         id: this.state.id,
-        issueDate: new Date(values.issueDate).valueOf()
-      }
-      if(this.state.application.product.branchManagerAndDate) {
-        obj['branchManagerId'] = values.branchManagerId;
-        obj['managerVisitDate'] = new Date(values.managerVisitDate).valueOf();
+        issueDate: new Date(values.issueDate).valueOf(),
+        branchManagerId: values.branchManagerId,
+        managerVisitDate: values.managerVisitDate? new Date(values.managerVisitDate).valueOf() : 0,
       }
       const res = await issueLoan(obj);
       if (res.status === "success") {
