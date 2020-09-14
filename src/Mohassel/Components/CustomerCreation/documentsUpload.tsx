@@ -114,6 +114,9 @@ class DocumentsUpload extends Component<Props, State>{
       </>
     );
   }
+  componentWillUnmount() {
+    this.props.clearSelectionArray();
+  }
 }
 
 const addDocumentToProps = dispatch => {

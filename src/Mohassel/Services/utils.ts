@@ -434,12 +434,12 @@ export const getDataURL = async(url) => {
 }
 export const downloadAsZip = async (images: Array<{url: string; fileName: string}>, folderName: string) => {
   const zip =  new JsZip();
-  const base64Matcher = new RegExp(/^data:image\/(png|jpg);base64,/);
+  const base64Matcher = new RegExp(/^data:image\/(png|jpg|jpeg);base64,/);
   try {
     let counter = 0;
     images.forEach((image) => {
       if(base64Matcher.test(image.url)){
-        zip.file(image.fileName,image.url.replace(/^data:image\/(png|jpg);base64,/, ""),{base64: true});
+        zip.file(image.fileName,image.url.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),{base64: true});
         counter ++;
       } else {
         zip.file(image.fileName,getDataURL(image.url),{base64: true})
