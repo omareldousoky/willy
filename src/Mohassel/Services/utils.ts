@@ -281,6 +281,7 @@ export const getStatus = (installment) => {
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
+      case 'canceled': return local.cancelled;
       case 'issued': return local.issued;
       default: return '';
   }
@@ -304,6 +305,7 @@ export const getLoanStatus = (status: string) => {
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
+      case 'canceled': return local.cancelled;
       case 'issued': return local.issued;
       case 'created': return local.created;
       case 'underReview': return local.underReview;
