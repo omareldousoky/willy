@@ -144,7 +144,7 @@ class UsersList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'nationalId', 'key']} 
+            dropDownKeys={['name', 'nationalId', 'key', 'userName']} 
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             setFrom= {(from) => this.setState({from: from})}
             url="user" from={this.state.from} size={this.state.size} 

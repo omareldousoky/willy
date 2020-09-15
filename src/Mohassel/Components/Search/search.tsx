@@ -141,6 +141,7 @@ class Search extends Component<Props, State> {
       case 'authorName': return local.employeeName;
       case 'customerKey': return local.customerCode;
       case 'customerCode': return local.customerPartialCode;
+      case 'userName': return local.username;
       default: return '';
     }
   }
