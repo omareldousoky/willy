@@ -1,4 +1,5 @@
 import iconv from 'iconv-lite';
+import { getBusinessDevCode } from './getBusinessDevCode';
 interface TextReport {
     name: string;
     func: (data) => string;
@@ -60,8 +61,14 @@ const cusTxt = (textData) => {
     return (`H|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n` +
         textData.map(application => {
             const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer
-            return (
-                `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}|${getGender(customer.gender)}|SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${customer.customerHomeAddress}|${customer.customerName}|1|5|1|other||\n`
+            if (application.product.beneficiaryType === "group") {
+                let groupTxt = '';
+                application.group.individualsInGroup.map(individual => {
+                    groupTxt = groupTxt + `D|N|${individual.customer.key}    |${getYearMonthDay(individual.customer.created.at)}|${individual.customer.customerName}|${getGender(individual.customer.gender)}||SINGLE|EG|National ID|${individual.customer.nationalId}|${getYearMonthDay(individual.customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${individual.customer.customerHomeAddress}|${individual.customer.customerName}|other|1|5|${getBusinessDevCode(individual.customer.businessSector)}|${getBusinessDevCode(individual.customer.businessActivity)}|${getBusinessDevCode(individual.customer.businessSpeciality)}|${customer.key}|\n`
+                })
+                return groupTxt;
+            } else return (
+                `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}||${getGender(customer.gender)}||SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${customer.customerHomeAddress}|${customer.customerName}|other|1|5|${getBusinessDevCode(customer.businessSector)}|${getBusinessDevCode(customer.businessActivity)}|${getBusinessDevCode(customer.businessSpeciality)}|${customer.key}|\n`
             )
         }) + `T|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n`).split(',').join('')
 }
@@ -88,7 +95,6 @@ const instText = (textData) => {
 }
 
 const payText = (textData, dateOfPay: number) => {
-    console.log('DATE OF PAY', dateOfPay)
     let totalPrincipal = 0;
     let totalInterest = 0;
     let totalNoOfInstallments = 0;
@@ -160,13 +166,14 @@ export const downloadTxtFile = (textData, tPay: boolean, dateOfPay: number) => {
     filesArr.forEach(item => {
         const element = document.createElement("a");
         let file;
-        if(item.name === "TDIS_CUS") {
-            file = new Blob([iconv.encode(item.func(textData), 'CP1256')], {type: 'text/plain'})
+        if (item.name === "TDIS_CUS") {
+            file = new Blob([iconv.encode(item.func(textData), 'CP1256')], { type: 'text/plain' })
         } else {
-            file = new Blob([item.func(textData)], {type: 'text/plain'})
+            file = new Blob([item.func(textData)], { type: 'text/plain' })
         }
         element.href = URL.createObjectURL(file);
-        element.download = `${item.name}${getYearMonthDay(dateOfPay)}`;
+        const dateInName = getYearMonthDay(dateOfPay).toString();
+        element.download = `${item.name}${dateInName.slice(2,dateInName.length)}`;
         document.body.appendChild(element);
         element.click();
     })
