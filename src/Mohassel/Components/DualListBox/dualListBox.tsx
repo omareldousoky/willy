@@ -133,7 +133,7 @@ class DualBox extends Component<Props, State> {
         })
     }
     handleSearch(e) {
-        this.setState({ searchKeyword: e.currentTarget.value }, () => {
+        this.setState({ searchKeyword: e }, () => {
             if (this.props.search && this.props.dropDownKeys && this.props.dropDownKeys.length > 0) {
                 this.props.search(this.state.searchKeyword, this.state.dropDownValue)
             }
@@ -164,7 +164,7 @@ class DualBox extends Component<Props, State> {
                                         type="text"
                                         name="searchKeyWord"
                                         data-qc="searchKeyWord"
-                                        onChange={(e) => this.handleSearch(e)}
+                                        onChange={(e) => this.handleSearch(e.currentTarget.value)}
                                         style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                                         placeholder={local.search}
                                     />
@@ -180,7 +180,7 @@ class DualBox extends Component<Props, State> {
                                             data-qc="search-dropdown"
                                         >
                                             {this.props.dropDownKeys.map((key, index) =>
-                                                <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key })}>{this.getArValue(key)}</Dropdown.Item>
+                                                <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key },()=> this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
                                             )}
                                         </DropdownButton>
                                         : null}
