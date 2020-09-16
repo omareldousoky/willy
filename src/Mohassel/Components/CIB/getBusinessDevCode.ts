@@ -421,6 +421,6 @@ export const getBusinessDevCode = (businessDev: string) => {
         case 'صوبات زراعيه': return 9;
         case 'تاجير ماكينات رش (زراعى)': return 10;
         case 'أدوات ومستلزمات زراعية': return 11;
-        default: return '';
+        default: return 0;
     }
 }
