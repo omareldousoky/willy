@@ -710,5 +710,12 @@
     "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق",
     "divide":"مقسمة",
     "now":"الأن",
-    "duplicateHRCodeMessage": "هذا الكود موجود بالفعل"
+    "duplicateHRCodeMessage": "هذا الكود موجود بالفعل",
+    "searchByProductName": "البحث بنوع القرض",
+    "showBranches": "إظهار الفروع",
+    "availableBranches": "الفروع المتاحة",
+    "assignProductsToBranchesSuccess": "تمت عمليه إتاحة أنواع القروض للفروع بنجاح",
+    "assignProductsToBranchesError":" لم يتم إضافه فروع جديده لأنواع القروض ",
+    "unassignProductsToBranchesSuccess": "تمت عمليه حذف لأنواع القروض للفروع بنجاح",
+    "unassignProductsToBranchesError":" لم يتم حذف  لأنواع القروض "
 }
