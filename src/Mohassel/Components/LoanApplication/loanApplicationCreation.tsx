@@ -382,9 +382,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             Swal.fire('', local.selectBranch, 'error');
         }
     }
-    async searchCustomers(key?: string) {
+    async searchCustomers(keyword?: string, key?: string) {
         this.setState({ loading: true, branchCustomers: [] });
-        const query = (!key || key.trim().length === 0) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer, name: key }
+        const query = (!keyword || keyword.trim().length === 0 || !key) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer, [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
@@ -793,7 +793,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 rightHeader={local.allCustomers}
                                 leftHeader={local.selectedCustomers}
                                 viewSelected={(id) => this.viewCustomer(id)}
-                                search={(keyword) => this.searchCustomers(keyword)}
+                                search={(keyword, key) => this.searchCustomers(keyword, key)}
+                                dropDownKeys={['nationalId','name','key','code']}
                                 disabled={(customer) => this.checkGroupAge(customer)}
                                 disabledMessage={local.groupAgeError}
                             />

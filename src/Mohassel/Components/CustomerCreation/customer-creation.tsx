@@ -431,8 +431,8 @@ class CustomerCreation extends Component<Props, State>{
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
-        <Card>
-          <div style={{ display: "flex", flexDirection: "row", }} >
+        <Card style={{width:"100"}}>
+          <div className="row-nowrap" >
             <Wizard currentStepNumber={this.state.step - 1}
               edit={this.props.edit}
               onClick={this.handleWizardClick}

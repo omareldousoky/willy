@@ -362,7 +362,7 @@ class Payment extends Component<Props, State>{
         payerNationalId: values.payerNationalId.toString(),
       }
       const res = await earlyPayment(obj);
-      this.setState({ payAmount: res.body.requiredAmount });
+      this.setState({ payAmount: values.payAmount });
       if (res.status === "success") {
         this.props.setReceiptData(res.body);
         this.props.print({print: 'payEarly'});

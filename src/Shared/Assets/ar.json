@@ -709,5 +709,6 @@
     "partialCode":"الكود الجزئي",
     "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق",
     "divide":"مقسمة",
-    "now":"الأن"
+    "now":"الأن",
+    "duplicateHRCodeMessage": "هذا الكود موجود بالفعل"
 }
