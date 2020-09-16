@@ -70,7 +70,7 @@ const cusTxt = (textData) => {
             } else return (
                 `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}||${getGender(customer.gender)}||SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${customer.customerHomeAddress}|${customer.customerName}|other|1|5|${getBusinessDevCode(customer.businessSector)}|${getBusinessDevCode(customer.businessActivity)}|${getBusinessDevCode(customer.businessSpeciality)}|${customer.key}|\n`
             )
-        }) + `T|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n`).split(',').join('')
+        }) + `T|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n`).split(',').join('').replace(/\n/g, "\r\n")
 }
 
 const finText = (textData) => {
@@ -80,7 +80,7 @@ const finText = (textData) => {
             return (
                 `D|${customer.key}          |N|${getYearMonthDay(application.issueDate)}|${application.principal ? numTo2Decimal(application.principal) : numTo2Decimal(0)}|${application.product.currency.toUpperCase()}|D|0||${application.product.interest ? (application.product.interest + ".0000000") : '0.0000000'}|${getYearMonthDay(application.installmentsObject.output[application.installmentsObject.output.length - 1].dateOfPayment)}|${application.installmentsObject.output.length}|${application.installmentsObject.output[0].principalInstallment ? numTo2Decimal(application.installmentsObject.output[0].principalInstallment) : numTo2Decimal(0)}|${application.installmentsObject.output[0].feesInstallment ? numTo2Decimal(application.installmentsObject.output[0].feesInstallment) : numTo2Decimal(0)}|${periodType(application.product.periodType)}|${getYearMonthDay(application.installmentsObject.output[0].dateOfPayment)}|${application.loanApplicationKey}      |${getBeneficiaryType(application.product.beneficiaryType)}|\n`
             )
-        }) + `T|${getYearMonthDay(0)}|${getTotalPrincipals(textData)}|${textData.length}|TDIS_FIN|\n`).split(',').join('')
+        }) + `T|${getYearMonthDay(0)}|${getTotalPrincipals(textData)}|${textData.length}|TDIS_FIN|\n`).split(',').join('').replace(/\n/g, "\r\n")
 }
 
 const instText = (textData) => {
@@ -91,7 +91,7 @@ const instText = (textData) => {
                     `D|${application.loanApplicationKey}      |${installment.id? installment.id: 0}|${application.installmentsObject.output.length}|${getYearMonthDay(installment.dateOfPayment)}|${installment.principalInstallment ? numTo2Decimal(installment.principalInstallment) : numTo2Decimal(0)}|${installment.feesInstallment ? numTo2Decimal(installment.feesInstallment) : numTo2Decimal(0)}|${installment.installmentResponse ? numTo2Decimal(installment.installmentResponse) : numTo2Decimal(0)}|\n`
                 )
             })
-        }) + `T|${getYearMonthDay(0)}||${getTotalNumberOfLines(textData)}|TDIS_INST|\n`).split(',').join('')
+        }) + `T|${getYearMonthDay(0)}||${getTotalNumberOfLines(textData)}|TDIS_INST|\n`).split(',').join('').replace(/\n/g, "\r\n")
 }
 
 const payText = (textData, dateOfPay: number) => {
@@ -128,7 +128,7 @@ const payText = (textData, dateOfPay: number) => {
             })
             return final;
         }) + `T|${getYearMonthDay(dateOfPay)}|${numTo2Decimal(totalPrincipal)}|${numTo2Decimal(totalInterest)}|${totalNoOfInstallments * 3}|TPAY|`
-        ).split(',').join('')
+        ).split(',').join('').replace(/\n/g, "\r\n")
 }
 
 const trfText = (textData) => {
