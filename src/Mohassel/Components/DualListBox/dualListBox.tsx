@@ -6,6 +6,7 @@ import './styles.scss';
 import * as local from '../../../Shared/Assets/ar.json';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Swal from 'sweetalert2';
 
 interface Props {
     options: any;
@@ -133,24 +134,28 @@ class DualBox extends Component<Props, State> {
         })
     }
     handleSearch(e) {
-        this.setState({ searchKeyword: e }, () => {
-            if (this.props.search && this.props.dropDownKeys && this.props.dropDownKeys.length > 0) {
-                this.props.search(this.state.searchKeyword, this.state.dropDownValue)
-            }
-        })
+        if (this.props.search && this.props.dropDownKeys && this.props.dropDownKeys.length > 0 && e && ['code', 'key', 'nationalId'].includes(this.state.dropDownValue) && isNaN(Number(e))) {
+            Swal.fire("warning", local.onlyNumbers, 'warning')
+        } else {
+            this.setState({ searchKeyword: e }, () => {
+                if (this.props.search && this.props.dropDownKeys && this.props.dropDownKeys.length > 0) {
+                    this.props.search(this.state.searchKeyword, this.state.dropDownValue)
+                }
+            })
+        }
     }
     viewSelected(id) {
         if (this.props.viewSelected) { this.props.viewSelected(id) }
     }
-    getArValue(key: string){
-        switch(key) {
-          case 'name': return local.name;
-          case 'nationalId': return local.nationalId;
-          case 'key': return local.code;
-          case 'code': return local.partialCode;
-          default: return '';
+    getArValue(key: string) {
+        switch (key) {
+            case 'name': return local.name;
+            case 'nationalId': return local.nationalId;
+            case 'key': return local.code;
+            case 'code': return local.partialCode;
+            default: return '';
         }
-      }
+    }
     render() {
         return (
             <div className="container" style={{ marginTop: 20, textAlign: 'right' }}>
@@ -180,7 +185,7 @@ class DualBox extends Component<Props, State> {
                                             data-qc="search-dropdown"
                                         >
                                             {this.props.dropDownKeys.map((key, index) =>
-                                                <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key },()=> this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
+                                                <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key }, () => this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
                                             )}
                                         </DropdownButton>
                                         : null}
@@ -214,22 +219,22 @@ class DualBox extends Component<Props, State> {
                                                 </div>
                                             }
                                             ) : this.state.options
-                                            .map(option => {
-                                                return <div key={option._id}
-                                                    className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected d-flex" : "list-group-item d-flex"}>
-                                                    <Form.Check
-                                                        type='checkbox'
-                                                        // readOnly
-                                                        id={option._id}
-                                                        onChange={() => this.selectItem(option)}
-                                                        label={option[this.props.labelKey]}
-                                                        checked={this.state.selectionArray.find((item) => item._id === option._id)}
-                                                        disabled={(this.props.disabled && this.props.disabled(option))}
-                                                    />
-                                                    {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage}</span>}
-                                                </div>
-                                            }
-                                            )}
+                                                .map(option => {
+                                                    return <div key={option._id}
+                                                        className={(this.state.selectionArray.find((item) => item._id === option._id)) ? "list-group-item selected d-flex" : "list-group-item d-flex"}>
+                                                        <Form.Check
+                                                            type='checkbox'
+                                                            // readOnly
+                                                            id={option._id}
+                                                            onChange={() => this.selectItem(option)}
+                                                            label={option[this.props.labelKey]}
+                                                            checked={this.state.selectionArray.find((item) => item._id === option._id)}
+                                                            disabled={(this.props.disabled && this.props.disabled(option))}
+                                                        />
+                                                        {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage}</span>}
+                                                    </div>
+                                                }
+                                                )}
                                     </div>
                                 </>}
                             </ul>
