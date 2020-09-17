@@ -223,7 +223,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                                             options={this.state.products}
                                         />
                                     </Col>
-                                    <Col sm={2}><Button disabled={!this.state.selectedProducts} onClick={this.getBranchesForProducts}>{local.showBranches}</Button> </Col>
+                                    <Col sm={2}><Button disabled={!this.state.selectedProducts || this.state.selectedProducts.length <1} onClick={this.getBranchesForProducts}>{local.showBranches}</Button> </Col>
                                 </Row>
                             </Form.Group>
                             {(this.state.selectedBranches.length > 0 || this.state.branchesNotHaveProducts.length > 0) &&
