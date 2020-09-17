@@ -547,6 +547,7 @@ class Payment extends Component<Props, State>{
                   handleSubmit={this.handleSubmit}
                   randomPendingActions={this.props.randomPendingActions}
                   formikProps={formikProps}
+                  retainState={(values) => this.setState({ ...values })}
                 />
               }
             </Formik>
