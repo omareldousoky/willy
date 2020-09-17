@@ -1,10 +1,9 @@
-
 import axios from '../axios-instance';
 
-export const earlyPayment = async (obj) => {
-    const url = process.env.REACT_APP_BASE_URL + `/loan/early-payment/${obj.id}`;
+export const getManualOtherPayments = async (id: string) => {
+    const url = process.env.REACT_APP_BASE_URL + `/loan/get-manual-other-payments/${id}`;
     try {
-        const res = await axios.put(url, obj);
+        const res = await axios.get(url);
         return { status: "success", body: res.data }
     }
     catch (error) {

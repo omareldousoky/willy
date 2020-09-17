@@ -11,6 +11,7 @@ import { checkIssueDate } from '../../Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';
+import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHRCodeDUP';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 interface Props {
     values: Values;
@@ -175,7 +176,17 @@ export const UserDataForm = (props: Props) => {
                             name={"hrCode"}
                             data-qc={"hrCode"}
                             value={props.values.hrCode}
-                            onChange={props.handleChange}
+                            onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                                props.setFieldValue('hrCode', event.currentTarget.value);
+                                setLoading(true);
+                                const res = await checkHRCodeDuplicates(event.currentTarget.value);
+
+                                if (res.status === 'success') {
+                                    setLoading(false);
+                                    props.setFieldValue('hrCodeChecker', res.body.Exists);
+                                } else setLoading(false);
+
+                            }}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.hrCode && props.touched.hrCode) as boolean}
                         />
