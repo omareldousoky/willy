@@ -24,7 +24,7 @@ const mappers = [
     {
       title: local.manualPayment,
       key: "manualPayment",
-      render: data => data.manualPayment ?  local.yes : ''
+      render: data => data.manualPayment ?  local.yes : local.no
     },
     {
       title: local.author,
