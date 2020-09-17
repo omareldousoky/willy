@@ -141,7 +141,7 @@ class AssignProductsToBranches extends Component<Props, State>{
         this.setState({loading: true})
         const res = await assignProductsToBranches({
             branches: _ids,
-            productIds: this.state.products.map(product => product._id),
+            productIds: this.state.selectedProducts.map(product => product._id),
 
         })
         if (res.status == "success") {
@@ -164,7 +164,7 @@ class AssignProductsToBranches extends Component<Props, State>{
         this.setState({loading : true})
         const res = await unassignProductsToBranches({
             branches: _ids,
-            productIds: this.state.products.map(product => product._id),
+            productIds: this.state.selectedProducts.map(product => product._id),
 
         })
         if (res.status == "success") {
@@ -223,7 +223,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                                             options={this.state.products}
                                         />
                                     </Col>
-                                    <Col sm={2}><Button disabled={this.state.selectedProducts.length < 1} onClick={this.getBranchesForProducts}>{local.showBranches}</Button> </Col>
+                                    <Col sm={2}><Button disabled={!this.state.selectedProducts} onClick={this.getBranchesForProducts}>{local.showBranches}</Button> </Col>
                                 </Row>
                             </Form.Group>
                             {(this.state.selectedBranches.length > 0 || this.state.branchesNotHaveProducts.length > 0) &&
