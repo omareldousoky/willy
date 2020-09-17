@@ -111,7 +111,7 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رسوم طلب القرض</th>
                                                     <td>{loan.applicationFees}</td>
                                                     <th>عدد الأقساط</th>
-                                                    <td>{loan.installments.length}</td>
+                                                    <td>{loan.numInst}</td>
                                                     <th>فترة السداد</th>
                                                     <td>{loan.periodLength + " " + periodType(loan.periodType)}</td>
                                                     <th>فترة السماح</th>
@@ -122,10 +122,10 @@ const CustomerStatusDetails = (props) => {
                                                 <tr>
                                                     <th>فائدة القسط</th>
                                                     <td>{loan.feesInstallment}</td>
-                                                    <th>الفائدة الموزعه</th>
+                                                    <th>المصاريف الموزعه</th>
                                                     <td>{loan.interest} % سنويا</td>
-                                                    <th>الفائدة المقدمه</th>
-                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
+                                                    <th>المصاريف المقدمه</th>
+                                                    <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
                                                 </tr>
                                                 <tr>
                                                     <th>مندوب التنميه الحالي</th>
@@ -252,9 +252,9 @@ const CustomerStatusDetails = (props) => {
                                                     <th>رقم</th>
                                                     <th>تاريخ الأستحقاق</th>
                                                     <th>قيمة</th>
-                                                    <th>الفائدة</th>
+                                                    <th>المصاريف</th>
                                                     <th>قيمة مسدده</th>
-                                                    <th>الفائدة المسدده</th>
+                                                    <th>المصاريف المسدده</th>
                                                     <th>الحاله</th>
                                                     <th>تاريخ الحاله</th>
                                                     <th>عدد أيام التأخير / التبكير</th>
