@@ -22,9 +22,14 @@ const mappers = [
       render: data => data.action ?  data.action : ''
     },
     {
+      title: local.manualPayment,
+      key: "manualPayment",
+      render: data => data.manualPayment ?  local.yes : ''
+    },
+    {
       title: local.author,
       key: "authorName",
-      render: data => data?.userName ? data.userName : ''
+      render: data => data?.created.userName ? data.created.userName : ''
     },
     {
       title: local.amount,
