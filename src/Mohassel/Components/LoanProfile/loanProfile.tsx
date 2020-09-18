@@ -48,6 +48,7 @@ import ManualRandomPaymentsActions from './manualRandomPaymentsActions';
 import { getManualOtherPayments } from '../../Services/APIs/Payment/getManualOtherPayments';
 import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManualOtherPayment';
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment';
+import { numTo2Decimal } from '../CIB/textFiles';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -118,7 +119,7 @@ class LoanProfile extends Component<Props, State>{
         this.setState({ loading: true, activeTab: 'loanDetails', manualPaymentEditId: '' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
-        this.getManualOtherPayments(id);
+        if(application.body.status === 'paid' || application.body.status === "pending" || application.body.status === "issued") this.getManualOtherPayments(id);
         if (application.status === "success") {
             if (store.getState().auth.clientPermissions === {}) {
                 store.subscribe(() => {
@@ -506,7 +507,7 @@ class LoanProfile extends Component<Props, State>{
         this.state.pendingActions.transactions?.forEach((transaction) => {
             sum = sum + transaction.transactionAmount
         })
-        return sum;
+        return numTo2Decimal(sum);
     }
     render() {
         return (

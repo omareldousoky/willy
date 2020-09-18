@@ -710,5 +710,7 @@
     "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق",
     "divide":"مقسمة",
     "now":"الأن",
-    "duplicateHRCodeMessage": "هذا الكود موجود بالفعل"
+    "duplicateHRCodeMessage": "هذا الكود موجود بالفعل",
+    "actionLogs": "سجل التصرفات",
+    "transactionLogs": "سجل الحركات"
 }

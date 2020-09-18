@@ -1,0 +1,104 @@
+import React, { Component } from 'react';
+import { Loader } from '../../../Shared/Components/Loader';
+import { getApplicationTransactionLogs } from '../../Services/APIs/loanApplication/applicationLogs';
+import DynamicTable from '../DynamicTable/dynamicTable';
+import * as local from '../../../Shared/Assets/ar.json';
+import { getDateAndTime } from '../../Services/getRenderDate';
+interface Props {
+    id: string;
+}
+
+interface State {
+    loading: boolean;
+    data: any;
+    from: number;
+    size: number;
+    totalCount: number;
+}
+const mappers = [
+    {
+      title: local.action,
+      key: "action",
+      render: data => data.action ?  data.action : ''
+    },
+    {
+      title: local.manualPayment,
+      key: "manualPayment",
+      render: data => data.manualPayment ?  local.yes : local.no
+    },
+    {
+      title: local.author,
+      key: "authorName",
+      render: data => data?.created.userName ? data.created.userName : ''
+    },
+    {
+      title: local.amount,
+      key: "authorId",
+      render: data => data?.transactionAmount ? data.transactionAmount : 0
+    },
+    {
+      title: local.createdAt,
+      key: "createdAt",
+      render: data => data?.truthDate ?  getDateAndTime(data.truthDate) : ''
+    },
+    // {
+    //   title: local.customerId,
+    //   key: "customerId",
+    //   render: data => data.customerId
+    // },
+    // {
+    //     title: local.customerBranchId,
+    //     key: "customerBranchId",
+    //     render: data => data.customerBranchId
+    //   },
+  ]
+class TransactionLogs extends Component<Props, State> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            data: [],
+            size: 5,
+            from: 0,
+            totalCount: 0
+        }
+    }
+    componentDidMount() {
+        this.getLogs(this.props.id)
+    }
+    async getLogs(id) {
+        this.setState({ loading: true })
+        const res = await getApplicationTransactionLogs(id,this.state.size ,this.state.from);
+        if (res.status === "success") {
+            this.setState({
+                data: res.body.data?res.body.data:[],
+                totalCount: res.body.totalCount,
+                loading: false,
+            })
+        } else {
+            console.log("error")
+            this.setState({ loading: false })
+        }
+    }
+    render() {
+        return (
+            <>
+                <Loader type="fullsection" open={this.state.loading} />
+                                  {this.state.data.length > 0 ?
+                                        <DynamicTable 
+                                        totalCount={this.state.totalCount} 
+                                        pagination={true}
+                                        data={this.state.data} 
+                                        mappers={mappers}
+                                        changeNumber={(key: string, number: number) => {
+                                            this.setState({ [key]: number } as any, () => this.getLogs(this.props.id));
+                                        }}
+                                         />
+                    :
+                <p style={{textAlign: 'center'}}>{local.noLogsFound}</p>
+                }
+            </>
+        )
+    }
+}
+export default TransactionLogs;

@@ -78,6 +78,7 @@ interface Props {
   setPayerType: (data) => void;
   randomPendingActions: Array<PendingActions>;
   formikProps: any;
+  retainState: (data) => void;
 }
 class ManualPayment extends Component<Props, State> {
   constructor(props: Props) {
@@ -113,7 +114,7 @@ class ManualPayment extends Component<Props, State> {
     }
     const res = await searchUserByAction(obj);
     if (res.status === 'success') {
-      this.setState({ ...values, employees: res.body.data, payerType: 'employee' });
+      this.setState({ employees: res.body.data, payerType: 'employee' }, () => this.props.retainState(values));
       this.props.setPayerType('employee');
       return res.body.data;
     } else {
