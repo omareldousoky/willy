@@ -32,7 +32,7 @@ const getTotalNumberOfLines = (textData) => {
     return total;
 }
 
-const numTo2Decimal = (num: number | string) => {
+export const numTo2Decimal = (num: number | string) => {
     if (typeof num === 'string') num = Number(num);
     return (Math.round(num * 100) / 100).toFixed(2);
 }
