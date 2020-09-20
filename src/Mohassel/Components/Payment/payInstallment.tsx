@@ -29,7 +29,7 @@ interface FormValues {
   payerId: string;
   installmentNumber: number;
 }
-interface Installment {
+export interface Installment {
   id: number;
   installmentResponse: number;
   principalInstallment: number;
@@ -111,7 +111,7 @@ class PayInstallment extends Component<Props, State> {
     if (prevProps.penaltyAction !== this.props.penaltyAction)
       this.setState({ penaltyAction: prevProps.penaltyAction });
   }
-  getUsersByAction = async (input: string) => {
+  getUsersByAction = async (input: string, values) => {
     const obj = {
       size: 100,
       from: 0,
@@ -121,7 +121,7 @@ class PayInstallment extends Component<Props, State> {
     }
     const res = await searchUserByAction(obj);
     if(res.status === 'success') {
-      this.setState({ employees: res.body.data, payerType: 'employee' });
+      this.setState({ ...values, employees: res.body.data, payerType: 'employee' });
       return res.body.data;
     } else { 
       this.setState({ employees: [] });
@@ -162,6 +162,7 @@ class PayInstallment extends Component<Props, State> {
               ...this.state,
               max: this.props.application.installmentsObject.totalInstallments.installmentSum,
               beneficiaryType: this.props.application.product.beneficiaryType,
+              payAmount: this.props.paymentType === "normal" ? this.getRequiredAmount() : this.state.payAmount
             }}
             onSubmit={this.props.handleSubmit}
             validationSchema={paymentValidation}
@@ -301,31 +302,6 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                    {this.state.penaltyAction !== "cancel" ? (
-                      <Form.Group as={Col} md={6} controlId="truthDate">
-                        <Form.Label
-                          style={{ textAlign: "right", paddingRight: 0 }}
-                          column
-                        >{`${local.truthDate}`}</Form.Label>
-                        <Col>
-                          <Form.Control
-                            type="date"
-                            name="truthDate"
-                            data-qc="truthDate"
-                            value={formikBag.values.truthDate}
-                            onBlur={formikBag.handleBlur}
-                            onChange={formikBag.handleChange}
-                            isInvalid={
-                              Boolean(formikBag.errors.truthDate) &&
-                              Boolean(formikBag.touched.truthDate)
-                            }
-                          ></Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {formikBag.errors.truthDate}
-                          </Form.Control.Feedback>
-                        </Col>
-                      </Form.Group>
-                    ) : null}
                     <Form.Group as={Col} md={6} controlId="whoPaid">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
                       <Col>
@@ -383,7 +359,7 @@ class PayInstallment extends Component<Props, State> {
                           onChange={(employee: any) => formikBag.setFieldValue("payerId", employee._id)}
                           getOptionLabel={(option) => option.name}
                           getOptionValue={(option) => option._id}
-                          loadOptions={this.getUsersByAction}
+                          loadOptions={(input) => this.getUsersByAction(input, formikBag.values)}
                           cacheOptions defaultOptions
                         />
                         {formikBag.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>

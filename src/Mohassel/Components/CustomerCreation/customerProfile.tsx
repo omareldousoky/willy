@@ -112,9 +112,10 @@ const CustomerProfile = (props: Props) => {
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
         <BackButton title={local.viewCustomer} className="print-none" />
-        <div className="print-none" style={{ cursor: 'pointer' }} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
+        {(ability.can('updateCustomer', 'customer') || ability.can('updateNationalId', 'customer')) && <div className="print-none" style={{ cursor: 'pointer' }} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
           <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
-          {local.edit}</div>
+          {local.edit}
+        </div>}
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar

@@ -309,6 +309,7 @@
     "rescheduling": "إعادة جدولة",
     "reschedulingTest": "تجربة إعادة جدولة",
     "postponeInstallments": "ترحيل اقساط",
+    "postponeHalfInstallment": "ترحيل نصف قسط",
     "traditionalRescheduling": "جدولة تقليدية",
     "freeRescheduling": "جدولة حرة",
     "installmentsTableBeforeRescheduling": "جدول الاقساط قبل الترحيل",
@@ -337,7 +338,7 @@
     "recipientSignature": "توقيع المستلم",
     "revisedAndIssued": "روجع واعتمد",
     "amount": "المبلغ",
-    "truthDate": "تاريخ الحق",
+    "truthDate": "تاريخ الحركة",
     "download": "تنزيل",
     "example": "مثال",
     "nationalIdPlaceholder": "12345678901234",
@@ -705,5 +706,11 @@
     "groupAgeError":"يجب أن لا يقل عمر العضو فالمجموعة عن ١٨ و لا يزيد عن ٦٧",
     "writtenOffLoans":"قروض مشطوبة",
     "customerPartialCode":"كود العميل الجزئي",
-    "partialCode":"الكود الجزئي"
+    "partialCode":"الكود الجزئي",
+    "manualRandomPaymentNeedsInspection": "هناك حركة مالية يدوية قيد التحقيق",
+    "divide":"مقسمة",
+    "now":"الأن",
+    "duplicateHRCodeMessage": "هذا الكود موجود بالفعل",
+    "actionLogs": "سجل التصرفات",
+    "transactionLogs": "سجل الحركات"
 }

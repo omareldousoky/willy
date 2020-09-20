@@ -123,7 +123,7 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 </tr>
                 <tr>
                     <td>{local.enquiror}</td>
-                    <td>{(props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : props.application.customer.representativeName}</td>
+                    <td>{props.application.enquirerName}</td>
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>
@@ -312,16 +312,14 @@ export const LoanDetailsBoxView = (props: Props) => {
                             : props.application.customer.representativeName}</Form.Label>
                     </Row>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
+                 <Form.Group as={Col} md="3">
                     <Row>
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{(props.application.product.beneficiaryType === 'group') ?
-                            props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName
-                            : props.application.customer.representativeName} </Form.Label>
+                        <Form.Label>{props.application.enquirerName} </Form.Label>
                     </Row>
-                </Form.Group>
+                </Form.Group> 
             </Form.Row>
         </Form >
     )

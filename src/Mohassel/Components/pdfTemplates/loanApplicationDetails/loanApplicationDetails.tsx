@@ -119,7 +119,7 @@ const LoanApplicationDetails = (props) => {
                             </tr>
                             <tr>
                                 <th>تليفون محمول</th>
-                                <td>{props.data.mobilePhoneNumber}</td>
+                                <td>{props.data.mobilePhoneNumber + " - " + props.data.homePhoneNumber}</td>
                             </tr>
                             <tr>
                                 <th>الموقع الالكتروني</th>

@@ -104,6 +104,7 @@ class RoleUsers extends Component<Props, State> {
                             dropDownKeys={['name', 'nationalId', 'key']}
                             searchPlaceholder={local.searchByNameOrNationalId}
                             url="user"
+                            setFrom= {(from) => this.setState({from: from})}
                             from={this.state.from}
                             size={this.state.size}
                             roleId={this.props._id} />

@@ -40,7 +40,7 @@ const PaymentReceipt = (props) => {
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{props.fromLoanIssuance ? local.value : local.installmentType}</Form.Label>
-                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.installmentAmount)}</span> {receiptData.installmentAmount? ` = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})`: null}</Form.Label>
+                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.installmentAmount)}</span></Form.Label>
                                 </Form.Group>
                                 {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.paidFrom}</Form.Label>
@@ -48,7 +48,7 @@ const PaymentReceipt = (props) => {
                                 </Form.Group>}
                                 {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.currentPayment}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{numbersToArabic(receiptData.paidNow)}</Form.Label>
+                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.paidNow)}</span>{receiptData.paidNow? ` = (${new Tafgeet(receiptData.paidNow, 'EGP').parse()})`: null}</Form.Label>
                                 </Form.Group>}
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.purpose}</Form.Label>
