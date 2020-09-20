@@ -42,6 +42,7 @@ import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
 import Reports from '../Components/Reports/reports';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
+import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 
 const appRoutes = [
   {
@@ -313,7 +314,11 @@ const appRoutes = [
         path: "/move-customers",
         label: local.moveCustomers,
         render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
-
+      },
+      {
+        path: "/bulk-creation",
+        label: local.moveCustomers,
+        render: () => <BulkApplicationCreation/>
       }
     ]
   },

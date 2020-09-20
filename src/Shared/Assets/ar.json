@@ -712,5 +712,6 @@
     "now":"الأن",
     "duplicateHRCodeMessage": "هذا الكود موجود بالفعل",
     "actionLogs": "سجل التصرفات",
-    "transactionLogs": "سجل الحركات"
+    "transactionLogs": "سجل الحركات",
+    "bulkApplicationCreation": "انشاء القروض"
 }

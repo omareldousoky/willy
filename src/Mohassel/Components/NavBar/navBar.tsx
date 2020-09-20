@@ -182,6 +182,7 @@ class NavBar extends Component<Props, State> {
             {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/cib')}>{local.cib}</Nav.Link></Can>}
             {<Can I = "changeOfficer" a  ="customer"><Can  I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can></Can>}
             <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>
+            <Nav.Link onClick={() => this.props.history.push('/bulk-creation')}>{local.bulkApplicationCreation}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
