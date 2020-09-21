@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import { Formik } from 'formik';
 import { Loader } from '../../../Shared/Components/Loader';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
-import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
+import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation';
 import local from '../../../Shared/Assets/ar.json';
 import { englishToArabic } from '../../Services/statusLanguage';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
@@ -106,13 +106,13 @@ class BulkApplicationCreation extends Component<Props, State>{
   handleSubmit = async (values) => {
     this.setState({ showModal: false, loading: true })
     const obj = {
-      approvalDate: new Date(values.approvalDate).valueOf(),
+      creationDate: new Date(values.creationDate).valueOf(),
       applicationIds: this.state.selectedApplications.map(loan => loan.id)
     }
-    const res = await bulkApproval(obj);
+    const res = await bulkCreation(obj);
     if (res.status === "success") {
       this.setState({ loading: false })
-      Swal.fire('', local.bulkLoanApproved, 'success').then(() => this.getApplications());
+      Swal.fire('', local.bulkLoanCreated, 'success').then(() => this.getApplications());
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.bulkLoanError, 'error');
