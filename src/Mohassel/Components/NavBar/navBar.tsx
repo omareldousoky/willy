@@ -57,6 +57,11 @@ class NavBar extends Component<Props, State> {
       } else return { selectedBranch: branches[0], branches: branches }
     } else return null;
   }
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+      this.goToBranch(this.props.auth.validBranches[0])
+    }
+  }
   async goToBranch(branch: Branch) {
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
