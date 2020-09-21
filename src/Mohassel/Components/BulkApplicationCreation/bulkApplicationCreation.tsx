@@ -14,9 +14,10 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import local from '../../../Shared/Assets/ar.json';
-import { englishToArabic }  from '../../Services/statusLanguage';
+import { englishToArabic } from '../../Services/statusLanguage';
 import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation';
 
 interface Product {
   productName: string;
@@ -79,14 +80,14 @@ class BulkApplicationCreation extends Component<Props, State>{
     this.setState({ loading: true });
     const res = await searchApplication({ size: 1000, status: "approved" });
     if (res.status === "success") {
-      this.setState({ loading: false, applications: res.body.applications  });
+      this.setState({ loading: false, applications: res.body.applications });
     } else {
       this.setState({ loading: false });
       Swal.fire('', local.searchError, 'error');
     }
   }
   addRemoveItemFromChecked(loan: LoanItem) {
-    if (this.state.selectedApplications.findIndex(loanItem=> loanItem.id == loan.id ) > -1) {
+    if (this.state.selectedApplications.findIndex(loanItem => loanItem.id == loan.id) > -1) {
       this.setState({
         selectedApplications: this.state.selectedApplications.filter(el => el.id !== loan.id),
       })
@@ -111,16 +112,16 @@ class BulkApplicationCreation extends Component<Props, State>{
     const res = await bulkApproval(obj);
     if (res.status === "success") {
       this.setState({ loading: false })
-      Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getApplications());
+      Swal.fire('', local.bulkLoanApproved, 'success').then(() => this.getApplications());
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
-  dateSlice(date){
-    if(!date){
+  dateSlice(date) {
+    if (!date) {
       return timeToDateyyymmdd(0)
-    }else{
+    } else {
       return timeToDateyyymmdd(date)
     }
   }
@@ -155,16 +156,16 @@ class BulkApplicationCreation extends Component<Props, State>{
               </thead>
               <tbody>
                 {this.state.applications
-                  .filter(loanItem => loanItem.application.product.beneficiaryType !== 'group'? 
-                  loanItem.application.customer.customerName?.includes(this.state.filterCustomers)
-                  : loanItem.application.group.individualsInGroup.find(customer=> customer.type === 'leader')?.customer.customerName.includes(this.state.filterCustomers)
+                  .filter(loanItem => loanItem.application.product.beneficiaryType !== 'group' ?
+                    loanItem.application.customer.customerName?.includes(this.state.filterCustomers)
+                    : loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName.includes(this.state.filterCustomers)
                   )
                   .map((loanItem, index) => {
                     return (
                       <tr key={index}>
                         <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
                         <td>{loanItem.application.product.productName}</td>
-                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName:loanItem.application.customer.customerName}</td>
+                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName : loanItem.application.customer.customerName}</td>
                         <td>{this.dateSlice(loanItem.application.entryDate)}</td>
                         <td>{englishToArabic(loanItem.application.status).text}</td>
                         <td>{loanItem.application.principal}</td>
@@ -179,17 +180,17 @@ class BulkApplicationCreation extends Component<Props, State>{
                   })}
               </tbody>
             </Table>
-                <Button 
-                onClick={() => this.setState({ showModal: true })}
-                disabled={Boolean(!this.state.selectedApplications.length)}
-                >{local.bulkApplicationCreation}</Button>
+            <Button
+              onClick={() => this.setState({ showModal: true })}
+              disabled={Boolean(!this.state.selectedApplications.length)}
+            >{local.bulkApplicationCreation}</Button>
           </div>
           : null}
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
             initialValues={{ creationDate: this.dateSlice(null) }}
             onSubmit={this.handleSubmit}
-            // validationSchema={bulkApplicationCreationValidation}
+            validationSchema={bulkApplicationCreationValidation}
             validateOnBlur
             validateOnChange
           >

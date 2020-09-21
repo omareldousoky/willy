@@ -713,5 +713,6 @@
     "duplicateHRCodeMessage": "هذا الكود موجود بالفعل",
     "actionLogs": "سجل التصرفات",
     "transactionLogs": "سجل الحركات",
-    "bulkApplicationCreation": "انشاء القروض"
+    "bulkApplicationCreation": "انشاء القروض",
+    "creationDateShouldBeInTheSameMonth": "تاريخ الانشاء يجب ان يكون في نفس الشهر"
 }
