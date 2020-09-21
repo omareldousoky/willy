@@ -711,6 +711,8 @@
     "divide":"مقسمة",
     "now":"الأن",
     "duplicateHRCodeMessage": "هذا الكود موجود بالفعل",
+    "actionLogs": "سجل التصرفات",
+    "transactionLogs": "سجل الحركات",
     "searchByProductName": "البحث بنوع القرض",
     "showBranches": "إظهار الفروع",
     "availableBranches": "الفروع المتاحة",
