@@ -14,6 +14,7 @@ interface State {
     from: number;
     size: number;
     totalCount: number;
+    pageToken: string;
 }
 const mappers = [
     {
@@ -60,7 +61,8 @@ class TransactionLogs extends Component<Props, State> {
             data: [],
             size: 5,
             from: 0,
-            totalCount: 0
+            totalCount: 0,
+            pageToken: ''
         }
     }
     componentDidMount() {
@@ -68,11 +70,12 @@ class TransactionLogs extends Component<Props, State> {
     }
     async getLogs(id) {
         this.setState({ loading: true })
-        const res = await getApplicationTransactionLogs(id,this.state.size ,this.state.from);
+        const res = await getApplicationTransactionLogs(id,this.state.size , this.state.pageToken);
         if (res.status === "success") {
             this.setState({
                 data: res.body.data?res.body.data:[],
                 totalCount: res.body.totalCount,
+                pageToken: res.body.pageToken,
                 loading: false,
             })
         } else {
