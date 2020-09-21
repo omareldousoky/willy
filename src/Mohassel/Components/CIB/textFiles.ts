@@ -57,18 +57,26 @@ const sameDay = (paidAt: number, dateOfPay: number) => {
     return ((paidAtD.getFullYear() === dateOfPayD.getFullYear()) && (paidAtD.getMonth() === dateOfPayD.getMonth()) && (paidAtD.getDate() === dateOfPayD.getDate()))
 }
 
+const getTotalNumbersOfCustomers = (textData) => {
+    let total = 0;
+    textData.forEach(loan => {
+        if(Object.keys(loan.customer).length > 0) total++;
+        else total = total + loan.group.individualsInGroup.length;
+    });
+    return total;
+}
 const cusTxt = (textData) => {
-    return (`H|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n` +
+    return (`H|${getYearMonthDay(0)}|${getTotalNumbersOfCustomers(textData)}|TDIS_CUS|\n` +
         textData.map(application => {
             const customer = application.product.beneficiaryType === "group" ? application.group.individualsInGroup.find((member) => member.type === "leader").customer : application.customer
             if (application.product.beneficiaryType === "group") {
                 let groupTxt = '';
                 application.group.individualsInGroup.map(individual => {
-                    groupTxt = groupTxt + `D|N|${individual.customer.key}    |${getYearMonthDay(individual.customer.created.at)}|${individual.customer.customerName}|${getGender(individual.customer.gender)}||SINGLE|EG|National ID|${individual.customer.nationalId}|${getYearMonthDay(individual.customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${individual.customer.customerHomeAddress ? individual.customer.customerHomeAddress : ''}|${individual.customer.customerName}|other|1|5|${getBusinessDevCode(individual.customer.businessSector)}|${getBusinessDevCode(individual.customer.businessActivity)}|${getBusinessDevCode(individual.customer.businessSpeciality)}|${customer.key}|\n`
+                    groupTxt = groupTxt + `D|N|${individual.customer.key}    |${getYearMonthDay(individual.customer.created.at)}|${individual.customer.customerName}|${getGender(individual.customer.gender)}|SINGLE|EG|National ID|${individual.customer.nationalId}|${getYearMonthDay(individual.customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${individual.customer.customerHomeAddress ? individual.customer.customerHomeAddress : ''}|${individual.customer.customerName}|other|1|5|${getBusinessDevCode(individual.customer.businessSector)}|${getBusinessDevCode(individual.customer.businessActivity)}|${getBusinessDevCode(individual.customer.businessSpeciality)}|${customer.key}|\n`
                 })
                 return groupTxt;
             } else return (
-                `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}||${getGender(customer.gender)}||SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${customer.customerHomeAddress ? customer.customerHomeAddress : ''}|${customer.customerName}|other|1|5|${getBusinessDevCode(customer.businessSector)}|${getBusinessDevCode(customer.businessActivity)}|${getBusinessDevCode(customer.businessSpeciality)}|${customer.key}|\n`
+                `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}||${getGender(customer.gender)}|SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}||||990|Cairo|EG||4100|516|097|M5|1|29|${customer.customerHomeAddress ? customer.customerHomeAddress : ''}|${customer.customerName}|other|1|5|${getBusinessDevCode(customer.businessSector)}|${getBusinessDevCode(customer.businessActivity)}|${getBusinessDevCode(customer.businessSpeciality)}|${customer.key}|\n`
             )
         }) + `T|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n`).split(',').join('').replace(/\n/g, "\r\n")
 }
