@@ -181,7 +181,7 @@ class BulkApplicationCreation extends Component<Props, State>{
             </Table>
                 <Button 
                 onClick={() => this.setState({ showModal: true })}
-                disabled={Boolean(this.state.selectedApplications.length)}
+                disabled={Boolean(!this.state.selectedApplications.length)}
                 >{local.bulkApplicationCreation}</Button>
           </div>
           : null}
