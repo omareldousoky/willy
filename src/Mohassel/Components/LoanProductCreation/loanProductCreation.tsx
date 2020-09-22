@@ -6,6 +6,7 @@ import { LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
 import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
+import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -15,6 +16,7 @@ import Card from 'react-bootstrap/Card';
 interface Props {
     title: string;
     history: any;
+    edit: boolean;
 
 };
 interface State {
@@ -98,6 +100,9 @@ class LoanProductCreation extends Component<Props, State>{
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
+        if(this.props.edit) {
+            await this.getProduct();
+        }
     }
     cancel() {
         this.props.history.goBack();
@@ -118,10 +123,28 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    async getProduct() {
+        const id = this.props.history.location.state.id;
+        this.setState({ loading: true });
+        const product = await getProduct(id);
+        if (product.status === 'success') {
+            const calculationFormulaId = product.body.data.calculationFormula._id;
+            const loanProduct = product.body.data;
+            loanProduct.calculationFormulaId = calculationFormulaId;
+            this.setState({
+                product: product.body.data,
+                loading: false
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
+    }
+
     render() {
         return (
             <>
-                <BackButton title={local.createLoanProduct} />
+                <BackButton title={this.props.edit? local.editLoanProduct :local.createLoanProduct} />
                 <Container>
                     <Loader open={this.state.loading} type="fullscreen" />
                     <Card style={{ padding: '20px 10px' }}>
