@@ -8,7 +8,6 @@ function getMaxDate(selectedApplications) {
             maxDate = application.application.approvalDate;
         }
     });
-    console.log(maxDate, selectedApplications)
     return maxDate;
 }
 
