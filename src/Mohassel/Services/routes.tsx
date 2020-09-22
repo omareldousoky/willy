@@ -317,7 +317,7 @@ const appRoutes = [
       },
       {
         path: "/bulk-creation",
-        label: local.moveCustomers,
+        label: local.bulkApplicationCreation,
         render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
       }
     ]

@@ -144,9 +144,9 @@ class BulkApplicationCreation extends Component<Props, State>{
         render: data => local[data.application.product.periodType]
       },
       {
-        title: local.gracePeriod,
-        key: "gracePeriod",
-        render: data => data.application.product.gracePeriod ? data.application.product.gracePeriod : 0
+        title: local.entryDate,
+        key: "entryDate",
+        render: data => timeToDateyyymmdd(data.application.entryDate)
       },
       {
         title: local.approvalDate,
@@ -224,7 +224,7 @@ class BulkApplicationCreation extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search
               searchKeys={['dateFromTo']}
-              datePlaceholder={local.creationDate}
+              datePlaceholder={local.entryDate}
               url="application"
               from={this.state.from}
               size={this.state.size}
