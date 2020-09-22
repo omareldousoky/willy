@@ -56,7 +56,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
     )
     .max(100, local.maxLength100)
     .required(local.required),
-  username: Yup.string().when("usernameChecker", {
+  username: Yup.string().trim().when("usernameChecker", {
     is: true,
     then: Yup.string().test(
       "error",
@@ -72,10 +72,10 @@ export const userCreationValidationStepOne = Yup.object().shape({
       .max(100, local.maxLength100)
       .required(local.required),
   }),
-  hrCode: Yup.string()
+  hrCode: Yup.string().trim()
   .when("hrCodeChecker",{
     is: true,
-    then: Yup.string().test(
+    then: Yup.string().trim().test(
       "error",
       local.duplicateHRCodeMessage,
       () => false
@@ -134,7 +134,7 @@ export const editUserValidationStepOne = Yup.object().shape({
       local.containLetterError
     )
     .required(local.required),
-    hrCode: Yup.string()
+    hrCode: Yup.string().trim()
     .when("hrCodeChecker",{
       is: true,
       then: Yup.string().test(
