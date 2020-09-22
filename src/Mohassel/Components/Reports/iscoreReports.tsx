@@ -7,7 +7,6 @@ import { getiScoreReportRequests, generateiScoreReport } from '../../Services/AP
 import { downloadFile, getIscoreReportStatus, timeToDateyyymmdd, timeToArabicDate } from '../../Services/utils';
 
 interface State {
-    showModal?: boolean;
     data: any;
     loading: boolean;
 }
@@ -15,7 +14,6 @@ class IscoreReports extends Component<{}, State>{
     constructor(props) {
         super(props);
         this.state = {
-            showModal: false,
             loading: false,
             data: []
         }
@@ -28,8 +26,7 @@ class IscoreReports extends Component<{}, State>{
         const res = await getiScoreReportRequests();
         if (res.status === 'success') {
             this.setState({
-                data: res.body.data,
-                showModal: false,
+                data: res.body.iscoreJobs,
                 loading: false,
             })
         } else {
