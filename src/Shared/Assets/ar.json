@@ -719,5 +719,6 @@
     "assignProductsToBranchesSuccess": "تمت عمليه إتاحة أنواع القروض للفروع بنجاح",
     "assignProductsToBranchesError":" لم يتم إضافه فروع جديده لأنواع القروض ",
     "unassignProductsToBranchesSuccess": "تمت عمليه حذف لأنواع القروض للفروع بنجاح",
-    "unassignProductsToBranchesError":" لم يتم حذف  لأنواع القروض "
+    "unassignProductsToBranchesError":" لم يتم حذف  لأنواع القروض ",
+    "iScoreReports":"تقارير الiScore"
 }

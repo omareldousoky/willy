@@ -39,7 +39,7 @@ import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
-import Reports from '../Components/Reports/reports';
+import ReportsHome from '../Components/Reports/reportsHome';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 
@@ -307,7 +307,7 @@ const appRoutes = [
       {
         path: "/reports",
         label: local.reports,
-        render: () => <Reports/>
+        render: () => <ReportsHome/>
       },
       {
         path: "/move-customers",
