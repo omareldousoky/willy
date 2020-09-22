@@ -234,8 +234,8 @@ class UserCreation extends Component<Props, State> {
   getUserInfo(): UserInfo {
     const user = this.state.step1;
     return {
-      name: user.name,
-      username: user.username,
+      name: user.name.trim(),
+      username: user.username.trim(),
       nationalId: user.nationalId,
       gender: user.gender,
       birthDate: user.birthDate,

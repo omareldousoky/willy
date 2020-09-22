@@ -175,7 +175,7 @@ export const UserDataForm = (props: Props) => {
                             type={"text"}
                             name={"hrCode"}
                             data-qc={"hrCode"}
-                            value={props.values.hrCode}
+                            value={props.values.hrCode.trim()}
                             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                 props.setFieldValue('hrCode', event.currentTarget.value);
                                 setLoading(true);
