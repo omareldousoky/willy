@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
-import FormCheck from 'react-bootstrap/FormCheck';
+import { Formik } from 'formik';
+import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import FormCheck from 'react-bootstrap/FormCheck';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
-import { Formik } from 'formik';
+import DynamicTable from '../DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
-import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
-import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation';
 import local from '../../../Shared/Assets/ar.json';
-import { englishToArabic } from '../../Services/statusLanguage';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
-import InputGroup from 'react-bootstrap/InputGroup';
+import { search, searchFilters } from '../../redux/search/actions';
+import { loading } from '../../redux/loading/actions';
+import { timeToDateyyymmdd } from '../../Services/utils';
+import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation';
 import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation';
+import Search from '../Search/search';
 
 interface Product {
   productName: string;
@@ -55,66 +56,142 @@ interface LoanItem {
 interface State {
   applications: Array<LoanItem>;
   selectedApplications: Array<LoanItem>;
-  loading: boolean;
   showModal: boolean;
   filterCustomers: string;
+  size: number;
+  from: number;
+  checkAll: boolean;
 }
 interface Props {
-  history: Array<string>;
+  history: Array<any>;
+  data: any;
+  branchId: string;
+  fromBranch?: boolean;
+  totalCount: number;
+  loading: boolean;
+  searchFilters: any;
+  search: (data) => void;
+  setSearchFilters: (data) => void;
+  setLoading: (data) => void;
 };
 class BulkApplicationCreation extends Component<Props, State>{
+  mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
       applications: [],
       selectedApplications: [],
-      loading: false,
       showModal: false,
-      filterCustomers: ''
+      filterCustomers: '',
+      size: 10,
+      from: 0,
+      checkAll: false,
     }
+    this.mappers = [
+      {
+        title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll}></FormCheck>,
+        key: 'selected',
+        render: data => <FormCheck
+          type="checkbox"
+          checked={Boolean(this.state.selectedApplications.find(application => application.id === data.id))}
+          onChange={() => this.addRemoveItemFromChecked(data)}
+        ></FormCheck>
+      },
+      {
+        title: local.applicationCode,
+        key: "applicationCode",
+        render: data => data.application.applicationKey
+      },
+      {
+        title: local.customerName,
+        key: "name",
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
+            </div>)
+          }
+        </div>
+      },
+      {
+        title: local.productName,
+        key: "productName",
+        render: data => data.application.product.productName
+      },
+      {
+        title: local.principal,
+        key: "principal",
+        render: data => data.application.principal
+      },
+      {
+        title: local.currency,
+        key: "currency",
+        render: data => local[data.application.product.currency]
+      },
+      {
+        title: local.noOfInstallments,
+        key: "noOfInstallments",
+        render: data => data.application.product.noOfInstallments
+      },
+      {
+        title: local.periodLength,
+        key: "periodLength",
+        render: data => data.application.product.periodLength
+      },
+      {
+        title: local.every,
+        key: "every",
+        render: data => local[data.application.product.periodType]
+      },
+      {
+        title: local.gracePeriod,
+        key: "gracePeriod",
+        render: data => data.application.product.gracePeriod ? data.application.product.gracePeriod : 0
+      },
+      {
+        title: local.approvalDate,
+        key: "approvalDate",
+        render: data => timeToDateyyymmdd(data.application.approvalDate)
+      },
+    ]
   }
-  async componentDidMount() {
-    this.getApplications();
+  componentDidMount() {
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved" });
   }
-  async getApplications() {
-    this.setState({ loading: true });
-    const res = await searchApplication({ size: 1000, status: "approved" });
-    if (res.status === "success") {
-      this.setState({ loading: false, applications: res.body.applications });
-    } else {
-      this.setState({ loading: false });
-      Swal.fire('', local.searchError, 'error');
-    }
+  getApplications() {
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "approved" }
+    this.props.search(query);
   }
-  addRemoveItemFromChecked(loan: LoanItem) {
-    if (this.state.selectedApplications.findIndex(loanItem => loanItem.id == loan.id) > -1) {
+  addRemoveItemFromChecked(selectedApplication: LoanItem) {
+    if (this.state.selectedApplications.findIndex(application => application.id === selectedApplication.id) > -1) {
       this.setState({
-        selectedApplications: this.state.selectedApplications.filter(el => el.id !== loan.id),
+        selectedApplications: this.state.selectedApplications.filter(application => application.id !== selectedApplication.id),
       })
     } else {
       this.setState({
-        selectedApplications: [...this.state.selectedApplications, loan],
+        selectedApplications: [...this.state.selectedApplications, selectedApplication],
       })
     }
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      // const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.id);
-      this.setState({ selectedApplications: this.state.applications })
-    } else this.setState({ selectedApplications: [] })
+      this.setState({ checkAll: true, selectedApplications: this.props.data })
+    } else this.setState({ checkAll: false, selectedApplications: [] })
   }
   handleSubmit = async (values) => {
-    this.setState({ showModal: false, loading: true })
+    this.props.setLoading(true);
+    this.setState({ showModal: false })
     const obj = {
       creationDate: new Date(values.creationDate).valueOf(),
-      applicationIds: this.state.selectedApplications.map(loan => loan.id)
+      applicationIds: this.state.selectedApplications.map(application => application.id)
     }
     const res = await bulkCreation(obj);
     if (res.status === "success") {
-      this.setState({ loading: false })
+      this.props.setLoading(false);
+      this.setState({ selectedApplications: [] })
       Swal.fire('', local.bulkLoanCreated, 'success').then(() => this.getApplications());
     } else {
-      this.setState({ loading: false })
+      this.props.setLoading(false);
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
@@ -127,68 +204,49 @@ class BulkApplicationCreation extends Component<Props, State>{
   }
   render() {
     return (
-      <Container>
-        <Loader type="fullscreen" open={this.state.loading} />
-        {this.state.applications.length ?
-          <div>
-            <InputGroup style={{ direction: 'ltr', margin: '20px 0px' }}>
-              <Form.Control
-                value={this.state.filterCustomers}
-                style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-                placeholder={local.searchByName}
-                onChange={(e) => this.setState({ filterCustomers: e.currentTarget.value })}
-              />
-              <InputGroup.Append>
-                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>{local.customerType}</th>
-                  <th>{local.productName}</th>
-                  <th>{local.customerName}</th>
-                  <th>{local.loanAppCreationDate}</th>
-                  <th>{local.applicationStatus}</th>
-                  <th>{local.loanPrinciple}</th>
-                  <th><FormCheck type='checkbox' onClick={(e) => this.checkAll(e)}></FormCheck></th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.applications
-                  .filter(loanItem => loanItem.application.product.beneficiaryType !== 'group' ?
-                    loanItem.application.customer.customerName?.includes(this.state.filterCustomers)
-                    : loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName.includes(this.state.filterCustomers)
-                  )
-                  .map((loanItem, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
-                        <td>{loanItem.application.product.productName}</td>
-                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName : loanItem.application.customer.customerName}</td>
-                        <td>{this.dateSlice(loanItem.application.entryDate)}</td>
-                        <td>{englishToArabic(loanItem.application.status).text}</td>
-                        <td>{loanItem.application.principal}</td>
-                        <td>
-                          <FormCheck type='checkbox'
-                            checked={this.state.selectedApplications.includes(loanItem)}
-                            onChange={() => this.addRemoveItemFromChecked(loanItem)}>
-                          </FormCheck>
-                        </td>
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            </Table>
-            <Button
-              onClick={() => this.setState({ showModal: true })}
-              disabled={Boolean(!this.state.selectedApplications.length)}
-            >{local.bulkApplicationCreation}</Button>
-          </div>
-          : null}
+      <>
+        <Card style={{ margin: '20px 50px' }}>
+          <Loader type="fullscreen" open={this.props.loading} />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.approvedLoans}</Card.Title>
+                <span className="text-muted" style={{ marginLeft: 10 }}>{local.maxLoansAllowed + ` (${this.props.totalCount})`}</span>
+                <span className="text-muted">{local.noOfSelectedLoans + ` (${this.state.selectedApplications.length})`}</span>
+              </div>
+              <Button onClick={() => { this.setState({ showModal: true }) }}
+                disabled={!Boolean(this.state.selectedApplications.length)}
+                className="big-button"
+                style={{ marginLeft: 20 }}
+              > {local.bulkApplicationCreation}
+              </Button>
+            </div>
+            <hr className="dashed-line" />
+            <Search
+              searchKeys={['dateFromTo']}
+              datePlaceholder={local.creationDate}
+              url="application"
+              from={this.state.from}
+              size={this.state.size}
+              status="approved"
+              hqBranchIdRequest={this.props.branchId} />
+            <DynamicTable
+              from={this.state.from}
+              size={this.state.size}
+              url="application"
+              totalCount={this.props.totalCount}
+              mappers={this.mappers}
+              pagination={true}
+              data={this.props.data}
+              changeNumber={(key: string, number: number) => {
+                this.setState({ [key]: number, checkAll: false } as any, () => this.getApplications());
+              }}
+            />
+          </Card.Body>
+        </Card>
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ creationDate: this.dateSlice(null) }}
+            initialValues={{ creationDate: this.dateSlice(null), selectedApplications: this.state.selectedApplications }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationCreationValidation}
             validateOnBlur
@@ -226,9 +284,24 @@ class BulkApplicationCreation extends Component<Props, State>{
             }
           </Formik>
         </Modal>}
-      </Container>
+      </>
     )
   }
 }
+const addSearchToProps = dispatch => {
+  return {
+    search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
+    setLoading: data => dispatch(loading(data))
+  };
+};
+const mapStateToProps = state => {
+  return {
+    data: state.search.applications,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    searchFilters: state.searchFilters
+  };
+};
 
-export default withRouter(BulkApplicationCreation);
+export default connect(mapStateToProps, addSearchToProps)(withRouter(BulkApplicationCreation));

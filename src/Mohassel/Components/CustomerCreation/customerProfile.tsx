@@ -132,6 +132,10 @@ const CustomerProfile = (props: Props) => {
                 <td>{customerDetails?.customerName}</td>
               </tr>
               <tr>
+                <td>{local.branchName}</td>
+                <td>{customerDetails?.branchName}</td>
+              </tr>
+              <tr>
                 <td>iScore</td>
                 <td>
                   {iScoreDetails?.iscore}

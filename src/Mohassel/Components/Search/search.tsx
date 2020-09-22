@@ -34,7 +34,7 @@ interface Props {
   from: number;
   url: string;
   roleId?: string;
-  searchPlaceholder: string;
+  searchPlaceholder?: string;
   datePlaceholder?: string;
   hqBranchIdRequest?: string;
   status?: string;

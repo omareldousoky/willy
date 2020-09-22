@@ -63,7 +63,6 @@ class NavBar extends Component<Props, State> {
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
       setToken(res.body.token);
-      this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
   }
