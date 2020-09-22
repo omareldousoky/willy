@@ -390,7 +390,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async searchCustomers(keyword?: string, key?: string) {
         this.setState({ loading: true, branchCustomers: [] });
-        const query = (!keyword || keyword.trim().length === 0 || !key) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer, [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword }
+        const query = (!keyword || keyword.trim().length === 0 || !key) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer._id } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer._id, [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
