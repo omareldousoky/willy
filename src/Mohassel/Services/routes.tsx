@@ -7,7 +7,6 @@ import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreati
 import FormulaTest from '../Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from '../Components/LoanProductCreation/loanProductCreation';
 import LoanApplicationCreation from '../Components/LoanApplication/loanApplicationCreation';
-import AssignProductToBranch from '../Components/Branch/assignProductToBranch';
 import TrackLoanApplications from '../Components/TrackLoanApplications/trackLoanApplications';
 import LoanCreation from '../Components/LoanCreation/loanCreation';
 import LoanUses from '../Components/LoanUses/loanUses';
@@ -43,6 +42,7 @@ import CIB from '../Components/CIB/cib';
 import Reports from '../Components/Reports/reports';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
+import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 
 const appRoutes = [
   {
@@ -286,9 +286,9 @@ const appRoutes = [
 
       }
       , {
-        path: "/assign-branch-products",
+        path: "/assign-products-branches",
         label: local.assignProductToBranch,
-        render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductToBranch {...props} /> </Can>,
+        render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductsToBranches {...props} /> </Can>,
       },
       {
         path: "/logs",

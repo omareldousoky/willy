@@ -82,7 +82,7 @@ const CustomerProfile = (props: Props) => {
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
       await changeCustomerDetails(res.body);
-      await getCachediScores(res.body.nationalId);
+      if (ability.can('viewIscore', 'customer')) await getCachediScores(res.body.nationalId);
       await getGuaranteeedLoans(res.body); 
     } else {
       changeLoading(false);
@@ -135,13 +135,13 @@ const CustomerProfile = (props: Props) => {
                 <td>{local.branchName}</td>
                 <td>{customerDetails?.branchName}</td>
               </tr>
-              <tr>
+              {ability.can('viewIscore', 'customer') && <tr>
                 <td>iScore</td>
                 <td>
                   {iScoreDetails?.iscore}
                   {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
                 </td>
-              </tr>
+              </tr>}
               <tr>
                 <td>{local.customerCode}</td>
                 <td>{customerDetails?.code}</td>
