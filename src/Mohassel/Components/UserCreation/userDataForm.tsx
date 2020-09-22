@@ -264,7 +264,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                         props.setFieldValue('username', event.currentTarget.value);
                         setLoading(true);
-                        const res = await checkUsernameDuplicates(event.currentTarget.value);
+                        const res = await checkUsernameDuplicates(event.currentTarget.value.trim());
 
                         if (res.status === 'success') {
                             setLoading(false);
