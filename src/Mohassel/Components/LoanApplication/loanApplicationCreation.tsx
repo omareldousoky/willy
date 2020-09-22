@@ -32,6 +32,7 @@ import InfoBox from '../userInfoBox';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import Wizard from '../wizard/Wizard';
 import { BusinessSector } from '../CustomerCreation/StepTwoForm';
+import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
 interface Props {
     history: any;
     location: Location;
@@ -475,6 +476,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
+                this.checkCustomersLimits([customer]) ? console.log('yes') : console.log('no');
                 const defaultApplication = this.state.application;
                 defaultApplication.customerID = customer._id;
                 this.populateCustomer(selectedCustomer.body)
@@ -701,6 +703,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
 
     }
+    async checkCustomersLimits(customers) {
+        console.log(customers)
+        const customerIds: Array<string> = [];
+        customers.forEach(customer => customerIds.push(customer._id));
+        this.setState({ loading: true });
+        const res = await getCustomersBalances({ids: customerIds});
+        if (res.status === 'success') { 
+            this.setState({ loading: false });
+            console.log(res.body)
+            return true
+        }else {
+            Swal.fire("error", res.error.details, 'error')
+            this.setState({ loading: false });
+            return false
+        }
+    }
     handleGroupChange(customers) {
         this.setState({ selectedGroupLeader: '' })
         const customersTemp: { customer: Customer; amount: number; type: string }[] = [];
@@ -713,6 +731,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             customersTemp.push(obj)
         })
+        this.checkCustomersLimits(customers) ? console.log('yes') : console.log('no');
         defaultApplication.individualDetails = customersTemp;
         this.setState({
             selectedCustomers: customers,
@@ -794,7 +813,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 leftHeader={local.selectedCustomers}
                                 viewSelected={(id) => this.viewCustomer(id)}
                                 search={(keyword, key) => this.searchCustomers(keyword, key)}
-                                dropDownKeys={['nationalId','name','key','code']}
+                                dropDownKeys={['nationalId', 'name', 'key', 'code']}
                                 disabled={(customer) => this.checkGroupAge(customer)}
                                 disabledMessage={local.groupAgeError}
                             />
