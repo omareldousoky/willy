@@ -88,7 +88,8 @@ class LoanProductCreation extends Component<Props, State>{
             formulas: []
         }
     }
-    async UNSAFE_componentWillMount() {
+    
+    async getFormulas(){
         this.setState({ loading: true });
         const formulas = await getFormulas();
         if (formulas.status === 'success') {
@@ -100,8 +101,11 @@ class LoanProductCreation extends Component<Props, State>{
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
         }
+    }
+    componentDidMount() {
+       this.getFormulas();
         if(this.props.edit) {
-            await this.getProduct();
+             this.getProduct();
         }
     }
     cancel() {
@@ -132,7 +136,7 @@ class LoanProductCreation extends Component<Props, State>{
             const loanProduct = product.body.data;
             loanProduct.calculationFormulaId = calculationFormulaId;
             this.setState({
-                product: product.body.data,
+                product: loanProduct,
                 loading: false
             })
         } else {
@@ -149,6 +153,7 @@ class LoanProductCreation extends Component<Props, State>{
                     <Loader open={this.state.loading} type="fullscreen" />
                     <Card style={{ padding: '20px 10px' }}>
                         <Formik
+                             enableReinitialize
                             initialValues={this.state.product}
                             onSubmit={this.submit}
                             validationSchema={LoanProductValidation}
