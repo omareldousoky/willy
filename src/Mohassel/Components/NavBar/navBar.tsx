@@ -50,20 +50,30 @@ class NavBar extends Component<Props, State> {
       const token = getCookie('token');
       const tokenData = parseJwt(token);
       const branches = props.auth.validBranches;
+      const selectedBranch = getCookie('branch')? JSON.parse(getCookie('branch')) : '';
       if (tokenData?.requireBranch === false) {
         if (branches) {
           return { branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
         } else return { branches: [...state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
-      } else return { selectedBranch: branches[0], branches: branches }
+      } else return { selectedBranch: selectedBranch? selectedBranch: branches[0], branches: branches }
     } else return null;
   }
-  async goToBranch(branch: Branch) {
+  componentDidUpdate(prevProps, prevState){
+    console.log(this.props)
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+      const selectedBranch = JSON.parse(getCookie('branch'));
+      this.goToBranch(selectedBranch, false);
+    }
+  }
+  async goToBranch(branch: Branch, refresh: boolean) {
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
+      document.cookie = `branch=${JSON.stringify(branch)};`;
       setToken(res.body.token);
       this.setState({ loading: false, selectedBranch: branch })
+      if(refresh) this.props.history.push("/");
     } else console.log(res)
   }
   renderBranchList() {
@@ -87,7 +97,7 @@ class NavBar extends Component<Props, State> {
             .map((branch, index) => {
               return (
                 <div key={index}>
-                  <div className="item" onClick={() => this.goToBranch(branch)}>
+                  <div className="item" onClick={() => this.goToBranch(branch, true)}>
                     <div style={{ display: 'flex' }}>
                       <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
                       <div className="branch-name">
@@ -106,6 +116,7 @@ class NavBar extends Component<Props, State> {
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = "branch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
           }}>{local.logOut}</Button>
         </div>
