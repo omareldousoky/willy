@@ -717,26 +717,28 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
             const merged: Array<any> = [];
             const validationObject: any = {};
-            for (let i = 0; i < customers.length; i++) {
-                const obj = {
-                    ...customers[i],
-                    ...(res.body.data.find((itmInner) => itmInner.id === customers[i]._id))
-                };
-                delete obj.id
-                merged.push(obj);
-            }
-            merged.forEach(customer => {
-                if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
-                    validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+            if (res.body.data && res.body.data.length > 0) {
+                for (let i = 0; i < customers.length; i++) {
+                    const obj = {
+                        ...customers[i],
+                        ...(res.body.data.find((itmInner) => itmInner.id === customers[i]._id))
+                    };
+                    delete obj.id
+                    merged.push(obj);
                 }
-                if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
-                    if (Object.keys(validationObject).includes(customer._id)) {
-                        validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
-                    } else {
-                        validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                merged.forEach(customer => {
+                    if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
+                        validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
                     }
-                }
-            })
+                    if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
+                        if (Object.keys(validationObject).includes(customer._id)) {
+                            validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
+                        } else {
+                            validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                        }
+                    }
+                })
+            }
             if (Object.keys(validationObject).length > 0) {
                 return validationObject
             }
@@ -759,20 +761,20 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             customersTemp.push(obj)
         })
-        if(customers.length > 0){
+        if (customers.length > 0) {
             const check = await this.checkCustomersLimits(customers);
-        if (check === true && typeof (check) === "boolean") {
-            defaultApplication.individualDetails = customersTemp;
-            this.setState({
-                selectedCustomers: customers,
-                application: defaultApplication
-            })
-        }else if (typeof (check) === "object" && Object.keys(check).length > 0) {
-            let names = ''
-            Object.keys(check).forEach((id,i) => (i === 0) ? names = names + check[id].customerName : names = names + ', '+ check[id].customerName);
-            Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
+            if (check === true && typeof (check) === "boolean") {
+                defaultApplication.individualDetails = customersTemp;
+                this.setState({
+                    selectedCustomers: customers,
+                    application: defaultApplication
+                })
+            } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+                let names = ''
+                Object.keys(check).forEach((id, i) => (i === 0) ? names = names + check[id].customerName : names = names + ', ' + check[id].customerName);
+                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
+            }
         }
-    }
     }
     async viewCustomer(id) {
         this.setState({ loading: true });
