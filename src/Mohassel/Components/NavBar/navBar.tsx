@@ -115,7 +115,7 @@ class NavBar extends Component<Props, State> {
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "branch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
           }}>{local.logOut}</Button>
         </div>
