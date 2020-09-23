@@ -50,7 +50,7 @@ class NavBar extends Component<Props, State> {
       const token = getCookie('token');
       const tokenData = parseJwt(token);
       const branches = props.auth.validBranches;
-      const selectedBranch = getCookie('branch')? JSON.parse(getCookie('branch')) : '';
+      const selectedBranch = getCookie('branch')? JSON.parse(getCookie('ltsbranch')) : '';
       if (tokenData?.requireBranch === false) {
         if (branches) {
           return { branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
@@ -60,7 +60,7 @@ class NavBar extends Component<Props, State> {
   }
   componentDidUpdate(prevProps, prevState){
     if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
-      const selectedBranch = JSON.parse(getCookie('branch'));
+      const selectedBranch = JSON.parse(getCookie('ltsbranch'));
       this.goToBranch(selectedBranch, false);
     }
   }
@@ -69,7 +69,7 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = `branch=${JSON.stringify(branch)};`;
+      document.cookie = `ltsbranch=${JSON.stringify(branch)};`;
       setToken(res.body.token);
       this.setState({ loading: false, selectedBranch: branch })
       if(refresh) this.props.history.push("/");
