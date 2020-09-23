@@ -50,7 +50,7 @@ class NavBar extends Component<Props, State> {
       const token = getCookie('token');
       const tokenData = parseJwt(token);
       const branches = props.auth.validBranches;
-      const selectedBranch = getCookie('branch')? JSON.parse(getCookie('ltsbranch')) : '';
+      const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       if (tokenData?.requireBranch === false) {
         if (branches) {
           return { branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
