@@ -56,7 +56,7 @@ module.exports = () => {
                     REACT_APP_LOGIN_URL: JSON.stringify(config.REACT_APP_LOGIN_URL),
                     REACT_APP_MOHASSEL_URL: JSON.stringify(config.REACT_APP_MOHASSEL_URL),
                     REACT_APP_DOMAIN: JSON.stringify(config.REACT_APP_DOMAIN),
-                    REACT_APP_SUBDOMAIN: JSON.stringify(config.REACT_APP_SUBDOMAIN),
+                    REACT_APP_LTS_SUBDOMAIN: JSON.stringify(config.REACT_APP_LTS_SUBDOMAIN),
                 },
             }),
             new ForkTsCheckerWebpackPlugin({ eslint: true })
