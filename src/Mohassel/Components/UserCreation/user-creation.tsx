@@ -234,8 +234,8 @@ class UserCreation extends Component<Props, State> {
   getUserInfo(): UserInfo {
     const user = this.state.step1;
     return {
-      name: user.name,
-      username: user.username,
+      name: user.name.trim(),
+      username: user.username.trim(),
       nationalId: user.nationalId,
       gender: user.gender,
       birthDate: user.birthDate,
@@ -274,6 +274,7 @@ class UserCreation extends Component<Props, State> {
           <UserDataForm
             {...formikProps}
             edit={this.props.edit}
+            _id = {this.props.edit? this.props.history.location.state.details : ""}
             cancle={() => this.cancel()}
           />
         )}

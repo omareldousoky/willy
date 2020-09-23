@@ -258,7 +258,7 @@ class PostponeHalfInstallment extends Component<Props, State>{
                                         >
                                             <option value=''></option>
                                             {this.props.application.installmentsObject.installments.filter(inst => (inst.status === 'unpaid') || (inst.status === 'partiallyPaid')).map(inst =>
-                                                <option key={inst.id} value={inst.id}> Installment number {inst.id}</option>)}
+                                                <option key={inst.id} value={inst.id}> {local.installment} {inst.id}</option>)}
 
                                         </Form.Control>
                                         <Form.Control.Feedback type="invalid">
