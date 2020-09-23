@@ -69,7 +69,7 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = `ltsbranch=${JSON.stringify(branch)};`;
+      document.cookie = `ltsbranch=${JSON.stringify(branch)};domain=.halan.io;path=/;`;
       setToken(res.body.token);
       this.setState({ loading: false, selectedBranch: branch })
       if(refresh) this.props.history.push("/");
