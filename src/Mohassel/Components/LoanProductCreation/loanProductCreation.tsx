@@ -69,7 +69,7 @@ class LoanProductCreation extends Component<Props, State>{
                 noOfGuarantors: 2,
                 deductionFee: 0,
                 allocatedDebtForGoodLoans: 0,
-                aging: [{ from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }],
+                aging: [{ from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }],
                 mergeUndoubtedLoans: false,
                 mergeUndoubtedLoansFees: 0,
                 mergeDoubtedLoans: false,
@@ -108,6 +108,7 @@ class LoanProductCreation extends Component<Props, State>{
         if (obj.mustEnterGuarantor === false) {
             obj.noOfGuarantors = 0;
         }
+        obj.aging.forEach(entry => {if(entry.new) delete entry.new});
         const res = await createProduct(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });

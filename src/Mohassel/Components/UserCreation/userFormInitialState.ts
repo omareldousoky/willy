@@ -23,23 +23,6 @@ export const initialStep1: Values = {
   password: "",
   confirmPassword: "",
 };
-
-export const userRolesOptions = [
-  { label: "مراجع إداري", value: "1", hasBranch: "true" },
-  { label: "مراجع مالي", value: "2" },
-  { label: "مدخل بيانات", value: "3" },
-];
-export const userBranchesOptions = [
-  { label: "سوهاج", value: "1" },
-  { label: "الجيزة", value: "2" },
-  { label: "القاهرة", value: "3" },
-  { label: "1سوهاج", value: "4" },
-  { label: "1الجيزة", value: "5" },
-  { label: "1القاهرة", value: "6" },
-  { label: "2سوهاج", value: "7" },
-  { label: "2الجيزة", value: "8" },
-  { label: "2القاهرة", value: "9" },
-];
 export const initialStep2: RolesBranchesValues = {
   roles: [],
   branches: [],
@@ -73,7 +56,7 @@ export const userCreationValidationStepOne = Yup.object().shape({
     )
     .max(100, local.maxLength100)
     .required(local.required),
-  username: Yup.string().when("usernameChecker", {
+  username: Yup.string().trim().when("usernameChecker", {
     is: true,
     then: Yup.string().test(
       "error",
@@ -89,10 +72,20 @@ export const userCreationValidationStepOne = Yup.object().shape({
       .max(100, local.maxLength100)
       .required(local.required),
   }),
-  hrCode: Yup.string()
+  hrCode: Yup.string().trim()
+  .when("hrCodeChecker",{
+    is: true,
+    then: Yup.string().trim().test(
+      "error",
+      local.duplicateHRCodeMessage,
+      () => false
+    ),
+    otherwise:
+    Yup.string()
     .trim()
     .max(100, local.maxLength100)
     .required(local.required),
+  }),
   mobilePhoneNumber: Yup.string()
     .trim()
     .matches(/^[0-9]*$/, local.onlyNumbers)
@@ -141,10 +134,20 @@ export const editUserValidationStepOne = Yup.object().shape({
       local.containLetterError
     )
     .required(local.required),
-  hrCode: Yup.string()
-    .trim()
-    .max(100, local.maxLength100)
-    .required(local.required),
+    hrCode: Yup.string().trim()
+    .when("hrCodeChecker",{
+      is: true,
+      then: Yup.string().test(
+        "error",
+        local.duplicateHRCodeMessage,
+        () => false
+      ),
+      otherwise:
+      Yup.string()
+      .trim()
+      .max(100, local.maxLength100)
+      .required(local.required),
+    }),
   mobilePhoneNumber: Yup.string()
     .trim()
     .matches(/^[0-9]*$/, local.onlyNumbers)

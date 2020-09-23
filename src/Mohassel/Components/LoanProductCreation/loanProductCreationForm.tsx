@@ -316,15 +316,20 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label className="data-label" column sm={4}>{local.stamps}</Form.Label>
                 <Row className='row-nowrap'>
                     <Col>
-                        <Form.Control
-                            type="number"
-                            name="stamps"
-                            data-qc="stamps"
-                            value={values.stamps}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={errors.stamps && touched.stamps}
-                        />
+                        <InputGroup>
+                            <Form.Control
+                                type="number"
+                                name="stamps"
+                                data-qc="stamps"
+                                value={values.stamps}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.stamps && touched.stamps}
+                            />
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
+                            </InputGroup.Prepend>
+                        </InputGroup>
                         <Form.Control.Feedback type="invalid">
                             {errors.stamps}
                         </Form.Control.Feedback>
@@ -822,7 +827,7 @@ export const LoanProductCreationForm = (props: any) => {
                                                 value={values.aging[i].to}
                                                 onChange={(e) => {
                                                     setFieldValue(`aging[${i}].to`, Number(e.currentTarget.value))
-                                                    if (i < 6) {
+                                                    if (i < values.aging.length-1) {
                                                         setFieldValue(`aging[${i + 1}].from`, Number(e.currentTarget.value) + 1)
                                                     }
                                                 }}
@@ -837,7 +842,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     </Form.Group>
                                 </div>
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={5}>
                                 <Form.Group controlId={`agingFee${i}`} style={{ width: '100%' }}>
                                     <InputGroup>
                                         <Form.Control
@@ -858,9 +863,21 @@ export const LoanProductCreationForm = (props: any) => {
                                     </Form.Control.Feedback>}
                                 </Form.Group>
                             </Col>
+                            {values.aging[i].new && <Col sm={1}>
+                                <Button onClick={() => {
+                                    const agingValues = values.aging;
+                                    agingValues.splice(i,1)
+                                    setFieldValue('aging', agingValues)
+                                }} type='button' variant='danger'>-</Button>
+                            </Col>}
                         </Row>
                     )
                 })}
+                <Button onClick={() => {
+                    const agingValues = values.aging;
+                    agingValues.push({ from: 0, to: 1, fee: 0, new: true })
+                    setFieldValue('aging', agingValues)
+                }} type='button'>+</Button>
             </Col>
             <Form.Group className="data-group" controlId="mergeUndoubtedLoans">
                 <Form.Label className="data-label">{local.mergeUndoubtedLoans}</Form.Label>

@@ -11,12 +11,14 @@ import { checkIssueDate } from '../../Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';
+import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHRCodeDUP';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 interface Props {
     values: Values;
     errors: Errors;
     touched: Touched;
     edit?: boolean;
+    _id?: string;
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
@@ -174,8 +176,18 @@ export const UserDataForm = (props: Props) => {
                             type={"text"}
                             name={"hrCode"}
                             data-qc={"hrCode"}
-                            value={props.values.hrCode}
-                            onChange={props.handleChange}
+                            value={props.values.hrCode.trim()}
+                            onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                                props.setFieldValue('hrCode', event.currentTarget.value);
+                                setLoading(true);
+                                const res = await checkHRCodeDuplicates(event.currentTarget.value,props._id);
+
+                                if (res.status === 'success') {
+                                    setLoading(false);
+                                    props.setFieldValue('hrCodeChecker', res.body.Exists);
+                                } else setLoading(false);
+
+                            }}
                             onBlur={props.handleBlur}
                             isInvalid={(props.errors.hrCode && props.touched.hrCode) as boolean}
                         />
@@ -253,7 +265,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                         props.setFieldValue('username', event.currentTarget.value);
                         setLoading(true);
-                        const res = await checkUsernameDuplicates(event.currentTarget.value);
+                        const res = await checkUsernameDuplicates(event.currentTarget.value.trim());
 
                         if (res.status === 'success') {
                             setLoading(false);

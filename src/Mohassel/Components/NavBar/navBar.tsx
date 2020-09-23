@@ -57,13 +57,17 @@ class NavBar extends Component<Props, State> {
       } else return { selectedBranch: branches[0], branches: branches }
     } else return null;
   }
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+      this.goToBranch(this.props.auth.validBranches[0])
+    }
+  }
   async goToBranch(branch: Branch) {
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
       setToken(res.body.token);
-      this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
     } else console.log(res)
   }
@@ -168,7 +172,7 @@ class NavBar extends Component<Props, State> {
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
               {<Can I='getLoanProduct' a='product'><Can I='getCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can></Can>}
-              {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
+              {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link></Can>}
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
@@ -182,6 +186,7 @@ class NavBar extends Component<Props, State> {
             {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/cib')}>{local.cib}</Nav.Link></Can>}
             {<Can I = "changeOfficer" a  ="customer"><Can  I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can></Can>}
             <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>
+            <Can I='createLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-creation')}>{local.bulkApplicationCreation}</Nav.Link></Can>
             </Nav>
           </Navbar.Collapse>
         </Navbar>}

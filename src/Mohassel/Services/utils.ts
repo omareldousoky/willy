@@ -1,6 +1,8 @@
 import * as local from '../../Shared/Assets/ar.json';
 import jwtDecode from 'jwt-decode';
-
+import JsZip from 'jszip';
+import {saveAs} from 'file-saver'
+import Swal from 'sweetalert2';
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -281,6 +283,7 @@ export const getStatus = (installment) => {
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
+      case 'canceled': return local.cancelled;
       case 'issued': return local.issued;
       default: return '';
   }
@@ -304,6 +307,7 @@ export const getLoanStatus = (status: string) => {
       case 'partiallyPaid': return local.partiallyPaid;
       case 'rescheduled': return local.rescheduled;
       case 'cancelled': return local.cancelled;
+      case 'canceled': return local.cancelled;
       case 'issued': return local.issued;
       case 'created': return local.created;
       case 'underReview': return local.underReview;
@@ -316,62 +320,6 @@ export const getLoanStatus = (status: string) => {
   }
 }
 
-export const actionsList = [
-  "cancelApplication",
-  "createLoanApplication",
-  "createLoan",
-  "undoReviewLoan",
-  "issueLoan",
-  "reviewLoan",
-  "editLoanApplication",
-  "payLoanInstallment",
-  "earlyPayLoan",
-  "rejectLoan",
-  "approveLoan",
-  "splitfromGroup",
-  "rollback",
-  "traditionalRescheduling",
-  "FreeReschedule",
-  "manualPayment",
-  "editManualPayment",
-  "approveManualPayment",
-  "rejectManualPayment",
-  "payPenalties",
-  "createBranch",
-  "updateBranch",
-  "createCustomer",
-  "updateCustomer",
-  "createUser",
-  "updateUser",
-  "createRole",
-  "updateRole",
-  "createProduct",
-  "reschedule",
-  "writeOff",
-  "setDoubtfulLoan",
-  "setUnDoubtfulLoan",
-  "cancelPenalties",
-  "rollbackCreateLoan",
-  "rollbackIssueLoan",
-  "rollbackPayLoanInstallment",
-  "rollbackRejectLoan",
-  "rollbackApproveLoan",
-  "rollbackManualPayment",
-  "rollbackApproveManualPayment",
-  "rollbackRejectManualPayment",
-  "rollbackPayPenalties",
-  "rollbackReschedule",
-  "postpone",
-  "rollbackPostpone",
-  "payClearanceFees",
-  "payCollectionCommission",
-  "payLegalFees",
-  "payReissuingFees",
-  "payToktokStamp",
-  "payTricycleStamp",
-  "activateUser",
-  "deactivateUser"
-]
 
 export const getTimestamp = (datetimeString: string) => {
   const dateTime = datetimeString.split(" ");
@@ -419,4 +367,39 @@ export const getRandomPaymentByKey = (key)=>{
   else if(key==='toktokStamp') return local.toktokStamp
   else if(key==='tricycleStamp') return local.tricycleStamp
   else if(key==='penalty') return local.payPenalty
+}
+export const getDataURL = async(url) => {
+
+  const blob = await fetch(url).then(r => r.blob());
+          const dataUrl: any = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
+          return  await dataUrl.replace("data:application/octet-stream;base64,","");
+}
+export const downloadAsZip = async (images: Array<{url: string; fileName: string}>, folderName: string) => {
+  const zip =  new JsZip();
+  const base64Matcher = new RegExp(/^data:image\/(png|jpg|jpeg);base64,/);
+  try {
+    let counter = 0;
+    images.forEach((image) => {
+      if(base64Matcher.test(image.url)){
+        zip.file(image.fileName,image.url.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),{base64: true});
+        counter ++;
+      } else {
+        zip.file(image.fileName,getDataURL(image.url),{base64: true})
+        counter ++;
+      }
+    });
+    if(counter === images.length)
+   await zip.generateAsync({type:"blob"}).then(async(content)=>{
+        await saveAs(content,folderName)
+    })
+  } catch (error) {
+    Swal.fire("error", "Can't Download you folder");
+    console.log(error); // this log is for purpose
+  }
+ 
+  
 }
