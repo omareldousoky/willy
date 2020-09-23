@@ -333,16 +333,21 @@ export const LoanProductCreationForm = (props: any) => {
                 <Form.Label className="data-label" column sm={4}>{local.stamps}</Form.Label>
                 <Row className='row-nowrap'>
                     <Col>
-                        <Form.Control
-                            type="number"
-                            name="stamps"
-                            data-qc="stamps"
-                            value={values.stamps}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={errors.stamps && touched.stamps}
-                            disabled = {edit}
-                        />
+                        <InputGroup>
+                            <Form.Control
+                                type="number"
+                                name="stamps"
+                                data-qc="stamps"
+                                value={values.stamps}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={errors.stamps && touched.stamps}
+                                disabled = {edit}
+                            />
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
+                            </InputGroup.Prepend>
+                        </InputGroup>
                         <Form.Control.Feedback type="invalid">
                             {errors.stamps}
                         </Form.Control.Feedback>
