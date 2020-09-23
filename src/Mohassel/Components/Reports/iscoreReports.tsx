@@ -26,7 +26,7 @@ class IscoreReports extends Component<{}, State>{
         const res = await getiScoreReportRequests();
         if (res.status === 'success') {
             this.setState({
-                data: res.body.iscoreJobs,
+                data: res.body.iscoreFiles ? res.body.iscoreFiles : [],
                 loading: false,
             })
         } else {
@@ -40,7 +40,7 @@ class IscoreReports extends Component<{}, State>{
         if (res.status === 'success') {
             this.setState({
                 loading: false,
-            })
+            },()=>{this.getiScoreReports()})
         } else {
             this.setState({ loading: false });
             console.log(res)
@@ -64,7 +64,7 @@ class IscoreReports extends Component<{}, State>{
                                             <div style={{ display: 'flex' }}>
                                                 <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                                                 <span style={{ marginLeft: 40 }}>{pdf.fileName}</span>
-                                                <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.loanAppCreationDate}</span>{timeToArabicDate(pdf.requestedAt, true)}</span>
+                                                <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.loanAppCreationDate}</span>{timeToArabicDate(pdf.created.at, true)}</span>
                                                 <span style={{ marginLeft: 40 }}>{getIscoreReportStatus(pdf.status)}</span>
                                                 {pdf.status === 'created' && <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.creationDate}</span>{timeToArabicDate(pdf.fileCreatedAt, true)}</span>}
                                             </div>
