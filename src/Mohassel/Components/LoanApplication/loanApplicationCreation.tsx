@@ -476,15 +476,20 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
-                this.checkCustomersLimits([customer]) ? console.log('yes') : console.log('no');
-                const defaultApplication = this.state.application;
-                defaultApplication.customerID = customer._id;
-                this.populateCustomer(selectedCustomer.body)
-                this.setState({
-                    loading: false,
-                    selectedCustomer: selectedCustomer.body,
-                    application: defaultApplication
-                });
+                const check = await this.checkCustomersLimits([customer]);
+                if (check === true && typeof (check) === "boolean") {
+                    const defaultApplication = this.state.application;
+                    defaultApplication.customerID = customer._id;
+                    this.populateCustomer(selectedCustomer.body)
+                    this.setState({
+                        loading: false,
+                        selectedCustomer: selectedCustomer.body,
+                        application: defaultApplication
+                    });
+                } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+                    Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
+                    this.setState({ loading: false });
+                }
             } else {
                 this.setState({ loading: false })
                 Swal.fire("error", local.individualAgeError, 'error')
@@ -704,22 +709,45 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
 
     }
     async checkCustomersLimits(customers) {
-        console.log(customers)
         const customerIds: Array<string> = [];
         customers.forEach(customer => customerIds.push(customer._id));
         this.setState({ loading: true });
-        const res = await getCustomersBalances({ids: customerIds});
-        if (res.status === 'success') { 
+        const res = await getCustomersBalances({ ids: customerIds });
+        if (res.status === 'success') {
             this.setState({ loading: false });
-            console.log(res.body)
-            return true
-        }else {
+            const merged: Array<any> = [];
+            const validationObject: any = {};
+            for (let i = 0; i < customers.length; i++) {
+                const obj = {
+                    ...customers[i],
+                    ...(res.body.data.find((itmInner) => itmInner.id === customers[i]._id))
+                };
+                delete obj.id
+                merged.push(obj);
+            }
+            merged.forEach(customer => {
+                if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
+                    validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                }
+                if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
+                    if (Object.keys(validationObject).includes(customer._id)) {
+                        validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
+                    } else {
+                        validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                    }
+                }
+            })
+            if (Object.keys(validationObject).length > 0) {
+                return validationObject
+            }
+            else return true
+        } else {
             Swal.fire("error", res.error.details, 'error')
             this.setState({ loading: false });
             return false
         }
     }
-    handleGroupChange(customers) {
+    async handleGroupChange(customers) {
         this.setState({ selectedGroupLeader: '' })
         const customersTemp: { customer: Customer; amount: number; type: string }[] = [];
         const defaultApplication = this.state.application;
@@ -731,12 +759,20 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             customersTemp.push(obj)
         })
-        this.checkCustomersLimits(customers) ? console.log('yes') : console.log('no');
-        defaultApplication.individualDetails = customersTemp;
-        this.setState({
-            selectedCustomers: customers,
-            application: defaultApplication
-        })
+        if(customers.length > 0){
+            const check = await this.checkCustomersLimits(customers);
+        if (check === true && typeof (check) === "boolean") {
+            defaultApplication.individualDetails = customersTemp;
+            this.setState({
+                selectedCustomers: customers,
+                application: defaultApplication
+            })
+        }else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+            let names = ''
+            Object.keys(check).forEach((id,i) => (i === 0) ? names = names + check[id].customerName : names = names + ', '+ check[id].customerName);
+            Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
+        }
+    }
     }
     async viewCustomer(id) {
         this.setState({ loading: true });
