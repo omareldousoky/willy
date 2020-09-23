@@ -188,7 +188,7 @@ class BulkApplicationCreation extends Component<Props, State>{
     const res = await bulkCreation(obj);
     if (res.status === "success") {
       this.props.setLoading(false);
-      this.setState({ selectedApplications: [] })
+      this.setState({ selectedApplications: [], checkAll: false })
       Swal.fire('', local.bulkLoanCreated, 'success').then(() => this.getApplications());
     } else {
       this.props.setLoading(false);
