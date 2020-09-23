@@ -720,5 +720,7 @@
     "assignProductsToBranchesError":" لم يتم إضافه فروع جديده لأنواع القروض ",
     "unassignProductsToBranchesSuccess": "تمت عمليه حذف لأنواع القروض للفروع بنجاح",
     "unassignProductsToBranchesError":" لم يتم حذف  لأنواع القروض ",
-    "editLoanProduct": "تعديل نوع القرض"
+    "editLoanProduct": "تعديل نوع القرض",
+    "updateLoanProductPrincipalsSuccess":"تم تعديل قيمة القرض المسموحة بنجاح",
+    "updateLoanProductPrincipalsError":"حدث خطأ ولم يتم تعدل قيمه القرض المسموحة"
 }

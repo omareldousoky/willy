@@ -6,6 +6,7 @@ import { LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
 import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
+import {editProductsPrincipals} from '../../Services/APIs/loanProduct/editProductPrincipals';
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -112,6 +113,22 @@ class LoanProductCreation extends Component<Props, State>{
         this.props.history.goBack();
     }
     submit = async (values: any) => {
+        if(this.props.edit){
+            const id = this.props.history.location.state.id;
+            this.setState({loading: true});
+                const res = await editProductsPrincipals(id, {
+                    maxPrincipal: values.maxPrincipal,
+                    minPrincipal: values.minPrincipal
+                })
+                if(res.status === 'success'){
+                    this.setState({loading: false});
+                    Swal.fire("success",local.updateLoanProductPrincipalsSuccess)
+                } else {
+                    this.setState({loading: false});
+                    Swal.fire("error", local.updateLoanProductPrincipalsError);
+                }
+            
+        }else {
         this.setState({ loading: true });
         const obj = { ...values }
         if (obj.mustEnterGuarantor === false) {
@@ -126,6 +143,7 @@ class LoanProductCreation extends Component<Props, State>{
             Swal.fire("error", local.loanProductCreationError, 'error')
             this.setState({ loading: false });
         }
+    }
     }
     async getProduct() {
         const id = this.props.history.location.state.id;
@@ -153,7 +171,7 @@ class LoanProductCreation extends Component<Props, State>{
                     <Loader open={this.state.loading} type="fullscreen" />
                     <Card style={{ padding: '20px 10px' }}>
                         <Formik
-                             enableReinitialize
+                            enableReinitialize
                             initialValues={this.state.product}
                             onSubmit={this.submit}
                             validationSchema={LoanProductValidation}
@@ -161,7 +179,7 @@ class LoanProductCreation extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} cancel={() => this.cancel()} />
+                                <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} edit = {this.props.edit} cancel={() => this.cancel()} />
                             }
                         </Formik>
                     </Card>

@@ -167,7 +167,7 @@ const appRoutes = [
               {
                 path: "/edit-loan-product",
                 label: local.editLoanProduct,
-                render: (props) => <Can I='createLoanProduct' a='product'><LoanProductCreation {...props} edit = {true} /></Can>,
+                render: (props) => <Can I='updateLoanProduct' a='product'><LoanProductCreation {...props} edit = {true} /></Can>,
               },
               {
                 path: "/view-product",
