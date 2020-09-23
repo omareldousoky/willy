@@ -57,6 +57,11 @@
     padding-right: 50px;
     }
 }
+.table {
+    & th,td{
+    padding: 0.5rem;
+    }
+}
 span.icon {
     margin-left: 20px;
     cursor: pointer;
