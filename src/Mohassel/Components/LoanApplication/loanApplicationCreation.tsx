@@ -476,7 +476,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
-                const check = await this.checkCustomersLimits([customer]);
+                const check = await this.checkCustomersLimits([customer], false);
                 if (check === true && typeof (check) === "boolean") {
                     const defaultApplication = this.state.application;
                     defaultApplication.customerID = customer._id;
@@ -504,13 +504,17 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj._id);
         if (selectedGuarantor.status === 'success') {
-            const defaultApplication = { ...values }
-            const defaultGuarantors = { ...defaultApplication.guarantors };
-            const defaultGuar = { ...defaultGuarantors[index] };
-            defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id };
-            defaultApplication.guarantorIds.push(obj._id)
-            defaultApplication.guarantors[index] = defaultGuar;
-            this.setState({ application: defaultApplication, loading: false });
+            const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
+            console.log(check)
+            if (check === true && typeof (check) === "boolean") {
+                const defaultApplication = { ...values }
+                const defaultGuarantors = { ...defaultApplication.guarantors };
+                const defaultGuar = { ...defaultGuarantors[index] };
+                defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id };
+                defaultApplication.guarantorIds.push(obj._id)
+                defaultApplication.guarantors[index] = defaultGuar;
+                this.setState({ application: defaultApplication, loading: false });
+            }
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
@@ -708,7 +712,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
 
     }
-    async checkCustomersLimits(customers) {
+    async checkCustomersLimits(customers, guarantor) {
         const customerIds: Array<string> = [];
         customers.forEach(customer => customerIds.push(customer._id));
         this.setState({ loading: true });
@@ -727,10 +731,24 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     merged.push(obj);
                 }
                 merged.forEach(customer => {
-                    if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
-                        validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                    if (customer.applicationIds && customer.applicationIds.length > 0 && customer.maxLoansAllowed === 1 && !guarantor) {
+                        validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
                     }
-                    if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
+                    if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed && !guarantor) {
+                        if (Object.keys(validationObject).includes(customer._id)) {
+                            validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
+                        } else {
+                            validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                        }
+                    }
+                    if (customer.guarantorIds && ((customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) || (customer.guarantorIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan)) && !guarantor) {
+                        if (Object.keys(validationObject).includes(customer._id)) {
+                            validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
+                        } else {
+                            validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                        }
+                    }
+                    if (customer.guarantorIds && (customer.guarantorIds.length >= customer.guarantorMaxLoans || !customer.allowGuarantorLoan) && guarantor) {
                         if (Object.keys(validationObject).includes(customer._id)) {
                             validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
                         } else {
@@ -762,7 +780,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             customersTemp.push(obj)
         })
         if (customers.length > 0) {
-            const check = await this.checkCustomersLimits(customers);
+            const check = await this.checkCustomersLimits(customers, false);
             if (check === true && typeof (check) === "boolean") {
                 defaultApplication.individualDetails = customersTemp;
                 this.setState({
