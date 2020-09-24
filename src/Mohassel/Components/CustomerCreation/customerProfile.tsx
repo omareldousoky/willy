@@ -131,6 +131,10 @@ const CustomerProfile = (props: Props) => {
                 <td>{local.customerName}</td>
                 <td>{customerDetails?.customerName}</td>
               </tr>
+              <tr>
+                <td>{local.branchName}</td>
+                <td>{customerDetails?.branchName}</td>
+              </tr>
               {ability.can('viewIscore', 'customer') && <tr>
                 <td>iScore</td>
                 <td>
