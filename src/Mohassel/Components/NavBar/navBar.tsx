@@ -60,7 +60,7 @@ class NavBar extends Component<Props, State> {
   }
   componentDidUpdate(prevProps, prevState){
     if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
-      const selectedBranch = JSON.parse(getCookie('ltsbranch'));
+      const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       this.goToBranch(selectedBranch, false);
     }
   }
