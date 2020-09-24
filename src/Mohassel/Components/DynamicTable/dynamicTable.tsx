@@ -80,7 +80,7 @@ const DynamicTable = (props: Props) => {
               {props.mappers?.map((mapper, index: number) => {
                 return (
                   <th style={mapper.sortable ? { cursor: 'pointer' } : {}} key={index} onClick={() => mapper.sortable ? sortBy(mapper.key) : null}>
-                    {mapper.title}
+                    {typeof mapper.title === "string" ? mapper.title : mapper.title()}
                     {mapper.sortable ? getOrderIcon(mapper.key) : null}
                   </th>
                 )

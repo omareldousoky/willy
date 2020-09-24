@@ -33,6 +33,8 @@ import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import Wizard from '../wizard/Wizard';
 import { BusinessSector } from '../CustomerCreation/StepTwoForm';
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
+import Select from 'react-select';
+
 interface Props {
     history: any;
     location: Location;
@@ -75,7 +77,7 @@ interface State {
     loading: boolean;
     selectedCustomer: Customer;
     selectedGroupLeader: string;
-    selectedLoanOfficer: string;
+    selectedLoanOfficer: LoanOfficer;
     searchResults: Results;
     guarantor1Res: Results;
     guarantor2Res: Results;
@@ -182,7 +184,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             loading: false,
             selectedCustomer: {},
             selectedGroupLeader: '',
-            selectedLoanOfficer: '',
+            selectedLoanOfficer: {
+                _id: '',
+                username: '',
+                name: ''
+            },
             searchResults: {
                 results: [],
                 empty: false
@@ -385,7 +391,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async searchCustomers(keyword?: string, key?: string) {
         this.setState({ loading: true, branchCustomers: [] });
-        const query = (!keyword || keyword.trim().length === 0 || !key) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer, [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword }
+        const query = (!keyword || keyword.trim().length === 0 || !key) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer._id } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer._id, [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
@@ -860,6 +866,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             return true
         }
     }
+    selectLO(e){
+        this.setState({ selectedLoanOfficer: e }, () => { this.searchCustomers() })
+
+    }
     renderStepOne() {
         return (
             <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
@@ -871,23 +881,22 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         <div style={{ marginTop: 10, marginBottom: 10 }}>
                             <Form.Group controlId="loanOfficer" style={{ margin: 'auto', width: '60%' }}>
                                 <Form.Label>{local.loanOfficer}</Form.Label>
-                                <Form.Control as="select"
+                                <Select
                                     name="loanOfficer"
                                     data-qc="loanOfficer"
                                     value={this.state.selectedLoanOfficer}
-                                    disabled={this.state.selectedCustomers.length > 0}
+                                    enableReinitialize={false}
                                     onChange={(event) => {
-                                        this.setState({ selectedLoanOfficer: event.currentTarget.value }, () => { this.searchCustomers() })
+                                        this.selectLO(event)
                                     }}
-                                >
-                                    <option value="" disabled></option>
-                                    {this.state.loanOfficers.map((officer) =>
-                                        <option key={officer._id} value={officer._id}>{officer.name}</option>
-                                    )}
-                                </Form.Control>
+                                    type='text'
+                                    getOptionLabel={(option) => option.name}
+                                    getOptionValue={(option) => option._id}
+                                    options={this.state.loanOfficers}
+                                />
                             </Form.Group>
                         </div>
-                        {this.state.selectedLoanOfficer.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
+                        {this.state.selectedLoanOfficer._id.length > 0 && <div style={{ marginTop: 10, marginBottom: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: "column" }}>
                             <DualBox
                                 labelKey={"customerName"}
                                 vertical
