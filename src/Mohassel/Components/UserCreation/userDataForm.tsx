@@ -18,6 +18,7 @@ interface Props {
     errors: Errors;
     touched: Touched;
     edit?: boolean;
+    _id?: string;
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
@@ -175,11 +176,11 @@ export const UserDataForm = (props: Props) => {
                             type={"text"}
                             name={"hrCode"}
                             data-qc={"hrCode"}
-                            value={props.values.hrCode}
+                            value={props.values.hrCode.trim()}
                             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                 props.setFieldValue('hrCode', event.currentTarget.value);
                                 setLoading(true);
-                                const res = await checkHRCodeDuplicates(event.currentTarget.value);
+                                const res = await checkHRCodeDuplicates(event.currentTarget.value,props._id);
 
                                 if (res.status === 'success') {
                                     setLoading(false);
@@ -264,7 +265,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                         props.setFieldValue('username', event.currentTarget.value);
                         setLoading(true);
-                        const res = await checkUsernameDuplicates(event.currentTarget.value);
+                        const res = await checkUsernameDuplicates(event.currentTarget.value.trim());
 
                         if (res.status === 'success') {
                             setLoading(false);
