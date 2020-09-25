@@ -8,7 +8,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { dayToArabic } from '../../Services/utils';
 
 export const LoanProductCreationForm = (props: any) => {
-    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue } = props;
+    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue,edit } = props;
+    console.log("values", values);
     return (
         <Form onSubmit={handleSubmit} className="data-form">
             <Row>
@@ -23,6 +24,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.productName && touched.productName}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.productName}
@@ -39,6 +41,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.beneficiaryType && touched.beneficiaryType}
+                            disabled = {edit}
                         >
                             <option value=''></option>
                             <option value='individual'>{local.individual}</option>
@@ -62,6 +65,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.calculationFormulaId && touched.calculationFormulaId}
+                            disabled = {edit}
                         >
                             <option value=''></option>
                             {props.formulas.map((formula, i) =>
@@ -83,6 +87,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.loanNature && touched.loanNature}
+                            disabled = {edit}
                         >
                             <option value='cash'>{local.cash}</option>
                         </Form.Control>
@@ -104,6 +109,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.currency && touched.currency}
+                            disabled = {edit}
                         >
                             <option value='egp'>{local.egp}</option>
                         </Form.Control>
@@ -125,6 +131,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     isInvalid={errors.periodLength && touched.periodLength}
+                                    disabled = {edit}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.periodLength}
@@ -138,6 +145,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     isInvalid={errors.periodType && touched.periodType}
+                                    disabled = {edit}
                                 >
                                     <option value='months'>{local.month}</option>
                                     <option value='days'>{local.day}</option>
@@ -162,6 +170,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.noOfInstallments && touched.noOfInstallments}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {(errors.noOfInstallments === 'outOfRange') ? `${local.mustBeinRange} ` + `${values.minInstallment} ${local.and} ${values.maxInstallment}` : errors.noOfInstallments}
@@ -179,6 +188,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.lateDays && touched.lateDays}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.lateDays}
@@ -197,6 +207,7 @@ export const LoanProductCreationForm = (props: any) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     isInvalid={errors.gracePeriod && touched.gracePeriod}
+                    disabled = {edit}
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.gracePeriod}
@@ -215,6 +226,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.interest && touched.interest}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.interest}
@@ -231,6 +243,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.interestPeriod && touched.interestPeriod}
+                            disabled = {edit}
                         >
                             <option value='yearly'>{local.yearlyInnterestPeriod}</option>
                             <option value='monthly'>{local.monthlyInnterestPeriod}</option>
@@ -251,6 +264,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.allowInterestAdjustment && touched.allowInterestAdjustment}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.allowInterestAdjustment}
@@ -271,6 +285,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.inAdvanceFees && touched.inAdvanceFees}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.inAdvanceFees}
@@ -284,6 +299,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             isInvalid={errors.inAdvanceFrom && touched.inAdvanceFrom}
+                            disabled = {edit}
                         >
                             <option value='principal'>{local.inAdvanceFromPrinciple}</option>
                             <option value='monthly'>{local.inAdvanceFromMonthly}</option>
@@ -304,6 +320,7 @@ export const LoanProductCreationForm = (props: any) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     isInvalid={errors.inAdvanceType && touched.inAdvanceType}
+                    disabled = {edit}
                 >
                     <option value='cut'>{local.inAdvanceFeesCut}</option>
                     <option value='uncut'>{local.inAdvanceFeesUncut}</option>
@@ -325,6 +342,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.stamps && touched.stamps}
+                                disabled = {edit}
                             />
                             <InputGroup.Prepend>
                                 <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
@@ -345,6 +363,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.allowStampsAdjustment && touched.allowStampsAdjustment}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.allowStampsAdjustment}
@@ -367,6 +386,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.representativeFees && touched.representativeFees}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.representativeFees}
@@ -384,6 +404,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.allowRepresentativeFeesAdjustment && touched.allowRepresentativeFeesAdjustment}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.allowRepresentativeFeesAdjustment}
@@ -405,6 +426,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.adminFees && touched.adminFees}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.adminFees}
@@ -422,6 +444,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.allowAdminFeesAdjustment && touched.allowAdminFeesAdjustment}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.allowAdminFeesAdjustment}
@@ -443,6 +466,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.earlyPaymentFees && touched.earlyPaymentFees}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.earlyPaymentFees}
@@ -461,6 +485,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.maxNoOfRestructuring && touched.maxNoOfRestructuring}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.maxNoOfRestructuring}
@@ -514,6 +539,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.minInstallment && touched.minInstallment}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.minInstallment}
@@ -529,6 +555,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.maxInstallment && touched.maxInstallment}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.maxInstallment}
@@ -550,7 +577,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.applicationFee && touched.applicationFee}
-                                disabled={values.applicationFeePercent > 0}
+                                disabled={values.applicationFeePercent > 0 || edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.applicationFee}
@@ -569,7 +596,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.individualApplicationFee && touched.individualApplicationFee}
-                                disabled={values.applicationFeePercentPerPerson > 0}
+                                disabled={values.applicationFeePercentPerPerson > 0 || edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.individualApplicationFee}
@@ -587,6 +614,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.allowApplicationFeeAdjustment && touched.allowApplicationFeeAdjustment}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.allowApplicationFeeAdjustment}
@@ -627,7 +655,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.applicationFeePercent && touched.applicationFeePercent}
-                                disabled={values.applicationFee > 0}
+                                disabled={values.applicationFee > 0 || edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.applicationFeePercent}
@@ -641,7 +669,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.applicationFeeType && touched.applicationFeeType}
-                                disabled={values.applicationFee > 0}
+                                disabled={values.applicationFee > 0 || edit}
                             >
                                 <option value='principal'>{local.inAdvanceFromPrinciple}</option>
                                 <option value='monthly'>{local.inAdvanceFromMonthly}</option>
@@ -665,7 +693,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.applicationFeePercentPerPerson && touched.applicationFeePercentPerPerson}
-                                disabled={values.individualApplicationFee > 0}
+                                disabled={values.individualApplicationFee > 0|| edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.applicationFeePercentPerPerson}
@@ -679,7 +707,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.applicationFeePercentPerPersonType && touched.applicationFeePercentPerPersonType}
-                                disabled={values.individualApplicationFee > 0}
+                                disabled={values.individualApplicationFee > 0|| edit}
                             >
                                 <option value='principal'>{local.inAdvanceFromPrinciple}</option>
                                 <option value='monthly'>{local.inAdvanceFromMonthly}</option>
@@ -711,6 +739,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 }
                             }}
                             isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.loanImpactPrincipal}
@@ -736,6 +765,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 }
                             }}
                             isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.loanImpactPrincipal}
@@ -759,6 +789,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     isInvalid={errors.mustEnterGuarantor && touched.mustEnterGuarantor}
+                                    disabled = {edit}
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.mustEnterGuarantor}
@@ -795,6 +826,7 @@ export const LoanProductCreationForm = (props: any) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     isInvalid={errors.allocatedDebtForGoodLoans && touched.allocatedDebtForGoodLoans}
+                    disabled = {edit}
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.allocatedDebtForGoodLoans}
@@ -834,6 +866,7 @@ export const LoanProductCreationForm = (props: any) => {
                                                 onBlur={handleBlur}
                                                 min={values.aging[i].from}
                                                 isInvalid={errors.aging && errors.aging[i] && errors.aging[i].to && touched.aging && touched.aging[i] && touched.aging[i].to}
+                                                disabled = {edit}
                                             />
                                         </InputGroup>
                                         {errors.aging && errors.aging[i] && errors.aging[i].to && <Form.Control.Feedback type="invalid" className="d-flex">
@@ -853,6 +886,7 @@ export const LoanProductCreationForm = (props: any) => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             isInvalid={errors.aging && errors.aging[i] && errors.aging[i].fee && touched.aging && touched.aging[i] && touched.aging[i].fee}
+                                            disabled = {edit}
                                         />
                                         <InputGroup.Prepend>
                                             <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
@@ -900,6 +934,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     }
                                 }}
                                 isInvalid={errors.mergeUndoubtedLoans && touched.mergeUndoubtedLoans}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.mergeUndoubtedLoans}
@@ -925,6 +960,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     }
                                 }}
                                 isInvalid={errors.mergeUndoubtedLoans && touched.mergeUndoubtedLoans}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.mergeUndoubtedLoans}
@@ -945,6 +981,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.mergeUndoubtedLoansFees && touched.mergeUndoubtedLoansFees}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.mergeUndoubtedLoansFees}
@@ -974,6 +1011,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     }
                                 }}
                                 isInvalid={errors.mergeDoubtedLoans && touched.mergeDoubtedLoans}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.mergeDoubtedLoans}
@@ -999,6 +1037,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     }
                                 }}
                                 isInvalid={errors.mergeDoubtedLoans && touched.mergeDoubtedLoans}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.mergeDoubtedLoans}
@@ -1019,6 +1058,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 isInvalid={errors.mergeDoubtedLoansFees && touched.mergeDoubtedLoansFees}
+                                disabled = {edit}
                             />
                             <Form.Control.Feedback type="invalid">
                                 {errors.mergeDoubtedLoansFees}
@@ -1039,6 +1079,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.pushPayment && touched.pushPayment}
+                            disabled = {edit}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.pushPayment}
@@ -1055,6 +1096,7 @@ export const LoanProductCreationForm = (props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={errors.pushHolidays && touched.pushHolidays}
+                            disabled = {edit}
                         >
                             <option value='previous'>{local.previous}</option>
                             <option value='next'>{local.next}</option>
@@ -1166,6 +1208,7 @@ export const LoanProductCreationForm = (props: any) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     isInvalid={errors.branchManagerAndDate && touched.branchManagerAndDate}
+                    disabled = {edit}
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.branchManagerAndDate}
