@@ -40,7 +40,6 @@ class Login extends React.PureComponent<Props, State> {
 
     }).then(succ => {
       setToken(succ.data.Token);
-      if(succ.data.validBranches && succ.data.validBranches.length > 0) document.cookie = `ltsbranch=${JSON.stringify(succ.data.validBranches[0])};domain=.halan.io;path=/;`;
       window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
       swal.fire('', local.loginError, 'error');
