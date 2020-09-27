@@ -240,14 +240,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async setappStats() {
         if (this.state.prevId.length > 0) {
-            this.getAppByID(this.state.prevId)
-        } else {
-            this.setState(this.setInitState());
-        }
-        await this.getProducts();
+            await this.getProducts();
         await this.getFormulas();
         await this.getLoanUsage();
         await this.getLoanOfficers();
+            this.getAppByID(this.state.prevId)
+        } else {
+            this.setState(this.setInitState());
+            await this.getProducts();
+        await this.getFormulas();
+        await this.getLoanUsage();
+        await this.getLoanOfficers();
+        }
     }
     async getAppByID(id) {
         this.setState({ loading: true })
