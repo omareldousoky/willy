@@ -239,15 +239,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setappStats();
         }
     }
-    setappStats() {
-        this.getProducts();
-        this.getFormulas();
-        this.getLoanUsage();
-        this.getLoanOfficers();
+    async setappStats() {
         if (this.state.prevId.length > 0) {
+            await this.getProducts();
+        await this.getFormulas();
+        await this.getLoanUsage();
+        await this.getLoanOfficers();
             this.getAppByID(this.state.prevId)
         } else {
             this.setState(this.setInitState());
+            await this.getProducts();
+        await this.getFormulas();
+        await this.getLoanUsage();
+        await this.getLoanOfficers();
         }
     }
     async getAppByID(id) {
@@ -263,7 +267,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     if (customer.type === 'leader') {
                         this.setState({
                             selectedGroupLeader: customer.customer._id,
-                            selectedLoanOfficer: customer.customer.representative
+                            selectedLoanOfficer: this.state.loanOfficers.filter(officer => officer._id === customer.customer.representative)[0]
                         })
                     }
                 })
