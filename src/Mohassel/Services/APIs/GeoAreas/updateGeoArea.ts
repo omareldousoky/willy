@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const getAreasByBranch = async (branchid: string) => {
-    const url = process.env.REACT_APP_BASE_URL + `/config/branch-areas/${branchid}`;
+export const updateGeoArea = async (id: string, obj: any) => {
+    const url = process.env.REACT_APP_BASE_URL + `/config/geo-areas/${id}`;
     try {
-        const res = await axios.get(url);
+        const res = await axios.put(url, obj);
         return { status: "success", body: res.data }
     }
     catch (error) {

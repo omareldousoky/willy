@@ -172,7 +172,7 @@ class NavBar extends Component<Props, State> {
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
-              {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/branch-areas')}>{local.branchAreas}</Nav.Link></Can>}
+              {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/geo-areas')}>{local.branchAreas}</Nav.Link></Can>}
               {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
                 : ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
                   : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
