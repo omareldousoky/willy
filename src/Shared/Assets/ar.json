@@ -729,6 +729,9 @@
     "approvedLoans": "قروض موافق عليها",
     "approvalDate": "تاريخ الموافقة",
     "reviewDateShouldNotBeSmallerThanCreationDate": "تاريخ الإنشاء يجب أن يكون بعد تاريخ القبول",
+    "editLoanProduct": "تعديل نوع القرض",
+    "updateLoanProductPrincipalsSuccess":"تم تعديل قيمة القرض المسموحة بنجاح",
+    "updateLoanProductPrincipalsError":"حدث خطأ ولم يتم تعدل قيمه القرض المسموحة",
     "customerInvolvedInAnotherLoan":"هذا العميل مربوط بقروض أخرى",
     "memberInvolvedInAnotherLoan":"مربوط بقروض أخرى"
 }
