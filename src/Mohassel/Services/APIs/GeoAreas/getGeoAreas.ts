@@ -11,7 +11,7 @@ export const getGeoAreas = async () => {
     }
 }
 export const getGeoAreasByBranch = async (id: string) => {
-    const url = process.env.REACT_APP_BASE_URL + '/config/geo-areas';
+    const url = process.env.REACT_APP_BASE_URL + `/config/geo-areas/${id}`;
     try {
         const res = await axios.get(url);
         return { status: "success", body: res.data }

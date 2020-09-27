@@ -18,11 +18,13 @@ import { addGeoArea } from '../../Services/APIs/GeoAreas/addGeoArea';
 import { updateGeoArea } from '../../Services/APIs/GeoAreas/updateGeoArea';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import DualBox from '../DualListBox/dualListBox';
+import { assignGeoAreas } from '../../Services/APIs/GeoAreas/assignGeoAreas';
 
 interface GeoArea {
     name: string;
     disabledUi: boolean;
-    id: string;
+    _id: string;
     active: boolean;
 }
 interface State {
@@ -34,6 +36,7 @@ interface State {
     branches: Array<any>;
     branchAreas: Array<any>;
     branch: any;
+    selectedAreas: Array<any>;
 }
 class GeoAreas extends Component<{}, State> {
     constructor(props) {
@@ -46,7 +49,8 @@ class GeoAreas extends Component<{}, State> {
             temp: [],
             branches: [],
             branchAreas: [],
-            branch: {}
+            branch: {},
+            selectedAreas: []
         }
     }
     async componentDidMount() {
@@ -56,7 +60,7 @@ class GeoAreas extends Component<{}, State> {
         if (!this.state.geoAreas.some(branchArea => branchArea.name === "")) {
             this.setState({
                 filterGeoAreas: '',
-                geoAreas: [...this.state.geoAreas, { name: "", disabledUi: false, id: "", active: true }],
+                geoAreas: [...this.state.geoAreas, { name: "", disabledUi: false, _id: "", active: true }],
                 temp: [...this.state.temp, '']
             })
         }
@@ -73,8 +77,7 @@ class GeoAreas extends Component<{}, State> {
     }
     async toggleClick(index: number, submit: boolean) {
         if (this.state.geoAreas[index].disabledUi === false && this.state.geoAreas[index].name.trim() !== "") {
-            console.log(this.state.geoAreas[index])
-            if (this.state.geoAreas[index].id === "") {
+            if (this.state.geoAreas[index]._id === "") {
                 //New 
                 this.setState({ loading: true })
                 const res = await addGeoArea({ name: this.state.geoAreas[index].name });
@@ -87,7 +90,7 @@ class GeoAreas extends Component<{}, State> {
             } else {
                 //Edit 
                 this.setState({ loading: true })
-                const res = await updateGeoArea(this.state.geoAreas[index].id, { name: this.state.geoAreas[index].name, active: this.state.geoAreas[index].active });
+                const res = await updateGeoArea(this.state.geoAreas[index]._id, { name: this.state.geoAreas[index].name, active: this.state.geoAreas[index].active });
                 if (res.status === "success") {
                     this.setState({
                         geoAreas: this.state.geoAreas.map((branchArea, branchAreaIndex) => branchAreaIndex === index ? { ...branchArea, disabledUi: !branchArea.disabledUi } : branchArea),
@@ -105,8 +108,13 @@ class GeoAreas extends Component<{}, State> {
         this.setState({ loading: true });
         const geoAreas = await getGeoAreas();
         if (geoAreas.status === 'success') {
+            const areas = geoAreas.body.data ? geoAreas.body.data.map(area => ({ ...area, disabledUi: true })) : [];
+            areas.forEach(area => {
+                area._id = area.id;
+                delete area.id
+            })
             this.setState({
-                geoAreas: geoAreas.body.data ? geoAreas.body.data.map(area => ({ ...area, disabledUi: true })) : [],
+                geoAreas: areas,
                 loading: false
             })
         } else {
@@ -116,7 +124,6 @@ class GeoAreas extends Component<{}, State> {
         }
     }
     async openAssignToBranches() {
-        console.log('now')
         await this.getBranches();
         this.setState({
             showModal: true
@@ -137,13 +144,49 @@ class GeoAreas extends Component<{}, State> {
         }
     }
     async getBranchAreas(branch) {
-        console.log(branch)
+        await this.getGeoAreas();
         this.setState({ loading: true, branch: branch })
         const branchsAreas = await getGeoAreasByBranch(branch._id);
         if (branchsAreas.status === 'success') {
+            const areas = (branchsAreas.body.data) ? branchsAreas.body.data : [];
+            areas.forEach(area => {
+                area._id = area.id;
+                delete area.id
+            })
             this.setState({
-                branchAreas: branchsAreas.body.data,
+                branchAreas: areas,
                 loading: false,
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({
+                loading: false,
+            })
+        }
+    }
+    handleChange(list) {
+        console.log('Here', list)
+        this.setState({
+            selectedAreas: list
+        })
+    }
+    async submitChange() {
+        console.log(this.state.branch, this.state.selectedAreas)
+        const areaIds: Array<any> = [];
+        this.state.selectedAreas.forEach(area => areaIds.push(area._id))
+        const obj = {
+            id: this.state.branch._id,
+            geoAreas: areaIds
+        }
+        this.setState({ loading: true })
+        const branchsAreas = await assignGeoAreas(obj);
+        if (branchsAreas.status === 'success') {
+            Swal.fire('success', local.customerSuccess, 'success');
+            this.setState({
+                loading: false,
+                showModal: false,
+                selectedAreas: [],
+                branch: {}
             })
         } else {
             Swal.fire('', local.searchError, 'error');
@@ -205,7 +248,7 @@ class GeoAreas extends Component<{}, State> {
                                             className={branchArea.active ? "fa fa-check-circle fa-lg" : "fa fa-times-circle fa-lg"} />
                                         :
                                         <>
-                                            {branchArea.id.length > 0 && <Form.Check
+                                            {branchArea._id.length > 0 && <Form.Check
                                                 type="checkbox"
                                                 data-qc={`activate${index}`}
                                                 label={local.active}
@@ -228,10 +271,16 @@ class GeoAreas extends Component<{}, State> {
                             )
                         }).reverse()}
                 </ListGroup>
-                {this.state.showModal && <Modal show={this.state.showModal} backdrop="static">
+                {this.state.showModal && <Modal show={this.state.showModal} backdrop="static" size="lg">
                     <Modal.Header>
                         <Modal.Title>{local.branchAreas}</Modal.Title>
-                        <Button variant='danger' type='button' onClick={()=>{this.setState({ showModal: false })}}>x</Button>
+                        <Button variant='danger' type='button' onClick={() => {
+                            this.setState({
+                                showModal: false,
+                                selectedAreas: [],
+                                branch: {}
+                            })
+                        }}>x</Button>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group as={Row} controlId="branch" style={{ width: '100%' }}>
@@ -250,6 +299,19 @@ class GeoAreas extends Component<{}, State> {
                                 />
                             </Col>
                         </Form.Group>
+                        {Object.keys(this.state.branch).length > 0 && this.state.geoAreas.length > 0 &&
+                            <DualBox
+                                labelKey={"name"}
+                                options={this.state.geoAreas.filter(area => area.active)}
+                                selected={this.state.branchAreas}
+                                onChange={(list) => this.handleChange(list)}
+                                filterKey={this.state.branch._id}
+                                rightHeader={local.availableLoanProducts}
+                                leftHeader={local.loanProductsForBranch}
+                            />
+                        }
+                        {this.state.branch._id ? <Button type="button" style={{ margin: 10, width: '10%', alignSelf: 'flex-end' }} onClick={() => this.submitChange()}>{local.submit}</Button> : null}
+
                     </Modal.Body>
                 </Modal>}
             </Container>
