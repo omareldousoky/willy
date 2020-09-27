@@ -709,5 +709,10 @@
     "partialCode":"الكود الجزئي",
     "divide":"مقسمة",
     "now":"الأن",
-    "branchAreas":"التقسيم الجغرافي للفروع"
+    "branchAreas":"التقسيم الجغرافي للفروع",
+    "assignBranchAreas":"تعيين التقسيمات الجغرافية للفروع",
+    "availableGeoAreas": " التقسيمات الجغرافية المتاحة",
+    "branchgeoAreas": " التقسيمات الجغرافية المتاحة للفرع",
+    "branchAssignGeoAreaSuccess":"تم تعيين التقسيمات الجغرافية للفرع بنجاح",
+    "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع"
 }
