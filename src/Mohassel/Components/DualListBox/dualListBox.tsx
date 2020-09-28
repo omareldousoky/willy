@@ -55,22 +55,13 @@ class DualBox extends Component<Props, State> {
 
     static getDerivedStateFromProps(props, state) {
         if (props.filterKey !== state.filterKey || props.options !== state.options) {
-            // if (props.selected?.length > 0) {
-                const selectedIds = props.selected.map(item => item._id);
+            const selectedIds = props.selected.map(item => item._id);
 
-                return {
-                    filterKey: props.filterKey,
-                    options: (selectedIds.length > 0) ? props.options.filter(item => !selectedIds.includes(item._id)) : props.options,
-                    selectedOptions: props.selected
-                }
-            // }
-            // else {
-                // return {
-                //     filterKey: props.filterKey,
-                //     options: props.options,
-                // }
-            // }
-
+            return {
+                filterKey: props.filterKey,
+                options: (selectedIds.length > 0) ? props.options.filter(item => !selectedIds.includes(item._id)) : props.options,
+                selectedOptions: props.selected
+            }
         }
         return null;
     }
