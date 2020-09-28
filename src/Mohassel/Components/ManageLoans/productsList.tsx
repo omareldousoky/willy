@@ -67,7 +67,8 @@ class LoanProducts extends Component<Props, State> {
     renderIcons(data: any) {
         return (
             <>
-                <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-loans/loan-products/view-product", state: { id: data.id } }) }}></img>
+                <img style={{cursor: 'pointer', marginLeft:"30px"}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-loans/loan-products/view-product", state: { id: data.id } }) }}></img>
+                <Can I='updateLoanProduct' a='product'><img style={{cursor: 'pointer', marginLeft:"30px"}}  alt={"edit"} src={require('../../Assets/editIcon.svg')}  onClick={() => { this.props.history.push({ pathname: "/manage-loans/loan-products/edit-loan-product", state: { id: data.id } }) }}></img></Can>
             </>
         );
     }

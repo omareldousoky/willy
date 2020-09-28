@@ -74,7 +74,7 @@ class Reports extends Component<{}, State> {
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'], permission: 'installments' },
         {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches'], permission: 'randomPayments' },
         {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
-        {key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen'},
+        // {key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen'},
         {key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo','branches'], permission: 'manualPayments'},
       ],
       selectedPdf: { permission: '' },
@@ -448,7 +448,7 @@ class Reports extends Component<{}, State> {
         this.setState({ loading: false }, () => Swal.fire("error", local.noResults));
       }
       this.setState({ loading: false });
-      downloadTxtFile(res.body.loans, true);
+      downloadTxtFile(res.body.loans, true, values.fromDate);
     } else {
       this.setState({ loading: false });
       console.log(res);

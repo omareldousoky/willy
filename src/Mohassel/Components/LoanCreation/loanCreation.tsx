@@ -71,7 +71,7 @@ class LoanCreation extends Component<Props, State> {
       approvalDate: '',
       loanCreationDate: timeToDateyyymmdd(0),
       issueDate: timeToDateyyymmdd(0),
-      managerVisitDate: timeToDateyyymmdd(0),
+      managerVisitDate: '',
       loading: false,
       customerData: {
         id: '',
@@ -164,11 +164,9 @@ class LoanCreation extends Component<Props, State> {
     } else {
       const obj = {
         id: this.state.id,
-        issueDate: new Date(values.issueDate).valueOf()
-      }
-      if(this.state.application.product.branchManagerAndDate) {
-        obj['branchManagerId'] = values.branchManagerId;
-        obj['managerVisitDate'] = new Date(values.managerVisitDate).valueOf();
+        issueDate: new Date(values.issueDate).valueOf(),
+        branchManagerId: values.branchManagerId,
+        managerVisitDate: values.managerVisitDate? new Date(values.managerVisitDate).valueOf() : 0,
       }
       const res = await issueLoan(obj);
       if (res.status === "success") {
@@ -317,8 +315,6 @@ class LoanCreation extends Component<Props, State> {
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>
-                {this.state.application?.product?.branchManagerAndDate ?
-                  <>
                     <Form.Group as={Row} controlId="branchManagerId">
                       <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.branchManager}*`}</Form.Label>
                       <Col sm={6}>
@@ -360,9 +356,6 @@ class LoanCreation extends Component<Props, State> {
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
-                  </>
-                  : null
-                }
                 </>
               }
               <Button type="submit">{local.submit}</Button>

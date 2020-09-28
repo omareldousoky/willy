@@ -82,7 +82,7 @@ const CustomerProfile = (props: Props) => {
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
       await changeCustomerDetails(res.body);
-      await getCachediScores(res.body.nationalId);
+      if (ability.can('viewIscore', 'customer')) await getCachediScores(res.body.nationalId);
       await getGuaranteeedLoans(res.body); 
     } else {
       changeLoading(false);
@@ -112,9 +112,10 @@ const CustomerProfile = (props: Props) => {
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
         <BackButton title={local.viewCustomer} className="print-none" />
-        <div className="print-none" style={{ cursor: 'pointer' }} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
+        {(ability.can('updateCustomer', 'customer') || ability.can('updateNationalId', 'customer')) && <div className="print-none" style={{ cursor: 'pointer' }} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
           <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
-          {local.edit}</div>
+          {local.edit}
+        </div>}
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar
@@ -131,12 +132,16 @@ const CustomerProfile = (props: Props) => {
                 <td>{customerDetails?.customerName}</td>
               </tr>
               <tr>
+                <td>{local.branchName}</td>
+                <td>{customerDetails?.branchName}</td>
+              </tr>
+              {ability.can('viewIscore', 'customer') && <tr>
                 <td>iScore</td>
                 <td>
                   {iScoreDetails?.iscore}
                   {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
                 </td>
-              </tr>
+              </tr>}
               <tr>
                 <td>{local.customerCode}</td>
                 <td>{customerDetails?.code}</td>
