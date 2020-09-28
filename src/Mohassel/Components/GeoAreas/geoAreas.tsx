@@ -155,13 +155,11 @@ class GeoAreas extends Component<{}, State> {
         }
     }
     handleChange(list) {
-        console.log('Here', list)
         this.setState({
             branchAreas: list
         })
     }
     async submitChange() {
-        console.log(this.state.branch, this.state.branchAreas)
         const areaIds: Array<any> = [];
         this.state.branchAreas.forEach(area => areaIds.push(area._id))
         const obj = {
@@ -285,7 +283,6 @@ class GeoAreas extends Component<{}, State> {
                                 />
                             </Col>
                         </Form.Group>
-                        {console.log('-->',this.state.geoAreas, this.state.branchAreas)}
                         {Object.keys(this.state.branch).length > 0 && this.state.geoAreas.length > 0 &&
                             <DualBox
                                 labelKey={"name"}

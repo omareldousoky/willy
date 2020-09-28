@@ -100,7 +100,6 @@ class DualBox extends Component<Props, State> {
     }
     removeItemFromList(option) {
         const newList = this.state.selectedOptions.filter(item => item._id !== option._id);
-        console.log(option, newList)
         this.props.onChange(newList);
         this.setState({
             selectedOptions: newList,
