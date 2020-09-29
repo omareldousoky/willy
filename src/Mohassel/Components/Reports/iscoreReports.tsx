@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { getiScoreReportRequests, generateiScoreReport, getiScoreReport } from '../../Services/APIs/Reports/iScoreReports';
 import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../Services/utils';
 import Swal from 'sweetalert2';
+import Can from '../../config/Can';
 
 interface State {
     data: any;
@@ -70,7 +71,7 @@ class IscoreReports extends Component<{}, State>{
                     <Card.Body style={{ padding: 15 }}>
                         <div className="custom-card-header">
                             <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.iScoreReports}</Card.Title>
-                            <Button type='button' variant='primary' onClick={() => this.generateReport()}>{local.requestNewreport}</Button>
+                            <Can I="createIscoreFile" a="report"><Button type='button' variant='primary' onClick={() => this.generateReport()}>{local.requestNewreport}</Button></Can>
                         </div>
                         {this.state.data.length > 0 ? this.state.data.map((pdf, index) => {
                             return (

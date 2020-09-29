@@ -21,7 +21,9 @@ class ReportsHome extends Component<{}, State>{
                 stringKey: 'financialReports'
             }, {
                 header: local.iScoreReports,
-                stringKey: 'iScoreReports'
+                stringKey: 'iScoreReports',
+                permission: 'downloadIscoreFile',
+                permissionKey: 'report'
             }]
         }
     }
