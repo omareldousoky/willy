@@ -81,6 +81,9 @@ steps:
       - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
       - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LTS_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
+
     tags:
       - ${DRONE_COMMIT_SHA:0:8}
       - ${DRONE_BRANCH}
@@ -109,6 +112,8 @@ steps:
       - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
       - REACT_APP_MOHASSEL_URL=https://mohassel.${DRONE_BRANCH}.halan.io
       - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LTS_SUBDOMAIN=mohassel.${DRONE_BRANCH}.halan.io
     region: us-east-1
     tags:
       - ${DRONE_COMMIT_SHA:0:8}

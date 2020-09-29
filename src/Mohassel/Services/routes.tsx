@@ -41,6 +41,7 @@ import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
 import ReportsHome from '../Components/Reports/reportsHome';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
+import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 
 const appRoutes = [
@@ -163,6 +164,11 @@ const appRoutes = [
                 path: "/new-loan-product",
                 label: local.createLoanProduct,
                 render: (props) => <Can I='createLoanProduct' a='product'><LoanProductCreation {...props} /></Can>,
+              },
+              {
+                path: "/edit-loan-product",
+                label: local.editLoanProduct,
+                render: (props) => <Can I='updateLoanProduct' a='product'><LoanProductCreation {...props} edit = {true} /></Can>,
               },
               {
                 path: "/view-product",
@@ -313,7 +319,11 @@ const appRoutes = [
         path: "/move-customers",
         label: local.moveCustomers,
         render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
-
+      },
+      {
+        path: "/bulk-creation",
+        label: local.bulkApplicationCreation,
+        render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
       }
     ]
   },

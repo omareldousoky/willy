@@ -4,6 +4,9 @@ export const authMe = async () => {
     const url = process.env.REACT_APP_BASE_URL + '/auth/me';
     try {
         const res = await axios.get(url);
+        if (res.data.validBranches && res.data.validBranches.length > 0) {
+            document.cookie = 'ltsbranch=' + JSON.stringify(res.data.validBranches[0]) + (process.env.REACT_APP_LTS_SUBDOMAIN ? `;domain=${process.env.REACT_APP_LTS_SUBDOMAIN}` : '' + ';path=/;');
+        }
         return { status: "success", body: res.data }
     }
     catch (error) {

@@ -2,7 +2,6 @@ import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
 import { timeToDateyyymmdd, timeToArabicDate } from '../../../Services/utils'
-
 interface Props {
     result: {
         days: {
