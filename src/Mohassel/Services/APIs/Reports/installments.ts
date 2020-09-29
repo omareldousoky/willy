@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const assignProductToBranchAPI = async (data: object) => {
-    const url = process.env.REACT_APP_BASE_URL + `/branch/assign-to-product`;
+export const installments = async (obj: any) => {
+    const url = process.env.REACT_APP_BASE_URL + `/report/installments`;
     try {
-        const res = await axios.post(url, data);
+        const res = await axios.post(url, obj);
         return { status: "success", body: res.data }
     }
     catch (error) {

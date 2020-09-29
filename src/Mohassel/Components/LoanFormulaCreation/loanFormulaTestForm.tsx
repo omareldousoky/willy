@@ -283,8 +283,8 @@ export const LoanFormulaTestForm = (props: any) => {
                             onChange={handleChange}
                             isInvalid={errors.inAdvanceType && touched.inAdvanceType}
                         >
-                            <option value='uncut'>لا تستقطع من المصاريف الموزعه</option>
-                            <option value='cut'>تستقطع من المصاريف الموزعه</option>
+                            <option value='uncut'>{local.inAdvanceFeesUncut}</option>
+                            <option value='cut'>{local.inAdvanceFeesCut}</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {errors.inAdvanceType}

@@ -50,21 +50,29 @@ class NavBar extends Component<Props, State> {
       const token = getCookie('token');
       const tokenData = parseJwt(token);
       const branches = props.auth.validBranches;
+      const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       if (tokenData?.requireBranch === false) {
         if (branches) {
           return { branches: [...branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
         } else return { branches: [...state.branches, { _id: 'hq', name: local.headquarters }], selectedBranch: { _id: 'hq', name: local.headquarters } }
-      } else return { selectedBranch: branches[0], branches: branches }
+      } else return { selectedBranch: selectedBranch? selectedBranch: branches[0], branches: branches }
     } else return null;
   }
-  async goToBranch(branch: Branch) {
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+      const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
+      this.goToBranch(selectedBranch, false);
+    }
+  }
+  async goToBranch(branch: Branch, refresh: boolean) {
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
+      document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_LTS_SUBDOMAIN ? `;domain=${process.env.REACT_APP_LTS_SUBDOMAIN}`: '' + ';path=/;');
       setToken(res.body.token);
-      this.props.history.push('/');
       this.setState({ loading: false, selectedBranch: branch })
+      if(refresh) this.props.history.push("/");
     } else console.log(res)
   }
   renderBranchList() {
@@ -88,7 +96,7 @@ class NavBar extends Component<Props, State> {
             .map((branch, index) => {
               return (
                 <div key={index}>
-                  <div className="item" onClick={() => this.goToBranch(branch)}>
+                  <div className="item" onClick={() => this.goToBranch(branch, true)}>
                     <div style={{ display: 'flex' }}>
                       <div className="pin-icon"><span className="fa fa-map-marker-alt fa-lg"></span></div>
                       <div className="branch-name">
@@ -107,6 +115,7 @@ class NavBar extends Component<Props, State> {
         <div className="item">
           <Button variant="outline-secondary" onClick={() => {
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
           }}>{local.logOut}</Button>
         </div>
@@ -164,11 +173,11 @@ class NavBar extends Component<Props, State> {
         {this.state.selectedBranch._id && <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
               {<Can I='getLoanProduct' a='product'><Can I='getCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can></Can>}
-              {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-branch-products')}>{local.assignProductToBranch}</Nav.Link></Can>}
+              {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link></Can>}
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
@@ -177,8 +186,13 @@ class NavBar extends Component<Props, State> {
                   : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
               {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-finances/principleRange')}>{local.manageFinances}</Nav.Link> : null}
               {<Can I='documentTypes' a='config'><Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
-              {<Can I='getIssuedLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link></Can>}
+              {(ability.can('getIssuedLoan',"application") || ability.can('branchIssuedLoan', "application")) && <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>}
             {<Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}
+            {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/source-of-fund')}>{local.changeSourceOfFund}</Nav.Link></Can>}
+            {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/cib')}>{local.cib}</Nav.Link></Can>}
+            {<Can I = "changeOfficer" a  ="customer"><Can  I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can></Can>}
+            <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>
+            <Can I='createLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-creation')}>{local.bulkApplicationCreation}</Nav.Link></Can>
             </Nav>
           </Navbar.Collapse>
         </Navbar>}

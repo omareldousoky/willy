@@ -15,8 +15,11 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
+import { Employee } from '../Payment/payment';
+import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
+import { getCookie } from '../../Services/getCookie';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -33,7 +36,8 @@ interface CustomerData {
 }
 interface State {
   loanCreationDate: string;
-  loanIssuanceDate: string;
+  issueDate: string;
+  managerVisitDate: string;
   customerData: CustomerData;
   id: string;
   type: string;
@@ -44,6 +48,8 @@ interface State {
   application: any;
   print: boolean;
   receiptData: any;
+  employees: Array<Employee>;
+  branchManagerId: string;
 }
 export interface Location {
   pathname: string;
@@ -64,7 +70,8 @@ class LoanCreation extends Component<Props, State> {
       type: '',
       approvalDate: '',
       loanCreationDate: timeToDateyyymmdd(0),
-      loanIssuanceDate: timeToDateyyymmdd(0),
+      issueDate: timeToDateyyymmdd(0),
+      managerVisitDate: '',
       loading: false,
       customerData: {
         id: '',
@@ -84,7 +91,9 @@ class LoanCreation extends Component<Props, State> {
       installmentsData: {},
       application: {},
       print: false,
-      receiptData: {}
+      receiptData: {},
+      employees: [],
+      branchManagerId: '',
     }
   }
   async componentDidMount() {
@@ -95,7 +104,7 @@ class LoanCreation extends Component<Props, State> {
       if (res.status === "success") {
         this.setState({ installmentsData: res.body })
       } else console.log(res)
-    }
+    } else this.getEmployees();
     const res = await getApplication(id);
     if (res.status === "success") {
       this.setState({
@@ -124,6 +133,22 @@ class LoanCreation extends Component<Props, State> {
       }
     } else this.setState({ loading: false })
   }
+  async getEmployees() {
+    const token = getCookie('token');
+    const tokenData = parseJwt(token);
+    this.setState({loading: true})
+    const obj = {
+      size: 1000,
+      from: 0,
+      serviceKey:'halan.com/application',
+      action:'actBranchManager',
+      branchId: tokenData?.branch
+    }
+    const res = await searchUserByAction(obj);
+    if(res.status === 'success') {
+      this.setState({ employees: res.body.data, loading: false });
+    } else this.setState({ loading: false });
+  }
   handleSubmit = async (values) => {
     this.setState({ loading: true })
     if (this.state.type === "create") {
@@ -137,10 +162,16 @@ class LoanCreation extends Component<Props, State> {
         Swal.fire('', local.loanCreationError, 'error');
       }
     } else {
-      const res = await issueLoan(this.state.id, new Date(values.loanIssuanceDate).valueOf());
+      const obj = {
+        id: this.state.id,
+        issueDate: new Date(values.issueDate).valueOf(),
+        branchManagerId: values.branchManagerId,
+        managerVisitDate: values.managerVisitDate? new Date(values.managerVisitDate).valueOf() : 0,
+      }
+      const res = await issueLoan(obj);
       if (res.status === "success") {
-        this.setState({ loading: false, print: true, receiptData: res.body }, () => window.print());
-        Swal.fire('', local.loanIssuanceSuccess, 'success').then(() => {this.props.history.push('/track-loan-applications')});
+        this.setState({ loading: false, print: true, receiptData: res.body.receipts }, () => window.print());
+        Swal.fire('', local.loanIssuanceSuccess + `${local.withCode}` + res.body.loanApplicationKey , 'success').then(() => {this.props.history.push('/track-loan-applications')});
       } else {
         this.setState({ loading: false });
         Swal.fire('', local.loanIssuanceError, 'error');
@@ -235,7 +266,7 @@ class LoanCreation extends Component<Props, State> {
         </Table>
         <Formik
           enableReinitialize
-          initialValues={this.state}
+          initialValues={{...this.state, branchManagerAndDate: this.state.application?.product?.branchManagerAndDate}}
           onSubmit={this.handleSubmit}
           validationSchema={this.state.type === "create" ? loanCreationValidation : loanIssuanceValidation}
           validateOnBlur
@@ -266,23 +297,66 @@ class LoanCreation extends Component<Props, State> {
                   </Col>
                 </Form.Group>
                 :
-                <Form.Group as={Row} controlId="loanIssuanceDate">
+                <>
+                <Form.Group as={Row} controlId="issueDate">
                   <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.loanIssuanceDate}*`}</Form.Label>
                   <Col sm={6}>
                     <Form.Control
                       type="date"
-                      name="loanIssuanceDate"
-                      data-qc="loanIssuanceDate"
-                      value={formikProps.values.loanIssuanceDate}
+                      name="issueDate"
+                      data-qc="issueDate"
+                      value={formikProps.values.issueDate}
                       onChange={formikProps.handleChange}
                       onBlur={formikProps.handleBlur}
-                      isInvalid={Boolean(formikProps.errors.loanIssuanceDate) && Boolean(formikProps.touched.loanIssuanceDate)}
+                      isInvalid={Boolean(formikProps.errors.issueDate) && Boolean(formikProps.touched.issueDate)}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.loanIssuanceDate}
+                      {formikProps.errors.issueDate}
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>
+                    <Form.Group as={Row} controlId="branchManagerId">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.branchManager}*`}</Form.Label>
+                      <Col sm={6}>
+                        <Form.Control
+                          as="select"
+                          name="branchManagerId"
+                          data-qc="branchManagerId"
+                          onChange={formikProps.handleChange}
+                          value={formikProps.values.branchManagerId}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.branchManagerId) && Boolean(formikProps.touched.branchManagerId)}
+                        >
+                          <option value={''}></option>
+                          {this.state.employees.map((employee, index) => {
+                            return (
+                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                            )
+                          })}
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.branchManagerId}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="managerVisitDate">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.visitationDate}*`}</Form.Label>
+                      <Col sm={6}>
+                        <Form.Control
+                          type="date"
+                          name="managerVisitDate"
+                          data-qc="managerVisitDate"
+                          value={formikProps.values.managerVisitDate}
+                          onChange={formikProps.handleChange}
+                          onBlur={formikProps.handleBlur}
+                          isInvalid={Boolean(formikProps.errors.managerVisitDate) && Boolean(formikProps.touched.managerVisitDate)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {formikProps.errors.managerVisitDate}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                </>
               }
               <Button type="submit">{local.submit}</Button>
             </Form>

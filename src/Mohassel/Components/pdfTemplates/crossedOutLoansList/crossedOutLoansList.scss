@@ -1,0 +1,58 @@
+@media screen,
+print {
+    .crossed-out-loans-list {
+        font-size: 10px;
+        font-weight: bold;
+		page-break-after: always;
+
+        & tbody {
+            page-break-inside: avoid;
+        }
+    
+        & .tbodyborder {
+            box-shadow: 0 0 0 1px black;
+        }
+    
+        & .headtitle {
+            font-size: 12px;
+            font-weight: bolder;
+        }
+    
+        & table {
+            width: 100%;
+        }
+    
+        & thead.report-header {
+            display: table-header-group;
+        }
+    
+        & .frame {
+            border: 0.5px solid black;
+            text-align: right;
+        }
+    
+        & .gray {
+            background-color: lightgrey;
+            text-align: center;
+            -webkit-print-color-adjust: exact;
+        }
+    
+        & .horizontal-line {
+            border-bottom: 1px solid black;
+        }
+        & th {
+            text-align: right;
+        }
+        & td {
+            text-align: right;
+        }
+    }
+}
+
+@media screen {
+    .crossed-out-loans-list {
+        max-width: 624px;
+        font-size: 8px;
+        display: none;
+    }
+}

@@ -7,6 +7,7 @@ import store from '../../../redux/store';
 interface Props {
     data: any;
     branchDetails: any;
+    penalty: number;
 }
 interface State {
     totalDaysLate: number;
@@ -114,26 +115,28 @@ class CustomerCardPDF extends Component<Props, State> {
                         <tr>
                             <td>غرامات مسددة <div className="frame">{numbersToArabic(this.props.data.penaltiesPaid)}</div>
                             </td>
+                            <td>غرامات مطلوبة <div className="frame">{numbersToArabic(this.props.penalty)}</div>
+                            </td>
                             <td>غرامات معفاة <div className="frame">{numbersToArabic(this.props.data.penaltiesCanceled)}</div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <table className="tablestyle" style={{ width: '90%', border: "1px black solid" }}>
+                <table className="tablestyle" style={{ border: "1px black solid" }}>
                     <tbody>
                         <tr>
                             <th>القسط</th>
                             <th>تاريخ الآستحقاق</th>
                             <th> قيمة القسط</th>
-                            <th>المصاريف</th>
+                            <th>الفائدة</th>
                             <th>اجمالي القيمة</th>
                             <th>قيمه مسدده</th>
-                            <th>مصاريف مسدده</th>
+                            <th>فائدة مسدده</th>
                             <th>الحاله</th>
                             <th>تاريخ الحاله</th>
                             <th>ايام التأخير</th>
-                            <th style={{ width: "30%" }}>ملاحظات</th>
+                            <th style={{ width: "15%" }}>ملاحظات</th>
                         </tr>
                         {this.props.data.installmentsObject.installments.map(installment => {
                             return (<tr key={installment.id}>

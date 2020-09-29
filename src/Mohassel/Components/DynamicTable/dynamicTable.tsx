@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import './styles.scss';
@@ -26,6 +26,11 @@ const DynamicTable = (props: Props) => {
   const [order, changeOrder] = useState('');
   const [selectedSortKey, changeSortKey] = useState('');
   const totalPages: Array<number> = [];
+  useEffect(() => {
+    if(props.from === 0) {
+      changePage(0);
+    }
+  }, [props.from])
   for (let index = 1; index <= Math.ceil(props.totalCount / rowsPerPage); index++) {
     totalPages.push(index)
   }
@@ -75,7 +80,7 @@ const DynamicTable = (props: Props) => {
               {props.mappers?.map((mapper, index: number) => {
                 return (
                   <th style={mapper.sortable ? { cursor: 'pointer' } : {}} key={index} onClick={() => mapper.sortable ? sortBy(mapper.key) : null}>
-                    {mapper.title}
+                    {typeof mapper.title === "string" ? mapper.title : mapper.title()}
                     {mapper.sortable ? getOrderIcon(mapper.key) : null}
                   </th>
                 )

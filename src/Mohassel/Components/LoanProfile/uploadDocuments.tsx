@@ -2,18 +2,31 @@ import React, { Component } from 'react'
 import DocumentUploader from '../documentUploader/documentUploader'
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
 import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments';
-import { uploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
-import { deleteDocument } from '../../Services/APIs/loanApplication/deleteDocument'
 import Swal from 'sweetalert2';
+import * as local from '../../../Shared/Assets/ar.json';
+import Row from 'react-bootstrap/Row';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader'
 import ability from '../../config/ability'
+import { connect } from 'react-redux';
+import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../redux/document/actions'
+import { Image } from '../../redux/document/types';
+import { downloadAsZip } from '../../Services/utils';
 interface Props {
     application: any;
+    getDocuments: typeof getDocuments;
+    addAllToSelectionArray: typeof addAllToSelectionArray;
+    clearSelectionArray: typeof clearSelectionArray;
+    loading: boolean;
+    documents: any[];
+    selectionArray: Image[];
 }
 interface State {
     loading: boolean;
     docsOfImagesFiles: any[];
     documentTypes: any[];
+    selectAll: boolean;
 }
 class UploadDocuments extends Component<Props, State> {
     constructor(props: Props) {
@@ -21,6 +34,7 @@ class UploadDocuments extends Component<Props, State> {
         this.state = {
             loading: false,
             documentTypes: [],
+            selectAll: false,
             docsOfImagesFiles: [[{
                 key: '',
                 url: '',
@@ -42,7 +56,24 @@ class UploadDocuments extends Component<Props, State> {
         }
 
     }
-
+    selectAllOptions() {
+        if (this.state.selectAll === true) {
+            this.setState({ selectAll: false });
+            this.props.clearSelectionArray();
+        } else {
+            this.setState({ selectAll: true });
+            const images: Image[] = [];
+            this.props.documents.map((doc) => {
+                doc.imagesFiles.map((image) => {
+                    images.push({
+                        fileName: image.key,
+                        url: image.url,
+                    })
+                })
+            });
+            this.props.addAllToSelectionArray(images);
+        }
+    }
     async getApplicationDocuments() {
         const res = await getApplicationDocuments(this.props.application._id as string);
         if (res.status === "success") {
@@ -56,20 +87,12 @@ class UploadDocuments extends Component<Props, State> {
         }
 
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({ loading: true });
         this.getDocumentTypes();
-        this.getApplicationDocuments();
+        await this.props.getDocuments({ applicationId: this.props.application._id, docType: this.props.application.status === "issued" ? "issuedLoan" : "loanApplication" })
         this.setState({ loading: false });
 
-    }
-    prepareApplicationDocuments(customerDocs: any[], name: string) {
-
-        let ImageFiles: any[] = [];
-        customerDocs?.map((doc) => {
-            ImageFiles = doc.docs;
-        });
-        return ImageFiles;
     }
     checkPermission() {
         return ability.can('addingDocuments', 'application');
@@ -77,17 +100,30 @@ class UploadDocuments extends Component<Props, State> {
     render() {
         return (
             <>
-                <Loader type="fullscreen" open={this.state.loading} />
+                <Loader type="fullscreen" open={this.state.loading || this.props.loading} />
+                <Row style={{ justifyContent: "space-between" }}>
+                    <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
+                        <Form.Check
+                            type='checkbox'
+                            id='check-all'
+                            label={local.checkAll}
+                            checked={this.state.selectAll}
+                            onChange={() => this.selectAllOptions()}
+                        />
+                    </div>
+                    <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
+                        <Button style={{ width: '150px' }} variant="primary" disabled={this.props.selectionArray.length <= 0} onClick={async () => {
+                            this.setState({ loading: true })
+                            const res = await downloadAsZip(this.props.selectionArray, `loan-${this.props.application._id}-${new Date().valueOf()}`);
+                            this.setState({ loading: false })
+                        }}>{`${local.download}(${this.props.selectionArray.length})`}</Button> </div>
+                </Row>
                 {this.state.documentTypes.map((documentType, index) => {
-                    const ImageFiles = this.state.docsOfImagesFiles.filter(item => item.name === documentType.name);
                     return (
                         <DocumentUploader
                             key={index}
                             documentType={documentType}
-                            uploadDocumentFun={uploadDocument}
-                            deleteDocumentFun={deleteDocument}
                             edit={this.checkPermission()}
-                            uploadedImageFile={this.prepareApplicationDocuments(ImageFiles, documentType.name)}
                             keyName="applicationId"
                             keyId={this.props.application._id as string}
                             view={(this.props.application.status === "paid" || this.props.application.status === "rejected" ||
@@ -99,6 +135,23 @@ class UploadDocuments extends Component<Props, State> {
             </>
         )
     }
+    componentWillUnmount() {
+        this.props.clearSelectionArray();
+      }
+}
+const addDocumentToProps = dispatch => {
+    return {
+        getDocuments: (obj) => dispatch(getDocuments(obj)),
+        addAllToSelectionArray: (images) => dispatch(addAllToSelectionArray(images)),
+        clearSelectionArray: () => dispatch(clearSelectionArray()),
+    };
+}
+const mapStateToProps = (state) => {
+    return {
+        loading: state.loading,
+        documents: state.documents as any[],
+        selectionArray: state.selectionArray,
+    }
 }
 
-export default UploadDocuments
+export default connect(mapStateToProps, addDocumentToProps)(UploadDocuments);

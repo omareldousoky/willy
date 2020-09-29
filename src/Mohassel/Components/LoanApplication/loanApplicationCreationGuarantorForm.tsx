@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
+import InfoBox from '../userInfoBox';
+import GroupInfoBox from '../LoanProfile/groupInfoBox';
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -13,6 +15,9 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
+                {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox values={props.customer} /> :
+                    <GroupInfoBox group={{individualsInGroup: values.individualDetails}} />
+                }
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <h5>{local.guarantorInfo}</h5>
                         <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>

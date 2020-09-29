@@ -63,7 +63,7 @@ export const StepThreeForm = (props: any) => {
                                 value={values.geographicalDistribution}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                             >
                                 <option value="" disabled></option>
@@ -98,7 +98,7 @@ export const StepThreeForm = (props: any) => {
                                 getOptionLabel={(option) => option.name}
                                 getOptionValue={(option) => option._id}
                                 loadOptions={getLoanOfficers}
-                                isDisabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                isDisabled={(props.edit)}
                                 cacheOptions defaultOptions
                             />}
                         </Can>
@@ -118,7 +118,7 @@ export const StepThreeForm = (props: any) => {
                                 value={values.applicationDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.applicationDate && touched.applicationDate}
                             />}
                         </Can>
@@ -145,7 +145,7 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('permanentEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
                             />}
                         </Can>
@@ -170,7 +170,7 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
                             />}
                         </Can>
@@ -184,22 +184,8 @@ export const StepThreeForm = (props: any) => {
                 {allowed =>
                     props.edit && allowed &&
                     <Row>
-                        <Col sm={4}>
-                            <Form.Group>
-                                <Form.Check
-                                    name="allowMultiLoans"
-                                    id="allowMultiLoans"
-                                    data-qc="allowMultiLoans"
-                                    type='checkbox'
-                                    checked={values.allowMultiLoans}
-                                    value={values.allowMultiLoans}
-                                    label={local.allowMultiLoans}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col sm={4}>
-                            <Form.Group>
+                        <Col sm={6}>
+                            <Form.Group style={{textAlign:'right'}}>
                                 <Form.Check
                                     name="allowGuarantorLoan"
                                     id="allowGuarantorLoan"
@@ -212,22 +198,51 @@ export const StepThreeForm = (props: any) => {
                                 />
                             </Form.Group>
                         </Col>
-                        <Col sm={4}>
-                            <Form.Group>
-                                <Form.Check
-                                    name="allowMultiGuarantee"
-                                    id="allowMultiGuarantee"
-                                    data-qc="allowMultiGuarantee"
-                                    type='checkbox'
-                                    checked={values.allowMultiGuarantee}
-                                    value={values.allowMultiGuarantee}
-                                    label={local.allowMultiGuarantee}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                        </Col>
                     </Row>
                 }
+            </Can>
+            <Can I="updateNationalId" a="customer" passThrough>
+            {allowed =>
+                    props.edit && allowed &&
+                <Row>
+                    <Col sm={6}>
+                        <Form.Group controlId="maxLoansAllowed">
+                            <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="maxLoansAllowed"
+                                    data-qc=""
+                                    value={values.maxLoansAllowed}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                    isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
+                                />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.maxLoansAllowed}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group controlId="guarantorMaxLoans">
+                            <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="guarantorMaxLoans"
+                                    data-qc=""
+                                    value={values.guarantorMaxLoans}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                    isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
+                                />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.guarantorMaxLoans}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            }
             </Can>
             <Row>
                 <Col sm={12}>
@@ -240,7 +255,7 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="comments"
                                 value={values.comments}
                                 onChange={handleChange}
-                                disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.comments && touched.comments}
                             />}
                         </Can>

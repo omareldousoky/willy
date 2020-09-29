@@ -6,6 +6,8 @@ import { LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
 import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
+import {editProductsPrincipals} from '../../Services/APIs/loanProduct/editProductPrincipals';
+import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -15,6 +17,7 @@ import Card from 'react-bootstrap/Card';
 interface Props {
     title: string;
     history: any;
+    edit: boolean;
 
 };
 interface State {
@@ -69,7 +72,7 @@ class LoanProductCreation extends Component<Props, State>{
                 noOfGuarantors: 2,
                 deductionFee: 0,
                 allocatedDebtForGoodLoans: 0,
-                aging: [{ from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }],
+                aging: [{ from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }, { from: 0, to: 1, fee: 0 }],
                 mergeUndoubtedLoans: false,
                 mergeUndoubtedLoansFees: 0,
                 mergeDoubtedLoans: false,
@@ -86,7 +89,8 @@ class LoanProductCreation extends Component<Props, State>{
             formulas: []
         }
     }
-    async UNSAFE_componentWillMount() {
+    
+    async getFormulas(){
         this.setState({ loading: true });
         const formulas = await getFormulas();
         if (formulas.status === 'success') {
@@ -99,15 +103,38 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    componentDidMount() {
+       this.getFormulas();
+        if(this.props.edit) {
+             this.getProduct();
+        }
+    }
     cancel() {
         this.props.history.goBack();
     }
     submit = async (values: any) => {
+        if(this.props.edit){
+            const id = this.props.history.location.state.id;
+            this.setState({loading: true});
+                const res = await editProductsPrincipals(id, {
+                    maxPrincipal: values.maxPrincipal,
+                    minPrincipal: values.minPrincipal
+                })
+                if(res.status === 'success'){
+                    this.setState({loading: false});
+                    Swal.fire("success",local.updateLoanProductPrincipalsSuccess)
+                } else {
+                    this.setState({loading: false});
+                    Swal.fire("error", local.updateLoanProductPrincipalsError);
+                }
+            
+        }else {
         this.setState({ loading: true });
         const obj = { ...values }
         if (obj.mustEnterGuarantor === false) {
             obj.noOfGuarantors = 0;
         }
+        obj.aging.forEach(entry => {if(entry.new) delete entry.new});
         const res = await createProduct(obj);
         if (res.status === 'success') {
             this.setState({ loading: false });
@@ -117,14 +144,34 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    }
+    async getProduct() {
+        const id = this.props.history.location.state.id;
+        this.setState({ loading: true });
+        const product = await getProduct(id);
+        if (product.status === 'success') {
+            const calculationFormulaId = product.body.data.calculationFormula._id;
+            const loanProduct = product.body.data;
+            loanProduct.calculationFormulaId = calculationFormulaId;
+            this.setState({
+                product: loanProduct,
+                loading: false
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
+    }
+
     render() {
         return (
             <>
-                <BackButton title={local.createLoanProduct} />
+                <BackButton title={this.props.edit? local.editLoanProduct :local.createLoanProduct} />
                 <Container>
                     <Loader open={this.state.loading} type="fullscreen" />
                     <Card style={{ padding: '20px 10px' }}>
                         <Formik
+                            enableReinitialize
                             initialValues={this.state.product}
                             onSubmit={this.submit}
                             validationSchema={LoanProductValidation}
@@ -132,7 +179,7 @@ class LoanProductCreation extends Component<Props, State>{
                             validateOnChange
                         >
                             {(formikProps) =>
-                                <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} cancel={() => this.cancel()} />
+                                <LoanProductCreationForm {...formikProps} formulas={this.state.formulas} edit = {this.props.edit} cancel={() => this.cancel()} />
                             }
                         </Formik>
                     </Card>

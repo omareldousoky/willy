@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
 import Card from 'react-bootstrap/Card';
 import DynamicTable from '../DynamicTable/dynamicTable';
@@ -68,7 +67,8 @@ class ActionLogs extends Component <Props, State>{
                     <Search 
                     searchKeys={['keyword', 'dateFromTo',  'actions']} 
                     dropDownKeys={['authorName' ]} 
-                    url="actionLogs" 
+                    url="actionLogs"
+                    setFrom= {(from) => this.setState({from: from})} 
                     from={this.state.from} 
                     size={this.state.size} 
                     datePlaceholder={local.transactionDate}
