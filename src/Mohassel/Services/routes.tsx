@@ -43,6 +43,7 @@ import Reports from '../Components/Reports/reports';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
+import Leads from '../Components/HalanIntegration/leads';
 
 const appRoutes = [
   {
@@ -319,6 +320,18 @@ const appRoutes = [
         path: "/bulk-creation",
         label: local.bulkApplicationCreation,
         render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
+      },
+      {
+        path: "/halan-integration",
+        label: 'halan integration',
+        render: (props) => <Leads {...props} />,
+        routes: [
+          {
+            path: "/leads",
+            label: 'leads',
+            render: (props) => <Leads {...props} /> ,
+          }
+        ]
       }
     ]
   },

@@ -728,5 +728,10 @@
     "unassignProductsToBranchesError":" لم يتم حذف  لأنواع القروض ",
     "approvedLoans": "قروض موافق عليها",
     "approvalDate": "تاريخ الموافقة",
-    "reviewDateShouldNotBeSmallerThanCreationDate": "تاريخ الإنشاء يجب أن يكون بعد تاريخ القبول"
+    "reviewDateShouldNotBeSmallerThanCreationDate": "تاريخ الإنشاء يجب أن يكون بعد تاريخ القبول",
+    "actions": "العمليات",
+    "rejectApplication": "رفض الطلب",
+    "acceptApplication": "قبول الطلب",
+    "acceptSecondVisit": "الموافقة على الزيارة الثانية",
+    "viewCustomerLead": "عرض العميل"
 }
