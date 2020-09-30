@@ -60,7 +60,7 @@ class NavBar extends Component<Props, State> {
   }
   componentDidUpdate(prevProps, prevState){
     if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
-      const selectedBranch = JSON.parse(getCookie('ltsbranch'));
+      const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       this.goToBranch(selectedBranch, false);
     }
   }
@@ -69,7 +69,7 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = `ltsbranch=${JSON.stringify(branch)};domain=.halan.io;path=/;`;
+      document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_LTS_SUBDOMAIN ? `;domain=${process.env.REACT_APP_LTS_SUBDOMAIN}`: '' + ';path=/;');
       setToken(res.body.token);
       this.setState({ loading: false, selectedBranch: branch })
       if(refresh) this.props.history.push("/");

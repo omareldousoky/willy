@@ -733,5 +733,10 @@
     "rejectApplication": "رفض الطلب",
     "acceptApplication": "قبول الطلب",
     "acceptSecondVisit": "الموافقة على الزيارة الثانية",
-    "viewCustomerLead": "عرض العميل"
+    "viewCustomerLead": "عرض العميل",
+    "editLoanProduct": "تعديل نوع القرض",
+    "updateLoanProductPrincipalsSuccess":"تم تعديل قيمة القرض المسموحة بنجاح",
+    "updateLoanProductPrincipalsError":"حدث خطأ ولم يتم تعدل قيمه القرض المسموحة",
+    "customerInvolvedInAnotherLoan":"هذا العميل مربوط بقروض أخرى",
+    "memberInvolvedInAnotherLoan":"مربوط بقروض أخرى"
 }

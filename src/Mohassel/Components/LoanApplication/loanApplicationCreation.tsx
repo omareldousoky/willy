@@ -32,6 +32,7 @@ import InfoBox from '../userInfoBox';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import Wizard from '../wizard/Wizard';
 import { BusinessSector } from '../CustomerCreation/StepTwoForm';
+import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
 import Select from 'react-select';
 
 interface Props {
@@ -238,15 +239,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setappStats();
         }
     }
-    setappStats() {
-        this.getProducts();
-        this.getFormulas();
-        this.getLoanUsage();
-        this.getLoanOfficers();
+    async setappStats() {
         if (this.state.prevId.length > 0) {
+            await this.getProducts();
+        await this.getFormulas();
+        await this.getLoanUsage();
+        await this.getLoanOfficers();
             this.getAppByID(this.state.prevId)
         } else {
             this.setState(this.setInitState());
+            await this.getProducts();
+        await this.getFormulas();
+        await this.getLoanUsage();
+        await this.getLoanOfficers();
         }
     }
     async getAppByID(id) {
@@ -262,7 +267,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     if (customer.type === 'leader') {
                         this.setState({
                             selectedGroupLeader: customer.customer._id,
-                            selectedLoanOfficer: customer.customer.representative
+                            selectedLoanOfficer: this.state.loanOfficers.filter(officer => officer._id === customer.customer.representative)[0]
                         })
                     }
                 })
@@ -481,14 +486,20 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
-                const defaultApplication = this.state.application;
-                defaultApplication.customerID = customer._id;
-                this.populateCustomer(selectedCustomer.body)
-                this.setState({
-                    loading: false,
-                    selectedCustomer: selectedCustomer.body,
-                    application: defaultApplication
-                });
+                const check = await this.checkCustomersLimits([customer], false);
+                if (check === true && typeof (check) === "boolean") {
+                    const defaultApplication = this.state.application;
+                    defaultApplication.customerID = customer._id;
+                    this.populateCustomer(selectedCustomer.body)
+                    this.setState({
+                        loading: false,
+                        selectedCustomer: selectedCustomer.body,
+                        application: defaultApplication
+                    });
+                } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+                    Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
+                    this.setState({ loading: false });
+                }
             } else {
                 this.setState({ loading: false })
                 Swal.fire("error", local.individualAgeError, 'error')
@@ -503,13 +514,19 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj._id);
         if (selectedGuarantor.status === 'success') {
-            const defaultApplication = { ...values }
-            const defaultGuarantors = { ...defaultApplication.guarantors };
-            const defaultGuar = { ...defaultGuarantors[index] };
-            defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id };
-            defaultApplication.guarantorIds.push(obj._id)
-            defaultApplication.guarantors[index] = defaultGuar;
-            this.setState({ application: defaultApplication, loading: false });
+            const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
+            if (check === true && typeof (check) === "boolean") {
+                const defaultApplication = { ...values }
+                const defaultGuarantors = { ...defaultApplication.guarantors };
+                const defaultGuar = { ...defaultGuarantors[index] };
+                defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id };
+                defaultApplication.guarantorIds.push(obj._id)
+                defaultApplication.guarantors[index] = defaultGuar;
+                this.setState({ application: defaultApplication, loading: false });
+            } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+                Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
+                this.setState({ loading: false });
+            }
         } else {
             Swal.fire('', local.searchError, 'error');
             this.setState({ loading: false });
@@ -707,7 +724,90 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
 
     }
-    handleGroupChange(customers) {
+    async checkCustomersLimits(customers, guarantor) {
+        const customerIds: Array<string> = [];
+        customers.forEach(customer => customerIds.push(customer._id));
+        this.setState({ loading: true });
+        const res = await getCustomersBalances({ ids: customerIds });
+        if (res.status === 'success') {
+            this.setState({ loading: false });
+            const merged: Array<any> = [];
+            const validationObject: any = {};
+            if (res.body.data && res.body.data.length > 0) {
+                for (let i = 0; i < customers.length; i++) {
+                    const obj = {
+                        ...customers[i],
+                        ...(res.body.data.find((itmInner) => itmInner.id === customers[i]._id))
+                    };
+                    delete obj.id
+                    merged.push(obj);
+                }
+                merged.forEach(customer => {
+                    if (!guarantor) {
+                        if (customer.applicationIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
+                            validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
+                        }
+                        if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                            }
+                        }
+                        if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                            }
+                        }
+                    }
+                    else {
+                        if (customer.applicationIds && customer.applicationIds.length > 0 && !customer.allowGuarantorLoan) {
+                            validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
+                        }
+                        if (customer.loanIds && customer.loanIds.length > 0 && !customer.allowGuarantorLoan) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                            }
+                        }
+                        if (customer.applicationIds && customer.applicationIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ applicationIds: customer.applicationIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
+                            }
+                        }
+                        if (customer.loanIds && customer.loanIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                            }
+                        }
+                        if (customer.guarantorIds && customer.guarantorIds.length >= customer.guarantorMaxLoans) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                            }
+                        }
+                    }
+                })
+            }
+            if (Object.keys(validationObject).length > 0) {
+                return validationObject
+            }
+            else return true
+        } else {
+            Swal.fire("error", res.error.details, 'error')
+            this.setState({ loading: false });
+            return false
+        }
+    }
+    async handleGroupChange(customers) {
         this.setState({ selectedGroupLeader: '' })
         const customersTemp: { customer: Customer; amount: number; type: string }[] = [];
         const defaultApplication = this.state.application;
@@ -719,11 +819,20 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             customersTemp.push(obj)
         })
-        defaultApplication.individualDetails = customersTemp;
-        this.setState({
-            selectedCustomers: customers,
-            application: defaultApplication
-        })
+        if (customers.length > 0) {
+            const check = await this.checkCustomersLimits(customers, false);
+            if (check === true && typeof (check) === "boolean") {
+                defaultApplication.individualDetails = customersTemp;
+                this.setState({
+                    selectedCustomers: customers,
+                    application: defaultApplication
+                })
+            } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+                let names = ''
+                Object.keys(check).forEach((id, i) => (i === 0) ? names = names + check[id].customerName : names = names + ', ' + check[id].customerName);
+                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
+            }
+        }
     }
     async viewCustomer(id) {
         this.setState({ loading: true });
@@ -803,7 +912,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 leftHeader={local.selectedCustomers}
                                 viewSelected={(id) => this.viewCustomer(id)}
                                 search={(keyword, key) => this.searchCustomers(keyword, key)}
-                                dropDownKeys={['nationalId','name','key','code']}
+                                dropDownKeys={['nationalId', 'name', 'key', 'code']}
                                 disabled={(customer) => this.checkGroupAge(customer)}
                                 disabledMessage={local.groupAgeError}
                             />
