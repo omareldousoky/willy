@@ -300,6 +300,15 @@ export const getInstallmentStatus = (status: string) => {
       default: return '';
   }
 }
+export const getIscoreReportStatus = (status: string) => {
+  switch (status) {
+      case 'queued': return local.queued;
+      case 'processing': return local.processing;
+      case 'created': return local.created;
+      case 'failed': return local.failed;
+      default: return '';
+  }
+}
 export const getLoanStatus = (status: string) => {
   switch (status) {
       case 'pending': return local.pending;
