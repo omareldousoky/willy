@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Card } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import FormCheck from 'react-bootstrap/FormCheck';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
@@ -9,10 +11,9 @@ import Search from '../Search/search';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { search } from '../../redux/search/actions';
 import local from '../../../Shared/Assets/ar.json';
-import './leads.scss';
-
 
 interface Props {
+  history: Array<any>;
   data: any;
   totalCount: number;
   loading: boolean;
@@ -29,18 +30,21 @@ interface State {
   }>;
   size: number;
   from: number;
-  openActionsId: string;
+  checkAll: boolean;
+  selectedCustomers: Array<any>;
+  openModal: boolean;
 }
-class Leads extends Component<Props, State>{
-  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
+
+class AssignLoanOfficer extends Component<Props, State>{
+  mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
       tabs: [
         {
           icon: 'users',
-          header: local.applicantsLeads,
-          desc: local.createAndEditApplicantLeads,
+          header: local.roles,
+          desc: local.rolesDesc,
           path: '/halan-integration/leads',
         },
         {
@@ -48,13 +52,24 @@ class Leads extends Component<Props, State>{
           header: local.changeRepresentative,
           desc: local.changeOfficerForMoreThanOneCustomer,
           path: '/halan-integration/exchange',
-      }
+        }
       ],
       size: 10,
       from: 0,
-      openActionsId: '',
+      checkAll: false,
+      selectedCustomers: [],
+      openModal: false,
     }
     this.mappers = [
+      {
+        title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll}></FormCheck>,
+        key: 'selected',
+        render: data => <FormCheck
+          type="checkbox"
+          checked={Boolean(this.state.selectedCustomers.find(customer => customer._id === data._id))}
+          onChange={() => this.addRemoveItemFromChecked(data)}
+        ></FormCheck>
+      },
       {
         title: local.customerCode,
         key: "customerCode",
@@ -89,28 +104,35 @@ class Leads extends Component<Props, State>{
         render: data => data.created?.at ? getDateAndTime(data.created?.at) : ''
       },
       {
-        title: local.actions,
-        key: "actions",
-        render: data =>
-          <div style={{ position: 'relative' }}>
-            <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data._id ? '' : data._id })}>{local.actions}</p>
-            {this.state.openActionsId === data._id && <div className="actions-list">
-              <div className="item">{local.rejectApplication}</div>
-              <div className="item">{local.acceptApplication}</div>
-              <div className="item">{local.acceptSecondVisit}</div>
-              <div className="item">{local.editCustomer}</div>
-              <div className="item">{local.viewCustomerLead}</div>
-            </div>}
-          </div>
-      },
+        title: '',
+        key: 'actions',
+        render: data => <> <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>
+          <img style={{ cursor: 'pointer' }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></>
+      }
     ]
   }
 
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer' });
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer' });
+  }
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedCustomers: this.props.data })
+    } else this.setState({ checkAll: false, selectedCustomers: [] })
+  }
+  addRemoveItemFromChecked(selectedCustomer: any) {
+    if (this.state.selectedCustomers.findIndex(customer => customer._id === selectedCustomer._id) > -1) {
+      this.setState({
+        selectedCustomers: this.state.selectedCustomers.filter(customer => customer._id !== selectedCustomer._id),
+      })
+    } else {
+      this.setState({
+        selectedCustomers: [...this.state.selectedCustomers, selectedCustomer],
+      })
+    }
   }
   render() {
     return (
@@ -118,17 +140,26 @@ class Leads extends Component<Props, State>{
         <HeaderWithCards
           header={'halan integration'}
           array={this.state.tabs}
-          active={this.state.tabs.map(item => { return item.icon }).indexOf('users')}
+          active={this.state.tabs.map(item => { return item.icon }).indexOf('exchange')}
         />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.roles}</Card.Title>
-                <span className="text-muted">{local.noOfRoles + ` (${this.props.totalCount})`}</span>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
+                <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount})`}</span>
               </div>
               <div>
+                <Button
+                  onClick={() => this.setState({ openModal: true })}
+                  disabled={!Boolean(this.state.selectedCustomers.length)}
+                  className="big-button"
+                  style={{ marginLeft: 20 }}
+                >
+                  {local.assignOrChangeLoanOfficer}{" "}
+                  <span className="fa fa-exchange-alt"></span>
+                </Button>
               </div>
             </div>
             <hr className="dashed-line" />
@@ -174,4 +205,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, addSearchToProps)(withRouter(Leads));
+export default connect(mapStateToProps, addSearchToProps)(withRouter(AssignLoanOfficer));

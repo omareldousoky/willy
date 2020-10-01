@@ -44,6 +44,7 @@ import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 import Leads from '../Components/HalanIntegration/leads';
+import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer';
 
 const appRoutes = [
   {
@@ -335,6 +336,11 @@ const appRoutes = [
             path: "/leads",
             label: 'leads',
             render: (props) => <Leads {...props} /> ,
+          },
+          {
+            path: "/exchange",
+            label: 'change loan officer',
+            render: (props) => <AssignLoanOfficer {...props} /> ,
           }
         ]
       }

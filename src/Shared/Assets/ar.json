@@ -738,5 +738,9 @@
     "updateLoanProductPrincipalsSuccess":"تم تعديل قيمة القرض المسموحة بنجاح",
     "updateLoanProductPrincipalsError":"حدث خطأ ولم يتم تعدل قيمه القرض المسموحة",
     "customerInvolvedInAnotherLoan":"هذا العميل مربوط بقروض أخرى",
-    "memberInvolvedInAnotherLoan":"مربوط بقروض أخرى"
+    "memberInvolvedInAnotherLoan":"مربوط بقروض أخرى",
+    "changeOfficerForMoreThanOneCustomer": "تغيير المندوب لأكثر من عميل",
+    "assignOrChangeLoanOfficer": "تعيين أو تغيير المندوب",
+    "applicantsLeads": "المتقدمون",
+    "createAndEditApplicantLeads": "إنشاء و تعديل المتقدمون وإدارتهم"
 }
