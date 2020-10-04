@@ -495,7 +495,7 @@ class Reports extends Component<{}, State> {
       <>
         <Card style={{ margin: '20px 50px' }} className="print-none">
           <Loader type="fullscreen" open={this.state.loading} />
-          <Card.Body style={{ padding: 0 }}>
+          <Card.Body style={{ padding: 15 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.paymentsReports}</Card.Title>
