@@ -76,6 +76,11 @@ export interface Application {
     rejectionDate: any;
     noOfGuarantors: number;
     guarantors: Array<Guarantor>;
+    principals: {
+        maxIndividualPrincipal: number;
+        maxGroupIndividualPrincipal: number;
+        maxGroupPrincipal: number;
+    };
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),

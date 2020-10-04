@@ -742,5 +742,7 @@
     "principalMaxWillChange":"سيتم تغيير الحد الاقصى لقيم القروض",
     "principalMaxChangeSuccess":"تم تغيير الحد الاقصى لقيم القروض بنجاح",
     "principalMaxChangeError":"حدث خطأ في تغيير الحد الاقصى لقيم القروض",
-    "individualInGroupPrincipalMustBeLessThanGroupPrincipal":"يجب أن يكون الحد الاقصى للفرد أقل من الحد الاقصى للمجموعة"
+    "individualInGroupPrincipalMustBeLessThanGroupPrincipal":"يجب أن يكون الحد الاقصى للفرد أقل من الحد الاقصى للمجموعة",
+    "maxGlobalLimitReachedError":"لا يمكن أن تكون القيمة أكبر من الحد الاقصى المسموح بتساهيل",
+    "maxCustomerPrincipal":"قيمة القروض المسموحة للعميل"
 }

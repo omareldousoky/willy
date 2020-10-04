@@ -184,7 +184,7 @@ class NavBar extends Component<Props, State> {
               {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
                 : ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
                   : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
-              {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-finances/principleRange')}>{local.manageFinances}</Nav.Link> : null}
+              {ability.can('createMaxPrincipal', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-finances/principleRange')}>{local.manageFinances}</Nav.Link> : null}
               {<Can I='documentTypes' a='config'><Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {(ability.can('getIssuedLoan',"application") || ability.can('branchIssuedLoan', "application")) && <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>}
             {<Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}

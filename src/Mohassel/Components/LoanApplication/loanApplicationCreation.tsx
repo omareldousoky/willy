@@ -34,6 +34,7 @@ import Wizard from '../wizard/Wizard';
 import { BusinessSector } from '../CustomerCreation/StepTwoForm';
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
 import Select from 'react-select';
+import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 
 interface Props {
     history: any;
@@ -178,7 +179,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 undoReviewDate: date,
                 rejectionDate: date,
                 noOfGuarantors: 0,
-                guarantors: []
+                guarantors: [],
+                principals: {
+                    maxIndividualPrincipal: 0,
+                    maxGroupIndividualPrincipal: 0,
+                    maxGroupPrincipal: 0,
+                }
             },
             customerType: '',
             loading: false,
@@ -242,16 +248,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     async setappStats() {
         if (this.state.prevId.length > 0) {
             await this.getProducts();
-        await this.getFormulas();
-        await this.getLoanUsage();
-        await this.getLoanOfficers();
+            await this.getFormulas();
+            await this.getLoanUsage();
+            await this.getLoanOfficers();
+            await this.getGlobalPrinciple();
             this.getAppByID(this.state.prevId)
         } else {
             this.setState(this.setInitState());
             await this.getProducts();
-        await this.getFormulas();
-        await this.getLoanUsage();
-        await this.getLoanOfficers();
+            await this.getFormulas();
+            await this.getLoanUsage();
+            await this.getLoanOfficers();
+            await this.getGlobalPrinciple();
         }
     }
     async getAppByID(id) {
@@ -486,17 +494,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
-                const check = await this.checkCustomersLimits([customer], false);
-                if (check === true && typeof (check) === "boolean") {
+                const check = await this.checkCustomersLimits([selectedCustomer.body], false);
+                console.log(check)
+                if (check.flag === true && check.customers) {
                     const defaultApplication = this.state.application;
                     defaultApplication.customerID = customer._id;
-                    this.populateCustomer(selectedCustomer.body)
+                    this.populateCustomer(check.customers[0])
                     this.setState({
                         loading: false,
-                        selectedCustomer: selectedCustomer.body,
+                        selectedCustomer: check.customers[0],
                         application: defaultApplication
                     });
-                } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+                } else if (check.flag === false && Object.keys(check.validationObject).length > 0) {
                     Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
                     this.setState({ loading: false });
                 }
@@ -515,7 +524,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const selectedGuarantor = await getCustomerByID(obj._id);
         if (selectedGuarantor.status === 'success') {
             const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
-            if (check === true && typeof (check) === "boolean") {
+            if (check.flag === true && check.customers) {
                 const defaultApplication = { ...values }
                 const defaultGuarantors = { ...defaultApplication.guarantors };
                 const defaultGuar = { ...defaultGuarantors[index] };
@@ -523,7 +532,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 defaultApplication.guarantorIds.push(obj._id)
                 defaultApplication.guarantors[index] = defaultGuar;
                 this.setState({ application: defaultApplication, loading: false });
-            } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+            } else if (check.flag === false && check.validationObject) {
                 Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
                 this.setState({ loading: false });
             }
@@ -724,6 +733,18 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
 
     }
+    // async getCustomerExistingPrincipal(customers) {
+    //     const customerIds: Array<string> = [];
+    //     customers.forEach(customer => customerIds.push(customer._id));
+    //     this.setState({ loading: true });
+    //     const res = await getCustomersBalances({ ids: customerIds });
+    //     if (res.status === 'success') {
+    //         this.setState({ loading: false });
+    //     } else {
+    //         Swal.fire("error", res.error.details, 'error')
+    //         this.setState({ loading: false });
+    //     }
+    // }
     async checkCustomersLimits(customers, guarantor) {
         const customerIds: Array<string> = [];
         customers.forEach(customer => customerIds.push(customer._id));
@@ -733,15 +754,16 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
             const merged: Array<any> = [];
             const validationObject: any = {};
+            for (let i = 0; i < customers.length; i++) {
+                const obj = {
+                    ...customers[i],
+                    ...(res.body.data ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id) : {id: customers[i]._id})
+                };
+                delete obj.id
+                merged.push(obj);
+            }
             if (res.body.data && res.body.data.length > 0) {
-                for (let i = 0; i < customers.length; i++) {
-                    const obj = {
-                        ...customers[i],
-                        ...(res.body.data.find((itmInner) => itmInner.id === customers[i]._id))
-                    };
-                    delete obj.id
-                    merged.push(obj);
-                }
+                console.log(merged)
                 merged.forEach(customer => {
                     if (!guarantor) {
                         if (customer.applicationIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
@@ -759,6 +781,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }
                             } else {
                                 validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
+                            }
+                        }
+                        if ((customer.totalPrincipals && customer.maxPrincipal && customer.totalPrincipals >= customer.maxPrincipal) || (customer.totalPrincipals && !customer.maxPrincipal && ((this.state.application.beneficiaryType === "individual" && customer.totalPrincipals >= this.state.application.principals.maxIndividualPrincipal) || (this.state.application.beneficiaryType === "group" && customer.totalPrincipals >= this.state.application.principals.maxGroupIndividualPrincipal)))) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } };
                             }
                         }
                     }
@@ -798,38 +827,63 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 })
             }
             if (Object.keys(validationObject).length > 0) {
-                return validationObject
+                return { flag: false, validationObject: validationObject }
             }
-            else return true
+            else return { flag: true, customers: merged }
         } else {
             Swal.fire("error", res.error.details, 'error')
             this.setState({ loading: false });
-            return false
+            return { flag: false }
+        }
+    }
+    async getGlobalPrinciple() {
+        this.setState({ loading: true });
+        const princples = await getMaxPrinciples();
+        if (princples.status === 'success') {
+            const principals = {
+                maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
+                maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
+                maxGroupPrincipal: princples.body.maxGroupPrincipal,
+            }
+            const application = this.state.application;
+            application.principals = principals
+            this.setState({
+                loading: false,
+                application
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
         }
     }
     async handleGroupChange(customers) {
         this.setState({ selectedGroupLeader: '' })
         const customersTemp: { customer: Customer; amount: number; type: string }[] = [];
         const defaultApplication = this.state.application;
-        customers.forEach(customer => {
-            const obj = {
-                customer: customer,
-                amount: 0,
-                type: 'member'
-            }
-            customersTemp.push(obj)
-        })
+
         if (customers.length > 0) {
             const check = await this.checkCustomersLimits(customers, false);
-            if (check === true && typeof (check) === "boolean") {
+            console.log(check)
+            if (check.flag === true && check.customers) {
+                console.log('Here')
+                check.customers.forEach(customer => {
+                    const obj = {
+                        customer: customer,
+                        amount: 0,
+                        type: 'member'
+                    }
+                    customersTemp.push(obj)
+                })
                 defaultApplication.individualDetails = customersTemp;
                 this.setState({
-                    selectedCustomers: customers,
+                    selectedCustomers: check.customers,
                     application: defaultApplication
                 })
-            } else if (typeof (check) === "object" && Object.keys(check).length > 0) {
+            } else if (check.flag === false && check.validationObject &&  Object.keys(check.validationObject).length > 0) {
+                console.log('Here2') 
                 let names = ''
-                Object.keys(check).forEach((id, i) => (i === 0) ? names = names + check[id].customerName : names = names + ', ' + check[id].customerName);
+                Object.keys(check.validationObject).forEach((id, i) => (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName);
+                console.log('Here3', names) 
                 Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
             }
         }
@@ -870,7 +924,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             return true
         }
     }
-    selectLO(e){
+    selectLO(e) {
         this.setState({ selectedLoanOfficer: e }, () => { this.searchCustomers() })
 
     }
