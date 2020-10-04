@@ -34,6 +34,7 @@ import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport';
 import { downloadTxtFile } from '../CIB/textFiles';
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 import { getManualPayments } from '../../Services/APIs/Reports/manualPayments';
+import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 
 export interface PDF {
   key?: string;
@@ -72,10 +73,10 @@ class Reports extends Component<{}, State> {
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'], permission: 'loansCreated' },
         { key: 'rescheduledLoanList', local: 'قائمة حركات جدولة القروض المنفذه', inputs: ['dateFromTo', 'branches'], permission: 'loanRescheduling' },
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'], permission: 'installments' },
-        {key: 'randomPayments',local: 'الحركات المالية', inputs: ['dateFromTo', 'branches'], permission: 'randomPayments' },
-        {key: 'loanApplicationFees',local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
-        // {key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen'},
-        {key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo','branches'], permission: 'manualPayments'},
+        { key: 'randomPayments', local: 'الحركات المالية', inputs: ['dateFromTo', 'branches'], permission: 'randomPayments' },
+        { key: 'loanApplicationFees', local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
+        { key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen' },
+        { key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo', 'branches'], permission: 'manualPayments' },
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -442,16 +443,22 @@ class Reports extends Component<{}, State> {
   }
   async getCibPaymentReport(values) {
     this.setState({ loading: true, showModal: false });
-    const res = await cibPaymentReport({ startDate: values.fromDate, endDate: values.toDate });
+    const res = await cibPaymentReport({ endDate: values.toDate });
     if (res.status === "success") {
-      if (res.body.loans.length === 0) {
-        this.setState({ loading: false }, () => Swal.fire("error", local.noResults));
+      const downloadFile = await cibTPAYReport(res.body.url);
+      if (downloadFile.status === "success") {
+        this.setState({ loading: false });
+        const url = window.URL.createObjectURL(new Blob([downloadFile.body]));
+        const link = document.createElement('a');
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+      } else {
+        this.setState({ loading: false });
       }
-      this.setState({ loading: false });
-      downloadTxtFile(res.body.loans, true, values.fromDate);
     } else {
       this.setState({ loading: false });
-      console.log(res);
+      Swal.fire("",local.noResults, "error");
     }
   }
   async getManualPayments(values) {
@@ -461,7 +468,7 @@ class Reports extends Component<{}, State> {
       startdate: values.fromDate,
       enddate: values.toDate,
       branches: branches.includes("") ? [""] : branches,
-      all: branches.includes("")|| branches === [] ? "1" : "0",
+      all: branches.includes("") || branches === [] ? "1" : "0",
     }
     const res = await getManualPayments(obj);
     if (res.status === 'success') {
@@ -527,7 +534,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "DoubtfulLoans" && <DoubtfulPayments data={this.state.data} />}
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} startDate={this.state.fromDate} endDate={this.state.toDate} />}
-        {this.state.print === "manualPayments" && <ManualPayments result = {this.state.data.result} fromDate ={this.state.fromDate} toDate = {this.state.toDate} />}
+        {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
       </>
     )
   }
