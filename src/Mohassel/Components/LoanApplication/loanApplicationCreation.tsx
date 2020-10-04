@@ -497,7 +497,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         if (selectedCustomer.status === 'success') {
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
                 const check = await this.checkCustomersLimits([selectedCustomer.body], false);
-                console.log(check)
                 if (check.flag === true && check.customers) {
                     const defaultApplication = this.state.application;
                     defaultApplication.customerID = customer._id;
@@ -756,7 +755,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 merged.push(obj);
             }
             if (res.body.data && res.body.data.length > 0) {
-                console.log(merged)
                 merged.forEach(customer => {
                     if (!guarantor) {
                         if (customer.applicationIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
@@ -852,13 +850,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     async handleGroupChange(customers) {
         this.setState({ selectedGroupLeader: '' })
         const customersTemp: { customer: Customer; amount: number; type: string }[] = [];
-        const defaultApplication = this.state.application;
-
+        const defaultApplication = this.state.application
         if (customers.length > 0) {
             const check = await this.checkCustomersLimits(customers, false);
-            console.log(check)
             if (check.flag === true && check.customers) {
-                console.log('Here')
                 check.customers.forEach(customer => {
                     const obj = {
                         customer: customer,
@@ -873,12 +868,14 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     application: defaultApplication
                 })
             } else if (check.flag === false && check.validationObject &&  Object.keys(check.validationObject).length > 0) {
-                console.log('Here2') 
                 let names = ''
                 Object.keys(check.validationObject).forEach((id, i) => (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName);
-                console.log('Here3', names) 
                 Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
             }
+        } else {
+            this.setState({
+                selectedCustomers: []
+            })
         }
     }
     async viewCustomer(id) {
@@ -944,6 +941,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     getOptionLabel={(option) => option.name}
                                     getOptionValue={(option) => option._id}
                                     options={this.state.loanOfficers}
+                                    isDisabled={this.state.selectedCustomers.length > 0}
                                 />
                             </Form.Group>
                         </div>
