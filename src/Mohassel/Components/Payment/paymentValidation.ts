@@ -20,7 +20,11 @@ export const paymentValidation = Yup.object().shape({
       .required(local.required),
     otherwise: Yup.string()
   }),
-  payerType: Yup.string().required(local.required),
+  payerType: Yup.string().when("penaltyAction", {
+    is: penaltyAction => penaltyAction !== "cancel",
+    then: Yup.string().required(local.required),
+    otherwise: Yup.string()
+  }),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
     is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
     then: Yup.string().required(local.required),
