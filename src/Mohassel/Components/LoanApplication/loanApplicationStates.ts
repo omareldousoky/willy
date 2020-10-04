@@ -81,6 +81,8 @@ export interface Application {
         maxGroupIndividualPrincipal: number;
         maxGroupPrincipal: number;
     };
+    customerTotalPrincipals: number;
+    customerMaxPrincipal: number;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),
@@ -115,6 +117,16 @@ export const LoanApplicationValidation = Yup.object().shape({
             } else {
                 return (value >= minPrincipal && value <= maxPrincipal)
             }
+        }).test("principal", local.customerMaxPrincipalError,
+        function (this: any, value: any) {
+            const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
+            if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= (customerMaxPrincipal - customerTotalPrincipals)) {
+                return true
+            }else if ( customerMaxPrincipal === 0 && value <= ((beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal) - customerTotalPrincipals)) {
+                return true
+            } else {
+                return false
+            }
         }).required('required!'),
     applicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     individualApplicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
@@ -139,7 +151,17 @@ export const LoanApplicationValidation = Yup.object().shape({
     // )
     individualDetails: Yup.array().of(
         Yup.object().shape({
-            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").nullable()
+            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", local.customerMaxPrincipalError,
+            function (this: any, value: any) {
+                const { customer } = this.parent
+                if (customer.maxPrincipal && customer.maxPrincipal > 0 && value <= (customer.maxPrincipal - customer.totalPrincipals)) {
+                    return true
+                }else if (!customer.maxPrincipal && value <= (customer.maxGroupIndividualPrincipal - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
+                    return true
+                } else {
+                    return false
+                }
+            }).nullable()
         })
     ).nullable(),
     // viceCustomers: Yup.array().of(

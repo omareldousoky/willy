@@ -184,7 +184,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     maxIndividualPrincipal: 0,
                     maxGroupIndividualPrincipal: 0,
                     maxGroupPrincipal: 0,
-                }
+                },
+                customerTotalPrincipals: 0,
+                customerMaxPrincipal: 0
             },
             customerType: '',
             loading: false,
@@ -499,6 +501,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 if (check.flag === true && check.customers) {
                     const defaultApplication = this.state.application;
                     defaultApplication.customerID = customer._id;
+                    defaultApplication.customerTotalPrincipals = check.customers[0].totalPrincipals ? check.customers[0].totalPrincipals : 0;
+                    defaultApplication.customerMaxPrincipal = check.customers[0].maxPrincipal ? check.customers[0].maxPrincipal : 0;
                     this.populateCustomer(check.customers[0])
                     this.setState({
                         loading: false,
@@ -733,18 +737,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
 
     }
-    // async getCustomerExistingPrincipal(customers) {
-    //     const customerIds: Array<string> = [];
-    //     customers.forEach(customer => customerIds.push(customer._id));
-    //     this.setState({ loading: true });
-    //     const res = await getCustomersBalances({ ids: customerIds });
-    //     if (res.status === 'success') {
-    //         this.setState({ loading: false });
-    //     } else {
-    //         Swal.fire("error", res.error.details, 'error')
-    //         this.setState({ loading: false });
-    //     }
-    // }
     async checkCustomersLimits(customers, guarantor) {
         const customerIds: Array<string> = [];
         customers.forEach(customer => customerIds.push(customer._id));
@@ -757,7 +749,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             for (let i = 0; i < customers.length; i++) {
                 const obj = {
                     ...customers[i],
-                    ...(res.body.data ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id) : {id: customers[i]._id})
+                    ...(res.body.data ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id) : {id: customers[i]._id}),
+                    ...this.state.application.principals
                 };
                 delete obj.id
                 merged.push(obj);
