@@ -283,11 +283,11 @@ const appRoutes = [
       {
         path: "/manage-finances",
         label: local.manageFinances,
-        render: (props) => <Can I='getRoles' a='user'><PrincipleThreshold {...props} /></Can>,
+        render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /></Can>,
         routes: [
           { path: "/principleRange",
           label: local.principalRange,
-          render: (props) => <Can I='getRoles' a='user'><PrincipleThreshold {...props} /> </Can>,
+          render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /> </Can>,
           }
         ]
       }
