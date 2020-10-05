@@ -282,6 +282,7 @@ class GeoAreas extends Component<{}, State> {
                         {Object.keys(this.state.branch).length > 0 && this.state.geoAreas.length > 0 &&
                             <DualBox
                                 labelKey={"name"}
+                                oneWay={true}
                                 options={this.state.geoAreas.filter(area => area.active)}
                                 selected={this.state.branchAreas}
                                 onChange={(list) => this.handleChange(list)}
