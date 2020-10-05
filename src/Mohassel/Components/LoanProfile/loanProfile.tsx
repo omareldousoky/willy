@@ -202,7 +202,7 @@ class LoanProfile extends Component<Props, State>{
         const penaltiesTab = {
             header: local.penalties,
             stringKey: 'penalties',
-            permission: ['payInstallment', 'rollback'],
+            permission: ['payInstallment', 'cancelPenalty'],
             permissionKey: 'application'
         };
         const logsTab = {
