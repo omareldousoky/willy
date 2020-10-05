@@ -149,7 +149,7 @@ const appRoutes = [
       {
         path: "/geo-areas",
         label: local.branchAreas,
-        render: (props) => <Can I='loanUsage' a='config'><GeoAreas /></Can>
+        render: (props) => <Can I='geoArea' a='config'><GeoAreas /></Can>
       },
       {
         path: "/bulk-approvals",
