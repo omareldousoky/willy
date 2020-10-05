@@ -1,7 +1,6 @@
 import axios from '../axios-instance';
 
 interface ChangeFundObj {
-    startDate: number;
     endDate: number;
 }
 export const cibPaymentReport = async (data: ChangeFundObj) => {
