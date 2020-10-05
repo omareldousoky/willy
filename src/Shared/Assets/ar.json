@@ -752,5 +752,7 @@
     "individualInGroupPrincipalMustBeLessThanGroupPrincipal":"يجب أن يكون الحد الاقصى للفرد أقل من الحد الاقصى للمجموعة",
     "maxGlobalLimitReachedError":"لا يمكن أن تكون القيمة أكبر من الحد الاقصى المسموح بتساهيل",
     "maxCustomerPrincipal":"قيمة القروض المسموحة للعميل",
-    "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل"
+    "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
+    "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
+    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له"
 }

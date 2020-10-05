@@ -271,21 +271,27 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             const formData = this.state.application;
             if (application.body.product.beneficiaryType === 'group') {
                 this.getBusinessSectors();
-                const selectedCustomers: Customer[] = [];
+                const selectedCustomers: Customer[] = application.body.group.individualsInGroup.map(x => x.customer);
+                const customers = await this.getCustomerLimits(selectedCustomers);
                 application.body.group.individualsInGroup.forEach(customer => {
-                    selectedCustomers.push(customer.customer)
                     if (customer.type === 'leader') {
                         this.setState({
                             selectedGroupLeader: customer.customer._id,
                             selectedLoanOfficer: this.state.loanOfficers.filter(officer => officer._id === customer.customer.representative)[0]
                         })
                     }
+                    customer.customer = customers.filter(member => member._id === customer.customer._id)[0]
                 })
+                formData.individualDetails = application.body.group.individualsInGroup
                 this.setState({
                     selectedCustomers
                 })
             } else {
-                this.populateCustomer(application.body.customer)
+                const customers = await this.getCustomerLimits([application.body.customer]);
+                this.populateCustomer(customers[0])
+                formData.customerTotalPrincipals = customers[0].totalPrincipals ? customers[0].totalPrincipals : 0;
+                formData.customerMaxPrincipal = customers[0].maxPrincipal ? customers[0].maxPrincipal : 0;
+                formData.individualDetails = application.body.group.individualsInGroup
             }
             this.populateLoanProduct(application.body.product)
             const value = (this.state.prevId.length > 0) ? application.body.guarantors.length : application.body.product.noOfGuarantors
@@ -322,7 +328,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.undoReviewDate = application.body.undoReviewDate;
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
-            formData.individualDetails = application.body.group.individualsInGroup
+            // formData.individualDetails = application.body.group.individualsInGroups
             this.setState({
                 selectedCustomer: application.body.customer,
                 customerType: application.body.product.beneficiaryType,
@@ -509,7 +515,11 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         application: defaultApplication
                     });
                 } else if (check.flag === false && Object.keys(check.validationObject).length > 0) {
-                    Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
+                    if (check.validationObject[customer._id].totalPrincipals) {
+                        Swal.fire("error", local.customerMaxLoanPrincipalError, 'error')
+                    } else {
+                        Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
+                    }
                     this.setState({ loading: false });
                 }
             } else {
@@ -736,6 +746,30 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
 
     }
+    async getCustomerLimits(customers) {
+        const customerIds: Array<string> = [];
+        customers.forEach(customer => customerIds.push(customer._id));
+        this.setState({ loading: true });
+        const res = await getCustomersBalances({ ids: customerIds });
+        if (res.status === 'success') {
+            this.setState({ loading: false });
+            const merged: Array<any> = [];
+            for (let i = 0; i < customers.length; i++) {
+                const obj = {
+                    ...customers[i],
+                    ...(res.body.data ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id) : { id: customers[i]._id }),
+                    ...this.state.application.principals
+                };
+                delete obj.id
+                merged.push(obj);
+            }
+            return merged
+        } else {
+            Swal.fire("error", res.error.details, 'error')
+            this.setState({ loading: false });
+            return []
+        }
+    }
     async checkCustomersLimits(customers, guarantor) {
         const customerIds: Array<string> = [];
         customers.forEach(customer => customerIds.push(customer._id));
@@ -748,7 +782,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             for (let i = 0; i < customers.length; i++) {
                 const obj = {
                     ...customers[i],
-                    ...(res.body.data ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id) : {id: customers[i]._id}),
+                    ...(res.body.data ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id) : { id: customers[i]._id }),
                     ...this.state.application.principals
                 };
                 delete obj.id
@@ -867,10 +901,17 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     selectedCustomers: check.customers,
                     application: defaultApplication
                 })
-            } else if (check.flag === false && check.validationObject &&  Object.keys(check.validationObject).length > 0) {
-                let names = ''
-                Object.keys(check.validationObject).forEach((id, i) => (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName);
-                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan}`, 'error')
+            } else if (check.flag === false && check.validationObject && Object.keys(check.validationObject).length > 0) {
+                let names = '';
+                let financeNames = '';
+                console.log(check.validationObject)
+                Object.keys(check.validationObject).forEach((id, i) => {
+                    if(check.validationObject[id].totalPrincipals){
+                        (i === 0) ? financeNames = financeNames + check.validationObject[id].customerName : financeNames = financeNames + ', ' + check.validationObject[id].customerName
+                    }else (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName
+
+            });
+                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan} ${(financeNames.length > 0 ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}`: '')}`, 'error')
             }
         } else {
             this.setState({
