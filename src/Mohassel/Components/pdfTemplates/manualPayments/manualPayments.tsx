@@ -56,6 +56,8 @@ const statusLocalization = (status: string) => {
             return ('لم يستحق');
         case 'pending':
             return ('قيد التحقيق');
+        case 'issued':
+            return ('مصدر');
         default:
             return status;
     }
