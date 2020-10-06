@@ -5,6 +5,7 @@ import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
 import Reports from './reports';
 import IscoreReports from './iscoreReports';
+import Card from 'react-bootstrap/Card';
 interface State {
     id: string;
     activeTab: string;
@@ -44,7 +45,7 @@ class ReportsHome extends Component<{}, State>{
     }
     render() {
         return (
-            <>
+            <Card style={{ margin: '20px 50px' }} className="print-none">
                 <CardNavBar
                     header={'here'}
                     array={this.state.tabsArray}
@@ -54,7 +55,7 @@ class ReportsHome extends Component<{}, State>{
                 <div style={{ padding: 20, marginTop: 15 }}>
                     {this.renderContent()}
                 </div>
-            </>
+            </Card>
         )
     }
 }

@@ -55,23 +55,20 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={12}>
                     <Form.Group controlId="geographicalDistribution">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control as="select"
+                            <Form.Control as="select"
                                 type="select"
                                 name="geographicalDistribution"
                                 data-qc="geographicalDistribution"
                                 value={values.geographicalDistribution}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                             >
                                 <option value="" disabled></option>
                                 {geoDivisions.map((geoDivision, index) => {
                                     return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
                                 })}
-                            </Form.Control>}
-                        </Can>
+                            </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {errors.geographicalDistribution}
                         </Form.Control.Feedback>
