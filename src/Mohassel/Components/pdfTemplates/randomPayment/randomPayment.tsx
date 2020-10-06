@@ -26,17 +26,19 @@ const actionsLocalization = (action: string) => {
 		case 'reissuingFees':
 			return ('رسوم إعادة إصدار');
 		case 'clearanceFees':
-			return ('رسوم مخالصة');
+			return ('رسوم تحرير مخالصة');
 		case 'applicationFees':
 			return ('رسوم طلب قرض');
 		case 'collectionCommission':
-			return ('عموله تحصيل');
+			return ('عموله تحصيل قرض');
 		case 'penalty':
 			return ('غرامات');
 		case 'toktokStamp':
 			return ('دفعه مقدم توكتَوك');
 		case 'tricycleStamp':
 			return ('دفعه مقدم تروسكل');
+	  case 'legalFees':
+	  return('مصاريف قضائية');		
 
 		default:
 			return null;
