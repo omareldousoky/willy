@@ -68,9 +68,14 @@ class CustomersList extends Component<Props, State> {
         key: "actions",
         
         render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
-          <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can></>  
+          <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can>
+          <Can I="blockAndUnblockCustomer" a="customer"><span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.blocked?.isBlocked ? local.activate: <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} </span></Can>
+          </>  
       },
     ]
+  }
+  handleActivationClick(data){
+    console.log(data);
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
