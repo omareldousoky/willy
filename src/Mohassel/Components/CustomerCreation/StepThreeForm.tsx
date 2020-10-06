@@ -9,6 +9,9 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
+import { getCookie } from '../../Services/getCookie';
+import { parseJwt } from '../../Services/utils';
+import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -26,28 +29,39 @@ export const StepThreeForm = (props: any) => {
         majorGeoDivisionName: { ar: '' },
         majorGeoDivisionLegacyCode: 0
     }])
+    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep, edit } = props;
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
         if (res.status === "success") {
-            setLoanOfficers([...res.body.data, {_id: props.representativeDetails.representative, name: props.representativeDetails.representativeName}]);
+            setLoanOfficers([...res.body.data, { _id: props.representativeDetails.representative, name: props.representativeDetails.representativeName }]);
             return res.body.data;
         } else {
             setLoanOfficers([]);
             return [];
         }
     }
-    async function getConfig() {
+    async function getConfig(branch) {
         setLoading(true);
-        const resGeo = await getGeoDivision();
+        const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             setLoading(false);
-            setgeoDivisions(resGeo.body.geoDivisions)
+            setgeoDivisions(resGeo.body.data)
         } else setLoading(false);
     }
     useEffect(() => {
-        getConfig();
+        // if(!edit){
+        const token = getCookie('token');
+        const details = parseJwt(token)
+        console.log('here', values, edit)
+        if (!edit && details.branch.length > 0) {
+            getConfig(details.branch);
+        } else if (props.branchId.length > 0) {
+            getConfig(props.branchId);
+        }
+        // } else {
+        //     getConfig(values.branch);
+        // }
     }, [])
-    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
         <Form onSubmit={handleSubmit}>
             <Loader open={loading} type="fullscreen" />
@@ -68,7 +82,7 @@ export const StepThreeForm = (props: any) => {
                             >
                                 <option value="" disabled></option>
                                 {geoDivisions.map((geoDivision, index) => {
-                                    return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
+                                    return <option key={index} value={geoDivision.name} >{geoDivision.name}</option>
                                 })}
                             </Form.Control>}
                         </Can>
@@ -87,7 +101,7 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
-                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative :  values.representative ?  values.representative._id: ""))}
+                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string' ? values.representative : values.representative ? values.representative._id : ""))}
                                 onBlur={handleBlur}
                                 onChange={(representative) => {
                                     if (props.edit && values.representative !== representative._id) { setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id) }
@@ -185,7 +199,7 @@ export const StepThreeForm = (props: any) => {
                     props.edit && allowed &&
                     <Row>
                         <Col sm={6}>
-                            <Form.Group style={{textAlign:'right'}}>
+                            <Form.Group style={{ textAlign: 'right' }}>
                                 <Form.Check
                                     name="allowGuarantorLoan"
                                     id="allowGuarantorLoan"
@@ -202,12 +216,12 @@ export const StepThreeForm = (props: any) => {
                 }
             </Can>
             <Can I="updateNationalId" a="customer" passThrough>
-            {allowed =>
+                {allowed =>
                     props.edit && allowed &&
-                <Row>
-                    <Col sm={6}>
-                        <Form.Group controlId="maxLoansAllowed">
-                            <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group controlId="maxLoansAllowed">
+                                <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
                                 <Form.Control
                                     type="number"
                                     name="maxLoansAllowed"
@@ -218,14 +232,14 @@ export const StepThreeForm = (props: any) => {
                                     disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                     isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
                                 />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.maxLoansAllowed}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col sm={6}>
-                        <Form.Group controlId="guarantorMaxLoans">
-                            <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.maxLoansAllowed}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Group controlId="guarantorMaxLoans">
+                                <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
                                 <Form.Control
                                     type="number"
                                     name="guarantorMaxLoans"
@@ -236,13 +250,13 @@ export const StepThreeForm = (props: any) => {
                                     disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
                                     isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
                                 />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.guarantorMaxLoans}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
-            }
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.guarantorMaxLoans}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                }
             </Can>
             <Row>
                 <Col sm={12}>

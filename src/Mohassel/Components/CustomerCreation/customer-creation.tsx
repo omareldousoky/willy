@@ -121,6 +121,7 @@ interface State {
     empty: boolean;
   };
   oldRepresentative: string;
+  branchId: string;
 }
 
 class CustomerCreation extends Component<Props, State>{
@@ -140,7 +141,8 @@ class CustomerCreation extends Component<Props, State>{
         empty: false
       },
       selectedCustomer: {},
-      oldRepresentative: ''
+      oldRepresentative: '',
+      branchId: ''
     }
   }
 
@@ -248,6 +250,7 @@ class CustomerCreation extends Component<Props, State>{
         hasLoan: res.body.hasLoan,
         isGuarantor: res.body.isGuarantor,
         oldRepresentative: res.body.representative,
+        branchId: res.body.branchId
       } as any);
     } else {
       this.setState({ loading: false });
@@ -372,7 +375,7 @@ class CustomerCreation extends Component<Props, State>{
             this.formikStep3 = formikProps;
           }
           return (
-            <StepThreeForm {...formikProps} representativeDetails={this.state.step3} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>
+            <StepThreeForm {...formikProps} representativeDetails={this.state.step3} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} branchId={this.state.branchId}/>
           )
         }}
       </Formik>
