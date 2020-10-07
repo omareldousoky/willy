@@ -5,9 +5,9 @@ import DocumentTypeCreationForm from './documentTypeCreationForm'
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import { DocumentType } from '../../Services/interfaces';
-import {documentType, documentTypeCreationValidation} from './documnetTypeinitialState';
-import {createDocumentsType} from '../../Services/APIs/encodingFiles/createDocumentType';
-import {editDocumentsType} from '../../Services/APIs/encodingFiles/editDocumentType';
+import { documentType, documentTypeCreationValidation, documentTypeEditValidation } from './documnetTypeinitialState';
+import { createDocumentsType } from '../../Services/APIs/encodingFiles/createDocumentType';
+import { editDocumentsType } from '../../Services/APIs/encodingFiles/editDocumentType';
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 interface Props {
@@ -18,66 +18,66 @@ interface State {
     documentType: DocumentType;
     loading: boolean;
 }
-class DocumentTypeCreation extends Component<Props,State> {
-  constructor(props: Props){
-            super(props);
-            this.state = {
-                documentType,
-                loading: false,
-            }
-  }
+class DocumentTypeCreation extends Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            documentType,
+            loading: false,
+        }
+    }
 
-  getDocumentType() {
-    const documentTypeFromH = this.props.history.location.state.documentType;
-    this.setState({documentType: documentTypeFromH});
-}
+    getDocumentType() {
+        const documentTypeFromH: DocumentType = this.props.history.location.state.documentType;
+        this.setState({ documentType: documentTypeFromH });
+    }
 
     componentDidMount() {
-        if(this.props.edit) {
+        if (this.props.edit) {
             this.getDocumentType();
         }
     }
     async updateDocument(values) {
-        const res =  await editDocumentsType(values);
-        this.setState({loading:false})
-        if(res.status === "success") {
+        const res = await editDocumentsType(values);
+        this.setState({ loading: false })
+        if (res.status === "success") {
             Swal.fire('success', local.documentTypeEditSuccessMessage);
             this.props.history.goBack();
         } else {
             Swal.fire('error', local.documentTypeEditErrorMessage);
         }
     }
-    
-   async createDocument (values) {
-       const res =  await createDocumentsType(values);
-       this.setState({loading:false})
-       if(res.status === "success") {
-           Swal.fire('success', local.documentTypeCreationSuccessMessage);
-           this.props.history.goBack();
-       } else {
-           Swal.fire('error', local.documentTypeCreationErrorMessage);
-       }
-   }
-     submit= (values) => {
-      this.setState({
-          documentType: values,
-          loading:true,
-      })
-     if(this.props.edit) {
-         this.updateDocument(values);
 
-     } else {
-         this.createDocument(values);
-     }
-    
+    async createDocument(values) {
+        const res = await createDocumentsType(values);
+        this.setState({ loading: false })
+        if (res.status === "success") {
+            Swal.fire('success', local.documentTypeCreationSuccessMessage);
+            this.props.history.goBack();
+        } else {
+            Swal.fire('error', local.documentTypeCreationErrorMessage);
+        }
+    }
+    submit = (values) => {
+        this.setState({
+            documentType: values,
+            loading: true,
+        })
+        if (this.props.edit) {
+            this.updateDocument(values);
 
-  }
-  cancel(){
+        } else {
+            this.createDocument(values);
+        }
+
+
+    }
+    cancel() {
         this.setState({
             documentType,
         })
         this.props.history.goBack();
-  }
+    }
     render() {
         return (
             <div>
@@ -87,14 +87,14 @@ class DocumentTypeCreation extends Component<Props,State> {
                             <Formik
                                 enableReinitialize
                                 initialValues={this.state.documentType}
-                                validationSchema={documentTypeCreationValidation}
+                                validationSchema={this.props.edit ? documentTypeEditValidation : documentTypeCreationValidation}
                                 onSubmit={this.submit}
                                 validateOnChange
                                 validateOnBlur
-                             >
-                              {(formikProps)=>
-                            <DocumentTypeCreationForm {...formikProps} edit={this.props.edit} cancel ={()=>this.cancel()}/>
-                                  }
+                            >
+                                {(formikProps) =>
+                                    <DocumentTypeCreationForm {...formikProps} edit={this.props.edit} cancel={() => this.cancel()} />
+                                }
                             </Formik>
                         </Card.Body>
                     </Card>

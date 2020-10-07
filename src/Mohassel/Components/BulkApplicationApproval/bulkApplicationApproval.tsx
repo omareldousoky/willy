@@ -270,6 +270,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                       >
                         <option value="" disabled></option>
                         <option value='tasaheel'>{local.tasaheel}</option>
+                        <option value='cib'>CIB</option>
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
                         {formikProps.errors.fundSource}

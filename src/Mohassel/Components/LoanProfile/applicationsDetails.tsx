@@ -10,32 +10,19 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { beneficiaryType, currency, interestPeriod, periodType } from  '../../Services/utils';
+import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate } from '../../Services/utils';
 
 interface Props {
     application: any;
 }
 interface LoanDetailsProps {
     application: any;
-    setLoanOfficer: (name: string) => void;
 }
 
 //this is used in the application details tab from loanProfile
 export const LoanDetailsTableView = (props: LoanDetailsProps) => {
-    const [officer, changeOfficerName] = useState('')
     const [loanUse, changeUse] = useState('')
 
-    async function getOfficerName(id) {
-        const res = await getLoanOfficer(id);
-        if (res.status === "success") {
-            const name = res.body.name
-            props.setLoanOfficer(name)
-            changeOfficerName(name)
-        } else {
-            console.log('Err')
-            return ''
-        }
-    }
     async function getLoanUsages() {
         const res = await getLoanUsage();
         if (res.status === "success") {
@@ -49,7 +36,6 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
     }
     useEffect(() => {
         const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
-        getOfficerName(id);
         getLoanUsages()
     }, [])
     return (
@@ -62,6 +48,10 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 <tr>
                     <td>{local.currency}</td>
                     <td>{currency(props.application.product.currency)}</td>
+                </tr>
+                <tr>
+                    <td>{local.productName}</td>
+                    <td>{props.application.product.productName}</td>
                 </tr>
                 <tr>
                     <td>{local.calculationFormulaId}</td>
@@ -94,11 +84,11 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                 {props.application.product.beneficiaryType === 'individual' ? <tr>
                     <td>{local.principal}</td>
                     <td>{props.application.principal}</td>
-                </tr> : props.application.group.individualsInGroup.map((member)=>
-                <tr key={member.customer._id}>
-                    <td>{local.principal} {member.customer.customerName}</td>
-                    <td>{member.amount}</td>
-                </tr>)}
+                </tr> : props.application.group.individualsInGroup.map((member) =>
+                    <tr key={member.customer._id}>
+                        <td>{local.principal} {member.customer.customerName}</td>
+                        <td>{member.amount}</td>
+                    </tr>)}
                 <tr>
                     <td>{local.applicationFee}</td>
                     <td>{props.application.product.applicationFee}</td>
@@ -124,43 +114,57 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                     <td>{props.application.product.adminFees}</td>
                 </tr>
                 <tr>
-                    <td>{local.entryDate}</td>
-                    <td>{getRenderDate(props.application.entryDate)}</td>
-                </tr>
-                <tr>
                     <td>{local.usage}</td>
                     <td>{loanUse}</td>
                 </tr>
                 <tr>
                     <td>{local.representative}</td>
-                    <td>{officer}</td>
+                    <td>{(props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : props.application.customer.representativeName}</td>
                 </tr>
                 <tr>
                     <td>{local.enquiror}</td>
-                    <td>{officer}</td>
+                    <td>{props.application.enquirerName}</td>
                 </tr>
                 <tr>
                     <td>{local.visitationDate}</td>
-                    <td>{getRenderDate(props.application.visitationDate)}</td>
+                    <td>{timeToArabicDate(props.application.visitationDate, false)}</td>
                 </tr>
+                <tr>
+                    <td>{local.entryDate}</td>
+                    <td>{timeToArabicDate(props.application.entryDate, false)}</td>
+                </tr>
+                {props.application.reviewedDate > 0 && <tr>
+                    <td>{local.reviewDate}</td>
+                    <td>{timeToArabicDate(props.application.reviewedDate, false)}</td>
+                </tr>}
+                {props.application.undoReviewDate > 0 && <tr>
+                    <td>{local.unreviewDate}</td>
+                    <td>{timeToArabicDate(props.application.undoReviewDate, false)}</td>
+                </tr>}
+                {props.application.rejectionDate > 0 && <tr>
+                    <td>{local.decisionDate}</td>
+                    <td>{timeToArabicDate(props.application.rejectionDate, false)}</td>
+                </tr>}
+                {props.application.approvalDate > 0 && <tr>
+                    <td>{local.loanApprovalDate}</td>
+                    <td>{timeToArabicDate(props.application.approvalDate, false)}</td>
+                </tr>}
+                {props.application.creationDate > 0 && <tr>
+                    <td>{local.loanCreationDate}</td>
+                    <td>{timeToArabicDate(props.application.creationDate, false)}</td>
+                </tr>}
+                {props.application.issueDate > 0 && <tr>
+                    <td>{local.loanIssuanceDate}</td>
+                    <td>{timeToArabicDate(props.application.issueDate, false)}</td>
+                </tr>}
             </tbody>
         </Table>
     )
 }
 //this is used in rescheduling
 export const LoanDetailsBoxView = (props: Props) => {
-    const [officer, changeOfficerName] = useState('')
     const [loanUse, changeUse] = useState('')
-    async function getOfficerName(id) {
-        const res = await getLoanOfficer(id);
-        if (res.status === "success") {
-            const name = res.body.name
-            changeOfficerName(name)
-        } else {
-            console.log('Err')
-            return ''
-        }
-    }
+
     async function getLoanUsages() {
         const res = await getLoanUsage();
         if (res.status === "success") {
@@ -174,7 +178,6 @@ export const LoanDetailsBoxView = (props: Props) => {
     }
     useEffect(() => {
         const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
-        getOfficerName(id);
         getLoanUsages()
 
     }, [])
@@ -304,17 +307,19 @@ export const LoanDetailsBoxView = (props: Props) => {
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.representative}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{officer} </Form.Label>
+                        <Form.Label>{(props.application.product.beneficiaryType === 'group') ?
+                            props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName
+                            : props.application.customer.representativeName}</Form.Label>
                     </Row>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
+                 <Form.Group as={Col} md="3">
                     <Row>
                         <Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
                     </Row>
                     <Row>
-                        <Form.Label>{officer} </Form.Label>
+                        <Form.Label>{props.application.enquirerName} </Form.Label>
                     </Row>
-                </Form.Group>
+                </Form.Group> 
             </Form.Row>
         </Form >
     )
@@ -391,7 +396,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                         </Row>
                     </Form.Group>
                 </Form.Row>
-                {props.application.guarantors && props.application.product.beneficiaryType === 'individual' && <Form.Row>
+                {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
                     <GuarantorTableView guarantors={props.application.guarantors} />
                 </Form.Row>}
             </Form>

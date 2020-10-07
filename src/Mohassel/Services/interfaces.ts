@@ -61,12 +61,13 @@ export interface Customer {
     partTimeEmployeeCount?: number;
     permanentEmployeeCount?: number;
     representative?: string;
+    representativeName?: string;
     ruralUrban?: string;
     taxCardNumber?: string;
     village?: string;
-    allowMultiLoans?: boolean;
+    maxLoansAllowed?: number;
     allowGuarantorLoan?: boolean;
-    allowMultiGuarantee?: boolean;
+    guarantorMaxLoans?: number;
     _id?: string;
 }
 
@@ -86,6 +87,10 @@ export interface PendingActions {
     receiptNumber?: string;
     transactions?: Array<Action>;
     beneficiaryId?: string;
+    payerId?: string;
+    payerNationalId?: string;
+    payerType?: string;
+    payerName?: string;
     _id?: string;
 }
 
@@ -95,6 +100,28 @@ export interface DocumentType {
     type: string;
     paperType: string;
     name: string;
-    active: boolean;
-    updatable: boolean;
+    active?: boolean;
+    updatable?: boolean;
 }
+export interface GuaranteedLoan{
+    guarantorOrder: string;
+    customerKey: string;
+    applicationCode: string;
+    customerName: string;
+    appStatus?: string;
+    approvalDate?: string;
+    loanStatus?: string;
+    issueDate?: string;
+}
+export interface GuaranteedLoans {
+        data: Array<GuaranteedLoan>;
+        GuarantorName: string;
+}
+
+export interface Document {
+    key: string;
+    url: string | ArrayBuffer | null;
+    valid: boolean;
+    delete?: boolean;
+    selected?: boolean;
+  }

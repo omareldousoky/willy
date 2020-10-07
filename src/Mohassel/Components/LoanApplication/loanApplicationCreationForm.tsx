@@ -5,6 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json'
 import InputGroup from 'react-bootstrap/InputGroup';
+import GroupInfoBox from '../LoanProfile/groupInfoBox';
+import InfoBox from '../userInfoBox';
+import Select from 'react-select';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -12,6 +15,9 @@ export const LoanApplicationCreationForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
+                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox values={props.customer} /> :
+                        <GroupInfoBox group={{ individualsInGroup: values.individualDetails }} />
+                    }
                     <div style={{ width: '100%', margin: '20px 0' }}>
                         <Row>
                             <Col sm={7}>
@@ -504,16 +510,21 @@ export const LoanApplicationCreationForm = (props: any) => {
                             <Col sm={6}>
                                 <Form.Group controlId="stamps">
                                     <Form.Label column sm={6}>{local.stamps}</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        name="stamps"
-                                        data-qc="stamps"
-                                        value={values.stamps}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        isInvalid={errors.stamps && touched.stamps}
-                                        disabled={!values.allowStampsAdjustment}
-                                    />
+                                    <InputGroup>
+                                        <Form.Control
+                                            type="number"
+                                            name="stamps"
+                                            data-qc="stamps"
+                                            value={values.stamps}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isInvalid={errors.stamps && touched.stamps}
+                                            disabled={!values.allowStampsAdjustment}
+                                        />
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text id="inputGroupPrepend">%</InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                    </InputGroup>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.stamps}
                                     </Form.Control.Feedback>
@@ -577,7 +588,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                 </Form.Control.Feedback>
                             </Col>
                         </Form.Group>
-                        <Form.Group as={Row} controlId="representative">
+                        {(values.beneficiaryType !== "group") && <Form.Group as={Row} controlId="representative">
                             <Col sm={12}>
                                 <Form.Label column sm={6}>{local.representative}</Form.Label>
                                 <Form.Control
@@ -588,26 +599,28 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     disabled
                                 />
                             </Col>
-                        </Form.Group>
+                        </Form.Group>}
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="enquirorId">
                                     <Form.Label column sm={6}>{local.enquiror}</Form.Label>
-                                    <Form.Control as="select"
-                                        type="select"
+                                    <Select
                                         name="enquirorId"
                                         data-qc="enquirorId"
-                                        onBlur={handleBlur}
-                                        isInvalid={errors.enquirorId && touched.enquirorId}
-                                        value={values.enquirorId}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="" disabled></option>
-                                        {props.loanOfficers.map((officer) => <option key={officer._id} value={officer._id} >{officer.name}</option>)}
-                                    </Form.Control>
+                                        value={props.loanOfficers.filter((lo) => lo._id === values.enquirorId)}
+                                        enableReinitialize={false}
+                                        onChange={(event: any) => { console.log(event, values); setFieldValue('enquirorId', event._id) }}
+                                        type='text'
+                                        getOptionLabel={(option) => option.name}
+                                        getOptionValue={(option) => option._id}
+                                        options={props.loanOfficers}
+                                    />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.enquirorId}
                                     </Form.Control.Feedback>
+                                    <div style={{ color: '#d51b1b', fontSize: '80%', margin: '10px' }}>
+                                        {errors.enquirorId}
+                                    </div>
                                 </Form.Group>
                             </Col>
                             <Col sm={6}>

@@ -1,6 +1,8 @@
 import * as local from '../../Shared/Assets/ar.json';
 import jwtDecode from 'jwt-decode';
-
+import JsZip from 'jszip';
+import {saveAs} from 'file-saver'
+import Swal from 'sweetalert2';
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -8,9 +10,10 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp > 0)
+  if (timeStamp === 0) {
+    return new Date().toISOString().slice(0, 10)
+  } else if (timeStamp)
     return new Date(timeStamp).toISOString().slice(0, 10)
-  else return new Date().toISOString().slice(0, 10);
 }
 
 export function parseJwt(token: string) {
@@ -231,7 +234,7 @@ export const numbersToArabic = (input: number | string) => {
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp > 0)
+  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
   else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
@@ -239,10 +242,173 @@ export const dayToArabic = (index: number): string => {
   const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
   return weekday[index];
 }
+export const customFilterOption = (option, rawInput) => {
+  if (option.label) {
+    const words = rawInput.split(' ');
+    return words.reduce(
+      (acc, cur) => acc && option.label.toLowerCase().includes(cur.toLowerCase()),
+      true,
+    );
+  }
+};
 export function arabicGender(gender: string) {
   switch (gender) {
     case 'male': return local.male;
     case 'female': return local.female;
     default: return ''
   }
+}
+
+
+export const download = (url, fileName: string): void => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  a.remove();
+}
+
+export const getStatus = (installment) => {
+  const todaysDate = new Date().setHours(0, 0, 0, 0).valueOf();
+  switch (installment.status) {
+      case 'unpaid':
+          if (new Date (installment.dateOfPayment).setHours(23, 59, 59, 59) < todaysDate)
+              return local.late
+          else
+              return local.unpaid
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'canceled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getInstallmentStatus = (status: string) => {
+  switch (status) {
+      case 'unpaid': return local.unpaid;
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'issued': return local.issued;
+      default: return '';
+  }
+}
+export const getIscoreReportStatus = (status: string) => {
+  switch (status) {
+      case 'queued': return local.queued;
+      case 'processing': return local.processing;
+      case 'created': return local.created;
+      case 'failed': return local.failed;
+      default: return '';
+  }
+}
+export const getLoanStatus = (status: string) => {
+  switch (status) {
+      case 'pending': return local.pending;
+      case 'paid': return local.paid;
+      case 'partiallyPaid': return local.partiallyPaid;
+      case 'rescheduled': return local.rescheduled;
+      case 'cancelled': return local.cancelled;
+      case 'canceled': return local.cancelled;
+      case 'issued': return local.issued;
+      case 'created': return local.created;
+      case 'underReview': return local.underReview;
+      case 'reviewed': return local.reviewed;
+      case 'approved': return local.approved;
+      case 'writtenOff': return local.writtenOffLoan;
+      case 'Doubtful': return local.doubtedLoan;
+      case 'doubt_cancelled': return local.cancelled;
+      default: return '';
+  }
+}
+
+
+export const getTimestamp = (datetimeString: string) => {
+  const dateTime = datetimeString.split(" ");
+  const datum = new Date(dateTime[0]).valueOf();
+  return datum
+}
+export const iscoreDate = (date: any) => {
+  const iscoreDate = new Date(date);
+  const iscoreDateString = ('0' + iscoreDate.getDate()).slice(-2) + '/'
+    + ('0' + (iscoreDate.getMonth() + 1)).slice(-2) + '/'
+    + iscoreDate.getFullYear();
+  return iscoreDateString
+}
+
+export const getDateString = (date: any) => {
+  return (
+    new Date(new Date(date).getTime() - (new Date(date).getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+  )
+}
+
+export const downloadFile = (fileURL) => {
+  const link = document.createElement('a');
+  link.href = fileURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+export const getAge = (DOB) => {
+  const today = new Date();
+  const birthDate = new Date(DOB);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age = age - 1;
+  }
+
+  return age;
+}
+
+export const getRandomPaymentByKey = (key)=>{
+  if(key==='collectionCommission') return local.collectionCommission
+  else if(key==="reissuingFees") return local.reissuingFees
+  else if(key==="legalFees") return local.legalFees
+  else if(key==="clearanceFees") return local.clearanceFees
+  else if(key==='toktokStamp') return local.toktokStamp
+  else if(key==='tricycleStamp') return local.tricycleStamp
+  else if(key==='penalty') return local.payPenalty
+}
+export const getDataURL = async(url) => {
+
+  const blob = await fetch(url).then(r => r.blob());
+          const dataUrl: any = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
+          return  await dataUrl.replace("data:application/octet-stream;base64,","");
+}
+export const downloadAsZip = async (images: Array<{url: string; fileName: string}>, folderName: string) => {
+  const zip =  new JsZip();
+  const base64Matcher = new RegExp(/^data:image\/(png|jpg|jpeg);base64,/);
+  try {
+    let counter = 0;
+    images.forEach((image) => {
+      if(base64Matcher.test(image.url)){
+        zip.file(image.fileName,image.url.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),{base64: true});
+        counter ++;
+      } else {
+        zip.file(image.fileName,getDataURL(image.url),{base64: true})
+        counter ++;
+      }
+    });
+    if(counter === images.length)
+   await zip.generateAsync({type:"blob"}).then(async(content)=>{
+        await saveAs(content,folderName)
+    })
+  } catch (error) {
+    Swal.fire("error", "Can't Download you folder");
+    console.log(error); // this log is for purpose
+  }
+ 
+  
 }

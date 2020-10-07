@@ -4,12 +4,22 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
-import {checkIssueDate} from '../../Services/utils';
+import { checkIssueDate } from '../../Services/utils';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
+
+function calculateAge(dateOfBirth: number) {
+  if (dateOfBirth) {
+    const diff = Date.now().valueOf() - dateOfBirth;
+    const age = new Date(diff);
+    return Math.abs(age.getUTCFullYear() - 1970);
+  }
+  return 0;
+}
+
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
   const [mapState, openCloseMap] = useState(false);
@@ -35,7 +45,7 @@ export const StepOneForm = (props: any) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isInvalid={errors.customerName && touched.customerName}
-                disabled={(!allowed && props.hasLoan)}
+                disabled={(!allowed && props.edit)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -67,6 +77,9 @@ export const StepOneForm = (props: any) => {
                     if (res.status === 'success') {
                       setLoading(false);
                       setFieldValue('nationalIdChecker', res.body.Exists);
+                      if (res.body.Exists) {
+                        setFieldValue('nationalIdCheckerDupKey', res.body.CustomerKey);
+                      }
                       setFieldValue('birthDate', getBirthdateFromNationalId(value));
                       setFieldValue('gender', getGenderFromNationalId(value));
                     } else setLoading(false);
@@ -74,11 +87,11 @@ export const StepOneForm = (props: any) => {
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}
                 maxLength={14}
-                disabled={(!allowed && props.hasLoan)}
+                disabled={(!allowed && props.edit)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
-              {errors.nationalId}
+              {(errors.nationalId === local.duplicateNationalIdMessage) ? local.duplicateNationalIdMessage + local.withCode + values.nationalIdCheckerDupKey : errors.nationalId}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
@@ -95,6 +108,9 @@ export const StepOneForm = (props: any) => {
               value={values.birthDate}
               disabled
             />
+            <Form.Control.Feedback type="invalid" style={calculateAge(new Date(values.birthDate).valueOf()) >= 67? { display: 'block' }: {}}>
+              {local.customerAgeMoreThan67}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col sm={3}>
@@ -127,10 +143,10 @@ export const StepOneForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-              disabled={(!allowed && props.hasLoan)}
+              disabled={(!allowed && props.edit)}
             />}
             </Can>
-            <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !==""? {display: 'block'}: {}}>
+            <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
               {errors.nationalIdIssueDate || checkIssueDate(values.nationalIdIssueDate)}
             </Form.Control.Feedback>
           </Form.Group>
@@ -165,7 +181,7 @@ export const StepOneForm = (props: any) => {
               name="customerHomeAddressLocation"
               data-qc="customerHomeAddressLocation"
               style={{ cursor: 'pointer', color: '#7dc356', textDecoration: 'underline' }}
-              value = {values.customerAddressLatLongNumber?.lat !== 0 && values.customerAddressLatLongNumber?.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
+              value={values.customerAddressLatLongNumber?.lat !== 0 && values.customerAddressLatLongNumber?.lng !== 0 ? local.addressChosen : local.chooseCustomerAddress}
               // value={values.customerHomeAddressLocationTitle}
               onClick={() => openCloseMap(true)}
             />
@@ -238,7 +254,7 @@ export const StepOneForm = (props: any) => {
               maxLength={11}
               minLength={10}
               isInvalid={errors.faxNumber && touched.faxNumber}
-              disabled={(!allowed && props.hasLoan)}
+              disabled={(!allowed && props.edit)}
             />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -281,7 +297,7 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.emailAddress && touched.emailAddress}
-          disabled={(!allowed && props.hasLoan)}
+          disabled={(!allowed && props.edit)}
           />}
         </Can>
         <Form.Control.Feedback type="invalid">
@@ -299,7 +315,7 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.customerWebsite && touched.customerWebsite}
-          disabled={(!allowed && props.hasLoan)}
+          disabled={(!allowed && props.edit)}
         />}
         </Can>
         <Form.Control.Feedback type="invalid">

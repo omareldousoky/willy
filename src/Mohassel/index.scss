@@ -7,13 +7,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
     direction: rtl !important;
 }
-  
 code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-.form-control {
-  padding: 0 0.75rem !important;
 }
 .pac-container.pac-logo.hdpi, .pac-container.pac-logo {
   z-index: 1100;
@@ -46,24 +42,29 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   flex: 1;
   background-color: #ffffff;
   text-align: center;
-  min-height: 20rem;
-  min-width: 20rem;
+  min-width: 250px;
+  min-height: 250px;
+  max-width: 250px;
+  max-height: 250px;
   justify-content: center;
   align-items: center;
   border: #e5e5e5 dashed 1px;
+  opacity: 1;
 }
 
-.delete-document {
-  position: absolute;
-  top: 0;
-  left: 10px;
-  background: red;
-  color: white;
-  padding: 5px;
+.document-actions {
+  justify-content: space-between;
+  height: 40px;
+  width: 250px;
+  padding-right:10px ;
+  padding-bottom: 5px;
   border-radius: 10px;
   cursor: pointer;
 }
-
+.document-action-icon{
+  width: 20px;
+  height: 20px;
+}
 /*Loader Component*/
 .loader-full-screen, .loader-full-section {
   position: fixed;
@@ -102,7 +103,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   background-color: #7dc356;
 }
 
-.primary-color {
+.pr2ry-color {
   color: #7dc356
 }
 .navbar-nav a{
@@ -254,6 +255,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   font-weight: bold; 
   margin: 10px 0;
   font-size: 14px;
+  text-align: right;
 }
 .data-check-label{
   font-weight: bold; 
@@ -290,6 +292,14 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     border-radius: 6px;
     cursor: pointer;
   }
+  & .cancel {
+    background: #d51b1b;
+    color: #fff;
+    padding: 5px 40px;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 }
 .swal-table {
   width: 100%;
@@ -302,21 +312,34 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   }
 }
 .uploaded-image {
-  padding-top: 35px;
-   width: 100%;
-   height: 100%;
-
+  // padding-top: 35px;
+   width: 250px;
+   height: 200px;
+   object-fit: fill;
 }
 .invalid-image{
-
   opacity: 0.7;
-
+ pointer-events: all;
 }
 .invalid-document {
   position: absolute;
-  top: 0;
-  left: 10px;
   padding: 5px;
+  top:120px;
+  left: 120px;
   border-radius: 10px;
-  cursor: pointer;
+  cursor: not-allowed;
 }
+
+.sort-icons {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+@media print {
+    * {
+      font-size: 14px;
+    }
+		.print-none {
+			display: none !important;
+    }
+  }

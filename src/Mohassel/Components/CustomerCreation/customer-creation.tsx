@@ -8,7 +8,7 @@ import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
-import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree } from './customerFormIntialState';
+import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree, customerCreationValidationStepThreeEdit , } from './customerFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
@@ -16,6 +16,7 @@ import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
 import { timeToDateyyymmdd } from '../../Services/utils';
+import ability from '../../config/ability';
 
 interface CustomerInfo {
   birthDate: number;
@@ -44,9 +45,9 @@ interface CustomerExtraDetails {
   permanentEmployeeCount: any;
   partTimeEmployeeCount: any;
   representative: any;
-  allowMultiLoans: boolean;
+  maxLoansAllowed: number;
   allowGuarantorLoan: boolean;
-  allowMultiGuarantee: boolean;
+  guarantorMaxLoans: number;
 }
 export interface Customer {
   customerInfo: CustomerInfo;
@@ -101,19 +102,25 @@ interface State {
   step3: {
     geographicalDistribution: string;
     representative: any;
+    newRepresentative: any;
+    representativeName: string;
     applicationDate: any;
     permanentEmployeeCount: any;
     partTimeEmployeeCount: any;
     comments: string;
+    guarantorMaxLoans: number;
+    maxLoansAllowed: number;
   };
   customerId: string;
   selectedCustomer: any;
   loading: boolean;
   hasLoan: boolean;
+  isGuarantor: boolean;
   searchResults: {
     results: Array<object>;
     empty: boolean;
   };
+  oldRepresentative: string;
 }
 
 class CustomerCreation extends Component<Props, State>{
@@ -127,11 +134,13 @@ class CustomerCreation extends Component<Props, State>{
       customerId: '',
       loading: false,
       hasLoan: false,
+      isGuarantor: false,
       searchResults: {
         results: [],
         empty: false
       },
-      selectedCustomer: {}
+      selectedCustomer: {},
+      oldRepresentative: ''
     }
   }
 
@@ -140,6 +149,21 @@ class CustomerCreation extends Component<Props, State>{
       this.getCustomerById();
     }
   }
+  formikStep1 = {
+    isValid: true,
+    values: step1,
+    errors: {},
+  };
+  formikStep2 = {
+    isValid: true,
+    values: step2,
+    errors: {},
+  };
+  formikStep3 = {
+    isValid: true,
+    values: step3,
+    errors: {},
+  };
   async getCustomerById() {
     this.setState({ loading: true });
     const res = await getCustomerByID(this.props.location.state.id)
@@ -190,13 +214,30 @@ class CustomerCreation extends Component<Props, State>{
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,
         representative: res.body.representative,
+        representativeName: res.body.representativeName,
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
         permanentEmployeeCount: res.body.permanentEmployeeCount,
         partTimeEmployeeCount: res.body.partTimeEmployeeCount,
         comments: res.body.comments,
-        allowMultiLoans: res.body.allowMultiLoans,
+        maxLoansAllowed: res.body.maxLoansAllowed? Number(res.body.maxLoansAllowed) : 1,
         allowGuarantorLoan: res.body.allowGuarantorLoan,
-        allowMultiGuarantee: res.body.allowMultiGuarantee,
+        guarantorMaxLoans: res.body.guarantorMaxLoans? Number(res.body.guarantorMaxLoans ): 1,
+      };
+      this.formikStep1 = {
+        values: { ...this.state.step1, ...customerInfo },
+        errors: {},
+        isValid: true,
+      };
+      this.formikStep2 = {
+        values: { ...this.state.step2, ...customerBusiness },
+        errors: {},
+        isValid: true,
+      };
+      this.formikStep3 = {
+        errors: {},
+        values: { ...this.state.step3, ...customerExtraDetails },
+        isValid: true,
+
       };
       this.setState({
         loading: false,
@@ -204,7 +245,9 @@ class CustomerCreation extends Component<Props, State>{
         step1: { ...this.state.step1, ...customerInfo },
         step2: { ...this.state.step2, ...customerBusiness },
         step3: { ...this.state.step3, ...customerExtraDetails },
-        hasLoan: res.body.hasLoan
+        hasLoan: res.body.hasLoan,
+        isGuarantor: res.body.isGuarantor,
+        oldRepresentative: res.body.representative,
       } as any);
     } else {
       this.setState({ loading: false });
@@ -231,7 +274,12 @@ class CustomerCreation extends Component<Props, State>{
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.permanentEmployeeCount = Number(objToSubmit.permanentEmployeeCount);
     objToSubmit.partTimeEmployeeCount = Number(objToSubmit.partTimeEmployeeCount);
-    objToSubmit.representative = objToSubmit.representative._id ? objToSubmit.representative._id : objToSubmit.representative;
+    objToSubmit.representative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? this.state.oldRepresentative : objToSubmit.representative;
+    objToSubmit.newRepresentative = (this.state.oldRepresentative !== objToSubmit.newRepresentative) ? objToSubmit.newRepresentative : '';
+    if(objToSubmit?.guarantorMaxLoans && objToSubmit.guarantorMaxLoans > 0) objToSubmit.guarantorMaxLoans = Number(objToSubmit.guarantorMaxLoans);
+    else  objToSubmit.guarantorMaxLoans = 1;
+    if(objToSubmit?.maxLoansAllowed && objToSubmit.maxLoansAllowed > 0) objToSubmit.maxLoansAllowed = Number(objToSubmit.maxLoansAllowed);
+    else  objToSubmit.maxLoansAllowed = 1;
     if (this.props.edit) {
       const res = await editCustomer(objToSubmit, this.state.selectedCustomer._id);
       if (res.status === 'success') {
@@ -245,7 +293,7 @@ class CustomerCreation extends Component<Props, State>{
       const res = await createCustomer(objToSubmit);
       if (res.status === 'success') {
         this.setState({ loading: false });
-        Swal.fire("", local.customerCreated, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
+        Swal.fire("", local.customerCreated + ' ' + local.withCode + ' ' + res.body.customerKey, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
       } else {
         Swal.fire("error", local.customerCreationError)
         this.setState({ loading: false });
@@ -268,8 +316,14 @@ class CustomerCreation extends Component<Props, State>{
         validateOnBlur
         validateOnChange
       >
-        {(formikProps) =>
-          <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} />
+        {(formikProps) => {
+          if (this.props.edit) {
+            this.formikStep1 = formikProps;
+          }
+
+          return (
+            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>);
+        }
         }
       </Formik>
     )
@@ -285,9 +339,16 @@ class CustomerCreation extends Component<Props, State>{
         validateOnBlur
         validateOnChange
       >
-        {(formikProps) =>
-          <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan}/>
+        {(formikProps) => {
+          if (this.props.edit) {
+            this.formikStep2 = formikProps;
+          }
+
+          return (
+            <StepTwoForm {...formikProps} previousStep={(valuesOfStep2) => this.previousStep(valuesOfStep2, 2)} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} edit={this.props.edit}/>);
         }
+        }
+
       </Formik>
     )
   }
@@ -298,15 +359,24 @@ class CustomerCreation extends Component<Props, State>{
         enableReinitialize
         initialValues={this.state.step3}
         onSubmit={this.submit}
-        validationSchema={customerCreationValidationStepThree}
+        validationSchema={
+          (ability.can("updateNationalId", "customer") && this.props.edit)
+            ? customerCreationValidationStepThreeEdit
+            : customerCreationValidationStepThree
+        }
         validateOnBlur
         validateOnChange
       >
-        {(formikProps) =>
-          <StepThreeForm {...formikProps} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan}/>
-        }
+        {(formikProps) => {
+          if (this.props.edit) {
+            this.formikStep3 = formikProps;
+          }
+          return (
+            <StepThreeForm {...formikProps} representativeDetails={this.state.step3} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor}/>
+          )
+        }}
       </Formik>
-    )
+    );
   }
   renderDocuments() {
     return ( 
@@ -314,7 +384,7 @@ class CustomerCreation extends Component<Props, State>{
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
         previousStep={() => this.setState({ step: 3 })}
         edit={this.props.edit}
-        view = {false}
+        view={false}
       />
     )
   }
@@ -332,15 +402,43 @@ class CustomerCreation extends Component<Props, State>{
       default: return null;
     }
   }
+  handleWizardClick = (index: number) => {
+    if (this.formikStep1.isValid == true && this.formikStep2.isValid == true && this.formikStep3.isValid == true)
+      switch (this.state.step) {
+        case 1:
+          return (this.setState({
+            step1: this.formikStep1.values,
+            step: index + 1
+          }))
+        case 2:
+          return (this.setState({
+            step2: this.formikStep2.values,
+            step: index + 1
+          }))
+        case 3:
+          return (this.setState({
+            step3: this.formikStep3.values,
+            step: index + 1
+          }))
+        default:
+          return (this.setState({
+            step: index + 1
+          }))
+
+      }
+  }
   render() {
     return (
       <Container>
         <Loader open={this.state.loading} type="fullscreen" />
-        <Card>
-          <div style={{ display: "flex", flexDirection: "row", }} >
+        <Card style={{width:"100"}}>
+          <div className="row-nowrap" >
             <Wizard currentStepNumber={this.state.step - 1}
-              stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}></Wizard>
-            <Card.Body style= {{width:"80%"}}>
+              edit={this.props.edit}
+              onClick={this.handleWizardClick}
+              stepsDescription={[local.mainInfo, local.workInfo, local.differentInfo, local.documents]}
+            />
+            <Card.Body style={{ width: "80%" }} >
               {this.renderSteps()}
             </Card.Body>
           </div>
