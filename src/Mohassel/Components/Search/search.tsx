@@ -119,7 +119,7 @@ class Search extends Component<Props, State> {
   }
   removeEmptyArg(obj) {
     Object.keys(obj).forEach(el => {
-      if(obj[el] === "" || isNaN(obj[el]) || obj[el] === undefined) {
+      if(obj[el] === "" || obj[el] === undefined) {
         delete obj[el];
       }
     })
