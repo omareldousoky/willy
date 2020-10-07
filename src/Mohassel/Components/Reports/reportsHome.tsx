@@ -45,14 +45,16 @@ class ReportsHome extends Component<{}, State>{
     }
     render() {
         return (
-            <Card style={{ margin: '20px 50px' }} className="print-none">
-                <CardNavBar
-                    header={'here'}
-                    array={this.state.tabsArray}
-                    active={this.state.activeTab}
-                    selectTab={(index: string) => this.setState({ activeTab: index })}
-                />
-                <div style={{ padding: 20, marginTop: 15 }}>
+            <Card>
+                <div className="print-none">
+                    <CardNavBar
+                        header={'here'}
+                        array={this.state.tabsArray}
+                        active={this.state.activeTab}
+                        selectTab={(index: string) => this.setState({ activeTab: index })}
+                    />
+                </div>
+                <div>
                     {this.renderContent()}
                 </div>
             </Card>
