@@ -1,7 +1,7 @@
 import React from "react";
 import "./crossedOutLoansList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
-import { timeToDateyyymmdd } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../Services/utils";
 
 const CrossedOutLoansList = (props) => {
   const data = props.data.data;
@@ -10,8 +10,8 @@ const CrossedOutLoansList = (props) => {
   const totalTransactionAmount = Number(data.transactionAmount);
   const totalTransactionInterest = Number(data.transactionInterest);
   const totalTransactionPrincipal = Number(data.transactionPrincipal);
-  const startDate = timeToDateyyymmdd(props.data.startDate);
-  const endDate = timeToDateyyymmdd(props.data.endDate);
+  const startDate = timeToArabicDate(props.data.startDate,false);
+  const endDate = timeToArabicDate(props.data.endDate,false);
 
   const getStatus = (value) => {
     switch (value) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
-import { timeToDateyyymmdd, timeToArabicDate } from '../../../Services/utils'
+import {timeToArabicDate } from '../../../Services/utils'
 interface Props {
     result: {
         days: {
@@ -43,8 +43,8 @@ interface Props {
         transactionPrincipal: string;
         transactionInterest: string;
     };
-    fromDate: string;
-    toDate: string;
+    fromDate: any;
+    toDate: any;
 }
 const statusLocalization = (status: string) => {
     switch (status) {
@@ -80,7 +80,7 @@ const ManualPayments = (props: Props) => {
                 </thead>
                 <thead>
                     <tr className="headtitle">
-                        <th colSpan={6}>تاريخ الحركه من {timeToDateyyymmdd(new Date(props.fromDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.toDate).valueOf())}</th>
+                        <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.fromDate,false)} الي {timeToArabicDate(props.toDate,false)}</th>
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>{timeToArabicDate(0, true)}</th>
