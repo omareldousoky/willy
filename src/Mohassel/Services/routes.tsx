@@ -244,7 +244,7 @@ const appRoutes = [
               {
                 path: "/edit-user",
                 label: local.editUser,
-                render: (props) => <Can I='getUser' a='user'><UserCreation  {...props} edit={true} /></Can>,
+                render: (props) => <Can I='updateUser' a='user'><UserCreation  {...props} edit={true} /></Can>,
               },
               {
                 path: "/user-details",

@@ -302,6 +302,7 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
+                    {this.props.penaltyAction !== "cancel" &&
                     <Form.Group as={Col} md={6} controlId="whoPaid">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
                       <Col>
@@ -325,7 +326,7 @@ class PayInstallment extends Component<Props, State> {
                           {formikBag.errors.payerType}
                         </Form.Control.Feedback>
                       </Col>
-                    </Form.Group>
+                    </Form.Group>}
                     {formikBag.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
                       <Col>
