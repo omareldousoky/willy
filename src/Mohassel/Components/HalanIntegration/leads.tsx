@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { Card } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import Search from '../Search/search';
 import { getDateAndTime } from '../../Services/getRenderDate';
+import { changeLeadState } from '../../Services/APIs/Leads/changeLeadState';
 import { search } from '../../redux/search/actions';
+import { loading } from '../../redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 
@@ -18,6 +21,7 @@ interface Props {
   loading: boolean;
   searchFilters: any;
   search: (data) => void;
+  setLoading: (data) => void;
   setSearchFilters: (data) => void;
 }
 interface State {
@@ -48,7 +52,7 @@ class Leads extends Component<Props, State>{
           header: local.changeRepresentative,
           desc: local.changeOfficerForMoreThanOneCustomer,
           path: '/halan-integration/exchange',
-      }
+        }
       ],
       size: 10,
       from: 0,
@@ -83,6 +87,11 @@ class Leads extends Component<Props, State>{
         render: data => data.representativeName
       },
       {
+        title: local.status,
+        key: "status",
+        render: data => data.status
+      },
+      {
         title: local.creationDate,
         sortable: true,
         key: "createdAt",
@@ -93,13 +102,13 @@ class Leads extends Component<Props, State>{
         key: "actions",
         render: data =>
           <div style={{ position: 'relative' }}>
-            <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data._id ? '' : data._id })}>{local.actions}</p>
-            {this.state.openActionsId === data._id && <div className="actions-list">
-              <div className="item">{local.rejectApplication}</div>
-              <div className="item">{local.acceptApplication}</div>
-              <div className="item">{local.acceptSecondVisit}</div>
-              <div className="item">{local.editCustomer}</div>
-              <div className="item">{local.viewCustomerLead}</div>
+            <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
+            {this.state.openActionsId === data.uuid && <div className="actions-list">
+              {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'rejected')}>{local.rejectApplication}</div>}
+              {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'approved')}>{local.acceptApplication}</div>}
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.acceptSecondVisit}</div>
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.editCustomer}</div>
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.viewCustomerLead}</div>
             </div>}
           </div>
       },
@@ -111,6 +120,17 @@ class Leads extends Component<Props, State>{
   }
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
+  }
+  async changeLeadState(phoneNumber: string, newState: string) {
+    this.props.setLoading(true);
+    const res = await changeLeadState(phoneNumber, newState);
+    if(res.status === "success") {
+      this.props.setLoading(false);
+      Swal.fire('', local.changeState, 'success').then(()=> this.getLeadsCustomers());
+      this.getLeadsCustomers();
+    } else {
+      this.props.setLoading(false);
+    }
   }
   render() {
     return (
@@ -163,6 +183,7 @@ class Leads extends Component<Props, State>{
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    setLoading: data => dispatch(loading(data))
   };
 };
 const mapStateToProps = state => {
