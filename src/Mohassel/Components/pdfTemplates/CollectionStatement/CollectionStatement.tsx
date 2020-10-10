@@ -1,13 +1,13 @@
 import React from "react";
 import "./CollectionStatement.scss";
-import { timeToDateyyymmdd } from "../../../Services/utils";
+import {timeToArabicDate } from "../../../Services/utils";
 import Table from "react-bootstrap/Table";
 
 const CollectionStatement = (props) => {
   const branches = props.data.data.branches;
   const total = props.data.data.total;
-  const startDate = timeToDateyyymmdd(props.data.startDate);
-  const endDate = timeToDateyyymmdd(props.data.endDate);
+  const startDate = timeToArabicDate(props.data.startDate,false);
+  const endDate = timeToArabicDate(props.data.endDate,false);
 
   const trimmedValue = (value: string) => {
     if (value.includes(".")) {

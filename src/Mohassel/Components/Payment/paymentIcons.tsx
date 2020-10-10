@@ -81,7 +81,7 @@ class PaymentIcons extends Component<Props, {}> {
           </Can>
           {this.props.paymentType === "penalties" ? (
             <>
-              <Can I="rollback" a="application">
+              <Can I="cancelPenalty" a="application">
                 <div className="payment-icon">
                   <img alt="cancel-penalty" src={require("../../Assets/cancelPenalty.svg")} />
                   <Button
