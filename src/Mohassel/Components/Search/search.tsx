@@ -95,7 +95,7 @@ class Search extends Component<Props, State> {
     }
   }
   submit = async (values) => {
-    const obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
+    let obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
     delete obj.keyword;
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
@@ -112,9 +112,18 @@ class Search extends Component<Props, State> {
     if(this.props.status) obj.status = this.props.status;
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
+    obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
     this.props.search({ ...obj, from: 0, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
+  }
+  removeEmptyArg(obj) {
+    Object.keys(obj).forEach(el => {
+      if(obj[el] === "" || obj[el] === undefined) {
+        delete obj[el];
+      }
+    })
+    return obj;
   }
   getInitialState() {
     const initialState: InitialFormikState = {};
