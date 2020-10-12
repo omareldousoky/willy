@@ -129,6 +129,11 @@ class BulkApplicationApproval extends Component<Props, State>{
       },
     ]
   }
+  componentDidMount() {
+    if (this.props.data?.length > 0) {
+      this.props.search({ url: 'clearData' });
+    }
+  }
   getApplications() {
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
     this.props.search(query);

@@ -84,8 +84,11 @@ export const search = (obj) => {
                     dispatch({ type: 'SET_LOADING', payload: false })
                     console.log("Error!", "Disconnected, login again", "error")
                 }
-
             }
+            case ('clearData'): 
+                return (dispatch) => {
+                    dispatch({ type: 'SEARCH', payload: {} })
+                }
         default: return null;
     }
 }
