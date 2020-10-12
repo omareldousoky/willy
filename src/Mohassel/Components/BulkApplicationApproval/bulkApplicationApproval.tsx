@@ -161,6 +161,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     const res = await bulkApproval(obj);
     if (res.status === "success") {
       this.props.setLoading(false);
+      this.setState({ selectedReviewedLoans: [], checkAll: false })
       Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getApplications());
     } else {
       this.props.setLoading(false);
@@ -226,7 +227,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>Bulk Approval</Modal.Title>
+                  <Modal.Title>{local.bulkLoanApplicationsApproval}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <Form.Group as={Row} controlId="approvalDate">
