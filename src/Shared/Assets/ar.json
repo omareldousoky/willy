@@ -741,5 +741,19 @@
     "requestNewreport":"طلب تقرير جديد",
     "fileQueuedSuccess":"تم طلب تقرير جديد بنجاح",
     "fileQueuedError":"لم يتم طلب تقرير جديد",
-    "customerAgeMoreThan67": "هذا العميل عمره يزيد عن 67 عاماً"
+    "customerAgeMoreThan67": "هذا العميل عمره يزيد عن 67 عاماً",
+    "manageFinances":"إدارة التمويل",
+    "principalRange":"حدود قيمة القرض",
+    "maxIndividualPrincipal":"الحد الاقصى للفرد",
+    "maxGroupIndividualPrincipal":"الحد الاقصى للفرد فالمجموعة",
+    "maxGroupPrincipal":"الحد الاقصى للمجموعة",
+    "principalMaxWillChange":"سيتم تغيير الحد الاقصى لقيم القروض",
+    "principalMaxChangeSuccess":"تم تغيير الحد الاقصى لقيم القروض بنجاح",
+    "principalMaxChangeError":"حدث خطأ في تغيير الحد الاقصى لقيم القروض",
+    "individualInGroupPrincipalMustBeLessThanGroupPrincipal":"يجب أن يكون الحد الاقصى للفرد أقل من الحد الاقصى للمجموعة",
+    "maxGlobalLimitReachedError":"لا يمكن أن تكون القيمة أكبر من الحد الاقصى المسموح بتساهيل",
+    "maxCustomerPrincipal":"قيمة القروض المسموحة للعميل",
+    "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
+    "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
+    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له"
 }
