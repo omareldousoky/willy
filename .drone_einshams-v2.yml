@@ -212,7 +212,6 @@ steps:
     event:
       - push
 
-
 depends_on:
   - unit-test
   - PushToEcr
