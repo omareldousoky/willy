@@ -10,6 +10,16 @@ import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
+
+function calculateAge(dateOfBirth: number) {
+  if (dateOfBirth) {
+    const diff = Date.now().valueOf() - dateOfBirth;
+    const age = new Date(diff);
+    return Math.abs(age.getUTCFullYear() - 1970);
+  }
+  return 0;
+}
+
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
   const [mapState, openCloseMap] = useState(false);
@@ -98,6 +108,9 @@ export const StepOneForm = (props: any) => {
               value={values.birthDate}
               disabled
             />
+            <Form.Control.Feedback type="invalid" style={calculateAge(new Date(values.birthDate).valueOf()) >= 67? { display: 'block' }: {}}>
+              {local.customerAgeMoreThan67}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col sm={3}>

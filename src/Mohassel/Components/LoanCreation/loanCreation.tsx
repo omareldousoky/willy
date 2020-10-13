@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { loanCreationValidation, loanIssuanceValidation } from './loanCreationValidation';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
-import { createLoan } from '../../Services/APIs/createIssueLoan/createLoan';
+import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation';
 import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -153,7 +153,7 @@ class LoanCreation extends Component<Props, State> {
     this.setState({ loading: true })
     if (this.state.type === "create") {
       const creationDate = new Date(values.loanCreationDate).valueOf()
-      const res = await createLoan(this.state.id, creationDate);
+      const res = await bulkCreation({ applicationIds: [this.state.id], creationDate: creationDate })
       if (res.status === "success") {
         this.setState({ loading: false });
         Swal.fire('', local.loanCreationSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
