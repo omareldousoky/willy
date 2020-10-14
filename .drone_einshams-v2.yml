@@ -36,6 +36,7 @@ steps:
 - name: build
   image: node:12.16.1-alpine
   commands:
+  - rm -rf /var/cache/apk/* && rm -rf /tmp/*
   - apk update
   - apk add --no-cache git
   - npm i
