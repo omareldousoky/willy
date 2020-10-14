@@ -669,7 +669,7 @@
     "loanWriteOffError":"حدث خطأ في إعدام ديون القرض",
     "loanDoubtSuccess":"تم الشك في القرض بنجاح",
     "loanDoubtError":"حدث خطأ في الشك في القرض",
-    "writtenOffLoan":"مشطوب",
+    "writtenOffLoan":"معدوم",
     "doubtedLoan":"مشكوك فيه",
     "mustBeGreaterThanZero":"يجب أن تكون القيمة أكبر من 0 ",
     "reports": "التقارير",
