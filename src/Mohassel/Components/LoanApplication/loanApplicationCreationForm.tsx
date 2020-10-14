@@ -16,7 +16,6 @@ export const LoanApplicationCreationForm = (props: any) => {
     const [options, setOptions] = useState<Array<any>>([]);
     const branchId = JSON.parse(getCookie('ltsbranch'))._id;
     const getOptions = async (inputValue: string) => {
-        console.log("here")
         const res = await searchLoanOfficerAndManager({ from: 0, size: 100, name: inputValue, branchId: branchId });
         if (res.status === "success") {
             setOptions(res.body.data);
