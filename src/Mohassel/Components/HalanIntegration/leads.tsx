@@ -87,6 +87,11 @@ class Leads extends Component<Props, State>{
         render: data => data.representativeName
       },
       {
+        title: local.phoneNumber,
+        key: "phoneNumber",
+        render: data => data.phoneNumber
+      },
+      {
         title: local.status,
         key: "status",
         render: data => data.status
