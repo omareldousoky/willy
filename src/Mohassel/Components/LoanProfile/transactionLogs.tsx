@@ -59,7 +59,7 @@ class TransactionLogs extends Component<Props, State> {
         this.state = {
             loading: false,
             data: [],
-            size: 5,
+            size: 10,
             from: 0,
             totalCount: 0,
             pageToken: ''

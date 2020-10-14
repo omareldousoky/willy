@@ -67,7 +67,7 @@ class Reports extends Component<{}, State> {
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
         { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo', 'branches'], permission: 'penalties' },
-        { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
+        { key: 'CrossedOutLoans', local: 'قائمة حركات إعدام ديون القروض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
         { key: 'DoubtfulLoans', local: 'قائمة حركة القروض المشكوك في سدادها', inputs: ['dateFromTo', 'branches'], permission: 'loanDoubts' },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'], permission: 'loansIssued' },
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'], permission: 'loansCreated' },

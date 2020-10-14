@@ -747,32 +747,6 @@ export const LoanProductCreationForm = (props: any) => {
                         <Form.Label className="data-check-label">{local.loanImpactPrincipal}</Form.Label>
                     </Form.Group>
                 </Col>
-                <Col>
-                    <Form.Group className="data-check-group row-nowrap" controlId='loanImpactPrincipal'>
-                        <Form.Check
-                            type='radio'
-                            name='loanImpactPrincipal'
-                            data-qc='loanImpactPrincipal'
-                            value={values.loanImpactPrincipal}
-                            checked={(!values.loanImpactPrincipal)}
-                            onBlur={handleBlur}
-                            onChange={(e: any) => {
-                                const val = e.currentTarget.value;
-                                if (val === false) {
-                                    setFieldValue('loanImpactPrincipal', true)
-                                } else {
-                                    setFieldValue('loanImpactPrincipal', false)
-                                }
-                            }}
-                            isInvalid={errors.loanImpactPrincipal && touched.loanImpactPrincipal}
-                            disabled = {edit}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.loanImpactPrincipal}
-                        </Form.Control.Feedback>
-                        <Form.Label className="data-check-label">{local.loanImpactPrincipal2}</Form.Label>
-                    </Form.Group>
-                </Col>
             </Row>
             {values.beneficiaryType !== 'group' &&
                 <>
