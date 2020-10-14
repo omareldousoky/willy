@@ -151,7 +151,7 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   dateSlice(date){
     if(!date){
-      return timeToDateyyymmdd(0)
+      return timeToDateyyymmdd(-1)
     }else{
       return timeToDateyyymmdd(date)
     }
