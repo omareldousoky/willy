@@ -165,7 +165,7 @@ const CrossedOutLoansList = (props) => {
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركات شطب القرض المنفذة</th>
+            <th colSpan={6}>قائمة حركات إعدام ديون القروض المنفذة</th>
             <th rowSpan={3} colSpan={3}>
               <img
                 width="100px"
