@@ -64,7 +64,7 @@ name: PushToEcr
 
 steps:
 - name: publish-login
-  image: oxmh/ecr
+  image: oxmh/ecr:latest
   environment:
     REACT_APP_GOOGLE_MAP_KEY:
       from_secret: REACT_APP_GOOGLE_MAP_KEY
