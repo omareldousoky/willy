@@ -155,7 +155,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <th className="border">القسط</th>
                             <th className="border">تاريخ الآستحقاق</th>
-                            <th className="border"> قيمة القسط</th>
+                            <th className="border"> اصل القسط</th>
                             <th className="border">الفائدة</th>
                             <th className="border">اجمالي القيمة</th>
                             <th className="border">قيمه مسدده</th>
@@ -208,7 +208,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <td></td>
                             <th className="border">الاجمالي</th>
-                            <th className="border">فائدة</th>
+                            <th className="border">مصاريف الترحيل</th>
                             <th className="border">الأصل</th>
                             <td></td>
                             <td></td>
