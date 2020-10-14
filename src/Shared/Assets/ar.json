@@ -741,5 +741,6 @@
     "requestNewreport":"طلب تقرير جديد",
     "fileQueuedSuccess":"تم طلب تقرير جديد بنجاح",
     "fileQueuedError":"لم يتم طلب تقرير جديد",
-    "customerAgeMoreThan67": "هذا العميل عمره يزيد عن 67 عاماً"
+    "customerAgeMoreThan67": "هذا العميل عمره يزيد عن 67 عاماً",
+    "downloadOldFiles": "تنزيل ملفات قديمة"
 }

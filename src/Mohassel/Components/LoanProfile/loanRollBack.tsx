@@ -117,7 +117,7 @@ class LoanRollBack extends Component<Props, State>{
                 </Card>
                 {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
                     <Formik
-                        initialValues={{ truthDate: timeToDateyyymmdd(0) }}
+                        initialValues={{ truthDate: timeToDateyyymmdd(-1) }}
                         onSubmit={this.rollbackConfirmation}
                         validationSchema={Yup.object().shape({ truthDate: Yup.date().required(local.required) })}
                         validateOnBlur
