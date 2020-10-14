@@ -9,7 +9,6 @@ import { dayToArabic } from '../../Services/utils';
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue,edit } = props;
-    console.log("values", values);
     return (
         <Form onSubmit={handleSubmit} className="data-form">
             <Row>
