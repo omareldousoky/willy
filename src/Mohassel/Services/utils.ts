@@ -12,7 +12,7 @@ export const timeToDate = (timeStampe: number): any => {
 export const timeToDateyyymmdd = (timeStamp: number): any => {
   if (timeStamp === -1) {
     return new Date().toISOString().slice(0, 10)
-  } else
+  } else if (timeStamp !== undefined)
     return new Date(timeStamp).toISOString().slice(0, 10)
 }
 
