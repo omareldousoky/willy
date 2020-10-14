@@ -208,7 +208,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                         <tr>
                             <td></td>
                             <th className="border">الاجمالي</th>
-                            <th className="border">مصاريف الترحيل</th>
+                            <th className="border">فائدة</th>
                             <th className="border">الأصل</th>
                             <td></td>
                             <td></td>
@@ -229,7 +229,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <td></td>
                             <th className="border">اقساط يجب سدادها</th>
                             <th className="border">الرصيد الأصل</th>
-                            <th className="border">{numbersToArabic(this.props.data.product.earlyPaymentFees)}%</th>
+                            <th className="border">{numbersToArabic(this.props.data.product.earlyPaymentFees)}%  (مصاريف الترحيل)</th>
                             <th className="border">إجمالي السداد المعجل</th>
                             <td></td>
                             <td></td>

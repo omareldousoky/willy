@@ -178,7 +178,10 @@ class SourceOfFund extends Component<Props, State> {
     if (res.status === "success") {
       this.props.setLoading(false);
       downloadTxtFile(res.body.loans, false, date)
-    } else this.props.setLoading(false);
+    } else {
+      this.props.setLoading(false);
+      Swal.fire("", local.noResults, "error")
+    }
   }
   render() {
     return (
