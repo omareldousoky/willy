@@ -64,7 +64,7 @@ name: PushToEcr
 
 steps:
 - name: publish-login
-  image: mohamedhamza/ecr:latest
+  image: oxmh/ecr
   environment:
     REACT_APP_GOOGLE_MAP_KEY:
       from_secret: REACT_APP_GOOGLE_MAP_KEY
@@ -96,7 +96,7 @@ steps:
     - push
 
 - name: publish-mohassel
-  image: mohamedhamza/ecr:latest
+  image: oxmh/ecr
   environment:
     REACT_APP_GOOGLE_MAP_KEY:
       from_secret: REACT_APP_GOOGLE_MAP_KEY
