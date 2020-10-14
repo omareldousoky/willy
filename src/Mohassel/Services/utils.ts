@@ -12,7 +12,11 @@ export const timeToDate = (timeStampe: number): any => {
 export const timeToDateyyymmdd = (timeStamp: number): any => {
   if (timeStamp === -1) {
     return new Date().toISOString().slice(0, 10)
+<<<<<<< HEAD
   } else if (timeStamp !== undefined && !isNaN(timeStamp))
+=======
+  } else if (timeStamp !== undefined)
+>>>>>>> einshams-v2
     return new Date(timeStamp).toISOString().slice(0, 10)
 }
 

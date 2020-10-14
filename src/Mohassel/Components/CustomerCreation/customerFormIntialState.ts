@@ -58,7 +58,13 @@ export const step3 = {
     partTimeEmployeeCount: '',
     comments: '',
     guarantorMaxLoans: 1,
-    maxLoansAllowed: 1
+    maxLoansAllowed: 1,
+    maxPrincipal: 0,
+    principals: {
+        maxIndividualPrincipal: 0,
+        maxGroupIndividualPrincipal: 0,
+        maxGroupPrincipal: 0,
+    }
 };
 
 const endOfDay: Date = new Date();
@@ -133,5 +139,12 @@ export const customerCreationValidationStepThreeEdit = Yup.object().shape({
     partTimeEmployeeCount: Yup.string().trim(),
     comments: Yup.string().trim().max(500, local.maxLength100),
     guarantorMaxLoans: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required),
-    maxLoansAllowed: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required)
+    maxLoansAllowed: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required),
+    maxPrincipal: Yup.number().min(0, local.mustBeGreaterThanZero).test("maxPrincipal", local.maxGlobalLimitReachedError,
+        function (this: any, value: any) {
+            const { principals } = this.parent
+            if (value <= principals.maxIndividualPrincipal) {
+                return true
+            } else return false
+        }).required(local.required),
 })

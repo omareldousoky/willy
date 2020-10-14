@@ -291,6 +291,10 @@ const CustomerProfile = (props: Props) => {
                 <td>{customerDetails?.guarantorMaxLoans ? customerDetails.guarantorMaxLoans : "-"}</td>
               </tr>
               <tr>
+                <td>{local.maxCustomerPrincipal}</td>
+                <td>{customerDetails?.maxPrincipal ? customerDetails.maxPrincipal : "-"}</td>
+              </tr>
+              <tr>
                 <td>{local.comments}</td>
                 <td>{customerDetails?.comments}</td>
               </tr>

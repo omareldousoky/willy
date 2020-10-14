@@ -68,6 +68,7 @@ export interface Customer {
     maxLoansAllowed?: number;
     allowGuarantorLoan?: boolean;
     guarantorMaxLoans?: number;
+    maxPrincipal?: number;
     _id?: string;
 }
 

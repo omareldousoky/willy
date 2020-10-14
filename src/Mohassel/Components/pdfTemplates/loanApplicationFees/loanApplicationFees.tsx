@@ -1,6 +1,6 @@
 import React from 'react';
 import './loanApplicationFees.scss';
-import { timeToArabicDate, timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate } from '../../../Services/utils';
 
 interface Props {
     result: {
@@ -29,8 +29,8 @@ interface Props {
     }[];
     total: number[];
     trx: number;
-    startDate: string;
-    endDate: string;
+    startDate: any;
+    endDate: any;
 }
 
 const statusLocalization = (status: string) => {
@@ -63,7 +63,7 @@ const LoanApplicationFees = (props: Props) => {
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>المركز الرئيسي</th>
-                        <th colSpan={6}>تاريخ الحركه من {timeToDateyyymmdd(new Date(props.startDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.endDate).valueOf())}</th>
+                        <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.startDate,false)} الي {timeToArabicDate(props.endDate,false)}</th>
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>{timeToArabicDate(0, true)}</th>

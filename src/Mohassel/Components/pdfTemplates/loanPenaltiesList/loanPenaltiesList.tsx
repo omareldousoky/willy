@@ -1,15 +1,15 @@
 import React from "react";
 import "./loanPenaltiesList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
-import { timeToDateyyymmdd } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../Services/utils";
 
 const LoanPenaltiesList = (props) => {
   const data = props.data;
   const days = data.days;
   const totalNumberOfTransactions = Number(data.totalNumberOfTransactions);
   const totalTransactionAmount = Number(data.totalTransactionAmount);
-  const startDate = timeToDateyyymmdd(props.data.startDate);
-  const endDate = timeToDateyyymmdd(props.data.endDate);
+  const startDate = timeToArabicDate(props.data.startDate,false);
+  const endDate = timeToArabicDate(props.data.endDate,false);
   const getStatus = (value) => {
     switch (value) {
       case "unpaid":
