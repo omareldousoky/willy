@@ -64,7 +64,7 @@ name: PushToEcr
 
 steps:
 - name: publish-login
-  image: plugins/ecr
+  image: mohamedhamza/ecr
   environment:
     REACT_APP_GOOGLE_MAP_KEY:
       from_secret: REACT_APP_GOOGLE_MAP_KEY
