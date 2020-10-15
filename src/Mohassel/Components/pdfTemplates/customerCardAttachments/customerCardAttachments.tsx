@@ -294,6 +294,11 @@ const CustomerCardAttachments = (props) => {
   } else {
     return (
       <>
+        <thead style={{ fontSize: "12px" }}>
+          <tr style={{ height: "10px" }}></tr>
+          <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+          <tr style={{ height: "10px" }}></tr>
+        </thead>
         {props.data.group.individualsInGroup.map((individualInGroup, index) => {
           return (
             <div className="customer-card-attachments-print" style={{ direction: "rtl" }} lang="ar" key={index}>
