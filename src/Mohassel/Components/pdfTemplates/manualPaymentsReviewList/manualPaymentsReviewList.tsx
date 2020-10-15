@@ -5,6 +5,11 @@ const ManualPaymentsReviewList = (props) => {
     return (
         <div className="manual-payments-review-list" dir="rtl" lang="ar">
             <table className="report-container">
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <thead className="report-header">
                     <tr className="headtitle">
                         <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر
@@ -91,7 +96,7 @@ const ManualPaymentsReviewList = (props) => {
                 </tbody>
 
 
-                <tr style={{height: "1em"}}></tr>
+                <tr style={{ height: "1em" }}></tr>
 
                 <tbody className="tbodyborder">
                     <tr>
@@ -110,7 +115,7 @@ const ManualPaymentsReviewList = (props) => {
 
                 </tbody>
 
-                <tr style={{height: "1em"}}></tr>
+                <tr style={{ height: "1em" }}></tr>
 
                 <tbody className="tbodyborder">
                     <tr>

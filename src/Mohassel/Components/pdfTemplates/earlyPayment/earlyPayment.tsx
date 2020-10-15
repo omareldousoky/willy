@@ -30,8 +30,8 @@ class EarlyPaymentPDF extends Component<Props, State> {
         const installmentsDue: Array<number> = []
         this.props.data.installmentsObject.installments.forEach(installment => {
             if ((new Date(installment.dateOfPayment).getMonth() === new Date().getMonth()
-                    && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear() && (getStatus(installment) === local.unpaid)) 
-                || (getStatus(installment) === local.late) 
+                && new Date(installment.dateOfPayment).getFullYear() === new Date().getFullYear() && (getStatus(installment) === local.unpaid))
+                || (getStatus(installment) === local.late)
                 || ((new Date(installment.dateOfPayment).getMonth() <= new Date().getMonth()
                     && new Date(installment.dateOfPayment).getFullYear() <= new Date().getFullYear()) && (getStatus(installment) === local.partiallyPaid))) {
                 latePrincipal = latePrincipal + (installment.principalInstallment - installment.principalPaid)
@@ -51,7 +51,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
         });
         this.setState({ totalDaysEarly, totalDaysLate, latePrincipal, installmentsDue })
     }
-    
+
     getSum(key: string) {
         let max = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
@@ -62,8 +62,8 @@ class EarlyPaymentPDF extends Component<Props, State> {
     getInstallmentsRemaining() {
         let total = 0;
         this.props.data.installmentsObject.installments.forEach(installment => {
-            if(this.state.installmentsDue.includes(installment.id)) {
-                total= total + installment.installmentResponse
+            if (this.state.installmentsDue.includes(installment.id)) {
+                total = total + installment.installmentResponse
             }
         });
         return total;
@@ -83,6 +83,11 @@ class EarlyPaymentPDF extends Component<Props, State> {
         return (
             <div className="early-payment-print" style={{ direction: "rtl" }} lang="ar">
                 <table>
+                    <thead style={{ fontSize: "12px" }}>
+                        <tr style={{ height: "10px" }}></tr>
+                        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                        <tr style={{ height: "10px" }}></tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <th style={{ width: "35%" }} className="title bold border">
@@ -169,7 +174,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             return (
                                 <tr key={index}>
                                     <td>{numbersToArabic(this.props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                    <td className={this.state.installmentsDue.includes(installment.id)? 'due': ''}>{timeToArabicDate(installment.dateOfPayment, false)}</td>
+                                    <td className={this.state.installmentsDue.includes(installment.id) ? 'due' : ''}>{timeToArabicDate(installment.dateOfPayment, false)}</td>
                                     <td>{numbersToArabic(installment.principalInstallment)}</td>
                                     <td>{numbersToArabic(installment.feesInstallment)}</td>
                                     <td>{numbersToArabic(installment.installmentResponse)}</td>
@@ -180,7 +185,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                     <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
                                         :
-                                        ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
+                                        ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))) : ''}</td>
                                     <td></td>
                                 </tr>
                             )
@@ -223,7 +228,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <td></td>
                             <td></td>
                             <th className="border">الخصم</th>
-                            <td className="border">{numbersToArabic(((this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid')) + this.props.earlyPaymentData.remainingPrincipal)-((this.props.earlyPaymentData.remainingPrincipal) + ((this.props.data.product.earlyPaymentFees * (this.props.earlyPaymentData.remainingPrincipal)) / 100)))}</td>
+                            <td className="border">{numbersToArabic(((this.props.data.installmentsObject.totalInstallments.feesSum - this.getSum('feesPaid')) + this.props.earlyPaymentData.remainingPrincipal) - ((this.props.earlyPaymentData.remainingPrincipal) + ((this.props.data.product.earlyPaymentFees * (this.props.earlyPaymentData.remainingPrincipal)) / 100)))}</td>
                         </tr>
                         <tr>
                             <td></td>

@@ -56,6 +56,11 @@ class CustomerCardPDF extends Component<Props, State> {
         return (
             <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
                 <table>
+                    <thead style={{ fontSize: "12px" }}>
+                        <tr style={{ height: "10px" }}></tr>
+                        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                        <tr style={{ height: "10px" }}></tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <td className="title bold titleborder titlebackground">
@@ -150,9 +155,9 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{getStatus(installment)}</td>
                                 <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                 <td>{installment.paidAt ?
-                                        numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
-                                        :
-                                        ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))): ''}</td>
+                                    numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
+                                    :
+                                    ((new Date().setHours(23, 59, 59, 59).valueOf() > new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) && installment.status !== "rescheduled") ? numbersToArabic(Math.round((new Date().setHours(23, 59, 59, 59).valueOf() - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24))) : ''}</td>
                                 <td></td>
                             </tr>)
                         })}

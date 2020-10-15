@@ -37,8 +37,8 @@ const actionsLocalization = (action: string) => {
 			return ('دفعه مقدم توكتَوك');
 		case 'tricycleStamp':
 			return ('دفعه مقدم تروسكل');
-	  case 'legalFees':
-	  return('مصاريف قضائية');		
+		case 'legalFees':
+			return ('مصاريف قضائية');
 
 		default:
 			return null;
@@ -49,8 +49,12 @@ const RandomPayment = (props: Props) => {
 	return (
 
 		<div dir="rtl" lang="ar" className="random-payment-print">
-
 			<table className="report-container">
+				<thead style={{ fontSize: "12px" }}>
+					<tr style={{ height: "10px" }}></tr>
+					<tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+					<tr style={{ height: "10px" }}></tr>
+				</thead>
 				<thead className="report-header">
 					<tr>
 						<th>
@@ -63,7 +67,7 @@ const RandomPayment = (props: Props) => {
 										</tr>
 										<tr className="head-title">
 											<th></th>
-											<th>الحركات الماليه من الفتره {timeToArabicDate(props.startDate,false)} الي {timeToArabicDate(props.endDate,false)}</th>
+											<th>الحركات الماليه من الفتره {timeToArabicDate(props.startDate, false)} الي {timeToArabicDate(props.endDate, false)}</th>
 										</tr>
 										<tr className="head-title">
 											<th></th>
