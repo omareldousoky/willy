@@ -3,7 +3,7 @@ import './customerCardAttachments.scss';
 import { timeToArabicDate, numbersToArabic, arabicGender } from '../../../Services/utils';
 import * as local from '../../../../Shared/Assets/ar.json';
 const CustomerCardAttachments = (props) => {
-  
+
   function getArabicNumberFromIndex(index: number) {
     switch (index) {
       case 1: return local.first;
@@ -18,6 +18,11 @@ const CustomerCardAttachments = (props) => {
   if (props.data.product.beneficiaryType === "individual") {
     return (
       <div className="customer-card-attachments-print" style={{ direction: "rtl" }} lang="ar">
+        <thead style={{ fontSize: "12px" }}>
+          <tr style={{ height: "10px" }}></tr>
+          <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+          <tr style={{ height: "10px" }}></tr>
+        </thead>
         <div className="head">
           <table>
             <tbody>
@@ -102,7 +107,7 @@ const CustomerCardAttachments = (props) => {
           </div>
           <div className="triple">
             <div>أرقام التليفون :
-          <div className="value">{props.data.customer.mobilePhoneNumber + '-' + props.data.customer.businessPhoneNumber  + '-' + props.data.customer.homePhoneNumber}</div>
+          <div className="value">{props.data.customer.mobilePhoneNumber + '-' + props.data.customer.businessPhoneNumber + '-' + props.data.customer.homePhoneNumber}</div>
             </div>
             <div>رقم آخر :
           <div className="value">---------------------</div>
@@ -223,7 +228,7 @@ const CustomerCardAttachments = (props) => {
               </div>
               <div className="triple">
                 <div>رقم تليفون الضامن {getArabicNumberFromIndex(index + 1)} :
-                     <div className="value">{guarantor.mobilePhoneNumber + '-' + guarantor.businessPhoneNumber  + '-' + guarantor.homePhoneNumber}</div>
+                     <div className="value">{guarantor.mobilePhoneNumber + '-' + guarantor.businessPhoneNumber + '-' + guarantor.homePhoneNumber}</div>
                 </div>
                 <div>رقم آخر :
                      <div className="value">---------------------</div>
@@ -376,7 +381,7 @@ const CustomerCardAttachments = (props) => {
                 </div>
                 <div className="triple">
                   <div>أرقام التليفون :
-          <div className="value">{individualInGroup.customer.mobilePhoneNumber + '-' + individualInGroup.customer.businessPhoneNumber  + '-' + individualInGroup.customer.homePhoneNumber}</div>
+          <div className="value">{individualInGroup.customer.mobilePhoneNumber + '-' + individualInGroup.customer.businessPhoneNumber + '-' + individualInGroup.customer.homePhoneNumber}</div>
                   </div>
                   <div>رقم آخر :
           <div className="value">---------------------</div>

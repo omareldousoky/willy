@@ -12,7 +12,12 @@ const FollowUpStatment = (props) => {
     }
     return (
         <div className="follow-up-statment" dir="rtl" lang="ar">
-            <table className="margin" >
+            <table className="margin">
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <tbody>
                     <tr>
                         <td>{props.branchDetails.name} - {props.branchDetails.governorate}</td>
@@ -57,7 +62,7 @@ const FollowUpStatment = (props) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                <td>{timeToArabicDate((installment.dateOfPayment - (5*24*60*60*1000)), false)}</td>
+                                <td>{timeToArabicDate((installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000)), false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
                             </tr>
