@@ -129,9 +129,10 @@ class Leads extends Component<Props, State>{
   async changeLeadState(phoneNumber: string, newState: string) {
     this.props.setLoading(true);
     const res = await changeLeadState(phoneNumber, newState);
-    if(res.status === "success") {
+    if (res.status === "success") {
       this.props.setLoading(false);
-      Swal.fire('', local.changeState, 'success').then(()=> this.getLeadsCustomers());
+      this.setState({ openActionsId: "" })
+      Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
       this.getLeadsCustomers();
     } else {
       this.props.setLoading(false);
@@ -175,7 +176,7 @@ class Leads extends Component<Props, State>{
                 data={this.props.data}
                 url="customer"
                 changeNumber={(key: string, number: number) => {
-                  this.setState({ [key]: number } as any, () => this.getLeadsCustomers());
+                  this.setState({ [key]: number, openActionsId: "" } as any, () => this.getLeadsCustomers());
                 }}
               />
             }
