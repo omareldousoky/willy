@@ -373,7 +373,7 @@ class Payment extends Component<Props, State>{
     } else {
       if (this.props.paymentType === "normal") {
       if (this.props.manualPaymentEditId === "") {
-        let obj = {
+        const obj = {
           id: this.props.applicationId,
           receiptNumber: values.receiptNumber,
           truthDate: new Date(values.truthDate).valueOf(), 
