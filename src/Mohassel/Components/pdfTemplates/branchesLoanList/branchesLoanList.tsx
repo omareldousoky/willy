@@ -1,7 +1,7 @@
 import React from 'react';
 import store from '../../../redux/store';
 import './branchesLoanList.scss';
-import { timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate } from '../../../Services/utils';
 
 const BranchesLoanList = (props) => {
     return (
@@ -16,7 +16,7 @@ const BranchesLoanList = (props) => {
                                         <tr className="headtitle">
                                             <th>شركة تساهيل للتمويل متناهي الصغر</th>
                                             <td>{store.getState().auth.name}</td>
-                                            <th>القروض والحالات للفتره من : {timeToDateyyymmdd(new Date(props.fromDate).valueOf())} الي : {timeToDateyyymmdd(new Date(props.toDate).valueOf())}</th>
+                                            <th>القروض والحالات للفتره من : {timeToArabicDate(props.fromDate,false)} الي : {timeToArabicDate(props.toDate,false)}</th>
                                             <th>1/1</th>
                                         </tr>
                                     </tbody>

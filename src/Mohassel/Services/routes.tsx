@@ -39,12 +39,14 @@ import CustomerProfile from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
-import Reports from '../Components/Reports/reports';
+import ReportsHome from '../Components/Reports/reportsHome';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 import Leads from '../Components/HalanIntegration/leads';
 import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer';
+import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
+
 
 const appRoutes = [
   {
@@ -244,7 +246,7 @@ const appRoutes = [
               {
                 path: "/edit-user",
                 label: local.editUser,
-                render: (props) => <Can I='getUser' a='user'><UserCreation  {...props} edit={true} /></Can>,
+                render: (props) => <Can I='updateUser' a='user'><UserCreation  {...props} edit={true} /></Can>,
               },
               {
                 path: "/user-details",
@@ -279,7 +281,19 @@ const appRoutes = [
 
         ]
 
-      }, {
+      },
+      {
+        path: "/manage-finances",
+        label: local.manageFinances,
+        render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /></Can>,
+        routes: [
+          { path: "/principleRange",
+          label: local.principalRange,
+          render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /> </Can>,
+          }
+        ]
+      }
+      , {
         path: "/loans",
         label: local.issuedLoans,
         render: (props) => <LoanList {...props} />,
@@ -315,7 +329,7 @@ const appRoutes = [
       {
         path: "/reports",
         label: local.reports,
-        render: () => <Reports/>
+        render: () => <ReportsHome/>
       },
       {
         path: "/move-customers",

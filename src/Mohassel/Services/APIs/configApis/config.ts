@@ -51,3 +51,23 @@ export const getSeperationReasons = async () => {
         return { status: "error", error: error.response.data }
     }
 }
+export const getMaxPrinciples = async () => {
+    const url = process.env.REACT_APP_BASE_URL + '/config/max-principal';
+    try {
+        const res = await axios.get(url);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
+export const setMaxPrinciples = async (obj) => {
+    const url = process.env.REACT_APP_BASE_URL + '/config/max-principal';
+    try {
+        const res = await axios.post(url,obj);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}

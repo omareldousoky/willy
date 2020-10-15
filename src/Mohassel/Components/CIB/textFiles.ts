@@ -86,7 +86,7 @@ const cusTxt = (textData) => {
             } else return (
                 `D|N|${customer.key}    |${getYearMonthDay(customer.created.at)}|${customer.customerName}||${getGender(customer.gender)}|SINGLE|EG|National ID|${customer.nationalId}|${getYearMonthDay(customer.birthDate)}|2|${customer.customerHomeAddress}|${getYearMonthDay(customer.created.at)}|990|Cairo|EG|||4100|516|2|199|097|M5|1||${getOrderedLine(customer)}|29|other|1|5|${getBusinessDevCode(customer.businessSector)}|${getBusinessDevCode(customer.businessActivity)}|${getBusinessDevCode(customer.businessSpeciality)}|${customer.key}|\n`
             )
-        }) + `T|${getYearMonthDay(0)}|${textData.length}|TDIS_CUS|\n`).split(',').join('').replace(/\n/g, "\r\n")
+        }) + `T|${getYearMonthDay(0)}|${getTotalNumbersOfCustomers(textData)}|TDIS_CUS|\n`).split(',').join('').replace(/\n/g, "\r\n")
 }
 
 const finText = (textData) => {

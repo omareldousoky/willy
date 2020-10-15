@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from "react-redux";
 import './randomPayment.scss';
-import { timeToArabicDate, timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate } from '../../../Services/utils';
 interface Props {
 	branches: {
 		rows: {
@@ -16,8 +16,8 @@ interface Props {
 		trxSum: string;
 		branchName: string;
 	}[];
-	startDate: string;
-	endDate: string;
+	startDate: any;
+	endDate: any;
 	name: string;
 };
 
@@ -26,17 +26,19 @@ const actionsLocalization = (action: string) => {
 		case 'reissuingFees':
 			return ('رسوم إعادة إصدار');
 		case 'clearanceFees':
-			return ('رسوم مخالصة');
+			return ('رسوم تحرير مخالصة');
 		case 'applicationFees':
 			return ('رسوم طلب قرض');
 		case 'collectionCommission':
-			return ('عموله تحصيل');
+			return ('عموله تحصيل قرض');
 		case 'penalty':
 			return ('غرامات');
 		case 'toktokStamp':
 			return ('دفعه مقدم توكتَوك');
 		case 'tricycleStamp':
 			return ('دفعه مقدم تروسكل');
+	  case 'legalFees':
+	  return('مصاريف قضائية');		
 
 		default:
 			return null;
@@ -61,7 +63,7 @@ const RandomPayment = (props: Props) => {
 										</tr>
 										<tr className="head-title">
 											<th></th>
-											<th>الحركات الماليه من الفتره {timeToDateyyymmdd(new Date(props.startDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.endDate).valueOf())}</th>
+											<th>الحركات الماليه من الفتره {timeToArabicDate(props.startDate,false)} الي {timeToArabicDate(props.endDate,false)}</th>
 										</tr>
 										<tr className="head-title">
 											<th></th>

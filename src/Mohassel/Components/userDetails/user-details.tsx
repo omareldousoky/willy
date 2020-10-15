@@ -121,7 +121,7 @@ class UserDetails extends Component<Props, State> {
     const id = this.props.history.location.state.details;
     return (
       <div className={"rowContainer"}>
-        <Can I="createUser" a="user">
+        <Can I="updateUser" a="user">
           <span className={"fa icon"}>
             <div
               className={"iconConatiner fa icon"}

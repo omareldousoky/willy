@@ -1,11 +1,11 @@
 import React from 'react';
 import './loanCreationList.scss';
 import { englishToArabic } from '../../../Services/statusLanguage';
-import { timeToArabicDate, getTimestamp, timeToDateyyymmdd } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
 
 const LoanCreationList = (props) => {
     const tempData = props.data.data;
-    const reportDate = (props.data.from === props.data.to) ? timeToDateyyymmdd(new Date(props.data.from).valueOf()): `من ${timeToDateyyymmdd(new Date(props.data.from).valueOf())} الي ${timeToDateyyymmdd(new Date(props.data.to).valueOf())}`;
+    const reportDate = (props.data.from === props.data.to) ? timeToArabicDate(props.data.from,false): `من ${timeToArabicDate(props.data.from,false)} الي ${timeToArabicDate(props.data.to,false)}`;
 
     return (
         <div className="loan-creation-list" lang="ar">
