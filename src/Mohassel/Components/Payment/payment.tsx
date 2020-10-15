@@ -373,7 +373,7 @@ class Payment extends Component<Props, State>{
     } else {
       if (this.props.paymentType === "normal") {
       if (this.props.manualPaymentEditId === "") {
-        const obj = {
+        let obj = {
           id: this.props.applicationId,
           receiptNumber: values.receiptNumber,
           truthDate: new Date(values.truthDate).valueOf(), 
@@ -382,6 +382,10 @@ class Payment extends Component<Props, State>{
           payerId: values.payerId,
           payerName: values.payerName,
           payerNationalId: values.payerNationalId.toString(),
+        }
+        if(values.installmentNumber !== -1) {
+          obj['installmentNumber'] = Number(values.installmentNumber);
+          obj['futurePayment'] = true;
         }
         const res = await manualPayment(obj);
         if (res.status === "success") {

@@ -15,6 +15,7 @@ import { manualPaymentValidation } from "./paymentValidation";
 import * as local from "../../../Shared/Assets/ar.json";
 import "./styles.scss";
 import { PendingActions } from "../../Services/interfaces";
+import { Installment } from "./payInstallment";
 
 interface SelectObject {
   label: string;
@@ -63,6 +64,7 @@ interface Application {
 }
 interface InstallmentsObject {
   totalInstallments: TotalInstallments;
+  installments: Array<Installment>;
 }
 interface TotalInstallments {
   installmentSum: number;
@@ -224,6 +226,38 @@ class ManualPayment extends Component<Props, State> {
                       <Form.Control.Feedback type="invalid">
                         {this.props.formikProps.errors.receiptNumber}
                       </Form.Control.Feedback>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Col} md={6} controlId="installmentNumber">
+                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column >{`${local.installmentToBePaid}`}</Form.Label>
+                    <Col>
+                      <Form.Control
+                        as="select"
+                        name="installmentNumber"
+                        data-qc="installmentNumber"
+                        onChange={event => {
+                          this.props.formikProps.setFieldValue("installmentNumber", event.currentTarget.value);
+                          this.props.formikProps.setFieldValue(
+                            "requiredAmount",
+                            this.props.application.installmentsObject.installments.find(
+                              installment =>
+                                installment.id ===
+                                Number(event.currentTarget.value)
+                            )?.installmentResponse
+                          );
+                        }}
+                      >
+                        <option value={-1}></option>
+                        {this.props.application.installmentsObject.installments.map(installment => {
+                          if (
+                            installment.status !== "partiallyPaid" &&
+                            installment.status !== "paid" &&
+                            installment.status !== "rescheduled" &&
+                            installment.dateOfPayment > Date.now()
+                          )
+                            return <option key={installment.id} value={installment.id}>{installment.id}</option>
+                        })}
+                      </Form.Control>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Col} md={6} controlId="whoPaid">
