@@ -4,16 +4,21 @@ import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, benef
 
 const CustomerStatusDetails = (props) => {
     function getCustomerStatus(status: string) {
-        switch(status) {
+        switch (status) {
             case 'no commitment': return 'ليس عليه إلتزامات';
-            case 'open loan': return'قرض مفتوح';
-            case 'open application': return'طلب مفتوح';
+            case 'open loan': return 'قرض مفتوح';
+            case 'open application': return 'طلب مفتوح';
             default: return '';
         }
     }
     return (
         <div className="customer-status-details" lang="ar">
             <table>
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <thead className="report-header">
                     <tr className="headtitle">
                         <th colSpan={3}>شركة تساهيل للتمويل متناهي الصغر</th>
@@ -165,50 +170,50 @@ const CustomerStatusDetails = (props) => {
                                             <tbody>
                                                 <tr>
                                                     {loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
-                                                        return(
-                                                        <td key={index}>
-                                                            <table>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th>الأسم</th>
-                                                                        <td>{guarantor.customerName}</td>
-                                                                        <th>النوع</th>
-                                                                        <td>{arabicGender(guarantor.gender)}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>الرقم القومي</th>
-                                                                        <td>{guarantor.nationalId}</td>
-                                                                        <th>تاريخ الأصدار</th>
-                                                                        <td>{guarantor.nationalIdIssueDate? timeToArabicDate(guarantor.nationalIdIssueDate, false): ''}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>تاريخ الميلاد</th>
-                                                                        <td>{guarantor.birthDate}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>العنوان</th>
-                                                                        <td>{guarantor.customerHomeAddress}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>التليفون</th>
-                                                                        <td>{guarantor.mobilePhoneNumber}</td>
-                                                                        <th>الرقم البريدي</th>
-                                                                        <td>{guarantor.homePostalCode}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th>البطاقه صادره من</th>
-                                                                        <td></td>
-                                                                        <th>الرقم المطبوع</th>
-                                                                        <td></td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </td>
+                                                        return (
+                                                            <td key={index}>
+                                                                <table>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th>الأسم</th>
+                                                                            <td>{guarantor.customerName}</td>
+                                                                            <th>النوع</th>
+                                                                            <td>{arabicGender(guarantor.gender)}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>الرقم القومي</th>
+                                                                            <td>{guarantor.nationalId}</td>
+                                                                            <th>تاريخ الأصدار</th>
+                                                                            <td>{guarantor.nationalIdIssueDate ? timeToArabicDate(guarantor.nationalIdIssueDate, false) : ''}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>تاريخ الميلاد</th>
+                                                                            <td>{guarantor.birthDate}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>العنوان</th>
+                                                                            <td>{guarantor.customerHomeAddress}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>التليفون</th>
+                                                                            <td>{guarantor.mobilePhoneNumber}</td>
+                                                                            <th>الرقم البريدي</th>
+                                                                            <td>{guarantor.homePostalCode}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>البطاقه صادره من</th>
+                                                                            <td></td>
+                                                                            <th>الرقم المطبوع</th>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
                                                         )
                                                     })}
                                                 </tr>

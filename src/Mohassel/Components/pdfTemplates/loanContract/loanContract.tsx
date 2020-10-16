@@ -44,12 +44,16 @@ const LoanContract = (props) => {
   return (
     <div className="loan-contract" dir="rtl" lang="ar">
       <table className="report-container">
+        <thead style={{ fontSize: "12px" }}>
+          <tr style={{ height: "10px" }}></tr>
+          <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+          <tr style={{ height: "10px" }}></tr>
+        </thead>
         <thead className="report-header">
           <tr>
             <th className="report-header-cell">
               <div className="header-info">
                 <table className="textcenter bottomborder">
-
                   <tbody>
                     <tr>
                       <td>
@@ -225,7 +229,7 @@ const LoanContract = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
+                  البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
@@ -582,7 +586,7 @@ const LoanContract = (props) => {
                       return (
                         <tr key={index}>
                           <td>
-                            <div>الضامن {getIndexOfGuarantorInAr(index-2)}/</div>
+                            <div>الضامن {getIndexOfGuarantorInAr(index - 2)}/</div>
                           </td>
                           <td style={{ width: "100px" }}></td>
                         </tr>

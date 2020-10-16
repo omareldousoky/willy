@@ -130,11 +130,11 @@ class LoanProductCreation extends Component<Props, State>{
         }
     }
     componentDidMount() {
-       this.getFormulas();
-       this.getGlobalPrinciple();
         if(this.props.edit) {
              this.getProduct();
         }
+       this.getFormulas();
+       this.getGlobalPrinciple();
     }
     cancel() {
         this.props.history.goBack();
