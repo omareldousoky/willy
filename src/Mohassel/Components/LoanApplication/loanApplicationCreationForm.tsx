@@ -609,7 +609,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         data-qc="enquirorId"
                                         value={props.loanOfficers.filter((lo) => lo._id === values.enquirorId)}
                                         enableReinitialize={false}
-                                        onChange={(event: any) => { console.log(event, values); setFieldValue('enquirorId', event._id) }}
+                                        onChange={(event: any) => { setFieldValue('enquirorId', event._id) }}
                                         type='text'
                                         getOptionLabel={(option) => option.name}
                                         getOptionValue={(option) => option._id}

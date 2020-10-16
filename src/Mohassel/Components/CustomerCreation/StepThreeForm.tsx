@@ -49,18 +49,13 @@ export const StepThreeForm = (props: any) => {
         } else setLoading(false);
     }
     useEffect(() => {
-        // if(!edit){
         const token = getCookie('token');
         const details = parseJwt(token)
-        console.log('here', values, edit)
         if (!edit && details.branch.length > 0) {
             getConfig(details.branch);
         } else if (props.branchId.length > 0) {
             getConfig(props.branchId);
         }
-        // } else {
-        //     getConfig(values.branch);
-        // }
     }, [])
     return (
         <Form onSubmit={handleSubmit}>
