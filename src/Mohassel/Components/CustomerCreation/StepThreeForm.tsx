@@ -69,23 +69,20 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={12}>
                     <Form.Group controlId="geographicalDistribution">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control as="select"
+                            <Form.Control as="select"
                                 type="select"
                                 name="geographicalDistribution"
                                 data-qc="geographicalDistribution"
                                 value={values.geographicalDistribution}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                             >
                                 <option value="" disabled></option>
                                 {geoDivisions.map((geoDivision, index) => {
                                     return <option key={index} value={geoDivision.name} >{geoDivision.name}</option>
                                 })}
-                            </Form.Control>}
-                        </Can>
+                            </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {errors.geographicalDistribution}
                         </Form.Control.Feedback>
@@ -218,44 +215,66 @@ export const StepThreeForm = (props: any) => {
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
                     props.edit && allowed &&
-                    <Row>
-                        <Col sm={6}>
-                            <Form.Group controlId="maxLoansAllowed">
-                                <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="maxLoansAllowed"
-                                    data-qc=""
-                                    value={values.maxLoansAllowed}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
-                                    isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.maxLoansAllowed}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                        <Col sm={6}>
-                            <Form.Group controlId="guarantorMaxLoans">
-                                <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="guarantorMaxLoans"
-                                    data-qc=""
-                                    value={values.guarantorMaxLoans}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
-                                    isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.guarantorMaxLoans}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                    </Row>
+                    <>
+                        <Row>
+                            <Col sm={6}>
+                                <Form.Group controlId="maxLoansAllowed">
+                                    <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="maxLoansAllowed"
+                                        data-qc=""
+                                        value={values.maxLoansAllowed}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                        isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.maxLoansAllowed}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col sm={6}>
+                                <Form.Group controlId="guarantorMaxLoans">
+                                    <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="guarantorMaxLoans"
+                                        data-qc=""
+                                        value={values.guarantorMaxLoans}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                        isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.guarantorMaxLoans}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={6}>
+                                <Form.Group controlId="maxPrincipal">
+                                    <Form.Label className="customer-form-label">{`${local.maxCustomerPrincipal}`}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="maxPrincipal"
+                                        data-qc="maxCustomerPrincipal"
+                                        value={values.maxPrincipal}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        // disabled={(!allowed && )}
+                                        isInvalid={errors.maxPrincipal && touched.maxPrincipal}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.maxPrincipal}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </>
                 }
             </Can>
             <Row>

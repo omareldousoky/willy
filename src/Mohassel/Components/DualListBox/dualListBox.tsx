@@ -56,11 +56,16 @@ class DualBox extends Component<Props, State> {
     static getDerivedStateFromProps(props, state) {
         if (props.filterKey !== state.filterKey || props.options !== state.options) {
             const selectedIds = props.selected.map(item => item._id);
-
             return {
                 filterKey: props.filterKey,
-                options: (selectedIds.length > 0) ? props.options.filter(item => !selectedIds.includes(item._id)) : props.options,
+                options: props.options.filter(item => !selectedIds.includes(item._id)),
                 selectedOptions: props.selected
+            }
+        }
+        else {
+            return {
+                filterKey: props.filterKey,
+                options: props.options
             }
         }
         return null;

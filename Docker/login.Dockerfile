@@ -1,5 +1,5 @@
 FROM node:12.16.1-alpine as builder
-RUN apk add git
+RUN apk add --no-cache git
 COPY package*.json  ./
 RUN npm i
 COPY . .
