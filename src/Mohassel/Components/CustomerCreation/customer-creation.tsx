@@ -102,6 +102,7 @@ interface State {
   };
   step3: {
     geographicalDistribution: string;
+    geoAreaId: string;
     representative: any;
     newRepresentative: any;
     representativeName: string;
@@ -222,6 +223,7 @@ class CustomerCreation extends Component<Props, State>{
       };
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,
+        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
         representative: res.body.representative,
         representativeName: res.body.representativeName,
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),

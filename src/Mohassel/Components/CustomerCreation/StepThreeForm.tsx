@@ -67,20 +67,20 @@ export const StepThreeForm = (props: any) => {
             <Loader open={loading} type="fullscreen" />
             <Row>
                 <Col sm={12}>
-                    <Form.Group controlId="geographicalDistribution">
+                    <Form.Group controlId="geoAreaId">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
                             <Form.Control as="select"
                                 type="select"
-                                name="geographicalDistribution"
-                                data-qc="geographicalDistribution"
-                                value={values.geographicalDistribution}
+                                name="geoAreaId"
+                                data-qc="geoAreaId"
+                                value={values.geoAreaId}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
+                                isInvalid={errors.geoAreaId && touched.geoAreaId}
                             >
                                 <option value="" disabled></option>
                                 {geoDivisions.map((geoDivision: any, index) => {
-                                    return <option key={index} value={geoDivision.name} >{geoDivision.name}</option>
+                                    return <option key={index} value={geoDivision._id} >{geoDivision.name}</option>
                                 })}
                             </Form.Control>
                         <Form.Control.Feedback type="invalid">
