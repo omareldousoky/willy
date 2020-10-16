@@ -79,7 +79,7 @@ export const StepThreeForm = (props: any) => {
                                 isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
                             >
                                 <option value="" disabled></option>
-                                {geoDivisions.map((geoDivision, index) => {
+                                {geoDivisions.map((geoDivision: any, index) => {
                                     return <option key={index} value={geoDivision.name} >{geoDivision.name}</option>
                                 })}
                             </Form.Control>
