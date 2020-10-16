@@ -54,7 +54,7 @@ export const step3 = {
     representative: '',
     newRepresentative: '',
     representativeName: '',
-    applicationDate: timeToDateyyymmdd(0),
+    applicationDate: timeToDateyyymmdd(-1),
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
     comments: '',

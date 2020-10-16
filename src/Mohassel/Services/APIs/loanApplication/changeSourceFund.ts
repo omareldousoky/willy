@@ -4,6 +4,7 @@ interface ChangeFundObj {
     fundSource: string;
     applicationIds: Array<string>;
     returnDetails: boolean;
+    approvalDate: number;
 }
 export const changeSourceFund = async (data: ChangeFundObj) => {
     const url = process.env.REACT_APP_BASE_URL + `/application/fund`;

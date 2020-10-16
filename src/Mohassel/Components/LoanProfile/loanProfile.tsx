@@ -218,7 +218,7 @@ class LoanProfile extends Component<Props, State>{
             tabsToRender.push(reschedulingTab)
             tabsToRender.push(paymentTab)
         }
-        if (application.body.status === "issued" || application.body.status === "paid") {
+        if (application.body.status === "issued" || application.body.status === "paid" || application.body.status === "pending") {
             tabsToRender.push(financialTransactionsTab)
             tabsToRender.push(penaltiesTab)
         }

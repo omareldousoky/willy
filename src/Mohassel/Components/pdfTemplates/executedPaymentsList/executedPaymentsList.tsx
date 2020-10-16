@@ -5,6 +5,11 @@ const ExecutedPaymentsList = (props) => {
     return (
         <div className="executed-payments-list" style={{ direction: "rtl" }} lang="ar">
             <table className="title">
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <tbody>
                     <tr>
                         <th>شركة تساهيل للتمويل متناهي الصغر</th>
