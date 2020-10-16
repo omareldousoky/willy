@@ -12,7 +12,6 @@ const DocumentsUploadedPercentage = (props) => {
     const splitNUmber = 50;
     let start = 0;
     while (start < bigArr.length) {
-        console.log("slice")
         parentArr.push(bigArr.slice(start, start + splitNUmber));
         start = start + 50;
     }
