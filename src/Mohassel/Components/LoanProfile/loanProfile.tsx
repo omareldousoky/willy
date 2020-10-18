@@ -72,7 +72,6 @@ interface State {
     penalty: number;
     randomPendingActions: Array<any>;
     geoAreas: Array<any>;
-    geoArea: any;
 }
 
 interface Props {
@@ -99,8 +98,7 @@ class LoanProfile extends Component<Props, State>{
             iscores: [],
             penalty: 0,
             randomPendingActions: [],
-            geoAreas: [],
-            geoArea: {}
+            geoAreas: []
         };
     }
     componentDidMount() {
@@ -248,7 +246,6 @@ class LoanProfile extends Component<Props, State>{
         } else this.setState({ loading: false })
     }
     getCustomerGeoArea(geoArea) {
-        console.log(this.state.geoAreas, geoArea)
         const geoAreaObject = this.state.geoAreas.filter(area => area._id === geoArea);
         if (geoAreaObject.length === 1) {
             return geoAreaObject[0]
