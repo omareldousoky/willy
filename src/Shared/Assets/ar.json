@@ -610,7 +610,7 @@
     "enabledProduct": "هذا النوع مسموح باستخدامه",
     "viceFieldManagerAndDate": "يجب ادخال اسم نائب مدير  ميدانى و تاريخ الزيارة عند مراجعة طلب القرض",
     "reviewerChiefAndDate": "يجب ادخال اسم مراجع  -  رئيس مجموعة مندوبيين الفرع و تاريخ الزيارة عند اصدار القرض",
-    "branchManagerAndDate": "يجب ادخال اسم  مدير  فرع و تاريخ الزيارة عند اصدار القرض",
+    "branchManagerAndDate": "يجب ادخال اسم  مدير  فرع و تاريخ الزيارة عند ربط طلب القرض",
     "push": "الترحيل",
     "priority": "اولوية التطبيق",
     "pushPaymentPriority1": "يتم تطبيق عدد ايام ترحيل الأقساط",
@@ -756,5 +756,6 @@
     "maxCustomerPrincipal":"قيمة القروض المسموحة للعميل",
     "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
     "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
-    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له"
+    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
+    "branchManagerVisitation":"تاريخ زيارة مدير الفرع"
 }
