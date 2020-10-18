@@ -15,6 +15,7 @@ import { guaranteed } from "../../Services/APIs/Reports";
 import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 import ability from '../../config/ability';
+import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -67,6 +68,7 @@ const CustomerProfile = (props: Props) => {
   const [print, _changePrint] = useState<any>();
   const [dataToBePrinted, changeDataToBePrinted] = useState<any>();
   const [guaranteeedLoansData, changeGuaranteeedLoansData] = useState<GuaranteedLoans>()
+  const [geoArea, setgeoArea] = useState<string>();
   const getGuaranteeedLoans = async (customer) => {
     changeLoading(true);
     const res = await guaranteed(customer?.key)
@@ -77,13 +79,25 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     }
   }
+  const getGeoArea = async (geoArea) => {
+    changeLoading(true);
+    const resGeo = await getGeoAreasByBranch('');
+    if (resGeo.status === "success") {
+      changeLoading(false);
+      const geoAreaObject = resGeo.body.data.filter(area => area._id === geoArea);
+      if (geoAreaObject.length === 1) {
+        setgeoArea(geoAreaObject[0].name)
+      }
+    } else changeLoading(false);
+  }
   async function getCustomerDetails() {
     changeLoading(true);
     const res = await getCustomerByID(props.location.state.id)
     if (res.status === 'success') {
       await changeCustomerDetails(res.body);
       if (ability.can('viewIscore', 'customer')) await getCachediScores(res.body.nationalId);
-      await getGuaranteeedLoans(res.body); 
+      await getGuaranteeedLoans(res.body);
+      await getGeoArea(res.body.geoAreaId);
     } else {
       changeLoading(false);
     }
@@ -260,7 +274,7 @@ const CustomerProfile = (props: Props) => {
             <tbody>
               <tr>
                 <td>{local.geographicalDistribution}</td>
-                <td>{customerDetails?.geographicalDistribution}</td>
+                <td>{geoArea}</td>
               </tr>
               <tr>
                 <td>{local.representative}</td>

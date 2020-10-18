@@ -10,6 +10,7 @@ interface Props {
     iScores?: any;
     getIscore?: Function;
     status?: string;
+    getGeoArea: Function;
 }
 
 export const GuarantorView = (props: Props) => {
@@ -79,10 +80,11 @@ export const GuarantorTableView = (props: Props) => {
                 <tbody>
                     {props.guarantors.length > 0 && props.guarantors.map((guar, i) =>{
                         const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
+                        const area = props.getGeoArea(guar.geoAreaId);
                         return (<tr key={i}>
                             <td>{guar.key}</td>
                             <td>{guar.customerName}</td>
-                            <td>{guar.geographicalDistribution}</td>
+                            <td  style={{ color: (!area.active && area.name !== '-')? 'red' : 'black'}}>{area.name}</td>
                             <td>{guar.customerHomeAddress}</td>
                             <td>{guar.mobilePhoneNumber}</td>
                             {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.iscore}</td>}

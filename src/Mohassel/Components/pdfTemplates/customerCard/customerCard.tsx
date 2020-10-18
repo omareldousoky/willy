@@ -8,6 +8,7 @@ interface Props {
     data: any;
     branchDetails: any;
     penalty: number;
+    getGeoArea: Function;
 }
 interface State {
     totalDaysLate: number;
@@ -198,11 +199,12 @@ class CustomerCardPDF extends Component<Props, State> {
                         }
                         {this.props.data.product.beneficiaryType === "individual" && this.props.data.guarantors.length > 0 ?
                             this.props.data.guarantors.map((guarantor, index) => {
+                                const area = this.props.getGeoArea(guarantor.geoAreaId);
                                 return (
                                     <tr key={index}>
                                         <td>{numbersToArabic(guarantor.key)}</td>
                                         <td>{guarantor.customerName}</td>
-                                        <td>{guarantor.geographicalDistribution}</td>
+                                        <td style={{ color: (!area.active && area.name !== '-')? 'red' : 'black'}}>{area.name}</td>
                                         <td>{guarantor.customerHomeAddress}</td>
                                         <td>{numbersToArabic(guarantor.mobilePhoneNumber) + '-' + numbersToArabic(guarantor.businessPhoneNumber) + '-' + numbersToArabic(guarantor.homePhoneNumber)}</td>
                                     </tr>
@@ -210,11 +212,12 @@ class CustomerCardPDF extends Component<Props, State> {
                             })
                             : this.props.data.product.beneficiaryType === "group" ?
                                 this.props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                                const area = this.props.getGeoArea(individualInGroup.customer.geoAreaId);
                                     return (
                                         <tr key={index}>
                                             <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                             <td>{individualInGroup.customer.customerName}</td>
-                                            <td>{individualInGroup.customer.geographicalDistribution}</td>
+                                            <td  style={{ color: (!area.active && area.name !== '-')? 'red' : 'black'}}>{area.name}</td>
                                             <td>{individualInGroup.customer.customerHomeAddress}</td>
                                             <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
                                         </tr>

@@ -49,6 +49,7 @@ export interface Customer {
     faxNumber?: string;
     gender?: string;
     geographicalDistribution?: string;
+    geoAreaId?: string;
     governorate?: string;
     hasLoan?: boolean;
     homePhoneNumber?: string;

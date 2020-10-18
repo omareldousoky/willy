@@ -79,7 +79,7 @@ export const StepThreeForm = (props: any) => {
                                 })}
                             </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                            {errors.geographicalDistribution}
+                            {errors.geoAreaId}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

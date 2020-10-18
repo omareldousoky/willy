@@ -132,7 +132,8 @@ export const customerCreationValidationStepThree = Yup.object().shape({
 })
 
 export const customerCreationValidationStepThreeEdit = Yup.object().shape({
-    geographicalDistribution: Yup.string().trim().required(local.required),
+    geographicalDistribution: Yup.string().trim(),
+    geoAreaId: Yup.string().trim().required(local.required),
     representative: Yup.string().trim().required(local.required),
     applicationDate: Yup.string().test(
         "Max Date", local.dateShouldBeBeforeToday,

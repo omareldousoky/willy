@@ -14,6 +14,7 @@ import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate
 
 interface Props {
     application: any;
+    getGeoArea?: Function;
 }
 interface LoanDetailsProps {
     application: any;
@@ -397,7 +398,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                     </Form.Group>
                 </Form.Row>
                 {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
-                    <GuarantorTableView guarantors={props.application.guarantors} />
+                    <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
                 </Form.Row>}
             </Form>
         </div>
