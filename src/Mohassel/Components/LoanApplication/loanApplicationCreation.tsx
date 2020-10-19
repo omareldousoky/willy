@@ -332,7 +332,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
             // formData.individualDetails = application.body.group.individualsInGroups
-            formData.managerVisitDate = application.body.managerVisitDate;
+            formData.managerVisitDate = this.getDateString(application.body.managerVisitDate);
             formData.branchManagerId = application.body.branchManagerId;
             this.setState({
                 selectedCustomer: application.body.customer,
@@ -614,6 +614,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.allowApplicationFeeAdjustment = selectedProductDetails.allowApplicationFeeAdjustment;
         defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType;
         defaultApplication.branchManagerAndDate = selectedProductDetails.branchManagerAndDate;
+        defaultApplication.branchManagerId = '';
+        defaultApplication.managerVisitDate = '';
         if (selectedProductDetails.beneficiaryType === 'group' && this.state.step === 1) { this.searchCustomers() }
         this.setState({ application: defaultApplication });
     }

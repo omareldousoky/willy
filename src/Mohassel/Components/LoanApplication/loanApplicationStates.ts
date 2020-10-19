@@ -176,11 +176,13 @@ export const LoanApplicationValidation = Yup.object().shape({
     branchManagerAndDate:Yup.boolean(),
     branchManagerId: Yup.string().when('branchManagerAndDate', {
         is: true,
-        then: Yup.string().required(local.required)
+        then: Yup.string().required(local.required),
+        otherwise: Yup.string()
     }),
     managerVisitDate: Yup.string().when('branchManagerAndDate', {
         is: true,
-        then: Yup.string().required(local.required)
+        then: Yup.string().required(local.required),
+        otherwise: Yup.string()
     })
 });
 export const ReviewLoanValidation = Yup.object().shape({
