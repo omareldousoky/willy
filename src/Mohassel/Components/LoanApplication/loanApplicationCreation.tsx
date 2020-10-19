@@ -332,7 +332,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
             // formData.individualDetails = application.body.group.individualsInGroups
-            formData.managerVisitDate = application.body.managerVisitDate === 0 ? '' : this.getDateString(application.body.managerVisitDate);
+            formData.managerVisitDate = ( !application.body.managerVisitDate || application.body.managerVisitDate === 0) ? '' : this.getDateString(application.body.managerVisitDate);
             formData.branchManagerId = application.body.branchManagerId;
             this.setState({
                 selectedCustomer: application.body.customer,
