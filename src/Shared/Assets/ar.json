@@ -756,5 +756,11 @@
     "maxCustomerPrincipal":"قيمة القروض المسموحة للعميل",
     "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
     "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
-    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له"
+    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
+    "blockCustomer": "حظر العميل",
+    "unblockCustomer": "فك حظر العميل",
+    "blockReason": "سبب الحظر",
+    "unblockReason":"سبب فك الحظر",
+    "customerWillBeBlocked": "سيتم حظر العميل",
+    "customerWillBeUnblocked": "سيتم فك حظر العميل"
 }
