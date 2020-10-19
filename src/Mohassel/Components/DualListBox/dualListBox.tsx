@@ -67,7 +67,7 @@ class DualBox extends Component<Props, State> {
             else {
                 return {
                     filterKey: props.filterKey,
-                    options: props.options,
+                    options: props.options
                 }
             }
 

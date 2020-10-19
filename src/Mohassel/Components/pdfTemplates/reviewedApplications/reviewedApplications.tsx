@@ -4,7 +4,7 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { ageCalculate, timeToArabicDate } from './../../../Services/utils';
 import store from '../../../redux/store';
 const ReviewedApplicationsPDF = (props) => {
-    function getTotal(){
+    function getTotal() {
         let sum = 0;
         props.data.forEach(application => sum += (application.principal ? application.principal : 0))
         return sum
@@ -12,6 +12,11 @@ const ReviewedApplicationsPDF = (props) => {
     return (
         <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
             <table>
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <tbody>
                     <tr>
                         <td className="title titleborder titlebackground">
@@ -21,7 +26,7 @@ const ReviewedApplicationsPDF = (props) => {
                         <td className="title">{props.branchDetails.name}</td>
                     </tr>
                     <tr>
-                        <td>{timeToArabicDate(0,true)}</td>
+                        <td>{timeToArabicDate(0, true)}</td>
                         <td></td>
                         <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                     </tr>
@@ -33,9 +38,9 @@ const ReviewedApplicationsPDF = (props) => {
             </table>
 
             <div className="title titleborder titlebackground titlestyle">
-                قرارات الموافقه على صرف التمويلات 
+                قرارات الموافقه على صرف التمويلات
                 {/* - فردى - لدفعة ( &emsp; / &emsp; / &emsp; ) */}
-	</div>
+            </div>
             <table className="tablestyle" style={{ border: "1px black solid" }}>
                 <tbody>
                     <tr>

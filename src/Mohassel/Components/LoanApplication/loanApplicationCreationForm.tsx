@@ -7,10 +7,24 @@ import * as local from '../../../Shared/Assets/ar.json'
 import InputGroup from 'react-bootstrap/InputGroup';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
 import InfoBox from '../userInfoBox';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { getCookie } from '../../Services/getCookie';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
+    const [options, setOptions] = useState<Array<any>>([]);
+    const branchId = JSON.parse(getCookie('ltsbranch'))._id;
+    const getOptions = async (inputValue: string) => {
+        const res = await searchLoanOfficerAndManager({ from: 0, size: 100, name: inputValue, branchId: branchId });
+        if (res.status === "success") {
+            setOptions(res.body.data);
+            return res.body.data;
+        } else {
+            setOptions([]);
+            return [];
+        }
+    }
     return (
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
@@ -604,16 +618,16 @@ export const LoanApplicationCreationForm = (props: any) => {
                             <Col sm={6}>
                                 <Form.Group controlId="enquirorId">
                                     <Form.Label column sm={6}>{local.enquiror}</Form.Label>
-                                    <Select
+                                    <AsyncSelect
                                         name="enquirorId"
                                         data-qc="enquirorId"
-                                        value={props.loanOfficers.filter((lo) => lo._id === values.enquirorId)}
-                                        enableReinitialize={false}
-                                        onChange={(event: any) => { console.log(event, values); setFieldValue('enquirorId', event._id) }}
+                                        value={options.filter((lo) => lo._id === values.enquirorId)}
+                                        onChange={(event: any) => { setFieldValue('enquirorId', event._id) }}
                                         type='text'
                                         getOptionLabel={(option) => option.name}
                                         getOptionValue={(option) => option._id}
-                                        options={props.loanOfficers}
+                                        loadOptions={getOptions}
+                                        cacheOptions defaultOptions
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.enquirorId}

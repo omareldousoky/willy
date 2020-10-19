@@ -36,7 +36,8 @@ steps:
 - name: build
   image: node:12.16.1-alpine
   commands:
-  - apk add git
+  - echo -e "https://nl.alpinelinux.org/alpine/v3.5/main\nhttps://nl.alpinelinux.org/alpine/v3.5/community" > /etc/apk/repositories
+  - apk add --no-cache git
   - npm i
   - npm run build
 
@@ -211,7 +212,6 @@ steps:
     - einshams-v2
     event:
       - push
-
 
 depends_on:
   - unit-test
