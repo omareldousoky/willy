@@ -198,6 +198,7 @@ class Payment extends Component<Props, State>{
           payerName: pendingAction.transactions[0].payerName,
           payerId: pendingAction.transactions[0].payerId,
           receiptNumber: pendingAction.receiptNumber,
+          installmentNumber: pendingAction.transactions[0].installmentSerial,
           truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
         })
       } else {
@@ -208,8 +209,9 @@ class Payment extends Component<Props, State>{
           payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
           payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
           payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
-          payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
+          payerId: this.props.pendingActions.payerId ? this.props.pendingActions.payerId: '',
           receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
+          installmentNumber: this.props.pendingActions.transactions ? this.props.pendingActions.transactions[0].installmentSerial : -1,
           truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(-1),
         })
       }

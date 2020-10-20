@@ -235,6 +235,7 @@ class ManualPayment extends Component<Props, State> {
                         as="select"
                         name="installmentNumber"
                         data-qc="installmentNumber"
+                        value={this.props.formikProps.values.installmentNumber}
                         onChange={event => {
                           this.props.formikProps.setFieldValue("installmentNumber", event.currentTarget.value);
                           this.props.formikProps.setFieldValue(
