@@ -11,6 +11,11 @@ const EarlyPaymentReceipt = (props) => {
     }
     return (
         <div className="early-payment-receipt" dir="rtl" lang="ar">
+            <thead style={{ fontSize: "12px" }}>
+                <tr style={{ height: "10px" }}></tr>
+                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{ height: "10px" }}></tr>
+            </thead>
             <table className="title">
                 <tbody>
                     <tr>
@@ -51,8 +56,8 @@ const EarlyPaymentReceipt = (props) => {
                     </tr>
                     <tr>
                         <th className="frame"> السداد الحالي </th>
-                        <td className="frame" style={{direction: 'ltr'}}>{numbersToArabic(props.receiptData[0].paidNow)}
-					<div>{new Tafgeet(props.receiptData[0].paidNow, 'EGP').parse()}</div>
+                        <td className="frame" style={{ direction: 'ltr' }}>{numbersToArabic(props.receiptData[0].paidNow)}
+                            <div>{new Tafgeet(props.receiptData[0].paidNow, 'EGP').parse()}</div>
                         </td>
                     </tr>
                     <tr style={{ height: "45px" }}>

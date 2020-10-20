@@ -1,7 +1,7 @@
 import React from "react";
 import "./crossedOutLoansList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
-import { timeToDateyyymmdd } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../Services/utils";
 
 const CrossedOutLoansList = (props) => {
   const data = props.data.data;
@@ -10,8 +10,8 @@ const CrossedOutLoansList = (props) => {
   const totalTransactionAmount = Number(data.transactionAmount);
   const totalTransactionInterest = Number(data.transactionInterest);
   const totalTransactionPrincipal = Number(data.transactionPrincipal);
-  const startDate = timeToDateyyymmdd(props.data.startDate);
-  const endDate = timeToDateyyymmdd(props.data.endDate);
+  const startDate = timeToArabicDate(props.data.startDate, false);
+  const endDate = timeToArabicDate(props.data.endDate, false);
 
   const getStatus = (value) => {
     switch (value) {
@@ -41,12 +41,16 @@ const CrossedOutLoansList = (props) => {
   const DayComponent = ({ day }) => {
     return (
       <>
+        <thead style={{ fontSize: "12px" }}>
+          <tr style={{ height: "10px" }}></tr>
+          <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+          <tr style={{ height: "10px" }}></tr>
+        </thead>
         {day.branches.map((branch, idx) => (
           <BranchComponent key={idx} branch={branch} />
         ))}
 
         <tr style={{ height: "1em" }}></tr>
-
         <tbody className="tbodyborder">
           <tr>
             <td></td>
@@ -126,7 +130,7 @@ const CrossedOutLoansList = (props) => {
           <td className="frame" colSpan={1}>
             {branch.truthDate.substring(0, 10)}
           </td>
-        <td className="frame">{branch.numTrx}</td>
+          <td className="frame">{branch.numTrx}</td>
           <td></td>
           <td className="frame">إجمالي المبلغ</td>
           <td className="frame">{branch.transactionPrincipal}</td>
@@ -165,7 +169,7 @@ const CrossedOutLoansList = (props) => {
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر</th>
-            <th colSpan={6}>قائمة حركات شطب القرض المنفذة</th>
+            <th colSpan={6}>قائمة حركات إعدام ديون القروض المنفذة</th>
             <th rowSpan={3} colSpan={3}>
               <img
                 width="100px"

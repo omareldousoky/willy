@@ -147,8 +147,8 @@ class Payment extends Component<Props, State>{
       receiptData: {},
       payAmount: 0,
       receiptNumber: '',
-      truthDate: timeToDateyyymmdd(0),
-      dueDate: timeToDateyyymmdd(0),
+      truthDate: timeToDateyyymmdd(-1),
+      dueDate: timeToDateyyymmdd(-1),
       loading: false,
       loadingFullScreen: false,
       remainingPrincipal: 0,
@@ -210,7 +210,7 @@ class Payment extends Component<Props, State>{
           payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
           payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
           receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-          truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+          truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(-1),
         })
       }
   }

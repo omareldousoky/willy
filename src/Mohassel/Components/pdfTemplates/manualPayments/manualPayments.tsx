@@ -1,7 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
-import { timeToDateyyymmdd, timeToArabicDate } from '../../../Services/utils'
+import { timeToArabicDate } from '../../../Services/utils'
 interface Props {
     result: {
         days: {
@@ -43,8 +43,8 @@ interface Props {
         transactionPrincipal: string;
         transactionInterest: string;
     };
-    fromDate: string;
-    toDate: string;
+    fromDate: any;
+    toDate: any;
 }
 const statusLocalization = (status: string) => {
     switch (status) {
@@ -67,6 +67,11 @@ const ManualPayments = (props: Props) => {
     return (
         <div className="manual-payments" dir="rtl" lang="ar">
             <table className="report-container">
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <thead className="report-header">
                     <tr className="headtitle">
                         <th colSpan={4}>شركة تساهيل للتمويل متناهي الصغر
@@ -80,7 +85,7 @@ const ManualPayments = (props: Props) => {
                 </thead>
                 <thead>
                     <tr className="headtitle">
-                        <th colSpan={6}>تاريخ الحركه من {timeToDateyyymmdd(new Date(props.fromDate).valueOf())} الي {timeToDateyyymmdd(new Date(props.toDate).valueOf())}</th>
+                        <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.fromDate, false)} الي {timeToArabicDate(props.toDate, false)}</th>
                     </tr>
                     <tr className="headtitle">
                         <th colSpan={4}>{timeToArabicDate(0, true)}</th>
@@ -120,7 +125,7 @@ const ManualPayments = (props: Props) => {
                                             {branch.rows.map((row) => {
                                                 return (
                                                     <>
-                                                    <tr style={{ height: "1em" }}></tr>
+                                                        <tr style={{ height: "1em" }}></tr>
                                                         <tbody>
                                                             <tr>
                                                                 <th className="gray frame" colSpan={2}>تاريخ الحركه</th>

@@ -1,13 +1,13 @@
 import React from "react";
 import "./CollectionStatement.scss";
-import { timeToDateyyymmdd } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../Services/utils";
 import Table from "react-bootstrap/Table";
 
 const CollectionStatement = (props) => {
   const branches = props.data.data.branches;
   const total = props.data.data.total;
-  const startDate = timeToDateyyymmdd(props.data.startDate);
-  const endDate = timeToDateyyymmdd(props.data.endDate);
+  const startDate = timeToArabicDate(props.data.startDate, false);
+  const endDate = timeToArabicDate(props.data.endDate, false);
 
   const trimmedValue = (value: string) => {
     if (value.includes(".")) {
@@ -65,6 +65,11 @@ const CollectionStatement = (props) => {
   return (
     <div className="CollectionStatement">
       <table style={{ width: "100%" }}>
+        <thead style={{ fontSize: "12px" }}>
+          <tr style={{ height: "10px" }}></tr>
+          <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+          <tr style={{ height: "10px" }}></tr>
+        </thead>
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>

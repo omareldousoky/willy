@@ -156,7 +156,7 @@ const CustomerProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.birthDate}</td>
-                <td>{customerDetails?.birthDate ? timeToDateyyymmdd(customerDetails.birthDate) : ''}</td>
+                <td>{customerDetails?.birthDate !== undefined ? timeToDateyyymmdd(customerDetails.birthDate) : ''}</td>
               </tr>
               <tr>
                 <td>{local.gender}</td>
@@ -289,6 +289,10 @@ const CustomerProfile = (props: Props) => {
               <tr>
                 <td>{local.guarantorMaxLoans}</td>
                 <td>{customerDetails?.guarantorMaxLoans ? customerDetails.guarantorMaxLoans : "-"}</td>
+              </tr>
+              <tr>
+                <td>{local.maxCustomerPrincipal}</td>
+                <td>{customerDetails?.maxPrincipal ? customerDetails.maxPrincipal : "-"}</td>
               </tr>
               <tr>
                 <td>{local.comments}</td>
