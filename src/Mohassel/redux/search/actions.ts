@@ -87,7 +87,7 @@ export const search = (obj) => {
             }
             case ('clearData'): 
                 return (dispatch) => {
-                    dispatch({ type: 'SEARCH', payload: {} })
+                    dispatch({ type: 'CLEAR_DATA', payload: {} })
                 }
         default: return null;
     }
