@@ -68,7 +68,7 @@ const CustomerProfile = (props: Props) => {
   const [print, _changePrint] = useState<any>();
   const [dataToBePrinted, changeDataToBePrinted] = useState<any>();
   const [guaranteeedLoansData, changeGuaranteeedLoansData] = useState<GuaranteedLoans>()
-  const [geoArea, setgeoArea] = useState<string>();
+  const [geoArea, setgeoArea] = useState<any>();
   const getGuaranteeedLoans = async (customer) => {
     changeLoading(true);
     const res = await guaranteed(customer?.key)
@@ -86,8 +86,8 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
       const geoAreaObject = resGeo.body.data.filter(area => area._id === geoArea);
       if (geoAreaObject.length === 1) {
-        setgeoArea(geoAreaObject[0].name)
-      }
+        setgeoArea(geoAreaObject[0])
+      }else setgeoArea({name: '-', active: false})
     } else changeLoading(false);
   }
   async function getCustomerDetails() {
@@ -274,7 +274,7 @@ const CustomerProfile = (props: Props) => {
             <tbody>
               <tr>
                 <td>{local.geographicalDistribution}</td>
-                <td>{geoArea}</td>
+                <td style={{ color: (!geoArea.active && geoArea.name !== '-')? 'red' : 'black'}}>{geoArea.name}</td>
               </tr>
               <tr>
                 <td>{local.representative}</td>
