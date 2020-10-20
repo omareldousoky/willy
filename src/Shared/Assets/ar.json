@@ -762,5 +762,7 @@
     "blockReason": "سبب الحظر",
     "unblockReason":"سبب فك الحظر",
     "customerWillBeBlocked": "سيتم حظر العميل",
-    "customerWillBeUnblocked": "سيتم فك حظر العميل"
+    "customerWillBeUnblocked": "سيتم فك حظر العميل",
+    "customerBlockedSuccessfully":"لقد تم حظر العميل بنجاح",
+    "customerUnblockedSuccessfully":"لقد تم فك حظر العميل بنجاح"
 }
