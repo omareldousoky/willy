@@ -31,6 +31,7 @@ interface State {
     temp: Array<string>;
     branches: Array<any>;
     branchAreas: Array<any>;
+    branchAreasOrigninal: Array<any>;
     branch: any;
 }
 class GeoAreas extends Component<{}, State> {
@@ -44,6 +45,7 @@ class GeoAreas extends Component<{}, State> {
             temp: [],
             branches: [],
             branchAreas: [],
+            branchAreasOrigninal: [],
             branch: {}
         }
     }
@@ -141,6 +143,7 @@ class GeoAreas extends Component<{}, State> {
             const areas = (branchAreas.body.data) ? branchAreas.body.data : [];
             this.setState({
                 branchAreas: areas,
+                branchAreasOrigninal: areas,
                 loading: false,
             })
         } else {
@@ -291,7 +294,7 @@ class GeoAreas extends Component<{}, State> {
                                 leftHeader={local.branchgeoAreas}
                             />
                         }
-                        {this.state.branch._id ? <Button type="button" style={{ margin: 10, width: '10%', alignSelf: 'flex-end' }} onClick={() => this.submitChange()}>{local.submit}</Button> : null}
+                        {this.state.branch._id ? <Button type="button" style={{ margin: 10, width: '10%', alignSelf: 'flex-end' }} disabled={this.state.branchAreas.length === this.state.branchAreasOrigninal.length} onClick={() => this.submitChange()}>{local.submit}</Button> : null}
 
                     </Modal.Body>
                 </Modal>}
