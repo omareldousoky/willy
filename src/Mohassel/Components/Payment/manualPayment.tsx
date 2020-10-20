@@ -89,7 +89,7 @@ class ManualPayment extends Component<Props, State> {
       payAmount: this.props.payAmount,
       truthDate: this.props.truthDate,
       randomPaymentType: "",
-      dueDate: timeToDateyyymmdd(0),
+      dueDate: timeToDateyyymmdd(-1),
       receiptNumber: this.props.receiptNumber,
       payerType: '',
       payerNationalId: '',

@@ -17,6 +17,11 @@ const PaymentReceipt = (props) => {
     }
     return (
         <>
+            <thead style={{ fontSize: "12px" }}>
+                <tr style={{ height: "10px" }}></tr>
+                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{ height: "10px" }}></tr>
+            </thead>
             {props.receiptData.map((receiptData, index) => {
                 return (
                     <div key={index} className="payment-receipt frame" dir="rtl" lang="ar">
@@ -40,7 +45,7 @@ const PaymentReceipt = (props) => {
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{props.fromLoanIssuance ? local.value : local.installmentType}</Form.Label>
-                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.installmentAmount)}</span></Form.Label>
+                                    <Form.Label column sm={6} className="info"><span style={{ direction: 'ltr' }}>{numbersToArabic(receiptData.installmentAmount)}</span></Form.Label>
                                 </Form.Group>
                                 {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.paidFrom}</Form.Label>
@@ -48,7 +53,7 @@ const PaymentReceipt = (props) => {
                                 </Form.Group>}
                                 {props.fromLoanIssuance ? null : <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.currentPayment}</Form.Label>
-                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.paidNow)}</span>{receiptData.paidNow? ` = (${new Tafgeet(receiptData.paidNow, 'EGP').parse()})`: null}</Form.Label>
+                                    <Form.Label column sm={6} className="info"><span style={{ direction: 'ltr' }}>{numbersToArabic(receiptData.paidNow)}</span>{receiptData.paidNow ? ` = (${new Tafgeet(receiptData.paidNow, 'EGP').parse()})` : null}</Form.Label>
                                 </Form.Group>}
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.purpose}</Form.Label>

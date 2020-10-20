@@ -38,6 +38,11 @@ const ClientGuaranteedLoans = (props) => {
   return (
     <div className="ClientGuaranteedLoans">
       <table className="report-container">
+        <thead style={{ fontSize: "12px" }}>
+          <tr style={{ height: "10px" }}></tr>
+          <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+          <tr style={{ height: "10px" }}></tr>
+        </thead>
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={3}>شركة تساهيل للتمويل متناهي الصغر</th>
@@ -90,9 +95,9 @@ const ClientGuaranteedLoans = (props) => {
                   </td>
                   <td>{record.applicationCode}</td>
                   <td>{record.customerName}</td>
-                  <td>{record.appStatus? getStatus(record.appStatus): '-'}</td>
-                  <td>{record.approvalDate? record.approvalDate: '-'}</td>
-                  <td>{record.loanStatus? getStatus(record.loanStatus): '-'}</td>
+                  <td>{record.appStatus ? getStatus(record.appStatus) : '-'}</td>
+                  <td>{record.approvalDate ? record.approvalDate : '-'}</td>
+                  <td>{record.loanStatus ? getStatus(record.loanStatus) : '-'}</td>
                   <td>{record.issueDate ? record.issueDate : "-"}</td>
                 </tr>
               );

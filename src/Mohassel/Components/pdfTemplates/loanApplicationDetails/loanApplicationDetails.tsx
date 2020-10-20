@@ -18,7 +18,7 @@ const LoanApplicationDetails = (props) => {
         }
     }
     function getNumberInArabic(number: number) {
-        switch(number) {
+        switch (number) {
             case 2: return 'الضامن الثاني';
             case 3: return 'الضامن الثالث';
             case 4: return 'الضامن الرابع';
@@ -28,14 +28,19 @@ const LoanApplicationDetails = (props) => {
             case 8: return 'الضامن الثامن';
             case 9: return 'الضامن التاسع';
             case 10: return 'الضامن العاشر';
-            default: return'';
+            default: return '';
         }
     }
     return (
-        props.data.loans? props.data.loans.map((loan, index) => {
+        props.data.loans ? props.data.loans.map((loan, index) => {
             return (
                 <div className="loan-application-details" lang="ar" key={index}>
                     <table className="report-container">
+                        <thead style={{ fontSize: "12px" }}>
+                            <tr style={{ height: "10px" }}></tr>
+                            <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                            <tr style={{ height: "10px" }}></tr>
+                        </thead>
                         <thead className="report-header">
                             <tr className="headtitle">
                                 <th>شركة تساهيل للتمويل متناهي الصغر
@@ -307,7 +312,7 @@ const LoanApplicationDetails = (props) => {
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th className="frame gray" colSpan={100}>{index === 0? 'الضامن الرئيسي': getNumberInArabic(index + 1)}</th>
+                                                        <th className="frame gray" colSpan={100}>{index === 0 ? 'الضامن الرئيسي' : getNumberInArabic(index + 1)}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -329,7 +334,7 @@ const LoanApplicationDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>التليفون</th>
-                                                        <td>{`${guarantor.homePhoneNumber? guarantor.homePhoneNumber: ''} ${guarantor.mobilePhoneNumber? ` - ${guarantor.mobilePhoneNumber}`: ''}`}</td>
+                                                        <td>{`${guarantor.homePhoneNumber ? guarantor.homePhoneNumber : ''} ${guarantor.mobilePhoneNumber ? ` - ${guarantor.mobilePhoneNumber}` : ''}`}</td>
                                                         <th>الرقم البريدي</th>
                                                         <td>{guarantor.homePostalCode}</td>
                                                     </tr>
@@ -388,7 +393,7 @@ const LoanApplicationDetails = (props) => {
                     </table>
                 </div>
             )
-        }): <h1 style={{textAlign: 'right'}}>هذا العميل ليس لديه قروض </h1>
+        }) : <h1 style={{ textAlign: 'right' }}>هذا العميل ليس لديه قروض </h1>
     )
 }
 

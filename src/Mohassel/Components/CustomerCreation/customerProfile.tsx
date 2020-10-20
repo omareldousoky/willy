@@ -156,7 +156,7 @@ const CustomerProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.birthDate}</td>
-                <td>{customerDetails?.birthDate ? timeToDateyyymmdd(customerDetails.birthDate) : ''}</td>
+                <td>{customerDetails?.birthDate !== undefined ? timeToDateyyymmdd(customerDetails.birthDate) : ''}</td>
               </tr>
               <tr>
                 <td>{local.gender}</td>
