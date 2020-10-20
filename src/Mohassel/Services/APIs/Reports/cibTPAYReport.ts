@@ -1,4 +1,4 @@
-import axios from '../axios-instance';
+import axios from 'axios';
 
 export const cibTPAYReport = async (url: string) => {
     try {
