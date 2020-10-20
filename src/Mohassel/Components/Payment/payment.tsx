@@ -383,6 +383,10 @@ class Payment extends Component<Props, State>{
           payerName: values.payerName,
           payerNationalId: values.payerNationalId.toString(),
         }
+        if(values.installmentNumber !== -1) {
+          obj['installmentNumber'] = Number(values.installmentNumber);
+          obj['futurePayment'] = true;
+        }
         const res = await manualPayment(obj);
         if (res.status === "success") {
           this.setState({ loadingFullScreen: false });
