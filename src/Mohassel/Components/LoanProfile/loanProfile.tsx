@@ -333,7 +333,7 @@ class LoanProfile extends Component<Props, State>{
             receiptNumber = Number(this.state.pendingActions.receiptNumber);
             truthDate = this.state.pendingActions.transactions ? this.state.pendingActions.transactions[0].truthDate : 0;
             actualDate = this.state.pendingActions.transactions ? this.state.pendingActions.transactions[0].actualDate : 0;
-            transactionAmount =  this.state.pendingActions.transactions ? Number(this.state.pendingActions.transactions[0].transactionAmount) : 0;
+            transactionAmount =  Number(this.getSumOfPendingActions());
         }
         const table = document.createElement("table");
         table.className = "swal-table";
