@@ -7,11 +7,6 @@ import Tafgeet from 'tafgeetjs';
 const TotalWrittenChecks = (props) => {
     return (
         <div className="total-written-checks-print">
-            <thead style={{ fontSize: "12px" }}>
-                <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
-                <tr style={{ height: "10px" }}></tr>
-            </thead>
             {props.data.product.beneficiaryType === "individual" ?
                 <>
                     <div className="check">
