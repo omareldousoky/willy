@@ -10,7 +10,7 @@ import Search from '../Search/search';
 import { search, searchFilters } from '../../redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt, iscoreDate, downloadFile } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt, iscoreDate, downloadFile, iscoreStatusColor } from '../../Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
@@ -275,6 +275,7 @@ class TrackLoanApplications extends Component<Props, State>{
                   <td>{local.customer}</td>
                   <td>{local.nationalId}</td>
                   <td>{local.value}</td>
+                  <td></td>
                   <td>{local.downloadPDF}</td>
                 </tr>
               </thead>
@@ -283,7 +284,8 @@ class TrackLoanApplications extends Component<Props, State>{
                   <tr key={customer.nationalId}>
                     <td>{customer.customerName}</td>
                     <td>{customer.nationalId}</td>
-                    <td>{customer.iscore}</td>
+                    <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
+                    <td>{iscoreStatusColor(customer.iscore).status}</td>
                     <td>{customer.url && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download" onClick={() => { downloadFile(customer.url) }}></span>}</td>
                   </tr>
                 )}
