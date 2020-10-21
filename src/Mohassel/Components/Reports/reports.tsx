@@ -448,11 +448,12 @@ class Reports extends Component<{}, State> {
       const downloadFile = await cibTPAYReport(res.body.url);
       if (downloadFile.status === "success") {
         this.setState({ loading: false });
-        const url = window.URL.createObjectURL(new Blob([downloadFile.body]));
-        const link = document.createElement('a');
-        link.href = url;
+        const link = document.createElement("a");
+        link.href = downloadFile.body.url;
         document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        link.remove();
       } else {
         this.setState({ loading: false });
       }
