@@ -3,6 +3,8 @@ export const searchReducer = (state= {}, action) => {
     switch (action.type) {
         case 'SEARCH':
             return {...state, ...action.payload};
+        case 'CLEAR_DATA': 
+            return action.payload;
         default:
             return state;
     }
