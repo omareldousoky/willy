@@ -11,10 +11,13 @@ interface Props {
 			trxDate: string;
 			trxAmount: string;
 			trxAction: string;
+			canceled: string;
 		}[];
 		trxCount: string;
 		trxSum: string;
 		branchName: string;
+		trxRb: string;
+		trxNet: string;
 	}[];
 	startDate: any;
 	endDate: any;
@@ -117,7 +120,7 @@ const RandomPayment = (props: Props) => {
 											<td>{row.trxAmount}</td>
 											<td></td>
 											<td>{actionsLocalization(row.trxAction)}</td>
-											<td>منفذ</td>
+											<td>{row.canceled === '1' ? 'الحركة ملغاه' : ''}</td>
 										</tr>
 										<tr>
 											<td colSpan={4}></td>
@@ -135,8 +138,26 @@ const RandomPayment = (props: Props) => {
 								<tr>
 									<td colSpan={3}>إجمالي الحركه {branch.branchName}</td>
 									<td></td>
-									<td>عدد {branch.trxCount}</td>
-									<td>المبلغ {branch.trxSum}</td>
+									<td>
+										<tr>
+											<td>عدد </td>
+											<td>{branch.trxCount}</td>
+										</tr>
+									</td>
+									<td>
+										<tr>
+											<td>إجمالي المبلغ </td>
+											<td>{branch.trxSum}</td>
+										</tr>
+										<tr>
+											<td>القيمة الملغاه </td>
+											<td>{branch.trxRb}</td>
+										</tr>
+										<tr>
+											<td>صافي المبلغ </td>
+											<td>{branch.trxNet}</td>
+										</tr>
+									</td>
 								</tr>
 							</tbody>
 						</table>
