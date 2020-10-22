@@ -760,5 +760,6 @@
     "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
     "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
     "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
-    "dateOfFile": "تاريخ الملف"
+    "dateOfFile": "تاريخ الملف",
+    "cancelledTransaction": "الحركة ملغاة"
 }
