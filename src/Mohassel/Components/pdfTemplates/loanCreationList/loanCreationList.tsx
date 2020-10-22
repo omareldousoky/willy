@@ -84,6 +84,7 @@ const LoanCreationList = (props) => {
                                             <td>{transaction.principalAmount}</td>
                                             <td>{transaction.transactionInterest}</td>
                                             <td>{transaction.transactionAmount}</td>
+                                            <td>{transaction.canceled === 1 ? 'الحركة ملغاه' : ''}</td>
                                         </tr>)}
                                         <tr>
                                             <th colSpan={100} className="horizontal-line"></th>
@@ -106,16 +107,16 @@ const LoanCreationList = (props) => {
                                         <tr>
                                             <td colSpan={8}></td>
                                             <td className="frame">القيمة الملغاه</td>
-                                            <td className="frame">0.00</td>
-                                            <td className="frame">0.00</td>
-                                            <td className="frame">0.00</td>
+                                            <td className="frame">{branch.canceled[0]}</td>
+                                            <td className="frame">{branch.canceled[1]}</td>
+                                            <td className="frame">{branch.canceled[2]}</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={8}></td>
                                             <td className="frame">صافي المبلغ</td>
-                                            <td className="frame">{branch.total[0]}</td>
-                                            <td className="frame">{branch.total[1]}</td>
-                                            <td className="frame">{branch.total[2]}</td>
+                                            <td className="frame">{branch.net[0]}</td>
+                                            <td className="frame">{branch.net[1]}</td>
+                                            <td className="frame">{branch.net[2]}</td>
                                         </tr>
                                         <tr>
                                             <th colSpan={100} className="horizontal-line"></th>
@@ -144,16 +145,16 @@ const LoanCreationList = (props) => {
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">القيمة الملغاه</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
+                                    <td className="frame">{day.canceled[0]}</td>
+                                    <td className="frame">{day.canceled[1]}</td>
+                                    <td className="frame">{day.canceled[2]}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">صافي المبلغ</td>
-                                    <td className="frame">{day.total[0]}</td>
-                                    <td className="frame">{day.total[1]}</td>
-                                    <td className="frame">{day.total[2]}</td>
+                                    <td className="frame">{day.net[0]}</td>
+                                    <td className="frame">{day.net[1]}</td>
+                                    <td className="frame">{day.net[2]}</td>
                                 </tr>
                                 <tr style={{ height: "0.5em" }}></tr>
                             </tbody>
@@ -180,16 +181,16 @@ const LoanCreationList = (props) => {
                         <tr>
                             <td colSpan={8}></td>
                             <td className="frame">القيمة الملغاه</td>
-                            <td className="frame">0.00</td>
-                            <td className="frame">0.00</td>
-                            <td className="frame">0.00</td>
+                            <td className="frame">{tempData.canceled[0]}</td>
+                            <td className="frame">{tempData.canceled[1]}</td>
+                            <td className="frame">{tempData.canceled[2]}</td>
                         </tr>
                         <tr>
                             <td colSpan={8}></td>
                             <td className="frame">صافي المبلغ</td>
-                            <td className="frame">{tempData.total[0]}</td>
-                            <td className="frame">{tempData.total[1]}</td>
-                            <td className="frame">{tempData.total[2]}</td>
+                            <td className="frame">{tempData.net[0]}</td>
+                            <td className="frame">{tempData.net[1]}</td>
+                            <td className="frame">{tempData.net[2]}</td>
                         </tr>
                         <tr style={{ height: "0.5em" }}></tr>
                     </tbody>

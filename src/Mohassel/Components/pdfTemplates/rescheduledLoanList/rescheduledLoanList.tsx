@@ -85,6 +85,7 @@ const RescheduledLoanList = (props) => {
                                             <td>{transaction.principalAmount}</td>
                                             <td>{transaction.transactionInterest}</td>
                                             <td>{transaction.transactionAmount}</td>
+                                            <td>{transaction.canceled === 1 ? 'الحركة ملغاه' : ''}</td>
                                         </tr>)}
                                         <tr>
                                             <td colSpan={100} className="horizontal-line"></td>
@@ -106,16 +107,16 @@ const RescheduledLoanList = (props) => {
                                         <tr>
                                             <td colSpan={8} style={{ border: "0px" }}></td>
                                             <td>القيمة الملغاه</td>
-                                            <td>0.00</td>
-                                            <td>0.00</td>
-                                            <td>0.00</td>
+                                            <td>{branch.canceled[0]}</td>
+                                            <td>{branch.canceled[1]}</td>
+                                            <td>{branch.canceled[2]}</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={8} style={{ border: "0px" }}></td>
                                             <td>صافي المبلغ</td>
-                                            <td>{branch.total[0]}</td>
-                                            <td>{branch.total[1]}</td>
-                                            <td>{branch.total[2]}</td>
+                                            <td>{branch.net[0]}</td>
+                                            <td>{branch.net[1]}</td>
+                                            <td>{branch.net[2]}</td>
                                         </tr>
                                     </tbody>
                                 </React.Fragment>
@@ -144,16 +145,16 @@ const RescheduledLoanList = (props) => {
                                 <tr>
                                     <td colSpan={8} style={{ border: "0px" }}></td>
                                     <td>القيمة الملغاه</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
+                                    <td>{day.canceled[0]}</td>
+                                    <td>{day.canceled[1]}</td>
+                                    <td>{day.canceled[2]}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={8} style={{ border: "0px" }}></td>
                                     <td>صافي المبلغ</td>
-                                    <td>{day.total[0]}</td>
-                                    <td>{day.total[1]}</td>
-                                    <td>{day.total[2]}</td>
+                                    <td>{day.net[0]}</td>
+                                    <td>{day.net[1]}</td>
+                                    <td>{day.net[2]}</td>
                                 </tr>
                                 <tr style={{ height: "0.5em" }}></tr>
                             </tbody>
@@ -179,16 +180,16 @@ const RescheduledLoanList = (props) => {
                         <tr>
                             <td colSpan={8} style={{ border: "0px" }}></td>
                             <td>القيمة الملغاه</td>
-                            <td>0.00</td>
-                            <td>0.00</td>
-                            <td>0.00</td>
+                            <td>{tempData.canceled[0]}</td>
+                            <td>{tempData.canceled[1]}</td>
+                            <td>{tempData.canceled[2]}</td>
                         </tr>
                         <tr>
                             <td colSpan={8} style={{ border: "0px" }}></td>
                             <td>صافي المبلغ</td>
-                            <td>{tempData.total[0]}</td>
-                            <td>{tempData.total[1]}</td>
-                            <td>{tempData.total[2]}</td>
+                            <td>{tempData.net[0]}</td>
+                            <td>{tempData.net[1]}</td>
+                            <td>{tempData.net[2]}</td>
                         </tr>
                         <tr style={{ height: "0.5em" }}></tr>
                     </tbody>

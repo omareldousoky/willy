@@ -17,17 +17,24 @@ interface Props {
                 principalAmount: number;
                 transactionInterest: number;
                 transactionAmount: number;
+                canceled: number;
 
             }[];
             total: number[];
+            canceled: number[];
+            net: number[];
             branchName: string;
 
         }[];
         trx: number;
         day: string;
         total: number[];
+        canceled: number[];
+        net: number[];
     }[];
     total: number[];
+    canceled: number[];
+    net: number[];
     trx: number;
     startDate: any;
     endDate: any;
@@ -133,6 +140,7 @@ const LoanApplicationFees = (props: Props) => {
                                                                 <td>{row.principalAmount}</td>
                                                                 <td>{row.transactionInterest}</td>
                                                                 <td>{row.transactionAmount}</td>
+                                                                <td>{row.canceled === 1 ? 'الحركة ملغاه' : ''}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th colSpan={100} className="horizontal-line"></th>
@@ -158,16 +166,16 @@ const LoanApplicationFees = (props: Props) => {
                                                 <tr>
                                                     <td colSpan={8}></td>
                                                     <td className="frame">القيمة الملغاه</td>
-                                                    <td className="frame">0.00</td>
-                                                    <td className="frame">0.00</td>
-                                                    <td className="frame">0.00</td>
+                                                    <td className="frame">{branch.canceled[0]}</td>
+                                                    <td className="frame">{branch.canceled[1]}</td>
+                                                    <td className="frame">{branch.canceled[2]}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colSpan={8}></td>
                                                     <td className="frame">صافي المبلغ</td>
-                                                    <td className="frame">{branch.total[0]}</td>
-                                                    <td className="frame">{branch.total[1]}</td>
-                                                    <td className="frame">{branch.total[2]}</td>
+                                                    <td className="frame">{branch.net[0]}</td>
+                                                    <td className="frame">{branch.net[1]}</td>
+                                                    <td className="frame">{branch.net[2]}</td>
                                                 </tr>
                                                 <tr>
                                                     <th colSpan={100} className="horizontal-line"></th>
@@ -195,16 +203,16 @@ const LoanApplicationFees = (props: Props) => {
                                     <tr>
                                         <td colSpan={8}></td>
                                         <td className="frame">القيمة الملغاه</td>
-                                        <td className="frame">0.00</td>
-                                        <td className="frame">0.00</td>
-                                        <td className="frame">0.00</td>
+                                        <td className="frame">{res.canceled[0]}</td>
+                                        <td className="frame">{res.canceled[1]}</td>
+                                        <td className="frame">{res.canceled[2]}</td>
                                     </tr>
                                     <tr>
                                         <td colSpan={8}></td>
                                         <td className="frame">صافي المبلغ</td>
-                                        <td className="frame">{res.total[0]}</td>
-                                        <td className="frame">{res.total[1]}</td>
-                                        <td className="frame">{res.total[2]}</td>
+                                        <td className="frame">{res.net[0]}</td>
+                                        <td className="frame">{res.net[1]}</td>
+                                        <td className="frame">{res.net[2]}</td>
                                     </tr>
                                 </tbody>
                             </>
@@ -230,16 +238,16 @@ const LoanApplicationFees = (props: Props) => {
                         <tr>
                             <td colSpan={8}></td>
                             <td className="frame">القيمة الملغاه</td>
-                            <td className="frame">0.00</td>
-                            <td className="frame">0.00</td>
-                            <td className="frame">0.00</td>
+                            <td className="frame">{props.canceled[0]}</td>
+                            <td className="frame">{props.canceled[1]}</td>
+                            <td className="frame">{props.canceled[2]}</td>
                         </tr>
                         <tr>
                             <td colSpan={8}></td>
                             <td className="frame">صافي المبلغ</td>
-                            <td className="frame">{props.total[0]}</td>
-                            <td className="frame">{props.total[1]}</td>
-                            <td className="frame">{props.total[2]}</td>
+                            <td className="frame">{props.net[0]}</td>
+                            <td className="frame">{props.net[1]}</td>
+                            <td className="frame">{props.net[2]}</td>
                         </tr>
                     </tbody>
                 </table>

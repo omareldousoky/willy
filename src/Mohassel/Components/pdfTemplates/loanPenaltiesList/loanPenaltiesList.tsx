@@ -64,12 +64,12 @@ const LoanPenaltiesList = (props) => {
           <tr>
             <td colSpan={8}></td>
             <td className="horizontal-line">القيمة الملغاه</td>
-            <td className="horizontal-line">0.00</td>
+            <td className="horizontal-line">{day.rbAmount}</td>
           </tr>
           <tr>
             <td colSpan={8}></td>
             <td className="horizontal-line">القيمة المسدده</td>
-            <td className="horizontal-line">{day.transactionAmount}</td>
+            <td className="horizontal-line">{day.netAmount}</td>
           </tr>
         </tbody>
       </>
@@ -98,7 +98,7 @@ const LoanPenaltiesList = (props) => {
             <td>{getStatus(row.loanStatus)}</td>
             {/* <td>ترحيل</td> */}
             <td>{row.transactionAmount}</td>
-            {/* <td></td> */}
+            <td>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
           </tr>
         ))}
 
@@ -126,12 +126,12 @@ const LoanPenaltiesList = (props) => {
         <tr>
           <td colSpan={8}></td>
           <td className="horizontal-line">القيمة الملغاه</td>
-          <td className="horizontal-line">0.00</td>
+          <td className="horizontal-line">{branch.rbAmount}</td>
         </tr>
         <tr>
           <td colSpan={8}></td>
           <td className="horizontal-line">القيمة المسدده</td>
-          <td className="horizontal-line">{branch.transactionAmount}</td>
+          <td className="horizontal-line">{branch.netAmount}</td>
         </tr>
         <tr>
           <th colSpan={100} className="border-line"></th>
@@ -185,7 +185,7 @@ const LoanPenaltiesList = (props) => {
               <th>حالة القرض</th>
               <th>مستند الحركة</th>
               <th>قيمة الغرامة</th>
-              {/* <th>حالة الحركة</th> */}
+              <th>حالة الحركة</th>
             </tr>
             <tr>
               <th colSpan={100} className="border-line"></th>
@@ -216,12 +216,12 @@ const LoanPenaltiesList = (props) => {
             <tr>
               <td colSpan={8}></td>
               <td className="horizontal-line">القيمة الملغاه</td>
-              <td className="horizontal-line">0.00</td>
+          <td className="horizontal-line">{data.rbAmount}</td>
             </tr>
             <tr>
               <td colSpan={8}></td>
               <td className="horizontal-line">القيمة المسدده</td>
-              <td className="horizontal-line">{totalTransactionAmount}</td>
+              <td className="horizontal-line">{data.netAmount}</td>
             </tr>
           </tbody>
         </table>

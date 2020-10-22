@@ -71,16 +71,16 @@ const CrossedOutLoansList = (props) => {
           <tr>
             <td colSpan={8}></td>
             <td className="frame">القيمة الملغاه</td>
-            <td className="frame">0.00</td>
-            <td className="frame">0.00</td>
-            <td className="frame">0.00</td>
+            <td className="frame">{day.rbPrincipal}</td>
+            <td className="frame">{day.rbInt}</td>
+            <td className="frame">{day.rbAmount}</td>
           </tr>
           <tr>
             <td colSpan={8}></td>
             <td className="frame">صافي المبلغ</td>
-            <td className="frame">{day.transactionPrincipal}</td>
-            <td className="frame">{day.transactionInterest}</td>
-            <td className="frame">{day.transactionAmount}</td>
+            <td className="frame">{day.netPrincipal}</td>
+            <td className="frame">{day.netInt}</td>
+            <td className="frame">{day.netAmount}</td>
           </tr>
         </tbody>
 
@@ -112,6 +112,7 @@ const CrossedOutLoansList = (props) => {
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
             <td>{row.transactionAmount}</td>
+            <td>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
           </tr>
         ))}
 
@@ -141,16 +142,16 @@ const CrossedOutLoansList = (props) => {
         <tr>
           <td colSpan={8}></td>
           <td className="frame">القيمة الملغاه</td>
-          <td className="frame">0.00</td>
-          <td className="frame">0.00</td>
-          <td className="frame">0.00</td>
+          <td className="frame">{branch.rbPrincipal}</td>
+          <td className="frame">{branch.rbInt}</td>
+          <td className="frame">{branch.rbAmount}</td>
         </tr>
         <tr>
           <td colSpan={8}></td>
           <td className="frame">صافي المبلغ</td>
-          <td className="frame">{branch.transactionPrincipal}</td>
-          <td className="frame">{branch.transactionInterest}</td>
-          <td className="frame">{branch.transactionAmount}</td>
+          <td className="frame">{branch.netPrincipal}</td>
+          <td className="frame">{branch.netInt}</td>
+          <td className="frame">{branch.netAmount}</td>
         </tr>
         <tr>
           <th colSpan={100} className="horizontal-line"></th>
@@ -210,6 +211,7 @@ const CrossedOutLoansList = (props) => {
               <th>أصل</th>
               <th>قيمة الحركة فائدة</th>
               <th>إجمالي</th>
+              <th>حالة الحركة</th>
             </tr>
             <tr>
               <th colSpan={100} className="horizontal-line"></th>
@@ -250,16 +252,16 @@ const CrossedOutLoansList = (props) => {
             <tr>
               <td colSpan={8}></td>
               <td className="frame">القيمة الملغاه</td>
-              <td className="frame">0.00</td>
-              <td className="frame">0.00</td>
-              <td className="frame">0.00</td>
+              <td className="frame">{data.rbPrincipal}</td>
+              <td className="frame">{data.rbInt}</td>
+              <td className="frame">{data.rbAmount}</td>
             </tr>
             <tr>
               <td colSpan={8}></td>
               <td className="frame">صافي المبلغ</td>
-              <td className="frame">{totalTransactionPrincipal}</td>
-              <td className="frame">{totalTransactionInterest}</td>
-              <td className="frame">{totalTransactionAmount}</td>
+              <td className="frame">{data.netPrincipal}</td>
+              <td className="frame">{data.netInt}</td>
+              <td className="frame">{data.netAmount}</td>
             </tr>
           </tbody>
         </table>
