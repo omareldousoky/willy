@@ -733,7 +733,7 @@
     "rejectApplication": "رفض الطلب",
     "acceptApplication": "قبول الطلب",
     "acceptSecondVisit": "الموافقة على الزيارة الثانية",
-    "viewCustomerLead": "عرض العميل",
+    "viewCustomerLead": "عرض المتقدم",
     "editLoanProduct": "تعديل نوع القرض",
     "updateLoanProductPrincipalsSuccess":"تم تعديل قيمة القرض المسموحة بنجاح",
     "updateLoanProductPrincipalsError":"حدث خطأ ولم يتم تعدل قيمه القرض المسموحة",
@@ -764,5 +764,8 @@
     "maxCustomerPrincipal":"قيمة القروض المسموحة للعميل",
     "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
     "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
-    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له"
+    "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
+    "leadCode":"كود المتقدم",
+    "leadName": "اسم المتقدم",
+    "editLead":"تعديل المتقدم"
 }

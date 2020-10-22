@@ -60,12 +60,12 @@ class Leads extends Component<Props, State>{
     }
     this.mappers = [
       {
-        title: local.customerCode,
+        title: local.leadCode,
         key: "customerCode",
-        render: data => data.key
+        render: data => data.uuid
       },
       {
-        title: local.customerName,
+        title: local.leadName,
         sortable: true,
         key: "name",
         render: data => data.customerName
@@ -74,7 +74,7 @@ class Leads extends Component<Props, State>{
         title: local.governorate,
         sortable: true,
         key: "governorate",
-        render: data => data.governorate
+        render: data => data.businessGovernate
       },
       {
         title: local.branchName,
@@ -100,7 +100,7 @@ class Leads extends Component<Props, State>{
         title: local.creationDate,
         sortable: true,
         key: "createdAt",
-        render: data => data.created?.at ? getDateAndTime(data.created?.at) : ''
+        render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
       },
       {
         title: local.actions,
@@ -112,7 +112,7 @@ class Leads extends Component<Props, State>{
               {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'rejected')}>{local.rejectApplication}</div>}
               {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'approved')}>{local.acceptApplication}</div>}
               <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.acceptSecondVisit}</div>
-              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.editCustomer}</div>
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.editLead}</div>
               <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.viewCustomerLead}</div>
             </div>}
           </div>
