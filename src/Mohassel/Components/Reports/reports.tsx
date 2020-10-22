@@ -534,7 +534,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "CrossedOutLoans" && <CrossedOutLoansList data={this.state.data} />}
         {this.state.print === "DoubtfulLoans" && <DoubtfulPayments data={this.state.data} />}
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
-        {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} startDate={this.state.fromDate} endDate={this.state.toDate} />}
+        {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} canceled={this.state.data.canceled} net={this.state.data.net} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
       </>
     )

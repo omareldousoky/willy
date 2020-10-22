@@ -1,7 +1,7 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate, timeToArabicDate } from './../../../Services/utils';
+import { ageCalculate, timeToArabicDate, beneficiaryType } from './../../../Services/utils';
 import store from '../../../redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal() {
@@ -46,6 +46,7 @@ const ReviewedApplicationsPDF = (props) => {
                     <tbody>
                         <tr>
                             <th>مسلسل</th>
+                            <th>نوع العميل</th>
                             <th>الكود</th>
                             <th>اسم العميل</th>
                             <th>السن</th>
@@ -58,6 +59,7 @@ const ReviewedApplicationsPDF = (props) => {
                         </tr>
                         {props.data.map((application, i) => <tr key={application.id}>
                             <td>{application.serialNumber}</td>
+                            <td>{beneficiaryType(application.beneficiaryType)}</td>
                             <td>{application.customerKey}</td>
                             <td>{application.customerName}</td>
                             <td>{application.customerAge}</td>
