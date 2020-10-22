@@ -79,9 +79,9 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     }
   }
-  const getGeoArea = async (geoArea) => {
+  const getGeoArea = async (geoArea, branch) => {
     changeLoading(true);
-    const resGeo = await getGeoAreasByBranch('');
+    const resGeo = await getGeoAreasByBranch(branch);
     if (resGeo.status === "success") {
       changeLoading(false);
       const geoAreaObject = resGeo.body.data.filter(area => area._id === geoArea);
@@ -97,7 +97,7 @@ const CustomerProfile = (props: Props) => {
       await changeCustomerDetails(res.body);
       if (ability.can('viewIscore', 'customer')) await getCachediScores(res.body.nationalId);
       await getGuaranteeedLoans(res.body);
-      await getGeoArea(res.body.geoAreaId);
+      await getGeoArea(res.body.geoAreaId, res.body.branchId);
     } else {
       changeLoading(false);
     }
