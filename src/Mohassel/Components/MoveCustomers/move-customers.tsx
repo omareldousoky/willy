@@ -92,7 +92,7 @@ export class MoveCustomers extends Component<{}, State>  {
     async getLoanOfficers(searchKeyWord: string) {
         const token = getCookie('token');
         const tokenData = parseJwt(token);
-        const res = await searchLoanOfficer({ name: searchKeyWord, from: this.state.from, size: 1000, branchId: tokenData.branch, status: "active" })
+        const res = await searchLoanOfficer({ name: searchKeyWord, from: this.state.from, size: 1000, branchId: tokenData.branch })
         if (res.status === "success") {
             this.setState({
                 LoanOfficerSelectLoader: false,
