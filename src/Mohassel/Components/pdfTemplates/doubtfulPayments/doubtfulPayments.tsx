@@ -1,7 +1,7 @@
 import React from 'react';
 import './doubtfulPayments.scss';
 import { timeToArabicDate, getTimestamp, getLoanStatus } from '../../../Services/utils';
-
+import * as local from '../../../../Shared/Assets/ar.json';
 const DoubtfulPayments = (props) => {
     const tempData = props.data.data;
     const reportDate = (props.data.from === props.data.to) ? timeToArabicDate(props.data.from, false) : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(props.data.to, false)}`;
@@ -83,6 +83,7 @@ const DoubtfulPayments = (props) => {
                                             <td>{transaction.transactionPrincipal}</td>
                                             <td>{transaction.transactionInterest}</td>
                                             <td>{transaction.transactionAmount}</td>
+                                            <td>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
                                         </tr>)}
                                         <tr>
                                             <th colSpan={100} className="horizontal-line"></th>
@@ -103,16 +104,16 @@ const DoubtfulPayments = (props) => {
                                         <tr>
                                             <td colSpan={8}></td>
                                             <td className="frame">القيمة الملغاه</td>
-                                            <td className="frame">0.00</td>
-                                            <td className="frame">0.00</td>
-                                            <td className="frame">0.00</td>
+                                            <td className="frame">{branch.rbPrincipal}</td>
+                                            <td className="frame">{branch.rbInt}</td>
+                                            <td className="frame">{branch.rbAmount}</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={8}></td>
                                             <td className="frame">صافي المبلغ</td>
-                                            <td className="frame">{branch.transactionPrincipal}</td>
-                                            <td className="frame">{branch.transactionInterest}</td>
-                                            <td className="frame">{branch.transactionAmount}</td>
+                                            <td className="frame">{branch.netPrincipal}</td>
+                                            <td className="frame">{branch.netInt}</td>
+                                            <td className="frame">{branch.netAmount}</td>
                                         </tr>
                                         <tr>
                                             <th colSpan={100} className="horizontal-line"></th>
@@ -139,16 +140,16 @@ const DoubtfulPayments = (props) => {
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">القيمة الملغاه</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
+                                    <td className="frame">{day.rbPrincipal}</td>
+                                    <td className="frame">{day.rbInt}</td>
+                                    <td className="frame">{day.rbAmount}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">صافي المبلغ</td>
-                                    <td className="frame">{day.transactionPrincipal}</td>
-                                    <td className="frame">{day.transactionInterest}</td>
-                                    <td className="frame">{day.transactionAmount}</td>
+                                    <td className="frame">{day.netPrincipal}</td>
+                                    <td className="frame">{day.netInt}</td>
+                                    <td className="frame">{day.netAmount}</td>
                                 </tr>
                             </tbody>
                         </React.Fragment>
@@ -173,16 +174,16 @@ const DoubtfulPayments = (props) => {
                         <tr>
                             <td colSpan={8}></td>
                             <td className="frame">القيمة الملغاه</td>
-                            <td className="frame">0.00</td>
-                            <td className="frame">0.00</td>
-                            <td className="frame">0.00</td>
+                            <td className="frame">{tempData.rbPrincipal}</td>
+                            <td className="frame">{tempData.rbInt}</td>
+                            <td className="frame">{tempData.rbAmount}</td>
                         </tr>
                         <tr>
                             <td colSpan={8}></td>
                             <td className="frame">صافي المبلغ</td>
-                            <td className="frame">{tempData.transactionPrincipal}</td>
-                            <td className="frame">{tempData.transactionInterest}</td>
-                            <td className="frame">{tempData.transactionAmount}</td>
+                            <td className="frame">{tempData.netPrincipal}</td>
+                            <td className="frame">{tempData.netInt}</td>
+                            <td className="frame">{tempData.netAmount}</td>
                         </tr>
                     </tbody>
                 </table>
