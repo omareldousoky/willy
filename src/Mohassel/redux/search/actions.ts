@@ -3,7 +3,7 @@ import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
 import { searchUsers } from '../../Services/APIs/Users/searchUsers';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
-import {searchActionLogs} from '../../Services/APIs/ActionLogs/searchActionLogs';
+import { searchActionLogs } from '../../Services/APIs/ActionLogs/searchActionLogs';
 import { searchLeads } from '../../Services/APIs/Leads/searchLeads';
 
 export const search = (obj) => {
@@ -73,10 +73,10 @@ export const search = (obj) => {
                     console.log("Error!", "Disconnected, login again", "error")
                 }
             }
-        case ('actionLogs'): 
+        case ('actionLogs'):
             return async (dispatch) => {
                 delete obj.url;
-                dispatch({type: 'SET_LOADING', payload: true})
+                dispatch({ type: 'SET_LOADING', payload: true })
                 const res = await searchActionLogs(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
@@ -85,12 +85,11 @@ export const search = (obj) => {
                     dispatch({ type: 'SET_LOADING', payload: false })
                     console.log("Error!", "Disconnected, login again", "error")
                 }
-
             }
-        case ('lead'): 
+        case ('lead'):
             return async (dispatch) => {
                 delete obj.url;
-                dispatch({type: 'SET_LOADING', payload: true})
+                dispatch({ type: 'SET_LOADING', payload: true })
                 const res = await searchLeads(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
@@ -99,6 +98,10 @@ export const search = (obj) => {
                     dispatch({ type: 'SET_LOADING', payload: false })
                     console.log("Error!", "Disconnected, login again", "error")
                 }
+            }
+        case ('clearData'):
+            return (dispatch) => {
+                dispatch({ type: 'CLEAR_DATA', payload: {} })
             }
         default: return null;
     }

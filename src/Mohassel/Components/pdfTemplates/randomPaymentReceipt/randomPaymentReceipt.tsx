@@ -15,19 +15,19 @@ const randomPaymentReceipt = (props) => {
             default: return '';
         }
     }
-    const getValueFromLocalizationFileByKey = (key)=>{
-       if(key==='collectionCommission') return local.collectionCommission
-       else if(key==='reissuingFees') return local.reissuingFees
-       else if(key==='legalFees') return local.legalFees
-       else if(key==='clearanceFees') return local.clearanceFees
-       else if(key==='toktokStamp') return local.toktokStamp
-       else if(key==='tricycleStamp') return local.tricycleStamp
+    const getValueFromLocalizationFileByKey = (key) => {
+        if (key === 'collectionCommission') return local.collectionCommission
+        else if (key === 'reissuingFees') return local.reissuingFees
+        else if (key === 'legalFees') return local.legalFees
+        else if (key === 'clearanceFees') return local.clearanceFees
+        else if (key === 'toktokStamp') return local.toktokStamp
+        else if (key === 'tricycleStamp') return local.tricycleStamp
     }
     return (
         <>
             {props.receiptData.map((receiptData, index) => {
                 return (
-                
+
                     <div key={index} className="random-payment-receipt frame" dir="rtl" lang="ar">
                         <div className="receipt-container">
                             <div className="receipt-header">
@@ -49,13 +49,13 @@ const randomPaymentReceipt = (props) => {
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.value}</Form.Label>
-                                    <Form.Label column sm={6} className="info"><span style={{direction: 'ltr'}}>{numbersToArabic(receiptData.installmentAmount)}</span> {receiptData.installmentAmount? ` = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})`: null}</Form.Label>
+                                    <Form.Label column sm={6} className="info"><span style={{ direction: 'ltr' }}>{numbersToArabic(receiptData.installmentAmount)}</span> {receiptData.installmentAmount ? ` = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})` : null}</Form.Label>
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.purpose}</Form.Label>
                                     <Form.Label column sm={6} className="info">
-                                        {receiptData.type==='penalty'? local.payPenalty: receiptData.type==='randomPayment'? getValueFromLocalizationFileByKey(receiptData.randomPaymentType) : ''}
-                                    </Form.Label>                                      
+                                        {receiptData.type === 'penalty' ? local.payPenalty : receiptData.type === 'randomPayment' ? getValueFromLocalizationFileByKey(receiptData.randomPaymentType) : ''}
+                                    </Form.Label>
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Form.Label column sm={3} className="title">{local.recipientSignature}</Form.Label>

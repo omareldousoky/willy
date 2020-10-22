@@ -3,7 +3,7 @@ import './customerCardAttachments.scss';
 import { timeToArabicDate, numbersToArabic, arabicGender } from '../../../Services/utils';
 import * as local from '../../../../Shared/Assets/ar.json';
 const CustomerCardAttachments = (props) => {
-  
+
   function getArabicNumberFromIndex(index: number) {
     switch (index) {
       case 1: return local.first;
@@ -102,7 +102,7 @@ const CustomerCardAttachments = (props) => {
           </div>
           <div className="triple">
             <div>أرقام التليفون :
-          <div className="value">{props.data.customer.mobilePhoneNumber + '-' + props.data.customer.businessPhoneNumber  + '-' + props.data.customer.homePhoneNumber}</div>
+          <div className="value">{props.data.customer.mobilePhoneNumber + '-' + props.data.customer.businessPhoneNumber + '-' + props.data.customer.homePhoneNumber}</div>
             </div>
             <div>رقم آخر :
           <div className="value">---------------------</div>
@@ -223,7 +223,7 @@ const CustomerCardAttachments = (props) => {
               </div>
               <div className="triple">
                 <div>رقم تليفون الضامن {getArabicNumberFromIndex(index + 1)} :
-                     <div className="value">{guarantor.mobilePhoneNumber + '-' + guarantor.businessPhoneNumber  + '-' + guarantor.homePhoneNumber}</div>
+                     <div className="value">{guarantor.mobilePhoneNumber + '-' + guarantor.businessPhoneNumber + '-' + guarantor.homePhoneNumber}</div>
                 </div>
                 <div>رقم آخر :
                      <div className="value">---------------------</div>
@@ -376,7 +376,7 @@ const CustomerCardAttachments = (props) => {
                 </div>
                 <div className="triple">
                   <div>أرقام التليفون :
-          <div className="value">{individualInGroup.customer.mobilePhoneNumber + '-' + individualInGroup.customer.businessPhoneNumber  + '-' + individualInGroup.customer.homePhoneNumber}</div>
+          <div className="value">{individualInGroup.customer.mobilePhoneNumber + '-' + individualInGroup.customer.businessPhoneNumber + '-' + individualInGroup.customer.homePhoneNumber}</div>
                   </div>
                   <div>رقم آخر :
           <div className="value">---------------------</div>

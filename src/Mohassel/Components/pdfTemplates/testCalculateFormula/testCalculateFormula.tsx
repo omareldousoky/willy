@@ -8,6 +8,11 @@ const TestCalculateFormulaPDF = (props) => {
     return (
         <div className="test-calculate-formula" dir="rtl" lang="ar">
             <table className="margin" >
+                <thead style={{ fontSize: "12px" }}>
+                    <tr style={{ height: "10px" }}></tr>
+                    <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{ height: "10px" }}></tr>
+                </thead>
                 <tbody>
                     <tr>
                         <td>{props.branchName}</td>
@@ -15,7 +20,7 @@ const TestCalculateFormulaPDF = (props) => {
                         <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
-                        <td>{timeToArabicDate(0,true)}</td>
+                        <td>{timeToArabicDate(0, true)}</td>
                         <td></td>
                         <td>{dayToArabic(new Date().getDay())}</td>
                     </tr>
@@ -50,7 +55,7 @@ const TestCalculateFormulaPDF = (props) => {
                         <td>الإجمالي</td>
                         <td>{numbersToArabic(props.data.result?.sum.installmentSum)}</td>
                         <td>{numbersToArabic(props.data.result?.sum.principal)}</td>
-                        <td>{numbersToArabic((props.data.result?.sum.feesSum)?props.data.result?.sum.feesSum:0)}</td>
+                        <td>{numbersToArabic((props.data.result?.sum.feesSum) ? props.data.result?.sum.feesSum : 0)}</td>
                         <td></td>
                     </tr>
                 </tbody>

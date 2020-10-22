@@ -188,10 +188,6 @@ class ViewProduct extends Component<Props, State>{
                                     <td>{local.loanImpactPrincipal}</td>
                                     <td>{(this.state.product.loanImpactPrincipal ? local.yes : local.no)}</td>
                                 </tr>
-                                <tr>
-                                    <td>{local.loanImpactPrincipal2}</td>
-                                    <td>{(!this.state.product.loanImpactPrincipal ? local.yes : local.no)}</td>
-                                </tr>
                                 {this.state.product.beneficiaryType !== 'group' && <>
                                     <tr>
                                         <td>{local.mustEnterGuarantor}</td>

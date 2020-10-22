@@ -10,9 +10,9 @@ export const timeToDate = (timeStampe: number): any => {
   } else return '';
 }
 export const timeToDateyyymmdd = (timeStamp: number): any => {
-  if (timeStamp === 0) {
+  if (timeStamp === -1) {
     return new Date().toISOString().slice(0, 10)
-  } else if (timeStamp)
+  } else if (timeStamp !== undefined && !isNaN(timeStamp))
     return new Date(timeStamp).toISOString().slice(0, 10)
 }
 
@@ -411,4 +411,21 @@ export const downloadAsZip = async (images: Array<{url: string; fileName: string
   }
  
   
+}
+export const iscoreStatusColor = (score: any) => {
+  let iscoreColor = '';
+  let iscorStatus = '';
+  if(score < 400 && score >1 ){iscoreColor = '#000000'; iscorStatus = 'متعثر';}
+  else if(score >= 400 && score <= 520){iscoreColor = '#ff0000'; iscorStatus = 'مخاطر مرتفعه';}
+  else if(score >= 521 && score <= 625){iscoreColor = '#ff9900'; iscorStatus = 'غير مرضى';}
+  else if(score >= 626 && score <= 700){iscoreColor = '#ffff00'; iscorStatus = 'مرضى';}
+  else if(score >= 701 && score <= 750){iscoreColor = '#99ff00'; iscorStatus = 'جيد جدا';}
+  else if(score >= 751 && score <= 850){iscoreColor = '#00ff00'; iscorStatus = 'ممتاز';}
+  else if(score > 850){iscoreColor = '#dcf0f7'; iscorStatus = 'ممتاز';}
+  else if(score === -1){iscoreColor = '#ffbad2'; iscorStatus = 'خطأ عند الاستعلام';}
+  else if(score === 1){iscoreColor = '#c0c0c0'; iscorStatus = 'لا توجد بيانات متاحه';}
+  else if(score === 0){iscoreColor = '#ffffff'; iscorStatus = 'التقييم الرقمى غيرمتاح';}
+  else {iscoreColor = '#c0c0c0'; iscorStatus = '-';}
+  const iScoreStatusObj = {color: iscoreColor, status: iscorStatus}
+  return iScoreStatusObj
 }

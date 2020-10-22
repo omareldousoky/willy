@@ -67,7 +67,7 @@ class Reports extends Component<{}, State> {
         { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
         { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo', 'branches'], permission: 'penalties' },
-        { key: 'CrossedOutLoans', local: 'قائمة حركات شطب القرض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
+        { key: 'CrossedOutLoans', local: 'قائمة حركات إعدام ديون القروض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
         { key: 'DoubtfulLoans', local: 'قائمة حركة القروض المشكوك في سدادها', inputs: ['dateFromTo', 'branches'], permission: 'loanDoubts' },
         { key: 'issuedLoanList', local: 'القروض المصدره', inputs: ['dateFromTo', 'branches'], permission: 'loansIssued' },
         { key: 'createdLoanList', local: 'انشاء القروض', inputs: ['dateFromTo', 'branches'], permission: 'loansCreated' },
@@ -448,11 +448,12 @@ class Reports extends Component<{}, State> {
       const downloadFile = await cibTPAYReport(res.body.url);
       if (downloadFile.status === "success") {
         this.setState({ loading: false });
-        const url = window.URL.createObjectURL(new Blob([downloadFile.body]));
-        const link = document.createElement('a');
-        link.href = url;
+        const link = document.createElement("a");
+        link.href = downloadFile.body.url;
         document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        link.remove();
       } else {
         this.setState({ loading: false });
       }

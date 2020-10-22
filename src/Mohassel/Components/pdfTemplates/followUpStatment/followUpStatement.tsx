@@ -12,7 +12,7 @@ const FollowUpStatment = (props) => {
     }
     return (
         <div className="follow-up-statment" dir="rtl" lang="ar">
-            <table className="margin" >
+            <table className="margin">
                 <tbody>
                     <tr>
                         <td>{props.branchDetails.name} - {props.branchDetails.governorate}</td>
@@ -57,7 +57,7 @@ const FollowUpStatment = (props) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                <td>{timeToArabicDate((installment.dateOfPayment - (5*24*60*60*1000)), false)}</td>
+                                <td>{timeToArabicDate((installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000)), false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
                             </tr>

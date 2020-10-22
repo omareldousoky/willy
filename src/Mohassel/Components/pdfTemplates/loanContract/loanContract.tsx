@@ -49,7 +49,6 @@ const LoanContract = (props) => {
             <th className="report-header-cell">
               <div className="header-info">
                 <table className="textcenter bottomborder">
-
                   <tbody>
                     <tr>
                       <td>
@@ -225,7 +224,7 @@ const LoanContract = (props) => {
                   <div className="title">البند الثالث</div>
                   <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
-                  البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} 
+                  البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
@@ -582,7 +581,7 @@ const LoanContract = (props) => {
                       return (
                         <tr key={index}>
                           <td>
-                            <div>الضامن {getIndexOfGuarantorInAr(index-2)}/</div>
+                            <div>الضامن {getIndexOfGuarantorInAr(index - 2)}/</div>
                           </td>
                           <td style={{ width: "100px" }}></td>
                         </tr>

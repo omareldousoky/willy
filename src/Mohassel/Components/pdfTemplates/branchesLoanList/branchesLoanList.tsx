@@ -2,6 +2,7 @@ import React from 'react';
 import store from '../../../redux/store';
 import './branchesLoanList.scss';
 import { timeToArabicDate } from '../../../Services/utils';
+import { theme } from '../../../../theme';
 
 const BranchesLoanList = (props) => {
     return (
@@ -12,11 +13,16 @@ const BranchesLoanList = (props) => {
                         <th>
                             <div>
                                 <table>
+                                    <thead style={{ fontSize: "12px" }}>
+                                        <tr style={{ height: "10px" }}></tr>
+                                        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                                        <tr style={{ height: "10px" }}></tr>
+                                    </thead>
                                     <tbody>
                                         <tr className="headtitle">
                                             <th>شركة تساهيل للتمويل متناهي الصغر</th>
                                             <td>{store.getState().auth.name}</td>
-                                            <th>القروض والحالات للفتره من : {timeToArabicDate(props.fromDate,false)} الي : {timeToArabicDate(props.toDate,false)}</th>
+                                            <th>القروض والحالات للفتره من : {timeToArabicDate(props.fromDate, false)} الي : {timeToArabicDate(props.toDate, false)}</th>
                                             <th>1/1</th>
                                         </tr>
                                     </tbody>
