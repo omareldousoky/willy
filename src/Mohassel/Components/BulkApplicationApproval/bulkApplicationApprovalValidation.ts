@@ -21,7 +21,7 @@ export const bulkApplicationApprovalValidation = Yup.object().shape({
             const creationDate = new Date(value).getMonth();
             return (todaysDate === creationDate)
         }
-    ).test("Should all be in the same month", local.reviewDateShouldNotBeSmallerThanCreationDate, 
+    ).test("Should all be in the same month", local.reviewDateCannotBeBeforeApprovalDate, 
     function (this: any, value: string) {
         const { selectedReviewedLoans } = this.parent;
         const date = new Date(value).valueOf();

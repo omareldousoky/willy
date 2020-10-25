@@ -1,6 +1,7 @@
 import React from 'react';
 import './paymentsDone.scss';
 import { timeToArabicDate, getInstallmentStatus } from '../../../Services/utils';
+import * as local from '../../../../Shared/Assets/ar.json';
 const PaymentsDone = (props) => {
     const tempData = props.data.data;
     const reportDate = (props.data.from === props.data.to) ? timeToArabicDate(props.data.from, false) : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(props.data.to, false)}`;
@@ -82,6 +83,7 @@ const PaymentsDone = (props) => {
                                         <td>{transaction.transactionPrincipal}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
+                                        <td>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
                                     </tr>
                                 )}
                                 <tr>
@@ -103,16 +105,16 @@ const PaymentsDone = (props) => {
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">القيمة الملغاه</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
+                                    <td className="frame">{branch.branchRbPrincipal}</td>
+                                    <td className="frame">{branch.branchRbFees}</td>
+                                    <td className="frame">{branch.branchRbTotal}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">صافي المبلغ</td>
-                                    <td className="frame">{branch.totalPrincipal}</td>
-                                    <td className="frame">{branch.totalFees}</td>
-                                    <td className="frame">{branch.totalPaid}</td>
+                                    <td className="frame">{branch.branchNetTotal}</td>
+                                    <td className="frame">{branch.branchNetFees}</td>
+                                    <td className="frame">{branch.branchNetTotal}</td>
                                 </tr>
                                 <tr>
                                     <th colSpan={100} className="horizontal-line"></th>
@@ -139,16 +141,16 @@ const PaymentsDone = (props) => {
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">القيمة الملغاه</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
-                                    <td className="frame">0.00</td>
+                                    <td className="frame">{day.dayRbPrincipal  }</td>
+                                    <td className="frame">{day.dayRbFees}</td>
+                                    <td className="frame">{day.dayRbTotal}</td>
                                 </tr>
                                 <tr>
                                     <td colSpan={8}></td>
                                     <td className="frame">صافي المبلغ</td>
-                                    <td className="frame">{day.totalPrincipal}</td>
-                                    <td className="frame">{day.totalFees}</td>
-                                    <td className="frame">{day.totalPaid}</td>
+                                    <td className="frame">{day.dayNetPrincipal}</td>
+                                    <td className="frame">{day.dayNetFees}</td>
+                                    <td className="frame">{day.dayNetTotal}</td>
                                 </tr>
                             </tbody>
                         </React.Fragment>

@@ -228,13 +228,14 @@ class ManualPayment extends Component<Props, State> {
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Col} md={6} controlId="installmentNumber">
+                  {this.props.paymentType === "normal"  && <Form.Group as={Col} md={6} controlId="installmentNumber">
                     <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column >{`${local.installmentToBePaid}`}</Form.Label>
                     <Col>
                       <Form.Control
                         as="select"
                         name="installmentNumber"
                         data-qc="installmentNumber"
+                        value={this.props.formikProps.values.installmentNumber}
                         onChange={event => {
                           this.props.formikProps.setFieldValue("installmentNumber", event.currentTarget.value);
                           this.props.formikProps.setFieldValue(
@@ -259,7 +260,7 @@ class ManualPayment extends Component<Props, State> {
                         })}
                       </Form.Control>
                     </Col>
-                  </Form.Group>
+                  </Form.Group>}
                   <Form.Group as={Col} md={6} controlId="whoPaid">
                     <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
                     <Col>

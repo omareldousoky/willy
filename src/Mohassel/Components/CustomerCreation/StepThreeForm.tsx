@@ -45,7 +45,7 @@ export const StepThreeForm = (props: any) => {
         const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             setLoading(false);
-            setgeoDivisions(resGeo.body.data ? resGeo.body.data : [])
+            setgeoDivisions(resGeo.body.data ? resGeo.body.data.filter(area => area.active) : [])
         } else setLoading(false);
     }
     useEffect(() => {

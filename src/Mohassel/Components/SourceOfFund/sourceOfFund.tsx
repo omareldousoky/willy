@@ -254,7 +254,7 @@ class SourceOfFund extends Component<Props, State> {
         </Modal>
         <Modal show={this.state.openModal === 'downloadOldFiles'} backdrop="static">
           <Modal.Header style={{ padding: '20px 30px' }}>
-            <Modal.Title>{local.chooseSourceOfFund}</Modal.Title>
+            <Modal.Title>{local.dateOfFile}</Modal.Title>
             <div style={{ cursor: 'pointer' }} onClick={() => this.setState({ openModal: '' })}>X</div>
           </Modal.Header>
           <Modal.Body style={{ padding: '20px 60px' }}>
