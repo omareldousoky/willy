@@ -129,14 +129,14 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                     <td>{local.visitationDate}</td>
                     <td>{timeToArabicDate(props.application.visitationDate, false)}</td>
                 </tr>
-                <tr>
+                {props.application.branchManagerName.length > 0 && <tr>
                     <td>{local.branchManager}</td>
                     <td>{props.application.branchManagerName}</td>
-                </tr>
-                <tr>
+                </tr>}
+                {props.application.managerVisitDate > 0 && <tr>
                     <td>{local.branchManagerVisitation}</td>
                     <td>{timeToArabicDate(props.application.managerVisitDate, false)}</td>
-                </tr>
+                </tr>}
                 <tr>
                     <td>{local.entryDate}</td>
                     <td>{timeToArabicDate(props.application.entryDate, false)}</td>
