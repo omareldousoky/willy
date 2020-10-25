@@ -231,16 +231,16 @@ class LoanProfile extends Component<Props, State>{
             this.getPendingActions();
         }
         tabsToRender.push(logsTab)
-        this.getGeoAreas();
+        this.getGeoAreas(application.body.branchId);
         this.setState({
             application: application.body,
             tabsArray: tabsToRender,
             loading: false
         })
     }
-    async getGeoAreas() {
+    async getGeoAreas(branch) {
         this.setState({ loading: true })
-        const resGeo = await getGeoAreasByBranch('');
+        const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             this.setState({ loading: false, geoAreas: resGeo.body.data })
         } else this.setState({ loading: false })
