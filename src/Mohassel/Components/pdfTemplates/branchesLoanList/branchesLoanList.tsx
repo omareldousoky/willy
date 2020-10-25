@@ -63,7 +63,7 @@ const BranchesLoanList = (props) => {
                         <th colSpan={2}>عدد / مبلغ بالالف</th>
                     </tr>
                 </thead>
-                {/* <tbody>
+                <tbody>
                     {props.data.result[0] && props.data.result[0].rows.map((row, index) => {
                         if (row.branchName !== "Total") {
                             return (
@@ -215,7 +215,7 @@ const BranchesLoanList = (props) => {
                             </tr>
                         )
                     })}
-                </tbody> */}
+                </tbody>
             </table>
         </div>
     );

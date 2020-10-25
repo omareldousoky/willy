@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { Customer, GuaranteedLoans } from '../../Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { timeToDateyyymmdd, downloadFile } from '../../Services/utils';
+import { timeToDateyyymmdd, downloadFile, iscoreStatusColor } from '../../Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
@@ -137,8 +137,9 @@ const CustomerProfile = (props: Props) => {
               </tr>
               {ability.can('viewIscore', 'customer') && <tr>
                 <td>iScore</td>
-                <td>
+                <td style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}>
                   {iScoreDetails?.iscore}
+                  <span style={{ margin: '0px 10px' }}>{iscoreStatusColor(iScoreDetails?.iscore).status}</span>
                   {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
                 </td>
               </tr>}

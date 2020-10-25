@@ -445,17 +445,13 @@ class Reports extends Component<{}, State> {
     this.setState({ loading: true, showModal: false });
     const res = await cibPaymentReport({ endDate: values.toDate });
     if (res.status === "success") {
-      const downloadFile = await cibTPAYReport(res.body.url);
-      if (downloadFile.status === "success") {
-        this.setState({ loading: false });
-        const url = window.URL.createObjectURL(new Blob([downloadFile.body]));
-        const link = document.createElement('a');
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-      } else {
-        this.setState({ loading: false });
-      }
+      this.setState({ loading: false });
+      const link = document.createElement("a");
+      link.href = res.body.url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      link.remove();
     } else {
       this.setState({ loading: false });
       Swal.fire("",local.noResults, "error");
@@ -533,7 +529,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "CrossedOutLoans" && <CrossedOutLoansList data={this.state.data} />}
         {this.state.print === "DoubtfulLoans" && <DoubtfulPayments data={this.state.data} />}
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
-        {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} startDate={this.state.fromDate} endDate={this.state.toDate} />}
+        {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} canceled={this.state.data.canceled} net={this.state.data.net} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
       </>
     )
