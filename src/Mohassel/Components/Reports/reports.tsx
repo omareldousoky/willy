@@ -445,18 +445,13 @@ class Reports extends Component<{}, State> {
     this.setState({ loading: true, showModal: false });
     const res = await cibPaymentReport({ endDate: values.toDate });
     if (res.status === "success") {
-      const downloadFile = await cibTPAYReport(res.body.url);
-      if (downloadFile.status === "success") {
-        this.setState({ loading: false });
-        const link = document.createElement("a");
-        link.href = downloadFile.body.url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        link.remove();
-      } else {
-        this.setState({ loading: false });
-      }
+      this.setState({ loading: false });
+      const link = document.createElement("a");
+      link.href = res.body.url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      link.remove();
     } else {
       this.setState({ loading: false });
       Swal.fire("",local.noResults, "error");

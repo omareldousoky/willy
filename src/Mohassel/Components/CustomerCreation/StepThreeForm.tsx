@@ -31,7 +31,7 @@ export const StepThreeForm = (props: any) => {
     }])
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep, edit } = props;
     const getLoanOfficers = async (inputValue: string) => {
-        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
+        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue, status: "active",});
         if (res.status === "success") {
             setLoanOfficers([...res.body.data, { _id: props.representativeDetails.representative, name: props.representativeDetails.representativeName }]);
             return res.body.data;
