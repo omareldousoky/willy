@@ -381,7 +381,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async getLoanOfficers() {
         this.setState({ loanOfficers: [], loading: true })
-        const res = await searchLoanOfficer({ from: 0, size: 100, branchId: this.tokenData.branch });
+        const res = await searchLoanOfficer({ from: 0, size: 100, branchId: this.tokenData.branch, status: "active" });
         if (res.status === "success") {
             this.setState({
                 loanOfficers: res.body.data.filter(officer => officer.status === 'active'),
