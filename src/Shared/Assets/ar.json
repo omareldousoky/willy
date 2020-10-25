@@ -762,5 +762,11 @@
     "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
     "dateOfFile": "تاريخ الملف",
     "cancelledTransaction": "الحركة ملغاة",
-    "branchManagerVisitation":"تاريخ زيارة مدير الفرع"
+    "branchManagerVisitation":"تاريخ زيارة مدير الفرع",
+    "branchAreas":"التقسيم الجغرافي للفروع",
+    "assignBranchAreas":"تعيين التقسيمات الجغرافية للفروع",
+    "availableGeoAreas": " التقسيمات الجغرافية المتاحة",
+    "branchgeoAreas": " التقسيمات الجغرافية المتاحة للفرع",
+    "branchAssignGeoAreaSuccess":"تم تعيين التقسيمات الجغرافية للفرع بنجاح",
+    "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع"
 }

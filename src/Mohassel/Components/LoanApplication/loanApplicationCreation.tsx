@@ -914,7 +914,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             } else if (check.flag === false && check.validationObject && Object.keys(check.validationObject).length > 0) {
                 let names = '';
                 let financeNames = '';
-                console.log(check.validationObject)
                 Object.keys(check.validationObject).forEach((id, i) => {
                     if (check.validationObject[id].totalPrincipals) {
                         (i === 0) ? financeNames = financeNames + check.validationObject[id].customerName : financeNames = financeNames + ', ' + check.validationObject[id].customerName

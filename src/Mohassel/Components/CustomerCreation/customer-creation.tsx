@@ -102,6 +102,7 @@ interface State {
   };
   step3: {
     geographicalDistribution: string;
+    geoAreaId: string;
     representative: any;
     newRepresentative: any;
     representativeName: string;
@@ -128,6 +129,7 @@ interface State {
     empty: boolean;
   };
   oldRepresentative: string;
+  branchId: string;
 }
 
 class CustomerCreation extends Component<Props, State>{
@@ -147,7 +149,8 @@ class CustomerCreation extends Component<Props, State>{
         empty: false
       },
       selectedCustomer: {},
-      oldRepresentative: ''
+      oldRepresentative: '',
+      branchId: ''
     }
   }
 
@@ -220,6 +223,7 @@ class CustomerCreation extends Component<Props, State>{
       };
       const customerExtraDetails = {
         geographicalDistribution: res.body.geographicalDistribution,
+        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
         representative: res.body.representative,
         representativeName: res.body.representativeName,
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
@@ -256,6 +260,7 @@ class CustomerCreation extends Component<Props, State>{
         hasLoan: res.body.hasLoan,
         isGuarantor: res.body.isGuarantor,
         oldRepresentative: res.body.representative,
+        branchId: res.body.branchId
       } as any);
     } else {
       this.setState({ loading: false });
@@ -402,7 +407,7 @@ class CustomerCreation extends Component<Props, State>{
             this.formikStep3 = formikProps;
           }
           return (
-            <StepThreeForm {...formikProps} representativeDetails={this.state.step3} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} />
+            <StepThreeForm {...formikProps} representativeDetails={this.state.step3} previousStep={(valuesOfStep3) => this.previousStep(valuesOfStep3, 3)} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} branchId={this.state.branchId}/>
           )
         }}
       </Formik>
