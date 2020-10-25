@@ -8,7 +8,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import Search from '../Search/search';
 import { getDateAndTime } from '../../Services/getRenderDate';
-import { changeLeadState } from '../../Services/APIs/Leads/changeLeadState';
+import { changeLeadState, changeInReviewLeadState } from '../../Services/APIs/Leads/changeLeadState';
 import { search } from '../../redux/search/actions';
 import { loading } from '../../redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
@@ -109,11 +109,11 @@ class Leads extends Component<Props, State>{
           <div style={{ position: 'relative' }}>
             <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
             {this.state.openActionsId === data.uuid && <div className="actions-list">
-              {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'rejected')}>{local.rejectApplication}</div>}
-              {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'approved')}>{local.acceptApplication}</div>}
-              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.acceptSecondVisit}</div>
-              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.editLead}</div>
-              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review')}>{local.viewCustomerLead}</div>
+              {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'rejected', '')}>{local.rejectApplication}</div>}
+              {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'approved', '')}>{local.acceptApplication}</div>}
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div>
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review', 'basic')}>{local.editLead}</div>
+              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, 'in-review', 'basic')}>{local.viewCustomerLead}</div>
             </div>}
           </div>
       },
@@ -126,16 +126,25 @@ class Leads extends Component<Props, State>{
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
   }
-  async changeLeadState(phoneNumber: string, newState: string) {
+  async changeLeadState(phoneNumber: string, newState: string, inReviewStatus: string) {
     this.props.setLoading(true);
     const res = await changeLeadState(phoneNumber, newState);
     if (res.status === "success") {
       this.props.setLoading(false);
       this.setState({ openActionsId: "" })
+      if(inReviewStatus !== '') {
+        const inReviewStatusRes = await changeInReviewLeadState(phoneNumber, inReviewStatus);
+        if(inReviewStatusRes.status === "success") {
+          Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+        } else {
+          this.props.setLoading(false);
+          Swal.fire('', local.userRoleEditError, 'error');
+        }
+      }
       Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
-      this.getLeadsCustomers();
     } else {
       this.props.setLoading(false);
+      Swal.fire('', local.userRoleEditError, 'error');
     }
   }
   render() {
