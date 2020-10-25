@@ -10,8 +10,8 @@ const CrossedOutLoansList = (props) => {
   const totalTransactionAmount = Number(data.transactionAmount);
   const totalTransactionInterest = Number(data.transactionInterest);
   const totalTransactionPrincipal = Number(data.transactionPrincipal);
-  const startDate = timeToArabicDate(props.data.startDate, false);
-  const endDate = timeToArabicDate(props.data.endDate, false);
+  const startDate = timeToArabicDate(props.data.req.startDate, false);
+  const endDate = timeToArabicDate(props.data.req.endDate, false);
 
   const getStatus = (value) => {
     switch (value) {

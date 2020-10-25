@@ -32,17 +32,17 @@ const IssuedLoanList = (props) => {
                         </tr>
                         <tr>
                             <th>رقم مسلسل</th>
-                            <th>كود الحركه</th>
+                            <th colSpan={2}>كود الحركه</th>
                             <th>كود العميل</th>
                             <th>أسم العميل</th>
                             <th>مسلسل القرض</th>
-                            <th>رقم الشيك</th>
-                            <th>قيمة</th>
+                            <th colSpan={2}>رقم الشيك</th>
+                            <th colSpan={2}>قيمة</th>
                             <th>تاريخ القرض</th>
                             <th>الحالة الان</th>
                             <th>أصل</th>
-                            <th>قيمة الحركة فائدة</th>
-                            <th>إجمالي</th>
+                            <th colSpan={2}>قيمة الحركة فائدة</th>
+                            <th colSpan={2}>إجمالي</th>
                             <th>حالة الحركة</th>
                         </tr>
                         <tr>

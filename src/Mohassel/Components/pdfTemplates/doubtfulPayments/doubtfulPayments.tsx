@@ -4,7 +4,7 @@ import { timeToArabicDate, getTimestamp, getLoanStatus } from '../../../Services
 import * as local from '../../../../Shared/Assets/ar.json';
 const DoubtfulPayments = (props) => {
     const tempData = props.data.data;
-    const reportDate = (props.data.from === props.data.to) ? timeToArabicDate(props.data.from, false) : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(props.data.to, false)}`;
+    const reportDate = (props.data.req.startDate === props.data.req.endDate) ? timeToArabicDate(props.data.req.startDate, false) : `من ${timeToArabicDate(props.data.req.startDate, false)} الي ${timeToArabicDate(props.data.req.endDate, false)}`;
     return (
         <>
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
@@ -41,7 +41,7 @@ const DoubtfulPayments = (props) => {
                             <th>تاريخ القرض</th>
                             <th>الحالة الان</th>
                             <th>أصل</th>
-                            <th>قيمة الحركة فائدة</th>
+                            <th colSpan={2}>قيمة الحركة فائدة</th>
                             <th>إجمالي</th>
                             <th>حالة الحركة</th>
                         </tr>

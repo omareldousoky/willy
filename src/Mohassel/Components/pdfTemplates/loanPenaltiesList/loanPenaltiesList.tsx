@@ -90,7 +90,7 @@ const LoanPenaltiesList = (props) => {
             <td>{idx + 1}</td>
             {/* <td>{row.transactionCode}</td> */}
             <td>{row.customerKey}</td>
-            <td>{row.customerName}</td>
+            <td colSpan={2}>{row.customerName}</td>
             <td>{row.loanSerial}</td>
             {/* <td>0004519</td> */}
             <td>{row.loanPrincipal}</td>
@@ -170,16 +170,16 @@ const LoanPenaltiesList = (props) => {
             <tr>
               <th>رقم مسلسل</th>
               {/* <th>كود الحركه</th> */}
-              <th>كود العميل</th>
+              <th colSpan={2}>كود العميل</th>
               <th className="name">أسم العميل</th>
-              <th>مسلسل القرض</th>
+              <th colSpan={2}>مسلسل القرض</th>
               {/* <th>رقم الشيك</th> */}
               <th>قيمة</th>
               <th>تاريخ القرض</th>
-              <th>حالة القرض</th>
-              <th>مستند الحركة</th>
-              <th>قيمة الغرامة</th>
-              <th>حالة الحركة</th>
+              <th colSpan={2}>حالة القرض</th>
+              <th colSpan={2}>مستند الحركة</th>
+              <th colSpan={2}>قيمة الغرامة</th>
+              <th colSpan={2}>حالة الحركة</th>
             </tr>
             <tr>
               <th colSpan={100} className="border-line"></th>
