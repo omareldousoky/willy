@@ -12,46 +12,47 @@ const DocumentsUploadedPercentage = (props) => {
     const splitNUmber = 50;
     let start = 0;
     while (start < bigArr.length) {
-        console.log("slice")
         parentArr.push(bigArr.slice(start, start + splitNUmber));
         start = start + 50;
     }
     return (
-        <div className="documents-uploaded-percentage" lang="ar">
-            <thead style={{ fontSize: "12px" }}>
+        <>
+            <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
                 <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
-            </thead>
-            <Row>
-                {parentArr.map((arr, index) => {
-                    return (
-                        <Col key={index} sm={6}>
-                            <table key={index}>
-                                <thead>
-                                    <tr>
-                                        <th className="frame" colSpan={100}>نسب المسح الضوئى عن الفترة من 26-6-2020 2 الي 25-6-2020</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {arr.map((el, key) => {
-                                        return (
-                                            <tr key={key}>
-                                                <td className="frame" colSpan={1}>{(key + 1) + (index * 50)}</td>
-                                                <td className="frame" colSpan={4}>{el.name}</td>
-                                                <td className="frame" colSpan={4}>{el.number1}</td>
-                                                <td className="frame" colSpan={4}>{el.number2}</td>
-                                                <td className="frame yellow" colSpan={4}>{el.percentage}</td>
-                                            </tr>
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
-                        </Col>
-                    )
-                })}
-            </Row>
-        </div>
+            </table>
+            <div className="documents-uploaded-percentage" lang="ar">
+                <Row>
+                    {parentArr.map((arr, index) => {
+                        return (
+                            <Col key={index} sm={6}>
+                                <table key={index}>
+                                    <thead>
+                                        <tr>
+                                            <th className="frame" colSpan={100}>نسب المسح الضوئى عن الفترة من 26-6-2020 2 الي 25-6-2020</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {arr.map((el, key) => {
+                                            return (
+                                                <tr key={key}>
+                                                    <td className="frame" colSpan={1}>{(key + 1) + (index * 50)}</td>
+                                                    <td className="frame" colSpan={4}>{el.name}</td>
+                                                    <td className="frame" colSpan={4}>{el.number1}</td>
+                                                    <td className="frame" colSpan={4}>{el.number2}</td>
+                                                    <td className="frame yellow" colSpan={4}>{el.percentage}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </Col>
+                        )
+                    })}
+                </Row>
+            </div>
+        </>
     )
 }
 
