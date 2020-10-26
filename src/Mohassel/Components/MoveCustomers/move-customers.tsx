@@ -25,6 +25,10 @@ interface Customer {
     key?: number;
     _id?: string;
     branchId?: string;
+    blocked?: {
+        isBlocked: boolean;
+        reason?: string;
+    };
 
 }
 interface State {
@@ -34,8 +38,8 @@ interface State {
     size: number;
     from: number;
     openModal: boolean;
-    selectedLO: { _id?: string;name?: string } | undefined;
-    newSelectedLO: { _id?: string;name?: string } | undefined;
+    selectedLO: { _id?: string; name?: string } | undefined;
+    newSelectedLO: { _id?: string; name?: string } | undefined;
     filterCustomers: string;
     LoanOfficerSelectLoader: boolean;
     moveMissing: boolean;
@@ -70,8 +74,7 @@ export class MoveCustomers extends Component<{}, State>  {
     }
     checkAll(e: React.FormEvent<HTMLInputElement>) {
         if (e.currentTarget.checked) {
-            // const newselectedReviewedLoans: Array<string> = this.state.customers.map(loanItem => loanItem.id);
-            this.setState({ selectedCustomers: this.state.customers });
+            this.setState({ selectedCustomers: this.state.customers.filter(customer=> customer.blocked?.isBlocked !== true) });
         } else this.setState({ selectedCustomers: [] });
     }
     addRemoveItemFromChecked(customer: Customer) {
@@ -125,8 +128,7 @@ export class MoveCustomers extends Component<{}, State>  {
             this.setState({ loading: false, newSelectedLO: {}, filterCustomers: "" });
             Swal.fire(
                 "",
-                `${local.doneMoving} ${
-                this.state.moveMissing
+                `${local.doneMoving} ${this.state.moveMissing
                     ? local.customersSuccess
                     : this.state.selectedCustomers.length + " " + local.customerSuccess
                 }`,
@@ -189,7 +191,7 @@ export class MoveCustomers extends Component<{}, State>  {
         } else this.setState({ loading: false });
     }
     render() {
-        
+
         return (
             <Card style={{ textAlign: 'right' }}>
                 <Card.Body>
@@ -197,7 +199,7 @@ export class MoveCustomers extends Component<{}, State>  {
                         <Form.Group className="data-group" id="currentLoanOfficer">
                             <Form.Label className="data-label">{local.chooseCurrentLoanOfficer}</Form.Label>
                             <LoanOfficersDropDown
-                                id= "currentLoanSelect"
+                                id="currentLoanSelect"
                                 onSelectLoanOfficer={LO => {
                                     if (LO) this.setState({ selectedLO: LO }, () => this.getCustomersForUser());
                                     else this.setState({ selectedLO: {} });
@@ -258,10 +260,11 @@ export class MoveCustomers extends Component<{}, State>  {
                                 </InputGroup>
                                 {this.state.totalCustomers > 0 ? (
                                     <Table striped hover style={{ textAlign: "right" }}>
-                                        <thead>
+                                        <thead> 
                                             <tr>
                                                 <th>
                                                     <FormCheck
+                                                    style={{marginRight:"-14px"}}
                                                         type="checkbox"
                                                         onClick={e => this.checkAll(e)}
                                                     ></FormCheck>
@@ -276,13 +279,17 @@ export class MoveCustomers extends Component<{}, State>  {
                                                 return (
                                                     <tr key={index}>
                                                         <td>
+                                                            <Row>
                                                             <FormCheck
                                                                 type="checkbox"
                                                                 checked={this.state.selectedCustomers.includes(
                                                                     customer
                                                                 )}
                                                                 onChange={() => this.addRemoveItemFromChecked(customer)}
-                                                            ></FormCheck>
+                                                                disabled={customer.blocked?.isBlocked === true}
+                                                            />
+                                                            {customer.blocked?.isBlocked === true ? <span style={{color:'#d51b1b'}}>{local.theCustomerIsBlocked}</span> : null}
+                                                            </Row>
                                                         </td>
                                                         <td>{customer.key}</td>
                                                         <td>{customer.customerName}</td>
@@ -317,7 +324,7 @@ export class MoveCustomers extends Component<{}, State>  {
                                             <Form.Label className="data-label">{local.chooseLoanOfficer}</Form.Label>
                                             <Col sm={12}>
                                                 <LoanOfficersDropDown
-                                                id= "newLoanOfficerSelect"
+                                                    id="newLoanOfficerSelect"
                                                     onSelectLoanOfficer={LO => {
                                                         if (LO) this.setState({ newSelectedLO: LO });
                                                         else this.setState({ newSelectedLO: {} });
