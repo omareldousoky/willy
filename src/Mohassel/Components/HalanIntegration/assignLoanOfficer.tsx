@@ -2,14 +2,23 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import FormCheck from 'react-bootstrap/FormCheck';
+import Modal from 'react-bootstrap/Modal';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import AsyncSelect from 'react-select/async';
+import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import Search from '../Search/search';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { assignLeadToLO } from '../../Services/APIs/Leads/assignLeadToLO';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { search } from '../../redux/search/actions';
+import { loading } from '../../redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 
 interface Props {
@@ -20,6 +29,7 @@ interface Props {
   searchFilters: any;
   search: (data) => void;
   setSearchFilters: (data) => void;
+  setLoading: (data) => void;
 }
 interface State {
   tabs: Array<{
@@ -33,6 +43,8 @@ interface State {
   checkAll: boolean;
   selectedCustomers: Array<any>;
   openModal: boolean;
+  selectedLO: any;
+  loanOfficers: Array<any>;
 }
 
 class AssignLoanOfficer extends Component<Props, State>{
@@ -59,6 +71,8 @@ class AssignLoanOfficer extends Component<Props, State>{
       checkAll: false,
       selectedCustomers: [],
       openModal: false,
+      selectedLO: {},
+      loanOfficers: [],
     }
     this.mappers = [
       {
@@ -66,14 +80,14 @@ class AssignLoanOfficer extends Component<Props, State>{
         key: 'selected',
         render: data => <FormCheck
           type="checkbox"
-          checked={Boolean(this.state.selectedCustomers.find(customer => customer._id === data._id))}
+          checked={Boolean(this.state.selectedCustomers.find(customer => customer.uuid === data.uuid))}
           onChange={() => this.addRemoveItemFromChecked(data)}
         ></FormCheck>
       },
       {
         title: local.customerCode,
         key: "customerCode",
-        render: data => data.key
+        render: data => data.uuid
       },
       {
         title: local.customerName,
@@ -83,9 +97,8 @@ class AssignLoanOfficer extends Component<Props, State>{
       },
       {
         title: local.governorate,
-        sortable: true,
         key: "governorate",
-        render: data => data.governorate
+        render: data => data.businessGovernate
       },
       {
         title: local.branchName,
@@ -101,7 +114,7 @@ class AssignLoanOfficer extends Component<Props, State>{
         title: local.creationDate,
         sortable: true,
         key: "createdAt",
-        render: data => data.created?.at ? getDateAndTime(data.created?.at) : ''
+        render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
       },
       {
         title: '',
@@ -113,10 +126,10 @@ class AssignLoanOfficer extends Component<Props, State>{
   }
 
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' });
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
@@ -132,6 +145,29 @@ class AssignLoanOfficer extends Component<Props, State>{
       this.setState({
         selectedCustomers: [...this.state.selectedCustomers, selectedCustomer],
       })
+    }
+  }
+  getLoanOfficers = async (input: string) => {
+    const res = await searchLoanOfficer({ from: 0, size: 1000, name: input });
+    if (res.status === "success") {
+      this.setState({ loanOfficers: res.body.data })
+      return res.body.data;
+    } else {
+      this.setState({ loanOfficers: [] })
+      return [];
+    }
+  }
+  async submit() {
+    this.props.setLoading(true);
+    console.log("submit", this.state.selectedCustomers, this.state.selectedLO)
+    const res = await assignLeadToLO(this.state.selectedCustomers[0].phoneNumber, this.state.selectedLO._id, this.state.selectedCustomers[0].uuid);
+    if (res.status === "success") {
+      this.props.setLoading(false);
+      this.setState({ openModal: false })
+      Swal.fire("", `${local.doneMoving} ${this.state.selectedCustomers.length + " " + local.customerSuccess}`, "success")
+    } else {
+      this.props.setLoading(false);
+      Swal.fire("", local.errorOnMovingCustomers, "error")
     }
   }
   render() {
@@ -167,7 +203,7 @@ class AssignLoanOfficer extends Component<Props, State>{
               searchKeys={['keyword', 'dateFromTo', 'governorate', 'branch']}
               dropDownKeys={['name', 'nationalId', 'key', 'code']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              url="customer"
+              url="lead"
               from={this.state.from}
               size={this.state.size}
             />
@@ -179,7 +215,7 @@ class AssignLoanOfficer extends Component<Props, State>{
                 mappers={this.mappers}
                 pagination={true}
                 data={this.props.data}
-                url="customer"
+                url="lead"
                 changeNumber={(key: string, number: number) => {
                   this.setState({ [key]: number } as any, () => this.getLeadsCustomers());
                 }}
@@ -187,6 +223,42 @@ class AssignLoanOfficer extends Component<Props, State>{
             }
           </Card.Body>
         </Card>
+        <Modal size="lg" show={this.state.openModal} onHide={() => this.setState({ openModal: false })}>
+          <Modal.Header closeButton>
+            <Modal.Title style={{ margin: " 0 auto" }}>
+              {local.chooseRepresentative}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row style={{ padding: "10px 40px" }}>
+              <Form.Label className="data-label">{local.chooseLoanOfficer}</Form.Label>
+              <Col sm={12}>
+                <AsyncSelect
+                  name="employees"
+                  data-qc="employees"
+                  value={this.state.loanOfficers.find(loanOfficer => loanOfficer._id === this.state.selectedLO?._id)}
+                  onChange={(loanOfficer) => this.setState({ selectedLO: loanOfficer })}
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option._id}
+                  loadOptions={(input) => this.getLoanOfficers(input)}
+                  cacheOptions defaultOptions
+                />
+              </Col>
+            </Row>
+            <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
+              <Col >
+                <Button
+                  style={{ width: "100%", height: "100%" }}
+                  onClick={() => this.submit()}
+                  disabled={false}
+                  variant="primary"
+                >
+                  {local.submit}
+                </Button>
+              </Col>
+            </Row>
+          </Modal.Body>
+        </Modal>
       </>
     )
   }
@@ -194,6 +266,7 @@ class AssignLoanOfficer extends Component<Props, State>{
 const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
+    setLoading: data => dispatch(loading(data))
   };
 };
 const mapStateToProps = state => {

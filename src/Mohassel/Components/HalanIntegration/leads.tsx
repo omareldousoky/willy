@@ -171,7 +171,7 @@ class Leads extends Component<Props, State>{
               searchKeys={['keyword', 'dateFromTo', 'governorate', 'branch']}
               dropDownKeys={['name', 'nationalId', 'key', 'code']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              url="customer"
+              url="lead"
               from={this.state.from}
               size={this.state.size}
             />
@@ -183,7 +183,7 @@ class Leads extends Component<Props, State>{
                 mappers={this.mappers}
                 pagination={true}
                 data={this.props.data}
-                url="customer"
+                url="lead"
                 changeNumber={(key: string, number: number) => {
                   this.setState({ [key]: number, openActionsId: "" } as any, () => this.getLeadsCustomers());
                 }}
