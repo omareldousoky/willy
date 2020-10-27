@@ -176,8 +176,10 @@ class NavBar extends Component<Props, State> {
             <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
               {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
-              {<Can I='getLoanProduct' a='product'><Can I='getCalculationFormula' a='product'><Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link></Can></Can>}
-              {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link></Can>}
+              {ability.can('getLoanProduct', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link>
+               : ability.can('getCalculationFormula' ,'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/calculation-formulas')}>{local.loans}</Nav.Link>
+                : ability.can('assignProductToBranch', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link> : null}
+              {/* {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link></Can>} */}
               {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
               {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}

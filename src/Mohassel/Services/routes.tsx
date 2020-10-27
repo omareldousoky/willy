@@ -207,6 +207,11 @@ const appRoutes = [
             label: local.testCalculationMethod,
             render: (props) => <Can I='testCalculate' a='product'><FormulaTest {...props} /></Can>,
           },
+          {
+            path: "/assign-products-branches",
+            label: local.assignProductToBranch,
+            render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductsToBranches {...props} /> </Can>,
+          }    
         ]
       },
       {
@@ -309,11 +314,6 @@ const appRoutes = [
           },
         ]
 
-      }
-      , {
-        path: "/assign-products-branches",
-        label: local.assignProductToBranch,
-        render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductsToBranches {...props} /> </Can>,
       },
       {
         path: "/logs",

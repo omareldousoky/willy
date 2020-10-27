@@ -29,5 +29,13 @@ export const manageLoansArray = (): Card[] => {
       path: '/manage-loans/test-formula'
     })
   }
+  if (ability.can('assignProductToBranch', 'product')) {
+    manageLoanArr.push({
+      icon: 'assignProductToBranch',
+      header: local.assignProductToBranch,
+      desc: local.assignProductToBranch,
+      path: '/manage-loans/assign-products-branches'
+    })
+  }
   return manageLoanArr;
 }
