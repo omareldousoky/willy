@@ -8,13 +8,13 @@ import { connect } from "react-redux";
 import AsyncSelect from 'react-select/async';
 import { Formik, FormikProps } from "formik";
 import { searchUserByAction } from "../../Services/APIs/UserByAction/searchUserByAction";
-import { timeToDateyyymmdd } from "../../Services/utils";
-import { payment } from "../../redux/payment/actions";
+import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
+import { payment } from "../../../Shared/redux/payment/actions";
 import { Employee } from "./payment";
 import { manualPaymentValidation } from "./paymentValidation";
 import * as local from "../../../Shared/Assets/ar.json";
 import "./styles.scss";
-import { PendingActions } from "../../Services/interfaces";
+import { PendingActions } from "../../../Shared/Services/interfaces";
 import { Installment } from "./payInstallment";
 
 interface SelectObject {

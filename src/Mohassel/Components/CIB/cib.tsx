@@ -310,7 +310,7 @@ class CIB extends Component<Props, State> {
               </Table>
               :
               <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+                <img alt='no-data-found' src={require("../../../Shared/Assets/no-results-found.svg")} />
                 <h4>{local.noResultsFound}</h4>
               </div>
             }

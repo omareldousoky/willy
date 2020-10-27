@@ -265,7 +265,7 @@ class DualBox extends Component<Props, State> {
                                 <div className="list-group-item delete-all-row" style={{ background: '#FAFAFA' }}>
                                     <span className="text-muted">{local.count}({this.state.selectedOptions.length})</span>
                                     <div onClick={() => this.removeAllFromList()}>
-                                        <span ><img src={require('../../Assets/deleteIcon.svg')} /></span>
+                                        <span ><img src={require('../../../Shared/Assets/deleteIcon.svg')} /></span>
                                         <span>{local.deleteAll}</span>
                                     </div>
                                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './issuedLoanList.scss';
 import { englishToArabic } from '../../../Services/statusLanguage';
-import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp } from "../../../../Shared/Services/utils";
 const IssuedLoanList = (props) => {
     const tempData = props.data.data;
     const reportDate = (props.data.from === props.data.to) ? timeToArabicDate(props.data.from, false) : `من ${timeToArabicDate(props.data.from, false)} الي ${timeToArabicDate(props.data.to, false)}`;

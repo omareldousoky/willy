@@ -27,7 +27,7 @@ import CustomersList from '../Components/CustomerCreation/customersList';
 import LoanProducts from '../Components/ManageLoans/productsList';
 import FormulaList from '../Components/ManageLoans/calculationFormulaList';
 import * as local from '../../Shared/Assets/ar.json';
-import { generateAppRoutes } from './utils';
+import { generateAppRoutes } from '../../Shared/Services/utils';
 import BranchDetails from '../Components/BranchDetails/branch-details';
 import GroupMemberSeperation from '../Components/LoanProfile/groupMemberSeperation';
 import ViewFormula from '../Components/LoanFormulaCreation/calculationFormulaView';

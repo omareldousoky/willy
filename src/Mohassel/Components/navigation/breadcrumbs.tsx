@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { pathTo } from "../../Services/utils";
+import { pathTo } from "../../../Shared/Services/utils";
 
 const Breadcrumbs = ({ route }) => {
   return (

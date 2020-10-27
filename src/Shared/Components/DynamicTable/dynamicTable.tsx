@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import './styles.scss';
 import * as local from '../../../Shared/Assets/ar.json';
 import { connect } from 'react-redux';
-import { searchFilters, search } from '../../redux/search/actions';
+import { searchFilters, search } from '../../../Shared/redux/search/actions';
 
 interface Props {
   mappers: Array<any>;

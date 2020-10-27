@@ -9,7 +9,7 @@ import GroupInfoBox from '../LoanProfile/groupInfoBox';
 import InfoBox from '../userInfoBox';
 import AsyncSelect from 'react-select/async';
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { getCookie } from '../../Services/getCookie';
+import { getCookie } from '../../../Shared/Services/getCookie';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;

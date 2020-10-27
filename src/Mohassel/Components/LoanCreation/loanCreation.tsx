@@ -15,11 +15,11 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt } from "../../../Shared/Services/utils";
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 import { Employee } from '../Payment/payment';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
-import { getCookie } from '../../Services/getCookie';
+import { getCookie } from '../../../Shared/Services/getCookie';
 interface CustomerData {
   id: string;
   customerName: string;

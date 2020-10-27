@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Component } from 'react';
 import './earlyPayment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, getStatus } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic, getStatus } from "../../../../Shared/Services/utils";
 interface Props {
     data: any;
     earlyPaymentData: any;

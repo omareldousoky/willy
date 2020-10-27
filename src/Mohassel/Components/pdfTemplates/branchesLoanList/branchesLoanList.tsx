@@ -1,7 +1,7 @@
 import React from 'react';
-import store from '../../../redux/store';
+import store from '../../../../Shared/redux/store';
 import './branchesLoanList.scss';
-import { timeToArabicDate } from '../../../Services/utils';
+import { timeToArabicDate } from "../../../../Shared/Services/utils";
 import { theme } from '../../../../theme';
 
 const BranchesLoanList = (props) => {

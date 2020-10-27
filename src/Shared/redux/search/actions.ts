@@ -1,9 +1,9 @@
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
-import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
-import { searchUsers } from '../../Services/APIs/Users/searchUsers';
-import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
-import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
-import {searchActionLogs} from '../../Services/APIs/ActionLogs/searchActionLogs';
+import { searchCustomer } from '../../../Mohassel/Services/APIs/Customer-Creation/searchCustomer';
+import { searchBranches } from '../../../Mohassel/Services/APIs/Branch/searchBranches';
+import { searchUsers } from '../../../Mohassel/Services/APIs/Users/searchUsers';
+import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan';
+import { searchApplication } from '../../../Mohassel/Services/APIs/loanApplication/searchApplication';
+import {searchActionLogs} from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs';
 
 export const search = (obj) => {
     switch (obj.url) {

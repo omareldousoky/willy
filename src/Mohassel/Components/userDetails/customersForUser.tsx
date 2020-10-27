@@ -316,7 +316,7 @@ class CustomersForUser extends Component<Props, State> {
           <div style={{ textAlign: "center", marginBottom: 40 }}>
             <img
               alt="no-data-found"
-              src={require("../../Assets/no-results-found.svg")}
+              src={require("../../../Shared/Assets/no-results-found.svg")}
             />
             <h4>{local.noResultsFound}</h4>
           </div>

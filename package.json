@@ -6,9 +6,11 @@
   "scripts": {
     "start-login": "webpack-dev-server --mode development --env.development --config ./config/webpack.login.js --open --hot",
     "start-mohassel": "webpack-dev-server --mode development --env.development --config ./config/webpack.mohassel.js --open --hot",
-    "build": "npm run build-login && npm run build-mohassel",
+    "start-documents": "webpack-dev-server --mode development --env.development --config ./config/webpack.documents.js --open --hot",
+    "build": "npm run build-login && npm run build-mohassel && npm run build-documents",
     "build-login": "webpack --mode production --env.production --config ./config/webpack.login.js",
-    "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js"
+    "build-mohassel": "webpack --mode production --env.production --config ./config/webpack.mohassel.js",
+    "build-documents": "webpack --mode production --env.production --config ./config/webpack.documents.js"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

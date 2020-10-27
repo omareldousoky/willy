@@ -1,4 +1,4 @@
-import { authMe } from '../../Services/APIs/Auth/authMe';
+import { authMe } from '../../../Mohassel/Services/APIs/Auth/authMe';
 
 export const getAuthData = () => {
     return async (dispatch) => {

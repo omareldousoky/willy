@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from "react-redux";
 import './randomPayment.scss';
-import { timeToArabicDate } from '../../../Services/utils';
+import { timeToArabicDate } from "../../../../Shared/Services/utils"
 interface Props {
 	branches: {
 		rows: {

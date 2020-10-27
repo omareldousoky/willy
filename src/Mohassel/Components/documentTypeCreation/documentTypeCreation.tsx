@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import DocumentTypeCreationForm from './documentTypeCreationForm'
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import { DocumentType } from '../../Services/interfaces';
+import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentType, documentTypeCreationValidation, documentTypeEditValidation } from './documnetTypeinitialState';
 import { createDocumentsType } from '../../Services/APIs/encodingFiles/createDocumentType';
 import { editDocumentsType } from '../../Services/APIs/encodingFiles/editDocumentType';

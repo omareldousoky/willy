@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import Search from '../Search/search';
+import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from "../../../Shared/Services/utils";
 
 interface Props {
   history: Array<any>;

@@ -15,7 +15,7 @@ import { StepThreeForm } from './StepThreeForm';
 import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import ability from '../../config/ability';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 

@@ -7,7 +7,7 @@ import './userCreation.scss'
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
-import { checkIssueDate } from '../../Services/utils';
+import { checkIssueDate } from '../../../Shared/Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';

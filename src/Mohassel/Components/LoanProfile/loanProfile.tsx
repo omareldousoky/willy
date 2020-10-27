@@ -21,7 +21,6 @@ import ability from '../../config/ability';
 import CustomerCardPDF from '../pdfTemplates/customerCard/customerCard';
 import CashReceiptPDF from '../pdfTemplates/cashReceipt/cashReceipt';
 import CustomerCardAttachments from '../pdfTemplates/customerCardAttachments/customerCardAttachments';
-import TotalWrittenChecksPDF from '../pdfTemplates/totalWrittenChecks/totalWrittenChecks';
 import FollowUpStatementPDF from '../pdfTemplates/followUpStatment/followUpStatement';
 import LoanContract from '../pdfTemplates/loanContract/loanContract';
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup';
@@ -30,13 +29,13 @@ import { withRouter } from 'react-router-dom';
 import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
-import { PendingActions } from '../../Services/interfaces';
-import { timeToDateyyymmdd, iscoreDate } from '../../Services/utils';
-import { payment } from '../../redux/payment/actions';
+import { PendingActions } from '../../../Shared/Services/interfaces';
+import { timeToDateyyymmdd, iscoreDate } from '../../../Shared/Services/utils';
+import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
 import { cancelApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import { rejectManualPayment } from '../../Services/APIs/Loan/rejectManualPayment';
-import store from '../../redux/store';
+import store from '../../../Shared/redux/store';
 import UploadDocuments from './uploadDocuments';
 import { getIscore, getIscoreCached } from '../../Services/APIs/iScore/iScore';
 import { writeOffLoan } from '../../Services/APIs/Loan/writeOffLoan';
@@ -616,7 +615,6 @@ class LoanProfile extends Component<Props, State>{
                         <CashReceiptPDF data={this.state.application} />
                         <CustomerCardPDF data={this.state.application} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
-                        <TotalWrittenChecksPDF data={this.state.application} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />
                         {this.state.application.product.beneficiaryType === "individual" ?
                             <LoanContract data={this.state.application} branchDetails={this.state.branchDetails} />

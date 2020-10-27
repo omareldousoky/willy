@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import Card from 'react-bootstrap/Card';
-import DynamicTable from '../DynamicTable/dynamicTable';
-import Search from '../Search/search';
-import { search, searchFilters } from '../../redux/search/actions';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
+import Search from '../../../Shared/Components/Search/search';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getDateAndTime } from '../../Services/getRenderDate';

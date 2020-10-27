@@ -5,15 +5,15 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
-import * as local from '../../../Shared/Assets/ar.json';
-import Can from '../../config/Can';
-import { Loader } from '../../../Shared/Components/Loader';
+import * as local from '../../Assets/ar.json';
+import Can from '../../../Mohassel/config/Can';
+import { Loader } from '../Loader';
 import { getCookie } from '../../Services/getCookie';
-import { parseJwt, timeToDateyyymmdd } from '../../Services/utils';
-import { contextBranch } from '../../Services/APIs/Login/contextBranch';
-import ability from '../../config/ability';
+import { parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { contextBranch } from '../../../Mohassel/Services/APIs/Login/contextBranch';
+import ability from '../../../Mohassel/config/ability';
 import './styles.scss';
-import { setToken } from '../../../Shared/token';
+import { setToken } from '../../token';
 import { connect } from 'react-redux';
 import { Auth } from '../../redux/auth/types'
 interface Props {
@@ -170,7 +170,7 @@ class NavBar extends Component<Props, State> {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        {this.state.selectedBranch._id && <Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
+        {<Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>

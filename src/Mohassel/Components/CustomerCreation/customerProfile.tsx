@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import { Customer, GuaranteedLoans } from '../../Services/interfaces';
+import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { timeToDateyyymmdd, downloadFile, iscoreStatusColor } from '../../Services/utils';
+import { timeToDateyyymmdd, downloadFile, iscoreStatusColor } from '../../../Shared/Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';

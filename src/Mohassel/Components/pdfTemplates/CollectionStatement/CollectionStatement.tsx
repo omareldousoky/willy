@@ -1,6 +1,6 @@
 import React from "react";
 import "./CollectionStatement.scss";
-import { timeToArabicDate } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../../Shared/Services/utils";
 import Table from "react-bootstrap/Table";
 
 const CollectionStatement = (props) => {

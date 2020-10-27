@@ -13,12 +13,12 @@ import {
     ADD_TO_SELECTION_ARRAY,
     REMOVE_FROM_SELECTION_ARRAY,
 } from './types';
-import { uploadDocument as customerUploadDocument } from '../../Services/APIs/Customer-Creation/uploadDocument';
-import { uploadDocument as applicationUploadDocument } from '../../Services/APIs/loanApplication/uploadDocument'
-import { deleteDocument as customerDeleteDocument } from '../../Services/APIs/Customer-Creation/deleteDocument';
-import { deleteDocument as applicationDeleteDocument } from '../../Services/APIs/loanApplication/deleteDocument';
-import { getCustomerDocuments } from '../../Services/APIs/Customer-Creation/getDocuments';
-import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments';
+import { uploadDocument as customerUploadDocument } from '../../../Mohassel/Services/APIs/Customer-Creation/uploadDocument';
+import { uploadDocument as applicationUploadDocument } from '../../../Mohassel/Services/APIs/loanApplication/uploadDocument'
+import { deleteDocument as customerDeleteDocument } from '../../../Mohassel/Services/APIs/Customer-Creation/deleteDocument';
+import { deleteDocument as applicationDeleteDocument } from '../../../Mohassel/Services/APIs/loanApplication/deleteDocument';
+import { getCustomerDocuments } from '../../../Mohassel/Services/APIs/Customer-Creation/getDocuments';
+import { getApplicationDocuments } from '../../../Mohassel/Services/APIs/loanApplication/getDocuments';
 import {Document} from '../../Services/interfaces'
 import Swal from 'sweetalert2';
 

@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { connect } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import * as local from '../../../Shared/Assets/ar.json';
+import * as local from '../../Assets/ar.json';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -11,12 +11,12 @@ import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { search, searchFilters, issuedLoansSearchFilters } from '../../redux/search/actions';
-import { BranchesDropDown } from '../dropDowns/allDropDowns';
-import { parseJwt, timeToDateyyymmdd } from '../../Services/utils';
+import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDropDowns';
+import { parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { getCookie } from '../../Services/getCookie';
-import { getGovernorates } from '../../Services/APIs/configApis/config';
+import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
-import {getActionsList} from '../../Services/APIs/ActionLogs/getActionsList';
+import {getActionsList} from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList';
 import Swal from 'sweetalert2';
 
 interface InitialFormikState {

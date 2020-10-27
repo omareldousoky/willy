@@ -1,6 +1,6 @@
 import React from 'react';
 import './customerStatusDetails.scss';
-import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from '../../../Services/utils';
+import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from "../../../../Shared/Services/utils";
 
 const CustomerStatusDetails = (props) => {
     function getCustomerStatus(status: string) {

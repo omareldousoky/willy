@@ -1,7 +1,7 @@
 import React from 'react';
 import './totalWrittenChecks.scss';
-import * as local from '../../../../Shared/Assets/ar.json';
-import { numbersToArabic } from '../../../Services/utils';
+import local from '../../../../Shared/Assets/ar.json';
+import { numbersToArabic } from '../../../../Shared/Services/utils';
 import Tafgeet from 'tafgeetjs';
 
 const TotalWrittenChecks = (props) => {

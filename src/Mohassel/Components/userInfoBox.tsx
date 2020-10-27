@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
-import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor } from '../Services/utils';
+import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor } from '../../Shared/Services/utils';
 import Can from '../config/Can';
 import { Score } from './CustomerCreation/customerProfile';
 
