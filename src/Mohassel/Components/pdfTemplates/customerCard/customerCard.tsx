@@ -71,7 +71,6 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td className="title bold">{this.props.branchDetails.name} - {this.props.branchDetails.governorate}</td>
                             </tr>
                             <tr>
-                                <td className="bold">ترخيص ممارسة نشاط التمويل متناهي الصغر رقم (٢) لسنة ٢٠١٥</td>
                                 <td></td>
                                 <td style={{ fontSize: "8px" }}>{store.getState().auth.name}</td>
                             </tr>
