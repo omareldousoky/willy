@@ -9,6 +9,7 @@ import DocumentsUpload from './Components/Cusomters/documentsUpload';
 import trackLoanApplications from './Components/TrackLoanApplications/trackLoanApplications';
 import LoanList from './Components/LoanList/loanList';
 import UploadDocuments from './Components/LoanList/uploadDocuments';
+import EncodingFiles from './Components/Tools/encodingFiles';
 import './index.scss';
 
 const App = (props) => {
@@ -31,6 +32,7 @@ const App = (props) => {
                     <Route path="/track-loan-applications" component={trackLoanApplications} />
                     <Route path="/loans" component={LoanList} />
                     <Route path="/edit-profile" component={UploadDocuments}/>
+                    <Route paty="/tools/encoding-files" component={EncodingFiles}/>
                     </Switch>
                 </div>
             </BrowserRouter>
