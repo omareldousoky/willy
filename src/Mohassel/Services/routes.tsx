@@ -44,6 +44,7 @@ import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
+import GeoAreas from '../Components/GeoAreas/geoAreas';
 
 
 const appRoutes = [
@@ -146,6 +147,11 @@ const appRoutes = [
         path: "/loan-uses",
         label: local.loanUses,
         render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+      },
+      {
+        path: "/geo-areas",
+        label: local.branchAreas,
+        render: (props) => <Can I='geoArea' a='config'><GeoAreas /></Can>
       },
       {
         path: "/bulk-approvals",
