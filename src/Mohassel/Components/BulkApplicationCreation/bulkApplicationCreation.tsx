@@ -19,6 +19,8 @@ import { timeToDateyyymmdd } from '../../Services/utils';
 import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation';
 import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation';
 import Search from '../Search/search';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 
 interface Product {
   productName: string;
@@ -61,6 +63,7 @@ interface State {
   size: number;
   from: number;
   checkAll: boolean;
+  manageApplicationsTabs: any[];
 }
 interface Props {
   history: Array<any>;
@@ -86,6 +89,7 @@ class BulkApplicationCreation extends Component<Props, State>{
       size: 10,
       from: 0,
       checkAll: false,
+      manageApplicationsTabs: []
     }
     this.mappers = [
       {
@@ -157,6 +161,7 @@ class BulkApplicationCreation extends Component<Props, State>{
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved" });
+    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "approved" }
@@ -205,6 +210,11 @@ class BulkApplicationCreation extends Component<Props, State>{
   render() {
     return (
       <>
+        <HeaderWithCards
+          header={local.bulkApplicationCreation}
+          array={this.state.manageApplicationsTabs}
+          active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkApplicationCreation')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>

@@ -19,6 +19,8 @@ import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
 import { Score } from '../CustomerCreation/customerProfile';
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications';
+import { manageApplicationsArray } from './manageApplicationInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Product {
   productName: string;
@@ -49,6 +51,7 @@ interface State {
   iScoreModal: boolean;
   iScoreCustomers: any;
   loading: boolean;
+  manageApplicationsTabs: any[];
 }
 interface Props {
   history: any;
@@ -72,7 +75,8 @@ class TrackLoanApplications extends Component<Props, State>{
       reviewedResults: [],
       iScoreModal: false,
       iScoreCustomers: [],
-      loading: false
+      loading: false,
+      manageApplicationsTabs: []
     }
     this.mappers = [
       {
@@ -174,6 +178,7 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
+    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
@@ -224,6 +229,11 @@ class TrackLoanApplications extends Component<Props, State>{
   render() {
     return (
       <>
+        <HeaderWithCards
+          header={local.loanApplications}
+          array={this.state.manageApplicationsTabs}
+          active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('applications')}
+        />
         <Card className="print-none" style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading || this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -244,7 +254,7 @@ class TrackLoanApplications extends Component<Props, State>{
               url="application"
               from={this.state.from}
               size={this.state.size}
-              setFrom= {(from) => this.setState({from: from})}
+              setFrom={(from) => this.setState({ from: from })}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               hqBranchIdRequest={this.props.branchId} />
             <DynamicTable

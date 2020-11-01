@@ -11,10 +11,13 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import ability from '../../config/ability';
+import { manageCustomersArray } from './manageCustomersInitial';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface State {
   size: number;
   from: number;
+  manageCustomersTabs: any[];
 }
 interface Props {
   history: any;
@@ -33,6 +36,7 @@ class CustomersList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
+      manageCustomersTabs: []
     }
     this.mappers = [
       {
@@ -61,63 +65,72 @@ class CustomersList extends Component<Props, State> {
         title: local.creationDate,
         sortable: true,
         key: "createdAt",
-        render: data => data.created?.at? getDateAndTime(data.created?.at): ''
+        render: data => data.created?.at ? getDateAndTime(data.created?.at) : ''
       },
       {
         title: '',
         key: "actions",
-        
-        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
-          <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can></>  
+
+        render: data => <>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId', 'customer') ? <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img> : null}
+          <Can I='getCustomer' a='customer'><img style={{ cursor: 'pointer' }} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can></>
       },
     ]
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.setState({manageCustomersTabs: manageCustomersArray()})
+
   }
   getCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
   }
   render() {
     return (
-      <Card style={{ margin: '20px 50px' }}>
-        <Loader type="fullsection" open={this.props.loading} />
-        <Card.Body style={{ padding: 0 }}>
-          <div className="custom-card-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
-              <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
+      <>
+        <HeaderWithCards
+          header={local.customers}
+          array={this.state.manageCustomersTabs}
+          active={this.state.manageCustomersTabs.map(item => { return item.icon }).indexOf('customers')}
+        />
+        <Card style={{ margin: '20px 50px' }}>
+          <Loader type="fullsection" open={this.props.loading} />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
+                <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+              </div>
+              <div>
+                <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/customers/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
+                {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
+              </div>
             </div>
-            <div>
-              <Can I='createCustomer' a='customer'><Button onClick={() => { this.props.history.push("/customers/new-customer") }} className="big-button" style={{ marginLeft: 20 }}>{local.newCustomer}</Button></Can>
-              {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
-            </div>
-          </div>
-          <hr className="dashed-line" />
-          <Search 
-          searchKeys={['keyword', 'dateFromTo', 'governorate']} 
-          dropDownKeys={['name', 'nationalId', 'key', 'code']} 
-          searchPlaceholder ={local.searchByBranchNameOrNationalIdOrCode}
-          url="customer" 
-          from={this.state.from} size={this.state.size}  
-          setFrom= {(from) => this.setState({from: from})}
-          hqBranchIdRequest = {this.props.branchId}/>
-          {this.props.data &&
-            <DynamicTable
-              from={this.state.from} 
-              size={this.state.size} 
-              totalCount={this.props.totalCount}
-              mappers={this.mappers}
-              pagination={true}
-              data={this.props.data}
-              url="customer" 
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getCustomers());
-              }}
-            />
-          }
-        </Card.Body>
-      </Card>
+            <hr className="dashed-line" />
+            <Search
+              searchKeys={['keyword', 'dateFromTo', 'governorate']}
+              dropDownKeys={['name', 'nationalId', 'key', 'code']}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              url="customer"
+              from={this.state.from} size={this.state.size}
+              setFrom={(from) => this.setState({ from: from })}
+              hqBranchIdRequest={this.props.branchId} />
+            {this.props.data &&
+              <DynamicTable
+                from={this.state.from}
+                size={this.state.size}
+                totalCount={this.props.totalCount}
+                mappers={this.mappers}
+                pagination={true}
+                data={this.props.data}
+                url="customer"
+                changeNumber={(key: string, number: number) => {
+                  this.setState({ [key]: number } as any, () => this.getCustomers());
+                }}
+              />
+            }
+          </Card.Body>
+        </Card>
+      </>
     )
   }
 }

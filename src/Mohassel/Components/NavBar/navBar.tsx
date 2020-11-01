@@ -175,27 +175,34 @@ class NavBar extends Component<Props, State> {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
-              {<Can I='getCustomer' a='customer'><Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link></Can>}
+              {ability.can('getCustomer', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link> 
+                : ability.can('changeOfficer', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/customers/move-customers')}>{local.customers}</Nav.Link> : null}
               {ability.can('getLoanProduct', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link>
                : ability.can('getCalculationFormula' ,'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/calculation-formulas')}>{local.loans}</Nav.Link>
                 : ability.can('assignProductToBranch', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link> : null}
               {/* {<Can I='assignProductToBranch' a='product'><Nav.Link onClick={() => this.props.history.push('/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link></Can>} */}
-              {<Can I='getLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link></Can>}
-              {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>}
+              {ability.can('getLoanApplication', 'application') ? <Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link> 
+               : ability.can('approveLoanApplication', 'application') ? <Nav.Link onClick={() => this.props.history.push('/track-loan-applications/bulk-approvals')}>{local.loanApplications}</Nav.Link> 
+                : ability.can('createLoan', 'application') ? <Nav.Link onClick={() => this.props.history.push('/track-loan-applications/bulk-creation')}>{local.loanApplications}</Nav.Link> : null}
+              {/* {<Can I='approveLoanApplication' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-approvals')}>{local.bulkLoanApplicationsApproval}</Nav.Link></Can>} */}
               {<Can I='loanUsage' a='config'><Nav.Link onClick={() => this.props.history.push('/loan-uses')}>{local.loanUses}</Nav.Link></Can>}
-              {<Can I='geoArea' a='config'><Nav.Link onClick={() => this.props.history.push('/geo-areas')}>{local.branchAreas}</Nav.Link></Can>}
+              {/* {<Can I='geoArea' a='config'><Nav.Link onClick={() => this.props.history.push('/geo-areas')}>{local.branchAreas}</Nav.Link></Can>} */}
               {ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
                 : ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
                   : ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
-              {ability.can('createMaxPrincipal', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-finances/principleRange')}>{local.manageFinances}</Nav.Link> : null}
-              {<Can I='documentTypes' a='config'><Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link> </Can>}
-              {(ability.can('getIssuedLoan',"application") || ability.can('branchIssuedLoan', "application")) && <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>}
+              {/* {ability.can('createMaxPrincipal', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-finances/principleRange')}>{local.manageFinances}</Nav.Link> : null} */}
+              {ability.can('documentTypes', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link>
+                : ability.can('geoArea', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/geo-areas')}>{local.tools}</Nav.Link>
+                 : ability.can('createMaxPrincipal', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/principalRange')}>{local.tools}</Nav.Link> : null}
+              {(ability.can('getIssuedLoan',"application") || ability.can('branchIssuedLoan', "application")) ? <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>
+               : ability.can('cibScreen', 'report') ? <Nav.Link onClick={() => this.props.history.push('/loans/cib')}>{local.issuedLoans}</Nav.Link> : null }
+                 {/* : ability.can('cibScreen', 'report') ? <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link> : null} */}
             {<Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}
-            {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/source-of-fund')}>{local.changeSourceOfFund}</Nav.Link></Can>}
-            {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/cib')}>{local.cib}</Nav.Link></Can>}
-            {<Can I = "changeOfficer" a  ="customer"><Can  I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can></Can>}
+            {/* {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/source-of-fund')}>{local.changeSourceOfFund}</Nav.Link></Can>} */}
+            {/* {<Can  I="cibScreen" a='report' ><Nav.Link onClick={() => this.props.history.push('/cib')}>{local.cib}</Nav.Link></Can>} */}
+            {/* {<Can I = "changeOfficer" a  ="customer"><Can  I='getCustomer' a='customer'><Nav.Link onClick={()=> this.props.history.push('/move-customers')}>{local.moveCustomers}</Nav.Link></Can></Can>} */}
             <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>
-            <Can I='createLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-creation')}>{local.bulkApplicationCreation}</Nav.Link></Can>
+            {/* <Can I='createLoan' a='application'><Nav.Link onClick={() => this.props.history.push('/bulk-creation')}>{local.bulkApplicationCreation}</Nav.Link></Can> */}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
