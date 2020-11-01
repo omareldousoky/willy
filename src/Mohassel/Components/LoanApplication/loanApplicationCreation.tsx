@@ -419,7 +419,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         const query = (!keyword || keyword.trim().length === 0 || !key) ? { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer._id } : { from: 0, size: 2000, branchId: this.tokenData.branch, representativeId: this.state.selectedLoanOfficer._id, [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword }
         const results = await searchCustomer(query)
         if (results.status === 'success') {
-            this.setState({ loading: false, branchCustomers: results.body.data });
+            this.setState({ loading: false, branchCustomers: results.body.data});
         } else {
             Swal.fire("error", local.searchError, 'error')
             this.setState({ loading: false });
@@ -506,9 +506,14 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
-            if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65) {
+            if(selectedCustomer.body.Blocked.isBlocked === true) {
+                this.setState({loading: false})
+                 Swal.fire("error", local.theCustomerIsBlocked , 'error');
+             }
+            if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65 
+            ) {
                 const check = await this.checkCustomersLimits([selectedCustomer.body], false);
-                if (check.flag === true && check.customers) {
+                if (check.flag === true && check.customers && selectedCustomer.body.Blocked.isBlocked !==true) {
                     const defaultApplication = this.state.application;
                     defaultApplication.customerID = customer._id;
                     defaultApplication.customerTotalPrincipals = check.customers[0].totalPrincipals ? check.customers[0].totalPrincipals : 0;
@@ -526,8 +531,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         Swal.fire("error", local.customerInvolvedInAnotherLoan, 'error')
                     }
                     this.setState({ loading: false });
-                }
-            } else {
+                } 
+
+            } 
+            else {
                 this.setState({ loading: false })
                 Swal.fire("error", local.individualAgeError, 'error')
             }
@@ -541,8 +548,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj._id);
         if (selectedGuarantor.status === 'success') {
+            if(selectedGuarantor.body.Blocked.isBlocked === true) {
+                Swal.fire("error", local.theCustomerIsBlocked , 'error');
+                this.setState({loading: false});
+            }
             const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
-            if (check.flag === true && check.customers) {
+            if (check.flag === true && check.customers && selectedGuarantor.body.Blocked.isBlocked !==true) {
                 const defaultApplication = { ...values }
                 const defaultGuarantors = { ...defaultApplication.guarantors };
                 const defaultGuar = { ...defaultGuarantors[index] };
@@ -956,13 +967,25 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             selectedGroupLeader: id
         })
     }
-    checkGroupAge(customer) {
-        const age = getAge(customer.birthDate);
-        if (age <= 67 && age >= 18) {
+    checkGroupValidation(customer) {
+       const age = getAge(customer.birthDate);
+        if (age <= 67 && age >= 18 && customer.blocked?.isBlocked !== true) {
             return false
         } else {
             return true
         }
+    }
+    getGroupErrorMessage(customer){
+      let errorMessage1 ="";
+      let errorMessage = "";
+      if(customer.blocked?.isBlocked === true) {
+          errorMessage1 = `${local.theCustomerIsBlocked }`;
+      }
+      const age = getAge(customer.birthDate);
+      if(age > 67 || age < 18) {
+          errorMessage =  `${local.groupAgeError}`
+      } 
+    return <span>{errorMessage1}  {errorMessage1? <br/> : null} {errorMessage}</span> ;
     }
     selectLO(e) {
         this.setState({ selectedLoanOfficer: e }, () => { this.searchCustomers() })
@@ -1008,8 +1031,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 viewSelected={(id) => this.viewCustomer(id)}
                                 search={(keyword, key) => this.searchCustomers(keyword, key)}
                                 dropDownKeys={['nationalId', 'name', 'key', 'code']}
-                                disabled={(customer) => this.checkGroupAge(customer)}
-                                disabledMessage={local.groupAgeError}
+                                disabled={(customer) => this.checkGroupValidation(customer)}
+                                disabledMessage={(customer)=>this.getGroupErrorMessage(customer)}
                             />
                             {this.state.selectedCustomers.length <= 7 && this.state.selectedCustomers.length >= 3 ? <Form.Group controlId="leaderSelector" style={{ margin: 'auto', width: '60%' }}>
                                 <Form.Label>{local.groupLeaderName}</Form.Label>
