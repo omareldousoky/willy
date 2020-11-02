@@ -506,14 +506,14 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedCustomer = await getCustomerByID(customer._id)
         if (selectedCustomer.status === 'success') {
-            if(selectedCustomer.body.Blocked.isBlocked === true) {
+            if(selectedCustomer.body.blocked.isBlocked === true) {
                 this.setState({loading: false})
                  Swal.fire("error", local.theCustomerIsBlocked , 'error');
              }
             if (21 <= getAge(selectedCustomer.body.birthDate) && getAge(selectedCustomer.body.birthDate) <= 65 
             ) {
                 const check = await this.checkCustomersLimits([selectedCustomer.body], false);
-                if (check.flag === true && check.customers && selectedCustomer.body.Blocked.isBlocked !==true) {
+                if (check.flag === true && check.customers && selectedCustomer.body.blocked.isBlocked !==true) {
                     const defaultApplication = this.state.application;
                     defaultApplication.customerID = customer._id;
                     defaultApplication.customerTotalPrincipals = check.customers[0].totalPrincipals ? check.customers[0].totalPrincipals : 0;
@@ -548,12 +548,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         this.setState({ loading: true });
         const selectedGuarantor = await getCustomerByID(obj._id);
         if (selectedGuarantor.status === 'success') {
-            if(selectedGuarantor.body.Blocked.isBlocked === true) {
+            if(selectedGuarantor.body.blocked.isBlocked === true) {
                 Swal.fire("error", local.theCustomerIsBlocked , 'error');
                 this.setState({loading: false});
             }
             const check = await this.checkCustomersLimits([selectedGuarantor.body], true);
-            if (check.flag === true && check.customers && selectedGuarantor.body.Blocked.isBlocked !==true) {
+            if (check.flag === true && check.customers && selectedGuarantor.body.blocked.isBlocked !==true) {
                 const defaultApplication = { ...values }
                 const defaultGuarantors = { ...defaultApplication.guarantors };
                 const defaultGuar = { ...defaultGuarantors[index] };
