@@ -32,7 +32,7 @@ const App = (props) => {
                     <Route path="/track-loan-applications" component={trackLoanApplications} />
                     <Route path="/loans" component={LoanList} />
                     <Route path="/edit-profile" component={UploadDocuments}/>
-                    <Route paty="/tools/encoding-files" component={EncodingFiles}/>
+                    <Route path="/tools/encoding-files" component={EncodingFiles}/>
                     </Switch>
                 </div>
             </BrowserRouter>
