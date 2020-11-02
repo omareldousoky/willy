@@ -761,5 +761,7 @@
     "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
     "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
     "dateOfFile": "تاريخ الملف",
-    "cancelledTransaction": "الحركة ملغاة"
+    "cancelledTransaction": "الحركة ملغاة",
+    "hiddenInLTS": "لا تظهر في LTS",
+    "welcomeToDocuments": "اهلا بك في LTS Documents"
 }

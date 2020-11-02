@@ -4,12 +4,8 @@ import { connect } from "react-redux";
 import { getAuthData } from '../Shared/redux/auth/actions';
 import { getCookie } from '../Shared/Services/getCookie';
 import NavBar from '../Shared/Components/NavBar/navBar';
-import CustomersList from './Components/Cusomters/customersList';
-import DocumentsUpload from './Components/Cusomters/documentsUpload';
-import trackLoanApplications from './Components/TrackLoanApplications/trackLoanApplications';
-import LoanList from './Components/LoanList/loanList';
-import UploadDocuments from './Components/LoanList/uploadDocuments';
-import EncodingFiles from './Components/Tools/encodingFiles';
+import { routes } from './Services/routes'
+import WithBreadcrumbs from '../Shared/Components/navigation/withBreadcrumbs';
 import './index.scss';
 
 const App = (props) => {
@@ -21,18 +17,19 @@ const App = (props) => {
         return <></>
 
     } else {
-
+        const hideProp = {hide: true}
         return (
             <BrowserRouter >
                 <div style={{ direction: 'rtl', backgroundColor: '#fafafa' }}>
-                    <NavBar />
+                    <NavBar {...hideProp} />
                     <Switch>
-                    <Route path="/customers" component={CustomersList} />
-                    <Route path="/edit-customer-document" component={DocumentsUpload} />
-                    <Route path="/track-loan-applications" component={trackLoanApplications} />
-                    <Route path="/loans" component={LoanList} />
-                    <Route path="/edit-profile" component={UploadDocuments}/>
-                    <Route path="/tools/encoding-files" component={EncodingFiles}/>
+                        {
+                            routes.map(route => (
+                                <Route key={route.path} exact path={route.path}  >
+                                    <WithBreadcrumbs route={route} />
+                                </Route>
+                            ))
+                        }
                     </Switch>
                 </div>
             </BrowserRouter>

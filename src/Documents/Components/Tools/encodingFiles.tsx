@@ -9,19 +9,14 @@ import Form from 'react-bootstrap/Form';
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentTypeLocalization } from '../../../Shared/Services/utils';
-interface Props {
-    history: any;
-}
-
 interface State {
     documentTypes: DocumentType[];
     loading: boolean;
 }
-class EncodingFiles extends Component<Props, State> {
-    constructor(props: Props) {
+class EncodingFiles extends Component<{}, State> {
+    constructor(props) {
         super(props);
         this.state = {
             documentTypes: [{
@@ -39,7 +34,7 @@ class EncodingFiles extends Component<Props, State> {
 
     async getDocumentsTypes() {
         this.setState({ loading: true })
-        const res = await getDocumentsTypes();
+        const res = await getDocumentsTypes('',true);
         if (res.status === "success") {
             this.setState({
                 documentTypes: res.body.documentTypes,
@@ -104,11 +99,11 @@ class EncodingFiles extends Component<Props, State> {
                                                     <div style={{ fontSize: "12px", color: "#2f2f2f", fontWeight: "bold" }}>{documentTypeLocalization(documentType.type)} </div>
                                                 </Col>
                                                 <Col style={{ minWidth: "20%" }}>
-                                                    <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.documentFor}</div>
+                                                    <div style={{ fontSize: "12px", color: "#6e6e6e" }}>{local.hiddenInLTS}</div>
                                                     <Form.Check
                                                         type="switch"
                                                         data-qc="is-hidden"
-                                                        checked={false}
+                                                        checked={documentType.isHidden}
                                                         label=""
                                                         id="is-hidden"
                                                         onChange={(e) => this.hideShowDocument(e.currentTarget.checked, documentType.id)}
@@ -131,4 +126,4 @@ class EncodingFiles extends Component<Props, State> {
         )
     }
 }
-export default withRouter(EncodingFiles);
+export default EncodingFiles;

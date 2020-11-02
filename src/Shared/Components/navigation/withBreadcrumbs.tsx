@@ -5,7 +5,6 @@ const WithBreadcrumbs = ({ route }) => {
   const PageBody = route.render||route.component;
   return (
     <>
-  
       {Object.keys(route.parent).length > 0 && <Breadcrumbs route={route} />}
        <PageBody /> 
     </>

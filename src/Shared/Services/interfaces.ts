@@ -103,6 +103,7 @@ export interface DocumentType {
     name: string;
     active?: boolean;
     updatable?: boolean;
+    isHidden?: boolean;
 }
 export interface GuaranteedLoan{
     guarantorOrder: string;

@@ -6,7 +6,7 @@ import NavBar from '../Shared/Components/NavBar/navBar';
 import { getCookie } from '../Shared/Services/getCookie';
 import './index.scss';
 import {routes} from './Services/routes'
-import WithBreadcrumbs from './Components/navigation/withBreadcrumbs';
+import WithBreadcrumbs from '../Shared/Components/navigation/withBreadcrumbs';
 const App = (props) => {
     useEffect(() => {
         props.getAuthData();
