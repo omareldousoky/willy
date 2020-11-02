@@ -12,7 +12,7 @@ export const changeLeadState = async (phoneNumber: string, newState: string) => 
 }
 
 export const changeInReviewLeadState = async (phoneNumber: string, newState: string) => {
-    const url = process.env.REACT_APP_BASE_URL + `/change-in-review-status/${phoneNumber}`;
+    const url = process.env.REACT_APP_BASE_URL + `/lead/change-in-review-status/${phoneNumber}`;
     try {
         const res = await axios.put(url, { newStatus: newState });
         return { status: "success", body: res.data }

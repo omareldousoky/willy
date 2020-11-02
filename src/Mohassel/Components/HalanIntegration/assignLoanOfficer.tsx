@@ -151,7 +151,7 @@ class AssignLoanOfficer extends Component<Props, State>{
     const res = await searchLoanOfficer({ from: 0, size: 1000, name: input });
     if (res.status === "success") {
       this.setState({ loanOfficers: res.body.data })
-      return res.body.data;
+      return res.body.data.filter(loanOfficer => loanOfficer.branches.includes(this.state.selectedCustomers[0].branchId));
     } else {
       this.setState({ loanOfficers: [] })
       return [];
@@ -159,7 +159,6 @@ class AssignLoanOfficer extends Component<Props, State>{
   }
   async submit() {
     this.props.setLoading(true);
-    console.log("submit", this.state.selectedCustomers, this.state.selectedLO)
     const res = await assignLeadToLO(this.state.selectedCustomers[0].phoneNumber, this.state.selectedLO._id, this.state.selectedCustomers[0].uuid);
     if (res.status === "success") {
       this.props.setLoading(false);
