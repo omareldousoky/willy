@@ -8,7 +8,7 @@ import Search from '../Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
-import { manageLoansArray } from './maageLoansInitials';
+import { manageLoansArray } from './manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Props {
@@ -141,12 +141,13 @@ class LoanList extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
   render() {
+    const array = manageLoansArray();
     return (
       <>
         <HeaderWithCards
           header={local.issuedLoans}
-          array={this.state.manageLoansTabs}
-          active={this.state.manageLoansTabs.map(item => { return item.icon }).indexOf('issuedLoans')}
+          array={array}
+          active={array.map(item => { return item.icon }).indexOf('issuedLoans')}
         />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.props.loading} />

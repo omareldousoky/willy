@@ -1,17 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="31.208" height="31.146" viewBox="0 0 31.208 31.146">
+<svg xmlns="http://www.w3.org/2000/svg" id="payment" width="30" height="30" viewBox="0 0 30 30">
     <defs>
         <style>
-            .prefix__cls-1{fill:#7dc356}
+            .cls-1{fill:#7dc356}
         </style>
     </defs>
-    <g id="prefix__stack_1_" data-name="stack (1)" transform="translate(0 -.513)">
-        <g id="prefix__Group_9401" data-name="Group 9401" transform="translate(0 .513)">
-            <g id="prefix__Group_9400" data-name="Group 9400">
-                <path id="prefix__Path_8158" d="M29.989 13.678a1.219 1.219 0 0 0 1.219-1.219v-7.07A4.881 4.881 0 0 0 26.333.513H4.879A4.881 4.881 0 0 0 0 5.389v12c0 .253-.007 2.481 0 2.776a3.709 3.709 0 0 0 2.485 3.355l19.986 7.913.045.017a3.63 3.63 0 0 0 2.828-.169 1.219 1.219 0 1 0-1.077-2.187 1.21 1.21 0 0 1-.924.063L14.357 25.6 25.4 27.51h.011a3.717 3.717 0 0 0 .6.049 3.629 3.629 0 0 0 2.5-1 1.219 1.219 0 0 0-1.67-1.776 1.212 1.212 0 0 1-1.029.317l-9.691-1.677h10.212a4.881 4.881 0 0 0 4.876-4.876 1.219 1.219 0 0 0-2.438 0 2.441 2.441 0 0 1-2.438 2.438H4.879a2.441 2.441 0 0 1-2.438-2.438V5.389a2.441 2.441 0 0 1 2.438-2.438h21.454a2.441 2.441 0 0 1 2.437 2.438v7.07a1.219 1.219 0 0 0 1.219 1.219z" class="prefix__cls-1" data-name="Path 8158" transform="translate(0 -.513)"/>
-                <circle id="prefix__Ellipse_537" cx="1.219" cy="1.219" r="1.219" class="prefix__cls-1" data-name="Ellipse 537" transform="translate(24.077 10.178)"/>
-                <path id="prefix__Path_8159" d="M155.035 86.966a6.17 6.17 0 1 0 6.156-6.582 6.387 6.387 0 0 0-6.156 6.582zm9.874 0a3.74 3.74 0 1 1-3.718-4.144 3.953 3.953 0 0 1 3.718 4.144z" class="prefix__cls-1" data-name="Path 8159" transform="translate(-145.585 -75.516)"/>
-                <circle id="prefix__Ellipse_538" cx="1.219" cy="1.219" r="1.219" class="prefix__cls-1" data-name="Ellipse 538" transform="translate(4.696 10.178)"/>
-            </g>
+    <g id="Group_9435">
+        <g id="Group_9434">
+            <path id="Path_8167" d="M25.313 0H4.688A4.8 4.8 0 0 0 0 4.9v13.232a4.8 4.8 0 0 0 4.688 4.9h9.844a1.226 1.226 0 0 0 0-2.45H4.688a2.4 2.4 0 0 1-2.344-2.45V4.9a2.4 2.4 0 0 1 2.344-2.45h20.625a2.4 2.4 0 0 1 2.343 2.45v9.862a1.173 1.173 0 1 0 2.344 0V4.9A4.8 4.8 0 0 0 25.313 0z" class="cls-1"/>
+            <circle id="Ellipse_547" cx="1" cy="1" r="1" class="cls-1" transform="translate(4.693 9.512)"/>
+            <path id="Path_8168" d="M312.4 270.875v-.839a3.075 3.075 0 0 0-6.148 0v.839a2.565 2.565 0 0 0-2.252 2.543v5.123a1.025 1.025 0 0 0 1.025 1.025h8.607a1.025 1.025 0 0 0 1.025-1.025v-5.123a2.565 2.565 0 0 0-2.257-2.543zm-4.1-.839a1.026 1.026 0 0 1 2.049 0v.82H308.3zm4.3 7.48h-6.558v-4.1a.513.513 0 0 1 .512-.512h5.546a.513.513 0 0 1 .512.512z" class="cls-1" transform="translate(-284.657 -249.566)"/>
+            <path id="Path_8169" d="M165.349 85.411a5.186 5.186 0 1 0-5.175 5.533 5.369 5.369 0 0 0 5.175-5.533zm-5.174 3.489a3.5 3.5 0 1 1 3.125-3.484 3.323 3.323 0 0 1-3.125 3.484z" class="cls-1" transform="translate(-145.175 -74.769)"/>
+            <circle id="Ellipse_548" cx="1" cy="1" r="1" class="cls-1" transform="translate(22.756 9.512)"/>
         </g>
     </g>
 </svg>

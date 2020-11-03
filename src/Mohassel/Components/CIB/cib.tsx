@@ -17,7 +17,7 @@ import { cibReport } from '../../Services/APIs/loanApplication/cibReport';
 import Table from 'react-bootstrap/Table';
 import { downloadTxtFile } from './textFiles';
 import Swal from 'sweetalert2';
-import { manageLoansArray } from '../LoanList/maageLoansInitials';
+import { manageLoansArray } from '../LoanList/manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Props {

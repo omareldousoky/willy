@@ -747,7 +747,7 @@
     "allDatesShouldSameMonth": "يجب ان يكون التاريخ في نفس شهر اليوم",
     "downloadOldFiles": "تنزيل ملفات قديمة",
     "manageFinances":"إدارة التمويل",
-    "principalRange":"حدود قيمة القرض",
+    "principalRange":"إعدادات التمويل",
     "maxIndividualPrincipal":"الحد الاقصى للفرد",
     "maxGroupIndividualPrincipal":"الحد الاقصى للفرد فالمجموعة",
     "maxGroupPrincipal":"الحد الاقصى للمجموعة",

@@ -19,7 +19,7 @@ import { cibExtractions } from '../../Services/APIs/loanApplication/cibExtractio
 import { downloadTxtFile } from '../CIB/textFiles';
 import Swal from 'sweetalert2';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
-import { manageLoansArray } from '../LoanList/maageLoansInitials';
+import { manageLoansArray } from '../LoanList/manageLoansInitials';
 
 interface Props {
   history: Array<any>;
