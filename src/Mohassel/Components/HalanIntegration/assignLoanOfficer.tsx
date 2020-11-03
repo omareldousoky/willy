@@ -173,7 +173,7 @@ class AssignLoanOfficer extends Component<Props, State>{
     return (
       <>
         <HeaderWithCards
-          header={'halan integration'}
+          header={local.halan}
           array={this.state.tabs}
           active={this.state.tabs.map(item => { return item.icon }).indexOf('exchange')}
         />

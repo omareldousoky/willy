@@ -343,17 +343,17 @@ const appRoutes = [
       },
       {
         path: "/halan-integration",
-        label: 'halan integration',
+        label: local.halan,
         render: (props) => <Leads {...props} />,
         routes: [
           {
             path: "/leads",
-            label: 'leads',
+            label: local.applicantsLeads,
             render: (props) => <Leads {...props} /> ,
           },
           {
             path: "/exchange",
-            label: 'change loan officer',
+            label: local.assignOrChangeLoanOfficer,
             render: (props) => <AssignLoanOfficer {...props} /> ,
           }
         ]

@@ -733,7 +733,7 @@
     "actions": "العمليات",
     "rejectApplication": "رفض الطلب",
     "acceptApplication": "قبول الطلب",
-    "acceptSecondVisit": "الموافقة على الزيارة الثانية",
+    "acceptSecondVisit": "تم الاستعلام الميداني",
     "viewCustomerLead": "عرض المتقدم",
     "editLoanProduct": "تعديل نوع القرض",
     "updateLoanProductPrincipalsSuccess":"تم تعديل قيمة القرض المسموحة بنجاح",
@@ -743,7 +743,7 @@
     "changeOfficerForMoreThanOneCustomer": "تغيير المندوب لأكثر من عميل",
     "assignOrChangeLoanOfficer": "تعيين أو تغيير المندوب",
     "applicantsLeads": "المتقدمون",
-    "createAndEditApplicantLeads": "إنشاء و تعديل المتقدمون وإدارتهم",
+    "createAndEditApplicantLeads": "تعديل المتقدمون وإدارتهم",
     "iScoreReports":"تقارير الiScore",
     "failed":"فشل",
     "queued":"في قائمة الانتظار",
@@ -772,5 +772,7 @@
     "leadCode":"كود المتقدم",
     "leadName": "اسم المتقدم",
     "editLead":"تعديل المتقدم",
-    "dateOfFile": "تاريخ الملف"
+    "dateOfFile": "تاريخ الملف",
+    "halan": "حالا",
+    "noOfApplicants": "عدد المتقدمين"
 }

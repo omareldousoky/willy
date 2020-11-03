@@ -13,6 +13,7 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import Search from '../Search/search';
+import Can from '../../config/Can';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { changeLeadState, changeInReviewLeadState } from '../../Services/APIs/Leads/changeLeadState';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
@@ -69,11 +70,11 @@ class Leads extends Component<Props, State>{
       selectedLead: {}
     }
     this.mappers = [
-      {
-        title: local.leadCode,
-        key: "customerCode",
-        render: data => data.uuid
-      },
+      // {
+      //   title: local.leadCode,
+      //   key: "customerCode",
+      //   render: data => data.uuid
+      // },
       {
         title: local.leadName,
         sortable: true,
@@ -89,7 +90,7 @@ class Leads extends Component<Props, State>{
       {
         title: local.branchName,
         key: "branch",
-        render: data => data.branch
+        render: data => data.branchName
       },
       {
         title: local.representative,
@@ -115,7 +116,12 @@ class Leads extends Component<Props, State>{
       {
         title: local.loanOfficer,
         key: "loanOfficer",
-        render: data => <div>{data.loanOfficerName} <span style={{ marginRight: 5, cursor: 'pointer' }} className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openModal: true })} /></div>
+        render: data => <div>{data.loanOfficerName}
+          {
+            data.status !== 'rejected' &&
+            <Can I="assignLead" a="halanuser"><span style={{ marginRight: 5, cursor: 'pointer' }}
+              className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openModal: true })} /></Can>
+          }</div>
       },
       {
         title: local.actions,
@@ -127,8 +133,8 @@ class Leads extends Component<Props, State>{
               {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div>}
               {data.status === "in-review" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div>}
               {data.inReviewStatus !== "secondApproval" && data.status !== "approved" && data.status !== "rejected" && <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div>}
-              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div>
-              <div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.viewCustomerLead}</div>
+              {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
+              {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.viewCustomerLead}</div></Can> */}
             </div>}
           </div>
       },
@@ -141,37 +147,53 @@ class Leads extends Component<Props, State>{
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
   }
-  async changeLeadState(phoneNumber: string, oldState: string, oldInReviewStatus: string, newState: string, inReviewStatus: string) {
-    this.props.setLoading(true);
-    if (oldState === newState) {
-      if (oldInReviewStatus === 'basic') {
-        const inReviewStatusRes = await changeInReviewLeadState(phoneNumber, inReviewStatus);
-        if (inReviewStatusRes.status === "success") {
-          this.props.setLoading(false);
-          this.setState({ openActionsId: "" })
-          Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+  changeLeadState(phoneNumber: string, oldState: string, oldInReviewStatus: string, newState: string, inReviewStatus: string) {
+    Swal.fire({
+      text: local.areYouSure,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.yes,
+      cancelButtonText: local.cancel
+    }).then(async (result) => {
+      if (result.value) {
+        if (oldState === newState) {
+          if (oldInReviewStatus === 'basic') {
+            this.props.setLoading(true);
+            const inReviewStatusRes = await changeInReviewLeadState(phoneNumber, inReviewStatus);
+            if (inReviewStatusRes.status === "success") {
+              this.props.setLoading(false);
+              this.setState({ openActionsId: "" })
+              Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+            } else {
+              this.props.setLoading(false);
+              Swal.fire('', local.userRoleEditError, 'error');
+            }
+          }
         } else {
-          this.props.setLoading(false);
-          Swal.fire('', local.userRoleEditError, 'error');
+          this.props.setLoading(true);
+          const res = await changeLeadState(phoneNumber, newState);
+          if (res.status === "success") {
+            this.props.setLoading(false);
+            this.setState({ openActionsId: "" })
+            Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+          } else {
+            this.props.setLoading(false);
+            Swal.fire('', local.userRoleEditError, 'error');
+          }
         }
       }
-    } else {
-      const res = await changeLeadState(phoneNumber, newState);
-      if (res.status === "success") {
-        this.props.setLoading(false);
-        this.setState({ openActionsId: "" })
-        Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
-      } else {
-        this.props.setLoading(false);
-        Swal.fire('', local.userRoleEditError, 'error');
-      }
-    }
+    })
+
   }
   getLoanOfficers = async (input: string) => {
     const res = await searchLoanOfficer({ from: 0, size: 1000, name: input });
     if (res.status === "success") {
       this.setState({ loanOfficers: res.body.data })
-      return res.body.data.filter(loanOfficer => loanOfficer.branches.includes(this.state.selectedLead.branchId));
+      return res.body.data
+        .filter(loanOfficer => loanOfficer.branches.includes(this.state.selectedLead.branchId))
+        .filter(loanOfficer => loanOfficer.status === 'active');
     } else {
       this.setState({ loanOfficers: [] })
       return [];
@@ -183,7 +205,10 @@ class Leads extends Component<Props, State>{
     if (res.status === "success") {
       this.props.setLoading(false);
       this.setState({ openModal: false })
-      Swal.fire("", `${local.doneMoving} ${local.customerSuccess}`, "success").then(() => this.setState({selectedLO: {}, selectedLead: {}}))
+      Swal.fire("", `${local.doneMoving} ${local.customerSuccess}`, "success").then(() => {
+        this.setState({ selectedLO: {}, selectedLead: {} });
+        this.getLeadsCustomers();
+      })
     } else {
       this.props.setLoading(false);
       Swal.fire("", local.errorOnMovingCustomers, "error")
@@ -193,7 +218,7 @@ class Leads extends Component<Props, State>{
     return (
       <>
         <HeaderWithCards
-          header={'halan integration'}
+          header={local.halan}
           array={this.state.tabs}
           active={this.state.tabs.map(item => { return item.icon }).indexOf('users')}
         />
@@ -202,16 +227,16 @@ class Leads extends Component<Props, State>{
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.roles}</Card.Title>
-                <span className="text-muted">{local.noOfRoles + ` (${this.props.totalCount})`}</span>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.applicantsLeads}</Card.Title>
+                <span className="text-muted">{local.noOfApplicants + ` (${this.props.totalCount})`}</span>
               </div>
               <div>
               </div>
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'governorate', 'branch']}
-              dropDownKeys={['name', 'nationalId', 'key', 'code']}
+              searchKeys={['keyword', 'dateFromTo', 'branch']}
+              dropDownKeys={['name']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               url="lead"
               from={this.state.from}
