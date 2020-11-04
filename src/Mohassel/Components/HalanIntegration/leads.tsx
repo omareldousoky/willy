@@ -110,7 +110,7 @@ class Leads extends Component<Props, State>{
         render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
       },
       {
-        title: () => {local.loanOfficer},
+        title: () => local.loanOfficer,
         key: "loanOfficer",
         render: data => data.loanOfficerName
       },
