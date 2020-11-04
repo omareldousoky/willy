@@ -54,7 +54,7 @@ const LeadProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.age}</td>
-                <td>{`${local.from} ${leadDetails.minBusinessDate} ${local.to} ${leadDetails.maxBusinessDate} سنة` }</td>
+                <td>{`${local.from} ${leadDetails.minAge} ${local.to} ${leadDetails.maxAge} سنة` }</td>
               </tr>
               <tr>
                 <td>{local.mobilePhoneNumber}</td>
