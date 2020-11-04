@@ -110,12 +110,12 @@ class Leads extends Component<Props, State>{
         render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
       },
       {
-        title: () => <Can I="assignLead" a="halanuser">{local.chooseLoanOfficer}</Can>,
+        title: () => {local.loanOfficer},
         key: "loanOfficer",
         render: data => data.loanOfficerName
       },
       {
-        title: local.chooseLoanOfficer,
+        title: () => <Can I="assignLead" a="halanuser">{local.chooseLoanOfficer}</Can>,
         key: "changeLoanOfficer",
         render: data =>
           data.status !== 'rejected' &&
