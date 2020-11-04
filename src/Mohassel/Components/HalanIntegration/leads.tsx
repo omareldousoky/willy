@@ -49,7 +49,7 @@ interface State {
   selectedLead: any;
 }
 class Leads extends Component<Props, State>{
-  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
+  mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -77,13 +77,11 @@ class Leads extends Component<Props, State>{
       // },
       {
         title: local.leadName,
-        sortable: true,
         key: "name",
         render: data => data.customerName
       },
       {
         title: local.governorate,
-        sortable: true,
         key: "governorate",
         render: data => data.businessGovernate
       },
@@ -93,11 +91,6 @@ class Leads extends Component<Props, State>{
         render: data => data.branchName
       },
       {
-        title: local.representative,
-        key: "representative",
-        render: data => data.representativeName
-      },
-      {
         title: local.phoneNumber,
         key: "phoneNumber",
         render: data => data.phoneNumber
@@ -105,11 +98,10 @@ class Leads extends Component<Props, State>{
       {
         title: local.status,
         key: "status",
-        render: data => data.status
+        render: data => this.getLeadStatus(data.status)
       },
       {
         title: local.creationDate,
-        sortable: true,
         key: "createdAt",
         render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
       },
@@ -124,19 +116,21 @@ class Leads extends Component<Props, State>{
           }</div>
       },
       {
-        title: local.actions,
+        title: () => <Can I="reviewLead" a="halanuser">{local.actions}</Can>,
         key: "actions",
-        render: data =>
-          <div style={{ position: 'relative' }}>
-            <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
-            {this.state.openActionsId === data.uuid && <div className="actions-list">
-              {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div></Can>}
-              {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div></Can>}
-              {data.inReviewStatus !== "secondApproval" && data.status !== "approved" && data.status !== "rejected" && <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div></Can>}
-              {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
-              {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.viewCustomerLead}</div></Can> */}
-            </div>}
-          </div>
+        render: data => 
+          data.status !== 'approved' && data.status !== 'rejected' && <Can I="reviewLead" a="halanuser">
+            <div style={{ position: 'relative' }}>
+              <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
+              {this.state.openActionsId === data.uuid && <div className="actions-list">
+                {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div></Can>}
+                {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div></Can>}
+                {data.status === "submitted" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div></Can>}
+                {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
+                {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.viewCustomerLead}</div></Can> */}
+              </div>}
+            </div>
+          </Can>
       },
     ]
   }
@@ -146,6 +140,15 @@ class Leads extends Component<Props, State>{
   }
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
+  }
+  getLeadStatus(status: string) {
+    switch (status) {
+      case 'submitted': return local.submitted;
+      case 'in-review': return local.underReview;
+      case 'approved': return local.approved;
+      case 'rejected': return local.rejected;
+      default: return '';
+    }
   }
   async changeLeadState(phoneNumber: string, oldState: string, oldInReviewStatus: string, newState: string, inReviewStatus: string) {
     Swal.fire({
@@ -191,7 +194,7 @@ class Leads extends Component<Props, State>{
     if (res.status === "success") {
       this.setState({ loanOfficers: res.body.data })
       return res.body.data
-        .filter(loanOfficer => loanOfficer.branches.includes(this.state.selectedLead.branchId))
+        .filter(loanOfficer => loanOfficer.branches?.includes(this.state.selectedLead.branchId))
         .filter(loanOfficer => loanOfficer.status === 'active');
     } else {
       this.setState({ loanOfficers: [] })
@@ -234,7 +237,7 @@ class Leads extends Component<Props, State>{
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'branch']}
+              searchKeys={['keyword', 'dateFromTo']}
               dropDownKeys={['name']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               url="lead"
