@@ -14,6 +14,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../DynamicTable/dynamicTable';
 import Search from '../Search/search';
 import Can from '../../config/Can';
+import { getCookie } from '../../Services/getCookie';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { changeLeadState, changeInReviewLeadState } from '../../Services/APIs/Leads/changeLeadState';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
@@ -29,6 +30,7 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  history: any;
   search: (data) => void;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;
@@ -47,6 +49,7 @@ interface State {
   loanOfficers: Array<any>;
   selectedLO: any;
   selectedLead: any;
+  branchId: string;
 }
 class Leads extends Component<Props, State>{
   mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
@@ -67,7 +70,8 @@ class Leads extends Component<Props, State>{
       openModal: false,
       loanOfficers: [],
       selectedLO: {},
-      selectedLead: {}
+      selectedLead: {},
+      branchId: ''
     }
     this.mappers = [
       // {
@@ -118,7 +122,7 @@ class Leads extends Component<Props, State>{
       {
         title: () => <Can I="reviewLead" a="halanuser">{local.actions}</Can>,
         key: "actions",
-        render: data => 
+        render: data =>
           data.status !== 'approved' && data.status !== 'rejected' && <Can I="reviewLead" a="halanuser">
             <div style={{ position: 'relative' }}>
               <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
@@ -126,8 +130,14 @@ class Leads extends Component<Props, State>{
                 {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div></Can>}
                 {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div></Can>}
                 {data.status === "submitted" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div></Can>}
+                {/* <Can I="leadInReviewStatus" a="halanuser"> */}
+                  <div className="item"
+                    onClick={() => {
+                      this.changeMainState(data.phoneNumber,'in-review', true, data);
+                      this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
+                    }}>{local.viewCustomerLead}</div>
+                {/* </Can> */}
                 {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
-                {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.viewCustomerLead}</div></Can> */}
               </div>}
             </div>
           </Can>
@@ -136,10 +146,12 @@ class Leads extends Component<Props, State>{
   }
 
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' });
+    const branchId = JSON.parse(getCookie('ltsbranch'))._id;
+    this.setState({ branchId })
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId });
   }
   getLeadStatus(status: string) {
     switch (status) {
@@ -175,19 +187,29 @@ class Leads extends Component<Props, State>{
             }
           }
         } else {
-          this.props.setLoading(true);
-          const res = await changeLeadState(phoneNumber, newState);
-          if (res.status === "success") {
-            this.props.setLoading(false);
-            this.setState({ openActionsId: "" })
-            Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
-          } else {
-            this.props.setLoading(false);
-            Swal.fire('', local.userRoleEditError, 'error');
-          }
+          this.changeMainState(phoneNumber, newState, false, null);
         }
       }
     })
+  }
+  async changeMainState(phoneNumber: string, newState: string, view: boolean, data) {
+    this.props.setLoading(true);
+    if(view && data.status !== 'submitted'){
+      this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
+    } else {
+      const res = await changeLeadState(phoneNumber, newState);
+      if (res.status === "success") {
+        this.props.setLoading(false);
+        this.setState({ openActionsId: "" })
+        if(view) {
+          this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
+        } else Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+      } else {
+        this.props.setLoading(false);
+        Swal.fire('', local.userRoleEditError, 'error');
+      }
+    }
+    
   }
   getLoanOfficers = async (input: string) => {
     const res = await searchLoanOfficer({ from: 0, size: 1000, name: input });
@@ -240,6 +262,7 @@ class Leads extends Component<Props, State>{
               searchKeys={['keyword', 'dateFromTo']}
               dropDownKeys={['name']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              hqBranchIdRequest={this.state.branchId}
               url="lead"
               from={this.state.from}
               size={this.state.size}

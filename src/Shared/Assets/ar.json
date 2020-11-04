@@ -775,5 +775,8 @@
     "dateOfFile": "تاريخ الملف",
     "halan": "حالا",
     "noOfApplicants": "عدد المتقدمين",
-    "submitted": "متقدم"
+    "submitted": "متقدم",
+    "age": "العمر",
+    "addressDescription": "وصف العنوان",
+    "activityPeriod":"مده النشاط"
 }

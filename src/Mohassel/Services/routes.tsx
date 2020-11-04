@@ -46,6 +46,7 @@ import AssignProductsToBranches from '../Components/Branch/assignProductsToBranc
 import Leads from '../Components/HalanIntegration/leads';
 import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer';
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
+import LeadProfile from '../Components/HalanIntegration/leadProfile';
 
 
 const appRoutes = [
@@ -350,6 +351,13 @@ const appRoutes = [
             path: "/leads",
             label: local.applicantsLeads,
             render: (props) => <Leads {...props} /> ,
+            routes: [
+              {
+                path: "/view-lead",
+                label: local.customersDetails,
+                render: (props) => <LeadProfile {...props} />,
+              },
+            ]
           },
           {
             path: "/exchange",
