@@ -112,12 +112,17 @@ class Leads extends Component<Props, State>{
       {
         title: local.loanOfficer,
         key: "loanOfficer",
-        render: data => <div>{data.loanOfficerName}
-          {
-            data.status !== 'rejected' &&
-            <Can I="assignLead" a="halanuser"><span style={{ marginRight: 5, cursor: 'pointer' }}
-              className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openModal: true })} /></Can>
-          }</div>
+        render: data => { data.loanOfficerName }
+      },
+      {
+        title: local.chooseLoanOfficer,
+        key: "changeLoanOfficer",
+        render: data =>
+          data.status !== 'rejected' &&
+          <Can I="assignLead" a="halanuser">
+            <span style={{ marginRight: 5, cursor: 'pointer' }}
+              className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openModal: true })} />
+          </Can>
       },
       {
         title: () => <Can I="reviewLead" a="halanuser">{local.actions}</Can>,
@@ -130,13 +135,12 @@ class Leads extends Component<Props, State>{
                 {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div></Can>}
                 {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div></Can>}
                 {data.status === "submitted" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div></Can>}
-                {/* <Can I="leadInReviewStatus" a="halanuser"> */}
+                <Can I="leadInReviewStatus" a="halanuser">
                   <div className="item"
                     onClick={() => {
-                      this.changeMainState(data.phoneNumber,'in-review', true, data);
-                      this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
+                      this.changeMainState(data.phoneNumber, 'in-review', true, data);
                     }}>{local.viewCustomerLead}</div>
-                {/* </Can> */}
+                </Can>
                 {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
               </div>}
             </div>
@@ -148,7 +152,7 @@ class Leads extends Component<Props, State>{
   componentDidMount() {
     const branchId = JSON.parse(getCookie('ltsbranch'))._id;
     this.setState({ branchId })
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' });
   }
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId });
@@ -194,14 +198,14 @@ class Leads extends Component<Props, State>{
   }
   async changeMainState(phoneNumber: string, newState: string, view: boolean, data) {
     this.props.setLoading(true);
-    if(view && data.status !== 'submitted'){
+    if (view && data.status !== 'submitted') {
       this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
     } else {
       const res = await changeLeadState(phoneNumber, newState);
       if (res.status === "success") {
         this.props.setLoading(false);
         this.setState({ openActionsId: "" })
-        if(view) {
+        if (view) {
           this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
         } else Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
       } else {
@@ -209,7 +213,7 @@ class Leads extends Component<Props, State>{
         Swal.fire('', local.userRoleEditError, 'error');
       }
     }
-    
+
   }
   getLoanOfficers = async (input: string) => {
     const res = await searchLoanOfficer({ from: 0, size: 1000, name: input });
