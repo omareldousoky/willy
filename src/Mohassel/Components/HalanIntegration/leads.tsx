@@ -152,7 +152,7 @@ class Leads extends Component<Props, State>{
   componentDidMount() {
     const branchId = JSON.parse(getCookie('ltsbranch'))._id;
     this.setState({ branchId })
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
   }
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId });
