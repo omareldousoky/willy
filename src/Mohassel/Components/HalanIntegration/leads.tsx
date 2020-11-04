@@ -110,9 +110,9 @@ class Leads extends Component<Props, State>{
         render: data => data.createdAt ? getDateAndTime(data.createdAt) : ''
       },
       {
-        title: local.loanOfficer,
+        title: () => <Can I="assignLead" a="halanuser">{local.chooseLoanOfficer}</Can>,
         key: "loanOfficer",
-        render: data => { data.loanOfficerName }
+        render: data => data.loanOfficerName
       },
       {
         title: local.chooseLoanOfficer,
@@ -128,29 +128,28 @@ class Leads extends Component<Props, State>{
         title: () => <Can I="reviewLead" a="halanuser">{local.actions}</Can>,
         key: "actions",
         render: data =>
-          data.status !== 'approved' && data.status !== 'rejected' && <Can I="reviewLead" a="halanuser">
-            <div style={{ position: 'relative' }}>
-              <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
-              {this.state.openActionsId === data.uuid && <div className="actions-list">
-                {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div></Can>}
-                {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div></Can>}
-                {data.status === "submitted" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div></Can>}
-                <Can I="leadInReviewStatus" a="halanuser">
-                  <div className="item"
-                    onClick={() => {
-                      this.changeMainState(data.phoneNumber, 'in-review', true, data);
-                    }}>{local.viewCustomerLead}</div>
-                </Can>
-                {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
-              </div>}
-            </div>
-          </Can>
+          <div style={{ position: 'relative' }}>
+            <p className="clickable-action" onClick={() => this.setState({ openActionsId: this.state.openActionsId === data.uuid ? '' : data.uuid })}>{local.actions}</p>
+            {this.state.openActionsId === data.uuid && <div className="actions-list">
+              {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'rejected', '')}>{local.rejectApplication}</div></Can>}
+              {data.status === "in-review" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'approved', '')}>{local.acceptApplication}</div></Can>}
+              {data.status === "submitted" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'secondApproval')}>{local.acceptSecondVisit}</div></Can>}
+              <Can I="leadInReviewStatus" a="halanuser">
+                <div className="item"
+                  onClick={() => {
+                    this.changeMainState(data.phoneNumber, 'in-review', true, data);
+                  }}>{local.viewCustomerLead}</div>
+              </Can>
+              {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
+            </div>}
+          </div>
       },
     ]
   }
 
   componentDidMount() {
-    const branchId = JSON.parse(getCookie('ltsbranch'))._id;
+    let branchId = JSON.parse(getCookie('ltsbranch'))._id;
+    branchId = branchId === 'hq' ? '' : branchId;
     this.setState({ branchId })
     this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
   }
