@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
+import Can from '../../../Mohassel/config/Can';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../../../Shared/Components/Search/search';
@@ -119,9 +120,9 @@ class LoanList extends Component<Props, State> {
   renderIcons(data) {
     if (!(data.application.status === 'paid' || data.application.status === 'canceled' || data.application.status === 'rejected')) {
       return (
-        <>
+        <Can I='addingDocuments' a='application'>
           <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push('/edit-loan-profile', { id: data.application._id })}></img>
-        </>
+        </Can>
       )
     } else return null;
   }

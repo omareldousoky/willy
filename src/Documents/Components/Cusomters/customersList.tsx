@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import Search from  '../../../Shared/Components/Search/search';
+import Can from '../../../Mohassel/config/Can';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -63,7 +64,7 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img>
+        render: data => <Can I="updateNationalId" a="customer"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img></Can>
       },
     ]
   }

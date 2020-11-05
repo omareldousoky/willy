@@ -79,7 +79,7 @@ class DocumentsUpload extends Component<Props, State>{
     } else {
       Swal.fire("error", "error in getting customer documents", "error");
     }
-    await this.props.getDocuments({ customerId: this.props.location.state.id, docType: 'customer' });
+    this.props.getDocuments({ customerId: this.props.location.state.id, docType: 'customer' });
   }
   render() {
     return (

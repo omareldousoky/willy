@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import Search from '../../../Shared/Components/Search/search';
 import TotalWrittenChecksPDF from '../PDF/totalWrittenChecks/totalWrittenChecks';
+import Can from '../../../Mohassel/config/Can';
 import { getApplication } from '../../../Mohassel/Services/APIs/loanApplication/getApplication';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
@@ -123,7 +124,7 @@ class TrackLoanApplications extends Component<Props, State>{
     if (!(data.application.status === 'paid' || data.application.status === 'canceled' || data.application.status === 'rejected')) {
       return (
         <>
-          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push('/edit-loan-profile', { id: data.application._id })}></img>
+          <Can I='addingDocuments' a='application'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push('/edit-loan-profile', { id: data.application._id })}></img></Can>
           {data.application.status === 'created' &&
             <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"}
               src={require('../../../Shared/Assets/downloadIcon.svg')}
