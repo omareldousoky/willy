@@ -57,7 +57,7 @@ class LoanList extends Component<Props, State> {
         title: local.customerName,
         key: "name",
         sortable: true,
-        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
+        render: data => <div>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
@@ -68,7 +68,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.nationalId,
         key: "nationalId",
-        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
+        render: data => <div>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.nationalId :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.nationalId}</span> : null)}
@@ -120,7 +120,7 @@ class LoanList extends Component<Props, State> {
     if (!(data.application.status === 'paid' || data.application.status === 'canceled' || data.application.status === 'rejected')) {
       return (
         <>
-          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/editIcon.svg')} onClick={() => this.props.history.push('/edit-profile', { id: data.application._id })}></img>
+          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/editIcon.svg')} onClick={() => this.props.history.push('/edit-loan-profile', { id: data.application._id })}></img>
         </>
       )
     } else return null;

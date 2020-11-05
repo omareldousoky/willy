@@ -13,6 +13,7 @@ import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../..
 import { Image } from '../../../Shared/redux/document/types';
 import { downloadAsZip } from '../../../Shared/Services/utils';
 import * as local from '../../../Shared/Assets/ar.json';
+import { withRouter } from 'react-router-dom';
 
 interface State {
   docsOfImagesFiles: any[];
@@ -139,4 +140,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, addDocumentToProps)(DocumentsUpload);
+export default connect(mapStateToProps, addDocumentToProps)(withRouter(DocumentsUpload));

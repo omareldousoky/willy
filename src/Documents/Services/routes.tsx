@@ -21,13 +21,11 @@ const appRoutes = [
         path: "/customers",
         label: local.customers,
         render: (props) => <CustomersList {...props} />,
-        routes: [
-          {
-            path: "/edit-customer-document",
-            label: local.editCustomer,
-            render: (props) => <DocumentsUpload {...props} />,
-          }
-        ]
+      },
+      {
+        path: "/edit-customer-document",
+        label: local.customers,
+        render: (props) => <DocumentsUpload {...props} />,
       },
       {
         path: "/tools",
@@ -40,32 +38,22 @@ const appRoutes = [
             render: () => <EncodingFiles />,
           }
         ]
-
       },
       {
         path: "/track-loan-applications",
         label: local.loanApplications,
         render: (props) => <TrackLoanApplications />,
-        routes: [
-          {
-            path: "/edit-profile",
-            label: local.editLoan,
-            render: (props) => <UploadDocuments {...props} />,
-          },
-        ]
       },
+
       {
         path: "/loans",
         label: local.issuedLoans,
         render: (props) => <LoanList {...props} />,
-        routes: [
-          {
-            path: "/edit-profile",
-            label: local.editLoan,
-            render: (props) => <UploadDocuments {...props} />,
-          },
-        ]
-
+      },
+      {
+        path: "/edit-loan-profile",
+        label: local.editLoan,
+        render: (props) => <UploadDocuments {...props} />,
       }
     ]
   },

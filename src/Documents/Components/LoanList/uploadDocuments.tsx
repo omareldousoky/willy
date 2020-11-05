@@ -14,6 +14,7 @@ import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../..
 import { Image } from '../../../Shared/redux/document/types';
 import { downloadAsZip } from "../../../Shared/Services/utils";
 import Container from 'react-bootstrap/Container';
+import { withRouter } from 'react-router-dom';
 interface Props {
     history: any;
     getDocuments: typeof getDocuments;
@@ -163,4 +164,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, addDocumentToProps)(UploadDocuments);
+export default connect(mapStateToProps, addDocumentToProps)(withRouter(UploadDocuments));
