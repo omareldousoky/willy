@@ -28,16 +28,9 @@ const appRoutes = [
         render: (props) => <DocumentsUpload {...props} />,
       },
       {
-        path: "/tools",
-        label: local.tools,
+        path: "/encoding-files",
+        label: local.encodingFiles,
         render: () => <EncodingFiles />,
-        routes: [
-          {
-            path: "/encoding-files",
-            label: local.encodingFiles,
-            render: () => <EncodingFiles />,
-          }
-        ]
       },
       {
         path: "/track-loan-applications",

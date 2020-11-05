@@ -7,6 +7,7 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 
 interface State {
   size: number;
@@ -57,12 +58,12 @@ class CustomersList extends Component<Props, State> {
         title: local.creationDate,
         sortable: true,
         key: "createdAt",
-        render: data => data.created?.at? data.created?.at: ''
+        render: data => timeToDateyyymmdd(data.created?.at)
       },
       {
         title: '',
         key: "actions",
-        render: data => <img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/editIcon.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img>
+        render: data => <img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img>
       },
     ]
   }

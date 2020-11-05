@@ -48,7 +48,7 @@ class UploadDocuments extends Component<Props, State> {
 
     async getDocumentTypes() {
         const query = this.state.application.status === "issued" ? "loanApplication,issuedLoan" : "loanApplication";
-        const response = await getDocumentsTypes('loanApplication,issuedLoan');
+        const response = await getDocumentsTypes('loanApplication,issuedLoan', true);
         if (response.status === "success") {
             this.setState({
                 documentTypes: response.body.documentTypes,

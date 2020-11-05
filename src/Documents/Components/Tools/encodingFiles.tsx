@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentTypeLocalization } from '../../../Shared/Services/utils';
 interface State {
@@ -105,7 +106,7 @@ class EncodingFiles extends Component<{}, State> {
                                                         data-qc="is-hidden"
                                                         checked={documentType.isHidden}
                                                         label=""
-                                                        id="is-hidden"
+                                                        id={index.toString()}
                                                         onChange={(e) => this.hideShowDocument(e.currentTarget.checked, documentType.id)}
                                                     /></Col>
                                             </Row>
@@ -126,4 +127,4 @@ class EncodingFiles extends Component<{}, State> {
         )
     }
 }
-export default EncodingFiles;
+export default withRouter(EncodingFiles);

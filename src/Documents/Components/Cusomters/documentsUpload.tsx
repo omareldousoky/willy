@@ -71,7 +71,7 @@ class DocumentsUpload extends Component<Props, State>{
     }
   }
   async componentDidMount() {
-    const response = await getDocumentsTypes('customer');
+    const response = await getDocumentsTypes('customer', true);
     if (response.status === "success") {
       this.setState({
         documentTypes: response.body.documentTypes,

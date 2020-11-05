@@ -120,7 +120,7 @@ class LoanList extends Component<Props, State> {
     if (!(data.application.status === 'paid' || data.application.status === 'canceled' || data.application.status === 'rejected')) {
       return (
         <>
-          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/editIcon.svg')} onClick={() => this.props.history.push('/edit-loan-profile', { id: data.application._id })}></img>
+          <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push('/edit-loan-profile', { id: data.application._id })}></img>
         </>
       )
     } else return null;
