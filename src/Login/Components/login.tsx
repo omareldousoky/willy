@@ -39,6 +39,8 @@ class Login extends React.PureComponent<Props, State> {
       data: data
 
     }).then(succ => {
+      document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+      document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
       setToken(succ.data.Token);
       window.location.href = process.env.REACT_APP_MOHASSEL_URL || '';
     }, err => {
