@@ -611,7 +611,7 @@
     "enabledProduct": "هذا النوع مسموح باستخدامه",
     "viceFieldManagerAndDate": "يجب ادخال اسم نائب مدير  ميدانى و تاريخ الزيارة عند مراجعة طلب القرض",
     "reviewerChiefAndDate": "يجب ادخال اسم مراجع  -  رئيس مجموعة مندوبيين الفرع و تاريخ الزيارة عند اصدار القرض",
-    "branchManagerAndDate": "يجب ادخال اسم  مدير  فرع و تاريخ الزيارة عند اصدار القرض",
+    "branchManagerAndDate": "يجب ادخال اسم  مدير  فرع و تاريخ الزيارة عند ربط طلب القرض",
     "push": "الترحيل",
     "priority": "اولوية التطبيق",
     "pushPaymentPriority1": "يتم تطبيق عدد ايام ترحيل الأقساط",
@@ -763,5 +763,12 @@
     "dateOfFile": "تاريخ الملف",
     "cancelledTransaction": "الحركة ملغاة",
     "hiddenInLTS": "لا تظهر في LTS",
-    "welcomeToDocuments": "اهلا بك في LTS Documents"
+    "welcomeToDocuments": "اهلا بك في LTS Documents",
+    "branchManagerVisitation":"تاريخ زيارة مدير الفرع",
+    "branchAreas":"التقسيم الجغرافي للفروع",
+    "assignBranchAreas":"تعيين التقسيمات الجغرافية للفروع",
+    "availableGeoAreas": " التقسيمات الجغرافية المتاحة",
+    "branchgeoAreas": " التقسيمات الجغرافية المتاحة للفرع",
+    "branchAssignGeoAreaSuccess":"تم تعيين التقسيمات الجغرافية للفرع بنجاح",
+    "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع"
 }

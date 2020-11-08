@@ -186,7 +186,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     maxGroupPrincipal: 0,
                 },
                 customerTotalPrincipals: 0,
-                customerMaxPrincipal: 0
+                customerMaxPrincipal: 0,
+                branchManagerAndDate: false,
+                branchManagerId: '',
+                managerVisitDate: ''
             },
             customerType: '',
             loading: false,
@@ -329,6 +332,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
             // formData.individualDetails = application.body.group.individualsInGroups
+            formData.managerVisitDate = ( !application.body.managerVisitDate || application.body.managerVisitDate === 0) ? '' : this.getDateString(application.body.managerVisitDate);
+            formData.branchManagerId = application.body.branchManagerId;
             this.setState({
                 selectedCustomer: application.body.customer,
                 customerType: application.body.product.beneficiaryType,
@@ -381,7 +386,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     async getLoanOfficers() {
         this.setState({ loanOfficers: [], loading: true })
-        const res = await searchLoanOfficer({ from: 0, size: 100, branchId: this.tokenData.branch });
+        const res = await searchLoanOfficer({ from: 0, size: 100, branchId: this.tokenData.branch, status: "active" });
         if (res.status === "success") {
             this.setState({
                 loanOfficers: res.body.data.filter(officer => officer.status === 'active'),
@@ -608,6 +613,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         defaultApplication.noOfGuarantors = (selectedProductDetails.noOfGuarantors) ? selectedProductDetails.noOfGuarantors : defaultValues.noOfGuarantors;
         defaultApplication.allowApplicationFeeAdjustment = selectedProductDetails.allowApplicationFeeAdjustment;
         defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType;
+        defaultApplication.branchManagerAndDate = selectedProductDetails.branchManagerAndDate;
+        defaultApplication.branchManagerId = '';
+        defaultApplication.managerVisitDate = '';
         if (selectedProductDetails.beneficiaryType === 'group' && this.state.step === 1) { this.searchCustomers() }
         this.setState({ application: defaultApplication });
     }
@@ -706,6 +714,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 visitationDate: new Date(obj.visitationDate).valueOf(),
                 individualDetails: individualsToSend,
                 viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
+                branchManagerId: values.branchManagerId,
+                managerVisitDate: values.managerVisitDate? new Date(values.managerVisitDate).valueOf() : 0,
             }
             if (this.state.application.guarantorIds.length < this.state.application.noOfGuarantors && this.state.customerType === 'individual') {
                 Swal.fire("error", local.selectTwoGuarantors, 'error')
@@ -904,14 +914,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             } else if (check.flag === false && check.validationObject && Object.keys(check.validationObject).length > 0) {
                 let names = '';
                 let financeNames = '';
-                console.log(check.validationObject)
                 Object.keys(check.validationObject).forEach((id, i) => {
-                    if(check.validationObject[id].totalPrincipals){
+                    if (check.validationObject[id].totalPrincipals) {
                         (i === 0) ? financeNames = financeNames + check.validationObject[id].customerName : financeNames = financeNames + ', ' + check.validationObject[id].customerName
-                    }else (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName
+                    } else (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName
 
-            });
-                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan} ${(financeNames.length > 0 ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}`: '')}`, 'error')
+                });
+                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan} ${(financeNames.length > 0 ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}` : '')}`, 'error')
             }
         } else {
             this.setState({

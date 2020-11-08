@@ -22,7 +22,7 @@ interface Props {
     viewSelected?: Function;
     disabled?: Function;
     disabledMessage?: string;
-
+    oneWay?: boolean;
 }
 
 interface State {
@@ -55,22 +55,18 @@ class DualBox extends Component<Props, State> {
 
     static getDerivedStateFromProps(props, state) {
         if (props.filterKey !== state.filterKey || props.options !== state.options) {
-            if (props.selected?.length > 0) {
-                const selectedIds = props.selected.map(item => item._id);
-
-                return {
-                    filterKey: props.filterKey,
-                    options: props.options.filter(item => !selectedIds.includes(item._id)),
-                    selectedOptions: props.selected
-                }
+            const selectedIds = props.selected.map(item => item._id);
+            return {
+                filterKey: props.filterKey,
+                options: props.options.filter(item => !selectedIds.includes(item._id)),
+                selectedOptions: props.selected
             }
-            else {
-                return {
-                    filterKey: props.filterKey,
-                    options: props.options
-                }
+        }
+        else {
+            return {
+                filterKey: props.filterKey,
+                options: props.options
             }
-
         }
         return null;
     }
@@ -264,16 +260,16 @@ class DualBox extends Component<Props, State> {
                                 </InputGroup>
                                 <div className="list-group-item delete-all-row" style={{ background: '#FAFAFA' }}>
                                     <span className="text-muted">{local.count}({this.state.selectedOptions.length})</span>
-                                    <div onClick={() => this.removeAllFromList()}>
+                                    {!this.props.oneWay && <div onClick={() => this.removeAllFromList()}>
                                         <span ><img src={require('../../../Shared/Assets/deleteIcon.svg')} /></span>
                                         <span>{local.deleteAll}</span>
-                                    </div>
+                                    </div>}
                                 </div>
                                 <div className="scrollable-list">
                                     {this.state.selectedOptions
                                         .filter(option => option[this.props.labelKey].toLocaleLowerCase().includes(this.state.searchSelectedKeyWord.toLocaleLowerCase()))
                                         .map(option => <li key={option._id}
-                                            className="list-group-item"><span onClick={() => this.removeItemFromList(option)}><img style={{ width: '15px', height: '15px' }} src={require('../../Assets/closeIcon.svg')} /></span><span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon' style={{ float: 'left' }}></span>}</li>)}
+                                            className="list-group-item">{!this.props.oneWay && <span onClick={() => this.removeItemFromList(option)}><img style={{ width: '15px', height: '15px' }} src={require('../../Assets/closeIcon.svg')} /></span>}<span>{option[this.props.labelKey]}</span>{this.props.viewSelected && <span onClick={() => this.viewSelected(option._id)} className='fa fa-eye icon' style={{ float: 'left' }}></span>}</li>)}
                                 </div>
                             </ul>
                         </div>

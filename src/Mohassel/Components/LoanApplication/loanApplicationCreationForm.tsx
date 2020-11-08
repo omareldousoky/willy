@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,10 +10,13 @@ import InfoBox from '../userInfoBox';
 import AsyncSelect from 'react-select/async';
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getCookie } from '../../../Shared/Services/getCookie';
+import { parseJwt } from '../../../Shared/Services/utils';
+import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     const [options, setOptions] = useState<Array<any>>([]);
+    const [employees, setEmployees] = useState<Array<any>>([]);
     const branchId = JSON.parse(getCookie('ltsbranch'))._id;
     const getOptions = async (inputValue: string) => {
         const res = await searchLoanOfficerAndManager({ from: 0, size: 100, name: inputValue, branchId: branchId });
@@ -25,6 +28,28 @@ export const LoanApplicationCreationForm = (props: any) => {
             return [];
         }
     }
+    const getEmployees = async () => {
+        const token = getCookie('token');
+        const tokenData = parseJwt(token);
+        const obj = {
+            size: 1000,
+            from: 0,
+            serviceKey: 'halan.com/application',
+            action: 'actBranchManager',
+            branchId: tokenData?.branch
+        }
+        const res = await searchUserByAction(obj);
+        if (res.status === 'success') {
+            setEmployees(res.body.data);
+            return res.body.data;
+        } else {
+            setEmployees([]);
+            return [];
+        }
+    }
+    useEffect(() => {
+        getEmployees();
+    }, [])
     return (
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
@@ -651,6 +676,49 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.visitationDate}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={6}>
+                                <Form.Group controlId="branchManagerId">
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{`${local.branchManager}`}</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="branchManagerId"
+                                        data-qc="branchManagerId"
+                                        onChange={handleChange}
+                                        value={values.branchManagerId}
+                                        onBlur={handleBlur}
+                                        isInvalid={Boolean(errors.branchManagerId) && Boolean(touched.branchManagerId)}
+                                    >
+                                        <option value={''}></option>
+                                        {employees.map((employee, index) => {
+                                            return (
+                                                <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
+                                            )
+                                        })}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.branchManagerId}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col sm={6}>
+                                <Form.Group controlId="managerVisitDate">
+                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{`${local.branchManagerVisitation}`}</Form.Label>
+                                    <Form.Control
+                                        type="date"
+                                        name="managerVisitDate"
+                                        data-qc="managerVisitDate"
+                                        value={values.managerVisitDate}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isInvalid={Boolean(errors.managerVisitDate) && Boolean(touched.managerVisitDate)}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.managerVisitDate}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Col>

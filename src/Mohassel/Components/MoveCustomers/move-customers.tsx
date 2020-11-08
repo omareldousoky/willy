@@ -39,6 +39,7 @@ interface State {
     LoanOfficerSelectLoader: boolean;
     moveMissing: boolean;
     LoanOfficerSelectOptions: Array<any>;
+    activeLoanOfficerSelectOptions: Array<any>;
     loading: boolean;
 }
 
@@ -59,6 +60,7 @@ export class MoveCustomers extends Component<{}, State>  {
             moveMissing: false,
             LoanOfficerSelectLoader: false,
             LoanOfficerSelectOptions: [],
+            activeLoanOfficerSelectOptions: []
         }
     }
     componentDidMount() {
@@ -101,6 +103,16 @@ export class MoveCustomers extends Component<{}, State>  {
             this.setState({
                 LoanOfficerSelectLoader: false,
                 LoanOfficerSelectOptions: []
+            })
+        }
+        const activeRes = await searchLoanOfficer({ name: searchKeyWord, from: this.state.from, size: 1000, branchId: tokenData.branch, status: 'active' })
+        if (activeRes.status === "success") {
+            this.setState({
+                activeLoanOfficerSelectOptions: activeRes.body.data
+            })
+        } else {
+            this.setState({
+                activeLoanOfficerSelectOptions: []
             })
         }
     }
@@ -311,7 +323,7 @@ export class MoveCustomers extends Component<{}, State>  {
                                                     }}
                                                     value={this.state.newSelectedLO}
                                                     LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
-                                                    LoanOfficerSelectOptions={this.state.LoanOfficerSelectOptions.filter(LO => LO !== this.state.selectedLO)}
+                                                    LoanOfficerSelectOptions={this.state.activeLoanOfficerSelectOptions.filter(LO => LO !== this.state.selectedLO)}
                                                 />
                                             </Col>
                                         </Row>

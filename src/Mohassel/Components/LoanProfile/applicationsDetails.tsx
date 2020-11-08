@@ -14,6 +14,7 @@ import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate
 
 interface Props {
     application: any;
+    getGeoArea?: Function;
 }
 interface LoanDetailsProps {
     application: any;
@@ -129,6 +130,14 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                     <td>{local.visitationDate}</td>
                     <td>{timeToArabicDate(props.application.visitationDate, false)}</td>
                 </tr>
+                {props.application.branchManagerName.length > 0 && <tr>
+                    <td>{local.branchManager}</td>
+                    <td>{props.application.branchManagerName}</td>
+                </tr>}
+                {props.application.managerVisitDate > 0 && <tr>
+                    <td>{local.branchManagerVisitation}</td>
+                    <td>{timeToArabicDate(props.application.managerVisitDate, false)}</td>
+                </tr>}
                 <tr>
                     <td>{local.entryDate}</td>
                     <td>{timeToArabicDate(props.application.entryDate, false)}</td>
@@ -397,7 +406,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                     </Form.Group>
                 </Form.Row>
                 {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
-                    <GuarantorTableView guarantors={props.application.guarantors} />
+                    <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
                 </Form.Row>}
             </Form>
         </div>

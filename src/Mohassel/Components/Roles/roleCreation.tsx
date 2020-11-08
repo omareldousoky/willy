@@ -252,7 +252,6 @@ class RoleCreation extends Component<Props, State> {
                   name="mangerRole"
                   data-qc="managerRole"
                   onChange={(e) => {
-                    console.log(e);
                     formikProps.values.managerRole = e.value;
                   }}
                   options={this.state.managerRolesList}
