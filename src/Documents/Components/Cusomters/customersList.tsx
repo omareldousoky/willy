@@ -64,7 +64,7 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <Can I="updateNationalId" a="customer"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img></Can>
+        render: data => <Can I="updateCustomer" a="customer"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img></Can>
       },
     ]
   }
