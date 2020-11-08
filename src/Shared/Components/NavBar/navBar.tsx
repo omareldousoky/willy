@@ -70,7 +70,7 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-      document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_LTS_SUBDOMAIN ? `;domain=${process.env.REACT_APP_LTS_SUBDOMAIN}`: '' + ';path=/;');
+      document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}`: '' + ';path=/;');
       setToken(res.body.token);
       this.setState({ loading: false, selectedBranch: branch })
       if(refresh) this.props.history.push("/");
