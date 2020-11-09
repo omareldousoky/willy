@@ -23,7 +23,7 @@ class HeaderWithCards extends React.Component <Props> {
     <div className="header-cards-parent">
       <h4>{this.props.header}</h4>
       <div className="cards-container">
-        <Nav style={{ overflowX: 'scroll', overflowY: 'hidden', flexWrap: 'nowrap'}}>
+        <Nav style={{ overflow: 'auto', flexWrap: 'nowrap'}}>
         {this.props.array.map((item, index) => {
           return (
             <div key={index} className={index === this.props.active ?"card-item active":"card-item"}>
