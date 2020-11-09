@@ -156,17 +156,16 @@ const CrossedOutLoansList = (props) => {
   };
 
   return (
-    <>
-      <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
-        <tr style={{ height: "10px" }}></tr>
-        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
-        <tr style={{ height: "10px" }}></tr>
-      </table>
       <div
         className="crossed-out-loans-list"
         style={{ direction: "rtl" }}
         lang="ar"
       >
+      <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
+        <tr style={{ height: "10px" }}></tr>
+        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr style={{ height: "10px" }}></tr>
+      </table>
         <table className="report-container">
           <thead className="report-header">
             <tr className="headtitle">
@@ -255,7 +254,6 @@ const CrossedOutLoansList = (props) => {
           </tbody>
         </table>
       </div>
-    </>
   );
 };
 
