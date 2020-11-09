@@ -567,7 +567,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 this.setState({ application: defaultApplication, loading: false });
             } else if (check.flag === false && check.validationObject) {
                 errorMessage2 = local.customerInvolvedInAnotherLoan;
-                console
             }
             if(errorMessage1 || errorMessage2)
             Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : null} ${errorMessage2}</span>`, 'error');
