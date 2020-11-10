@@ -14,6 +14,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import { editLead } from '../../Services/APIs/Leads/editLead';
 import { Governorate } from '../CustomerCreation/StepTwoForm';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
+import { leadStepOne, leadStepTwo, leadValidationStepOne, leadValidationStepTwo } from './editLeadValidation';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 
@@ -25,27 +26,29 @@ interface Props {
   };
   history: any;
 }
+export interface LeadStepOne {
+  customerName: string;
+  maxAge: number;
+  minAge: number;
+  maxMinAge: string;
+  phoneNumber: string;
+  nationalId: string;
+  nationalIdIssueDate: string;
+  loanOwner: boolean;
+}
+export interface LeadStepTwo {
+  businessSector: string;
+  businessGovernate: string;
+  businessCity: string;
+  businessArea: string;
+  businessAddress: string;
+  businessAddressDescription: string;
+}
 interface State {
   step: number;
   loading: boolean;
-  stepOne: {
-    customerName: string;
-    maxAge: number;
-    minAge: number;
-    maxMinAge: string;
-    phoneNumber: string;
-    nationalId: string;
-    nationalIdIssueDate: string;
-    loanOwner: boolean;
-  };
-  stepTwo: {
-    businessSector: string;
-    businessGovernate: string;
-    businessCity: string;
-    businessArea: string;
-    businessAddress: string;
-    businessAddressDescription: string;
-  };
+  stepOne: LeadStepOne;
+  stepTwo: LeadStepTwo;
   governorates: Array<Governorate>;
   uuid: string;
 }
@@ -56,24 +59,8 @@ class EditLead extends Component<Props, State> {
     this.state = {
       step: 1,
       loading: false,
-      stepOne: {
-        customerName: '',
-        maxAge: 0,
-        minAge: 0,
-        maxMinAge: '',
-        phoneNumber: '',
-        nationalId: '',
-        nationalIdIssueDate: '',
-        loanOwner: false,
-      },
-      stepTwo: {
-        businessSector: '',
-        businessGovernate: '',
-        businessCity: '',
-        businessArea: '',
-        businessAddress: '',
-        businessAddressDescription: '',
-      },
+      stepOne: leadStepOne,
+      stepTwo: leadStepTwo,
       governorates: [],
       uuid: '',
     };
@@ -118,7 +105,7 @@ class EditLead extends Component<Props, State> {
         enableReinitialize
         initialValues={this.state.stepOne}
         onSubmit={this.submit}
-        // validationSchema={customerCreationValidationStepOne}
+        validationSchema={leadValidationStepOne}
         validateOnBlur
         validateOnChange
       >
@@ -172,17 +159,15 @@ class EditLead extends Component<Props, State> {
                 <Col sm={4}>
                   <Form.Group controlId="phoneNumber">
                     <Form.Label className="customer-form-label" column>{`${local.mobilePhoneNumber}*`}</Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        type="text"
-                        name="phoneNumber"
-                        data-qc="phoneNumber"
-                        value={formikProps.values.phoneNumber}
-                        onChange={formikProps.handleChange}
-                        onBlur={formikProps.handleBlur}
-                        isInvalid={Boolean(formikProps.errors.phoneNumber && formikProps.touched.phoneNumber)}
-                      />
-                    </InputGroup>
+                    <Form.Control
+                      type="text"
+                      name="phoneNumber"
+                      data-qc="phoneNumber"
+                      value={formikProps.values.phoneNumber}
+                      onChange={formikProps.handleChange}
+                      onBlur={formikProps.handleBlur}
+                      isInvalid={Boolean(formikProps.errors.phoneNumber && formikProps.touched.phoneNumber)}
+                    />
                     <Form.Control.Feedback type="invalid">
                       {formikProps.errors.phoneNumber}
                     </Form.Control.Feedback>
@@ -211,7 +196,7 @@ class EditLead extends Component<Props, State> {
                   <Form.Group controlId="nationalIdIssueDate">
                     <Form.Label className="customer-form-label" column>{`${local.nationalIdIssueDate}*`}</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="date"
                       name="nationalIdIssueDate"
                       data-qc="nationalIdIssueDate"
                       value={formikProps.values.nationalIdIssueDate}
@@ -253,8 +238,7 @@ class EditLead extends Component<Props, State> {
               </Form.Group>
             </Form>
           )
-        }
-        }
+        }}
       </Formik >
     )
   }
@@ -264,7 +248,7 @@ class EditLead extends Component<Props, State> {
         enableReinitialize
         initialValues={this.state.stepTwo}
         onSubmit={this.submit}
-        // validationSchema={customerCreationValidationStepOne}
+        validationSchema={leadValidationStepTwo}
         validateOnBlur
         validateOnChange
       >
@@ -388,7 +372,8 @@ class EditLead extends Component<Props, State> {
                     <Form.Label className="customer-form-label" column>{`${local.addressDescription}*`}</Form.Label>
                     <InputGroup>
                       <Form.Control
-                        type="text"
+                        as="textarea"
+                        rows={3}
                         name="businessAddressDescription"
                         data-qc="businessAddressDescription"
                         value={formikProps.values.businessAddressDescription}
