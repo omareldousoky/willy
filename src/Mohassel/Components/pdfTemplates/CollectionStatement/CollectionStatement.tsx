@@ -63,42 +63,40 @@ const CollectionStatement = (props) => {
   };
 
   return (
-    <>
+    <div className="CollectionStatement">
       <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
         <tr style={{ height: "10px" }}></tr>
-        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr><th colSpan={1} style = {{backgroundColor:'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} style = {{backgroundColor:'white'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
         <tr style={{ height: "10px" }}></tr>
       </table>
-      <div className="CollectionStatement">
-        <table style={{ width: "100%" }}>
-          <thead className="report-header">
-            <tr className="headtitle">
-              <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
-              <th colSpan={5}>
-                حركات السداد باليوم عن الفتره من {startDate} الي {endDate}
-              </th>
-            </tr>
-          </thead>
-        </table>
-        <Table style={{ width: "100%" }} striped bordered hover>
-          <tbody>
-            {branches.map((branch, idx) => (
-              <BranchComponent key={idx} branch={branch} />
-            ))}
-            <tr style={{ fontSize: 16 }}>
-              <td>{"إجمالى عام"}</td>
-              <td>{trimmedValue(total.fees)}</td>
-              <td>{trimmedValue(total.installmentsPrincipal)}</td>
-              <td>{trimmedValue(total.installmentsInterest)}</td>
-              <td>{trimmedValue(total.installmentsTotal)}</td>
-              <td>{trimmedValue(total.penalties)}</td>
-              <td>{trimmedValue(total.otherIncome)}</td>
-              <td>{trimmedValue(total.totalCollected)}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
-    </>
+      <table style={{ width: "100%" }}>
+        <thead className="report-header">
+          <tr className="headtitle">
+            <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
+            <th colSpan={5}>
+              حركات السداد باليوم عن الفتره من {startDate} الي {endDate}
+            </th>
+          </tr>
+        </thead>
+      </table>
+      <Table style={{ width: "100%" }} striped bordered hover>
+        <tbody>
+          {branches.map((branch, idx) => (
+            <BranchComponent key={idx} branch={branch} />
+          ))}
+          <tr style={{ fontSize: 16 }}>
+            <td>{"إجمالى عام"}</td>
+            <td>{trimmedValue(total.fees)}</td>
+            <td>{trimmedValue(total.installmentsPrincipal)}</td>
+            <td>{trimmedValue(total.installmentsInterest)}</td>
+            <td>{trimmedValue(total.installmentsTotal)}</td>
+            <td>{trimmedValue(total.penalties)}</td>
+            <td>{trimmedValue(total.otherIncome)}</td>
+            <td>{trimmedValue(total.totalCollected)}</td>
+          </tr>
+        </tbody>
+      </Table>
+    </div>
   );
 };
 

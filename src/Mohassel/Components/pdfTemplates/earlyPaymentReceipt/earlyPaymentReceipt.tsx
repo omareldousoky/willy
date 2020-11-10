@@ -10,12 +10,11 @@ const EarlyPaymentReceipt = (props) => {
         else return props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.key;
     }
     return (
-        <>
             <div className="early-payment-receipt" dir="rtl" lang="ar">
                 <table className="title">
                 <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr><th  style = {{backgroundColor: 'white'}} colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th style = {{backgroundColor: 'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                     <tbody>
@@ -68,7 +67,6 @@ const EarlyPaymentReceipt = (props) => {
                     </tbody>
                 </table>
             </div>
-        </>
     )
 }
 
