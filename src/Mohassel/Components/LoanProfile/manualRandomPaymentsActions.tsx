@@ -1,6 +1,6 @@
 import React from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, getRandomPaymentByKey } from '../../Services/utils';
+import { timeToDateyyymmdd, getRandomPaymentByKey } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 
 const ManualRandomPaymentsActions = (props) => {

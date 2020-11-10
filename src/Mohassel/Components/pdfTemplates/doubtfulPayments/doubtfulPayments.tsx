@@ -1,6 +1,6 @@
 import React from 'react';
 import './doubtfulPayments.scss';
-import { timeToArabicDate, getTimestamp, getLoanStatus } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp, getLoanStatus } from "../../../../Shared/Services/utils";
 import * as local from '../../../../Shared/Assets/ar.json';
 const DoubtfulPayments = (props) => {
     const tempData = props.data.data;

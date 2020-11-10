@@ -21,10 +21,10 @@ import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication, editApplication } from '../../Services/APIs/loanApplication/newApplication';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import { Location } from '../LoanCreation/loanCreation';
-import { getCookie } from '../../Services/getCookie';
+import { getCookie } from '../../../Shared/Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { parseJwt, beneficiaryType, getAge } from '../../Services/utils';
+import { parseJwt, beneficiaryType, getAge } from "../../../Shared/Services/utils";
 import { getBusinessSectors } from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm';
 import DualBox from '../DualListBox/dualListBox';

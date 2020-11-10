@@ -762,6 +762,8 @@
     "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
     "dateOfFile": "تاريخ الملف",
     "cancelledTransaction": "الحركة ملغاة",
+    "hiddenInLTS": "لا تظهر في LTS",
+    "welcomeToDocuments": "اهلا بك في LTS Documents",
     "branchManagerVisitation":"تاريخ زيارة مدير الفرع",
     "branchAreas":"التقسيم الجغرافي للفروع",
     "assignBranchAreas":"تعيين التقسيمات الجغرافية للفروع",

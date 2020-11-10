@@ -11,7 +11,7 @@ import * as local from "../../../Shared/Assets/ar.json";
 import { paymentValidation } from "./paymentValidation";
 import { searchUserByAction } from "../../Services/APIs/UserByAction/searchUserByAction";
 import { connect } from "react-redux";
-import { payment } from "../../redux/payment/actions";
+import { payment } from "../../../Shared/redux/payment/actions";
 import "./styles.scss";
 import { Employee } from "./payment";
 

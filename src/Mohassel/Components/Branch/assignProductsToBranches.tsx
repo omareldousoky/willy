@@ -5,7 +5,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getProducts } from '../../Services/APIs/loanProduct/getProduct';
 import { assignProductsToBranches, unassignProductsToBranches } from '../../Services/APIs/Branch/assignProductsToBranches';
-import { customFilterOption } from "../../Services/utils";
+import { customFilterOption } from '../../../Shared/Services/utils';
 import DualBox from '../DualListBox/dualListBox';
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form';

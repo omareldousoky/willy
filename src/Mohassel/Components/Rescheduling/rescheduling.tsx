@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import PostponeInstallments from './postponeInstallments';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import TraditionalLoanRescheduling from './traditionalLoanRescheduling';
 import FreeRescheduling from './freeRescheduling';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';

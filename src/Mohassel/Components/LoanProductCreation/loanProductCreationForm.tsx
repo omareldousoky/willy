@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { dayToArabic } from '../../Services/utils';
+import { dayToArabic } from "../../../Shared/Services/utils";
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue,edit } = props;

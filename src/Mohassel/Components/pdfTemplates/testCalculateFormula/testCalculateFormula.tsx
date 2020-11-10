@@ -1,8 +1,8 @@
 import React from 'react';
 import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Services/utils';
-import store from '../../../redux/store';
+import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../../Shared/Services/utils';
+import store from '../../../../Shared/redux/store';
 
 const TestCalculateFormulaPDF = (props) => {
     return (

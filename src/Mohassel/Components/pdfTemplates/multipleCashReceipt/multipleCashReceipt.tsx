@@ -1,6 +1,4 @@
 import React from 'react';
-import Tafgeet from 'tafgeetjs';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
 import './multipleCashReceipt.scss';
 
 const MultipleCashReceipt = (props) => {

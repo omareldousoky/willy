@@ -3,19 +3,19 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import { setUserActivation } from '../../Services/APIs/Users/userActivation';
-import Search from '../Search/search';
+import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { loading } from '../../redux/loading/actions';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { loading } from '../../../Shared/redux/loading/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
 
 interface Props {
   history: any;

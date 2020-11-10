@@ -3,15 +3,15 @@ import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/Button';
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes';
 import * as local from '../../../Shared/Assets/ar.json';
-import DocumentUploader from '../documentUploader/documentUploader';
+import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader';
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
-import { DocumentType } from '../../Services/interfaces'
+import { DocumentType } from '../../../Shared/Services/interfaces'
 import { connect } from 'react-redux';
-import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../redux/document/actions'
-import {Image} from '../../redux/document/types';
-import { downloadAsZip } from '../../Services/utils';
+import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
+import {Image} from '../../../Shared/redux/document/types';
+import { downloadAsZip } from '../../../Shared/Services/utils';
 interface State {
   docsOfImagesFiles: any[];
   documentTypes: any[];

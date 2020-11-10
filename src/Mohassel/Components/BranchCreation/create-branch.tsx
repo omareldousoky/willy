@@ -10,10 +10,10 @@ import { Loader } from '../../../Shared/Components/Loader';
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json'
 import { connect } from 'react-redux';
-import {createNewBranch, editBranchById , getBranchById} from '../../redux/branch/actions';
+import {createNewBranch, editBranchById , getBranchById} from '../../../Shared/redux/branch/actions';
 import Swal from 'sweetalert2';
-import { Branch } from '../../Services/interfaces';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { Branch } from '../../../Shared/Services/interfaces';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 interface State {
     step: number;
     step1: BasicValues;
