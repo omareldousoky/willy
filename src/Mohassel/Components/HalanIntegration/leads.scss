@@ -29,3 +29,26 @@
         }
     }
 }
+.age-range-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    & .item {
+        width: 200px;
+        height: 60px;
+        border: 1px #e5e5e5 solid;
+        color: #6e6e6e;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        &.active {
+            color: #7dc356;
+            border-color: #7dc356;
+        }
+    }:hover {
+        color: #7dc356;
+        border-color: #7dc356;
+    }
+}

@@ -137,10 +137,12 @@ class Leads extends Component<Props, State>{
               <Can I="leadInReviewStatus" a="halanuser">
                 <div className="item"
                   onClick={() => {
-                    this.changeMainState(data.phoneNumber, 'in-review', true, data);
+                    this.changeMainState(data.phoneNumber, 'in-review', 'view', data);
                   }}>{local.viewCustomerLead}</div>
               </Can>
-              {/* <Can I="leadInReviewStatus" a="halanuser"><div className="item" onClick={() => this.changeLeadState(data.phoneNumber, data.status, data.inReviewStatus, 'in-review', 'basic')}>{local.editLead}</div></Can> */}
+              <Can I="leadInReviewStatus" a="halanuser">
+                <div className="item" onClick={() => this.changeMainState(data.phoneNumber, 'in-review', 'edit', data)}>{local.editLead}</div>
+                </Can>
             </div>}
           </div>
       },
@@ -190,22 +192,24 @@ class Leads extends Component<Props, State>{
             }
           }
         } else {
-          this.changeMainState(phoneNumber, newState, false, null);
+          this.changeMainState(phoneNumber, newState, '', null);
         }
       }
     })
   }
-  async changeMainState(phoneNumber: string, newState: string, view: boolean, data) {
+  async changeMainState(phoneNumber: string, newState: string, action: string, data) {
     this.props.setLoading(true);
-    if (view && data.status !== 'submitted') {
-      this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
+    if (action && data.status !== 'submitted') {
+      action === 'view' ? this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data }) : this.props.history.push('/halan-integration/leads/edit-lead', { leadDetails: data })
     } else {
       const res = await changeLeadState(phoneNumber, newState);
       if (res.status === "success") {
         this.props.setLoading(false);
         this.setState({ openActionsId: "" })
-        if (view) {
+        if (action === 'view') {
           this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
+        } else if(action === 'edit') {
+          this.props.history.push('/halan-integration/leads/edit-lead', { leadDetails: data })
         } else Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
       } else {
         this.props.setLoading(false);

@@ -29,6 +29,13 @@ const tabs: Array<Tab> = [
 const LeadProfile = (props: Props) => {
   const [activeTab, changeActiveTab] = useState('mainInfo');
   const leadDetails = props.history.location.state.leadDetails;
+  function getPeriod(maxDate: number) {
+    if(maxDate < 6) {
+      return `${local.lessThan} 6 ${local.months}`;
+    } else if(maxDate > 12){
+      return `${local.moreThan} 1 ${local.year}`;
+    } else return `${local.from} ${leadDetails.minBusinessDate} ${local.to} ${leadDetails.maxBusinessDate} ${local.months}`
+  }
   return (
     <>
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
@@ -54,7 +61,7 @@ const LeadProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.age}</td>
-                <td>{`${local.from} ${leadDetails.minAge} ${local.to} ${leadDetails.maxAge} سنة` }</td>
+                <td>{`${local.from} ${leadDetails.minAge} ${local.to} ${leadDetails.maxAge} ${local.year}` }</td>
               </tr>
               <tr>
                 <td>{local.mobilePhoneNumber}</td>
@@ -78,7 +85,7 @@ const LeadProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.activityPeriod}</td>
-                <td>{`${local.from} ${leadDetails.minBusinessDate} ${local.to} ${leadDetails.maxBusinessDate} ${local.months}` }</td>
+                <td>{getPeriod(leadDetails.maxBusinessDate)}</td>
               </tr>
               <tr>
                 <td>{local.businessName}</td>
@@ -86,7 +93,7 @@ const LeadProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.businessAddress}</td>
-                <td>{`${leadDetails.businessAddress}, ${leadDetails.businessArea}, ${leadDetails.businessCity}, ${leadDetails.businessGovernate}`}</td>
+                <td>{`${leadDetails.businessStreet}, ${leadDetails.businessArea}, ${leadDetails.businessCity}, ${leadDetails.businessGovernate}`}</td>
               </tr>
               <tr>
                 <td>{local.addressDescription}</td>

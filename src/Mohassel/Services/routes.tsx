@@ -47,6 +47,7 @@ import Leads from '../Components/HalanIntegration/leads';
 import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer';
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
 import LeadProfile from '../Components/HalanIntegration/leadProfile';
+import EditLead from '../Components/HalanIntegration/editLead';
 
 
 const appRoutes = [
@@ -356,6 +357,11 @@ const appRoutes = [
                 path: "/view-lead",
                 label: local.customersDetails,
                 render: (props) => <LeadProfile {...props} />,
+              },
+              {
+                path: "/edit-lead",
+                label: local.editCustomer,
+                render: (props) => <EditLead {...props} />,
               },
             ]
           },

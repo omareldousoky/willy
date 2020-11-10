@@ -493,7 +493,7 @@
     "loanStatusChange": "تعديل حالة القرض",
     "code": "الكود",
     "month": "شهر",
-    "months": "شهر",
+    "months": "أشهر",
     "day": "يوم",
     "days": "يوم",
     "loans": "قروض",
@@ -778,5 +778,14 @@
     "submitted": "متقدم",
     "age": "العمر",
     "addressDescription": "وصف العنوان",
-    "activityPeriod":"مده النشاط"
+    "activityPeriod":"مده النشاط",
+    "loanOwner": "صاحب القرض",
+    "streetName":"اسم الشارع",
+    "personal": "شخصي",
+    "notPersonal": "شخص أخر",
+    "year": "سنة",
+    "lessThan": "اقل من",
+    "moreThan": "اكثر من",
+    "leadEditSuccess": "تم تعديل المتقدم بنجاح",
+    "leadEditError": "حدث خطأ في تعديل المتقدم"
 }
