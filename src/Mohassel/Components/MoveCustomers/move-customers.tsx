@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { getCookie } from '../../Services/getCookie';
-import Search from '../Search/search';
+import { getCookie } from '../../../Shared/Services/getCookie';
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import FormCheck from "react-bootstrap/FormCheck";
 import InputGroup from "react-bootstrap/InputGroup";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
-import { parseJwt } from '../../Services/utils';
+import { parseJwt } from "../../../Shared/Services/utils";
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Form from "react-bootstrap/Form";
@@ -27,6 +26,10 @@ interface Customer {
     key?: number;
     _id?: string;
     branchId?: string;
+    blocked?: {
+        isBlocked: boolean;
+        reason?: string;
+    };
 
 }
 interface State {
@@ -77,8 +80,7 @@ export class MoveCustomers extends Component<{}, State>  {
     }
     checkAll(e: React.FormEvent<HTMLInputElement>) {
         if (e.currentTarget.checked) {
-            // const newselectedReviewedLoans: Array<string> = this.state.customers.map(loanItem => loanItem.id);
-            this.setState({ selectedCustomers: this.state.customers });
+            this.setState({ selectedCustomers: this.state.customers.filter(customer=> customer.blocked?.isBlocked !== true) });
         } else this.setState({ selectedCustomers: [] });
     }
     addRemoveItemFromChecked(customer: Customer) {
@@ -132,8 +134,7 @@ export class MoveCustomers extends Component<{}, State>  {
             this.setState({ loading: false, newSelectedLO: {}, filterCustomers: "" });
             Swal.fire(
                 "",
-                `${local.doneMoving} ${
-                this.state.moveMissing
+                `${local.doneMoving} ${this.state.moveMissing
                     ? local.customersSuccess
                     : this.state.selectedCustomers.length + " " + local.customerSuccess
                 }`,
@@ -309,7 +310,7 @@ export class MoveCustomers extends Component<{}, State>  {
                                             <div style={{ textAlign: "center", marginBottom: 40 }}>
                                                 <img
                                                     alt="no-data-found"
-                                                    src={require("../../Assets/no-results-found.svg")}
+                                                    src={require("../../../Shared/Assets/no-results-found.svg")}
                                                 />
                                                 <h4>{local.noResultsFound}</h4>
                                             </div>

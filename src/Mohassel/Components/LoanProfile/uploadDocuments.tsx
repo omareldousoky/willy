@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import DocumentUploader from '../documentUploader/documentUploader'
+import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader';
 import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
 import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments';
 import Swal from 'sweetalert2';
@@ -10,9 +10,9 @@ import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader'
 import ability from '../../config/ability'
 import { connect } from 'react-redux';
-import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../redux/document/actions'
-import { Image } from '../../redux/document/types';
-import { downloadAsZip } from '../../Services/utils';
+import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
+import { Image } from '../../../Shared/redux/document/types';
+import { downloadAsZip } from "../../../Shared/Services/utils";
 interface Props {
     application: any;
     getDocuments: typeof getDocuments;

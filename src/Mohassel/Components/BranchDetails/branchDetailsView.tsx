@@ -3,7 +3,7 @@ import React, { CSSProperties } from 'react'
 import Table from 'react-bootstrap/Table'
 import * as local from '../../../Shared/Assets/ar.json';
 import { theme } from '../../../theme'
-import { timeToDate } from '../../Services/utils';
+import { timeToDate } from '../../../Shared/Services/utils';
 import Labels from '../Labels/labels';
 import { BranchBasicsView } from './branchDetailsInterfaces';
 

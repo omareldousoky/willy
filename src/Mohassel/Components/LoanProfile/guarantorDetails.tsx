@@ -2,7 +2,7 @@ import React from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, iscoreStatusColor } from '../../Services/utils';
+import { downloadFile, iscoreStatusColor } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 
 interface Props {

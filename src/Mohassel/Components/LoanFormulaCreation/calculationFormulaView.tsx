@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import Table from 'react-bootstrap/Table';
 import BackButton from '../BackButton/back-button';
-import { interestType, installmentType, roundDirection, roundWhat } from '../../Services/utils';
+import { interestType, installmentType, roundDirection, roundWhat } from "../../../Shared/Services/utils";
 
 interface State {
     formula: any;

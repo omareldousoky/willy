@@ -1,8 +1,8 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate, timeToArabicDate, beneficiaryType } from './../../../Services/utils';
-import store from '../../../redux/store';
+import { ageCalculate, timeToArabicDate, beneficiaryType } from '../../../../Shared/Services/utils';
+import store from '../../../../Shared/redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal() {
         let sum = 0;

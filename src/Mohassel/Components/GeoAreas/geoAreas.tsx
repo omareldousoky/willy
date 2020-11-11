@@ -12,7 +12,7 @@ import Col from 'react-bootstrap/Col';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { addGeoArea } from '../../Services/APIs/GeoAreas/addGeoArea';
 import { updateGeoArea } from '../../Services/APIs/GeoAreas/updateGeoArea';
-import { Branch } from '../../redux/auth/types';
+import { Branch } from '../../../Shared/redux/auth/types';
 import { manageToolsArray } from '../Tools/manageToolsInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Card from 'react-bootstrap/Card';

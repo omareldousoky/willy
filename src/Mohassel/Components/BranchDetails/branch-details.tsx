@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json'
 import BranchDetailsView from './branchDetailsView';
 import BackButton from '../BackButton/back-button';
-import {getBranchById} from '../../redux/branch/actions';
+import {getBranchById} from '../../../Shared/redux/branch/actions';
 import { BranchBasicsView } from './branchDetailsInterfaces';
 import UsersList from '../ManageAccounts/usersList';
 import CustomersList from '../CustomerCreation/customersList';

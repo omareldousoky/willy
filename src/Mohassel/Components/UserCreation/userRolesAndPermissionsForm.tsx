@@ -9,7 +9,7 @@ import Select from "react-select";
 import { theme } from "../../../theme";
 import { RolesBranchesValues } from "./userCreationinterfaces";
 import DualBox from "../DualListBox/dualListBox";
-import { customFilterOption } from "../../Services/utils";
+import { customFilterOption } from '../../../Shared/Services/utils';
 import Container from "react-bootstrap/Container";
 
 interface Props {

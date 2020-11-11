@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import AsyncSelect from 'react-select/async';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 import { Installment } from './payInstallment';
-import { payment } from '../../redux/payment/actions';
+import { payment } from '../../../Shared/redux/payment/actions';
 import { Employee } from './payment';
 import * as local from '../../../Shared/Assets/ar.json';
 
