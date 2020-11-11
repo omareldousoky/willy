@@ -31,6 +31,10 @@ interface Customer {
   key?: number;
   _id?: string;
   branchId?: string;
+  blocked?: {
+    isBlocked: boolean;
+    reason?: string;
+};
 }
 interface State {
   customers: Array<Customer>;
@@ -108,8 +112,7 @@ class CustomersForUser extends Component<Props, State> {
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      // const newselectedReviewedLoans: Array<string> = this.state.customers.map(loanItem => loanItem.id);
-      this.setState({ selectedCustomers: this.state.customers });
+      this.setState({ selectedCustomers: this.state.customers.filter(customer=> customer.blocked?.isBlocked !== true) });
     } else this.setState({ selectedCustomers: [] });
   }
   addRemoveItemFromChecked(customer: Customer) {
@@ -282,6 +285,7 @@ class CustomersForUser extends Component<Props, State> {
               <tr>
                 <th>
                   <FormCheck
+                    style={{marginRight:"-14px"}}
                     type="checkbox"
                     onClick={e => this.checkAll(e)}
                   ></FormCheck>
@@ -296,13 +300,17 @@ class CustomersForUser extends Component<Props, State> {
                 return (
                   <tr key={index}>
                     <td>
+                      <Row>
                       <FormCheck
                         type="checkbox"
                         checked={this.state.selectedCustomers.includes(
                           customer
                         )}
                         onChange={() => this.addRemoveItemFromChecked(customer)}
-                      ></FormCheck>
+                        disabled={customer.blocked?.isBlocked === true}
+                      />
+                    {customer.blocked?.isBlocked === true ? <span style={{color:'#d51b1b'}}>{local.theCustomerIsBlocked}</span> : null}
+                    </Row>
                     </td>
                     <td>{customer.key}</td>
                     <td>{customer.customerName}</td>

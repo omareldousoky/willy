@@ -21,7 +21,7 @@ interface Props {
     dropDownKeys?: Array<string>;
     viewSelected?: Function;
     disabled?: Function;
-    disabledMessage?: string;
+    disabledMessage?: Function;
     oneWay?: boolean;
 }
 
@@ -211,7 +211,7 @@ class DualBox extends Component<Props, State> {
                                                         checked={this.state.selectionArray.find((item) => item._id === option._id)}
                                                         disabled={(this.props.disabled && this.props.disabled(option))}
                                                     />
-                                                    {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage}</span>}
+                                                    {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage(option)}</span>}
                                                 </div>
                                             }
                                             ) : this.state.options
@@ -227,7 +227,7 @@ class DualBox extends Component<Props, State> {
                                                             checked={this.state.selectionArray.find((item) => item._id === option._id)}
                                                             disabled={(this.props.disabled && this.props.disabled(option))}
                                                         />
-                                                        {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage}</span>}
+                                                        {this.props.disabled && this.props.disabledMessage && this.props.disabled(option) && <span>{this.props.disabledMessage(option)}</span>}
                                                     </div>
                                                 }
                                                 )}

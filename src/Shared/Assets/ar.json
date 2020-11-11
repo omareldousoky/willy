@@ -760,6 +760,14 @@
     "customerMaxPrincipalError":"هذا المبلغ يتعدى الحد الاقصى الشخصي المسموح للعميل",
     "customerMaxLoanPrincipalError":"هذا العميل يتعدى الحد الاقصى الشخصي المسموح له",
     "customersMaxLoanPrincipalError":"يتعدى الحد الاقصى الشخصي المسموح له",
+    "blockCustomer": "حظر العميل",
+    "unblockCustomer": "فك حظر العميل",
+    "blockReason": "سبب الحظر",
+    "unblockReason":"سبب فك الحظر",
+    "customerWillBeBlocked": "سيتم حظر العميل",
+    "customerWillBeUnblocked": "سيتم فك حظر العميل",
+    "customerBlockedSuccessfully":"لقد تم حظر العميل بنجاح",
+    "customerUnblockedSuccessfully":"لقد تم فك حظر العميل بنجاح",
     "dateOfFile": "تاريخ الملف",
     "cancelledTransaction": "الحركة ملغاة",
     "hiddenInLTS": "لا تظهر في LTS",
@@ -770,5 +778,6 @@
     "availableGeoAreas": " التقسيمات الجغرافية المتاحة",
     "branchgeoAreas": " التقسيمات الجغرافية المتاحة للفرع",
     "branchAssignGeoAreaSuccess":"تم تعيين التقسيمات الجغرافية للفرع بنجاح",
-    "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع"
+    "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع",
+    "theCustomerIsBlocked": "هذاالعميل موقوف التعامل معه"
 }
