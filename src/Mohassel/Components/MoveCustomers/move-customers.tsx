@@ -19,6 +19,8 @@ import Button from "react-bootstrap/Button";
 import Can from "../../config/Can";
 import { searchCustomer } from "../../Services/APIs/Customer-Creation/searchCustomer";
 import { moveCustomerToOfficer } from "../../Services/APIs/Customer-Creation/moveCustomerToOfficer";
+import { manageCustomersArray } from '../CustomerCreation/manageCustomersInitial';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 interface Customer {
     customerName?: string;
     key?: number;
@@ -45,6 +47,8 @@ interface State {
     LoanOfficerSelectOptions: Array<any>;
     activeLoanOfficerSelectOptions: Array<any>;
     loading: boolean;
+    manageCustomersTabs: any[];
+
 }
 
 export class MoveCustomers extends Component<{}, State>  {
@@ -64,12 +68,15 @@ export class MoveCustomers extends Component<{}, State>  {
             moveMissing: false,
             LoanOfficerSelectLoader: false,
             LoanOfficerSelectOptions: [],
-            activeLoanOfficerSelectOptions: []
+            activeLoanOfficerSelectOptions: [],
+            manageCustomersTabs: []
         }
     }
     componentDidMount() {
         this.setState({ LoanOfficerSelectLoader: true });
         this.getLoanOfficers("")
+        this.setState({ manageCustomersTabs: manageCustomersArray() })
+
     }
     checkAll(e: React.FormEvent<HTMLInputElement>) {
         if (e.currentTarget.checked) {
@@ -192,177 +199,179 @@ export class MoveCustomers extends Component<{}, State>  {
     render() {
 
         return (
-            <Card style={{ textAlign: 'right' }}>
-                <Card.Body>
-                    <>
-                        <Form.Group className="data-group" id="currentLoanOfficer">
-                            <Form.Label className="data-label">{local.chooseCurrentLoanOfficer}</Form.Label>
-                            <LoanOfficersDropDown
-                                id="currentLoanSelect"
-                                onSelectLoanOfficer={LO => {
-                                    if (LO) this.setState({ selectedLO: LO }, () => this.getCustomersForUser());
-                                    else this.setState({ selectedLO: {} });
-                                }}
-                                value={this.state.selectedLO}
-                                LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
-                                LoanOfficerSelectOptions={this.state.LoanOfficerSelectOptions}
-                            />
-                        </Form.Group>
-                        {this.state.selectedLO?._id &&
-                            <>
-                                <div className="custom-card-header">
-                                    <Loader open={this.state.loading} type="fullsection" />
-                                    <Row style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }} >
+            <>
+                <HeaderWithCards
+                    header={local.customers}
+                    array={this.state.manageCustomersTabs}
+                    active={this.state.manageCustomersTabs.map(item => { return item.icon }).indexOf('changeOfficer')}
+                />
+                <Card style={{ textAlign: 'right' }}>
+                    <Card.Body>
+                        <>
+                            <Form.Group className="data-group" id="currentLoanOfficer">
+                                <Form.Label className="data-label">{local.chooseCurrentLoanOfficer}</Form.Label>
+                                <LoanOfficersDropDown
+                                    id="currentLoanSelect"
+                                    onSelectLoanOfficer={LO => {
+                                        if (LO) this.setState({ selectedLO: LO }, () => this.getCustomersForUser());
+                                        else this.setState({ selectedLO: {} });
+                                    }}
+                                    value={this.state.selectedLO}
+                                    LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
+                                    LoanOfficerSelectOptions={this.state.LoanOfficerSelectOptions}
+                                />
+                            </Form.Group>
+                            {this.state.selectedLO?._id &&
+                                <>
+                                    <div className="custom-card-header">
+                                        <Loader open={this.state.loading} type="fullsection" />
+                                        <Row style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }} >
 
-                                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                                            {local.customers}
-                                        </Card.Title>
-                                        <span className="text-muted">
-                                            {local.noOfCustomers + ` (${this.state.totalCustomers})`}
-                                        </span>
-                                    </Row>
-                                    <div>
-                                        <Can I="changeOfficer" a="customer">
-                                            <Button
-                                                onClick={() => {
-                                                    this.setState({ openModal: true });
-                                                }}
-                                                disabled={!Boolean(this.state.selectedCustomers.length)}
-                                                className="big-button"
-                                                style={{ marginLeft: 20 }}
-                                            >
-                                                {local.changeRepresentative}{" "}
-                                                <span className="fa fa-exchange-alt"></span>
-                                            </Button>
-                                        </Can>
+                                            <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                                                {local.customers}
+                                            </Card.Title>
+                                            <span className="text-muted">
+                                                {local.noOfCustomers + ` (${this.state.totalCustomers})`}
+                                            </span>
+                                        </Row>
+                                        <div>
+                                            <Can I="changeOfficer" a="customer">
+                                                <Button
+                                                    onClick={() => {
+                                                        this.setState({ openModal: true });
+                                                    }}
+                                                    disabled={!Boolean(this.state.selectedCustomers.length)}
+                                                    className="big-button"
+                                                    style={{ marginLeft: 20 }}
+                                                >
+                                                    {local.changeRepresentative}{" "}
+                                                    <span className="fa fa-exchange-alt"></span>
+                                                </Button>
+                                            </Can>
+                                        </div>
                                     </div>
-                                </div>
-                                <InputGroup style={{ direction: "ltr", margin: "20px 0" }}>
-                                    <Form.Control
-                                        value={this.state.filterCustomers}
-                                        style={{ direction: "rtl", borderRight: 0, padding: 22 }}
-                                        placeholder={local.searchByName}
-                                        onChange={e => {
-                                            this.setState({ filterCustomers: e.currentTarget.value });
-                                        }}
-                                        onKeyPress={async event => {
-                                            if (event.key === "Enter") {
-                                                this.getCustomersForUser(this.state.filterCustomers);
-                                            }
+                                    <InputGroup style={{ direction: "ltr", margin: "20px 0" }}>
+                                        <Form.Control
+                                            value={this.state.filterCustomers}
+                                            style={{ direction: "rtl", borderRight: 0, padding: 22 }}
+                                            placeholder={local.searchByName}
+                                            onChange={e => {
+                                                this.setState({ filterCustomers: e.currentTarget.value });
+                                            }}
+                                            onKeyPress={async event => {
+                                                if (event.key === "Enter") {
+                                                    this.getCustomersForUser(this.state.filterCustomers);
+                                                }
+                                            }}
+                                        />
+                                        <InputGroup.Append>
+                                            <InputGroup.Text style={{ background: "#fff" }}>
+                                                <span className="fa fa-search fa-rotate-90"></span>
+                                            </InputGroup.Text>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                    {this.state.totalCustomers > 0 ? (
+                                        <Table striped hover style={{ textAlign: "right" }}>
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <FormCheck
+                                                            type="checkbox"
+                                                            onClick={e => this.checkAll(e)}
+                                                        ></FormCheck>
+                                                    </th>
+                                                    <th>{local.customerCode}</th>
+                                                    <th>{local.customerName}</th>
+                                                    <th>{local.representative}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {this.state.customers.map((customer, index) => {
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <FormCheck
+                                                                    type="checkbox"
+                                                                    checked={this.state.selectedCustomers.includes(
+                                                                        customer
+                                                                    )}
+                                                                    onChange={() => this.addRemoveItemFromChecked(customer)}
+                                                                ></FormCheck>
+                                                            </td>
+                                                            <td>{customer.key}</td>
+                                                            <td>{customer.customerName}</td>
+                                                            {<td>{this.state.selectedLO?.name}</td>}
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </Table>
+                                    ) : (
+                                            <div style={{ textAlign: "center", marginBottom: 40 }}>
+                                                <img
+                                                    alt="no-data-found"
+                                                    src={require("../../../Shared/Assets/no-results-found.svg")}
+                                                />
+                                                <h4>{local.noResultsFound}</h4>
+                                            </div>
+                                        )}
+                                    <Modal
+                                        size="lg"
+                                        show={this.state.openModal}
+                                        centered
+                                        onHide={() => this.setState({ openModal: false, moveMissing: false })}
+                                    >
+                                        <Modal.Header closeButton>
+                                            <Modal.Title style={{ margin: " 0 auto" }}>
+                                                {local.chooseRepresentative}
+                                            </Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <Row style={{ padding: "10px 40px" }}>
+                                                <Form.Label className="data-label">{local.chooseLoanOfficer}</Form.Label>
+                                                <Col sm={12}>
+                                                    <LoanOfficersDropDown
+                                                        id="newLoanOfficerSelect"
+                                                        onSelectLoanOfficer={LO => {
+                                                            if (LO) this.setState({ newSelectedLO: LO });
+                                                            else this.setState({ newSelectedLO: {} });
+                                                        }}
+                                                        value={this.state.newSelectedLO}
+                                                        LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
+                                                        LoanOfficerSelectOptions={this.state.activeLoanOfficerSelectOptions.filter(LO => LO !== this.state.selectedLO)}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                            <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
+                                                <Col >
+                                                    <Button
+                                                        style={{ width: "100%", height: "100%" }}
+                                                        onClick={() => this.submit()}
+                                                        disabled={false}
+                                                        variant="primary"
+                                                    >
+                                                        {local.submit}
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </Modal.Body>
+                                    </Modal>
+                                    <Pagination
+                                        totalCount={this.state.totalCustomers}
+                                        pagination={true}
+                                        dataLength={this.state.customers.length}
+                                        changeNumber={(key: string, number: number) => {
+                                            this.setState({ [key]: number } as any, () =>
+                                                this.getCustomersForUser()
+                                            );
                                         }}
                                     />
-                                    <InputGroup.Append>
-                                        <InputGroup.Text style={{ background: "#fff" }}>
-                                            <span className="fa fa-search fa-rotate-90"></span>
-                                        </InputGroup.Text>
-                                    </InputGroup.Append>
-                                </InputGroup>
-                                {this.state.totalCustomers > 0 ? (
-                                    <Table striped hover style={{ textAlign: "right" }}>
-                                        <thead> 
-                                            <tr>
-                                                <th>
-                                                    <FormCheck
-                                                    style={{marginRight:"-14px"}}
-                                                        type="checkbox"
-                                                        onClick={e => this.checkAll(e)}
-                                                    ></FormCheck>
-                                                </th>
-                                                <th>{local.customerCode}</th>
-                                                <th>{local.customerName}</th>
-                                                <th>{local.representative}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {this.state.customers.map((customer, index) => {
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Row>
-                                                            <FormCheck
-                                                                type="checkbox"
-                                                                checked={this.state.selectedCustomers.includes(
-                                                                    customer
-                                                                )}
-                                                                onChange={() => this.addRemoveItemFromChecked(customer)}
-                                                                disabled={customer.blocked?.isBlocked === true}
-                                                            />
-                                                            {customer.blocked?.isBlocked === true ? <span style={{color:'#d51b1b'}}>{local.theCustomerIsBlocked}</span> : null}
-                                                            </Row>
-                                                        </td>
-                                                        <td>{customer.key}</td>
-                                                        <td>{customer.customerName}</td>
-                                                        {<td>{this.state.selectedLO?.name}</td>}
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </Table>
-                                ) : (
-                                        <div style={{ textAlign: "center", marginBottom: 40 }}>
-                                            <img
-                                                alt="no-data-found"
-                                                src={require("../../../Shared/Assets/no-results-found.svg")}
-                                            />
-                                            <h4>{local.noResultsFound}</h4>
-                                        </div>
-                                    )}
-                                <Modal
-                                    size="lg"
-                                    show={this.state.openModal}
-                                    centered
-                                    onHide={() => this.setState({ openModal: false, moveMissing: false })}
-                                >
-                                    <Modal.Header closeButton>
-                                        <Modal.Title style={{ margin: " 0 auto" }}>
-                                            {local.chooseRepresentative}
-                                        </Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Row style={{ padding: "10px 40px" }}>
-                                            <Form.Label className="data-label">{local.chooseLoanOfficer}</Form.Label>
-                                            <Col sm={12}>
-                                                <LoanOfficersDropDown
-                                                    id="newLoanOfficerSelect"
-                                                    onSelectLoanOfficer={LO => {
-                                                        if (LO) this.setState({ newSelectedLO: LO });
-                                                        else this.setState({ newSelectedLO: {} });
-                                                    }}
-                                                    value={this.state.newSelectedLO}
-                                                    LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
-                                                    LoanOfficerSelectOptions={this.state.activeLoanOfficerSelectOptions.filter(LO => LO !== this.state.selectedLO)}
-                                                />
-                                            </Col>
-                                        </Row>
-                                        <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
-                                            <Col >
-                                                <Button
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    onClick={() => this.submit()}
-                                                    disabled={false}
-                                                    variant="primary"
-                                                >
-                                                    {local.submit}
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </Modal.Body>
-                                </Modal>
-                                <Pagination
-                                    totalCount={this.state.totalCustomers}
-                                    pagination={true}
-                                    dataLength={this.state.customers.length}
-                                    changeNumber={(key: string, number: number) => {
-                                        this.setState({ [key]: number } as any, () =>
-                                            this.getCustomersForUser()
-                                        );
-                                    }}
-                                />
-                            </>
-                        }
-                    </>
-                </Card.Body>
-            </Card >
+                                </>
+                            }
+                        </>
+                    </Card.Body>
+                </Card >
+            </>
         )
     }
 }
