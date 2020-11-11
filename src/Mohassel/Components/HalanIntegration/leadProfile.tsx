@@ -36,6 +36,15 @@ const LeadProfile = (props: Props) => {
       return `${local.moreThan} 1 ${local.year}`;
     } else return `${local.from} ${leadDetails.minBusinessDate} ${local.to} ${leadDetails.maxBusinessDate} ${local.months}`
   }
+  function getSector(businessSector) {
+    switch(businessSector) {
+      case '1': return local.industrialProjects;
+      case '2': return local.commercialProjects;
+      case '3': return local.agriculturalProjects;
+      case '4': return local.serviceProjects;
+      default: return '';
+    }
+  }
   return (
     <>
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
@@ -81,7 +90,7 @@ const LeadProfile = (props: Props) => {
             <tbody>
               <tr>
                 <td>{local.businessSector}</td>
-                <td>{leadDetails.businessSector}</td>
+                <td>{getSector(leadDetails.businessSector)}</td>
               </tr>
               <tr>
                 <td>{local.activityPeriod}</td>

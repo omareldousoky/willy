@@ -261,20 +261,20 @@ class EditLead extends Component<Props, State> {
                     <Form.Label className="customer-form-label" column>{`${local.businessActivity}*`}</Form.Label>
                     <div className="age-range-container">
                       <div onClick={() => {
-                        formikProps.setFieldValue('businessSector', 'industrial projects');
+                        formikProps.setFieldValue('businessSector', '1');
                       }}
-                        className={`item ${formikProps.values.businessSector === 'industrial projects' ? 'active' : ''}`}> مشاريع صناعيه</div>
+                        className={`item ${formikProps.values.businessSector === '1' ? 'active' : ''}`}>{local.industrialProjects}</div>
                       <div onClick={() => {
-                        formikProps.setFieldValue('businessSector', 'commerial projects');
-                      }} className={`item ${formikProps.values.businessSector === 'commerial projects' ? 'active' : ''}`}>مشاريع تجاريه</div>
+                        formikProps.setFieldValue('businessSector', '2');
+                      }} className={`item ${formikProps.values.businessSector === '2' ? 'active' : ''}`}>{local.commercialProjects}</div>
                     </div>
                     <div className="age-range-container">
                       <div onClick={() => {
-                        formikProps.setFieldValue('businessSector', 'agricultural projects');
-                      }} className={`item ${formikProps.values.businessSector === 'agricultural projects' ? 'active' : ''}`}>مشاريع زراعيه</div>
+                        formikProps.setFieldValue('businessSector', '3');
+                      }} className={`item ${formikProps.values.businessSector === '3' ? 'active' : ''}`}>{local.agriculturalProjects}</div>
                       <div onClick={() => {
-                        formikProps.setFieldValue('businessSector', 'service projects');
-                      }} className={`item ${formikProps.values.businessSector === 'service projects' ? 'active' : ''}`}>مشاريع خدميه</div>
+                        formikProps.setFieldValue('businessSector', '4');
+                      }} className={`item ${formikProps.values.businessSector === '4' ? 'active' : ''}`}>{local.serviceProjects}</div>
                     </div>
                   </Form.Group>
                 </Col>

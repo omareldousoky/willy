@@ -787,5 +787,9 @@
     "lessThan": "اقل من",
     "moreThan": "اكثر من",
     "leadEditSuccess": "تم تعديل المتقدم بنجاح",
-    "leadEditError": "حدث خطأ في تعديل المتقدم"
+    "leadEditError": "حدث خطأ في تعديل المتقدم",
+    "industrialProjects":"مشاريع صناعيه",
+    "commercialProjects":"مشاريع تجاريه",
+    "agriculturalProjects":"مشاريع زراعيه",
+    "serviceProjects":"مشاريع خدميه"
 }
