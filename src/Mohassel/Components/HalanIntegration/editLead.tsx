@@ -137,19 +137,19 @@ class EditLead extends Component<Props, State> {
                     <Form.Label className="customer-form-label" column>{`${local.age}*`}</Form.Label>
                     <div className="age-range-container">
                       <div onClick={() => {
-                        this.setState({ stepOne: { ...this.state.stepOne, maxMinAge: '0-21' } });
+                        this.setState({ stepOne: { ...formikProps.values, maxMinAge: '0-21' } });
                       }}
                         className={`item ${this.state.stepOne.maxMinAge === '0-21' ? 'active' : ''}`}> اقل من ٢١ سنه</div>
                       <div onClick={() => {
-                        this.setState({ stepOne: { ...this.state.stepOne, maxMinAge: '21-35' } });
+                        this.setState({ stepOne: { ...formikProps.values, maxMinAge: '21-35' } });
                       }} className={`item ${this.state.stepOne.maxMinAge === '21-35' ? 'active' : ''}`}>من ٢١ إلى ٣٥ سنه</div>
                     </div>
                     <div className="age-range-container">
                       <div onClick={() => {
-                        this.setState({ stepOne: { ...this.state.stepOne, maxMinAge: '36-50' } });
+                        this.setState({ stepOne: { ...formikProps.values, maxMinAge: '36-50' } });
                       }} className={`item ${this.state.stepOne.maxMinAge === '36-50' ? 'active' : ''}`}>من ٣٦ إلى ٥٠ سنه</div>
                       <div onClick={() => {
-                        this.setState({ stepOne: { ...this.state.stepOne, maxMinAge: '51-65' } });
+                        this.setState({ stepOne: { ...formikProps.values, maxMinAge: '51-65' } });
                       }} className={`item ${this.state.stepOne.maxMinAge === '51-65' ? 'active' : ''}`}>من ٥١ إلى ٦٥ سنه</div>
                     </div>
                   </Form.Group>
