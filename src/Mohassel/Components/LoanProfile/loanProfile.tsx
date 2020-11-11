@@ -230,6 +230,9 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ activeTab: 'loanDetails' })
             this.getPendingActions();
         }
+        if(application.body.status === "canceled"){
+            tabsToRender.push(financialTransactionsTab)
+        }
         tabsToRender.push(logsTab)
         this.getGeoAreas(application.body.branchId);
         this.setState({
@@ -249,7 +252,7 @@ class LoanProfile extends Component<Props, State>{
         const geoAreaObject = this.state.geoAreas.filter(area => area._id === geoArea);
         if (geoAreaObject.length === 1) {
             return geoAreaObject[0]
-        } else return{name: '-', active: false}
+        } else return { name: '-', active: false }
     }
     async getPendingActions() {
         this.setState({ loading: true })
@@ -345,12 +348,12 @@ class LoanProfile extends Component<Props, State>{
             receiptNumber = pendingAction.receiptNumber;
             truthDate = pendingAction.transactions[0].truthDate;
             actualDate = pendingAction.transactions[0].actualDate;
-            transactionAmount =  pendingAction.transactions[0].transactionAmount;
+            transactionAmount = pendingAction.transactions[0].transactionAmount;
         } else {
             receiptNumber = Number(this.state.pendingActions.receiptNumber);
             truthDate = this.state.pendingActions.transactions ? this.state.pendingActions.transactions[0].truthDate : 0;
             actualDate = this.state.pendingActions.transactions ? this.state.pendingActions.transactions[0].actualDate : 0;
-            transactionAmount =  Number(this.getSumOfPendingActions());
+            transactionAmount = Number(this.getSumOfPendingActions());
         }
         const table = document.createElement("table");
         table.className = "swal-table";
@@ -641,7 +644,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)}  penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} />}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application} />}
