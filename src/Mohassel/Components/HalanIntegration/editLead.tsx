@@ -292,7 +292,7 @@ class EditLead extends Component<Props, State> {
                       onChange={formikProps.handleChange}
                       isInvalid={Boolean(formikProps.errors.businessGovernate && formikProps.touched.businessGovernate)}
                     >
-                      <option value="" disabled></option>
+                      <option value=""></option>
                       {this.state.governorates.map((governorate, index) => {
                         return <option key={index} value={governorate.governorateName.ar} >{governorate.governorateName.ar}</option>
                       })}
@@ -314,7 +314,7 @@ class EditLead extends Component<Props, State> {
                       isInvalid={Boolean(formikProps.errors.businessCity && formikProps.touched.businessCity)}
                       disabled={!formikProps.values.businessGovernate}
                     >
-                      <option value="" disabled></option>
+                      <option value=""></option>
                       {this.state.governorates.find(gov => gov.governorateName.ar === formikProps.values.businessGovernate)?.districts.map((district, index) => {
                         return <option key={index} value={district.districtName.ar} >{district.districtName.ar}</option>
                       })}
@@ -336,7 +336,7 @@ class EditLead extends Component<Props, State> {
                       isInvalid={Boolean(formikProps.errors.businessArea && formikProps.touched.businessArea)}
                       disabled={!formikProps.values.businessCity}
                     >
-                      <option value="" disabled></option>
+                      <option value=""></option>
                       {this.state.governorates.find(gov => gov.governorateName.ar === formikProps.values.businessGovernate)?.districts
                         .find(district => district.districtName.ar === formikProps.values.businessCity)?.villages?.map((village, index) => {
                           return <option key={index} value={village.villageName.ar} >{village.villageName.ar}</option>
