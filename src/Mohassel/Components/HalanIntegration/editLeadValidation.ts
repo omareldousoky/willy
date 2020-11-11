@@ -42,8 +42,8 @@ export const leadValidationStepOne = Yup.object().shape({
 
 export const leadValidationStepTwo = Yup.object().shape({
     businessAddress: Yup.string().trim().max(500, "Can't be more than 500 characters").required(local.required),
-    governorate: Yup.string().trim(),
-    businessCity: Yup.string().trim(),
-    businessArea: Yup.string().trim(),
+    businessGovernate: Yup.string().trim().required(local.required),
+    businessCity: Yup.string().trim().required(local.required),
+    businessArea: Yup.string().trim().required(local.required),
     businessAddressDescription: Yup.string().required(local.required),
 })
