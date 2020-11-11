@@ -99,15 +99,13 @@ const CrossedOutLoansList = (props) => {
             <td>{row.customerKey}</td>
             <td>{row.customerName}</td>
             <td>{row.loanSerial}</td>
-            <td>{row.loanPrincipal}</td>
-            <td>{row.issueDate}</td>
+            <td colSpan={1}>{row.loanPrincipal}</td>
+            <td colSpan={3}>{row.issueDate}</td>
             <td>{getStatus(row.loanStatus)}</td>
-            <td></td>
-            <td></td>
             <td>{row.transactionPrincipal}</td>
             <td>{row.transactionInterest}</td>
-            <td>{row.transactionAmount}</td>
-            <td>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
+            <td colSpan={1}>{row.transactionAmount}</td>
+            <td colSpan={2}>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
           </tr>
         ))}
 
@@ -163,7 +161,7 @@ const CrossedOutLoansList = (props) => {
       >
       <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
         <tr style={{ height: "10px" }}></tr>
-        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
         <tr style={{ height: "10px" }}></tr>
       </table>
         <table className="report-container">
@@ -186,20 +184,17 @@ const CrossedOutLoansList = (props) => {
               <th colSpan={100} className="horizontal-line"></th>
             </tr>
             <tr>
-              {/* <th>رقم مسلسل</th> */}
-              <th>كود الحركه</th>
+             <th>كود الحركة</th>
               <th>كود العميل</th>
-              <th className="name">أسم العميل</th>
+              <th>أسم العميل</th>
               <th>مسلسل القرض</th>
-              <th>قيمة</th>
-              <th>تاريخ القرض</th>
-              <th style={{ width: "10%" }}>الحالة الان</th>
-              <th></th>
-              <th></th>
+              <th colSpan={1}>قيمة</th>
+              <th colSpan={3}>تاريخ القرض</th>
+              <th>الحالةالان</th>
               <th>أصل</th>
               <th>قيمة الحركة فائدة</th>
-              <th>إجمالي</th>
-              <th>حالة الحركة</th>
+              <th colSpan={1}>إجمالي</th>
+              <th colSpan={2}>حالةالحركة</th>
             </tr>
             <tr>
               <th colSpan={100} className="horizontal-line"></th>
