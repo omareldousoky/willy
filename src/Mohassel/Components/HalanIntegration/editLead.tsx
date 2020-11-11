@@ -391,7 +391,7 @@ class EditLead extends Component<Props, State> {
               <Form.Group as={Row} className='branch-data-group'>
                 <Col >
                   <Button className={'btn-cancel-prev'} style={{ width: '60%' }}
-                    onClick={() => { this.setState({ step: 1 }) }}
+                    onClick={() => { this.setState({ step: 1, stepTwo: {...formikProps.values} }) }}
                   >{local.previous}</Button>
                 </Col>
                 <Col>
@@ -423,6 +423,8 @@ class EditLead extends Component<Props, State> {
     } else {
       this.setState({ loading: true })
       const obj = { ...this.state.stepOne, ...values, uuid: this.state.uuid }
+      obj.minAge = Number(obj.maxMinAge.split('-')[0])
+      obj.maxAge = Number(obj.maxMinAge.split('-')[1])
       const res = await editLead(obj);
       if (res.status === "success") {
         this.setState({ loading: false })
