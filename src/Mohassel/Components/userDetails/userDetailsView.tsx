@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import * as local from '../../../Shared/Assets/ar.json';
 import { theme } from '../../../theme'
 import { UserDateValues } from './userDetailsInterfaces';
-import { timeToDate, timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDate, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import Labels from '../Labels/labels';
 
 interface Props {

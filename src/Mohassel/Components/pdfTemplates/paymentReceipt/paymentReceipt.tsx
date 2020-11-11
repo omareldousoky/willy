@@ -1,7 +1,7 @@
 import React from 'react';
 import './paymentReceipt.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic } from "../../../../Shared/Services/utils";
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Tafgeet from 'tafgeetjs'

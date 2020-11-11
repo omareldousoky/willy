@@ -9,8 +9,8 @@ import GroupInfoBox from '../LoanProfile/groupInfoBox';
 import InfoBox from '../userInfoBox';
 import AsyncSelect from 'react-select/async';
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { getCookie } from '../../Services/getCookie';
-import { parseJwt } from '../../Services/utils';
+import { getCookie } from '../../../Shared/Services/getCookie';
+import { parseJwt } from '../../../Shared/Services/utils';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 
 export const LoanApplicationCreationForm = (props: any) => {

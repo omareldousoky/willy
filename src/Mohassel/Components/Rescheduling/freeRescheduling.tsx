@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { LoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import { testFreeRescheduling, freeRescheduling } from '../../Services/APIs/loanApplication/freeRescheduling';
@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import Table from 'react-bootstrap/Table';
-import { getStatus, getDateString } from '../../Services/utils';
+import { getStatus, getDateString } from '../../../Shared/Services/utils';
 
 interface Props {
     application: any;

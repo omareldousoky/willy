@@ -1,7 +1,7 @@
 import React from 'react';
 import './loanCreationList.scss';
 import { englishToArabic } from '../../../Services/statusLanguage';
-import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp } from "../../../../Shared/Services/utils";
 
 const LoanCreationList = (props) => {
     const tempData = props.data.data;

@@ -1,6 +1,6 @@
 import React from 'react';
 import './rescheduledLoanList.scss';
-import { timeToArabicDate, getTimestamp } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp } from '../../../../Shared/Services/utils'
 import { englishToArabic } from '../../../Services/statusLanguage';
 
 const RescheduledLoanList = (props) => {

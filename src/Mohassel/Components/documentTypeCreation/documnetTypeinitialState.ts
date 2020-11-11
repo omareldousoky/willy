@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
-import { DocumentType } from '../../Services/interfaces';
+import { DocumentType } from '../../../Shared/Services/interfaces';
 
 
 

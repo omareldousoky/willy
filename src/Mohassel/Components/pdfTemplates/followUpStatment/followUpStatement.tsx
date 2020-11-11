@@ -1,8 +1,8 @@
 import React from 'react';
 import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../Services/utils';
-import store from '../../../redux/store';
+import { timeToArabicDate, numbersToArabic, dayToArabic } from "../../../../Shared/Services/utils";
+import store from '../../../../Shared/redux/store';
 
 const FollowUpStatment = (props) => {
     function getCustomerData(key: string) {

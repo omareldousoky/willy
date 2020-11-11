@@ -12,7 +12,10 @@ import Col from 'react-bootstrap/Col';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { addGeoArea } from '../../Services/APIs/GeoAreas/addGeoArea';
 import { updateGeoArea } from '../../Services/APIs/GeoAreas/updateGeoArea';
-import { Branch } from '../../redux/auth/types';
+import { Branch } from '../../../Shared/redux/auth/types';
+import { manageToolsArray } from '../Tools/manageToolsInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import Card from 'react-bootstrap/Card';
 
 interface GeoArea {
     name: string;
@@ -28,6 +31,7 @@ interface State {
     branches: Array<any>;
     branchAreas: Array<GeoArea>;
     branch: Branch;
+    manageToolsTabs: any[];
 }
 class GeoAreas extends Component<{}, State> {
     constructor(props) {
@@ -42,12 +46,14 @@ class GeoAreas extends Component<{}, State> {
             branch: {
                 name: '',
                 _id: ''
-            }
+            },
+            manageToolsTabs: []
+
         }
     }
     async componentDidMount() {
         this.getBranches();
-
+        this.setState({ manageToolsTabs: manageToolsArray() })
     }
     addBranchArea() {
         if (!this.state.branchAreas.some(branchArea => branchArea.name === "")) {
@@ -136,91 +142,97 @@ class GeoAreas extends Component<{}, State> {
     }
     render() {
         return (
-            <Container style={{ marginTop: 20 }}>
-                <div style={{ display: 'flex', textAlign: 'center', flexDirection: 'column' }}>
-                    <h4 style={{ textAlign: 'right' }}>{local.branchAreas}</h4>
-                    <Form.Group as={Row} controlId="branch" style={{ width: '100%', marginTop: '1rem' }}>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.branch}</Form.Label>
-                        <Col sm={6}>
-                            <Select
-                                name="branch"
-                                data-qc="branch"
-                                value={this.state.branch}
-                                enableReinitialize={false}
-                                onChange={(event: any) => { this.setState({ branch: event }, () => this.getBranchAreas()) }}
-                                type='text'
-                                getOptionLabel={(option) => option.name}
-                                getOptionValue={(option) => option._id}
-                                options={this.state.branches}
+            <>
+                <HeaderWithCards
+                    header={local.branchAreas}
+                    array={this.state.manageToolsTabs}
+                    active={this.state.manageToolsTabs.map(item => { return item.icon }).indexOf('branchAreas')}
+                />
+                <Card>
+                    <div style={{ display: 'flex', textAlign: 'center', flexDirection: 'column' }}>
+                        <Form.Group as={Row} controlId="branch" style={{ width: '100%', marginTop: '1rem' }}>
+                            <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.branch}</Form.Label>
+                            <Col sm={6}>
+                                <Select
+                                    name="branch"
+                                    data-qc="branch"
+                                    value={this.state.branch}
+                                    enableReinitialize={false}
+                                    onChange={(event: any) => { this.setState({ branch: event }, () => this.getBranchAreas()) }}
+                                    type='text'
+                                    getOptionLabel={(option) => option.name}
+                                    getOptionValue={(option) => option._id}
+                                    options={this.state.branches}
+                                />
+                            </Col>
+                        </Form.Group>
+                        {this.state.branch._id.length > 0 && <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span
+                                onClick={() => this.addBranchArea()}
+                                className="fa fa-plus fa-lg"
+                                style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
                             />
-                        </Col>
-                    </Form.Group>
-                    {this.state.branch._id.length > 0 && <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        {this.state.branchAreas.length > 0 && <Form.Control
-                            type="text"
-                            data-qc="filterGeoAreas"
-                            placeholder={local.search}
-                            maxLength={100}
-                            value={this.state.filterGeoAreas}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterGeoAreas: e.currentTarget.value })}
-                        />}
-                        <span
-                            onClick={() => this.addBranchArea()}
-                            className="fa fa-plus fa-lg"
-                            style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
-                        />
-                    </div>}
-                </div>
-                <ListGroup style={{ textAlign: 'right', width: '30%', margin: '30px 0' }}>
-                    <Loader type="fullscreen" open={this.state.loading} />
-                    {this.state.branchAreas
-                        .filter(branchArea => branchArea.name.toLocaleLowerCase().includes(this.state.filterGeoAreas.toLocaleLowerCase()))
-                        .map((branchArea, index) => {
-                            return (
-                                <ListGroup.Item key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Form.Group style={{ margin: '0px 0px 0px 20px' }}>
-                                        <Form.Control
-                                            type="text"
-                                            data-qc="branchAreaInput"
-                                            maxLength={100}
-                                            title={branchArea.name}
-                                            value={branchArea.name}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.handleChangeInput(e, branchArea, 'name')}
-                                            onKeyDown={(e: React.KeyboardEvent) => this.handleKeyDown(e, branchArea)}
-                                            disabled={branchArea.disabledUi}
-                                            style={branchArea.disabledUi ? { background: 'none', border: 'none' } : {}}
-                                            isInvalid={this.state.branchAreas[index].name.trim() === ""}
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            {local.required}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                    {branchArea.disabledUi ?
+                            {this.state.branchAreas.length > 0 && <Form.Control
+                                type="text"
+                                data-qc="filterGeoAreas"
+                                placeholder={local.search}
+                                maxLength={100}
+                                value={this.state.filterGeoAreas}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterGeoAreas: e.currentTarget.value })}
+                            />}
+                        </div>}
+                    </div>
+                    <ListGroup style={{ textAlign: 'right', width: '30%', margin: '30px 0' }}>
+                        <Loader type="fullscreen" open={this.state.loading} />
+                        {this.state.branchAreas
+                            .filter(branchArea => branchArea.name.toLocaleLowerCase().includes(this.state.filterGeoAreas.toLocaleLowerCase()))
+                            .map((branchArea, index) => {
+                                return (
+                                    <ListGroup.Item key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Form.Group style={{ margin: '0px 0px 0px 20px' }}>
+                                            <Form.Control
+                                                type="text"
+                                                data-qc="branchAreaInput"
+                                                maxLength={100}
+                                                title={branchArea.name}
+                                                value={branchArea.name}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.handleChangeInput(e, branchArea, 'name')}
+                                                onKeyDown={(e: React.KeyboardEvent) => this.handleKeyDown(e, branchArea)}
+                                                disabled={branchArea.disabledUi}
+                                                style={branchArea.disabledUi ? { background: 'none', border: 'none' } : {}}
+                                                isInvalid={this.state.branchAreas[index].name.trim() === ""}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {local.required}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                        {branchArea.disabledUi ?
+                                            <span
+                                                style={branchArea.active ? { color: '#7dc356', marginLeft: 20 } : { color: '#d51b1b', marginLeft: 20 }}
+                                                className={branchArea.active ? "fa fa-check-circle fa-lg" : "fa fa-times-circle fa-lg"} />
+                                            :
+                                            <>
+                                                {branchArea._id.length > 0 && <Form.Check
+                                                    type="checkbox"
+                                                    data-qc={`activate${index}`}
+                                                    label={local.active}
+                                                    className="checkbox-label"
+                                                    checked={this.state.branchAreas.filter(area => area._id === branchArea._id)[0].active}
+                                                    onChange={(e) => this.handleChangeInput(e, branchArea, 'active')}
+                                                />}
+                                            </>
+                                        }
                                         <span
-                                            style={branchArea.active ? { color: '#7dc356', marginLeft: 20 } : { color: '#d51b1b', marginLeft: 20 }}
-                                            className={branchArea.active ? "fa fa-check-circle fa-lg" : "fa fa-times-circle fa-lg"} />
-                                        :
-                                        <>
-                                            {branchArea._id.length > 0 && <Form.Check
-                                                type="checkbox"
-                                                data-qc={`activate${index}`}
-                                                label={local.active}
-                                                className="checkbox-label"
-                                                checked={this.state.branchAreas.filter(area => area._id === branchArea._id)[0].active}
-                                                onChange={(e) => this.handleChangeInput(e, branchArea, 'active')}
-                                            />}
-                                        </>
-                                    }
-                                    <span
-                                        onClick={() => branchArea.disabledUi ? this.toggleClick(branchArea, false) : this.toggleClick(branchArea, true)}
-                                        style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
-                                        data-qc="editSaveIcon"
-                                        className={branchArea.disabledUi ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
-                                </ListGroup.Item>
-                            )
-                        })}
-                </ListGroup>
-            </Container>
+                                            onClick={() => branchArea.disabledUi ? this.toggleClick(branchArea, false) : this.toggleClick(branchArea, true)}
+                                            style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
+                                            data-qc="editSaveIcon"
+                                            className={branchArea.disabledUi ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
+                                    </ListGroup.Item>
+                                )
+                            })}
+                    </ListGroup>
+                </Card>
+            </>
         );
     }
 }

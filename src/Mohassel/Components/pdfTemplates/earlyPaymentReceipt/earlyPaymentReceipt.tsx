@@ -1,6 +1,6 @@
 import React from 'react';
 import Tafgeet from 'tafgeetjs';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic } from "../../../../Shared/Services/utils";
 import './earlyPaymentReceipt.scss';
 
 const EarlyPaymentReceipt = (props) => {

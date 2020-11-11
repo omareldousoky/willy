@@ -1,7 +1,7 @@
 import React from "react";
 import "./crossedOutLoansList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
-import { timeToArabicDate } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../../Shared/Services/utils";
 
 const CrossedOutLoansList = (props) => {
   const data = props.data.data;
