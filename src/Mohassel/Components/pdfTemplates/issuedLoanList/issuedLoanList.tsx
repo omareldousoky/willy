@@ -9,7 +9,7 @@ const IssuedLoanList = (props) => {
             <div className="issued-loan-list" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={1} style= {{backgroundColor:'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} style={{backgroundColor:'white'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style= {{backgroundColor:'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} style={{backgroundColor:'white'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -31,13 +31,11 @@ const IssuedLoanList = (props) => {
                         </tr>
                         <tr>
                             <th>رقم مسلسل</th>
-                            <th colSpan={2}>كود الحركه</th>
-                            <th>كود العميل</th>
+                            <th colSpan={2}>كود العميل</th>
                             <th>أسم العميل</th>
                             <th>مسلسل القرض</th>
-                            <th colSpan={2}>رقم الشيك</th>
                             <th colSpan={2}>قيمة</th>
-                            <th>تاريخ القرض</th>
+                            <th colSpan={2}>تاريخ القرض</th>
                             <th>الحالة الان</th>
                             <th>أصل</th>
                             <th colSpan={2}>قيمة الحركة فائدة</th>
@@ -68,17 +66,15 @@ const IssuedLoanList = (props) => {
                                         </tr>
                                         {branch.df.map((transaction, z) => <tr key={z}>
                                             <td>{transaction.serialNo}</td>
-                                            <td></td>
-                                            <td>{transaction.customerKey}</td>
+                                            <td colSpan={2}>{transaction.customerKey}</td>
                                             <td>{transaction.customerName}</td>
                                             <td>{transaction.loanSerial}</td>
-                                            <td></td>
-                                            <td>{transaction.principalAmount}</td>
-                                            <td>{timeToArabicDate(getTimestamp(transaction.truthDate), false)}</td>
+                                            <td colSpan={2}>{transaction.principalAmount}</td>
+                                            <td colSpan={2}>{timeToArabicDate(getTimestamp(transaction.truthDate), false)}</td>
                                             <td>{englishToArabic(transaction.status).text}</td>
                                             <td>{transaction.principalAmount}</td>
-                                            <td>{transaction.transactionInterest}</td>
-                                            <td>{transaction.transactionAmount}</td>
+                                            <td colSpan={2}>{transaction.transactionInterest}</td>
+                                            <td colSpan={2}>{transaction.transactionAmount}</td>
                                             <td>{transaction.canceled === 1 ? 'الحركة ملغاه' : ''}</td>
                                         </tr>)}
                                         <tr>
