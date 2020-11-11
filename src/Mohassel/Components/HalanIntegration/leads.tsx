@@ -224,7 +224,8 @@ class Leads extends Component<Props, State>{
       this.setState({ loanOfficers: res.body.data })
       return res.body.data
         .filter(loanOfficer => loanOfficer.branches?.includes(this.state.selectedLead.branchId))
-        .filter(loanOfficer => loanOfficer.status === 'active');
+        .filter(loanOfficer => loanOfficer.status === 'active')
+        .filter(loanOfficer => loanOfficer._id !== this.state.selectedLead.loanOfficerId);
     } else {
       this.setState({ loanOfficers: [] })
       return [];
