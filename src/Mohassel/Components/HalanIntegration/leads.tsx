@@ -150,7 +150,7 @@ class Leads extends Component<Props, State>{
   }
 
   componentDidMount() {
-    let branchId = JSON.parse(getCookie('ltsbranch'))._id;
+    let branchId = getCookie('ltsbranch')? JSON.parse(getCookie('ltsbranch'))._id : ''; 
     branchId = branchId === 'hq' ? '' : branchId;
     this.setState({ branchId })
     this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });

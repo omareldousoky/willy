@@ -24,10 +24,6 @@ class Login extends React.PureComponent<Props, State> {
       credentials: loginCred
     };
   }
-  componentDidMount() {
-    document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-    document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-  }
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { name, value } = e.currentTarget;
     this.setState({ [name]: value } as any)
