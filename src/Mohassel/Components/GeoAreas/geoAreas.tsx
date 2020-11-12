@@ -219,7 +219,7 @@ class GeoAreas extends Component<{}, State> {
                                         className={branchArea.disabledUi ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
                                 </ListGroup.Item>
                             )
-                        })}
+                        }).reverse()}
                 </ListGroup>
             </Container>
         );
