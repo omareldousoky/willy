@@ -15,7 +15,7 @@ export const authMe = async () => {
             const currentBranch = JSON.parse(getCookie('ltsbranch'))._id;
             if (res.data.validBranches && res.data.validBranches.length > 0) {
                 const foundBranch = res.data.validBranches?.find(el => el._id === currentBranch)
-                if (!foundBranch) {
+                if (!foundBranch && currentBranch !== 'hq') {
                     document.cookie = 'ltsbranch=' + JSON.stringify(res.data.validBranches[0]) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}` : '') + ';path=/;';
                 }
             } else {
