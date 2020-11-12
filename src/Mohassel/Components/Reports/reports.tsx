@@ -463,7 +463,7 @@ class Reports extends Component<{}, State> {
     const obj = {
       startdate: values.fromDate,
       enddate: values.toDate,
-      branches: branches.includes("") ? [""] : branches,
+      branchList: branches.includes("") ? [""] : branches,
       all: branches.includes("") || branches === [] ? "1" : "0",
     }
     const res = await getManualPayments(obj);

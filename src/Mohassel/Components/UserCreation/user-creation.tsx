@@ -26,7 +26,7 @@ import { getUserRolesAndBranches } from "../../Services/APIs/User-Creation/getUs
 import { createUser } from "../../Services/APIs/User-Creation/createUser";
 import { editUser } from "../../Services/APIs/User-Creation/editUser";
 import { getUserDetails } from "../../Services/APIs/Users/userDetails";
-import { timeToDateyyymmdd } from "../../Services/utils";
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import Card from "react-bootstrap/Card";
 import UserManagerForm from "./userManagerForm";
 import { step2 } from "../CustomerCreation/customerFormIntialState";

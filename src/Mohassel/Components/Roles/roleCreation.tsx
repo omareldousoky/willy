@@ -21,7 +21,7 @@ import { theme } from "../../../theme";
 import { getRoles } from "../../Services/APIs/Roles/roles";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import { customFilterOption } from "../../Services/utils";
+import { customFilterOption } from '../../../Shared/Services/utils';
 export interface Section {
   _id: string;
   key: string;

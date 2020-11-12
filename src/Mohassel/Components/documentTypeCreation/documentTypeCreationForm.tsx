@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
-import { DocumentType } from '../../Services/interfaces';
+import { DocumentType } from '../../../Shared/Services/interfaces';
 
 interface Props {
     values: DocumentType;

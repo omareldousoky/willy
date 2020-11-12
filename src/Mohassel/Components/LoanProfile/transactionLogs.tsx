@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getApplicationTransactionLogs } from '../../Services/APIs/loanApplication/applicationLogs';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getDateAndTime } from '../../Services/getRenderDate';
 interface Props {

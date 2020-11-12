@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
@@ -16,6 +16,7 @@ import BackButton from '../BackButton/back-button';
 import * as Yup from "yup";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { manageToolsArray } from '../Tools/manageToolsInitials';
 
 interface Props {
     history: any;
@@ -29,6 +30,7 @@ interface Principals {
 interface State {
     loading: boolean;
     principals: Principals;
+    manageToolsTabs: any[];
 }
 
 class PrincipleThreshold extends Component<Props, State> {
@@ -40,11 +42,13 @@ class PrincipleThreshold extends Component<Props, State> {
                 maxIndividualPrincipal: 0,
                 maxGroupIndividualPrincipal: 0,
                 maxGroupPrincipal: 0,
-            }
+            },
+            manageToolsTabs: []
         }
     }
     componentDidMount() {
         this.getMaxPrinciples()
+        this.setState({manageToolsTabs: manageToolsArray()})
     }
     async getMaxPrinciples() {
         this.setState({ loading: true });
@@ -91,7 +95,11 @@ class PrincipleThreshold extends Component<Props, State> {
     render() {
         return (
             <>
-                <BackButton title={local.principalRange} />
+                <HeaderWithCards
+                    header={local.principalRange}
+                    array={this.state.manageToolsTabs}
+                    active={this.state.manageToolsTabs.map(item => {return item.icon}).indexOf('principalRange')}
+                />
                 <Loader type="fullscreen" open={this.state.loading} />
                 <Card>
                     <Formik

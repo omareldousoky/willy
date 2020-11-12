@@ -4,7 +4,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 import { getiScoreReportRequests, generateiScoreReport, getiScoreReport } from '../../Services/APIs/Reports/iScoreReports';
-import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../Services/utils';
+import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../../Shared/Services/utils';
 import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 
