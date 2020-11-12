@@ -41,6 +41,8 @@ export interface Installment {
   status: string;
 }
 interface Application {
+  principal: number;
+  status: string;
   installmentsObject: InstallmentsObject;
   group: any;
   product: any;
@@ -160,7 +162,7 @@ class PayInstallment extends Component<Props, State> {
             enableReinitialize
             initialValues={{
               ...this.state,
-              max: this.props.application.installmentsObject.totalInstallments.installmentSum,
+              max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum,
               beneficiaryType: this.props.application.product.beneficiaryType,
               payAmount: this.props.paymentType === "normal" ? this.getRequiredAmount() : this.state.payAmount
             }}
