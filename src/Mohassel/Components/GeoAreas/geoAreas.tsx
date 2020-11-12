@@ -166,9 +166,10 @@ class GeoAreas extends Component<{}, State> {
                         />}
                         <span
                             onClick={() => this.addBranchArea()}
-                            className="fa fa-plus fa-lg"
                             style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
-                        />
+                        >
+                             <img alt="addArea" src={require('../../Assets/plus.svg')}/>
+                        </span>
                     </div>}
                 </div>
                 <ListGroup style={{ textAlign: 'right', width: '30%', margin: '30px 0' }}>
