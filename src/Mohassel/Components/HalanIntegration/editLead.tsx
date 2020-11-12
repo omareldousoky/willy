@@ -163,6 +163,7 @@ class EditLead extends Component<Props, State> {
                       type="text"
                       name="phoneNumber"
                       data-qc="phoneNumber"
+                      disabled
                       value={formikProps.values.phoneNumber}
                       onChange={formikProps.handleChange}
                       onBlur={formikProps.handleBlur}
