@@ -171,7 +171,9 @@ class GeoAreas extends Component<{}, State> {
                                 onClick={() => this.addBranchArea()}
                                 className="fa fa-plus fa-lg"
                                 style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
-                            />
+                            >
+                                <img alt="addArea" src={require('../../Assets/plus.svg')} />
+                            </span>
                             {this.state.branchAreas.length > 0 && <Form.Control
                                 type="text"
                                 data-qc="filterGeoAreas"
@@ -229,7 +231,7 @@ class GeoAreas extends Component<{}, State> {
                                             className={branchArea.disabledUi ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
                                     </ListGroup.Item>
                                 )
-                            })}
+                            }).reverse()}
                     </ListGroup>
                 </Card>
             </>
