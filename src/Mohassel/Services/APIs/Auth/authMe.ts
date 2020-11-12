@@ -12,9 +12,11 @@ export const authMe = async () => {
                 document.cookie = `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN}` + ';path=/;';
             }
         } else {
-            const branch = JSON.parse(getCookie('ltsbranch'))._id;
-            const newBranch = res.data.validBranches[0]._id;
-            if(branch !== newBranch) document.cookie = 'ltsbranch=' + JSON.stringify(res.data.validBranches[0]) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}` : '') + ';path=/;';
+            const currentBranch = JSON.parse(getCookie('ltsbranch'))._id;
+            const foundBranch = res.data.validBranches.find(el => el._id === currentBranch)
+            if(!foundBranch) {
+                document.cookie = 'ltsbranch=' + JSON.stringify(res.data.validBranches[0]) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}` : '') + ';path=/;';
+            }
         }
         return { status: "success", body: res.data }
     }
