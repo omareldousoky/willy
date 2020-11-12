@@ -540,7 +540,7 @@ class Payment extends Component<Props, State>{
           <div style={{ width: '100%', padding: 20 }}>
             <Formik
               enableReinitialize
-              initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
+              initialValues={{ ...this.state, max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
               onSubmit={this.handleSubmit}
               validationSchema={manualPaymentValidation}
               validateOnBlur
