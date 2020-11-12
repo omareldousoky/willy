@@ -169,7 +169,6 @@ class GeoAreas extends Component<{}, State> {
                         {this.state.branch._id.length > 0 && <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span
                                 onClick={() => this.addBranchArea()}
-                                className="fa fa-plus fa-lg"
                                 style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
                             >
                                 <img alt="addArea" src={require('../../Assets/plus.svg')} />
