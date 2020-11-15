@@ -18,7 +18,7 @@ const ClientGuaranteedLoans = (props) => {
         return local.partiallyPaid;
       case "rescheduled":
         return local.rescheduled;
-      case "cancelled":
+      case "canceled":
         return local.cancelled;
       case "issued":
         return local.issued;
