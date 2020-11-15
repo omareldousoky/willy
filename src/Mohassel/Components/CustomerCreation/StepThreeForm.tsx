@@ -9,8 +9,8 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
-import { getCookie } from '../../Services/getCookie';
-import { parseJwt } from '../../Services/utils';
+import { getCookie } from '../../../Shared/Services/getCookie';
+import { parseJwt } from '../../../Shared/Services/utils';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 
 interface GeoDivision {

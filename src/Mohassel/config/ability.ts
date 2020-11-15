@@ -1,5 +1,5 @@
 import { Ability, AbilityBuilder } from "@casl/ability";
-import store from '../redux/store';
+import store from '../../Shared/redux/store';
 
 // Defines how to detect object's type
 function subjectName(item) {

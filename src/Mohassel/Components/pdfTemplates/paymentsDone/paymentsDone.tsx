@@ -1,6 +1,6 @@
 import React from 'react';
 import './paymentsDone.scss';
-import { timeToArabicDate, getInstallmentStatus } from '../../../Services/utils';
+import { timeToArabicDate, getInstallmentStatus } from '../../../../Shared/Services/utils';
 import * as local from '../../../../Shared/Assets/ar.json';
 const PaymentsDone = (props) => {
     const tempData = props.data.data;
@@ -9,7 +9,7 @@ const PaymentsDone = (props) => {
             <div className="payments-done" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -33,16 +33,14 @@ const PaymentsDone = (props) => {
                             <th>رقم مسلسل</th>
                             <th>كود الحركه</th>
                             <th>مسلسل القسط</th>
-                            <th style={{ width: "15%" }}>أسم العميل</th>
-                            <th>قيمة القسط</th>
-                            <th>مستند الضمان</th>
-                            <th>تاريخ الإستحقاق</th>
-                            <th style={{ width: "10%" }}>حالة القسط</th>
-                            <th style={{ width: "10%" }}>مستند الحركه</th>
+                            <th colSpan={2.5}>أسم العميل</th>
+                            <th colSpan={1.5}>قيمة القسط</th>
+                            <th colSpan={2}>تاريخ الإستحقاق</th>
+                            <th colSpan={1.5}>حالة القسط</th>
                             <th>أصل</th>
                             <th>القيمه المسدده الفائدة</th>
                             <th>إجمالي</th>
-                            <th>حالة الحركة</th>
+                            <th colSpan={1.5}>حالة الحركة</th>
                         </tr>
                         <tr>
                             <th colSpan={100} className="horizontal-line"></th>
@@ -68,16 +66,14 @@ const PaymentsDone = (props) => {
                                         <td>{z + 1}</td>
                                         <td>{transaction.transactionCode}</td>
                                         <td>{transaction.installmentSerial}</td>
-                                        <td>{transaction.customerName}</td>
-                                        <td>{transaction.totalInstallment}</td>
-                                        <td></td>
-                                        <td>{timeToArabicDate(new Date(transaction.dateOfPayment).valueOf(), false)}</td>
-                                        <td>{getInstallmentStatus(transaction.instStatus)}</td>
-                                        <td></td>
+                                        <td colSpan={2.5}>{transaction.customerName}</td>
+                                        <td colSpan={1.5}>{transaction.totalInstallment}</td>
+                                        <td colSpan={2}>{timeToArabicDate(new Date(transaction.dateOfPayment).valueOf(), false)}</td>
+                                        <td colSpan={1.5}>{getInstallmentStatus(transaction.instStatus)}</td>
                                         <td>{transaction.transactionPrincipal}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
-                                        <td>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
+                                        <td colSpan={1.5}>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
                                     </tr>
                                 )}
                                 <tr>

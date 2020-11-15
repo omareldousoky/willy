@@ -1,7 +1,7 @@
 import React from "react";
 import "./loanPenaltiesList.scss";
 import * as local from "../../../../Shared/Assets/ar.json";
-import { timeToArabicDate } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../../Shared/Services/utils"
 
 const LoanPenaltiesList = (props) => {
   const data = props.data;
@@ -89,21 +89,21 @@ const LoanPenaltiesList = (props) => {
           <tr key={row.loanId}>
             <td>{idx + 1}</td>
             {/* <td>{row.transactionCode}</td> */}
-            <td>{row.customerKey}</td>
+            <td colSpan={2}>{row.customerKey}</td>
             <td colSpan={2}>{row.customerName}</td>
-            <td>{row.loanSerial}</td>
+            <td colSpan={1}>{row.loanSerial}</td>
             {/* <td>0004519</td> */}
             <td>{row.loanPrincipal}</td>
-            <td>{row.issueDate}</td>
-            <td>{getStatus(row.loanStatus)}</td>
-            {/* <td>ترحيل</td> */}
-            <td>{row.transactionAmount}</td>
-            <td>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
+            <td colSpan={2}>{row.issueDate}</td>
+            <td colSpan={1}>{getStatus(row.loanStatus)}</td>
+            <td colSpan={1}></td>
+            <td colSpan={2}>{row.transactionAmount}</td>
+            <td colSpan={2}>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
           </tr>
         ))}
 
         <tr>
-          <th colSpan={100} className="border-line"></th>
+          <th colSpan={15} className="border-line"></th>
         </tr>
 
         <tr>
@@ -134,7 +134,7 @@ const LoanPenaltiesList = (props) => {
           <td className="horizontal-line">{branch.netAmount}</td>
         </tr>
         <tr>
-          <th colSpan={100} className="border-line"></th>
+          <th colSpan={15} className="border-line"></th>
         </tr>
       </tbody>
     );
@@ -144,7 +144,7 @@ const LoanPenaltiesList = (props) => {
       <div className="loan-penalties-list" dir="rtl" lang="ar">
       <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
         <tr style={{ height: "10px" }}></tr>
-        <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style = {{backgroundColor:'red'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} style={{backgroundColor:'blue'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
         <tr style={{ height: "10px" }}></tr>
       </table>
         <table className="report-container">
@@ -164,24 +164,24 @@ const LoanPenaltiesList = (props) => {
             <th colSpan={6}>جنيه مصري</th>
           </tr> */}
             <tr>
-              <th colSpan={100} className="border-line"></th>
+              <th colSpan={15} className="border-line"></th>
             </tr>
             <tr>
               <th>رقم مسلسل</th>
               {/* <th>كود الحركه</th> */}
               <th colSpan={2}>كود العميل</th>
-              <th className="name">أسم العميل</th>
-              <th colSpan={2}>مسلسل القرض</th>
+              <th colSpan={2}>أسم العميل</th>
+              <th colSpan={1}>مسلسل القرض</th>
               {/* <th>رقم الشيك</th> */}
               <th>قيمة</th>
-              <th>تاريخ القرض</th>
-              <th colSpan={2}>حالة القرض</th>
-              <th colSpan={2}>مستند الحركة</th>
+              <th colSpan={2}>تاريخ القرض</th>
+              <th colSpan={1}>حالة القرض</th>
+              <th colSpan={1}>مستند الحركة</th>
               <th colSpan={2}>قيمة الغرامة</th>
               <th colSpan={2}>حالة الحركة</th>
             </tr>
             <tr>
-              <th colSpan={100} className="border-line"></th>
+              <th colSpan={15} className="border-line"></th>
             </tr>
           </thead>
 

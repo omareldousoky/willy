@@ -10,7 +10,7 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate } from '../../Services/utils';
+import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
 
 interface Props {
     application: any;

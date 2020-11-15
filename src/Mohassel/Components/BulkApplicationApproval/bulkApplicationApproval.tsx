@@ -10,15 +10,17 @@ import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
-import Search from '../Search/search';
-import DynamicTable from '../DynamicTable/dynamicTable';
-import { search, searchFilters } from '../../redux/search/actions';
-import { loading } from '../../redux/loading/actions';
+import Search from '../../../Shared/Components/Search/search';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { loading } from '../../../Shared/redux/loading/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
+import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Product {
   productName: string;
@@ -59,6 +61,7 @@ interface State {
   checkAll: boolean;
   from: number;
   size: number;
+  manageApplicationsTabs: any[];
 }
 interface Props {
   history: Array<any>;
@@ -79,7 +82,8 @@ class BulkApplicationApproval extends Component<Props, State>{
       showModal: false,
       checkAll: false,
       from: 0,
-      size: 10
+      size: 10,
+      manageApplicationsTabs: []
     }
     this.mappers = [
       {
@@ -133,14 +137,16 @@ class BulkApplicationApproval extends Component<Props, State>{
     if (this.props.data?.length > 0) {
       this.props.search({ url: 'clearData' });
     }
+    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
+
   }
   getApplications() {
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
     this.props.search(query);
   }
-  
+
   addRemoveItemFromChecked(loan: LoanItem) {
-    if (this.state.selectedReviewedLoans.findIndex(loanItem=> loanItem.id == loan.id ) > -1) {
+    if (this.state.selectedReviewedLoans.findIndex(loanItem => loanItem.id == loan.id) > -1) {
       this.setState({
         selectedReviewedLoans: this.state.selectedReviewedLoans.filter(el => el.id !== loan.id),
       })
@@ -167,22 +173,27 @@ class BulkApplicationApproval extends Component<Props, State>{
     if (res.status === "success") {
       this.props.setLoading(false);
       this.setState({ selectedReviewedLoans: [], checkAll: false })
-      Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getApplications());
+      Swal.fire('', local.bulkLoanApproved, 'success').then(() => this.getApplications());
     } else {
       this.props.setLoading(false);
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
-  dateSlice(date){
-    if(!date){
+  dateSlice(date) {
+    if (!date) {
       return timeToDateyyymmdd(-1)
-    }else{
+    } else {
       return timeToDateyyymmdd(date)
     }
   }
   render() {
     return (
       <>
+        <HeaderWithCards
+          header={local.bulkLoanApplicationsApproval}
+          array={this.state.manageApplicationsTabs}
+          active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkLoanApplicationsApproval')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -202,7 +213,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             <hr className="dashed-line" />
             <Search
               searchKeys={['keyword', 'dateFromTo', 'branch']}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode']}
+              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
               url="application"
               from={this.state.from}
               size={this.state.size}
@@ -223,7 +234,7 @@ class BulkApplicationApproval extends Component<Props, State>{
         </Card>
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans:this.state.selectedReviewedLoans }}
+            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans: this.state.selectedReviewedLoans }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur

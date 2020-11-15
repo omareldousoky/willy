@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import Search from '../Search/search';
+import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../../Shared/Services/utils';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Can from '../../config/Can';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Form from 'react-bootstrap/Form';
-import { loading } from '../../redux/loading/actions';
+import { loading } from '../../../Shared/redux/loading/actions';
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund';
 import { cibExtractions } from '../../Services/APIs/loanApplication/cibExtractions';
 import { downloadTxtFile } from '../CIB/textFiles';
 import Swal from 'sweetalert2';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageLoansArray } from '../LoanList/manageLoansInitials';
 
 interface Props {
   history: Array<any>;
@@ -38,6 +40,7 @@ interface State {
   selectedCustomers: Array<string>;
   selectedFund: string;
   oldFilesDate: string;
+  manageLoansTabs: any[];
 }
 
 class SourceOfFund extends Component<Props, State> {
@@ -50,7 +53,8 @@ class SourceOfFund extends Component<Props, State> {
       openModal: '',
       selectedCustomers: [],
       selectedFund: '',
-      oldFilesDate: ''
+      oldFilesDate: '',
+      manageLoansTabs: []
     }
     this.mappers = [
       {
@@ -111,6 +115,7 @@ class SourceOfFund extends Component<Props, State> {
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib' });
+    this.setState({ manageLoansTabs: manageLoansArray() })
   }
   getSourceOfFund(SourceOfFund: string) {
     switch (SourceOfFund) {
@@ -186,6 +191,11 @@ class SourceOfFund extends Component<Props, State> {
   render() {
     return (
       <>
+        <HeaderWithCards
+          header={local.changeSourceOfFund}
+          array={this.state.manageLoansTabs}
+          active={this.state.manageLoansTabs.map(item => { return item.icon }).indexOf('changeSourceOfFund')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>

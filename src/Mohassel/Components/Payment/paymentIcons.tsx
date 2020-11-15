@@ -4,7 +4,7 @@ import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import { Installment } from './payInstallment';
-import { payment } from '../../redux/payment/actions';
+import { payment } from '../../../Shared/redux/payment/actions';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {

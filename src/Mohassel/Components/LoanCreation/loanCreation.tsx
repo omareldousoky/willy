@@ -15,7 +15,7 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt } from "../../../Shared/Services/utils";
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 interface CustomerData {
   id: string;

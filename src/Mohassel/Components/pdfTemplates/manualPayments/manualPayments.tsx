@@ -1,7 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
-import { timeToArabicDate } from '../../../Services/utils'
+import { timeToArabicDate } from '../../../../Shared/Services/utils';
 interface Props {
     result: {
         days: {
@@ -68,7 +68,7 @@ const ManualPayments = (props: Props) => {
             <div className="manual-payments" dir="rtl" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -97,14 +97,11 @@ const ManualPayments = (props: Props) => {
                                     <thead>
                                         <tr>
                                             <th>رقم مسلسل</th>
-                                            <th>كود الحركه</th>
                                             <th>مسلسل القسط</th>
-                                            <th className="name">أسم العميل</th>
-                                            <th>مستند الضمان</th>
+                                            <th colSpan={2}>أسم العميل</th>
                                             <th>قيمة القسط</th>
-                                            <th>تاريخ استحقاق القسط</th>
-                                            <th>حالة القسط</th>
-                                            <th>مستند الحركه</th>
+                                            <th colSpan={2}>تاريخ استحقاق القسط</th>
+                                            <th colSpan={2}>حالة القسط</th>
                                             <th>أصل</th>
                                             <th>القيمه المسدده مصاريف</th>
                                             <th>إجمالي</th>
@@ -128,14 +125,11 @@ const ManualPayments = (props: Props) => {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>{row.loanSerial}</td>
-                                                                    <td></td>
                                                                     <td>{row.loanApplicationKey}</td>
-                                                                    <td>{row.customerName}</td>
-                                                                    <td></td>
+                                                                    <td colSpan={2}>{row.customerName}</td>
                                                                     <td>{row.installmentValue}</td>
-                                                                    <td>{row.dateOfPayment}</td>
-                                                                    <td>{statusLocalization(row.installmentStatus)}</td>
-                                                                    <td></td>
+                                                                    <td colSpan={2}>{row.dateOfPayment}</td>
+                                                                    <td colSpan={2}>{statusLocalization(row.installmentStatus)}</td>
                                                                     <td>{row.transactionPrincipal}</td>
                                                                     <td>{row.transactionInterest}</td>
                                                                     <td>{row.transactionAmount}</td>
