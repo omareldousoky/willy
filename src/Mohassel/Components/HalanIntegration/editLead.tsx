@@ -32,7 +32,7 @@ export interface LeadStepOne {
   minAge: number;
   maxMinAge: string;
   phoneNumber: string;
-  nationalId: string;
+  customerNationalId: string;
   nationalIdIssueDate: string;
   loanOwner: boolean;
 }
@@ -74,7 +74,7 @@ class EditLead extends Component<Props, State> {
         minAge: lead.minAge,
         maxMinAge: `${lead.minAge}-${lead.maxAge}`,
         phoneNumber: lead.phoneNumber,
-        nationalId: '',
+        customerNationalId: '',
         nationalIdIssueDate: '',
         loanOwner: lead.loanOwner,
       },
@@ -177,25 +177,25 @@ class EditLead extends Component<Props, State> {
               </Row>
               <Row>
                 <Col sm={4}>
-                  <Form.Group controlId="nationalId">
-                    <Form.Label className="customer-form-label" column>{`${local.nationalId}*`}</Form.Label>
+                  <Form.Group controlId="customerNationalId">
+                    <Form.Label className="customer-form-label" column>${local.nationalId}</Form.Label>
                     <Form.Control
                       type="text"
-                      name="nationalId"
-                      data-qc="nationalId"
-                      value={formikProps.values.nationalId}
+                      name="customerNationalId"
+                      data-qc="customerNationalId"
+                      value={formikProps.values.customerNationalId}
                       onChange={formikProps.handleChange}
                       onBlur={formikProps.handleBlur}
-                      isInvalid={Boolean(formikProps.errors.nationalId && formikProps.touched.nationalId)}
+                      isInvalid={Boolean(formikProps.errors.customerNationalId && formikProps.touched.customerNationalId)}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.nationalId}
+                      {formikProps.errors.customerNationalId}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
                 <Col sm={4}>
                   <Form.Group controlId="nationalIdIssueDate">
-                    <Form.Label className="customer-form-label" column>{`${local.nationalIdIssueDate}*`}</Form.Label>
+                    <Form.Label className="customer-form-label" column>${local.nationalIdIssueDate}</Form.Label>
                     <Form.Control
                       type="date"
                       name="nationalIdIssueDate"

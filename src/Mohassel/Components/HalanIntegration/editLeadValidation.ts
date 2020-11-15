@@ -8,7 +8,7 @@ export const leadStepOne: LeadStepOne = {
   minAge: 0,
   maxMinAge: '',
   phoneNumber: '',
-  nationalId: '',
+  customerNationalId: '',
   nationalIdIssueDate: '',
   loanOwner: false,
 };
@@ -28,7 +28,7 @@ endOfDay.setHours(23, 59, 59, 59);
 export const leadValidationStepOne = Yup.object().shape({
     customerName: Yup.string().trim().max(100, local.maxLength100).required(local.required),
     phoneNumber: Yup.string().min(10, local.minLength10).max(11, local.maxLength11).required(local.required),
-    nationalId: Yup.number()
+    customerNationalId: Yup.number()
         .when('nationalIdChecker', {
             is: true,
             then: Yup.number().test('error', local.duplicateNationalIdMessage, () => false),

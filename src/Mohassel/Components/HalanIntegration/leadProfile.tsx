@@ -70,7 +70,7 @@ const LeadProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.age}</td>
-                <td>{`${local.from} ${leadDetails.minAge} ${local.to} ${leadDetails.maxAge} ${local.year}` }</td>
+                <td>{`${local.from} ${leadDetails.minAge? leadDetails.minAge : 1} ${local.to} ${leadDetails.maxAge} ${local.year}` }</td>
               </tr>
               <tr>
                 <td>{local.mobilePhoneNumber}</td>
@@ -97,12 +97,8 @@ const LeadProfile = (props: Props) => {
                 <td>{getPeriod(leadDetails.maxBusinessDate)}</td>
               </tr>
               <tr>
-                <td>{local.businessName}</td>
-                <td>{leadDetails.businessName}</td>
-              </tr>
-              <tr>
                 <td>{local.businessAddress}</td>
-                <td>{`${leadDetails.businessStreet}, ${leadDetails.businessArea}, ${leadDetails.businessCity}, ${leadDetails.businessGovernate}`}</td>
+                <td>{`${leadDetails.businessStreet? leadDetails.businessStreet : ''}, ${leadDetails.businessArea}, ${leadDetails.businessCity}, ${leadDetails.businessGovernate}`}</td>
               </tr>
               <tr>
                 <td>{local.addressDescription}</td>

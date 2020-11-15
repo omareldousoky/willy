@@ -140,9 +140,9 @@ class Leads extends Component<Props, State>{
                     this.changeMainState(data.phoneNumber, 'in-review', 'view', data);
                   }}>{local.viewCustomerLead}</div>
               </Can>
-              <Can I="leadInReviewStatus" a="halanuser">
+              {data.status !== "rejected" && <Can I="leadInReviewStatus" a="halanuser">
                 <div className="item" onClick={() => this.changeMainState(data.phoneNumber, 'in-review', 'edit', data)}>{local.editLead}</div>
-                </Can>
+              </Can>}
             </div>}
           </div>
       },
@@ -150,7 +150,7 @@ class Leads extends Component<Props, State>{
   }
 
   componentDidMount() {
-    let branchId = getCookie('ltsbranch')? JSON.parse(getCookie('ltsbranch'))._id : ''; 
+    let branchId = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch'))._id : '';
     branchId = branchId === 'hq' ? '' : branchId;
     this.setState({ branchId })
     this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
@@ -208,7 +208,7 @@ class Leads extends Component<Props, State>{
         this.setState({ openActionsId: "" })
         if (action === 'view') {
           this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
-        } else if(action === 'edit') {
+        } else if (action === 'edit') {
           this.props.history.push('/halan-integration/leads/edit-lead', { leadDetails: data })
         } else Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
       } else {
