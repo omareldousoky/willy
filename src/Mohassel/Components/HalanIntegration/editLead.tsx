@@ -178,7 +178,7 @@ class EditLead extends Component<Props, State> {
               <Row>
                 <Col sm={4}>
                   <Form.Group controlId="customerNationalId">
-                    <Form.Label className="customer-form-label" column>${local.nationalId}</Form.Label>
+                    <Form.Label className="customer-form-label" column>{local.nationalId}</Form.Label>
                     <Form.Control
                       type="text"
                       name="customerNationalId"
@@ -195,7 +195,7 @@ class EditLead extends Component<Props, State> {
                 </Col>
                 <Col sm={4}>
                   <Form.Group controlId="nationalIdIssueDate">
-                    <Form.Label className="customer-form-label" column>${local.nationalIdIssueDate}</Form.Label>
+                    <Form.Label className="customer-form-label" column>{local.nationalIdIssueDate}</Form.Label>
                     <Form.Control
                       type="date"
                       name="nationalIdIssueDate"
@@ -426,6 +426,7 @@ class EditLead extends Component<Props, State> {
       const obj = { ...this.state.stepOne, ...values, uuid: this.state.uuid }
       obj.minAge = Number(obj.maxMinAge.split('-')[0])
       obj.maxAge = Number(obj.maxMinAge.split('-')[1])
+      obj.nationalIdIssueDate = Number(obj.nationalIdIssueDate);
       const res = await editLead(obj);
       if (res.status === "success") {
         this.setState({ loading: false })
