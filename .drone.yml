@@ -41,7 +41,7 @@ steps:
   image: node:12.16.1-alpine
   commands:
   - apk add git
-  - npm i 
+  - npm i
   - npm run build
 
 
@@ -212,7 +212,73 @@ steps:
     event:
       - push
 
+- name: publish-documents
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/documents.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/documents
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LTS_SUBDOMAIN=documents.${DRONE_BRANCH}.halan.io
+      - REACT_APP_DOCUMENTS_URL=documents.${DRONE_BRANCH}.halan.io
+    region: us-east-1
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - dev
+    - master
+    - staging
+    - test
+    - einshams-v2
+    - fintech
+    - ds
+    event:
+      - push
 
+- name: publish-documents-prod
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/documents.Dockerfile
+    repo: fintech/${DRONE_REPO_NAME}/documents
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - REACT_APP_BASE_URL=https://api.fintech.halan.io
+      - REACT_APP_LOGIN_URL=https://login.fintech.halan.io
+      - REACT_APP_DOMAIN=.fintech.halan.io
+      - REACT_APP_LTS_SUBDOMAIN=documents.fintech.halan.io
+      - REACT_APP_DOCUMENTS_URL=documents.fintech.halan.io
+    region: us-east-1
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - prod
+    event:
+      - push
 depends_on:
   - unit-test
 
@@ -260,6 +326,28 @@ steps:
     deployment: fe-mohassel
     repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/mohassel
     container: fe-mohassel
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+  when:
+    branch:
+    - dev
+    - test
+    - staging
+    event:
+      - push
+
+- name: deploy-documents
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-documents
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/documents
+    container: fe-documents
     tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
 
   when:
