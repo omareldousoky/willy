@@ -65,10 +65,6 @@ const LeadProfile = (props: Props) => {
                 <td>{leadDetails.customerName}</td>
               </tr>
               <tr>
-                <td>{local.customerType}</td>
-                <td>{}</td>
-              </tr>
-              <tr>
                 <td>{local.age}</td>
                 <td>{`${local.from} ${leadDetails.minAge? leadDetails.minAge : 1} ${local.to} ${leadDetails.maxAge} ${local.year}` }</td>
               </tr>
@@ -78,7 +74,7 @@ const LeadProfile = (props: Props) => {
               </tr>
               <tr>
                 <td>{local.nationalId}</td>
-                <td>{leadDetails.nationalId}</td>
+                <td>{leadDetails.customerNationalId}</td>
               </tr>
               <tr>
                 <td>{local.creationDate}</td>

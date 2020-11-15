@@ -1,4 +1,6 @@
 export interface Lead {
+  nationalIdIssueDate: string;
+  customerNationalId: string;
   branchAddress: string;
   branchId: string;
   branchLat: number;

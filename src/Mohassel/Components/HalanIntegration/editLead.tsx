@@ -15,6 +15,7 @@ import { editLead } from '../../Services/APIs/Leads/editLead';
 import { Governorate } from '../CustomerCreation/StepTwoForm';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { leadStepOne, leadStepTwo, leadValidationStepOne, leadValidationStepTwo } from './editLeadValidation';
+import { timeToDateyyymmdd } from '../../Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 
@@ -72,10 +73,10 @@ class EditLead extends Component<Props, State> {
         customerName: lead.customerName,
         maxAge: lead.maxAge,
         minAge: lead.minAge,
-        maxMinAge: `${lead.minAge}-${lead.maxAge}`,
+        maxMinAge: `${lead.minAge ? lead.minAge : 0}-${lead.maxAge}`,
         phoneNumber: lead.phoneNumber,
-        customerNationalId: '',
-        nationalIdIssueDate: '',
+        customerNationalId: lead.customerNationalId || '',
+        nationalIdIssueDate: timeToDateyyymmdd(Number(lead.nationalIdIssueDate)) || '',
         loanOwner: lead.loanOwner,
       },
       stepTwo: {
@@ -392,7 +393,7 @@ class EditLead extends Component<Props, State> {
               <Form.Group as={Row} className='branch-data-group'>
                 <Col >
                   <Button className={'btn-cancel-prev'} style={{ width: '60%' }}
-                    onClick={() => { this.setState({ step: 1, stepTwo: {...formikProps.values} }) }}
+                    onClick={() => { this.setState({ step: 1, stepTwo: { ...formikProps.values } }) }}
                   >{local.previous}</Button>
                 </Col>
                 <Col>
@@ -426,7 +427,7 @@ class EditLead extends Component<Props, State> {
       const obj = { ...this.state.stepOne, ...values, uuid: this.state.uuid }
       obj.minAge = Number(obj.maxMinAge.split('-')[0])
       obj.maxAge = Number(obj.maxMinAge.split('-')[1])
-      obj.nationalIdIssueDate = Number(obj.nationalIdIssueDate);
+      obj.nationalIdIssueDate = new Date(obj.nationalIdIssueDate).valueOf();
       const res = await editLead(obj);
       if (res.status === "success") {
         this.setState({ loading: false })
