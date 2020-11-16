@@ -12,13 +12,13 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
-import DynamicTable from '../DynamicTable/dynamicTable';
-import Search from '../Search/search';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
+import Search from '../../../Shared/Components/Search/search';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { assignLeadToLO } from '../../Services/APIs/Leads/assignLeadToLO';
 import { getDateAndTime } from '../../Services/getRenderDate';
-import { search } from '../../redux/search/actions';
-import { loading } from '../../redux/loading/actions';
+import { search } from '../../../Shared/redux/search/actions';
+import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 
 interface Props {
