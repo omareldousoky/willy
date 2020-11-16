@@ -70,11 +70,6 @@ class NavBar extends Component<Props, State> {
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
     if (res.status === "success") {
-<<<<<<< HEAD:src/Mohassel/Components/NavBar/navBar.tsx
-      document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-      document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-=======
->>>>>>> ein-shams-v2:src/Shared/Components/NavBar/navBar.tsx
       document.cookie = 'ltsbranch=' + JSON.stringify(branch) + (process.env.REACT_APP_DOMAIN ? `;domain=${process.env.REACT_APP_DOMAIN}`: '') + ';path=/;';
       setToken(res.body.token);
       this.setState({ loading: false, selectedBranch: branch })
