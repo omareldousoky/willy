@@ -4,6 +4,7 @@ print {
     .random-payment-print  {
         font-size: 12px;
         font-weight: bold;
+        padding: 10px 5px;
         page-break-after: always;
  
     & .head-title {

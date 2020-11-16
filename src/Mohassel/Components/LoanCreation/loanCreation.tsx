@@ -15,11 +15,8 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt } from "../../../Shared/Services/utils";
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
-import { Employee } from '../Payment/payment';
-import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
-import { getCookie } from '../../Services/getCookie';
 interface CustomerData {
   id: string;
   customerName: string;
@@ -48,8 +45,6 @@ interface State {
   application: any;
   print: boolean;
   receiptData: any;
-  employees: Array<Employee>;
-  branchManagerId: string;
 }
 export interface Location {
   pathname: string;
@@ -92,8 +87,6 @@ class LoanCreation extends Component<Props, State> {
       application: {},
       print: false,
       receiptData: {},
-      employees: [],
-      branchManagerId: '',
     }
   }
   async componentDidMount() {
@@ -104,7 +97,7 @@ class LoanCreation extends Component<Props, State> {
       if (res.status === "success") {
         this.setState({ installmentsData: res.body })
       } else console.log(res)
-    } else this.getEmployees();
+    }
     const res = await getApplication(id);
     if (res.status === "success") {
       this.setState({
@@ -133,22 +126,6 @@ class LoanCreation extends Component<Props, State> {
       }
     } else this.setState({ loading: false })
   }
-  async getEmployees() {
-    const token = getCookie('token');
-    const tokenData = parseJwt(token);
-    this.setState({loading: true})
-    const obj = {
-      size: 1000,
-      from: 0,
-      serviceKey:'halan.com/application',
-      action:'actBranchManager',
-      branchId: tokenData?.branch
-    }
-    const res = await searchUserByAction(obj);
-    if(res.status === 'success') {
-      this.setState({ employees: res.body.data, loading: false });
-    } else this.setState({ loading: false });
-  }
   handleSubmit = async (values) => {
     this.setState({ loading: true })
     if (this.state.type === "create") {
@@ -165,8 +142,6 @@ class LoanCreation extends Component<Props, State> {
       const obj = {
         id: this.state.id,
         issueDate: new Date(values.issueDate).valueOf(),
-        branchManagerId: values.branchManagerId,
-        managerVisitDate: values.managerVisitDate? new Date(values.managerVisitDate).valueOf() : 0,
       }
       const res = await issueLoan(obj);
       if (res.status === "success") {
@@ -315,47 +290,6 @@ class LoanCreation extends Component<Props, State> {
                     </Form.Control.Feedback>
                   </Col>
                 </Form.Group>
-                    <Form.Group as={Row} controlId="branchManagerId">
-                      <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.branchManager}*`}</Form.Label>
-                      <Col sm={6}>
-                        <Form.Control
-                          as="select"
-                          name="branchManagerId"
-                          data-qc="branchManagerId"
-                          onChange={formikProps.handleChange}
-                          value={formikProps.values.branchManagerId}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.branchManagerId) && Boolean(formikProps.touched.branchManagerId)}
-                        >
-                          <option value={''}></option>
-                          {this.state.employees.map((employee, index) => {
-                            return (
-                              <option key={index} value={employee._id} data-qc={employee._id}>{employee.name}</option>
-                            )
-                          })}
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.branchManagerId}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="managerVisitDate">
-                      <Form.Label style={{ textAlign: 'right' }} column sm={2}>{`${local.visitationDate}*`}</Form.Label>
-                      <Col sm={6}>
-                        <Form.Control
-                          type="date"
-                          name="managerVisitDate"
-                          data-qc="managerVisitDate"
-                          value={formikProps.values.managerVisitDate}
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={Boolean(formikProps.errors.managerVisitDate) && Boolean(formikProps.touched.managerVisitDate)}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.managerVisitDate}
-                        </Form.Control.Feedback>
-                      </Col>
-                    </Form.Group>
                 </>
               }
               <Button type="submit">{local.submit}</Button>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+    <defs>
+        <clipPath id="clip-path">
+            <path id="Boundary" fill="#7dc356" stroke="#707070" d="M0 0H30V30H0z" transform="translate(0 .123)"/>
+        </clipPath>
+        <style>
+            .cls-3{fill:#7dc356}
+        </style>
+    </defs>
+    <g id="documents_ic_30px_inactive" transform="translate(0 -.123)">
+        <g id="Mask_Group_82" clip-path="url(#clip-path)">
+            <g id="document" transform="translate(0 .123)">
+                <g id="Group_9629">
+                    <g id="Group_9628">
+                        <path id="Path_8219" d="M25.719 20.625a1.172 1.172 0 0 0 1.172-1.172V4.688A4.693 4.693 0 0 0 22.2 0H7.8a4.693 4.693 0 0 0-4.691 4.688v20.625A4.693 4.693 0 0 0 7.8 30h14.4a4.693 4.693 0 0 0 4.688-4.687 1.172 1.172 0 0 0-2.344 0 2.346 2.346 0 0 1-2.344 2.343H7.8a2.346 2.346 0 0 1-2.344-2.344V4.688A2.346 2.346 0 0 1 7.8 2.344h14.4a2.346 2.346 0 0 1 2.344 2.344v14.765a1.172 1.172 0 0 0 1.175 1.172z" class="cls-3"/>
+                    </g>
+                </g>
+                <g id="Group_9631">
+                    <g id="Group_9630">
+                        <path id="Path_8220" d="M21.032 7.031H8.962a1.172 1.172 0 0 0 0 2.344h12.07a1.172 1.172 0 0 0 0-2.344z" class="cls-3"/>
+                    </g>
+                </g>
+                <g id="Group_9633">
+                    <g id="Group_9632">
+                        <path id="Path_8221" d="M21.032 11.719H8.962a1.172 1.172 0 0 0 0 2.344h12.07a1.172 1.172 0 1 0 0-2.344z" class="cls-3"/>
+                    </g>
+                </g>
+                <g id="Group_9635">
+                    <g id="Group_9634">
+                        <path id="Path_8222" d="M16.292 16.406h-7.33a1.172 1.172 0 0 0 0 2.344h7.331a1.172 1.172 0 0 0 0-2.344z" class="cls-3"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

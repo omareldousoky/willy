@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import "./userCreation.scss";
 import * as local from "../../../Shared/Assets/ar.json";
 import { theme } from "../../../theme";
-import { customFilterOption } from "../../Services/utils";
+import { customFilterOption } from '../../../Shared/Services/utils';
 import { MainChoosesValues } from "./userCreationinterfaces";
 import Button from "react-bootstrap/Button";
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";

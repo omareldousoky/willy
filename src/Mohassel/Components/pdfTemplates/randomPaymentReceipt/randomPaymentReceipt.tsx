@@ -1,7 +1,7 @@
 import React from 'react';
 import './randomPaymentReceipt.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic } from '../../../Services/utils';
+import { timeToArabicDate, numbersToArabic } from '../../../../Shared/Services/utils';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Tafgeet from 'tafgeetjs'
@@ -24,12 +24,17 @@ const randomPaymentReceipt = (props) => {
         else if (key === 'tricycleStamp') return local.tricycleStamp
     }
     return (
-        <>
+        <div className="random-payment-receipt">
             {props.receiptData.map((receiptData, index) => {
                 return (
 
                     <div key={index} className="random-payment-receipt frame" dir="rtl" lang="ar">
                         <div className="receipt-container">
+                            <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
+                                <tr style={{ height: "10px" }}></tr>
+                                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                                <tr style={{ height: "10px" }}></tr>
+                            </table>
                             <div className="receipt-header">
                                 <h5>{local.tasaheelName}</h5>
                                 <h5>{local.paymentReceipt}</h5>
@@ -70,7 +75,7 @@ const randomPaymentReceipt = (props) => {
                     </div>
                 )
             })}
-        </>
+        </div>
     )
 }
 
