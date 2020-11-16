@@ -196,6 +196,7 @@ class NavBar extends Component<Props, State> {
               {!this.props.hide && ability.can('documentTypes', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link>
                 : !this.props.hide && ability.can('geoArea', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/geo-areas')}>{local.tools}</Nav.Link>
                  : !this.props.hide && ability.can('createMaxPrincipal', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/principalRange')}>{local.tools}</Nav.Link> : null}
+              {this.props.hide && <Can I='documentTypes' a='config'><Nav.Link onClick={() => this.props.history.push('/encoding-files')}>{local.tools}</Nav.Link> </Can>}
               {(ability.can('getIssuedLoan',"application") || ability.can('branchIssuedLoan', "application")) ? <Nav.Link onClick={() => this.props.history.push('/loans')}>{local.issuedLoans}</Nav.Link>
                : !this.props.hide && ability.can('cibScreen', 'report') ? <Nav.Link onClick={() => this.props.history.push('/loans/cib')}>{local.issuedLoans}</Nav.Link> 
                  : !this.props.hide && ability.can('cibScreen', 'report') ? <Nav.Link onClick={() => this.props.history.push('/loans/source-of-fund')}>{local.issuedLoans}</Nav.Link> : null}
