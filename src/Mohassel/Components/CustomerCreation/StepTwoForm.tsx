@@ -9,16 +9,16 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 
-interface Village {
+export interface Village {
     villageName: { ar: string };
     villageLegacyCode: number;
 }
-interface District {
+export interface District {
     districtName: { ar: string };
     districtLegacyCode: number;
     villages: Array<Village>;
 }
-interface Governorate {
+export interface Governorate {
     governorateName: { ar: string };
     governorateLegacyCode: number;
     districts: Array<District>;

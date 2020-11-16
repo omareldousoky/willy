@@ -43,7 +43,11 @@ import ReportsHome from '../Components/Reports/reportsHome';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
+import Leads from '../Components/HalanIntegration/leads';
+import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer';
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
+import LeadProfile from '../Components/HalanIntegration/leadProfile';
+import EditLead from '../Components/HalanIntegration/editLead';
 import GeoAreas from '../Components/GeoAreas/geoAreas';
 
 
@@ -346,7 +350,46 @@ const appRoutes = [
       {
         path: "/reports",
         label: local.reports,
-        render: () => <ReportsHome />
+        render: () => <ReportsHome/>
+      },
+      {
+        path: "/move-customers",
+        label: local.moveCustomers,
+        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
+      },
+      {
+        path: "/bulk-creation",
+        label: local.bulkApplicationCreation,
+        render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
+      },
+      {
+        path: "/halan-integration",
+        label: local.halan,
+        render: (props) => <Leads {...props} />,
+        routes: [
+          {
+            path: "/leads",
+            label: local.applicantsLeads,
+            render: (props) => <Leads {...props} /> ,
+            routes: [
+              {
+                path: "/view-lead",
+                label: local.customersDetails,
+                render: (props) => <LeadProfile {...props} />,
+              },
+              {
+                path: "/edit-lead",
+                label: local.editCustomer,
+                render: (props) => <EditLead {...props} />,
+              },
+            ]
+          },
+          {
+            path: "/exchange",
+            label: local.assignOrChangeLoanOfficer,
+            render: (props) => <AssignLoanOfficer {...props} /> ,
+          }
+        ]
       }
     ]
   },

@@ -4,6 +4,8 @@ import { searchUsers } from '../../../Mohassel/Services/APIs/Users/searchUsers';
 import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan';
 import { searchApplication } from '../../../Mohassel/Services/APIs/loanApplication/searchApplication';
 import {searchActionLogs} from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs';
+import { searchLeads } from '../../../Mohassel/Services/APIs/Leads/searchLeads';
+
 
 export const search = (obj) => {
     switch (obj.url) {
@@ -72,10 +74,10 @@ export const search = (obj) => {
                     console.log("Error!", "Disconnected, login again", "error")
                 }
             }
-            case ('actionLogs'): 
+        case ('actionLogs'):
             return async (dispatch) => {
                 delete obj.url;
-                dispatch({type: 'SET_LOADING', payload: true})
+                dispatch({ type: 'SET_LOADING', payload: true })
                 const res = await searchActionLogs(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
@@ -85,10 +87,23 @@ export const search = (obj) => {
                     console.log("Error!", "Disconnected, login again", "error")
                 }
             }
-            case ('clearData'): 
-                return (dispatch) => {
-                    dispatch({ type: 'CLEAR_DATA', payload: {} })
+        case ('lead'):
+            return async (dispatch) => {
+                delete obj.url;
+                dispatch({ type: 'SET_LOADING', payload: true })
+                const res = await searchLeads(obj);
+                if (res.status === "success") {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    dispatch({ type: 'SEARCH', payload: res.body })
+                } else {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    console.log("Error!", "Disconnected, login again", "error")
                 }
+            }
+        case ('clearData'):
+            return (dispatch) => {
+                dispatch({ type: 'CLEAR_DATA', payload: {} })
+            }
         default: return null;
     }
 }
