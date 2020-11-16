@@ -25,7 +25,6 @@ steps:
     - staging
     - test
     - prod
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -60,7 +59,6 @@ trigger:
   - staging
   - test
   - prod
-  - einshams-v2
   - fintech
   - ds
   event:
@@ -103,7 +101,6 @@ steps:
     - master
     - staging
     - test
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -175,7 +172,6 @@ steps:
     - master
     - staging
     - test
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -243,7 +239,6 @@ steps:
     - master
     - staging
     - test
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -391,7 +386,6 @@ steps:
     - staging
     - test
     - prod
-    - einshams-v2
     - fintech
     - ds
     event:
