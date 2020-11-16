@@ -15,7 +15,7 @@ import { editLead } from '../../Services/APIs/Leads/editLead';
 import { Governorate } from '../CustomerCreation/StepTwoForm';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { leadStepOne, leadStepTwo, leadValidationStepOne, leadValidationStepTwo } from './editLeadValidation';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 

@@ -1,5 +1,5 @@
 import axios from '../axios-instance';
-import { getCookie } from '../../getCookie';
+import { getCookie } from '../../../../Shared/Services/getCookie';
 
 export const authMe = async () => {
     const url = process.env.REACT_APP_BASE_URL + '/auth/me';
