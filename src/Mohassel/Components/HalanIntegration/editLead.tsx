@@ -350,7 +350,7 @@ class EditLead extends Component<Props, State> {
               <Row>
                 <Col sm={4}>
                   <Form.Group controlId="businessAddress">
-                    <Form.Label className="customer-form-label" column>{`${local.streetName}*`}</Form.Label>
+                    <Form.Label className="customer-form-label" column>{local.streetName}</Form.Label>
                     <InputGroup>
                       <Form.Control
                         type="text"
@@ -371,7 +371,7 @@ class EditLead extends Component<Props, State> {
               <Row>
                 <Col sm={4}>
                   <Form.Group controlId="businessAddressDescription">
-                    <Form.Label className="customer-form-label" column>{`${local.addressDescription}*`}</Form.Label>
+                    <Form.Label className="customer-form-label" column>{local.addressDescription}</Form.Label>
                     <InputGroup>
                       <Form.Control
                         as="textarea"
