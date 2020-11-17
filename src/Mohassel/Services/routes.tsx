@@ -172,11 +172,17 @@ const appRoutes = [
         ]
       },
       {
-        path: "/loan-uses",
-        label: local.loanUses,
-        render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+        path: "/manage-loan-details",
+        label: local.manageLoanDetails,
+        render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>,
+        routes: [
+          {
+            path: "/loan-uses",
+            label: local.loanUses,
+            render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+          }
+        ]
       },
-      
       {
         path: "/manage-loans",
         label: local.loans,
@@ -350,17 +356,7 @@ const appRoutes = [
       {
         path: "/reports",
         label: local.reports,
-        render: () => <ReportsHome/>
-      },
-      {
-        path: "/move-customers",
-        label: local.moveCustomers,
-        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
-      },
-      {
-        path: "/bulk-creation",
-        label: local.bulkApplicationCreation,
-        render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
+        render: () => <ReportsHome />
       },
       {
         path: "/halan-integration",
@@ -370,7 +366,7 @@ const appRoutes = [
           {
             path: "/leads",
             label: local.applicantsLeads,
-            render: (props) => <Leads {...props} /> ,
+            render: (props) => <Leads {...props} />,
             routes: [
               {
                 path: "/view-lead",
@@ -387,7 +383,7 @@ const appRoutes = [
           {
             path: "/exchange",
             label: local.assignOrChangeLoanOfficer,
-            render: (props) => <AssignLoanOfficer {...props} /> ,
+            render: (props) => <AssignLoanOfficer {...props} />,
           }
         ]
       }
