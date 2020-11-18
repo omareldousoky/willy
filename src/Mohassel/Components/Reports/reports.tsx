@@ -8,7 +8,7 @@ import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails';
 import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails';
 import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList';
-import { getBranchLoanList } from '../../Services/APIs/Reports/branchLoanList';
+import { getBranchLoanList, postBranchLoanListExcel, getBranchLoanListExcel } from '../../Services/APIs/Reports/branchLoanList';
 import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
 import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList';
 import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList';
@@ -110,6 +110,30 @@ class Reports extends Component<{}, State> {
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       case 'cibPaymentReport': return this.getCibPaymentReport(values);
       case 'manualPayments': return this.getManualPayments(values);
+      default: return null;
+    }
+  }
+  getExcel(values) {
+    const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf();
+    const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf();
+    values.fromDate = from;
+    values.toDate = to;
+    switch (this.state.selectedPdf.key) {
+      // case 'customerDetails': return this.getCustomerDetails(values);
+      // case 'loanDetails': return this.getLoanDetails(values);
+      case 'branchLoanList': return this.getBranchLoanListExcel(values);
+      // case 'CollectionStatement': return this.getCollectionReport(values);
+      // case 'Penalties': return this.getLoanPenaltiesReport(values);
+      // case 'CrossedOutLoans': return this.getWriteOffsReport(values);
+      // case 'DoubtfulLoans': return this.getDoubtfulLoansReport(values);
+      // case 'issuedLoanList': return this.getIssuedLoanList(values);
+      // case 'createdLoanList': return this.getCreatedLoanList(values);
+      // case 'rescheduledLoanList': return this.getRescheduledLoanList(values);
+      // case 'paymentsDoneList': return this.getInstallments(values);
+      // case 'randomPayments': return this.getRandomPayments(values);
+      // case 'loanApplicationFees': return this.getLoanApplicationFees(values);
+      // case 'cibPaymentReport': return this.getCibPaymentReport(values);
+      // case 'manualPayments': return this.getManualPayments(values);
       default: return null;
     }
   }
@@ -454,7 +478,7 @@ class Reports extends Component<{}, State> {
       link.remove();
     } else {
       this.setState({ loading: false });
-      Swal.fire("",local.noResults, "error");
+      Swal.fire("", local.noResults, "error");
     }
   }
   async getManualPayments(values) {
@@ -484,6 +508,43 @@ class Reports extends Component<{}, State> {
     } else {
       this.setState({ loading: false });
       console.log(res)
+    }
+  }
+  async getBranchLoanListExcel(values) {
+    this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
+    }
+    const res = await postBranchLoanListExcel(obj);
+    if (res.status === 'success') {
+      if (Object.keys(res.body).length === 0) {
+        this.setState({ loading: false });
+        Swal.fire("error", local.noResults)
+      } else {
+        this.setState({ loading: true })
+        this.getExcelPoll(getBranchLoanListExcel,res.body.fileId);
+      }
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getExcelPoll(func, id) {
+    const file = await func(id)
+    if (file.status === 'success') {
+      if (['created', 'failed'].includes(file.body.status)) {
+        this.setState({
+          showModal: false,
+          loading: false,
+        })
+      } else {
+        this.getExcelPoll(func, id)
+      }
+    } else {
+      this.setState({ loading: false });
+      console.log(file)
     }
   }
   render() {
@@ -516,7 +577,7 @@ class Reports extends Component<{}, State> {
             })}
           </Card.Body>
         </Card>
-        {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}
+        {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} getExcel={(values) => this.getExcel(values)} />}
         {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} customerKey={this.state.customerKey} />}
         {this.state.print === "loanDetails" && <LoanApplicationDetails data={this.state.data} />}
         {this.state.print === "issuedLoanList" && <IssuedLoanList data={this.state.data} />}

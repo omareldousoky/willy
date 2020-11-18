@@ -23,6 +23,7 @@ interface Props {
   show: boolean;
   hideModal: () => void;
   submit: (values) => void;
+  getExcel: (values) => void;
 }
 
 const ReportsModal = (props: Props) => {
@@ -135,6 +136,7 @@ const ReportsModal = (props: Props) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => { props.hideModal() }}>{local.cancel}</Button>
+              <Button variant="primary" onClick={() => { props.getExcel(formikProps.values) }}>xls</Button>
               <Button type="submit" variant="primary">{local.submit}</Button>
             </Modal.Footer>
           </Form>
