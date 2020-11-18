@@ -265,9 +265,9 @@ const CustomerStatusDetails = (props) => {
                                                             <tr key={index}>
                                                                 <td>{installment.idx}</td>
                                                                 <td>{timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{Number(installment.instTotal)}</td>
+                                                                <td style={{ direction: 'ltr' }}>{installment.instTotal}</td>
                                                                 <td style={{ direction: 'ltr' }}>{installment.feesInstallment}</td>
-                                                                <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid)}</td>
+                                                                <td style={{ direction: 'ltr' }}>{installment.totalPaid}</td>
                                                                 <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
                                                                 <td>{getStatus(installment)}</td>
                                                                 <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>
