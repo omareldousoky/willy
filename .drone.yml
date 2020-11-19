@@ -1,4 +1,5 @@
 kind: pipeline
+type: kubernetes
 name: notify-pipeline-start
 
 steps:
@@ -25,7 +26,6 @@ steps:
     - staging
     - test
     - prod
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -34,6 +34,7 @@ steps:
 ---
 
 kind: pipeline
+type: kubernetes
 name: unit-test
 
 steps:
@@ -60,7 +61,6 @@ trigger:
   - staging
   - test
   - prod
-  - einshams-v2
   - fintech
   - ds
   event:
@@ -69,6 +69,7 @@ trigger:
 
 ---
 kind: pipeline
+type: kubernetes
 name: PushToEcr
 
 steps:
@@ -103,7 +104,6 @@ steps:
     - master
     - staging
     - test
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -175,7 +175,6 @@ steps:
     - master
     - staging
     - test
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -243,7 +242,6 @@ steps:
     - master
     - staging
     - test
-    - einshams-v2
     - fintech
     - ds
     event:
@@ -287,6 +285,7 @@ depends_on:
 
 
 kind: pipeline
+type: kubernetes
 name: kubernetes
 
 steps:
@@ -364,6 +363,7 @@ depends_on:
 
 ---
 kind: pipeline
+type: kubernetes
 name: Endnotify
 
 steps:
@@ -391,7 +391,6 @@ steps:
     - staging
     - test
     - prod
-    - einshams-v2
     - fintech
     - ds
     event:
