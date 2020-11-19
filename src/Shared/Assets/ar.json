@@ -813,5 +813,7 @@
     "theCustomerIsBlocked": "هذاالعميل موقوف التعامل معه",
     "addGuarantor":"إضافة ضامن",
     "removeGuarantor":"إزالة ضامن",
-    "willNotBeAGuarantor":"لن يكون ضامن للقرض"
+    "willNotBeAGuarantor":"لن يكون ضامن للقرض",
+    "guarantorAddedSuccessfully":"تم إضافة الضامن بنجاح",
+    "guarantorRemovedSuccessfully":"تم إزالة الضامن بنجاح"
 }

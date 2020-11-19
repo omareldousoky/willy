@@ -22,7 +22,7 @@ interface Props {
     status?: string;
     getGeoArea: Function;
     customerId?: string;
-    applicationId: string;
+    application: any;
 }
 
 export const GuarantorView = (props: Props) => {
@@ -193,10 +193,9 @@ export const GuarantorTableView = (props: Props) => {
         const guarIds = props.guarantors.map(guar => guar._id)
         guarIds.push(selectedGuarantorId)
         changeLoading(true);
-        const selectedGuarantor = await editGuarantors(props.applicationId, { guarantorIds: guarIds });
+        const selectedGuarantor = await editGuarantors(props.application._id, { guarantorIds: guarIds });
         if (selectedGuarantor.status === 'success') {
-            Swal.fire('Done', '', 'success');
-            window.location.reload();
+            Swal.fire(local.guarantorAddedSuccessfully, '', 'success').then(() => { window.location.reload(); });
         } else {
             Swal.fire('', selectedGuarantor.error.details, 'error');
         }
@@ -206,7 +205,7 @@ export const GuarantorTableView = (props: Props) => {
         Swal.fire({
             title: local.areYouSure,
             text: `${guarantor.customerName} ${local.willNotBeAGuarantor}`,
-            icon: 'warning',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -218,10 +217,9 @@ export const GuarantorTableView = (props: Props) => {
                 const guarIds = props.guarantors.filter(guar => guar._id !== guarantor._id)
                 const ids = guarIds.map(guar => guar._id)
                 changeLoading(true);
-                const selectedGuarantor = await editGuarantors(props.applicationId, { guarantorIds: ids });
+                const selectedGuarantor = await editGuarantors(props.application._id, { guarantorIds: ids });
                 if (selectedGuarantor.status === 'success') {
-                    Swal.fire('Done', '', 'success');
-                    window.location.reload();
+                    Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(() => { window.location.reload(); });
                 } else {
                     Swal.fire('', selectedGuarantor.error.details, 'error');
                 }
@@ -266,7 +264,7 @@ export const GuarantorTableView = (props: Props) => {
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
                                 </Can>}
-                                {pass && i > 0 && <Can I="editApplicationGuarantors" a="application"><td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td></Can>}
+                                {pass && (i > props.application.product.noOfGuarantors - 1) && <Can I="editApplicationGuarantors" a="application"><td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td></Can>}
                             </tr>)
                         }
                         )}
