@@ -1,4 +1,5 @@
 kind: pipeline
+type: kubernetes
 name: notify-pipeline-start
 
 steps:
@@ -33,6 +34,7 @@ steps:
 ---
 
 kind: pipeline
+type: kubernetes
 name: unit-test
 
 steps:
@@ -67,6 +69,7 @@ trigger:
 
 ---
 kind: pipeline
+type: kubernetes
 name: PushToEcr
 
 steps:
@@ -282,6 +285,7 @@ depends_on:
 
 
 kind: pipeline
+type: kubernetes
 name: kubernetes
 
 steps:
@@ -359,6 +363,7 @@ depends_on:
 
 ---
 kind: pipeline
+type: kubernetes
 name: Endnotify
 
 steps:
