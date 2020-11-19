@@ -136,7 +136,7 @@ const ReportsModal = (props: Props) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => { props.hideModal() }}>{local.cancel}</Button>
-              <Button variant="primary" onClick={() => { props.getExcel(formikProps.values) }}>xls</Button>
+              {props.pdf && props.pdf.key && !['customerDetails', 'loanDetails', 'cibPaymentReport'].includes(props.pdf.key) && <Button variant="primary" onClick={() => { props.getExcel(formikProps.values) }}>xls</Button>}
               <Button type="submit" variant="primary">{local.submit}</Button>
             </Modal.Footer>
           </Form>

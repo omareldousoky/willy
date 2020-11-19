@@ -525,28 +525,36 @@ class Reports extends Component<{}, State> {
         Swal.fire("error", local.noResults)
       } else {
         this.setState({ loading: true })
-        this.getExcelPoll(getBranchLoanListExcel,res.body.fileId);
+        const pollStart = new Date().valueOf();
+        this.getExcelPoll(getBranchLoanListExcel, res.body.fileId, pollStart);
       }
     } else {
       this.setState({ loading: false });
       console.log(res)
     }
   }
-  async getExcelPoll(func, id) {
-    const file = await func(id)
-    if (file.status === 'success') {
-      if (['created', 'failed'].includes(file.body.status)) {
-        if(file.body.status === 'created') downloadFile(file.body.presignedUrl)
-        this.setState({
-          showModal: false,
-          loading: false,
-        })
+  async getExcelPoll(func, id, pollStart) {
+    const pollInstant = new Date().valueOf();
+    if (pollInstant - pollStart < 300000) {
+      const file = await func(id)
+      if (file.status === 'success') {
+        if (['created', 'failed'].includes(file.body.status)) {
+          if (file.body.status === 'created') downloadFile(file.body.presignedUrl)
+          if (file.body.status === 'failed') Swal.fire("error", local.failed)
+          this.setState({
+            showModal: false,
+            loading: false
+          })
+        } else {
+          setTimeout(() => this.getExcelPoll(func, id, pollStart), 5000);
+        }
       } else {
-        this.getExcelPoll(func, id)
+        this.setState({ loading: false });
+        console.log(file)
       }
     } else {
-      this.setState({ loading: false });
-      console.log(file)
+      this.setState({ loading: false })
+      Swal.fire("error", 'TimeOut')
     }
   }
   render() {
