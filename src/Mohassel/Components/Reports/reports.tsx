@@ -35,6 +35,7 @@ import { downloadTxtFile } from '../CIB/textFiles';
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 import { getManualPayments } from '../../Services/APIs/Reports/manualPayments';
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
+import { downloadFile } from '../../../Shared/Services/utils';
 
 export interface PDF {
   key?: string;
@@ -535,6 +536,7 @@ class Reports extends Component<{}, State> {
     const file = await func(id)
     if (file.status === 'success') {
       if (['created', 'failed'].includes(file.body.status)) {
+        if(file.body.status === 'created') downloadFile(file.body.presignedUrl)
         this.setState({
           showModal: false,
           loading: false,
