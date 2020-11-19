@@ -810,5 +810,8 @@
     "branchgeoAreas": " التقسيمات الجغرافية المتاحة للفرع",
     "branchAssignGeoAreaSuccess":"تم تعيين التقسيمات الجغرافية للفرع بنجاح",
     "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع",
-    "theCustomerIsBlocked": "هذاالعميل موقوف التعامل معه"
+    "theCustomerIsBlocked": "هذاالعميل موقوف التعامل معه",
+    "addGuarantor":"إضافة ضامن",
+    "removeGuarantor":"إزالة ضامن",
+    "willNotBeAGuarantor":"لن يكون ضامن للقرض"
 }
