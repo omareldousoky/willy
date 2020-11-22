@@ -108,7 +108,7 @@ class PaymentIcons extends Component<Props, {}> {
               <div className="payment-icon">
                 <img alt="early-payment" src={require("../../Assets/earlyPayment.svg")} />
                 <Button
-                  disabled={this.props.application.status === "pending"}
+                  disabled={this.props.application.status === "pending" || this.props.installments.some(installment => installment.status === 'partiallyPaid')}
                   onClick={() => this.props.handleClickEarlyPayment()}
                   variant="primary"
                 >
