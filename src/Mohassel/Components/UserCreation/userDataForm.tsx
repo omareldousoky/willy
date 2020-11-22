@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -22,12 +22,14 @@ interface Props {
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
-    cancle: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+    cancel: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any;
 }
 export const UserDataForm = (props: Props) => {
+    
     const handleSubmit = props.handleSubmit;
     const [loading, setLoading] = useState(false);
+    const [initialUsername, setInitialUsername] = useState(props.values.username);
     return (
         <Form
             onSubmit={handleSubmit}
@@ -77,7 +79,7 @@ export const UserDataForm = (props: Props) => {
                                 onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                     const re = /^\d*$/;
                                     const { name, value } = event.currentTarget;
-                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                    if ((!props.edit && event.currentTarget.value === '') || re.test(event.currentTarget.value)) {
                                         props.setFieldValue('nationalId', value)
                                     }
                                     if (value.length === 14) {
@@ -157,7 +159,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={props.handleChange}
                     isInvalid={(props.errors.nationalIdIssueDate && props.touched.nationalIdIssueDate) as boolean}
                 />
-                <Form.Control.Feedback type="invalid" style={checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
+                <Form.Control.Feedback type="invalid" style={!props.edit && props.values.nationalIdIssueDate == 0 ? checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}: {}}>
                     {props.errors.nationalIdIssueDate || checkIssueDate(props.values.nationalIdIssueDate)}
                 </Form.Control.Feedback>
             </Form.Group>
@@ -176,7 +178,7 @@ export const UserDataForm = (props: Props) => {
                             type={"text"}
                             name={"hrCode"}
                             data-qc={"hrCode"}
-                            value={props.values.hrCode.trim()}
+                            value={props.values.hrCode?.trim()}
                             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                 props.setFieldValue('hrCode', event.currentTarget.value);
                                 setLoading(true);
@@ -265,7 +267,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                         props.setFieldValue('username', event.currentTarget.value);
                         setLoading(true);
-                        const res = await checkUsernameDuplicates(event.currentTarget.value.trim());
+                        const res = await checkUsernameDuplicates(event.currentTarget.value?.trim());
 
                         if (res.status === 'success') {
                             setLoading(false);
@@ -274,7 +276,7 @@ export const UserDataForm = (props: Props) => {
 
                     }}
                     onBlur={props.handleBlur}
-                    disabled={props.edit}
+                    disabled={props.edit && initialUsername}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />
                 <Form.Control.Feedback
@@ -314,14 +316,14 @@ export const UserDataForm = (props: Props) => {
                 <Col>
                     <Form.Label
                         className={'user-data-label'}
-                    >{props.edit ? local.confrimPassword : `${local.confrimPassword}*`}
+                    >{props.edit ? local.confirmPassword : `${local.confirmPassword}*`}
                     </Form.Label>
                     <Form.Control
                         type={"password"}
                         name={'confirmPassword'}
                         data-qc={'confirmPassword'}
                         value={props.values.confirmPassword}
-                        placeholder={`${local.confrimPassword}*`}
+                        placeholder={`${local.confirmPassword}*`}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         isInvalid={(props.errors.confirmPassword && props.touched.confirmPassword) as boolean}
@@ -340,7 +342,7 @@ export const UserDataForm = (props: Props) => {
                 <Col >
                     <Button
                         className={'btn-cancel-prev'} style={{ width: '60%' }}
-                        onClick={() => { props.cancle() }}
+                        onClick={() => { props.cancel() }}
                     >{local.cancel}</Button>
                 </Col>
                 <Col>
