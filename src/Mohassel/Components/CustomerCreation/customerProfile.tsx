@@ -48,6 +48,11 @@ const tabs: Array<Tab> = [
     header: local.documents,
     stringKey: 'documents'
   },
+  {
+    header: local.deathCertificate,
+    stringKey:'deathCertificate'
+
+  }
 ]
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
