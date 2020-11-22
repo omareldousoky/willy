@@ -275,6 +275,8 @@ class UserCreation extends Component<Props, State> {
             {...formikProps}
             edit={this.props.edit}
             _id = {this.props.edit? this.props.history.location.state.details : ""}
+            username = {this.state.step1.username}
+            nationalId= {this.state.step1.nationalId}
             cancel={() => this.cancel()}
           />
         )}

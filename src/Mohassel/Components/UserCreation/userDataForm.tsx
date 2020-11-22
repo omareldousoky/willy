@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,6 +19,8 @@ interface Props {
     touched: Touched;
     edit?: boolean;
     _id?: string;
+    username: string;
+    nationalId: string;
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
@@ -26,10 +28,9 @@ interface Props {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any;
 }
 export const UserDataForm = (props: Props) => {
-    
+
     const handleSubmit = props.handleSubmit;
     const [loading, setLoading] = useState(false);
-    const [initialUsername, setInitialUsername] = useState(props.values.username);
     return (
         <Form
             onSubmit={handleSubmit}
@@ -68,37 +69,35 @@ export const UserDataForm = (props: Props) => {
                             className={'user-data-label'}
                         >{`${local.nationalId}*`}
                         </Form.Label>
-                        <Can I="edit" a="NationalId" passThrough>
-                            {allowed => <Form.Control
-                                type={"text"}
-                                placeholder={`${local.example} : ${local.nationalIdPlaceholder}`}
-                                name={"nationalId"}
-                                data-qc={"nationalId"}
-                                value={props.values.nationalId}
-                                onBlur={props.handleBlur}
-                                onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
-                                    const re = /^\d*$/;
-                                    const { name, value } = event.currentTarget;
-                                    if ((!props.edit && event.currentTarget.value === '') || re.test(event.currentTarget.value)) {
-                                        props.setFieldValue('nationalId', value)
-                                    }
-                                    if (value.length === 14) {
-                                        setLoading(true);
-                                        const res = await checkNationalIdDuplicates(value);
-                                        if (res.status === 'success') {
-                                            setLoading(false);
-                                            props.setFieldValue('nationalIdChecker', res.body.Exists);
-                                            props.setFieldValue('birthDate', getBirthdateFromNationalId(value));
-                                            props.setFieldValue('gender', getGenderFromNationalId(value));
-                                        } else setLoading(false);
-                                    }
-                                }}
-                                isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
-                                maxLength={14}
-                                disabled={(!allowed && props.edit)}
-                            />
-                            }
-                        </Can>
+                        <Form.Control
+                            type={"text"}
+                            placeholder={`${local.example} : ${local.nationalIdPlaceholder}`}
+                            name={"nationalId"}
+                            data-qc={"nationalId"}
+                            value={props.values.nationalId}
+                            onBlur={props.handleBlur}
+                            onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                                const re = /^\d*$/;
+                                const { name, value } = event.currentTarget;
+                                if ((!props.edit && event.currentTarget.value === '') || re.test(event.currentTarget.value)) {
+                                    props.setFieldValue('nationalId', value)
+                                }
+                                if (value.length === 14) {
+                                    setLoading(true);
+                                    const res = await checkNationalIdDuplicates(value);
+                                    if (res.status === 'success') {
+                                        setLoading(false);
+                                        props.setFieldValue('nationalIdChecker', res.body.Exists);
+                                        props.setFieldValue('birthDate', getBirthdateFromNationalId(value));
+                                        props.setFieldValue('gender', getGenderFromNationalId(value));
+                                    } else setLoading(false);
+                                }
+                            }}
+                            isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
+                            maxLength={14}
+                            disabled={props.edit && (props.nationalId === ""? false : true )}
+                        />
+
                         <Form.Control.Feedback
                             type="invalid">
                             {props.errors.nationalId}
@@ -159,7 +158,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={props.handleChange}
                     isInvalid={(props.errors.nationalIdIssueDate && props.touched.nationalIdIssueDate) as boolean}
                 />
-                <Form.Control.Feedback type="invalid" style={!props.edit && props.values.nationalIdIssueDate == 0 ? checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}: {}}>
+                <Form.Control.Feedback type="invalid" style={!props.edit && props.values.nationalIdIssueDate == 0 ? checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {} : {}}>
                     {props.errors.nationalIdIssueDate || checkIssueDate(props.values.nationalIdIssueDate)}
                 </Form.Control.Feedback>
             </Form.Group>
@@ -182,7 +181,7 @@ export const UserDataForm = (props: Props) => {
                             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                 props.setFieldValue('hrCode', event.currentTarget.value);
                                 setLoading(true);
-                                const res = await checkHRCodeDuplicates(event.currentTarget.value,props._id);
+                                const res = await checkHRCodeDuplicates(event.currentTarget.value, props._id);
 
                                 if (res.status === 'success') {
                                     setLoading(false);
@@ -276,7 +275,7 @@ export const UserDataForm = (props: Props) => {
 
                     }}
                     onBlur={props.handleBlur}
-                    disabled={(props.edit && initialUsername)as boolean}
+                    disabled={props.edit && (props.username ==="" ? false : true)}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />
                 <Form.Control.Feedback
