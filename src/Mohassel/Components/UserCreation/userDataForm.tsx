@@ -276,7 +276,7 @@ export const UserDataForm = (props: Props) => {
 
                     }}
                     onBlur={props.handleBlur}
-                    disabled={props.edit && initialUsername}
+                    disabled={(props.edit && initialUsername)as boolean}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />
                 <Form.Control.Feedback
