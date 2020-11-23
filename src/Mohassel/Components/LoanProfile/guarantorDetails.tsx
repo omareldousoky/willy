@@ -228,6 +228,12 @@ export const GuarantorTableView = (props: Props) => {
         })
 
     }
+    function cancelModal() {
+        changeResults({ results: [], empty: false });
+        changeSelected({});
+        changeSelectedId('');
+        changeModal(false);
+    }
     const pass = props.status && ['reviewed', 'created', 'approved'].includes(props.status)
     return (
         <>
@@ -264,7 +270,7 @@ export const GuarantorTableView = (props: Props) => {
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
                                 </Can>}
-                                {pass && (i > props.application.product.noOfGuarantors - 1) && <Can I="editApplicationGuarantors" a="application"><td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td></Can>}
+                                {pass && (props.guarantors.length > props.application.product.noOfGuarantors) && <Can I="editApplicationGuarantors" a="application"><td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td></Can>}
                             </tr>)
                         }
                         )}
@@ -288,7 +294,7 @@ export const GuarantorTableView = (props: Props) => {
                     />
                 </Modal.Body>
                 <ModalFooter>
-                    <Button variant="secondary" onClick={() => changeModal(false)}>{local.cancel}</Button>
+                    <Button variant="secondary" onClick={() => cancelModal()}>{local.cancel}</Button>
                     <Button variant="primary" onClick={() => addGuarantor()} disabled={selectedGuarantorId.length === 0}>{local.submit}</Button>
                 </ModalFooter>
             </Modal>}
