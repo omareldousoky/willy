@@ -1,12 +1,12 @@
 import React from 'react';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import { CustomerLoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { numbersToArabic } from '../../Services/utils';
+import { numbersToArabic } from "../../../Shared/Services/utils";
 interface Props {
   application: any;
   penalty?: number;

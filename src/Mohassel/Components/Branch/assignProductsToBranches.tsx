@@ -5,7 +5,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getProducts } from '../../Services/APIs/loanProduct/getProduct';
 import { assignProductsToBranches, unassignProductsToBranches } from '../../Services/APIs/Branch/assignProductsToBranches';
-import { customFilterOption } from "../../Services/utils";
+import { customFilterOption } from '../../../Shared/Services/utils';
 import DualBox from '../DualListBox/dualListBox';
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form';
@@ -17,6 +17,8 @@ import { theme } from '../../../theme';
 import { CardBody } from 'react-bootstrap/Card';
 import Card from 'react-bootstrap/Card';
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageLoansArray } from '../ManageLoans/manageLoansInitials';
 
 interface Props {
     title: string;
@@ -42,7 +44,7 @@ interface State {
     newSelectedIds: string[];
     deletedIds: string[];
     noErrors: boolean;
-
+        manageLoansTabs: any[];
 }
 class AssignProductsToBranches extends Component<Props, State>{
     constructor(props: Props) {
@@ -59,11 +61,13 @@ class AssignProductsToBranches extends Component<Props, State>{
             newSelectedIds: [],
             deletedIds: [],
             noErrors: true,
+            manageLoansTabs: []
         }
     }
 
     componentDidMount() {
         this.getProducts();
+        this.setState({manageLoansTabs: manageLoansArray()})
     }
     handleChange(list) {
         const selectedIds = list.map(branch => branch._id);
@@ -181,7 +185,12 @@ class AssignProductsToBranches extends Component<Props, State>{
     }
     render() {
         return (
-            <Container>
+            <>
+                <HeaderWithCards
+                    header={local.loanProducts}
+                    array={this.state.manageLoansTabs}
+                    active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('assignProductToBranch')}
+                />
                 <Card>
                     <Loader open={this.state.loading} type="fullscreen" />
                     <Card.Body style={{ width: '100%'}}>
@@ -242,7 +251,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                             </Form>
                     </Card.Body>
                 </Card>
-            </Container>
+            </>
         )
     }
 }

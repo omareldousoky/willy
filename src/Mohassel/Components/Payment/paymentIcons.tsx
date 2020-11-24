@@ -4,7 +4,7 @@ import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import { Installment } from './payInstallment';
-import { payment } from '../../redux/payment/actions';
+import { payment } from '../../../Shared/redux/payment/actions';
 import * as local from '../../../Shared/Assets/ar.json';
 
 interface Props {
@@ -108,7 +108,7 @@ class PaymentIcons extends Component<Props, {}> {
               <div className="payment-icon">
                 <img alt="early-payment" src={require("../../Assets/earlyPayment.svg")} />
                 <Button
-                  disabled={this.props.application.status === "pending"}
+                  disabled={this.props.application.status === "pending" || this.props.installments.some(installment => installment.status === 'partiallyPaid')}
                   onClick={() => this.props.handleClickEarlyPayment()}
                   variant="primary"
                 >

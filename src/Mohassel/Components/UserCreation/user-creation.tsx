@@ -26,7 +26,7 @@ import { getUserRolesAndBranches } from "../../Services/APIs/User-Creation/getUs
 import { createUser } from "../../Services/APIs/User-Creation/createUser";
 import { editUser } from "../../Services/APIs/User-Creation/editUser";
 import { getUserDetails } from "../../Services/APIs/Users/userDetails";
-import { timeToDateyyymmdd } from "../../Services/utils";
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import Card from "react-bootstrap/Card";
 import UserManagerForm from "./userManagerForm";
 import { step2 } from "../CustomerCreation/customerFormIntialState";
@@ -275,7 +275,9 @@ class UserCreation extends Component<Props, State> {
             {...formikProps}
             edit={this.props.edit}
             _id = {this.props.edit? this.props.history.location.state.details : ""}
-            cancle={() => this.cancel()}
+            username = {this.state.step1.username}
+            nationalId= {this.state.step1.nationalId}
+            cancel={() => this.cancel()}
           />
         )}
       </Formik>

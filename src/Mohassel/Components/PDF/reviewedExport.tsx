@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { getAge } from '../../Services/utils';
+import { getAge } from "../../../Shared/Services/utils";
 
 // Create styles
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import React from 'react';
 import './doubtfulPayments.scss';
-import { timeToArabicDate, getTimestamp, getLoanStatus } from '../../../Services/utils';
+import { timeToArabicDate, getTimestamp, getLoanStatus } from "../../../../Shared/Services/utils";
 import * as local from '../../../../Shared/Assets/ar.json';
 const DoubtfulPayments = (props) => {
     const tempData = props.data.data;
@@ -9,7 +9,7 @@ const DoubtfulPayments = (props) => {
             <div className="doubtful-payments" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={1}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -31,18 +31,16 @@ const DoubtfulPayments = (props) => {
                         </tr>
                         <tr>
                             <th>رقم مسلسل</th>
-                            <th>كود الحركه</th>
                             <th>كود العميل</th>
-                            <th>أسم العميل</th>
+                            <th colSpan={1}>أسم العميل</th>
                             <th>مسلسل القرض</th>
-                            <th>رقم الشيك</th>
-                            <th>قيمة</th>
-                            <th>تاريخ القرض</th>
-                            <th>الحالة الان</th>
+                            <th colSpan={1}>قيمة</th>
+                            <th colSpan={3}>تاريخ القرض</th>
+                            <th colSpan={1}>الحالة الان</th>
                             <th>أصل</th>
-                            <th colSpan={2}>قيمة الحركة فائدة</th>
+                            <th colSpan={1}>قيمة الحركة فائدة</th>
                             <th>إجمالي</th>
-                            <th>حالة الحركة</th>
+                            <th colSpan={2}>حالة الحركة</th>
                         </tr>
                         <tr>
                             <th colSpan={100} className="horizontal-line"></th>
@@ -66,18 +64,16 @@ const DoubtfulPayments = (props) => {
                                         </tr>
                                         {branch.rows.map((transaction, z) => <tr key={z}>
                                             <td>{transaction.serialNo}</td>
-                                            <td></td>
                                             <td>{transaction.customerKey}</td>
-                                            <td>{transaction.customerName}</td>
+                                            <td colSpan={1}>{transaction.customerName}</td>
                                             <td>{transaction.loanSerial}</td>
-                                            <td></td>
-                                            <td>{transaction.loanPrincipal}</td>
-                                            <td>{timeToArabicDate(getTimestamp(transaction.issueDate), false)}</td>
-                                            <td>{getLoanStatus(transaction.stateFlags)}</td>
+                                            <td colSpan={1}>{transaction.loanPrincipal}</td>
+                                            <td colSpan={3}>{timeToArabicDate(getTimestamp(transaction.issueDate), false)}</td>
+                                            <td colSpan={1}>{getLoanStatus(transaction.stateFlags)}</td>
                                             <td>{transaction.transactionPrincipal}</td>
-                                            <td>{transaction.transactionInterest}</td>
+                                            <td colSpan={1}>{transaction.transactionInterest}</td>
                                             <td>{transaction.transactionAmount}</td>
-                                            <td>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
+                                            <td colSpan={2}>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
                                         </tr>)}
                                         <tr>
                                             <th colSpan={100} className="horizontal-line"></th>

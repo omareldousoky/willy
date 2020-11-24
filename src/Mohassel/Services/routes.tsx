@@ -27,7 +27,7 @@ import CustomersList from '../Components/CustomerCreation/customersList';
 import LoanProducts from '../Components/ManageLoans/productsList';
 import FormulaList from '../Components/ManageLoans/calculationFormulaList';
 import * as local from '../../Shared/Assets/ar.json';
-import { generateAppRoutes } from './utils';
+import { generateAppRoutes } from '../../Shared/Services/utils';
 import BranchDetails from '../Components/BranchDetails/branch-details';
 import GroupMemberSeperation from '../Components/LoanProfile/groupMemberSeperation';
 import ViewFormula from '../Components/LoanFormulaCreation/calculationFormulaView';
@@ -43,7 +43,11 @@ import ReportsHome from '../Components/Reports/reportsHome';
 import MoveCustomers from '../Components/MoveCustomers/move-customers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
+import Leads from '../Components/HalanIntegration/leads';
+import AssignLoanOfficer from '../Components/HalanIntegration/assignLoanOfficer';
 import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
+import LeadProfile from '../Components/HalanIntegration/leadProfile';
+import EditLead from '../Components/HalanIntegration/editLead';
 import GeoAreas from '../Components/GeoAreas/geoAreas';
 
 
@@ -73,7 +77,12 @@ const appRoutes = [
             path: "/view-customer",
             label: local.viewCustomer,
             render: (props) => <CustomerProfile {...props} />,
-          }
+          },
+          {
+            path: "/move-customers",
+            label: local.moveCustomers,
+            render: (props) => <Can I="changeOfficer" a="customer"><MoveCustomers {...props} /></Can>
+          },
         ]
       },
       {
@@ -96,9 +105,18 @@ const appRoutes = [
               render: (props) => <Can I='documentTypes' a='config'><DocumentTypeCreation {...props} edit={true} /> </Can>
             }
           ]
+        },
+        {
+          path: "/geo-areas",
+          label: local.branchAreas,
+          render: (props) => <Can I='geoArea' a='config'><GeoAreas /></Can>
+        },
+        {
+          path: "/principalRange",
+          label: local.principalRange,
+          render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /> </Can>,
         }
         ]
-
       },
       {
         path: "/track-loan-applications",
@@ -140,6 +158,16 @@ const appRoutes = [
             path: "/loan-roll-back",
             label: local.previousActions,
             render: (props) => <LoanRollBack {...props} />,
+          },
+          {
+            path: "/bulk-creation",
+            label: local.bulkApplicationCreation,
+            render: () => <Can I='createLoan' a='application'><BulkApplicationCreation /></Can>
+          },
+          {
+            path: "/bulk-approvals",
+            label: local.bulkLoanApplicationsApproval,
+            render: (props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>
           }
         ]
       },
@@ -148,16 +176,7 @@ const appRoutes = [
         label: local.loanUses,
         render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
       },
-      {
-        path: "/geo-areas",
-        label: local.branchAreas,
-        render: (props) => <Can I='geoArea' a='config'><GeoAreas /></Can>
-      },
-      {
-        path: "/bulk-approvals",
-        label: local.bulkLoanApplicationsApproval,
-        render: (props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>
-      },
+      
       {
         path: "/manage-loans",
         label: local.loans,
@@ -176,7 +195,7 @@ const appRoutes = [
               {
                 path: "/edit-loan-product",
                 label: local.editLoanProduct,
-                render: (props) => <Can I='updateLoanProduct' a='product'><LoanProductCreation {...props} edit = {true} /></Can>,
+                render: (props) => <Can I='updateLoanProduct' a='product'><LoanProductCreation {...props} edit={true} /></Can>,
               },
               {
                 path: "/view-product",
@@ -207,6 +226,11 @@ const appRoutes = [
             label: local.testCalculationMethod,
             render: (props) => <Can I='testCalculate' a='product'><FormulaTest {...props} /></Can>,
           },
+          {
+            path: "/assign-products-branches",
+            label: local.assignProductToBranch,
+            render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductsToBranches {...props} /> </Can>,
+          }
         ]
       },
       {
@@ -286,18 +310,16 @@ const appRoutes = [
         ]
 
       },
+      // {
+      //   path: "/manage-finances",
+      //   label: local.manageFinances,
+      //   render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /></Can>,
+      //   routes: [
+
+      //   ]
+      // }
+      // , 
       {
-        path: "/manage-finances",
-        label: local.manageFinances,
-        render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /></Can>,
-        routes: [
-          { path: "/principleRange",
-          label: local.principalRange,
-          render: (props) => <Can I='createMaxPrincipal' a='config'><PrincipleThreshold {...props} /> </Can>,
-          }
-        ]
-      }
-      , {
         path: "/loans",
         label: local.issuedLoans,
         render: (props) => <LoanList {...props} />,
@@ -307,29 +329,24 @@ const appRoutes = [
             label: local.loanDetails,
             render: (props) => <LoanProfile {...props} />,
           },
+          {
+            path: "/source-of-fund",
+            label: local.changeSourceOfFund,
+            render: () => <Can I="cibScreen" a='report' ><SourceOfFund /></Can>
+          },
+          {
+            path: "/cib",
+            label: local.cib,
+            render: () => <Can I="cibScreen" a='report' ><CIB /></Can>
+          },
         ]
 
-      }
-      , {
-        path: "/assign-products-branches",
-        label: local.assignProductToBranch,
-        render: (props) => <Can I='assignProductToBranch' a='product'> <AssignProductsToBranches {...props} /> </Can>,
       },
       {
         path: "/logs",
         label: local.logs,
-        render: (props) => <Can I = "viewActionLogs" a = 'user' ><ActionLogs {...props} /></Can>,
+        render: (props) => <Can I="viewActionLogs" a='user' ><ActionLogs {...props} /></Can>,
       },
-      {
-        path: "/source-of-fund",
-        label: local.changeSourceOfFund,
-        render : () => <Can I="cibScreen" a='report' ><SourceOfFund/></Can>
-      },
-      {
-        path: "/cib",
-        label: local.cib,
-        render : () => <Can I="cibScreen" a='report' ><CIB/></Can>
-      }, 
       {
         path: "/reports",
         label: local.reports,
@@ -344,6 +361,35 @@ const appRoutes = [
         path: "/bulk-creation",
         label: local.bulkApplicationCreation,
         render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
+      },
+      {
+        path: "/halan-integration",
+        label: local.halan,
+        render: (props) => <Leads {...props} />,
+        routes: [
+          {
+            path: "/leads",
+            label: local.applicantsLeads,
+            render: (props) => <Leads {...props} /> ,
+            routes: [
+              {
+                path: "/view-lead",
+                label: local.customersDetails,
+                render: (props) => <LeadProfile {...props} />,
+              },
+              {
+                path: "/edit-lead",
+                label: local.editCustomer,
+                render: (props) => <EditLead {...props} />,
+              },
+            ]
+          },
+          {
+            path: "/exchange",
+            label: local.assignOrChangeLoanOfficer,
+            render: (props) => <AssignLoanOfficer {...props} /> ,
+          }
+        ]
       }
     ]
   },
