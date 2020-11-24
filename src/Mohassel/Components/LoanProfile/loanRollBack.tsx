@@ -40,6 +40,7 @@ class LoanRollBack extends Component<Props, State>{
     }
     componentDidMount() {
         const appId = this.props.history.location.state.id;
+        console.log(this.props.history.location.state)
         this.getAppRollableActionsByID(appId)
     }
     async getAppRollableActionsByID(id) {
@@ -47,7 +48,7 @@ class LoanRollBack extends Component<Props, State>{
         const application = await getRollableActionsById(id);
         if (application.status === 'success') {
             this.setState({
-                actions: application.body.RollbackObjects,
+                actions: ( this.props.history.location.state.status === 'canceled' ) ? this.filterForCancelled(application.body.RollbackObjects) : application.body.RollbackObjects,
                 applicationId: id,
                 loading: false
             })
@@ -95,6 +96,13 @@ class LoanRollBack extends Component<Props, State>{
             const y = b[key];
             return ((x > y) ? -1 : ((x < y) ? 1 : 0));
         });
+    }
+    filterForCancelled(array){
+        const actionList =['ActionManualPayToktokStamp', 'ActionManualPayTricycleStamp', 'ActionManualPayClearanceFees',
+        'ActionManualPayCollectionCommission', 'ActionManualPayLegalFees', 'ActionManualPayPenalties',
+        'ActionManualPayReissuingFees' , 'ActionPayToktokStamp' , 'ActionPayTricycleStamp' , 'ActionPayClearanceFees' ,
+        'ActionPayCollectionCommission' , 'ActionPayLegalFees' , 'ActionPayPenalties' , 'ActionPayReissuingFees'];
+        return array.filter( action => actionList.includes(action.action))
     }
     render() {
         return (
