@@ -406,7 +406,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                     </Form.Group>
                 </Form.Row>
                 {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
-                    <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
+                    <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} application={props.application}/>
                 </Form.Row>}
             </Form>
         </div>
