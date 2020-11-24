@@ -100,7 +100,8 @@ class LoanRollBack extends Component<Props, State>{
         const actionList =['ActionManualPayToktokStamp', 'ActionManualPayTricycleStamp', 'ActionManualPayClearanceFees',
         'ActionManualPayCollectionCommission', 'ActionManualPayLegalFees', 'ActionManualPayPenalties',
         'ActionManualPayReissuingFees' , 'ActionPayToktokStamp' , 'ActionPayTricycleStamp' , 'ActionPayClearanceFees' ,
-        'ActionPayCollectionCommission' , 'ActionPayLegalFees' , 'ActionPayPenalties' , 'ActionPayReissuingFees'];
+        'ActionPayCollectionCommission' , 'ActionPayLegalFees' , 'ActionPayPenalties' , 'ActionPayReissuingFees' ,
+        'ActionApproveManualRandomPayment', 'ActionRejectManualRandomPayment'];
         return array.filter( action => actionList.includes(action.action))
     }
     render() {
