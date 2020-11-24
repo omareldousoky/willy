@@ -97,11 +97,11 @@ class LoanRollBack extends Component<Props, State>{
         });
     }
     filterForCancelled(array){
-        const actionList =['ActionManualPayToktokStamp', 'ActionManualPayTricycleStamp', 'ActionManualPayClearanceFees',
-        'ActionManualPayCollectionCommission', 'ActionManualPayLegalFees', 'ActionManualPayPenalties',
-        'ActionManualPayReissuingFees' , 'ActionPayToktokStamp' , 'ActionPayTricycleStamp' , 'ActionPayClearanceFees' ,
-        'ActionPayCollectionCommission' , 'ActionPayLegalFees' , 'ActionPayPenalties' , 'ActionPayReissuingFees' ,
-        'ActionApproveManualRandomPayment', 'ActionRejectManualRandomPayment'];
+        const actionList =['manualPayToktokStamp', 'manualPayTricycleStamp', 'manualPayClearanceFees',
+        'manualPayCollectionCommission', 'manualPayLegalFees', 'manualPayPenalties',
+        'manualPayReissuingFees' , 'payToktokStamp' , 'payTricycleStamp' , 'payClearanceFees' ,
+        'payCollectionCommission' , 'payLegalFees' , 'payPenalties' , 'payReissuingFees' ,
+        'approveManualRandomPayment', 'rejectManualRandomPayment'];
         return array.filter( action => actionList.includes(action.action))
     }
     render() {
