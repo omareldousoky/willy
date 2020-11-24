@@ -6,6 +6,7 @@ import Can from '../../config/Can';
 import Reports from './reports';
 import IscoreReports from './iscoreReports';
 import Card from 'react-bootstrap/Card';
+import CIBReports from './cibReports';
 interface State {
     id: string;
     activeTab: string;
@@ -25,7 +26,14 @@ class ReportsHome extends Component<{}, State>{
                 stringKey: 'iScoreReports',
                 permission: 'downloadIscoreFile',
                 permissionKey: 'report'
-            }]
+            },
+            {
+                header: local.cib,
+                stringKey: 'cibTPAYReport',
+                permission: 'cibScreen',
+                permissionKey: 'report'
+            }
+        ]
         }
     }
     handleOptionChange = (changeEvent) => {
@@ -39,6 +47,8 @@ class ReportsHome extends Component<{}, State>{
                 return <Reports />
             case "iScoreReports":
                 return <IscoreReports />
+            case "cibTPAYReport":
+                return <CIBReports />
             default:
                 return null
         }
