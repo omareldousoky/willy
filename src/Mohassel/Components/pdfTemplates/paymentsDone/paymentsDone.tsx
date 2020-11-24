@@ -73,7 +73,7 @@ const PaymentsDone = (props) => {
                                         <td>{transaction.transactionPrincipal}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
-                                        <td colSpan={1.5}>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
+                                        <td colSpan={1.5}>{transaction.canceled ==="1" ? local.cancelledTransaction : null}</td>
                                     </tr>
                                 )}
                                 <tr>
