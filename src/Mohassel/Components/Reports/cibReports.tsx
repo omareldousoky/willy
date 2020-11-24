@@ -9,8 +9,20 @@ import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import ReportsModal from './reportsModal';
 
+interface TPAYFile {
+  created: {
+    at: number;
+    by: string;
+    userName: string;
+  };
+  failReason: string;
+  key: string;
+  _id: string;
+  status: string;
+  url?: string;
+}
 interface State {
-  data: any;
+  data: Array<TPAYFile>;
   loading: boolean;
   showModal: boolean;
 }
@@ -86,7 +98,7 @@ class CIBReports extends Component<{}, State>{
                         <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.loanAppCreationDate}</span>{timeToArabicDate(pdf.created.at, true)}</span>
                         <span style={{ marginLeft: 40 }}>{pdf.key.split("/")[1]}</span>
                         <span style={{ marginLeft: 40 }}>{getIscoreReportStatus(pdf.status)}</span>
-                        {pdf.status === 'created' && <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.creationDate}</span>{timeToArabicDate(pdf.fileGeneratedAt, true)}</span>}
+                        {pdf.status === 'created' && <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.creationDate}</span>{timeToArabicDate(pdf.created?.at, true)}</span>}
                       </div>
                       {pdf.status === 'created' && <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile(pdf)} />}
                     </div>
