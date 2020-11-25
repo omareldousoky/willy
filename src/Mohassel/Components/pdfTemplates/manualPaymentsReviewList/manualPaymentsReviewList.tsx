@@ -37,7 +37,7 @@ const ManualPaymentsReviewList = (props) => {
                             <th>حالة القسط</th>
                             <th>مستند الحركه</th>
                             <th>أصل</th>
-                            <th>القيمه المسدده فائدة</th>
+                            <th>تكلفه التمويل المسدده</th>
                             <th>إجمالي</th>
                         </tr>
                         <tr>

@@ -190,7 +190,7 @@ const LoanContractForGroup = (props) => {
                     <div>يلتزم الطرف الثاني ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                     القرض
                   البالغة {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
-                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه بواقع {numbersToArabic(props.data.applicationFeesRequired / props.data.group.individualsInGroup.length)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  وكافة تكلفه التمويل الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه بواقع {numbersToArabic(props.data.applicationFeesRequired / props.data.group.individualsInGroup.length)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه = (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} ، يتم
                   سداده
@@ -207,7 +207,7 @@ const LoanContractForGroup = (props) => {
                     <div className="title">البند الرابع</div>
                     <div>يقر افراد الطرف الثاني بأنهم ضامنين متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                     بالبند السابق وفقا
-                    للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
+                    للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة تكاليف تمويله
 							</div>
                   </section>
 
@@ -245,7 +245,7 @@ const LoanContractForGroup = (props) => {
                     في الوفاء بالتزماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                     تلقاء نفسه دون الحاجه
                     للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة افراد الطرف
-                  الثاني بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
+                  الثاني بباقي قيمة القرض وكافة تكاليف تمويله</div>
                     <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                     <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                     <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>

@@ -121,7 +121,7 @@ const CustomerStatusDetails = (props) => {
                                                         <td>{loan.representativeFees}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th>فائدة القسط</th>
+                                                        <th>تكلفه التمويل القسط</th>
                                                         <td>{loan.feesInstallment}</td>
                                                         <th>تكلفه التمويل الموزعه</th>
                                                         <td>{loan.interest} % سنويا</td>
