@@ -103,7 +103,7 @@ const ManualPayments = (props: Props) => {
                                             <th colSpan={2}>تاريخ استحقاق القسط</th>
                                             <th colSpan={2}>حالة القسط</th>
                                             <th>أصل</th>
-                                            <th>القيمه المسدده مصاريف</th>
+                                            <th>القيمه المسدده تكلفه تمويل </th>
                                             <th>إجمالي</th>
                                         </tr>
                                         <tr>

@@ -37,7 +37,7 @@ const FundingSourceChangeList = (props) => {
                             <th>تاريخ القرض</th>
                             <th>الحالة الان</th>
                             <th>أصل</th>
-                            <th>قيمة الحركة فائدة</th>
+                            <th>قيمة تكلفه التمويل</th>
                             <th>إجمالي</th>
                             <th>حالة الحركة</th>
                         </tr>

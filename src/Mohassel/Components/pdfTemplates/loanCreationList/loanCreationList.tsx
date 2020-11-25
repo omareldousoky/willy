@@ -40,7 +40,7 @@ const LoanCreationList = (props) => {
                             <th colSpan={2}>تاريخ القرض</th>
                             <th>الحالة الان</th>
                             <th>أصل</th>
-                            <th colSpan={2}>قيمة الحركة فائدة</th>
+                            <th colSpan={2}>قيمة تكلفه التمويل</th>
                             <th colSpan={2}>إجمالي</th>
                             <th>حالة الحركة</th>
                         </tr>
