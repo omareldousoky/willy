@@ -110,7 +110,7 @@ class LoanRollBack extends Component<Props, State>{
                 <BackButton title={local.previousActions} />
                 <Loader type="fullscreen" open={this.state.loading} />
                 <Card style={{ textAlign: 'right', padding: 20 }} className="d-flex align-items-center">
-                    {this.state.actions ? <div style={{ width: '70%' }}>
+                    {this.state.actions.length > 0 ? <div style={{ width: '70%' }}>
                         <div className="d-flex" style={{ margin: '20px 0px', padding: 10, borderBottom: '1px solid' }}>
                             <p style={{ width: '40%', margin: 0 }}>{local.actionType}</p>
                             <p style={{ width: '40%', margin: 0 }}>{local.actionDate}</p>
