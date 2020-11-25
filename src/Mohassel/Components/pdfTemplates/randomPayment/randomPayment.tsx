@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from "react-redux";
 import './randomPayment.scss';
-import { timeToArabicDate } from '../../../Services/utils';
+import { timeToArabicDate } from "../../../../Shared/Services/utils"
 interface Props {
 	branches: {
 		rows: {
@@ -11,10 +11,13 @@ interface Props {
 			trxDate: string;
 			trxAmount: string;
 			trxAction: string;
+			canceled: string;
 		}[];
 		trxCount: string;
 		trxSum: string;
 		branchName: string;
+		trxRb: string;
+		trxNet: string;
 	}[];
 	startDate: any;
 	endDate: any;
@@ -47,13 +50,12 @@ const actionsLocalization = (action: string) => {
 
 const RandomPayment = (props: Props) => {
 	return (
-		<>
+			<div dir="rtl" lang="ar" className="random-payment-print">
 			<table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
 				<tr style={{ height: "10px" }}></tr>
-				<tr><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+				<tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
 				<tr style={{ height: "10px" }}></tr>
 			</table>
-			<div dir="rtl" lang="ar" className="random-payment-print">
 				<table className="report-container">
 					<thead className="report-header">
 						<tr>
@@ -97,9 +99,8 @@ const RandomPayment = (props: Props) => {
 									<th>كود الحركه</th>
 									<th>تاريخ الحركه</th>
 									<th>قيمة الحركه</th>
-									<th>رقم الايصال</th>
 									<th>نوع الحركه الماليه</th>
-									<th></th>
+									<th>حالة الحركة</th>
 								</tr>
 								<tr>
 									<td colSpan={10} className="border"></td>
@@ -115,9 +116,8 @@ const RandomPayment = (props: Props) => {
 											<td>{row.trxCode}</td>
 											<td>{row.trxDate}</td>
 											<td>{row.trxAmount}</td>
-											<td></td>
 											<td>{actionsLocalization(row.trxAction)}</td>
-											<td>منفذ</td>
+											<td>{row.canceled === '1' ? 'الحركة ملغاه' : ''}</td>
 										</tr>
 										<tr>
 											<td colSpan={4}></td>
@@ -135,8 +135,26 @@ const RandomPayment = (props: Props) => {
 								<tr>
 									<td colSpan={3}>إجمالي الحركه {branch.branchName}</td>
 									<td></td>
-									<td>عدد {branch.trxCount}</td>
-									<td>المبلغ {branch.trxSum}</td>
+									<td>
+										<tr>
+											<td>عدد </td>
+											<td>{branch.trxCount}</td>
+										</tr>
+									</td>
+									<td>
+										<tr>
+											<td>إجمالي المبلغ </td>
+											<td>{branch.trxSum}</td>
+										</tr>
+										<tr>
+											<td>القيمة الملغاه </td>
+											<td>{branch.trxRb}</td>
+										</tr>
+										<tr>
+											<td>صافي المبلغ </td>
+											<td>{branch.trxNet}</td>
+										</tr>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -145,7 +163,6 @@ const RandomPayment = (props: Props) => {
 				})
 				}
 			</div>
-		</>
 	)
 }
 

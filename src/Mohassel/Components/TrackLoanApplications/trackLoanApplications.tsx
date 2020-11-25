@@ -5,20 +5,22 @@ import { Loader } from '../../../Shared/Components/Loader';
 import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications';
 import Can from '../../config/Can';
 import Card from 'react-bootstrap/Card';
-import DynamicTable from '../DynamicTable/dynamicTable';
-import Search from '../Search/search';
-import { search, searchFilters } from '../../redux/search/actions';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
+import Search from '../../../Shared/Components/Search/search';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt, iscoreDate, downloadFile, iscoreStatusColor } from '../../Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt, iscoreDate, downloadFile, iscoreStatusColor } from '../../../Shared/Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
-import { getCookie } from '../../Services/getCookie';
+import { getCookie } from '../../../Shared/Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
 import { getIscoreCached } from '../../Services/APIs/iScore/iScore';
 import Swal from 'sweetalert2';
 import Table from 'react-bootstrap/Table';
 import { Score } from '../CustomerCreation/customerProfile';
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications';
+import { manageApplicationsArray } from './manageApplicationInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Product {
   productName: string;
@@ -49,6 +51,7 @@ interface State {
   iScoreModal: boolean;
   iScoreCustomers: any;
   loading: boolean;
+  manageApplicationsTabs: any[];
 }
 interface Props {
   history: any;
@@ -72,7 +75,8 @@ class TrackLoanApplications extends Component<Props, State>{
       reviewedResults: [],
       iScoreModal: false,
       iScoreCustomers: [],
-      loading: false
+      loading: false,
+      manageApplicationsTabs: []
     }
     this.mappers = [
       {
@@ -174,6 +178,7 @@ class TrackLoanApplications extends Component<Props, State>{
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
+    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
@@ -224,78 +229,85 @@ class TrackLoanApplications extends Component<Props, State>{
   render() {
     return (
       <>
-        <Card className="print-none" style={{ margin: '20px 50px' }}>
-          <Loader type="fullsection" open={this.props.loading || this.state.loading} />
-          <Card.Body style={{ padding: 0 }}>
-            <div className="custom-card-header">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
-                <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+        <div className="print-none">
+          <HeaderWithCards
+            header={local.loanApplications}
+            array={this.state.manageApplicationsTabs}
+            active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('applications')}
+          />
+          <Card style={{ margin: '20px 50px' }}>
+            <Loader type="fullsection" open={this.props.loading || this.state.loading} />
+            <Card.Body style={{ padding: 0 }}>
+              <div className="custom-card-header">
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.loanApplications}</Card.Title>
+                  <span className="text-muted">{local.noOfApplications + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+                </div>
+                <div>
+                  {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
+                  <Can I="loansReviewed" a="report"><Button style={{ marginRight: 10 }} onClick={() => { this.getReviewedData() }}>{local.downloadPDF}</Button></Can>
+                </div>
               </div>
-              <div>
-                {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
-                <Can I="loansReviewed" a="report"><Button style={{ marginRight: 10 }} onClick={() => { this.getReviewedData() }}>{local.downloadPDF}</Button></Can>
-              </div>
-            </div>
-            <hr className="dashed-line" />
-            <Search
-              searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
-              url="application"
-              from={this.state.from}
-              size={this.state.size}
-              setFrom= {(from) => this.setState({from: from})}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              hqBranchIdRequest={this.props.branchId} />
-            <DynamicTable
-              url="application"
-              from={this.state.from}
-              size={this.state.size}
-              totalCount={this.props.totalCount}
-              mappers={this.mappers}
-              pagination={true}
-              data={this.props.data}
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getApplications());
-              }}
-            />
-          </Card.Body>
-        </Card>
-        <Modal show={this.state.iScoreModal} backdrop="static">
-          <Modal.Header>
-            <Modal.Title>
-              iScore
+              <hr className="dashed-line" />
+              <Search
+                searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']}
+                dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+                url="application"
+                from={this.state.from}
+                size={this.state.size}
+                setFrom={(from) => this.setState({ from: from })}
+                searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+                hqBranchIdRequest={this.props.branchId} />
+              <DynamicTable
+                url="application"
+                from={this.state.from}
+                size={this.state.size}
+                totalCount={this.props.totalCount}
+                mappers={this.mappers}
+                pagination={true}
+                data={this.props.data}
+                changeNumber={(key: string, number: number) => {
+                  this.setState({ [key]: number } as any, () => this.getApplications());
+                }}
+              />
+            </Card.Body>
+          </Card>
+          <Modal show={this.state.iScoreModal} backdrop="static">
+            <Modal.Header>
+              <Modal.Title>
+                iScore
             </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Loader type="fullsection" open={this.state.loading} />
-            <Table style={{ textAlign: 'right' }}>
-              <thead>
-                <tr>
-                  <td>{local.customer}</td>
-                  <td>{local.nationalId}</td>
-                  <td>{local.value}</td>
-                  <td></td>
-                  <td>{local.downloadPDF}</td>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.iScoreCustomers.map(customer =>
-                  <tr key={customer.nationalId}>
-                    <td>{customer.customerName}</td>
-                    <td>{customer.nationalId}</td>
-                    <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
-                    <td>{iscoreStatusColor(customer.iscore).status}</td>
-                    <td>{customer.url && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download" onClick={() => { downloadFile(customer.url) }}></span>}</td>
+            </Modal.Header>
+            <Modal.Body>
+              <Loader type="fullsection" open={this.state.loading} />
+              <Table style={{ textAlign: 'right' }}>
+                <thead>
+                  <tr>
+                    <td>{local.customer}</td>
+                    <td>{local.nationalId}</td>
+                    <td>{local.value}</td>
+                    <td></td>
+                    <td>{local.downloadPDF}</td>
                   </tr>
-                )}
-              </tbody>
-            </Table>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.setState({ iScoreModal: false, iScoreCustomers: [] })}>{local.cancel}</Button>
-          </Modal.Footer>
-        </Modal>
+                </thead>
+                <tbody>
+                  {this.state.iScoreCustomers.map(customer =>
+                    <tr key={customer.nationalId}>
+                      <td>{customer.customerName}</td>
+                      <td>{customer.nationalId}</td>
+                      <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
+                      <td>{iscoreStatusColor(customer.iscore).status}</td>
+                      <td>{customer.url && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download" onClick={() => { downloadFile(customer.url) }}></span>}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => this.setState({ iScoreModal: false, iScoreCustomers: [] })}>{local.cancel}</Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
         {this.state.print && <ReviewedApplicationsPDF data={this.state.reviewedResults} branchDetails={this.state.branchDetails} />}
       </>
     )

@@ -1,8 +1,8 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate, timeToArabicDate } from './../../../Services/utils';
-import store from '../../../redux/store';
+import { ageCalculate, timeToArabicDate, beneficiaryType } from '../../../../Shared/Services/utils';
+import store from '../../../../Shared/redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal() {
         let sum = 0;
@@ -10,13 +10,12 @@ const ReviewedApplicationsPDF = (props) => {
         return sum
     }
     return (
-        <>
+            <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor:'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
-            <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
                 <table>
                     <tbody>
                         <tr>
@@ -46,6 +45,7 @@ const ReviewedApplicationsPDF = (props) => {
                     <tbody>
                         <tr>
                             <th>مسلسل</th>
+                            <th>نوع العميل</th>
                             <th>الكود</th>
                             <th>اسم العميل</th>
                             <th>السن</th>
@@ -58,6 +58,7 @@ const ReviewedApplicationsPDF = (props) => {
                         </tr>
                         {props.data.map((application, i) => <tr key={application.id}>
                             <td>{application.serialNumber}</td>
+                            <td>{beneficiaryType(application.beneficiaryType)}</td>
                             <td>{application.customerKey}</td>
                             <td>{application.customerName}</td>
                             <td>{application.customerAge}</td>
@@ -90,7 +91,6 @@ const ReviewedApplicationsPDF = (props) => {
                     </tbody>
                 </table>
             </div>
-        </>
     )
 }
 export default ReviewedApplicationsPDF;

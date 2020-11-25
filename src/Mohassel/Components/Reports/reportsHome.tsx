@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
 import Reports from './reports';

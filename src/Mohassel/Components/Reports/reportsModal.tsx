@@ -9,7 +9,7 @@ import { reportsModalValidation } from './reportsModalValidation';
 import { PDF } from './reports';
 import { BranchesDropDown } from '../dropDowns/allDropDowns';
 import * as local from '../../../Shared/Assets/ar.json';
-import { Branch } from '../../Services/interfaces';
+import { Branch } from '../../../Shared/Services/interfaces';
 
 interface InitialFormikState {
   fromDate?: string;

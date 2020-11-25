@@ -9,6 +9,9 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
+import { getCookie } from '../../../Shared/Services/getCookie';
+import { parseJwt } from '../../../Shared/Services/utils';
+import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -26,8 +29,9 @@ export const StepThreeForm = (props: any) => {
         majorGeoDivisionName: { ar: '' },
         majorGeoDivisionLegacyCode: 0
     }])
+    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep, edit } = props;
     const getLoanOfficers = async (inputValue: string) => {
-        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
+        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue, status: "active",});
         if (res.status === "success") {
             setLoanOfficers([...res.body.data, { _id: props.representativeDetails.representative, name: props.representativeDetails.representativeName }]);
             return res.body.data;
@@ -36,41 +40,46 @@ export const StepThreeForm = (props: any) => {
             return [];
         }
     }
-    async function getConfig() {
+    async function getConfig(branch) {
         setLoading(true);
-        const resGeo = await getGeoDivision();
+        const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             setLoading(false);
-            setgeoDivisions(resGeo.body.geoDivisions)
+            setgeoDivisions(resGeo.body.data ? resGeo.body.data.filter(area => area.active) : [])
         } else setLoading(false);
     }
     useEffect(() => {
-        getConfig();
+        const token = getCookie('token');
+        const details = parseJwt(token)
+        if (!edit && details.branch.length > 0) {
+            getConfig(details.branch);
+        } else if (props.branchId.length > 0) {
+            getConfig(props.branchId);
+        }
     }, [])
-    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
         <Form onSubmit={handleSubmit}>
             <Loader open={loading} type="fullscreen" />
             <Row>
                 <Col sm={12}>
-                    <Form.Group controlId="geographicalDistribution">
+                    <Form.Group controlId="geoAreaId">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
                             <Form.Control as="select"
                                 type="select"
-                                name="geographicalDistribution"
-                                data-qc="geographicalDistribution"
-                                value={values.geographicalDistribution}
+                                name="geoAreaId"
+                                data-qc="geoAreaId"
+                                value={values.geoAreaId}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
+                                isInvalid={errors.geoAreaId && touched.geoAreaId}
                             >
                                 <option value="" disabled></option>
-                                {geoDivisions.map((geoDivision, index) => {
-                                    return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
+                                {geoDivisions.map((geoDivision: any, index) => {
+                                    return <option key={index} value={geoDivision._id} >{geoDivision.name}</option>
                                 })}
                             </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                            {errors.geographicalDistribution}
+                            {errors.geoAreaId}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

@@ -12,10 +12,10 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import { timeToDateyyymmdd, parseJwt } from '../../Services/utils';
-import { getCookie } from '../../Services/getCookie';
+import { timeToDateyyymmdd, parseJwt } from '../../../Shared/Services/utils';
+import { getCookie } from '../../../Shared/Services/getCookie';
 import BackButton from '../BackButton/back-button';
-import store from '../../redux/store';
+import store from '../../../Shared/redux/store';
 
 interface Props {
     title: string;
