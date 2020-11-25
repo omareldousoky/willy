@@ -38,7 +38,7 @@ const DoubtfulPayments = (props) => {
                             <th colSpan={3}>تاريخ القرض</th>
                             <th colSpan={1}>الحالة الان</th>
                             <th>أصل</th>
-                            <th colSpan={1}>قيمة الحركة فائدة</th>
+                            <th colSpan={1}>قيمة تكلفه التمويل</th>
                             <th>إجمالي</th>
                             <th colSpan={2}>حالة الحركة</th>
                         </tr>

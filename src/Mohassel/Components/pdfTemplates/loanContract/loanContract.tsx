@@ -226,7 +226,7 @@ const LoanContract = (props) => {
                     <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
-                  وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  وكافة تكاليف التمويل البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
                   سداده
@@ -243,7 +243,7 @@ const LoanContract = (props) => {
                     <div className="title">البند الرابع</div>
                     <div>يقر الطرفان الثاني و{getNumbersOfGuarantor()} بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
-                  للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته وتكاليف تمويله
+                  للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة تكاليف تمويله
 							</div>
                   </section>
 
@@ -281,7 +281,7 @@ const LoanContract = (props) => {
                    الثاني و{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الطرفين
-                  الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة مصروفاته وتكاليف تمويله</div>
+                  الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة تكاليف تمويله</div>
                     <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
                     <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                     <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>
@@ -317,7 +317,7 @@ const LoanContract = (props) => {
                     <div>يقر الطرف {getNumbersOfGuarantor()} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
                   لقيمة هذا القرض من
-                  اصل وعوائد وعمولات وكافة المصروفات المستحقه بموجب هذا العقد وايا من ملحقاته، ويحق
+                  اصل وعوائد وعمولات وكافة تكلفه التمويل بموجب هذا العقد وايا من ملحقاته، ويحق
                   للمقرض
                   الرجوع عليه بكامل
                   قيمة المديونيات المستحقه علي هذا القرض، ولا يحق للطرف {getNumbersOfGuarantor()} الدفع

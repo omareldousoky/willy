@@ -38,7 +38,7 @@ const PaymentsDone = (props) => {
                             <th colSpan={2}>تاريخ الإستحقاق</th>
                             <th colSpan={1.5}>حالة القسط</th>
                             <th>أصل</th>
-                            <th>القيمه المسدده الفائدة</th>
+                            <th>تكلفه التمويل المسدده</th>
                             <th>إجمالي</th>
                             <th colSpan={1.5}>حالة الحركة</th>
                         </tr>
@@ -73,7 +73,7 @@ const PaymentsDone = (props) => {
                                         <td>{transaction.transactionPrincipal}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
-                                        <td colSpan={1.5}>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
+                                        <td colSpan={1.5}>{transaction.canceled ==="1" ? local.cancelledTransaction : null}</td>
                                     </tr>
                                 )}
                                 <tr>

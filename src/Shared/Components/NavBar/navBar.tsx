@@ -197,6 +197,7 @@ class NavBar extends Component<Props, State> {
                  : !this.props.hide && ability.can('cibScreen', 'report') ? <Nav.Link onClick={() => this.props.history.push('/loans/source-of-fund')}>{local.issuedLoans}</Nav.Link> : null}
             {!this.props.hide && <Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}
             {!this.props.hide && <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>}
+            {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}

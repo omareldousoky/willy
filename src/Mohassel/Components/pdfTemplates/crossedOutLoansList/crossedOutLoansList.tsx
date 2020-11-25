@@ -192,7 +192,7 @@ const CrossedOutLoansList = (props) => {
               <th colSpan={3}>تاريخ القرض</th>
               <th>الحالةالان</th>
               <th>أصل</th>
-              <th>قيمة الحركة فائدة</th>
+              <th>قيمة تكلفه التمويل</th>
               <th colSpan={1}>إجمالي</th>
               <th colSpan={2}>حالةالحركة</th>
             </tr>

@@ -23,6 +23,7 @@ const LoanPenaltiesList = (props) => {
       case "rescheduled":
         return local.rescheduled;
       case "cancelled":
+      case "canceled":
         return local.cancelled;
       case "issued":
         return local.issued;
@@ -98,7 +99,7 @@ const LoanPenaltiesList = (props) => {
             <td colSpan={1}>{getStatus(row.loanStatus)}</td>
             <td colSpan={1}></td>
             <td colSpan={2}>{row.transactionAmount}</td>
-            <td colSpan={2}>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
+            <td colSpan={2}>{row.canceled === "1" ? local.cancelledTransaction : null}</td>
           </tr>
         ))}
 

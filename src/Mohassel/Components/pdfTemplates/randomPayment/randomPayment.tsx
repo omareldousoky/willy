@@ -41,7 +41,7 @@ const actionsLocalization = (action: string) => {
 		case 'tricycleStamp':
 			return ('دفعه مقدم تروسكل');
 		case 'legalFees':
-			return ('مصاريف قضائية');
+			return ('تكلفه تمويل قضائية');
 
 		default:
 			return null;

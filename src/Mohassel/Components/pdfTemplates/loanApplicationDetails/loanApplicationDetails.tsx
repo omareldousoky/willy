@@ -32,8 +32,8 @@ const LoanApplicationDetails = (props) => {
         }
     }
     return (
-        <div className="loan-application-details" lang="ar">      
-            <table style={{ fontSize: "12px", margin:"10px 0px", textAlign:"center", width:'100%' }}>
+        <div className="loan-application-details" lang="ar">
+            <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
                 <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6} >ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
@@ -121,7 +121,7 @@ const LoanApplicationDetails = (props) => {
                                     </tr>
                                     <tr>
                                         <th>تليفون محمول</th>
-                                        <td>{props.data.mobilePhoneNumber + " - " + props.data.homePhoneNumber}</td>
+                                        <td>{(props.data.mobilePhoneNumber ? props.data.mobilePhoneNumber : '') + " - " + (props.data.homePhoneNumber ? props.data.homePhoneNumber : '')}</td>
                                     </tr>
                                     <tr>
                                         <th>الموقع الالكتروني</th>
@@ -259,16 +259,16 @@ const LoanApplicationDetails = (props) => {
                                         <td>{loan.periodLength} {periodType(loan.periodType)}</td>
                                         <th>حساب السداد</th>
                                         <td></td>
-                                        <th>فائدة إداريه القسط</th>
+                                        <th>تكلفه تمويل إداريه القسط</th>
                                         <td>{loan.adminFees}</td>
                                     </tr>
 
 
                                     <tr>
-                                        <th>الفائدة الموزعه</th>
+                                        <th>تكلفه التمويل الموزعه</th>
                                         <td>{loan.productInterest}% {interestPeriod(loan.interestPeriod)}</td>
-                                        <th>الفائدة المقدمه</th>
-                                        <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
+                                        <th>تكلفه التمويل المقدمه</th>
+                                        <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                     </tr>
 
                                     <tr>
@@ -303,7 +303,7 @@ const LoanApplicationDetails = (props) => {
                             <table>
                                 <tbody>
                                     <tr>
-                                        {loan.beneficiaryType === "individual" && loan.guarantors && loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
+                                        {loan.beneficiaryType === "individual" && loan.guarantors && loan.guarantors.length > 0 && Object.keys(loan.guarantors[0]).length > 0 && loan.guarantors.map((guarantor, index) => {
                                             return (
                                                 <td key={index}>
                                                     <table>
@@ -361,24 +361,46 @@ const LoanApplicationDetails = (props) => {
                                                             <tr>
                                                                 <th>الرقم القومي</th>
                                                                 <td>{member.nationalId}</td>
-                                                                <th>تاريخ الأصدار</th>
-                                                                <td>{member.nationalIdIssueDate}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>النوع</th>
                                                                 <td>{arabicGender(member.gender)}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th>تاريخ الميلاد</th>
                                                                 <td>{member.customerBirthDate}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>التليفون</th>
                                                                 <td>{member.homePhoneNumber + member.mobilePhoneNumber ? ` - ${member.mobilePhoneNumber}` : ''}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th>الرقم البريدي</th>
                                                                 <td>{member.homePostalCode}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>العنوان</th>
                                                                 <td>{member.customerHomeAddress}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>قطاع العمل</th>
+                                                                <td>{member.businessSector}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>النشاط</th>
+                                                                <td>{member.businessActivity}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>التخصص</th>
+                                                                <td>{member.businessSpecialty}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>حصة العضو من قيمة القرض</th>
+                                                                <td>{member.amount}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>تاريخ الأصدار</th>
+                                                                <td>{member.nationalIdIssueDate}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
