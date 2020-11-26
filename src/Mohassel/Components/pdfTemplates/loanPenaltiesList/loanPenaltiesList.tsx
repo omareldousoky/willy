@@ -23,6 +23,7 @@ const LoanPenaltiesList = (props) => {
       case "rescheduled":
         return local.rescheduled;
       case "cancelled":
+      case "canceled":
         return local.cancelled;
       case "issued":
         return local.issued;
@@ -98,7 +99,7 @@ const LoanPenaltiesList = (props) => {
             <td colSpan={1}>{getStatus(row.loanStatus)}</td>
             <td colSpan={1}></td>
             <td colSpan={2}>{row.transactionAmount}</td>
-            <td colSpan={2}>{row.canceled === 1 ? local.cancelledTransaction : null}</td>
+            <td colSpan={2}>{row.canceled === "1" ? local.cancelledTransaction : null}</td>
           </tr>
         ))}
 
@@ -144,7 +145,7 @@ const LoanPenaltiesList = (props) => {
       <div className="loan-penalties-list" dir="rtl" lang="ar">
       <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
         <tr style={{ height: "10px" }}></tr>
-        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style = {{backgroundColor:'red'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} style={{backgroundColor:'blue'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style = {{backgroundColor:'red'}}><div className={"logo-print"}></div></th><th colSpan={6} style={{backgroundColor:'blue'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
         <tr style={{ height: "10px" }}></tr>
       </table>
         <table className="report-container">

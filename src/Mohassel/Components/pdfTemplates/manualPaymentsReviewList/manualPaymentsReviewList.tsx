@@ -6,7 +6,7 @@ const ManualPaymentsReviewList = (props) => {
             <div className="manual-payments-review-list" dir="rtl" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -37,7 +37,7 @@ const ManualPaymentsReviewList = (props) => {
                             <th>حالة القسط</th>
                             <th>مستند الحركه</th>
                             <th>أصل</th>
-                            <th>القيمه المسدده فائدة</th>
+                            <th>تكلفه التمويل المسدده</th>
                             <th>إجمالي</th>
                         </tr>
                         <tr>
