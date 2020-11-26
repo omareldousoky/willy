@@ -29,8 +29,8 @@ class ReportsHome extends Component<{}, State>{
             }, {
                 header: local.oracleIntegration,
                 stringKey: 'oracleIntegration',
-                permission: 'downloadIscoreFile',
-                permissionKey: 'report'
+                permission: 'summarizeTransactions',
+                permissionKey: 'oracleIntegration'
             }]
         }
     }

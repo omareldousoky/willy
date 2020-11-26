@@ -38,7 +38,7 @@ class OracleIntegration extends Component<{}, State>{
                 <Card style={{ margin: '20px 50px' }} className="print-none">
                     <Loader type="fullscreen" open={this.state.loading} />
                     <Card.Body style={{ padding: 15, display: 'flex', justifyContent: 'center' }}>
-                        <Can I="createIscoreFile" a="report"><Button type='button' variant='primary' onClick={() => this.migrate()}>{local.oracleIntegration}</Button></Can>
+                        <Can I="summarizeTransactions" a="oracleIntegration"><Button type='button' variant='primary' onClick={() => this.migrate()}>{local.oracleIntegration}</Button></Can>
                     </Card.Body>
                 </Card>
             </>
