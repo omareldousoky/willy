@@ -39,7 +39,7 @@ export const LoanFormulaCreationForm = (props: any) => {
                     >
                         <option value="flat">{local.interestTypeFlat}</option>
                         <option value="reducing">{local.interestTypeReducing}</option>
-                        {/* <option value="3">مصاريف متساوية محولة الي مصاريف متناقصه</option> */}
+                        {/* <option value="3">تكلفه التمويل متساوية محولة الي تكلفه تمويل متناقصه</option> */}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                         {errors.interestType}

@@ -35,7 +35,7 @@ const LoanApplicationDetails = (props) => {
         <div className="loan-application-details" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} >ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6} >ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
             {
@@ -259,16 +259,16 @@ const LoanApplicationDetails = (props) => {
                                         <td>{loan.periodLength} {periodType(loan.periodType)}</td>
                                         <th>حساب السداد</th>
                                         <td></td>
-                                        <th>فائدة إداريه القسط</th>
+                                        <th>تكلفه تمويل إداريه القسط</th>
                                         <td>{loan.adminFees}</td>
                                     </tr>
 
 
                                     <tr>
-                                        <th>الفائدة الموزعه</th>
+                                        <th>تكلفه التمويل الموزعه</th>
                                         <td>{loan.productInterest}% {interestPeriod(loan.interestPeriod)}</td>
-                                        <th>الفائدة المقدمه</th>
-                                        <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
+                                        <th>تكلفه التمويل المقدمه</th>
+                                        <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                     </tr>
 
                                     <tr>

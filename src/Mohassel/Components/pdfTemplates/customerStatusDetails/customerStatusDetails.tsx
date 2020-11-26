@@ -15,7 +15,7 @@ const CustomerStatusDetails = (props) => {
             <div className="customer-status-details" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor: 'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor: 'white'}}><div className={"logo-print"} ></div> </th><th style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table>
@@ -121,12 +121,12 @@ const CustomerStatusDetails = (props) => {
                                                         <td>{loan.representativeFees}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th>فائدة القسط</th>
+                                                        <th>تكلفه التمويل القسط</th>
                                                         <td>{loan.feesInstallment}</td>
-                                                        <th>المصاريف الموزعه</th>
+                                                        <th>تكلفه التمويل الموزعه</th>
                                                         <td>{loan.interest} % سنويا</td>
-                                                        <th>المصاريف المقدمه</th>
-                                                        <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من المصاريف الموزعه</td>
+                                                        <th>تكلفه التمويل المقدمه</th>
+                                                        <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                                     </tr>
                                                     <tr>
                                                         <th>مندوب التنميه الحالي</th>
@@ -253,9 +253,9 @@ const CustomerStatusDetails = (props) => {
                                                         <th>رقم</th>
                                                         <th>تاريخ الأستحقاق</th>
                                                         <th>قيمة</th>
-                                                        <th>المصاريف</th>
+                                                        <th>تكلفه التمويل</th>
                                                         <th>قيمة مسدده</th>
-                                                        <th>المصاريف المسدده</th>
+                                                        <th>تكلفه التمويل المسدده</th>
                                                         <th>الحاله</th>
                                                         <th>تاريخ الحاله</th>
                                                         <th>عدد أيام التأخير / التبكير</th>
@@ -264,10 +264,10 @@ const CustomerStatusDetails = (props) => {
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{installment.idx}</td>
-                                                                <td>{timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{Number(installment.instTotal)}</td>
+                                                                <td>{installment.dateOfPayment? timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false): ''}</td>
+                                                                <td style={{ direction: 'ltr' }}>{installment.instTotal}</td>
                                                                 <td style={{ direction: 'ltr' }}>{installment.feesInstallment}</td>
-                                                                <td style={{ direction: 'ltr' }}>{Number(installment.totalPaid)}</td>
+                                                                <td style={{ direction: 'ltr' }}>{installment.totalPaid}</td>
                                                                 <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
                                                                 <td>{getStatus(installment)}</td>
                                                                 <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>

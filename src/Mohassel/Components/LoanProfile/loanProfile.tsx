@@ -121,7 +121,7 @@ class LoanProfile extends Component<Props, State>{
         this.setState({ loading: true, activeTab: 'loanDetails', manualPaymentEditId: '' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
-        if (application.body.status === 'paid' || application.body.status === "pending" || application.body.status === "issued") this.getManualOtherPayments(id);
+        if (application.body.status === 'paid' || application.body.status === "pending" || application.body.status === "canceled" || application.body.status === "issued") this.getManualOtherPayments(id);
         if (application.status === "success") {
             if (store.getState().auth.clientPermissions === {}) {
                 store.subscribe(() => {
@@ -229,6 +229,9 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ activeTab: 'loanDetails' })
             this.getPendingActions();
         }
+        if(application.body.status === "canceled"){
+            tabsToRender.push(financialTransactionsTab)
+        }
         tabsToRender.push(logsTab)
         this.getGeoAreas(application.body.branchId);
         this.setState({
@@ -248,7 +251,7 @@ class LoanProfile extends Component<Props, State>{
         const geoAreaObject = this.state.geoAreas.filter(area => area._id === geoArea);
         if (geoAreaObject.length === 1) {
             return geoAreaObject[0]
-        } else return{name: '-', active: false}
+        } else return { name: '-', active: false }
     }
     async getPendingActions() {
         this.setState({ loading: true })
@@ -279,7 +282,7 @@ class LoanProfile extends Component<Props, State>{
             case 'loanDetails':
                 return <LoanDetailsTableView application={this.state.application} />
             case 'loanGuarantors':
-                return <GuarantorTableView guarantors={this.state.application.guarantors} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
+                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -344,12 +347,12 @@ class LoanProfile extends Component<Props, State>{
             receiptNumber = pendingAction.receiptNumber;
             truthDate = pendingAction.transactions[0].truthDate;
             actualDate = pendingAction.transactions[0].actualDate;
-            transactionAmount =  pendingAction.transactions[0].transactionAmount;
+            transactionAmount = pendingAction.transactions[0].transactionAmount;
         } else {
             receiptNumber = Number(this.state.pendingActions.receiptNumber);
             truthDate = this.state.pendingActions.transactions ? this.state.pendingActions.transactions[0].truthDate : 0;
             actualDate = this.state.pendingActions.transactions ? this.state.pendingActions.transactions[0].actualDate : 0;
-            transactionAmount =  Number(this.getSumOfPendingActions());
+            transactionAmount = Number(this.getSumOfPendingActions());
         }
         const table = document.createElement("table");
         table.className = "swal-table";
@@ -562,7 +565,7 @@ class LoanProfile extends Component<Props, State>{
                                 {this.state.application.status === 'created' && <Can I='issueLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.issueLoan}</span></Can>}
                                 {this.state.application.status === 'approved' && <Can I='createLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })}> <span className="fa fa-pencil" style={{ margin: "0px 0px 0px 5px" }}></span>{local.createLoan}</span></Can>}
                                 {this.state.application.status === 'underReview' && <Can I='cancelApplication' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.cancelApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.cancel}</span></Can>}
-                                {this.state.application.status !== 'canceled' && (ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
+                                {(ability.can('rollback', 'application') || ability.can('rollbackPayment', 'application')) && <span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.props.history.push('/track-loan-applications/loan-roll-back', { id: this.props.history.location.state.id, status: this.state.application.status })}> <span className="fa fa-undo" style={{ margin: "0px 0px 0px 5px" }}></span>{local.rollBackAction}</span>}
                                 {this.state.application.status === 'issued' && this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='writeOff' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.writeOffApplication()}> <span className="fa fa-remove" style={{ margin: "0px 0px 0px 5px" }}></span>{local.writeOffLoan}</span></Can>}
                                 {this.state.application.status === 'issued' && !this.state.application.isDoubtful && !this.state.application.writeOff && <Can I='setDoubtfulLoan' a='application'><span style={{ cursor: 'pointer', borderRight: '1px solid #e5e5e5', padding: 10 }} onClick={() => this.doubtApplication()}> <img alt="doubt" src={require('../../Assets/minus.svg')} style={{ height: 20, marginLeft: 5 }} />{local.doubtLoan}</span></Can>}
 
@@ -639,7 +642,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)}  penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} />}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application} />}
