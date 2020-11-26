@@ -161,7 +161,7 @@ const CrossedOutLoansList = (props) => {
       >
       <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
         <tr style={{ height: "10px" }}></tr>
-        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
         <tr style={{ height: "10px" }}></tr>
       </table>
         <table className="report-container">
@@ -192,7 +192,7 @@ const CrossedOutLoansList = (props) => {
               <th colSpan={3}>تاريخ القرض</th>
               <th>الحالةالان</th>
               <th>أصل</th>
-              <th>قيمة الحركة فائدة</th>
+              <th>قيمة تكلفه التمويل</th>
               <th colSpan={1}>إجمالي</th>
               <th colSpan={2}>حالةالحركة</th>
             </tr>

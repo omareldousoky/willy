@@ -43,6 +43,8 @@ interface State {
   step3: MainChoosesValues;
   branchesLabeled: Array<object>;
   rolesLabeled: Array<object>;
+  nationalId: string;
+  username: string;
 }
 class UserCreation extends Component<Props, State> {
   constructor(props: Props) {
@@ -55,6 +57,8 @@ class UserCreation extends Component<Props, State> {
       step3: initialStep3,
       branchesLabeled: [],
       rolesLabeled: [],
+      nationalId: "",
+      username: "",
     };
   }
   async getUser() {
@@ -73,6 +77,10 @@ class UserCreation extends Component<Props, State> {
       password: "",
       confirmPassword: "",
     };
+    this.setState({
+      nationalId: res.body.user.nationalId,
+      username: res.body.user.username,
+    })
     const step2data: RolesBranchesValues = { roles: [], branches: [] };
     res.body.roles?.forEach((role) => {
       step2data.roles.push({
@@ -275,8 +283,8 @@ class UserCreation extends Component<Props, State> {
             {...formikProps}
             edit={this.props.edit}
             _id = {this.props.edit? this.props.history.location.state.details : ""}
-            username = {this.state.step1.username}
-            nationalId= {this.state.step1.nationalId}
+            username = {this.state.username}
+            nationalId= {this.state.nationalId}
             cancel={() => this.cancel()}
           />
         )}
