@@ -818,5 +818,6 @@
     "guarantorRemovedSuccessfully":"تم إزالة الضامن بنجاح",
     "oracleIntegration":"إنشاء القيود المحاسبية",
     "oracleIntegrationSuccess":"تم إنشاء القيود المحاسبية بنجاح ",
-    "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية"
+    "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية",
+    "downloadExcel": "تنزيل Excel"
 }
