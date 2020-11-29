@@ -16,6 +16,7 @@ import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 import ability from '../../config/ability';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import DeathCertificate from './deathCertificate';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -347,6 +348,15 @@ const CustomerProfile = (props: Props) => {
               }
             />
           )}
+          {
+            activeTab === 'deathCertificate' &&(
+              <DeathCertificate 
+              edit={true}
+              view={false}
+              customerId ={props.location.state.id}
+               />
+            )
+          }
         </Card.Body>
       </Card>
       {(print === "ClientGuaranteedLoans" && dataToBePrinted) && (<ClientGuaranteedLoans data={dataToBePrinted} />)}
