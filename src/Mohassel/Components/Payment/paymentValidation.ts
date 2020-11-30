@@ -2,6 +2,9 @@ import * as Yup from "yup";
 import * as local from "../../../Shared/Assets/ar.json";
 import { getBirthdateFromNationalId } from "../../Services/nationalIdValidation";
 
+const endOfDay: Date = new Date();
+endOfDay.setHours(23, 59, 59, 59);
+
 export const paymentValidation = Yup.object().shape({
   payAmount: Yup.number()
     .moreThan(0, local.minPayment)
@@ -35,7 +38,11 @@ export const paymentValidation = Yup.object().shape({
     then: Yup.string().required(local.required),
     otherwise: Yup.string()
   }),
-  payerNationalId: Yup.string()
+  payerNationalId: Yup.string(),
+  truthDate: Yup.string()
+    .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+    }),
 });
 
 export const earlyPaymentValidation = Yup.object().shape({
@@ -63,7 +70,11 @@ export const earlyPaymentValidation = Yup.object().shape({
     then: Yup.string().required(local.required),
     otherwise: Yup.string()
   }),
-  payerNationalId: Yup.string()
+  payerNationalId: Yup.string(),
+  truthDate: Yup.string()
+    .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+    }),
 })
 
 export const manualPaymentValidation = Yup.object().shape({
@@ -75,7 +86,10 @@ export const manualPaymentValidation = Yup.object().shape({
       }
     )
     .required(local.required),
-  truthDate: Yup.string().required(local.required),
+  truthDate: Yup.string()
+    .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+    }),
   receiptNumber: Yup.string().required(local.required),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
