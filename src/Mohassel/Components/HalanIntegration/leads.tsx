@@ -51,8 +51,8 @@ interface State {
   openActionsId: string;
   openLOModal: boolean;
   openBranchModal: boolean;
-  loanOfficers: Array<Employee>;
-  branches: Array<Branch>;
+  loanOfficers: Array<any>;
+  branches: Array<any>;
   selectedLO: any;
   selectedBranch: any;
   selectedLead: any;
