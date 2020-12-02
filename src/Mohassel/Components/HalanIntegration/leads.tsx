@@ -14,6 +14,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import Search from '../../../Shared/Components/Search/search';
 import Can from '../../config/Can';
+import { Branch } from '../../../Shared/redux/auth/types';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { changeLeadState, changeInReviewLeadState } from '../../Services/APIs/Leads/changeLeadState';
@@ -25,6 +26,7 @@ import { search } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
+import { Employee } from '../Payment/payment';
 
 
 interface Props {
@@ -49,8 +51,8 @@ interface State {
   openActionsId: string;
   openLOModal: boolean;
   openBranchModal: boolean;
-  loanOfficers: Array<any>;
-  branches: Array<any>;
+  loanOfficers: Array<Employee>;
+  branches: Array<Branch>;
   selectedLO: any;
   selectedBranch: any;
   selectedLead: any;
