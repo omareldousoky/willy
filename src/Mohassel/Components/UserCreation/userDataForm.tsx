@@ -70,7 +70,8 @@ export const UserDataForm = (props: Props) => {
                             className={'user-data-label'}
                         >{`${local.nationalId}*`}
                         </Form.Label>
-                        <Form.Control
+                        <Can I ="updateNationalIdAndUsername" a="user" passThrough>
+                        {allowed => <Form.Control
                             type={"text"}
                             placeholder={`${local.example} : ${local.nationalIdPlaceholder}`}
                             name={"nationalId"}
@@ -96,8 +97,9 @@ export const UserDataForm = (props: Props) => {
                             }}
                             isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
                             maxLength={14}
-                            disabled={props.edit && (props.nationalId === "" ? false : true)}
-                        />
+                            disabled={(!allowed && props.edit)}
+                        />}
+                        </Can>
 
                         <Form.Control.Feedback
                             type="invalid">
@@ -264,7 +266,8 @@ export const UserDataForm = (props: Props) => {
                     className={'user-data-label'}
                 >{`${local.username}*`}
                 </Form.Label>
-                <Form.Control
+                <Can I ="updateNationalIdAndUsername" a="user" passThrough>
+                {allowed => <Form.Control
                     type={"text"}
                     name={"username"}
                     data-qc={"username"}
@@ -281,9 +284,10 @@ export const UserDataForm = (props: Props) => {
 
                     }}
                     onBlur={props.handleBlur}
-                    disabled={props.edit && (props.username === "" ? false : true)}
+                    disabled={(!allowed && props.edit)}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
-                />
+                />}
+                </Can>
                 <Form.Control.Feedback
                     type="invalid">
                     {props.errors.username}
