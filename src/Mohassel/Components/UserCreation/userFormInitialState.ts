@@ -66,8 +66,8 @@ export const userCreationValidationStepOne = Yup.object().shape({
     otherwise: Yup.string()
       .trim()
       .matches(
-        /[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,
-        local.containLetterError
+        /^(?!.*[\u0621-\u064A\u0660-\u0669 ])/, 
+        local.userNameErrorMessage
       )
       .max(100, local.maxLength100)
       .required(local.required),
@@ -197,8 +197,8 @@ export const editUserValidationStepOne = Yup.object().shape({
       otherwise: Yup.string()
         .trim()
         .matches(
-          /[\u0600-\u065F\u066A-\u06EF\u06FA-\u06FFa-zA-Z]/,
-          local.containLetterError
+          /^(?!.*[\u0621-\u064A\u0660-\u0669 ])/, 
+          local.userNameErrorMessage
         )
         .max(100, local.maxLength100)
         // .required(local.required),
