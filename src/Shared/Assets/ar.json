@@ -819,5 +819,11 @@
     "oracleIntegration":"إنشاء القيود المحاسبية",
     "oracleIntegrationSuccess":"تم إنشاء القيود المحاسبية بنجاح ",
     "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية",
-    "downloadExcel": "تنزيل Excel"
+    "downloadExcel": "تنزيل Excel",
+    "managers":"المديرين",
+    "levelsOfSupervision":"مستويات الإشراف",
+    "operationsManager":"مدير العمليات",
+    "districtManager":"مدير المنطقة",
+    "districtSupervisor":"مشرف المنطقة",
+    "centerManager":"مدير المركز"
 }

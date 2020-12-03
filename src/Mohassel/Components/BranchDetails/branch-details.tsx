@@ -16,6 +16,9 @@ import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
+import Managers from '../managerHierarchy/managers';
+import { timeToArabicDate } from '../../../Shared/Services/utils';
+import SupervisionLevels from '../managerHierarchy/supervisionLevels';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
@@ -132,6 +135,18 @@ interface State {
             stringKey: 'issuedLoan',
         })
     }
+    if(true) {
+        tabsToRender.push({
+            header: local.managers,
+            stringKey: 'managers'
+        })
+    }
+    if(true){
+        tabsToRender.push({
+            header: local.levelsOfSupervision,
+            stringKey: 'levelsOfSupervision'
+        })
+    }
 
       this.setState({
           tabsArray: tabsToRender
@@ -163,6 +178,23 @@ interface State {
              case 'customers':   return (<Can I='getCustomer' a='customer'><CustomersList {...{branchId: this.state._id}}/></Can>)
              case 'loanApplication': return (<Can I='getLoanApplication' a='application'><TrackLoanApplications {...{branchId: this.state._id}}/></Can>)
              case 'issuedLoan': return (<Can I='getIssuedLoan' a='application'> <LoanList {...{branchId: this.state._id, fromBranch: true}}/></Can>)
+             case 'managers' : return (<Managers 
+                 branchId ={this.state._id}
+                 branchCode={this.state.data.branchCode} 
+                 name ={this.state.data.name}
+                 createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
+                 status ={this.state.data.status}
+
+                 />)
+             case 'levelsOfSupervision'  : return (
+                 <SupervisionLevels
+                 branchId ={this.state._id}
+                 branchCode={this.state.data.branchCode} 
+                 name ={this.state.data.name}
+                 createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
+                 status ={this.state.data.status}
+                  />
+             ) 
              default: return null;   
         }
     }
