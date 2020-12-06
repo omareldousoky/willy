@@ -17,6 +17,7 @@ import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientG
 import ability from '../../config/ability';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import DeathCertificate from './deathCertificate';
+import Can from '../../config/Can';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -49,11 +50,6 @@ const tabs: Array<Tab> = [
     header: local.documents,
     stringKey: 'documents'
   },
-  {
-    header: local.deathCertificate,
-    stringKey:'deathCertificate'
-
-  }
 ]
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
@@ -111,6 +107,14 @@ const CustomerProfile = (props: Props) => {
 
   useEffect(() => {
     getCustomerDetails();
+    if(tabs[tabs.length-2].stringKey !== 'deathCertificate')
+     if(ability.can('deathCertificate','customer')) {
+       tabs.push({
+        header: local.deathCertificate,
+        stringKey:'deathCertificate'
+    
+      })
+    }
     if (tabs[tabs.length - 1].stringKey !== 'reports')
       if (ability.can('guaranteed', 'report')) {
         tabs.push({
@@ -118,6 +122,7 @@ const CustomerProfile = (props: Props) => {
           stringKey: 'reports'
         })
       }
+
   }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
@@ -350,11 +355,13 @@ const CustomerProfile = (props: Props) => {
           )}
           {
             activeTab === 'deathCertificate' &&(
+              <Can I = "deathCertificate" a ="customer" >
               <DeathCertificate 
               edit={true}
               view={false}
               customerId ={props.location.state.id}
-               />
+              />
+              </Can>
             )
           }
         </Card.Body>

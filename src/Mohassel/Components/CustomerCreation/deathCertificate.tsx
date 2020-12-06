@@ -73,7 +73,6 @@ class DeathCertificate extends Component<Props, State>  {
             Swal.fire("error", "error in getting customer documents", "error");
         }
         if (this.props.edit || this.props.view) {
-            console.log(this.props.customerId)
             await this.props.getDocuments({ customerId: this.props.customerId, docType: 'deathCertificate'});
         }
     }
@@ -95,7 +94,7 @@ class DeathCertificate extends Component<Props, State>  {
                     <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
                         <Button style={{ width: '150px' }} variant="primary" disabled={this.props.selectionArray.length <= 0} onClick={async () => {
                             this.setState({ loading: true })
-                            const res = await downloadAsZip(this.props.selectionArray, `customer-${this.props.customerId}-${new Date().valueOf()}`);
+                            const res = await downloadAsZip(this.props.selectionArray, `deathCertificate-customer-${this.props.customerId}-${new Date().valueOf()}`);
                             this.setState({ loading: false })
                         }}>{`${local.download}(${this.props.selectionArray.length})`}</Button> </div>
                 </Row>
