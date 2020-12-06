@@ -819,5 +819,6 @@
     "oracleIntegration":"إنشاء القيود المحاسبية",
     "oracleIntegrationSuccess":"تم إنشاء القيود المحاسبية بنجاح ",
     "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية",
-    "downloadExcel": "تنزيل Excel"
+    "downloadExcel": "تنزيل Excel",
+    "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط"
 }

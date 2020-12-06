@@ -304,6 +304,25 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
+                    <Form.Group as={Col} controlId="truthDate">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="date"
+                          name="truthDate"
+                          data-qc="truthDate"
+                          value={formikBag.values.truthDate}
+                          onBlur={formikBag.handleBlur}
+                          onChange={formikBag.handleChange}
+                          isInvalid={Boolean(formikBag.errors.truthDate) && Boolean(formikBag.touched.truthDate)}
+                          disabled
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.truthDate}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
                     {this.props.penaltyAction !== "cancel" &&
                     <Form.Group as={Col} md={6} controlId="whoPaid">
                       <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
