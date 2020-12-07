@@ -97,7 +97,7 @@ export const UserDataForm = (props: Props) => {
                             }}
                             isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
                             maxLength={14}
-                            disabled={(!allowed && props.edit)}
+                            disabled={((!allowed && props.edit) && props.nationalId) as boolean}
                         />}
                         </Can>
 
@@ -284,7 +284,7 @@ export const UserDataForm = (props: Props) => {
 
                     }}
                     onBlur={props.handleBlur}
-                    disabled={(!allowed && props.edit)}
+                    disabled={((!allowed && props.edit) && props.username) as boolean}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
                 />}
                 </Can>
