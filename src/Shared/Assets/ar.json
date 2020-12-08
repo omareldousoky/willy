@@ -825,5 +825,8 @@
     "operationsManager":"مدير العمليات",
     "districtManager":"مدير المنطقة",
     "districtSupervisor":"مشرف المنطقة",
-    "centerManager":"مدير المركز"
+    "centerManager":"مدير المركز",
+    "groupManager": "رئيس المجموعة",
+    "addLoanOfficer":"اضف أخصائي / منسقة",
+    "addGroupManager":"اضف رئيس مجموعة جديد"
 }
