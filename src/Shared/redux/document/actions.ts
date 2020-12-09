@@ -26,21 +26,22 @@ import { Document } from '../../Services/interfaces'
 import Swal from 'sweetalert2';
 
 const handleDocuments = (docs: any[], id, type) => {
-    const documents: DocumentsState = []
+    const documents: DocumentsState = [];
+    if(type === "deathCertificate") {
+        documents.push({
+            docName: "deathCertificate",
+            imagesFiles: docs,
+        })
+    }
+    else {
     docs?.map((doc) => {
-        if(type === "deathCertificate") {
-            documents.push({
-                docName: "deathCertificate",
-                imagesFiles: [doc],
-            })
-        }
-        else {
+    
         documents.push({
             docName: doc.name,
             imagesFiles: doc.docs,
         })
-    }
     });
+}
     return documents;
 }
 
