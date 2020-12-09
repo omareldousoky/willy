@@ -107,21 +107,25 @@ const CustomerProfile = (props: Props) => {
 
   useEffect(() => {
     getCustomerDetails();
-    if(tabs[tabs.length-2].stringKey !== 'deathCertificate')
      if(ability.can('deathCertificate','customer')) {
+       if(tabs.some(tab => tab.stringKey ==='deathCertificate')){}
+       else{
        tabs.push({
         header: local.deathCertificate,
         stringKey:'deathCertificate'
     
       })
     }
-    if (tabs[tabs.length - 1].stringKey !== 'reports')
+    }
       if (ability.can('guaranteed', 'report')) {
+        if(tabs.some(tab => tab.stringKey ==='reports')){}
+        else{
         tabs.push({
           header: local.reports,
           stringKey: 'reports'
         })
       }
+    }
 
   }, []);
   function getArGender(gender: string | undefined) {
