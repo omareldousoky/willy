@@ -8,33 +8,34 @@ import { getCustomerDetails } from '../../Services/APIs/Reports/customerDetails'
 import { getLoanDetails } from '../../Services/APIs/Reports/loanDetails';
 import LoanApplicationDetails from '../pdfTemplates/loanApplicationDetails/loanApplicationDetails';
 import BranchesLoanList from '../pdfTemplates/branchesLoanList/branchesLoanList';
-import { getBranchLoanList } from '../../Services/APIs/Reports/branchLoanList';
+import { getBranchLoanList, postBranchLoanListExcel, getBranchLoanListExcel } from '../../Services/APIs/Reports/branchLoanList';
 import CollectionStatement from '../pdfTemplates/CollectionStatement/CollectionStatement';
 import LoanPenaltiesList from '../pdfTemplates/loanPenaltiesList/loanPenaltiesList';
 import CrossedOutLoansList from '../pdfTemplates/crossedOutLoansList/crossedOutLoansList';
 import DoubtfulPayments from '../pdfTemplates/doubtfulPayments/doubtfulPayments';
-import { collectionReport, penalties, writeOffs } from "../../Services/APIs/Reports";
-import { installments } from '../../Services/APIs/Reports/installments';
+import { collectionReport, penalties, writeOffs, postCollectionReportExcel, getCollectionReportExcel, postPenaltiesExcel, getPenaltiesExcel, getWriteOffsExcel, postWriteOffsExcel } from "../../Services/APIs/Reports";
+import { installments, postInstallmentsExcel, getInstallmentsExcel } from '../../Services/APIs/Reports/installments';
 import PaymentsDone from '../pdfTemplates/paymentsDone/paymentsDone';
 import IssuedLoanList from '../pdfTemplates/issuedLoanList/issuedLoanList';
-import { getIssuedLoanList } from '../../Services/APIs/Reports/issuedLoansList';
-import { getCreatedLoanList } from '../../Services/APIs/Reports/createdLoansList';
-import { getRescheduledLoanList } from '../../Services/APIs/Reports/rescheduledLoansList';
+import { getIssuedLoanList, postIssuedLoansExcel, getIssuedLoansExcel } from '../../Services/APIs/Reports/issuedLoansList';
+import { getCreatedLoanList, postCreatedLoansExcel, getCreatedLoansExcel } from '../../Services/APIs/Reports/createdLoansList';
+import { getRescheduledLoanList, postRescheduledLoanExcel, getRescheduledLoanExcel } from '../../Services/APIs/Reports/rescheduledLoansList';
 import LoanCreationList from '../pdfTemplates/loanCreationList/loanCreationList';
 import RescheduledLoanList from '../pdfTemplates/rescheduledLoanList/rescheduledLoanList';
-import { getRandomPayments } from '../../Services/APIs/Reports/randomPayment';
+import { getRandomPayments, postRandomPaymentsExcel, getRandomPaymentsExcel } from '../../Services/APIs/Reports/randomPayment';
 import RandomPayment from '../pdfTemplates/randomPayment/randomPayment';
-import { getLoanApplicationFees } from '../../Services/APIs/Reports/loanApplicationFees';
+import { getLoanApplicationFees, postLoanApplicationFeesExcel, getLoanApplicationFeesExcel } from '../../Services/APIs/Reports/loanApplicationFees';
 import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees';
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import Can from '../../config/Can';
-import { doubtfulLoans } from '../../Services/APIs/Reports/doubtfulLoans';
+import { doubtfulLoans, postDoubtfulLoansExcel, getDoubtfulLoansExcel } from '../../Services/APIs/Reports/doubtfulLoans';
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport';
 import { downloadTxtFile } from '../CIB/textFiles';
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
-import { getManualPayments } from '../../Services/APIs/Reports/manualPayments';
+import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } from '../../Services/APIs/Reports/manualPayments';
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
+import { downloadFile } from '../../../Shared/Services/utils';
 
 export interface PDF {
   key?: string;
@@ -110,6 +111,30 @@ class Reports extends Component<{}, State> {
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       case 'cibPaymentReport': return this.getCibPaymentReport(values);
       case 'manualPayments': return this.getManualPayments(values);
+      default: return null;
+    }
+  }
+  getExcel(values) {
+    const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf();
+    const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf();
+    values.fromDate = from;
+    values.toDate = to;
+    switch (this.state.selectedPdf.key) {
+      // case 'customerDetails': return this.getCustomerDetails(values);
+      // case 'loanDetails': return this.getLoanDetails(values);
+      case 'branchLoanList': return this.getExcelFile(postBranchLoanListExcel, getBranchLoanListExcel, values);
+      case 'CollectionStatement': return this.getExcelFile(postCollectionReportExcel, getCollectionReportExcel, values);
+      case 'Penalties': return this.getExcelFile(postPenaltiesExcel, getPenaltiesExcel, values);
+      case 'CrossedOutLoans': return this.getExcelFile(postWriteOffsExcel, getWriteOffsExcel, values);
+      case 'DoubtfulLoans': return this.getExcelFile(postDoubtfulLoansExcel, getDoubtfulLoansExcel, values);
+      case 'issuedLoanList': return this.getExcelFile(postIssuedLoansExcel, getIssuedLoansExcel, values);
+      case 'createdLoanList': return this.getExcelFile(postCreatedLoansExcel, getCreatedLoansExcel, values);
+      case 'rescheduledLoanList': return this.getExcelFile(postRescheduledLoanExcel, getRescheduledLoanExcel, values);
+      case 'paymentsDoneList': return this.getExcelFile(postInstallmentsExcel, getInstallmentsExcel, values);
+      case 'randomPayments': return this.getExcelFile(postRandomPaymentsExcel, getRandomPaymentsExcel, values);
+      case 'loanApplicationFees': return this.getExcelFile(postLoanApplicationFeesExcel, getLoanApplicationFeesExcel, values);
+      // case 'cibPaymentReport': return this.getCibPaymentReport(values);
+      case 'manualPayments': return this.getExcelFile(postManualPaymentsExcel, getManualPaymentsExcel, values);
       default: return null;
     }
   }
@@ -454,7 +479,7 @@ class Reports extends Component<{}, State> {
       link.remove();
     } else {
       this.setState({ loading: false });
-      Swal.fire("",local.noResults, "error");
+      Swal.fire("", local.noResults, "error");
     }
   }
   async getManualPayments(values) {
@@ -484,6 +509,52 @@ class Reports extends Component<{}, State> {
     } else {
       this.setState({ loading: false });
       console.log(res)
+    }
+  }
+  async getExcelFile(func, pollFunc, values) {
+    this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branches: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
+    }
+    const res = await func(obj);
+    if (res.status === 'success') {
+      if (Object.keys(res.body).length === 0) {
+        this.setState({ loading: false });
+        Swal.fire("error", local.noResults)
+      } else {
+        this.setState({ loading: true })
+        const pollStart = new Date().valueOf();
+        this.getExcelPoll(pollFunc, res.body.fileId, pollStart);
+      }
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
+  async getExcelPoll(func, id, pollStart) {
+    const pollInstant = new Date().valueOf();
+    if (pollInstant - pollStart < 300000) {
+      const file = await func(id)
+      if (file.status === 'success') {
+        if (['created', 'failed'].includes(file.body.status)) {
+          if (file.body.status === 'created') downloadFile(file.body.presignedUrl)
+          if (file.body.status === 'failed') Swal.fire("error", local.failed)
+          this.setState({
+            showModal: false,
+            loading: false
+          })
+        } else {
+          setTimeout(() => this.getExcelPoll(func, id, pollStart), 5000);
+        }
+      } else {
+        this.setState({ loading: false });
+        console.log(file)
+      }
+    } else {
+      this.setState({ loading: false })
+      Swal.fire("error", 'TimeOut')
     }
   }
   render() {
@@ -516,7 +587,7 @@ class Reports extends Component<{}, State> {
             })}
           </Card.Body>
         </Card>
-        {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}
+        {this.state.showModal && <ReportsModal pdf={this.state.selectedPdf} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} getExcel={(values) => this.getExcel(values)} />}
         {this.state.print === "customerDetails" && <CustomerStatusDetails data={this.state.data} customerKey={this.state.customerKey} />}
         {this.state.print === "loanDetails" && <LoanApplicationDetails data={this.state.data} />}
         {this.state.print === "issuedLoanList" && <IssuedLoanList data={this.state.data} />}

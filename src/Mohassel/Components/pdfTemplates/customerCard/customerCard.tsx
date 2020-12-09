@@ -58,7 +58,7 @@ class CustomerCardPDF extends Component<Props, State> {
                 <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
                 <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                     <tr style={{ height: "10px" }}></tr>
-                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th style = {{backgroundColor: 'white'}} colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th  style = {{backgroundColor: 'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th style = {{backgroundColor: 'white'}} colSpan={6}><div className={"logo-print"}></div></th><th  style = {{backgroundColor: 'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                     <tr style={{ height: "10px" }}></tr>
                 </table>
                     <table>
@@ -134,10 +134,10 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <th>القسط</th>
                                 <th>تاريخ الآستحقاق</th>
                                 <th> قيمة القسط</th>
-                                <th>الفائدة</th>
+                                <th>تكلفه التمويل</th>
                                 <th>اجمالي القيمة</th>
                                 <th>قيمه مسدده</th>
-                                <th>فائدة مسدده</th>
+                                <th>تكلفه التمويل مسدده</th>
                                 <th>الحاله</th>
                                 <th>تاريخ الحاله</th>
                                 <th>ايام التأخير</th>
@@ -258,7 +258,7 @@ class CustomerCardPDF extends Component<Props, State> {
                         معجل
                         ٥٪
                 من باقي المبلغ المستحق (اصل) المراد تعجيل الوفاه به</li>
-                        <li>يحق للشركه مطالبه قيمة القرض وكافة المصروفات وتكاليف تمويله في حالة استخدام مبلغ القرض في غرض غير
+                        <li>يحق للشركه مطالبه قيمة القرض وكافة تكاليف تمويله في حالة استخدام مبلغ القرض في غرض غير
                         استخدامه
                         داخل
 			النشاط او اغلاق النشاط</li>

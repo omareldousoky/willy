@@ -41,6 +41,8 @@ export interface Installment {
   status: string;
 }
 interface Application {
+  principal: number;
+  status: string;
   installmentsObject: InstallmentsObject;
   group: any;
   product: any;
@@ -160,7 +162,7 @@ class PayInstallment extends Component<Props, State> {
             enableReinitialize
             initialValues={{
               ...this.state,
-              max: this.props.application.installmentsObject.totalInstallments.installmentSum,
+              max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum,
               beneficiaryType: this.props.application.product.beneficiaryType,
               payAmount: this.props.paymentType === "normal" ? this.getRequiredAmount() : this.state.payAmount
             }}
@@ -299,6 +301,25 @@ class PayInstallment extends Component<Props, State> {
                         ></Form.Control>
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="truthDate">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="date"
+                          name="truthDate"
+                          data-qc="truthDate"
+                          value={formikBag.values.truthDate}
+                          onBlur={formikBag.handleBlur}
+                          onChange={formikBag.handleChange}
+                          isInvalid={Boolean(formikBag.errors.truthDate) && Boolean(formikBag.touched.truthDate)}
+                          disabled
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.truthDate}
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>
