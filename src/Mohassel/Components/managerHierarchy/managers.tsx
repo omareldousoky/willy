@@ -25,59 +25,30 @@ export default class Managers extends Component<Props, {}> {
                     status={this.props.status}
                 />
                 <Form className="managers-form">
-                    <Form.Group className="row-nowrap" id="operationsManager">
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.operationsManager}</Form.Label>
-                            <Form.Control />
-                        </Col>
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.emailAddress}</Form.Label>
-                            <Form.Control type={'email'} />
-                        </Col>
-                    </Form.Group>
+                    <Row>
+                        <Form.Group as = {Col} id="operationsManager">          
+                                <Form.Label className={"managers-label"} >{local.operationsManager}</Form.Label>
+                                <Form.Control />   
+                        </Form.Group>
+                        <Form.Group as = {Col} id="districtManager">
+                                <Form.Label className={"managers-label"} >{local.districtManager}</Form.Label>
+                                <Form.Control />
+                        </Form.Group>
+                    </Row>
+                    <Row>
+                        <Form.Group as = {Col} id="districtSupervisor"> 
+                                <Form.Label className={"managers-label"} >{local.districtSupervisor}</Form.Label>
+                                <Form.Control />      
+                        </Form.Group>
 
-                    <Form.Group className="row-nowrap" id="districtManager">
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.districtManager}</Form.Label>
-                            <Form.Control />
-                        </Col>
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.emailAddress}</Form.Label>
-                            <Form.Control type={'email'} />
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group className="row-nowrap" id="districtSupervisor">
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.districtSupervisor}</Form.Label>
-                            <Form.Control />
-                        </Col>
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.emailAddress}</Form.Label>
-                            <Form.Control type={'email'} />
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group className="row-nowrap" id="centerManager">
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.centerManager}</Form.Label>
-                            <Form.Control />
-                        </Col>
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.emailAddress}</Form.Label>
-                            <Form.Control type={'email'} />
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group className="row-nowrap" id="branchManager">
-                        <Col sm={5}>
+                        <Form.Group as = {Col} id="centerManager">
+                                <Form.Label className={"managers-label"} >{local.centerManager}</Form.Label>
+                                <Form.Control />   
+                        </Form.Group>
+                    </Row>
+                    <Form.Group as = {Col}  sm = {6} id="branchManager">            
                             <Form.Label className={"managers-label"} >{local.branchManager}</Form.Label>
-                            <Form.Control />
-                        </Col>
-                        <Col sm={5}>
-                            <Form.Label className={"managers-label"} >{local.emailAddress}</Form.Label>
-                            <Form.Control type={'email'} />
-                        </Col>
+                            <Form.Control />   
                     </Form.Group>
                 </Form>
             </div>

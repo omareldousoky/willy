@@ -13,10 +13,6 @@ export const SupervisionGroup = (props: Props) => {
                     <Form.Label className="supervision-label" as={Col}>{`${local.groupManager}(${props.seqNo})`}</Form.Label>
                     <Form.Control type="text" />
                 </Col>
-                <Col>
-                    <Form.Label className="supervision-label" as={Col}>{local.emailAddress}*</Form.Label>
-                    <Form.Control type="email" />
-                </Col>
             </Row>
         </div>
     )
