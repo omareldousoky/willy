@@ -281,7 +281,7 @@ export const getStatus = (installment) => {
       case 'pending': return local.pending;
       case 'paid': return local.paid;
       case 'partiallyPaid': return local.partiallyPaid;
-      case 'rescheduled': return local.rescheduled;
+      case 'rescheduled': return `${local.rescheduled}${installment.earlyPaymentReschedule ? (' - ' + local.earlyPayment) : ''}`
       case 'cancelled': return local.cancelled;
       case 'canceled': return local.cancelled;
       case 'issued': return local.issued;
