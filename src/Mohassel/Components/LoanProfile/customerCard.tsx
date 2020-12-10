@@ -25,7 +25,12 @@ function getStatus(data) {
     case 'pending':
       return <div className="status-chip pending">{local.pending}</div>
     case 'rescheduled':
-      return <div className="status-chip rescheduled">{local.rescheduled}</div>
+      return (
+        <div className="status-chip rescheduled" style={data.earlyPaymentReschedule? {flexDirection: 'column', minHeight: 50}: {}}>
+          <span>{local.rescheduled}</span>
+          {data.earlyPaymentReschedule ? <span> ({local.earlyPayment})</span> : null}
+        </div>
+      )
     case 'partiallyPaid':
       return <div className="status-chip partially-paid">{local.partiallyPaid}</div>
     case 'cancelled':
