@@ -828,5 +828,6 @@
     "centerManager":"مدير المركز",
     "groupManager": "رئيس المجموعة",
     "addLoanOfficer":"اضف أخصائي / منسقة",
-    "addGroupManager":"اضف رئيس مجموعة جديد"
+    "addGroupManager":"اضف رئيس مجموعة جديد",
+    "loanOfficerOrCoordinator":"إخصائي / منسقة"
 }

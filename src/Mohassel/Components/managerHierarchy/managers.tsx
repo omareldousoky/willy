@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Col, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import * as local from '../../../Shared/Assets/ar.json';
 import BranchBasicsCard from './branchBasicsCard';
-
+import Search from '../../../Shared/Components/Search/search';
 interface Props {
     branchId: string;
     name: string;
@@ -51,6 +51,9 @@ export default class Managers extends Component<Props, {}> {
                             <Form.Control />   
                     </Form.Group>
                 </Form>
+                <Form.Group>
+        <Button className={'save-button'} onClick = {()=>{console.log()}}>{local.save}</Button>
+                </Form.Group>
             </div>
         )
     }
