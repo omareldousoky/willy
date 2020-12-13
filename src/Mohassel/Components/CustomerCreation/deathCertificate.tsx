@@ -64,14 +64,7 @@ class DeathCertificate extends Component<Props, State>  {
         }
     }
     async componentDidMount() {
-        const response = await getDocumentsTypes('deathCertificate');
-        if (response.status === "success") {
-            this.setState({
-                documentTypes: response.body.documentTypes,
-            })
-        } else {
-            Swal.fire("error", "error in getting customer documents", "error");
-        }
+
         if (this.props.edit || this.props.view) {
             await this.props.getDocuments({ customerId: this.props.customerId, docType: 'deathCertificate'});
         }

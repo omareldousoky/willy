@@ -28,6 +28,7 @@ import Swal from 'sweetalert2';
 const handleDocuments = (docs: any[], id, type) => {
     const documents: DocumentsState = [];
     if(type === "deathCertificate") {
+        if(docs)
         documents.push({
             docName: "deathCertificate",
             imagesFiles: docs,
@@ -41,6 +42,7 @@ const handleDocuments = (docs: any[], id, type) => {
             imagesFiles: doc.docs,
         })
     });
+    console.log("documents",documents);
 }
     return documents;
 }
@@ -141,6 +143,7 @@ export const getDocuments = (obj) => {
                 delete obj.docType;
                 dispatch({ type: 'SET_LOADING', payload: true })
                 const res = await getCustomerDocuments(obj.customerId);
+                console.log(res.body);
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
                     dispatch({ type: GET_DOCUMENTS, payload: handleDocuments(res.body.docs, obj.customerId, documentType) })
