@@ -25,10 +25,11 @@ const customFilterOption = (option, rawInput) => {
 };
 interface State {
     dropDownValue: string;
+    showError: boolean;
 }
 interface Props {
     usersOfBranch: any[];
-    objectKey: string;
+    objectKey: any;
     item: any;
     disabled?: boolean;
 }
@@ -37,6 +38,7 @@ class UsersSearch extends Component<Props, State> {
             super(props);
             this.state = {
                 dropDownValue:'hrCode',
+                showError: false,
             }
     }
     getArValue(key: string) {
@@ -47,10 +49,17 @@ class UsersSearch extends Component<Props, State> {
             default: return '';
         }
     } 
+    checkError(){
+      if(this.props.item[this.props.objectKey]==""){
+        this.setState({showError:true})
+      } else {
+        this.setState({showError: false})
+      }
+    }
     render() {
         return (
           <>
-                      <InputGroup>
+                      <InputGroup className={'row-nowrap'}>
                       {dropDownKeys && dropDownKeys.length?
                         <DropdownButton
                           as={InputGroup.Append}
@@ -69,6 +78,9 @@ class UsersSearch extends Component<Props, State> {
                         </InputGroup.Append>
                         <div style={{margin:0, width:"60%"}}>
                         <Select
+                        onBlur = {()=>{
+                          this.checkError();
+                        }}
                         placeholder={local.searchUserBranchPlaceholder}
                         name = "users-branch"
                         data-qc = "users-branch"
@@ -80,6 +92,7 @@ class UsersSearch extends Component<Props, State> {
                         isSearchable = {true}
                         onChange={(event)=>{
                             this.props.item[this.props.objectKey]=event._id;
+                           this.checkError();
                         }}
                         value={this.props.usersOfBranch?.find(
                           (item) => item._id===this.props.item[this.props.objectKey]
@@ -87,6 +100,7 @@ class UsersSearch extends Component<Props, State> {
                         isDisabled= {this.props.disabled}
                         />
                         </div>
+                      {this.state.showError &&<Form.Label className={'error-label'}>{local.required}</Form.Label>}
                       </InputGroup>
             </>
         )

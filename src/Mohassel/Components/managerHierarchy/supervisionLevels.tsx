@@ -4,7 +4,11 @@ import { SupervisionGroup } from './supervisionGroup';
 import * as local from '../../../Shared/Assets/ar.json';
 import { Button, Form, Row } from 'react-bootstrap';
 import { updateOfficersGroups } from '../../Services/APIs/ManagerHierarchy/updateOfficersGroups';
-
+import { getOfficersGroups} from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
+import { searchUsers } from "../../Services/APIs/Users/searchUsers";
+import Can from '../../config/Can';
+import ability from '../../config/ability';
+import { Loader } from '../../../Shared/Components/Loader';
 interface Props {
     branchId: string;
     name: string;
@@ -13,12 +17,15 @@ interface Props {
     status: string;
 
 }
-interface Group {
+export interface Group {
     leader: string;
     officers: string[];
 }
 interface State {
     groups: Group[];
+    usersOfBranch: any[];
+    disabled: boolean;
+    loading: boolean;
 
 }
 export default class SupervisionLevels extends Component<Props, State> {
@@ -26,7 +33,49 @@ export default class SupervisionLevels extends Component<Props, State> {
         super(props);
         this.state = {
             groups:[],
+            usersOfBranch: [],
+            disabled: true,
+            loading: false,
         }
+    }
+    componentDidMount(){
+        if(ability.can("updateGroupLeadersHierarchy","branch")){
+            this.setState({disabled:false})
+        }
+       
+        this.getUsers();
+        this.getGroups();
+    }
+    async getGroups() {
+        this.setState({loading:true})
+      const res = await getOfficersGroups(this.props.branchId)
+      if(res.status="success"){
+          this.setState({
+              groups: res.body.data.groups
+          })
+      }
+      this.setState({loading: false})
+    }
+
+    async updateGroups(){
+        this.setState({loading:true})
+       const res = await updateOfficersGroups({groups: this.state.groups}, this.props.branchId);
+       this.setState({loading: false})
+    }
+    async getUsers() {
+        this.setState({loading:true})
+        const obj = {
+            branchId: this.props.branchId,
+            from: 0,
+            size: 1000,
+        };
+        const res = await searchUsers(obj);
+        if (res.status === "success") {
+            this.setState({
+                usersOfBranch: res.body.data
+            })
+        }
+        this.setState({loading: false})
     }
     removeGroup = (index)=>{
         const newGroups = this.state.groups;
@@ -38,6 +87,7 @@ export default class SupervisionLevels extends Component<Props, State> {
     render() {
         return (
             <div>
+                <Loader open={this.state.loading} type="fullscreen" />
                 <BranchBasicsCard
                     name={this.props.name}
                     branchCode={this.props.branchCode}
@@ -47,7 +97,7 @@ export default class SupervisionLevels extends Component<Props, State> {
                 <Row>
                     {this.state.groups.map((item , index) =>{ 
                         return(
-                        <SupervisionGroup key= {index} seqNo ={index+1}  deleteGroup = {this.removeGroup}/>);       
+                        <SupervisionGroup key= {index} seqNo ={index+1}  deleteGroup = {this.removeGroup} usersOfBranch={this.state.usersOfBranch} group = {item}/>);       
                     })
                     }
                     <Row className={'add-supervisor-container'}>
@@ -58,21 +108,16 @@ export default class SupervisionLevels extends Component<Props, State> {
                     }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addGroupManager}</span>
                     </Row>
                 </Row>
+                 <Can I = "updateGroupLeadersHierarchy" a ="branch">
                 <Form.Group>
                 <Button 
                 onClick = {async() =>{
-                    const data={ groups : [
-                        
-                        {
-                            leader: '5fd0a00be6bce17603b82de1',
-                            officers: ['5f7c7af1ba0e8c0da7c79ddd']
-                        }
-                    ]}
-                    await updateOfficersGroups(data,'5e9ee6f52caac41f46b1ae03');
+                 await this.updateGroups();
                 } }
                 className={'save-button'}
                 >{local.save}</Button>
                 </Form.Group>
+                </Can>
             </div>
 
         )
