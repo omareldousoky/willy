@@ -141,7 +141,7 @@ interface State {
             stringKey: 'managers'
         })
     }
-    if(true){
+    if(ability.can("getGroupLeadersHierarchy","branch")){
         tabsToRender.push({
             header: local.levelsOfSupervision,
             stringKey: 'levelsOfSupervision'
@@ -187,13 +187,13 @@ interface State {
 
                  /></Can>)
              case 'levelsOfSupervision'  : return (
-                 <SupervisionLevels
+              <Can I="getGroupLeadersHierarchy"  a="branch"><SupervisionLevels
                  branchId ={this.state._id}
                  branchCode={this.state.data.branchCode} 
                  name ={this.state.data.name}
                  createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
                  status ={this.state.data.status}
-                  />
+                  /></Can> 
              ) 
              default: return null;   
         }

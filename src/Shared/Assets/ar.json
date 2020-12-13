@@ -830,5 +830,10 @@
     "addLoanOfficer":"اضف أخصائي / منسقة",
     "addGroupManager":"اضف رئيس مجموعة جديد",
     "loanOfficerOrCoordinator":"إخصائي / منسقة",
-    "searchUserBranchPlaceholder":"البحث بكود الموارد البشريه أو الرقم القومي أو الإسم"
+    "searchUserBranchPlaceholder":"البحث بكود الموارد البشريه أو الرقم القومي أو الإسم",
+    "transactionType":"نوع العملية",
+    "transactionNeedsInspection":"هناك عملية قيد التحقيق",
+    "approveGroupsConfirmation": "تأكيد الموافقه علي مستويات الإشراف",
+    "approveGroupsSuccess":"تمت الموافقة على مستويات الإشراف",
+    "approveGroupsError":"حدث خطأ ولم تتم الموافقة"
 }
