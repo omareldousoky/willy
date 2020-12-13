@@ -829,5 +829,6 @@
     "groupManager": "رئيس المجموعة",
     "addLoanOfficer":"اضف أخصائي / منسقة",
     "addGroupManager":"اضف رئيس مجموعة جديد",
-    "loanOfficerOrCoordinator":"إخصائي / منسقة"
+    "loanOfficerOrCoordinator":"إخصائي / منسقة",
+    "searchUserBranchPlaceholder":"البحث بكود الموارد البشريه أو الرقم القومي أو الإسم"
 }
