@@ -57,9 +57,8 @@ export default class SupervisionLevels extends Component<Props, State> {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
         if (res.status = "success") {
-            console.log(res.body.data);
             this.setState({
-                groups: res.body.data.groups,
+                groups: res.body.data.groups ? res.body.data.groups : [] ,
                 status: res.body.data.status,
                 startDate: res.body.data.startDate,
             })
