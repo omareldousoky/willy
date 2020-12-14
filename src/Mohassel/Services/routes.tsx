@@ -173,8 +173,7 @@ const appRoutes = [
           {
             path: "/bulk-reviews",
             label: local.bulkLoanApplicationReviews,
-            render: (props) => <Can I='reviewLoanApplication' a='application'> <BulkApplicationReview /> </Can>
-
+            render: (props) => <BulkApplicationReview />
           }
         ]
       },

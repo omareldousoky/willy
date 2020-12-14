@@ -827,5 +827,6 @@
     "secondReview":"مراجعه مدير الفرع للقروض",
     "thirdReview": "مراجعة مدير المركز للقروض",
     "signedApplications":"قروض تم مراجعتها و إمضائها",
-    "signedDateCannotBeBeforeReviewDate":"تاريخ الإمضاء يجب أن يكون بعد تاريخ المراجعة"
+    "signedDateCannotBeBeforeReviewDate":"تاريخ الإمضاء يجب أن يكون بعد تاريخ المراجعة",
+    "reviewApplicationsError":"حدث خطأ ولم تتم مراجعة القروض"
 }

@@ -323,13 +323,15 @@ class Search extends Component<Props, State> {
                       <div className="dropdown-container">
                         <p className="dropdown-label">{local.status}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
-                          {/* <Can I="secondReview" a="application"> */}
+                          <Can I="secondReview" a="application">
+                            <Can not I ='thirdReview' a ='application' >
                             <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
-                          {/* </Can> */}
-                          {/* <Can I="thirdReview" a="application"> */}
+                            </Can>
+                          </Can>      
+                           <Can I="thirdReview" a="application">
+                           <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
                             <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
-                          {/* </Can> */}
-                         
+                          </Can>
                         </Form.Control>
                       </div>
                     </Col>
