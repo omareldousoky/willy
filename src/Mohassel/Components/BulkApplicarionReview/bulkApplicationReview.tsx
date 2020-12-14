@@ -22,6 +22,7 @@ import local from '../../../Shared/Assets/ar.json';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Can from '../../config/Can';
+import ability from '../../config/ability';
 
 interface Product {
   productName: string;
@@ -63,6 +64,7 @@ interface State {
   from: number;
   size: number;
   manageApplicationsTabs: any[];
+  checkPermission: boolean;
 }
 interface Props {
   history: Array<any>;
@@ -85,6 +87,7 @@ class BulkApplicationReview extends Component<Props, State>{
       from: 0,
       size: 10,
       manageApplicationsTabs: [],
+      checkPermission: false,
     }
     this.mappers = [
       {
@@ -135,11 +138,14 @@ class BulkApplicationReview extends Component<Props, State>{
     ]
   }
   componentDidMount() {
+    if(ability.can('secondReview','application') || ability.can('thirdReview','application')){
+      this.setState({checkPermission: true});
+    }
     if (this.props.data?.length > 0) {
       this.props.search({ url: 'clearData' });
     }
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
-
+    
   }
   getApplications() {
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
@@ -189,6 +195,7 @@ class BulkApplicationReview extends Component<Props, State>{
   }
   render() {
     return (
+      this.state.checkPermission &&
       <>
         <HeaderWithCards
           header={local.bulkLoanApplicationReviews}
@@ -292,7 +299,7 @@ class BulkApplicationReview extends Component<Props, State>{
               </Form>
             }
           </Formik>
-        </Modal>}
+        </Modal>} 
       </>
     )
   }
