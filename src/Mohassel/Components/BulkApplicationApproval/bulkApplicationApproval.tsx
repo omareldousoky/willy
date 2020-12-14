@@ -199,7 +199,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.reviewedApplications}</Card.Title>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.signedApplications}</Card.Title>
                 <span className="text-muted" style={{ marginLeft: 10 }}>{local.maxLoansAllowed + ` (${this.props.totalCount || 0})`}</span>
                 <span className="text-muted">{local.noOfSelectedLoans + ` (${this.state.selectedReviewedLoans.length})`}</span>
               </div>
