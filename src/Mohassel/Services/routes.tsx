@@ -49,6 +49,7 @@ import PrincipleThreshold from '../Components/ManageFinance/principleThreshold';
 import LeadProfile from '../Components/HalanIntegration/leadProfile';
 import EditLead from '../Components/HalanIntegration/editLead';
 import GeoAreas from '../Components/GeoAreas/geoAreas';
+import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkApplicationReview' ;
 
 
 const appRoutes = [
@@ -168,6 +169,12 @@ const appRoutes = [
             path: "/bulk-approvals",
             label: local.bulkLoanApplicationsApproval,
             render: (props) => <Can I='approveLoanApplication' a='application'> <BulkApplicationApproval /></Can>
+          },
+          {
+            path: "/bulk-reviews",
+            label: local.bulkLoanApplicationReviews,
+            render: (props) => <Can I='reviewLoanApplication' a='application'> <BulkApplicationReview /> </Can>
+
           }
         ]
       },
