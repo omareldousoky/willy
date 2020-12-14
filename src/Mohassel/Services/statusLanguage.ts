@@ -4,6 +4,10 @@ export const englishToArabic = (status: string) => {
       return { text: 'تحت التحرير', color: '#ed7600' };
     case 'reviewed':
       return { text: 'رُجعت', color: '#edb600' };
+    case 'secondReview':
+      return {text: 'رُجعت من مدير الفرع', color: '#edb679'};
+    case 'thirdReview':
+      return {text: 'رُجعت من مدير المركز', color:'#ebd687'}  
     case 'rejected':
       return { text: 'مرفوضة', color: '#d51b1b' };
     case 'canceled':

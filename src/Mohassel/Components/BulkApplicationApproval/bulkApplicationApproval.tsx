@@ -217,7 +217,7 @@ class BulkApplicationApproval extends Component<Props, State>{
               url="application"
               from={this.state.from}
               size={this.state.size}
-              status="reviewed" />
+              status="thirdReview" />
             <DynamicTable
               from={this.state.from}
               size={this.state.size}

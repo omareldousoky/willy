@@ -18,6 +18,7 @@ import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/conf
 import { loading } from '../../redux/loading/actions';
 import {getActionsList} from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList';
 import Swal from 'sweetalert2';
+import Can from '../../../Mohassel/config/Can';
 
 interface InitialFormikState {
   name?: string;
@@ -305,10 +306,30 @@ class Search extends Component<Props, State> {
                           <option value="" data-qc="all">{local.all}</option>
                           <option value='underReview' data-qc='underReview'>{local.underReview}</option>
                           <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                          <option value='secondReview' data-qc='secondReview'>{local.secondReviewed}</option>
+                          <option value='thirdReview' data-qc='thirdReview'>{local.thirdReviewed}</option>
                           <option value='approved' data-qc='approved'>{local.approved}</option>
                           <option value='created' data-qc='created'>{local.created}</option>
                           <option value='rejected' data-qc='rejected'>{local.rejected}</option>
                           <option value='canceled' data-qc='canceled'>{local.cancelled}</option>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
+                if(searchKey === 'status-review-application') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                          {/* <Can I="secondReview" a="application"> */}
+                            <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                          {/* </Can> */}
+                          {/* <Can I="thirdReview" a="application"> */}
+                            <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
+                          {/* </Can> */}
+                         
                         </Form.Control>
                       </div>
                     </Col>

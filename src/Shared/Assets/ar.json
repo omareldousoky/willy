@@ -822,9 +822,10 @@
     "downloadExcel": "تنزيل Excel",
     "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط",
     "bulkLoanApplicationReviews":"مراجعة وإمضاءات طلبات القروض",
-    "secondReviewed":"رجعت من مدير الفرع",
-    "thirdReviewed":"رجعت من مدير المركز",
+    "secondReviewed":"رُجعت من مدير الفرع",
+    "thirdReviewed":"رُجعت من مدير المركز",
     "secondReview":"مراجعه مدير الفرع للقروض",
     "thirdReview": "مراجعة مدير المركز للقروض",
-    "signedApplications":"قروض تم مراجعتها و إمضائها"
+    "signedApplications":"قروض تم مراجعتها و إمضائها",
+    "signedDateCannotBeBeforeReviewDate":"تاريخ الإمضاء يجب أن يكون بعد تاريخ المراجعة"
 }
