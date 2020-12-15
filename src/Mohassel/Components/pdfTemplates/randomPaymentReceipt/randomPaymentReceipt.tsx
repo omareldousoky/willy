@@ -28,11 +28,11 @@ const randomPaymentReceipt = (props) => {
             {props.receiptData.map((receiptData, index) => {
                 return (
 
-                    <div key={index} className="random-payment-receipt frame" dir="rtl" lang="ar">
+                    <div key={index} className="random-payment-receipt" dir="rtl" lang="ar">
                         <div className="receipt-container">
                             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                                 <tr style={{ height: "10px" }}></tr>
-                                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                                 <tr style={{ height: "10px" }}></tr>
                             </table>
                             <div className="receipt-header">
@@ -40,36 +40,36 @@ const randomPaymentReceipt = (props) => {
                                 <h5>{local.paymentReceipt}</h5>
                             </div>
                             <div className="receipt-content">
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.date}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{timeToArabicDate(receiptData.date, false)}</Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.receiptNumber}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{numbersToArabic(receiptData.receiptNumber)}</Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.customerName}</Form.Label>
-                                    <Form.Label column sm={6} className="info">{receiptData.customerName}</Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.value}</Form.Label>
-                                    <Form.Label column sm={6} className="info"><span style={{ direction: 'ltr' }}>{numbersToArabic(receiptData.installmentAmount)}</span> {receiptData.installmentAmount ? ` = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})` : null}</Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.purpose}</Form.Label>
-                                    <Form.Label column sm={6} className="info">
+                                <div>
+                                    <span className="title">{local.date}</span>
+                                    <span className="info">{timeToArabicDate(receiptData.date, false)}</span>
+                                </div>
+                                <div>
+                                    <span className="title">{local.receiptNumber}</span>
+                                    <span className="info">{numbersToArabic(receiptData.receiptNumber)}</span>
+                                </div>
+                                <div>
+                                    <span className="title">{local.customerName}</span>
+                                    <span className="info">{receiptData.customerName}</span>
+                                </div>
+                                <div>
+                                    <span className="title">{local.value}</span>
+                                    <span className="info"><span style={{ direction: 'ltr' }}>{numbersToArabic(receiptData.installmentAmount)}</span> {receiptData.installmentAmount ? ` = (${new Tafgeet(receiptData.installmentAmount, 'EGP').parse()})` : null}</span>
+                                </div>
+                                <div>
+                                    <span className="title">{local.purpose}</span>
+                                    <span className="info">
                                         {receiptData.type === 'penalty' ? local.payPenalty : receiptData.type === 'randomPayment' ? getValueFromLocalizationFileByKey(receiptData.randomPaymentType) : ''}
-                                    </Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.recipientSignature}</Form.Label>
-                                    <Form.Label column sm={6} className="dots">........................................................</Form.Label>
-                                </Form.Group>
-                                <Form.Group as={Row}>
-                                    <Form.Label column sm={3} className="title">{local.revisedAndIssued}</Form.Label>
-                                    <Form.Label column sm={6} className="dots">........................................................</Form.Label>
-                                </Form.Group>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="title">{local.recipientSignature}</span>
+                                    <span className="dots">........................................................</span>
+                                </div>
+                                <div>
+                                    <span className="title">{local.revisedAndIssued}</span>
+                                    <span className="dots">........................................................</span>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -810,5 +810,15 @@
     "branchgeoAreas": " التقسيمات الجغرافية المتاحة للفرع",
     "branchAssignGeoAreaSuccess":"تم تعيين التقسيمات الجغرافية للفرع بنجاح",
     "branchAssignGeoAreaFail":"حدث خطأ في تعيين التقسيمات الجغرافية للفرع",
-    "theCustomerIsBlocked": "هذاالعميل موقوف التعامل معه"
+    "theCustomerIsBlocked": "هذاالعميل موقوف التعامل معه",
+    "addGuarantor":"إضافة ضامن",
+    "removeGuarantor":"إزالة ضامن",
+    "willNotBeAGuarantor":"لن يكون ضامن للقرض",
+    "guarantorAddedSuccessfully":"تم إضافة الضامن بنجاح",
+    "guarantorRemovedSuccessfully":"تم إزالة الضامن بنجاح",
+    "oracleIntegration":"إنشاء القيود المحاسبية",
+    "oracleIntegrationSuccess":"تم إنشاء القيود المحاسبية بنجاح ",
+    "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية",
+    "downloadExcel": "تنزيل Excel",
+    "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط"
 }

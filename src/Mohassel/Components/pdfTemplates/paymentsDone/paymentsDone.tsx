@@ -9,7 +9,7 @@ const PaymentsDone = (props) => {
             <div className="payments-done" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -73,7 +73,7 @@ const PaymentsDone = (props) => {
                                         <td>{transaction.transactionPrincipal}</td>
                                         <td>{transaction.transactionInterest}</td>
                                         <td>{transaction.transactionAmount}</td>
-                                        <td colSpan={1.5}>{transaction.canceled ===1 ? local.cancelledTransaction : null}</td>
+                                        <td colSpan={1.5}>{transaction.canceled ==="1" ? local.cancelledTransaction : null}</td>
                                     </tr>
                                 )}
                                 <tr>

@@ -283,7 +283,6 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="comments"
                                 value={values.comments}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.comments && touched.comments}
                             />}
                         </Can>
