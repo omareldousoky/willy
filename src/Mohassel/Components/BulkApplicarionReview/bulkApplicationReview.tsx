@@ -204,7 +204,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed", branchId: this.state.branchId }
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed", branchId: this.state.branchId !== 'hq'? this.state.branchId:''  }
     this.props.search(query);
   }
 

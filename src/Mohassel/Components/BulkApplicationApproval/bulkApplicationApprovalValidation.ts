@@ -7,8 +7,8 @@ endOfDay.setHours(23, 59, 59, 59);
 function getMaxDate(selectedReviewedLoans){
     let maxDate = 0;
     selectedReviewedLoans.forEach(loan => {
-        if(loan.application.reviewedDate > maxDate){
-            maxDate = loan.application.reviewedDate;
+        if(loan.application.thirdReviewDate > maxDate){
+            maxDate = loan.application.thirdReviewDate;
         }
     });
     return maxDate;
