@@ -7,7 +7,7 @@ export const englishToArabic = (status: string) => {
     case 'secondReview':
       return {text: 'رُجعت من مدير الفرع', color: '#edb679'};
     case 'thirdReview':
-      return {text: 'رُجعت من مدير المركز', color:'#ebd687'}  
+      return {text: 'رُجعت من مدير المركز', color:'#f4c109'}  
     case 'rejected':
       return { text: 'مرفوضة', color: '#d51b1b' };
     case 'canceled':

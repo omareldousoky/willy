@@ -335,7 +335,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   margin-right: 5px;
 }
 
-.status-chip {
+ip {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -344,8 +344,7 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   color: #fff;
   font-size: 14px;
   font-weight: bold;
-  width: 100px;
-  height: 25px;
+  height: 30px;
   &.outline {
       background-color: #fff;
   }
@@ -360,6 +359,14 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   &.reviewed {
       border: 1px solid #edb600;
       color: #edb600;
+  }
+  &.second-review {
+    border: 1px solid #edb679;
+    color: #edb679;
+  }
+  &.third-review {
+    border: 1px solid #f4c109;
+    color: #f4c109;
   }
   &.approved {
       border: 1px solid #009bed;

@@ -23,6 +23,7 @@ import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicat
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
+import { getCookie } from '../../../Shared/Services/getCookie';
 
 interface Product {
   productName: string;
@@ -65,6 +66,8 @@ interface State {
   size: number;
   manageApplicationsTabs: any[];
   checkPermission: boolean;
+  branchId: string;
+  searchKey: string[];
 }
 interface Props {
   history: Array<any>;
@@ -88,6 +91,8 @@ class BulkApplicationReview extends Component<Props, State>{
       size: 10,
       manageApplicationsTabs: [],
       checkPermission: false,
+      searchKey: ['keyword', 'dateFromTo', 'status-review-application'],
+      branchId: JSON.parse(getCookie('ltsbranch'))._id,
     }
     this.mappers = [
       {
@@ -116,9 +121,19 @@ class BulkApplicationReview extends Component<Props, State>{
         </div>
       },
       {
-        title: local.productName,
-        key: "productName",
-        render: data => data.application.product.productName
+        title: local.age,
+        key: "age",
+        render: data => data.application?.customer?.birthDate ? this.calculateAge(data.application.customer.birthDate) : null
+      },
+      {
+        title: local.nationalId,
+        key: "nationalId",
+        render: data => data.application.customer.nationalId
+      },
+      {
+        title: local.noOfInstallments,
+        key: "noOfInstallments",
+        render: data => data.application.product.noOfInstallments
       },
       {
         title: local.customerType,
@@ -131,24 +146,65 @@ class BulkApplicationReview extends Component<Props, State>{
         render: data => data.application.principal
       },
       {
+        title: local.businessActivity,
+        key: 'businessActivity',
+        render: data => data.application.customer.businessActivity
+      },
+      {
+        title: local.loanStatus,
+        key: 'status',
+        render: data => this.getStatus(data.application.status)
+      },
+      {
         title: local.reviewDate,
         key: "reviewDate",
+
         render: data => timeToDateyyymmdd(data.application.reviewedDate)
       },
     ]
   }
   componentDidMount() {
-    if(ability.can('secondReview','application') || ability.can('thirdReview','application')){
-      this.setState({checkPermission: true});
+    if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
+      this.setState({ checkPermission: true });
+      this.getApplications();
+      if (this.props.data?.length > 0) {
+        this.props.search({ url: 'clearData' });
+      }
+      if(this.state.branchId==='hq'){
+        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'status-review-application']});
+      }
+      this.setState({ manageApplicationsTabs: manageApplicationsArray() })
     }
-    if (this.props.data?.length > 0) {
-      this.props.search({ url: 'clearData' });
+  }
+  componentDidUpdate() {
+    if (this.props.searchFilters.status === 'secondReview') {
+      if (!this.mappers.find(item => item.key === 'secondReviewDate')) {
+        const index = this.mappers.findIndex(item => item.key === 'reviewDate')
+        this.mappers.splice(index, 1);
+        this.mappers.push(
+          {
+            title: local.secondReviewDate,
+            key: 'secondReviewDate',
+            render: data => timeToDateyyymmdd(data.application.secondReviewDate),
+          }
+        )
+      }
+    } else {
+      if (!this.mappers.find(item => item.key === 'reviewDate')) {
+        const index = this.mappers.findIndex(item => item.key === 'secondReviewDate')
+        if (index > -1) {
+          this.mappers.splice(index, 1);
+          this.mappers.push({
+            title: local.reviewDate,
+            key: "reviewDate",
+            render: data => timeToDateyyymmdd(data.application.reviewedDate)
+          })
+        }
+      }
     }
-    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
-    
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed", branchId: this.state.branchId }
     this.props.search(query);
   }
 
@@ -176,15 +232,15 @@ class BulkApplicationReview extends Component<Props, State>{
       action: values.action,
       ids: this.state.selectedReviewedLoans.map(loan => loan.id)
     }
-      const res = await bulkReview(obj);
-     if (res.status === "success") {
+    const res = await bulkReview(obj);
+    if (res.status === "success") {
       this.props.setLoading(false);
-     this.setState({ selectedReviewedLoans: [], checkAll: false })
-       Swal.fire('',  local.reviewed, 'success').then(() => this.getApplications());
+      this.setState({ selectedReviewedLoans: [], checkAll: false })
+      Swal.fire('', obj.action==='secondReview'? local.secondReviewSuccess : local.thirdReviewSuccess, 'success').then(() => this.getApplications());
     } else {
-    this.props.setLoading(false);
-       Swal.fire('', local.reviewApplicationsError, 'error');
-     }
+      this.props.setLoading(false);
+      Swal.fire('', local.reviewApplicationsError, 'error');
+    }
   }
   dateSlice(date) {
     if (!date) {
@@ -192,6 +248,35 @@ class BulkApplicationReview extends Component<Props, State>{
     } else {
       return timeToDateyyymmdd(date)
     }
+  }
+  getStatus(status: string) {
+    switch (status) {
+      case 'underReview':
+        return <div className="status-chip outline under-review">{local.underReview}</div>
+      case 'created':
+        return <div className="status-chip outline created">{local.created}</div>
+      case 'reviewed':
+        return <div className="status-chip outline reviewed">{local.reviewed}</div>
+      case 'secondReview':
+        return <div className="status-chip outline second-review">{local.secondReviewed}</div>
+      case 'thirdReview':
+        return <div className="status-chip outline third-review">{local.thirdReviewed}</div>
+      case 'approved':
+        return <div className="status-chip outline approved">{local.approved}</div>
+      case 'rejected':
+        return <div className="status-chip outline rejected">{local.rejected}</div>
+      case 'canceled':
+        return <div className="status-chip outline canceled">{local.cancelled}</div>
+      default: return null;
+    }
+  }
+  calculateAge(dateOfBirth: number) {
+    if (dateOfBirth) {
+      const diff = Date.now().valueOf() - dateOfBirth;
+      const age = new Date(diff);
+      return Math.abs(age.getUTCFullYear() - 1970);
+    }
+    return 0;
   }
   render() {
     return (
@@ -219,12 +304,15 @@ class BulkApplicationReview extends Component<Props, State>{
               </Button>
             </div>
             <hr className="dashed-line" />
+
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'branch', 'status-review-application']}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode']}
+              searchKeys ={this.state.searchKey}
+              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
               url="application"
               from={this.state.from}
-              size={this.state.size} />
+              size={this.state.size}
+              hqBranchIdRequest = {this.state.branchId !=='hq'? this.state.branchId :''}
+               />
             <DynamicTable
               from={this.state.from}
               size={this.state.size}
@@ -243,7 +331,7 @@ class BulkApplicationReview extends Component<Props, State>{
           <Formik
             initialValues={{ date: this.dateSlice(null), action: '', selectedReviewedLoans: this.state.selectedReviewedLoans }}
             onSubmit={this.handleSubmit}
-             validationSchema={bulkApplicationReviewValidation}
+            validationSchema={bulkApplicationReviewValidation}
             validateOnBlur
             validateOnChange
           >
@@ -282,15 +370,14 @@ class BulkApplicationReview extends Component<Props, State>{
                         isInvalid={Boolean(formikProps.errors.action) && Boolean(formikProps.touched.action)}
                       >
                         <option value="" disabled></option>
-                       {this.state.selectedReviewedLoans[0].application.status !== 'secondReview'  &&<Can I = "secondReview" a ="application"><option value='secondReview'>{local.secondReview}</option></Can> }
-                       <Can I = "thirdReview" a= "application">  <option value='thirdReview'>{local.thirdReview}</option> </Can>
+                        {this.state.selectedReviewedLoans[0].application.status !== 'secondReview' && <Can I="secondReview" a="application"><option value='secondReview'>{local.secondReview}</option></Can>}
+                        <Can I="thirdReview" a="application">  <option value='thirdReview'>{local.thirdReview}</option> </Can>
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
                         {formikProps.errors.action}
                       </Form.Control.Feedback>
                     </Col>
                   </Form.Group>
-
                 </Modal.Body>
                 <Modal.Footer>
                   <Button variant="secondary" onClick={() => this.setState({ showModal: false })}>{local.cancel}</Button>
@@ -299,7 +386,7 @@ class BulkApplicationReview extends Component<Props, State>{
               </Form>
             }
           </Formik>
-        </Modal>} 
+        </Modal>}
       </>
     )
   }
