@@ -326,7 +326,9 @@ class Search extends Component<Props, State> {
                         <p className="dropdown-label">{local.status}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="status"  value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>     
                            <option value="" data-qc="all" disabled></option>
+                           <Can I = "secondReview" a ="application">
                            <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                           </Can>
                            <Can I="thirdReview" a="application">
                             <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
                           </Can>
