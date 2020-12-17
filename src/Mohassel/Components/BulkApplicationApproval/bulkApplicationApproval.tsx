@@ -127,9 +127,9 @@ class BulkApplicationApproval extends Component<Props, State>{
         render: data => data.application.principal
       },
       {
-        title: local.reviewDate,
-        key: "reviewDate",
-        render: data => timeToDateyyymmdd(data.application.reviewedDate)
+        title: local.thirdReviewDate,
+        key: "thirdReviewDate",
+        render: data => timeToDateyyymmdd(data.application.thirdReviewDate)
       },
     ]
   }
@@ -141,7 +141,7 @@ class BulkApplicationApproval extends Component<Props, State>{
 
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "thirdReview" }
     this.props.search(query);
   }
 
@@ -248,7 +248,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                 <Modal.Body>
                   <Form.Group as={Row} controlId="approvalDate">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
-                    <Col sm={6}>
+                    <Col sm={7}>
                       <Form.Control
                         type="date"
                         name="approvalDate"
@@ -265,7 +265,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                   </Form.Group>
                   <Form.Group as={Row} controlId="fundSource">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.fundSource}*`}</Form.Label>
-                    <Col sm={6}>
+                    <Col sm={7}>
                       <Form.Control as="select"
                         name="fundSource"
                         data-qc="fundSource"

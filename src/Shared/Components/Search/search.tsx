@@ -144,7 +144,7 @@ class Search extends Component<Props, State> {
         case 'status-application':
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'status-review-application':
-          initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : 'reviewed';
+          initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :

@@ -166,7 +166,7 @@ class BulkApplicationReview extends Component<Props, State>{
   componentDidMount() {
     if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
       this.setState({ checkPermission: true });
-      this.getApplications();
+      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
       if (this.props.data?.length > 0) {
         this.props.search({ url: 'clearData' });
       }
@@ -204,7 +204,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed", branchId: this.state.branchId !== 'hq'? this.state.branchId:''  }
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.state.branchId !== 'hq'? this.state.branchId:'' }
     this.props.search(query);
   }
 
@@ -235,7 +235,7 @@ class BulkApplicationReview extends Component<Props, State>{
     const res = await bulkReview(obj);
     if (res.status === "success") {
       this.props.setLoading(false);
-      this.setState({ selectedReviewedLoans: [], checkAll: false })
+      this.setState({ selectedReviewedLoans: [], checkAll: false  })
       Swal.fire('', obj.action==='secondReview'? local.secondReviewSuccess : local.thirdReviewSuccess, 'success').then(() => this.getApplications());
     } else {
       this.props.setLoading(false);
@@ -343,7 +343,7 @@ class BulkApplicationReview extends Component<Props, State>{
                 <Modal.Body>
                   <Form.Group as={Row} controlId="date">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
-                    <Col sm={6}>
+                    <Col sm={7}>
                       <Form.Control
                         type="date"
                         name="date"
@@ -360,7 +360,7 @@ class BulkApplicationReview extends Component<Props, State>{
                   </Form.Group>
                   <Form.Group as={Row} controlId="action">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.action}*`}</Form.Label>
-                    <Col sm={6}>
+                    <Col sm={7}>
                       <Form.Control as="select"
                         name="action"
                         data-qc="action"
@@ -389,6 +389,9 @@ class BulkApplicationReview extends Component<Props, State>{
         </Modal>}
       </>
     )
+  }
+  componentWillUnmount(){
+    this.props.search({ url: 'clearData' });
   }
 }
 const addSearchToProps = dispatch => {
