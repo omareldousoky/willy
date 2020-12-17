@@ -193,17 +193,18 @@ class PayInstallment extends Component<Props, State> {
                               name="installmentNumber"
                               data-qc="installmentNumber"
                               onChange={event => {
+                                const installment = this.props.installments.find(installment => installment.id ===Number(event.currentTarget.value))
                                 formikBag.setFieldValue(
                                   "installmentNumber",
                                   event.currentTarget.value
                                 );
                                 formikBag.setFieldValue(
                                   "requiredAmount",
-                                  this.props.installments.find(
-                                    installment =>
-                                      installment.id ===
-                                      Number(event.currentTarget.value)
-                                  )?.installmentResponse
+                                  (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
+                                );
+                                formikBag.setFieldValue(
+                                  "payAmount",
+                                  (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
                                 );
                               }}
                             >

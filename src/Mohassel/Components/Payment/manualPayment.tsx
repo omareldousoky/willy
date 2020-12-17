@@ -237,14 +237,15 @@ class ManualPayment extends Component<Props, State> {
                         data-qc="installmentNumber"
                         value={this.props.formikProps.values.installmentNumber}
                         onChange={event => {
+                          const installment = this.props.application.installmentsObject.installments.find(installment => installment.id ===Number(event.currentTarget.value))
                           this.props.formikProps.setFieldValue("installmentNumber", event.currentTarget.value);
                           this.props.formikProps.setFieldValue(
                             "requiredAmount",
-                            this.props.application.installmentsObject.installments.find(
-                              installment =>
-                                installment.id ===
-                                Number(event.currentTarget.value)
-                            )?.installmentResponse
+                            (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
+                          );
+                          this.props.formikProps.setFieldValue(
+                            "payAmount",
+                            (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
                           );
                         }}
                       >
