@@ -91,7 +91,7 @@ class BulkApplicationReview extends Component<Props, State>{
       size: 10,
       manageApplicationsTabs: [],
       checkPermission: false,
-      searchKey: ['keyword', 'dateFromTo', 'status-review-application'],
+      searchKey: ['keyword', 'dateFromTo', 'review-application'],
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
     }
     this.mappers = [
@@ -167,11 +167,9 @@ class BulkApplicationReview extends Component<Props, State>{
     if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
       this.setState({ checkPermission: true });
       this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
-      if (this.props.data?.length > 0) {
-        this.props.search({ url: 'clearData' });
-      }
+
       if(this.state.branchId==='hq'){
-        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'status-review-application']});
+        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'review-application']});
       }
       this.setState({ manageApplicationsTabs: manageApplicationsArray() })
     }
@@ -204,8 +202,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.state.branchId !== 'hq'? this.state.branchId:'' }
-    this.props.search(query);
+    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.state.branchId !== 'hq'? this.state.branchId:'' })
   }
 
   addRemoveItemFromChecked(loan: LoanItem) {
@@ -311,6 +308,7 @@ class BulkApplicationReview extends Component<Props, State>{
               url="application"
               from={this.state.from}
               size={this.state.size}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               hqBranchIdRequest = {this.state.branchId !=='hq'? this.state.branchId :''}
                />
             <DynamicTable
@@ -389,9 +387,6 @@ class BulkApplicationReview extends Component<Props, State>{
         </Modal>}
       </>
     )
-  }
-  componentWillUnmount(){
-    this.props.search({ url: 'clearData' });
   }
 }
 const addSearchToProps = dispatch => {

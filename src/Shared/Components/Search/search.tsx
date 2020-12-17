@@ -143,7 +143,7 @@ class Search extends Component<Props, State> {
           initialState.branchId = this.props.url === "loan"? this.props.issuedLoansSearchFilters.branchId : '';
         case 'status-application':
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
-        case 'status-review-application':
+        case 'review-application':
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
@@ -319,19 +319,15 @@ class Search extends Component<Props, State> {
                     </Col>
                   )
                 }
-                if(searchKey === 'status-review-application') {
+                if(searchKey === 'review-application') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
                         <p className="dropdown-label">{local.status}</p>
-                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
-                          <Can I="secondReview" a="application">
-                            <Can not I ='thirdReview' a ='application' >
-                            <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
-                            </Can>
-                          </Can>      
-                           <Can I="thirdReview" a="application">
+                        <Form.Control as="select" className="dropdown-select" data-qc="status"  value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>     
+                           <option value="" data-qc="all" disabled></option>
                            <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                           <Can I="thirdReview" a="application">
                             <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
                           </Can>
                         </Form.Control>
