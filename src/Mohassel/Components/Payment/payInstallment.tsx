@@ -210,10 +210,8 @@ class PayInstallment extends Component<Props, State> {
                               <option value={-1}></option>
                               {this.props.installments.map(installment => {
                                 if (
-                                  installment.status !== "partiallyPaid" &&
                                   installment.status !== "paid" &&
-                                  installment.status !== "rescheduled" &&
-                                  installment.dateOfPayment > Date.now()
+                                  installment.status !== "rescheduled"
                                 )
                                   return (
                                     <option
