@@ -321,9 +321,9 @@ class FreeRescheduling extends Component<Props, State>{
                                         </div>
                                         <Button style={{ width: '4%', alignSelf: 'flex-end' }} onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
                                     </div>
-                                    {this.getTotals(formikProps.values).principleSum === this.props.application.installmentsObject.totalInstallments.principal ? <div className="d-flex justify-content-end">
+                                    {parseFloat(this.getTotals(formikProps.values).principleSum.toFixed(2)) === parseFloat(this.props.application.installmentsObject.totalInstallments.principal.toFixed(2)) ? <div className="d-flex justify-content-end">
                                         <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
-                                    </div> : <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {this.getTotals(formikProps.values).principleSum}</h1></div>}
+                                    </div> : <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {this.getTotals(formikProps.values).principleSum.toFixed(2)}</h1></div>}
                                 </Col>
                             </Form>
                         }
