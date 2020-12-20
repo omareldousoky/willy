@@ -53,10 +53,10 @@
     padding: 10px;
     border-radius: 30px; 
     color: #fff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
-    width: 100px;
-    height: 25px;
+    min-width: 130px;
+    height: 30px;
     &.outline {
         background-color: #fff;
     }
@@ -72,6 +72,14 @@
         border: 1px solid #edb600;
         color: #edb600;
     }
+    &.second-review {
+        border: 1px solid #edb679;
+        color: #edb679;
+      }
+      &.third-review {
+        border: 1px solid #f4c109;
+        color: #f4c109;
+      }
     &.approved {
         border: 1px solid #009bed;
         color: #009bed;
