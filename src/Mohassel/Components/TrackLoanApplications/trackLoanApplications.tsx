@@ -272,7 +272,7 @@ class TrackLoanApplications extends Component<Props, State>{
               />
             </Card.Body>
           </Card>
-          <Modal show={this.state.iScoreModal} backdrop="static">
+          <Modal show={this.state.iScoreModal} backdrop="static" size='lg'>
             <Modal.Header>
               <Modal.Title>
                 iScore
