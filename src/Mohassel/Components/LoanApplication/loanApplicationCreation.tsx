@@ -184,6 +184,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     maxIndividualPrincipal: 0,
                     maxGroupIndividualPrincipal: 0,
                     maxGroupPrincipal: 0,
+                    maxGroupReturningIndividualPrincipal: 0
                 },
                 customerTotalPrincipals: 0,
                 customerMaxPrincipal: 0,
@@ -834,7 +835,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
                             }
                         }
-                        if ((customer.totalPrincipals && customer.maxPrincipal && customer.totalPrincipals >= customer.maxPrincipal) || (customer.totalPrincipals && !customer.maxPrincipal && ((this.state.application.beneficiaryType === "individual" && customer.totalPrincipals >= this.state.application.principals.maxIndividualPrincipal) || (this.state.application.beneficiaryType === "group" && customer.totalPrincipals >= this.state.application.principals.maxGroupIndividualPrincipal)))) {
+                        if ((customer.totalPrincipals && customer.maxPrincipal && customer.totalPrincipals >= customer.maxPrincipal) || (customer.totalPrincipals && !customer.maxPrincipal && ((this.state.application.beneficiaryType === "individual" && customer.totalPrincipals >= this.state.application.principals.maxIndividualPrincipal) || (this.state.application.beneficiaryType === "group" && customer.totalPrincipals >= ( customer.paidLoans.length > 0 ? this.state.application.principals.maxGroupReturningIndividualPrincipal : this.state.application.principals.maxGroupIndividualPrincipal))))) {
                             if (Object.keys(validationObject).includes(customer._id)) {
                                 validationObject[customer._id] = { ...validationObject[customer._id], ...{ totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } } }
                             } else {
@@ -895,6 +896,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
                 maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
                 maxGroupPrincipal: princples.body.maxGroupPrincipal,
+                maxGroupReturningIndividualPrincipal: princples.body.maxGroupReturningIndividualPrincipal
             }
             const application = this.state.application;
             application.principals = principals
