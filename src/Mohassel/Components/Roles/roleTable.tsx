@@ -87,7 +87,7 @@ class RoleTable extends Component<Props, State> {
             return true
         }
         else if (!this.props.updatePerms) {
-            if (this.props.permissions && Object.keys(this.props.permissions).length > 0 && this.props.permissions[objectKey] && (BigInt(this.props.permissions[objectKey]) & BigInt(actionValue[action])).toString() === BigInt(actionValue[action]).toString()) {
+            if (this.props.permissions && Object.keys(this.props.permissions).length > 0 && this.props.permissions[objectKey] && actionValue[action] && (BigInt(this.props.permissions[objectKey]) & BigInt(actionValue[action])).toString() === BigInt(actionValue[action]).toString()) {
                 return true
             }
         }
