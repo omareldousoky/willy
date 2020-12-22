@@ -235,11 +235,11 @@ export const GuarantorTableView = (props: Props) => {
         changeSelectedId('');
         changeModal(false);
     }
-    const pass = props.status && ['reviewed', 'created', 'approved', 'issued'].includes(props.status)
+    const pass = props.status && ['reviewed', 'created', 'approved'].includes(props.status)
     return (
         <>
             <div className="d-flex flex-column align-items-start justify-content-center ">
-                {pass && (ability.can("editApplicationGuarantors", "application") || ability.can("editIssuedLoanGuarantors", "application")) && <Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button>}
+                {(pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application")) && <Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button>}
                 {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
