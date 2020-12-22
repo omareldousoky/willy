@@ -938,7 +938,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     } else (i === 0) ? names = names + check.validationObject[id].customerName : names = names + ', ' + check.validationObject[id].customerName
 
                 });
-                Swal.fire("error", `${names} ${local.memberInvolvedInAnotherLoan} ${(financeNames.length > 0 ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}` : '')}`, 'error')
+                Swal.fire("error", `${names.length > 0 ? names : ''} ${names.length > 0 ? local.memberInvolvedInAnotherLoan : ''} ${(financeNames.length > 0 ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}` : '')}`, 'error')
             }
         } else {
             this.setState({
