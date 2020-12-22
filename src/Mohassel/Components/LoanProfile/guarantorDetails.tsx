@@ -239,7 +239,7 @@ export const GuarantorTableView = (props: Props) => {
     return (
         <>
             <div className="d-flex flex-column align-items-start justify-content-center ">
-                {(pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application")) && <Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button>}
+                {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button>}
                 {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
@@ -252,7 +252,7 @@ export const GuarantorTableView = (props: Props) => {
                             {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
-                            {pass && (ability.can("editApplicationGuarantors", "application") || ability.can("editIssuedLoanGuarantors", "application")) && <th></th>}
+                            {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <th></th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -271,7 +271,7 @@ export const GuarantorTableView = (props: Props) => {
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
                                 </Can>}
-                                {pass && (props.guarantors.length > props.application.product.noOfGuarantors) && (ability.can("editApplicationGuarantors", "application") || ability.can("editIssuedLoanGuarantors", "application")) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
+                                {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
                             </tr>)
                         }
                         )}
