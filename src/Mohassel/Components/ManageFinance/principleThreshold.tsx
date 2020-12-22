@@ -156,7 +156,7 @@ class PrincipleThreshold extends Component<Props, State> {
                                     </Col>
                                 </Form.Group>
                                 <Form.Group className="data-group" controlId="maxGroupReturningIndividualPrincipal">
-                                    <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxGroupIndividualPrincipal}repeated*`}</Form.Label>
+                                    <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxGroupReturningIndividualPrincipal}*`}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
                                             type="number"

@@ -759,6 +759,7 @@
     "principalRange":"إعدادات التمويل",
     "maxIndividualPrincipal":"الحد الاقصى للفرد",
     "maxGroupIndividualPrincipal":"الحد الاقصى للفرد فالمجموعة",
+    "maxGroupReturningIndividualPrincipal":"الحد الاقصى للفرد المقترض سابقا فالمجموعة",
     "maxGroupPrincipal":"الحد الاقصى للمجموعة",
     "principalMaxWillChange":"سيتم تغيير الحد الاقصى لقيم القروض",
     "principalMaxChangeSuccess":"تم تغيير الحد الاقصى لقيم القروض بنجاح",
