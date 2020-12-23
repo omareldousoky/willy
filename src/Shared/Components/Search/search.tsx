@@ -113,6 +113,7 @@ class Search extends Component<Props, State> {
     if(this.props.status) obj.status = this.props.status;
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
+    if(this.props.url === 'application' && !obj.status) obj.status='reviewed'
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -144,7 +145,7 @@ class Search extends Component<Props, State> {
         case 'status-application':
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'review-application':
-          initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
+          initialState.status = this.props.url === "application"? this.props.issuedLoansSearchFilters.status : '';
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
@@ -325,9 +326,9 @@ class Search extends Component<Props, State> {
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
                         <p className="dropdown-label">{local.status}</p>
-                        <Form.Control as="select" className="dropdown-select" data-qc="status"  value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>     
+                        <Form.Control as="select" className="dropdown-select" data-qc="status"  value={formikProps.values.status ? formikProps.values.status  : 'reviewed' } onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>     
                            <option value="" data-qc="all" disabled></option>
-                           <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                           <option  value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
                            <Can I="thirdReview" a="application">
                             <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
                           </Can>

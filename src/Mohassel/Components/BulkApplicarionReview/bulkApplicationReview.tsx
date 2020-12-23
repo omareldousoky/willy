@@ -123,12 +123,12 @@ class BulkApplicationReview extends Component<Props, State>{
       {
         title: local.age,
         key: "age",
-        render: data => data.application?.customer?.birthDate ? this.calculateAge(data.application.customer.birthDate) : null
+        render: data => data.application?.customer?.birthDate ? this.calculateAge(data.application.customer.birthDate) : data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? this.calculateAge(member.customer.birthDate): null )
       },
       {
         title: local.nationalId,
         key: "nationalId",
-        render: data => data.application.customer.nationalId
+        render: data => data.application?.customer?.nationalId ? data.application.customer.nationalId : data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer.nationalId: null )
       },
       {
         title: local.noOfInstallments,
@@ -148,7 +148,7 @@ class BulkApplicationReview extends Component<Props, State>{
       {
         title: local.businessActivity,
         key: 'businessActivity',
-        render: data => data.application.customer.businessActivity
+        render: data => data.application?.customer?.businessActivity ? data.application.customer.businessActivity  :  data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer?.businessActivity: null )
       },
       {
         title: local.loanStatus,
@@ -167,7 +167,7 @@ class BulkApplicationReview extends Component<Props, State>{
     if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
       this.setState({ checkPermission: true });
       this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
-
+      this.props.setSearchFilters({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
       if(this.state.branchId==='hq'){
         this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'review-application']});
       }
