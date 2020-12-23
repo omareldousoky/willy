@@ -540,7 +540,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 errorMessage2 = local.individualAgeError;
             }
             if(errorMessage1 || errorMessage2)
-            Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : ''} ${errorMessage2}</span>`, 'error');
+            Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : ""} ${errorMessage2}</span>`, 'error');
         } else {
             Swal.fire("error", local.searchError, 'error')
         }
