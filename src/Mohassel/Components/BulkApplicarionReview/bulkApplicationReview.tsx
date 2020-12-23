@@ -148,7 +148,7 @@ class BulkApplicationReview extends Component<Props, State>{
       {
         title: local.businessActivity,
         key: 'businessActivity',
-        render: data => data.application?.customer?.businessActivity ? data.customer.businessActivity  :  data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer.businessActivity: null )
+        render: data => data.application?.customer?.businessActivity ? data.customer?.businessActivity  :  data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer?.businessActivity: null )
       },
       {
         title: local.loanStatus,
