@@ -235,7 +235,7 @@ export const GuarantorTableView = (props: Props) => {
         changeSelectedId('');
         changeModal(false);
     }
-    const pass = props.status && ['reviewed', 'created', 'approved'].includes(props.status)
+    const pass = props.status && ['reviewed', 'created', 'approved', 'secondReview', 'thirdReview'].includes(props.status)
     return (
         <>
             <div className="d-flex flex-column align-items-start justify-content-center ">
