@@ -1,0 +1,653 @@
+import React from 'react';
+import './monthlyReport.scss';
+
+const MonthlyReport = (props) => {
+  return (
+    <div className="monthly-report" lang="ar" dir="rtl">
+
+      {/* page one */}
+      <div className="page-one-container">
+        <div className="inner-container">
+          <div className="header">
+            <img alt="rekabaLogo1" src={require('../../../Assets/rekabaLogo1.jpg')} />
+            <img alt="rekabaLogo2" src={require('../../../Assets/rekabaLogo2.jpg')} />
+          </div>
+          <div className="text-list">
+            <h4>  أولاً: تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر</h4>
+            <ul>
+              <li>تلتزم الجمعية أو المؤسسة  بناءً على نص المادة &quot; 42 &quot; من قواعد ومعايير ممارسة نشاط التمويل متناهي الصغربإعداد التقارير الرقابية  المبينة فى الملحق (ب) وتسليمها للوحدة فى التوقيتات المحددة قرين كل منها </li>
+              <li>على الجمعية أو المؤسسة السعى نحو توافق النماذج المستخدمة وتصميم قواعد البيانات وتطبيقات نظم المعلومات بقدر الإمكان مع متطلبات إعداد التقارير الرقابية المشار إليها لتسهيل إعدادها</li>
+              <li>يجب على الجمعية أو المؤسسة بذل العناية اللازمة للتأكد من دقة التقارير المقدمة للوحدة وسلامة تصويرها</li>
+              <li>وقد تم تصميم النموذج الإلكتروني المرفق لمساعدة الجمعيات و المؤسسات الأهلية بإعداد التقارير الشهرية المطلوبة </li>
+            </ul>
+          </div>
+          <div className="bottom-text">
+            <div className="inner-container">
+              التوقيت: خلال أسبوعين من نهاية كل شهر ميلادى
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* end of page one */}
+
+      {/* page two */}
+      <div className="page-two-container-break">
+        <div className="page-two-container">
+          <div className="inner-container">
+            <h4>تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو المؤسسة الأهلية</h4>
+            <div className="inputs-desc">
+              <h5>تعليمات الإدخال:</h5>
+              <h5>عند الوقوف على أي خانة  من خانات إدخال  البيانات  - سوف تظهر التعليمات الخاصة بملئها  في  هذا المستطيل</h5>
+            </div>
+            <h5 className="sub-title">بيانات الجمعية / المؤسسة الأهلية و بيانات معد التقرير</h5>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> اسم الجمعية/المؤسسة :</td>
+                  <td className="td-body"> شركه تساهيل للتمويل متناهي الصغر</td>
+                </tr>
+                <tr>
+                  <td className="td-head"> رقم الترخيص :</td>
+                  <td className="td-body"> شركه تساهيل للتمويل متناهي الصغر</td>
+                </tr>
+              </tbody>
+            </table>
+            <h5 className="sub-title">اسم وصفة معد التقرير</h5>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> اسم معد التقرير:</td>
+                  <td className="td-body"> اسلام حسن</td>
+                </tr>
+                <tr>
+                  <td className="td-head"> صفة معد التقرير:</td>
+                  <td className="td-body"> المدير المالي</td>
+                </tr>
+              </tbody>
+            </table>
+            <h5 className="sub-title">بيانات التقرير</h5>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> الفترة :</td>
+                  <td className="label"> من</td>
+                  <td className="td-body"> 10/01/2020</td>
+                  <td className="label" style={{ paddingRight: 10 }}> الي</td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+                <tr>
+                  <td className="td-head"> تاريخ الاعداد:</td>
+                  <td></td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p className="perpared">إعداد:  اسلام حسن</p>
+      </div>
+      {/* end of page two */}
+
+      {/* page three */}
+      <div className="page-three-container-break">
+        <div className="page-three-container">
+          <div className="inner-container">
+            <h4>تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو المؤسسة الأهلية لمؤسسة الأهلية</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> الفترة من :</td>
+                  <td className="td-body"> 10/01/2020</td>
+                  <td></td>
+                  <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="inputs-desc">
+              <h5>تعليمات الإدخال:</h5>
+              <h5>عند الوقوف على أي خانة  من خانات إدخال  البيانات  - سوف تظهر التعليمات الخاصة بملئها  في  هذا المستطيل</h5>
+            </div>
+            <table className="details">
+              <thead>
+                <tr>
+                  <th colSpan={5}>1. العملاء والتمويل الممنوح</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>بيان</th>
+                  <th>عملاء مستمرون</th>
+                  <th>عملاء جدد خلال الفترة</th>
+                  <th>المجموع</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.1</td>
+                  <td>إجمالى عدد عملاء تمويل أفراد</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.2</td>
+                  <td>منهم عدد العملاء – ذكور</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.3</td>
+                  <td>منهم عدد العملاء - إناث</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.4</td>
+                  <td>إجمالى قيمة أرصدة تمويل أفراد</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.5</td>
+                  <td>منها أرصدة تمويل لعملاء – ذكور</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.6</td>
+                  <td>منها أرصدة تمويل لعملاء - إناث</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.7</td>
+                  <td>إجمالى عدد عقود تمويل جماعى</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.8</td>
+                  <td>إجمالى عدد عملاء عقود تمويل جماعى</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.9</td>
+                  <td>منهم عدد العملاء – ذكور</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.10</td>
+                  <td>منهم عدد العملاء - إناث</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.11</td>
+                  <td>إجمالى قيمة أرصدة تمويل جماعى</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.12</td>
+                  <td>منها أرصدة تمويل لعملاء – ذكور</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center' }}>1.13</td>
+                  <td>منها أرصدة تمويل لعملاء - إناث</td>
+                  <td>288,535</td>
+                  <td>28,913</td>
+                  <td>317,448</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="inner-container">
+            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>بناء على البيانات التي تم إدخالها في الجدول أعلاه </p>
+            <div className="totals">
+              <div className="lines">
+                <p>إجمالي قيمة أرصدة التمويل القائمة</p>
+                <p>(إجمالي قيمة أرصدة تمويل أفراد + إجمالي قيمة أرصدة تمويل جماعي)</p>
+              </div>
+              <div className="big-number">3,703,856,728.00</div>
+            </div>
+            <div className="totals">
+              <div className="lines">
+                <p>عدد العملاء الحاصلون على تمويل</p>
+                <p>(إجمالي عدد عملاء تمويل أفراد + إجمالي عدد عملاء عقود تمويل جماعي)</p>
+              </div>
+              <div className="big-number">576351</div>
+            </div>
+          </div>
+        </div>
+        <p className="perpared">إعداد:  اسلام حسن</p>
+      </div>
+      {/* end of page three */}
+
+      {/* page four */}
+      <div className="page-three-container-break">
+        <div className="page-three-container">
+          <div className="inner-container">
+            <h4>تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو المؤسسة الأهلية</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> الفترة من :</td>
+                  <td className="td-body"> 10/01/2020</td>
+                  <td></td>
+                  <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="inputs-desc">
+              <h5>تعليمات الإدخال:</h5>
+              <h5>عند الوقوف على أي خانة  من خانات إدخال  البيانات  - سوف تظهر التعليمات الخاصة بملئها  في  هذا المستطيل</h5>
+            </div>
+            <table className="details">
+              <thead>
+                <tr>
+                  <th colSpan={5}>2.1 قيمة أرصدة التمويل القائمة</th>
+                </tr>
+                <tr>
+                  <th rowSpan={2}>المنتج التمويلى</th>
+                  <th colSpan={4}>مجال النشاط الممنوح له التمويل</th>
+                </tr>
+                <tr>
+                  <th>تجارى</th>
+                  <th>إنتاجى / حرفى</th>
+                  <th>خدمى</th>
+                  <th>زراعى</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ textAlign: 'center' }}>
+                  <td> قرض</td>
+                  <td> 1</td>
+                  <td> 2</td>
+                  <td> 3</td>
+                  <td> 4</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="inner-container">
+            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>بناء على البيانات التي تم إدخالها في الجدول أعلاه </p>
+            <div className="totals">
+              <div className="lines">
+                <p>إجمالي قيمة أرصدة التمويل القائمة</p>
+                <p>(إجمالي قيمة أرصدة تمويل تجاري+إنتاجي/حرفي+خدمي+زراعي)</p>
+              </div>
+              <div className="big-number">3,703,856,728.00</div>
+            </div>
+            <div className="totals">
+              <div className="lines">
+                <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة </p>
+                <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
+              </div>
+              <div className="big-number">مطابق</div>
+            </div>
+          </div>
+          <div className="inner-container">
+            <table className="details">
+              <thead>
+                <tr>
+                  <th colSpan={5}>2.2 عدد العملاء الحاصلين على التمويل</th>
+                </tr>
+                <tr>
+                  <th rowSpan={2}>المنتج التمويلى</th>
+                  <th colSpan={4}>مجال النشاط الممنوح له التمويل</th>
+                </tr>
+                <tr>
+                  <th>تجارى</th>
+                  <th>إنتاجى / حرفى</th>
+                  <th>خدمى</th>
+                  <th>زراعى</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ textAlign: 'center' }}>
+                  <td> قرض</td>
+                  <td> 1</td>
+                  <td> 2</td>
+                  <td> 3</td>
+                  <td> 4</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td> إجمالى</td>
+                  <td> 1</td>
+                  <td> 2</td>
+                  <td> 3</td>
+                  <td> 4</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="inner-container">
+            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>بناء على البيانات التي تم إدخالها في الجدول أعلاه </p>
+            <div className="totals">
+              <div className="lines">
+                <p>إجمالي عدد العملاء الحاصلين على التمويل</p>
+                <p>جمالي عدد العملاء الحاصلين على (تمويل تجاري+إنتاجي/حرفي+خدمي+زراعي)</p>
+              </div>
+              <div className="big-number">3,703,856,728.00</div>
+            </div>
+            <div className="totals">
+              <div className="lines">
+                <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة </p>
+                <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
+              </div>
+              <div className="big-number">مطابق</div>
+            </div>
+          </div>
+        </div>
+        <p className="perpared">إعداد:  اسلام حسن</p>
+      </div>
+      {/* end of page four */}
+
+      {/* page five */}
+      <div className="page-three-container-break">
+        <div className="page-three-container">
+          <div className="inner-container">
+            <h4>تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو المؤسسة الأهلية</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> الفترة من :</td>
+                  <td className="td-body"> 10/01/2020</td>
+                  <td></td>
+                  <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="inputs-desc">
+              <h5>تعليمات الإدخال:</h5>
+              <h5>عند الوقوف على أي خانة  من خانات إدخال  البيانات  - سوف تظهر التعليمات الخاصة بملئها  في  هذا المستطيل</h5>
+            </div>
+            <table className="details">
+              <thead>
+                <tr>
+                  <th colSpan={5}>3- إنتظام السداد وجدول المتأخرات</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>بيان</th>
+                  <th>عدد عملاء (عقود)</th>
+                  <th>إجمالى أرصدة مستحقة</th>
+                  <th>أصل الأرصدة بدون أعباء تمويل</th>
+                  <th>نسبة مخصص ديون مشكوك فى تحصيلها</th>
+                  <th>قيمة مخصص ديون مشكوك فى تحصيلها</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.1</td>
+                  <td>أرصدة تمويل منتظمة (أو بتأخير لا يتجاوز أسبوع)</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.2</td>
+                  <td>تأخير حتى 30 يوم</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.3</td>
+                  <td>تأخير حتى 60 يوم</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.4</td>
+                  <td>تأخير حتى 90 يوم</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.5</td>
+                  <td>تأخير حتى 120 يوم</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.6</td>
+                  <td>تأخير يتجاوز 120 يوم</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.7</td>
+                  <td>أرصدة تمويل – أقساط مرحلة</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.8</td>
+                  <td>أرصدة تمويل معاد جدولتها</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>3.9</td>
+                  <td>إجمالى أرصدة التمويل</td>
+                  <td>444747</td>
+                  <td>1807781.5</td>
+                  <td>2892975841</td>
+                  <td>2%</td>
+                  <td>57859517</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="inner-container">
+            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>بناء على البيانات التي تم إدخالها في الجدول أعلاه </p>
+            <div className="totals">
+              <div className="lines">
+                <p>إجمالي عدد العملاء الذين لهم أرصدة تمويل منتظمة أو بتأخير (لا يتجاوز أسبوع + حتى 30 يوم</p>
+                <p> + حتى 60 يوم + حتى 90 يوم + حتى 120 يوم + أكثر من 120 يوم )+ أقساط (مرحلة + معاد جدولتها)</p>
+              </div>
+              <div className="big-number">576,351</div>
+            </div>
+            <div className="totals">
+              <div className="lines">
+                <p>مدى مطابقة &quot;إجمالي عدد العملاء &quot; بالجدول أعلاه ل&quot;إجمالي عدد العملاء الحاصلين على التمويل</p>
+                <p>&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
+              </div>
+              <div className="big-number">مطابق</div>
+            </div>
+          </div>
+          <div className="inner-container">
+            <p style={{ textDecoration: 'underline', fontWeight: 'bold' }}>بناء على البيانات التي تم إدخالها في الجدول أعلاه </p>
+            <div className="totals">
+              <div className="lines">
+                <p>إجمالي قيمة أرصدة التمويل القائمة منتظمة أو بتأخير (لا يتجاوز أسبوع + حتى 30 يوم</p>
+                <p> + حتى 60 يوم + حتى 90 يوم + حتى 120 يوم + أكثر من 120 يوم )+ أقساط (مرحلة + معاد جدولتها) </p>
+              </div>
+              <div className="big-number">576,351</div>
+            </div>
+            <div className="totals">
+              <div className="lines">
+                <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل المستحقة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة  </p>
+                <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
+              </div>
+              <div className="big-number">مطابق</div>
+            </div>
+          </div>
+        </div>
+        <p className="perpared">إعداد:  اسلام حسن</p>
+      </div>
+      {/* end of page five */}
+
+      {/* page six */}
+      <div className="page-three-container-break">
+        <div className="page-three-container">
+          <div className="inner-container">
+            <h4>تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو المؤسسة الأهلية</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> الفترة من :</td>
+                  <td className="td-body"> 10/01/2020</td>
+                  <td></td>
+                  <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="inputs-desc">
+              <h5>تعليمات الإدخال:</h5>
+              <h5>عند الوقوف على أي خانة  من خانات إدخال  البيانات  - سوف تظهر التعليمات الخاصة بملئها  في  هذا المستطيل</h5>
+            </div>
+            <table className="details">
+              <thead>
+                <tr>
+                  <th colSpan={5}>4. ديون معدومة</th>
+                </tr>
+                <tr>
+                  <th>م</th>
+                  <th>بيان</th>
+                  <th>الشهر</th>
+                  <th>من بداية العام</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>4.1</td>
+                  <td>إجمالى عدد أرصدة معدومة عملاء تمويل أفراد</td>
+                  <td>406</td>
+                  <td>599</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>4.2</td>
+                  <td>إجمالى قيمة أرصدة تمويل معدومة لعملاء أفراد</td>
+                  <td>406</td>
+                  <td>599</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>4.3</td>
+                  <td>إجمالى عدد أرصدة معدومة تمويل جماعى</td>
+                  <td>406</td>
+                  <td>599</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>4.4</td>
+                  <td>إجمالى قيمة أرصدة معدومة تمويل جماعى</td>
+                  <td>406</td>
+                  <td>599</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>4.5</td>
+                  <td>إجمالى عدد أرصدة معدومة لكافة أنواع العملاء</td>
+                  <td>406</td>
+                  <td>599</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>4.6</td>
+                  <td>إجمالى قيمة أرصدة معدومة لكافة أنواع العملاء</td>
+                  <td>406</td>
+                  <td>599</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p className="perpared">إعداد:  اسلام حسن</p>
+      </div>
+      {/* end of page six */}
+      {/* page seven */}
+      <div className="page-three-container-break">
+        <div className="page-three-container">
+          <div className="inner-container">
+            <h4>تقرير (ج.م.ص. / 1) الأداء الشهرى لنشاط التمويل متناهى الصغر للجمعية أو المؤسسة الأهلية</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="td-head"> الفترة من :</td>
+                  <td className="td-body"> 10/01/2020</td>
+                  <td></td>
+                  <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
+                  <td className="td-body"> 10/01/2020</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="inputs-desc">
+              <h5>5.1/ شهر</h5>
+              <h5>إجمالى عدد أرصدة تمويل لكافة أنواع العملاء (فردي + جماعي) انتظمت في السداد بعد إعدامها  خلال الشهر .</h5>
+            </div>
+            <table className="details">
+              <thead>
+                <tr>
+                  <th colSpan={5}>5. تحصيلات لأرصدة سبق إعدامها</th>
+                </tr>
+                <tr>
+                  <th>م</th>
+                  <th>بيان</th>
+                  <th>الشهر</th>
+                  <th>من بداية العام</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>5.1</td>
+                  <td>إجمالى عدد أرصدة تمويل لكافة أنواع العملاء </td>
+                  <td>63</td>
+                  <td>290</td>
+                </tr>
+                <tr style={{ textAlign: 'center' }}>
+                  <td>5.2</td>
+                  <td>إجمالى قيمة أرصدة تمويل لكافة أنواع العملاء </td>
+                  <td>43389</td>
+                  <td>196981</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p className="perpared">إعداد:  اسلام حسن</p>
+      </div>
+      {/* end of page seven */}
+    </div >
+  )
+}
+
+export default MonthlyReport;

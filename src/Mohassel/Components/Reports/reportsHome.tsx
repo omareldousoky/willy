@@ -7,6 +7,7 @@ import Reports from './reports';
 import IscoreReports from './iscoreReports';
 import Card from 'react-bootstrap/Card';
 import OracleIntegration from './oracleIntegration';
+import MonthlyQuarterlyReports from './monthlyQuarterlyReports';
 interface State {
     id: string;
     activeTab: string;
@@ -31,6 +32,11 @@ class ReportsHome extends Component<{}, State>{
                 stringKey: 'oracleIntegration',
                 permission: 'summarizeTransactions',
                 permissionKey: 'oracleIntegration'
+            },{
+                header: 'monthly and quarterly reports',
+                stringKey: 'monthlyQuarterlyReports',
+                permission: '',
+                permissionKey: ''
             }]
         }
     }
@@ -47,6 +53,8 @@ class ReportsHome extends Component<{}, State>{
                 return <IscoreReports />
             case "oracleIntegration":
                 return <OracleIntegration />
+            case "monthlyQuarterlyReports":
+                return <MonthlyQuarterlyReports/>
             default:
                 return null
         }
