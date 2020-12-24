@@ -1,29 +1,27 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
-import Select from 'react-select';
+import { connect } from 'react-redux';
 import { Formik } from 'formik';
+import Search from '../../../Shared/Components/Search/search';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { loading } from '../../../Shared/redux/loading/actions';
 import { Loader } from '../../../Shared/Components/Loader';
-import { getBranches } from '../../Services/APIs/Branch/getBranches';
-import { searchApplication } from '../../Services/APIs/loanApplication/searchApplication';
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
-import * as local from '../../../Shared/Assets/ar.json';
-import { englishToArabic }  from '../../Services/statusLanguage';
-import { timeToDateyyymmdd, beneficiaryType } from '../../Services/utils';
-import InputGroup from 'react-bootstrap/InputGroup';
-interface Branch {
-  label: string;
-  value: string;
-}
+import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
+import local from '../../../Shared/Assets/ar.json';
+import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+
 interface Product {
   productName: string;
   loanNature: string;
@@ -58,66 +56,97 @@ interface LoanItem {
   application: Application;
 }
 interface State {
-  branches: Array<Branch>;
-  filteredBranch: Branch;
-  searchResults: Array<LoanItem>;
-  uniqueLoanOfficers: Array<string>;
-  filteredLoanOfficer: string;
   selectedReviewedLoans: Array<LoanItem>;
-  loading: boolean;
   showModal: boolean;
-  filterCustomers: string;
+  checkAll: boolean;
+  from: number;
+  size: number;
+  manageApplicationsTabs: any[];
 }
 interface Props {
-  history: Array<string>;
+  history: Array<any>;
+  loading: boolean;
+  totalCount: number;
+  data: any;
+  searchFilters: any;
+  search: (data) => void;
+  setSearchFilters: (data) => void;
+  setLoading: (data) => void;
 };
 class BulkApplicationApproval extends Component<Props, State>{
+  mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
-      filteredBranch: { label: '', value: '' },
-      filteredLoanOfficer: '',
-      branches: [],
-      searchResults: [],
-      uniqueLoanOfficers: [],
       selectedReviewedLoans: [],
-      loading: false,
       showModal: false,
-      filterCustomers: ''
+      checkAll: false,
+      from: 0,
+      size: 10,
+      manageApplicationsTabs: []
     }
+    this.mappers = [
+      {
+        title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll}></FormCheck>,
+        key: 'selected',
+        render: data => <FormCheck
+          type="checkbox"
+          checked={Boolean(this.state.selectedReviewedLoans.find(application => application.id === data.id))}
+          onChange={() => this.addRemoveItemFromChecked(data)}
+        ></FormCheck>
+      },
+      {
+        title: local.applicationCode,
+        key: "applicationCode",
+        render: data => data.application.applicationKey
+      },
+      {
+        title: local.customerName,
+        key: "name",
+        render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
+          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
+            </div>)
+          }
+        </div>
+      },
+      {
+        title: local.productName,
+        key: "productName",
+        render: data => data.application.product.productName
+      },
+      {
+        title: local.customerType,
+        key: "customerType",
+        render: data => local[data.application.product.beneficiaryType]
+      },
+      {
+        title: local.principal,
+        key: "principal",
+        render: data => data.application.principal
+      },
+      {
+        title: local.reviewDate,
+        key: "reviewDate",
+        render: data => timeToDateyyymmdd(data.application.reviewedDate)
+      },
+    ]
   }
-  async componentDidMount() {
-    this.setState({ loading: true })
-    const res = await getBranches();
-    if (res.status === "success") {
-      const branches: any = [];
-      res.body.data.data.forEach(branch => {
-        branches.push({
-          label: branch.name,
-          value: branch._id
-        })
-      })
-      this.setState({
-        loading: false,
-        branches: branches
-      })
-    } else {
-      this.setState({ loading: false })
-      Swal.fire('', local.searchError, 'error');
+  componentDidMount() {
+    if (this.props.data?.length > 0) {
+      this.props.search({ url: 'clearData' });
     }
+    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
+
   }
-  async getDataFromBranch(e: Branch) {
-    this.setState({ loading: true, filteredBranch: e });
-    const res = await searchApplication({ branchId: e.value, size: 1000, status: "reviewed" });
-    if (res.status === "success") {
-      this.setState({ loading: false, searchResults: res.body.applications ? res.body.applications.filter(loanItem => loanItem.application.status === "reviewed") : [] });
-    } else {
-      this.setState({ loading: false });
-      Swal.fire('', local.searchError, 'error');
-    }
+  getApplications() {
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
+    this.props.search(query);
   }
+
   addRemoveItemFromChecked(loan: LoanItem) {
-    if (this.state.selectedReviewedLoans.findIndex(loanItem=> loanItem.id == loan.id ) > -1) {
+    if (this.state.selectedReviewedLoans.findIndex(loanItem => loanItem.id == loan.id) > -1) {
       this.setState({
         selectedReviewedLoans: this.state.selectedReviewedLoans.filter(el => el.id !== loan.id),
       })
@@ -129,12 +158,12 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      // const newselectedReviewedLoans: Array<string> = this.state.searchResults.map(loanItem => loanItem.id);
-      this.setState({ selectedReviewedLoans: this.state.searchResults })
-    } else this.setState({ selectedReviewedLoans: [] })
+      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
+    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
   }
   handleSubmit = async (values) => {
-    this.setState({ showModal: false, loading: true })
+    this.props.setLoading(true);
+    this.setState({ showModal: false })
     const obj = {
       approvalDate: new Date(values.approvalDate).valueOf(),
       fundSource: values.fundSource,
@@ -142,93 +171,70 @@ class BulkApplicationApproval extends Component<Props, State>{
     }
     const res = await bulkApproval(obj);
     if (res.status === "success") {
-      this.setState({ loading: false })
-      Swal.fire('', local.bulkLoanApproved, 'success').then(()=> this.getDataFromBranch(this.state.filteredBranch));
+      this.props.setLoading(false);
+      this.setState({ selectedReviewedLoans: [], checkAll: false })
+      Swal.fire('', local.bulkLoanApproved, 'success').then(() => this.getApplications());
     } else {
-      this.setState({ loading: false })
+      this.props.setLoading(false);
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
-  dateSlice(date){
-    if(!date){
-      return timeToDateyyymmdd(0)
-    }else{
+  dateSlice(date) {
+    if (!date) {
+      return timeToDateyyymmdd(-1)
+    } else {
       return timeToDateyyymmdd(date)
     }
   }
   render() {
     return (
-      <Container>
-        <Loader type="fullscreen" open={this.state.loading} />
-        <div style={{ display: 'flex' }}>
-          <Form.Group controlId="branchSelector" style={{ flex: 2, margin: 10, textAlign: 'right' }}>
-            <Form.Label>{`${local.selectBranch}*`}</Form.Label>
-            <Select
-              data-qc="branchSelector"
-              value={this.state.filteredBranch}
-              onChange={(e: any) => this.getDataFromBranch(e)}
-              type='text'
-              options={this.state.branches}
+      <>
+        <HeaderWithCards
+          header={local.bulkLoanApplicationsApproval}
+          array={this.state.manageApplicationsTabs}
+          active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkLoanApplicationsApproval')}
+        />
+        <Card style={{ margin: '20px 50px' }}>
+          <Loader type="fullscreen" open={this.props.loading} />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.reviewedApplications}</Card.Title>
+                <span className="text-muted" style={{ marginLeft: 10 }}>{local.maxLoansAllowed + ` (${this.props.totalCount || 0})`}</span>
+                <span className="text-muted">{local.noOfSelectedLoans + ` (${this.state.selectedReviewedLoans.length})`}</span>
+              </div>
+              <Button onClick={() => { this.setState({ showModal: true }) }}
+                disabled={!Boolean(this.state.selectedReviewedLoans.length)}
+                className="big-button"
+                style={{ marginLeft: 20, height: 70 }}
+              > {local.bulkLoanApplicationsApproval}
+              </Button>
+            </div>
+            <hr className="dashed-line" />
+            <Search
+              searchKeys={['keyword', 'dateFromTo', 'branch']}
+              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+              url="application"
+              from={this.state.from}
+              size={this.state.size}
+              status="reviewed" />
+            <DynamicTable
+              from={this.state.from}
+              size={this.state.size}
+              url="application"
+              totalCount={this.props.totalCount}
+              mappers={this.mappers}
+              pagination={true}
+              data={this.props.data}
+              changeNumber={(key: string, number: number) => {
+                this.setState({ [key]: number, checkAll: false } as any, () => this.getApplications());
+              }}
             />
-          </Form.Group>
-        </div>
-        {this.state.searchResults.length ?
-          <div>
-            <InputGroup style={{ direction: 'ltr', margin: '20px 0px' }}>
-              <Form.Control
-                value={this.state.filterCustomers}
-                style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
-                placeholder={local.searchByName}
-                onChange={(e) => this.setState({ filterCustomers: e.currentTarget.value })}
-              />
-              <InputGroup.Append>
-                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>{local.customerType}</th>
-                  <th>{local.productName}</th>
-                  <th>{local.customerName}</th>
-                  <th>{local.loanAppCreationDate}</th>
-                  <th>{local.applicationStatus}</th>
-                  <th>{local.loanPrinciple}</th>
-                  <th><FormCheck type='checkbox' onClick={(e) => this.checkAll(e)}></FormCheck></th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.searchResults
-                  .filter(loanItem => loanItem.application.product.beneficiaryType !== 'group'? 
-                  loanItem.application.customer.customerName?.includes(this.state.filterCustomers)
-                  : loanItem.application.group.individualsInGroup.find(customer=> customer.type === 'leader')?.customer.customerName.includes(this.state.filterCustomers)
-                  )
-                  .map((loanItem, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{beneficiaryType(loanItem.application.product.beneficiaryType)}</td>
-                        <td>{loanItem.application.product.productName}</td>
-                        <td>{loanItem.application.product.beneficiaryType === 'group' ? loanItem.application.group.individualsInGroup.find(customer => customer.type === 'leader')?.customer.customerName:loanItem.application.customer.customerName}</td>
-                        <td>{this.dateSlice(loanItem.application.entryDate)}</td>
-                        <td>{englishToArabic(loanItem.application.status).text}</td>
-                        <td>{loanItem.application.principal}</td>
-                        <td>
-                          <FormCheck type='checkbox'
-                            checked={this.state.selectedReviewedLoans.includes(loanItem)}
-                            onChange={() => this.addRemoveItemFromChecked(loanItem)}>
-                          </FormCheck>
-                        </td>
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            </Table>
-                <Button onClick={() => this.state.selectedReviewedLoans.length ? this.setState({ showModal: true }) : null}>{local.approve}</Button>
-          </div>
-          : this.state.filteredBranch.value ? <h4 style={{ textAlign: 'center', marginTop: 20 }}>{local.noApprovedApplicationsForThisBranch}</h4> : null}
+          </Card.Body>
+        </Card>
         {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
           <Formik
-            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans:this.state.selectedReviewedLoans }}
+            initialValues={{ approvalDate: this.dateSlice(null), fundSource: '', selectedReviewedLoans: this.state.selectedReviewedLoans }}
             onSubmit={this.handleSubmit}
             validationSchema={bulkApplicationApprovalValidation}
             validateOnBlur
@@ -237,7 +243,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>Bulk Approval</Modal.Title>
+                  <Modal.Title>{local.bulkLoanApplicationsApproval}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <Form.Group as={Row} controlId="approvalDate">
@@ -287,9 +293,24 @@ class BulkApplicationApproval extends Component<Props, State>{
             }
           </Formik>
         </Modal>}
-      </Container>
+      </>
     )
   }
 }
+const addSearchToProps = dispatch => {
+  return {
+    search: data => dispatch(search(data)),
+    setSearchFilters: data => dispatch(searchFilters(data)),
+    setLoading: data => dispatch(loading(data))
+  };
+};
+const mapStateToProps = state => {
+  return {
+    data: state.search.applications,
+    totalCount: state.search.totalCount,
+    loading: state.loading,
+    searchFilters: state.searchFilters
+  };
+};
 
-export default withRouter(BulkApplicationApproval);
+export default connect(mapStateToProps, addSearchToProps)(withRouter(BulkApplicationApproval));

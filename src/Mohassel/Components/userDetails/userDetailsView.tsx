@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import * as local from '../../../Shared/Assets/ar.json';
 import { theme } from '../../../theme'
 import { UserDateValues } from './userDetailsInterfaces';
-import { timeToDate } from '../../Services/utils';
+import { timeToDate, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import Labels from '../Labels/labels';
 
 interface Props {
@@ -37,7 +37,7 @@ const UserDetailsView = (props: Props) => {
                     <tr><td style={header}>{local.userRole}*</td><td style={cell}> <Labels labelsTextArr={data.roles?.map((role)=> {return role.roleName})} /></td></tr>
                     <tr><td style={header}>{local.name}*</td><td style={cell}>{data.name}</td></tr>
                     <tr><td style={header}>{local.nationalId}*</td><td style={cell}>{data.nationalId}</td></tr>
-                    <tr><td style={header}>{local.birthDate}*</td><td style={cell}>{timeToDate(data.birthDate)}</td></tr>
+                    <tr><td style={header}>{local.birthDate}*</td><td style={cell}>{timeToDateyyymmdd(data.birthDate)}</td></tr>
                     <tr><td style={header}>{local.gender}*</td><td style={cell}>{data.gender}</td></tr>
                     <tr><td style={header}>{local.nationalIdIssueDate}*</td><td style={cell}>{timeToDate(data.nationalIdIssueDate)}</td></tr>
                     <tr><td style={header}>{local.mobilePhoneNumber}</td><td style={cell}>{data.mobilePhoneNumber}</td></tr>

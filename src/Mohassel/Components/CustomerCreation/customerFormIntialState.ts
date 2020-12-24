@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
 
 export const step1: any = {
     customerName: '',
@@ -50,15 +50,22 @@ export const step2 = {
 
 export const step3 = {
     geographicalDistribution: '',
+    geoAreaId: '',
     representative: '',
     newRepresentative: '',
     representativeName: '',
-    applicationDate: timeToDateyyymmdd(0),
+    applicationDate: timeToDateyyymmdd(-1),
     permanentEmployeeCount: '',
     partTimeEmployeeCount: '',
     comments: '',
     guarantorMaxLoans: 1,
-    maxLoansAllowed: 1
+    maxLoansAllowed: 1,
+    maxPrincipal: 0,
+    principals: {
+        maxIndividualPrincipal: 0,
+        maxGroupIndividualPrincipal: 0,
+        maxGroupPrincipal: 0,
+    }
 };
 
 const endOfDay: Date = new Date();
@@ -113,7 +120,8 @@ export const customerCreationValidationStepTwo = Yup.object().shape({
 })
 
 export const customerCreationValidationStepThree = Yup.object().shape({
-    geographicalDistribution: Yup.string().trim().required(local.required),
+    geographicalDistribution: Yup.string().trim(),
+    geoAreaId: Yup.string().trim().required(local.required),
     representative: Yup.string().trim().required(local.required),
     applicationDate: Yup.string().test(
         "Max Date", local.dateShouldBeBeforeToday,
@@ -124,7 +132,8 @@ export const customerCreationValidationStepThree = Yup.object().shape({
 })
 
 export const customerCreationValidationStepThreeEdit = Yup.object().shape({
-    geographicalDistribution: Yup.string().trim().required(local.required),
+    geographicalDistribution: Yup.string().trim(),
+    geoAreaId: Yup.string().trim().required(local.required),
     representative: Yup.string().trim().required(local.required),
     applicationDate: Yup.string().test(
         "Max Date", local.dateShouldBeBeforeToday,
@@ -133,5 +142,12 @@ export const customerCreationValidationStepThreeEdit = Yup.object().shape({
     partTimeEmployeeCount: Yup.string().trim(),
     comments: Yup.string().trim().max(500, local.maxLength100),
     guarantorMaxLoans: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required),
-    maxLoansAllowed: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required)
+    maxLoansAllowed: Yup.number().required().min(1, local.mustBeOneOrMore).max(100, local.mustBeNotMoreThanHundred).required(local.required),
+    maxPrincipal: Yup.number().min(0, local.mustBeGreaterThanZero).test("maxPrincipal", local.maxGlobalLimitReachedError,
+        function (this: any, value: any) {
+            const { principals } = this.parent
+            if (value <= principals.maxIndividualPrincipal) {
+                return true
+            } else return false
+        }).required(local.required),
 })

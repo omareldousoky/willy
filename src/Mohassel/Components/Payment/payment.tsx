@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Swal from 'sweetalert2';
 import { Formik, FormikProps } from 'formik';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
-import { timeToDateyyymmdd } from '../../Services/utils';
-import { PendingActions } from '../../Services/interfaces';
-import { payment } from '../../redux/payment/actions';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { PendingActions } from '../../../Shared/Services/interfaces';
+import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
 import PayInstallment from "./payInstallment";
 import { calculateEarlyPayment, earlyPayment, editManualPayment, manualPayment, payFutureInstallment, payInstallment, otherPayment } from "../../Services/APIs/Payment";
@@ -147,8 +147,8 @@ class Payment extends Component<Props, State>{
       receiptData: {},
       payAmount: 0,
       receiptNumber: '',
-      truthDate: timeToDateyyymmdd(0),
-      dueDate: timeToDateyyymmdd(0),
+      truthDate: timeToDateyyymmdd(-1),
+      dueDate: timeToDateyyymmdd(-1),
       loading: false,
       loadingFullScreen: false,
       remainingPrincipal: 0,
@@ -198,6 +198,7 @@ class Payment extends Component<Props, State>{
           payerName: pendingAction.transactions[0].payerName,
           payerId: pendingAction.transactions[0].payerId,
           receiptNumber: pendingAction.receiptNumber,
+          installmentNumber: pendingAction.transactions[0].installmentSerial,
           truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
         })
       } else {
@@ -208,9 +209,10 @@ class Payment extends Component<Props, State>{
           payerType: this.props.pendingActions.payerType? this.props.pendingActions.payerType: '',
           payerNationalId: this.props.pendingActions.payerNationalId? this.props.pendingActions.payerNationalId: '',
           payerName: this.props.pendingActions.payerName? this.props.pendingActions.payerName: '',
-          payerId: this.props.pendingActions.payerId && Number(this.props.pendingActions.payerId)? this.props.pendingActions.payerId: '',
+          payerId: this.props.pendingActions.payerId ? this.props.pendingActions.payerId: '',
           receiptNumber: this.props.pendingActions.receiptNumber? this.props.pendingActions.receiptNumber: '',
-          truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(0),
+          installmentNumber: this.props.pendingActions.transactions ? this.props.pendingActions.transactions[0].installmentSerial : -1,
+          truthDate: this.props.pendingActions.transactions? timeToDateyyymmdd(this.props.pendingActions.transactions[0].truthDate):timeToDateyyymmdd(-1),
         })
       }
   }
@@ -383,6 +385,10 @@ class Payment extends Component<Props, State>{
           payerName: values.payerName,
           payerNationalId: values.payerNationalId.toString(),
         }
+        if(values.installmentNumber !== -1) {
+          obj['installmentNumber'] = Number(values.installmentNumber);
+          obj['futurePayment'] = true;
+        }
         const res = await manualPayment(obj);
         if (res.status === "success") {
           this.setState({ loadingFullScreen: false });
@@ -400,6 +406,10 @@ class Payment extends Component<Props, State>{
           payerId: values.payerId,
           payerName: values.payerName,
           payerNationalId: values.payerNationalId.toString(),
+        }
+        if(values.installmentNumber !== -1) {
+          obj['installmentNumber'] = Number(values.installmentNumber);
+          obj['futurePayment'] = true;
         }
         const res = await editManualPayment(obj);
         if (res.status === "success") {
@@ -530,7 +540,7 @@ class Payment extends Component<Props, State>{
           <div style={{ width: '100%', padding: 20 }}>
             <Formik
               enableReinitialize
-              initialValues={{ ...this.state, max: this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
+              initialValues={{ ...this.state, max: (this.props.application.status === 'canceled') ? this.props.application.principal : this.props.application.installmentsObject.totalInstallments.installmentSum, paymentType: this.props.paymentType }}
               onSubmit={this.handleSubmit}
               validationSchema={manualPaymentValidation}
               validateOnBlur

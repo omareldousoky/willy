@@ -14,7 +14,7 @@ import { Formik } from 'formik';
 import Button from 'react-bootstrap/Button';
 import * as Yup from "yup";
 import Row from 'react-bootstrap/Row';
-import { timeToDateyyymmdd, getDateString } from '../../Services/utils';
+import { timeToDateyyymmdd, getDateString } from "../../../Shared/Services/utils";
 
 interface State {
     loading: boolean;
@@ -47,7 +47,7 @@ class LoanRollBack extends Component<Props, State>{
         const application = await getRollableActionsById(id);
         if (application.status === 'success') {
             this.setState({
-                actions: application.body.RollbackObjects,
+                actions: ( this.props.history.location.state.status === 'canceled' ) ? this.filterForCancelled(application.body.RollbackObjects) : application.body.RollbackObjects,
                 applicationId: id,
                 loading: false
             })
@@ -96,13 +96,21 @@ class LoanRollBack extends Component<Props, State>{
             return ((x > y) ? -1 : ((x < y) ? 1 : 0));
         });
     }
+    filterForCancelled(array){
+        const actionList =['manualPayToktokStamp', 'manualPayTricycleStamp', 'manualPayClearanceFees',
+        'manualPayCollectionCommission', 'manualPayLegalFees', 'manualPayPenalties',
+        'manualPayReissuingFees' , 'payToktokStamp' , 'payTricycleStamp' , 'payClearanceFees' ,
+        'payCollectionCommission' , 'payLegalFees' , 'payPenalties' , 'payReissuingFees' ,
+        'approveManualRandomPayment', 'rejectManualRandomPayment'];
+        return array.filter( action => actionList.includes(action.action))
+    }
     render() {
         return (
             <>
                 <BackButton title={local.previousActions} />
                 <Loader type="fullscreen" open={this.state.loading} />
                 <Card style={{ textAlign: 'right', padding: 20 }} className="d-flex align-items-center">
-                    {this.state.actions ? <div style={{ width: '70%' }}>
+                    {this.state.actions.length > 0 ? <div style={{ width: '70%' }}>
                         <div className="d-flex" style={{ margin: '20px 0px', padding: 10, borderBottom: '1px solid' }}>
                             <p style={{ width: '40%', margin: 0 }}>{local.actionType}</p>
                             <p style={{ width: '40%', margin: 0 }}>{local.actionDate}</p>
@@ -117,7 +125,7 @@ class LoanRollBack extends Component<Props, State>{
                 </Card>
                 {this.state.showModal && <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
                     <Formik
-                        initialValues={{ truthDate: timeToDateyyymmdd(0) }}
+                        initialValues={{ truthDate: timeToDateyyymmdd(-1) }}
                         onSubmit={this.rollbackConfirmation}
                         validationSchema={Yup.object().shape({ truthDate: Yup.date().required(local.required) })}
                         validateOnBlur

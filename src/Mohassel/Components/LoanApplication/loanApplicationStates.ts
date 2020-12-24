@@ -76,6 +76,16 @@ export interface Application {
     rejectionDate: any;
     noOfGuarantors: number;
     guarantors: Array<Guarantor>;
+    principals: {
+        maxIndividualPrincipal: number;
+        maxGroupIndividualPrincipal: number;
+        maxGroupPrincipal: number;
+    };
+    customerTotalPrincipals: number;
+    customerMaxPrincipal: number;
+    branchManagerAndDate: boolean;
+    branchManagerId: string;
+    managerVisitDate: string;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),
@@ -110,7 +120,17 @@ export const LoanApplicationValidation = Yup.object().shape({
             } else {
                 return (value >= minPrincipal && value <= maxPrincipal)
             }
-        }).required('required!'),
+        }).test("principal", local.customerMaxPrincipalError,
+            function (this: any, value: any) {
+                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
+                if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= (customerMaxPrincipal - customerTotalPrincipals)) {
+                    return true
+                } else if (customerMaxPrincipal === 0 && value <= ((beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal) - customerTotalPrincipals)) {
+                    return true
+                } else {
+                    return false
+                }
+            }).required('required!'),
     applicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     individualApplicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     applicationFeePercent: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),
@@ -134,7 +154,17 @@ export const LoanApplicationValidation = Yup.object().shape({
     // )
     individualDetails: Yup.array().of(
         Yup.object().shape({
-            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").nullable()
+            amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", local.customerMaxPrincipalError,
+                function (this: any, value: any) {
+                    const { customer } = this.parent
+                    if (customer.maxPrincipal && customer.maxPrincipal > 0 && value <= ((customer.maxPrincipal > customer.maxGroupIndividualPrincipal ? customer.maxGroupIndividualPrincipal : customer.maxPrincipal) - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
+                        return true
+                    } else if (!customer.maxPrincipal && value <= (customer.maxGroupIndividualPrincipal - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }).nullable()
         })
     ).nullable(),
     // viceCustomers: Yup.array().of(
@@ -143,6 +173,17 @@ export const LoanApplicationValidation = Yup.object().shape({
     //         phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11).nullable()
     //     })
     // ).nullable(),
+    branchManagerAndDate:Yup.boolean(),
+    branchManagerId: Yup.string().when('branchManagerAndDate', {
+        is: true,
+        then: Yup.string().required(local.required),
+        otherwise: Yup.string()
+    }),
+    managerVisitDate: Yup.string().when('branchManagerAndDate', {
+        is: true,
+        then: Yup.string().required(local.required),
+        otherwise: Yup.string()
+    })
 });
 export const ReviewLoanValidation = Yup.object().shape({
     reviewStatus: Yup.string().required(local.required),

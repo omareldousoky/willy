@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import Search from '../Search/search';
+import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../../Shared/Services/utils';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Can from '../../config/Can';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Form from 'react-bootstrap/Form';
-import { loading } from '../../redux/loading/actions';
+import { loading } from '../../../Shared/redux/loading/actions';
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund';
+import { cibExtractions } from '../../Services/APIs/loanApplication/cibExtractions';
+import { downloadTxtFile } from '../CIB/textFiles';
 import Swal from 'sweetalert2';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { manageLoansArray } from '../LoanList/manageLoansInitials';
 
 interface Props {
   history: Array<any>;
@@ -32,9 +36,11 @@ interface Props {
 interface State {
   size: number;
   from: number;
-  openModal: boolean;
+  openModal: string;
   selectedCustomers: Array<string>;
   selectedFund: string;
+  oldFilesDate: string;
+  manageLoansTabs: any[];
 }
 
 class SourceOfFund extends Component<Props, State> {
@@ -44,9 +50,11 @@ class SourceOfFund extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      openModal: false,
+      openModal: '',
       selectedCustomers: [],
-      selectedFund: ''
+      selectedFund: '',
+      oldFilesDate: '',
+      manageLoansTabs: []
     }
     this.mappers = [
       {
@@ -107,6 +115,7 @@ class SourceOfFund extends Component<Props, State> {
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib' });
+    this.setState({ manageLoansTabs: manageLoansArray() })
   }
   getSourceOfFund(SourceOfFund: string) {
     switch (SourceOfFund) {
@@ -152,12 +161,13 @@ class SourceOfFund extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
   async submit() {
-    this.setState({ openModal: false, selectedFund: '', selectedCustomers: [] })
+    this.setState({ openModal: '', selectedFund: '', selectedCustomers: [] })
     this.props.setLoading(true);
     const obj = {
       fundSource: this.state.selectedFund,
       applicationIds: this.state.selectedCustomers,
-      returnDetails: false
+      returnDetails: false,
+      approvalDate: new Date().valueOf()
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
@@ -165,9 +175,27 @@ class SourceOfFund extends Component<Props, State> {
       Swal.fire("", local.changeSourceFundSuccess, "success").then(() => this.getLoans());
     } else this.props.setLoading(false);
   }
+  async getOldFiles() {
+    this.setState({ openModal: '', oldFilesDate: '' });
+    this.props.setLoading(true);
+    const date = new Date(this.state.oldFilesDate).valueOf();
+    const res = await cibExtractions(date);
+    if (res.status === "success") {
+      this.props.setLoading(false);
+      downloadTxtFile(res.body.loans, false, date)
+    } else {
+      this.props.setLoading(false);
+      Swal.fire("", local.noResults, "error")
+    }
+  }
   render() {
     return (
       <>
+        <HeaderWithCards
+          header={local.changeSourceOfFund}
+          array={this.state.manageLoansTabs}
+          active={this.state.manageLoansTabs.map(item => { return item.icon }).indexOf('changeSourceOfFund')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -176,13 +204,20 @@ class SourceOfFund extends Component<Props, State> {
                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.changeSourceOfFund}</Card.Title>
                 <span className="text-muted">{local.noOfSelectedLoans + ` (${this.state.selectedCustomers.length})`}</span>
               </div>
-              <Button onClick={() => { this.setState({ openModal: true }) }}
-                disabled={!Boolean(this.state.selectedCustomers.length)}
-                className="big-button"
-                style={{ marginLeft: 20 }}
-              > {local.changeFund}
-                <span className="fa fa-exchange-alt" style={{ verticalAlign: 'middle', marginRight: 10 }}></span>
-              </Button>
+              <div>
+                <Button onClick={() => { this.setState({ openModal: 'downloadOldFiles' }) }}
+                  className="big-button"
+                  style={{ marginLeft: 20 }}
+                > {local.downloadOldFiles}
+                  <span className="fa fa-download-alt" style={{ verticalAlign: 'middle', marginRight: 10 }}></span>
+                </Button>
+                <Button onClick={() => { this.setState({ openModal: 'changeFund' }) }}
+                  disabled={!Boolean(this.state.selectedCustomers.length)}
+                  className="big-button"
+                > {local.changeFund}
+                  <span className="fa fa-exchange-alt" style={{ verticalAlign: 'middle', marginRight: 10 }}></span>
+                </Button>
+              </div>
             </div>
             <hr className="dashed-line" />
             <Search
@@ -210,10 +245,10 @@ class SourceOfFund extends Component<Props, State> {
             />
           </Card.Body>
         </Card>
-        <Modal show={this.state.openModal} backdrop="static">
+        <Modal show={this.state.openModal === 'changeFund'} backdrop="static">
           <Modal.Header style={{ padding: '20px 30px' }}>
             <Modal.Title>{local.chooseSourceOfFund}</Modal.Title>
-            <div style={{ cursor: 'pointer' }} onClick={() => this.setState({ openModal: false })}>X</div>
+            <div style={{ cursor: 'pointer' }} onClick={() => this.setState({ openModal: '' })}>X</div>
           </Modal.Header>
           <Modal.Body style={{ padding: '20px 60px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
@@ -224,6 +259,20 @@ class SourceOfFund extends Component<Props, State> {
                 <option value="tasaheel" data-qc="tasaheel">{local.tasaheel}</option>
               </Form.Control>
               <Button className="big-button" data-qc="submit" onClick={() => this.submit()} disabled={this.state.selectedFund === ""}>{local.submit}</Button>
+            </div>
+          </Modal.Body>
+        </Modal>
+        <Modal show={this.state.openModal === 'downloadOldFiles'} backdrop="static">
+          <Modal.Header style={{ padding: '20px 30px' }}>
+            <Modal.Title>{local.dateOfFile}</Modal.Title>
+            <div style={{ cursor: 'pointer' }} onClick={() => this.setState({ openModal: '' })}>X</div>
+          </Modal.Header>
+          <Modal.Body style={{ padding: '20px 60px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+              <Form.Control type="date" data-qc="download-old-files"
+                style={{ marginLeft: 20 }} onChange={(e) => this.setState({ oldFilesDate: e.currentTarget.value })}
+              />
+              <Button className="big-button" data-qc="submit" onClick={() => this.getOldFiles()} disabled={this.state.oldFilesDate === ""}>{local.submit}</Button>
             </div>
           </Modal.Body>
         </Modal>

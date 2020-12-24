@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { withRouter } from 'react-router-dom';
-import DynamicTable from '../DynamicTable/dynamicTable';
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import Search from '../Search/search';
+import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
-import { search, searchFilters } from '../../redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../Services/utils';
+import { search, searchFilters } from '../../../Shared/redux/search/actions';
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from "../../../Shared/Services/utils";
+import { manageLoansArray } from './manageLoansInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Props {
   history: Array<any>;
@@ -28,6 +30,7 @@ interface State {
   iScoreCustomers: any;
   loading: boolean;
   searchKeys: any;
+  manageLoansTabs: any[];
 }
 
 class LoanList extends Component<Props, State> {
@@ -40,7 +43,8 @@ class LoanList extends Component<Props, State> {
       iScoreModal: false,
       iScoreCustomers: [],
       loading: false,
-      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch','doubtful', 'writtenOff']
+      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff'],
+      manageLoansTabs: []
     }
     this.mappers = [
       {
@@ -101,7 +105,8 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort:"issueDate" });
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" });
+    this.setState({ manageLoansTabs: manageLoansArray() })
   }
   getStatus(status: string) {
     switch (status) {
@@ -136,41 +141,49 @@ class LoanList extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
   render() {
+    const array = manageLoansArray();
     return (
-      <Card style={{ margin: '20px 50px' }}>
-        <Loader type="fullsection" open={this.props.loading} />
-        <Card.Body style={{ padding: 0 }}>
-          <div className="custom-card-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
-              <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+      <>
+        <HeaderWithCards
+          header={local.issuedLoans}
+          array={array}
+          active={array.map(item => { return item.icon }).indexOf('issuedLoans')}
+        />
+        <Card style={{ margin: '20px 50px' }}>
+          <Loader type="fullsection" open={this.props.loading} />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.issuedLoans}</Card.Title>
+                <span className="text-muted">{local.noOfIssuedLoans + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+              </div>
             </div>
-          </div>
-          <hr className="dashed-line" />
-          <Search
-            searchKeys={this.state.searchKeys}
-            dropDownKeys={['name', 'nationalId', 'key', 'customerKey','customerCode']}
-            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-            setFrom= {(from) => this.setState({from: from})}
-            datePlaceholder={local.issuanceDate}
-            url="loan"
-            from={this.state.from}
-            size={this.state.size}
-            hqBranchIdRequest={this.props.branchId} />
-          <DynamicTable
-            from={this.state.from}
-            size={this.state.size}
-            url="loan"
-            totalCount={this.props.totalCount}
-            mappers={this.mappers}
-            pagination={true}
-            data={this.props.data}
-            changeNumber={(key: string, number: number) => {
-              this.setState({ [key]: number } as any, () => this.getLoans());
-            }}
-          />
-        </Card.Body>
-      </Card>
+            <hr className="dashed-line" />
+            <Search
+              searchKeys={this.state.searchKeys}
+              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+              setFrom={(from) => this.setState({ from: from })}
+              datePlaceholder={local.issuanceDate}
+              url="loan"
+              from={this.state.from}
+              size={this.state.size}
+              hqBranchIdRequest={this.props.branchId} />
+            <DynamicTable
+              from={this.state.from}
+              size={this.state.size}
+              url="loan"
+              totalCount={this.props.totalCount}
+              mappers={this.mappers}
+              pagination={true}
+              data={this.props.data}
+              changeNumber={(key: string, number: number) => {
+                this.setState({ [key]: number } as any, () => this.getLoans());
+              }}
+            />
+          </Card.Body>
+        </Card>
+      </>
     )
   }
 }

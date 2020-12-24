@@ -1,13 +1,13 @@
 import React from "react";
 import "./CollectionStatement.scss";
-import { timeToDateyyymmdd } from "../../../Services/utils";
+import { timeToArabicDate } from "../../../../Shared/Services/utils";
 import Table from "react-bootstrap/Table";
 
 const CollectionStatement = (props) => {
   const branches = props.data.data.branches;
   const total = props.data.data.total;
-  const startDate = timeToDateyyymmdd(props.data.startDate);
-  const endDate = timeToDateyyymmdd(props.data.endDate);
+  const startDate = timeToArabicDate(props.data.startDate, false);
+  const endDate = timeToArabicDate(props.data.endDate, false);
 
   const trimmedValue = (value: string) => {
     if (value.includes(".")) {
@@ -30,7 +30,7 @@ const CollectionStatement = (props) => {
           <th>التاريخ</th>
           <th>رسوم</th>
           <th>أقساط _ أصل</th>
-          <th>أقساط _ فائده</th>
+          <th>أقساط _ تكلفه التمويل</th>
           <th>أقساط _ إجمالي</th>
           <th>الغرامات</th>
           <th>ايرادات اخري</th>
@@ -64,6 +64,11 @@ const CollectionStatement = (props) => {
 
   return (
     <div className="CollectionStatement">
+      <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
+        <tr style={{ height: "10px" }}></tr>
+        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style = {{backgroundColor:'white'}}><div className={"logo-print"}></div></th><th colSpan={6} style = {{backgroundColor:'white'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+        <tr style={{ height: "10px" }}></tr>
+      </table>
       <table style={{ width: "100%" }}>
         <thead className="report-header">
           <tr className="headtitle">

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../Services/utils';
+import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
 import Reports from './reports';
 import IscoreReports from './iscoreReports';
 import Card from 'react-bootstrap/Card';
+import OracleIntegration from './oracleIntegration';
 interface State {
     id: string;
     activeTab: string;
@@ -25,6 +26,11 @@ class ReportsHome extends Component<{}, State>{
                 stringKey: 'iScoreReports',
                 permission: 'downloadIscoreFile',
                 permissionKey: 'report'
+            }, {
+                header: local.oracleIntegration,
+                stringKey: 'oracleIntegration',
+                permission: 'summarizeTransactions',
+                permissionKey: 'oracleIntegration'
             }]
         }
     }
@@ -39,6 +45,8 @@ class ReportsHome extends Component<{}, State>{
                 return <Reports />
             case "iScoreReports":
                 return <IscoreReports />
+            case "oracleIntegration":
+                return <OracleIntegration />
             default:
                 return null
         }

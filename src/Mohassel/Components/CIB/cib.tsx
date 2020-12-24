@@ -17,6 +17,8 @@ import { cibReport } from '../../Services/APIs/loanApplication/cibReport';
 import Table from 'react-bootstrap/Table';
 import { downloadTxtFile } from './textFiles';
 import Swal from 'sweetalert2';
+import { manageLoansArray } from '../LoanList/manageLoansInitials';
+import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 
 interface Props {
   history: Array<any>;
@@ -55,6 +57,7 @@ interface State {
   filteredData: Array<CibLoan>;
   filteredBranch: string;
   principalSelectedSum: number;
+  manageLoansTabs: any[];
 }
 
 class CIB extends Component<Props, State> {
@@ -73,6 +76,7 @@ class CIB extends Component<Props, State> {
       filteredData: [],
       filteredBranch: '',
       principalSelectedSum: 0,
+      manageLoansTabs: []
     }
     this.mappers = [
       {
@@ -164,7 +168,8 @@ class CIB extends Component<Props, State> {
     const obj = {
       fundSource: 'cib',
       applicationIds: this.state.selectedCustomers,
-      returnDetails: true
+      returnDetails: true,
+      approvalDate: new Date().valueOf()
     }
     const res = await changeSourceFund(obj);
     if (res.status === "success") {
@@ -179,9 +184,17 @@ class CIB extends Component<Props, State> {
     }
     return totalPages;
   }
+  componentDidMount(){
+    this.setState({ manageLoansTabs: manageLoansArray() })
+  }
   render() {
     return (
       <>
+        <HeaderWithCards
+          header={local.cib}
+          array={this.state.manageLoansTabs}
+          active={this.state.manageLoansTabs.map(item => { return item.icon }).indexOf('cib')}
+        />
         <Card style={{ margin: '20px 50px' }}>
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
@@ -309,7 +322,7 @@ class CIB extends Component<Props, State> {
               </Table>
               :
               <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <img alt='no-data-found' src={require('../../Assets/no-results-found.svg')} />
+                <img alt='no-data-found' src={require("../../../Shared/Assets/no-results-found.svg")} />
                 <h4>{local.noResultsFound}</h4>
               </div>
             }

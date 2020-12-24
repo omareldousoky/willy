@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import Table from 'react-bootstrap/Table';
 import BackButton from '../BackButton/back-button';
-import { interestType, installmentType, roundDirection, roundWhat, beneficiaryType, loanNature, currency, periodType, interestPeriod, inAdvanceFrom, inAdvanceType } from '../../Services/utils';
+import { interestType, installmentType, roundDirection, roundWhat, beneficiaryType, loanNature, currency, periodType, interestPeriod, inAdvanceFrom, inAdvanceType } from "../../../Shared/Services/utils";
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 
 interface State {
@@ -187,10 +187,6 @@ class ViewProduct extends Component<Props, State>{
                                 <tr>
                                     <td>{local.loanImpactPrincipal}</td>
                                     <td>{(this.state.product.loanImpactPrincipal ? local.yes : local.no)}</td>
-                                </tr>
-                                <tr>
-                                    <td>{local.loanImpactPrincipal2}</td>
-                                    <td>{(!this.state.product.loanImpactPrincipal ? local.yes : local.no)}</td>
                                 </tr>
                                 {this.state.product.beneficiaryType !== 'group' && <>
                                     <tr>

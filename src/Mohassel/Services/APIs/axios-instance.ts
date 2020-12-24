@@ -1,5 +1,5 @@
 import axiosLib from 'axios';
-import { getCookie } from '../getCookie';
+import { getCookie } from '../../../Shared/Services/getCookie';
 
 function errorResponseHandler(error: any) {
 

@@ -13,6 +13,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import BackButton from '../BackButton/back-button';
 import Card from 'react-bootstrap/Card';
+import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 
 interface Props {
     title: string;
@@ -21,7 +22,7 @@ interface Props {
 
 };
 interface State {
-    product: object;
+    product: any;
     loading: boolean;
     formulas: Array<object>;
 }
@@ -84,6 +85,11 @@ class LoanProductCreation extends Component<Props, State>{
                 viceFieldManagerAndDate: true,
                 reviewerChiefAndDate: true,
                 branchManagerAndDate: true,
+                principals: {
+                    maxIndividualPrincipal: 0,
+                    maxGroupIndividualPrincipal: 0,
+                    maxGroupPrincipal: 0,
+                }
             },
             loading: false,
             formulas: []
@@ -103,11 +109,32 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
         }
     }
+    async getGlobalPrinciple(){
+        this.setState({ loading: true });
+        const princples = await getMaxPrinciples();
+        if (princples.status === 'success') {
+            const principals = {
+                maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
+                maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
+                maxGroupPrincipal: princples.body.maxGroupPrincipal,
+            }
+            const product = this.state.product;
+            product.principals = principals
+            this.setState({
+                loading: false,
+                product
+            })
+        } else {
+            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false });
+        }
+    }
     componentDidMount() {
-       this.getFormulas();
         if(this.props.edit) {
              this.getProduct();
         }
+       this.getFormulas();
+       this.getGlobalPrinciple();
     }
     cancel() {
         this.props.history.goBack();

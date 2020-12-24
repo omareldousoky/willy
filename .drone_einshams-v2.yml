@@ -2,7 +2,6 @@ kind: pipeline
 type: kubernetes
 name: notify-pipeline-start
 
-
 steps:
 - name: notify-start
   image: plugins/slack
@@ -36,7 +35,8 @@ steps:
 - name: build
   image: node:12.16.1-alpine
   commands:
-  - apk add git
+  - echo -e "https://nl.alpinelinux.org/alpine/v3.5/main\nhttps://nl.alpinelinux.org/alpine/v3.5/community" > /etc/apk/repositories
+  - apk add --no-cache git
   - npm i
   - npm run build
 
@@ -73,6 +73,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/login.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/login
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     region: us-east-1
@@ -105,6 +106,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/mohassel.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/mohassel
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     build_args_from_env:
@@ -125,12 +127,42 @@ steps:
     event:
     - push
 
+- name: publish-documents
+  image: plugins/ecr
+  environment:
+    REACT_APP_GOOGLE_MAP_KEY:
+      from_secret: REACT_APP_GOOGLE_MAP_KEY
+  settings:
+    access_key:
+      from_secret: aws_access_key_id
+    secret_key:
+      from_secret: aws_secret_access_key
+    dockerfile: Docker/documents.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
+    repo: fintech/${DRONE_REPO_NAME}/documents
+    registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
+    build_args_from_env:
+      - REACT_APP_GOOGLE_MAP_KEY
+    build_args:
+      - REACT_APP_BASE_URL=https://api.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LOGIN_URL=https://login.${DRONE_BRANCH}.halan.io
+      - REACT_APP_DOMAIN=.${DRONE_BRANCH}.halan.io
+      - REACT_APP_LTS_SUBDOMAIN=documents.${DRONE_BRANCH}.halan.io
+      - REACT_APP_DOCUMENTS_URL=documents.${DRONE_BRANCH}.halan.io
+    region: us-east-1
+    tags:
+      - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}
+      - ${DRONE_BRANCH}
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
 depends_on:
   - unit-test
 
 ---
-
-
 
 kind: pipeline
 type: kubernetes
@@ -179,6 +211,27 @@ steps:
     event:
       - push
 
+- name: deploy-documents
+  image: quay.io/honestbee/drone-kubernetes
+  settings:
+    KUBERNETES_SERVER:
+     from_secret: kubernetes_server
+    KUBERNETES_TOKEN:
+      from_secret: kubernetes_token
+    KUBERNETES_CERT:
+      from_secret: kubernetes_cert
+    namespace: ${DRONE_BRANCH}
+    deployment: fe-documents
+    repo: 624792314775.dkr.ecr.us-east-1.amazonaws.com/fintech/${DRONE_REPO_NAME}/documents
+    container: fe-documents
+    tag: "${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:8}"
+
+  when:
+    branch:
+    - einshams-v2
+    event:
+      - push
+
 depends_on:
   - unit-test
   - PushToEcr
@@ -211,7 +264,6 @@ steps:
     - einshams-v2
     event:
       - push
-
 
 depends_on:
   - unit-test

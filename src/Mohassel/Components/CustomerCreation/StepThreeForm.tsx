@@ -9,6 +9,9 @@ import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOf
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
+import { getCookie } from '../../../Shared/Services/getCookie';
+import { parseJwt } from '../../../Shared/Services/utils';
+import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -26,51 +29,57 @@ export const StepThreeForm = (props: any) => {
         majorGeoDivisionName: { ar: '' },
         majorGeoDivisionLegacyCode: 0
     }])
+    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep, edit } = props;
     const getLoanOfficers = async (inputValue: string) => {
-        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue });
+        const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue, status: "active",});
         if (res.status === "success") {
-            setLoanOfficers([...res.body.data, {_id: props.representativeDetails.representative, name: props.representativeDetails.representativeName}]);
+            setLoanOfficers([...res.body.data, { _id: props.representativeDetails.representative, name: props.representativeDetails.representativeName }]);
             return res.body.data;
         } else {
             setLoanOfficers([]);
             return [];
         }
     }
-    async function getConfig() {
+    async function getConfig(branch) {
         setLoading(true);
-        const resGeo = await getGeoDivision();
+        const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             setLoading(false);
-            setgeoDivisions(resGeo.body.geoDivisions)
+            setgeoDivisions(resGeo.body.data ? resGeo.body.data.filter(area => area.active) : [])
         } else setLoading(false);
     }
     useEffect(() => {
-        getConfig();
+        const token = getCookie('token');
+        const details = parseJwt(token)
+        if (!edit && details.branch.length > 0) {
+            getConfig(details.branch);
+        } else if (props.branchId.length > 0) {
+            getConfig(props.branchId);
+        }
     }, [])
-    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep } = props;
     return (
         <Form onSubmit={handleSubmit}>
             <Loader open={loading} type="fullscreen" />
             <Row>
                 <Col sm={12}>
-                    <Form.Group controlId="geographicalDistribution">
+                    <Form.Group controlId="geoAreaId">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
                             <Form.Control as="select"
                                 type="select"
-                                name="geographicalDistribution"
-                                data-qc="geographicalDistribution"
-                                value={values.geographicalDistribution}
+                                name="geoAreaId"
+                                data-qc="geoAreaId"
+                                value={values.geoAreaId}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                isInvalid={errors.geographicalDistribution && touched.geographicalDistribution}
+                                isInvalid={errors.geoAreaId && touched.geoAreaId}
                             >
                                 <option value="" disabled></option>
-                                {geoDivisions.map((geoDivision, index) => {
-                                    return <option key={index} value={geoDivision.majorGeoDivisionName.ar} >{geoDivision.majorGeoDivisionName.ar}</option>
+                                {geoDivisions.map((geoDivision: any, index) => {
+                                    return <option key={index} value={geoDivision._id} >{geoDivision.name}</option>
                                 })}
                             </Form.Control>
                         <Form.Control.Feedback type="invalid">
-                            {errors.geographicalDistribution}
+                            {errors.geoAreaId}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
@@ -84,7 +93,7 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
-                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string'? values.representative :  values.representative ?  values.representative._id: ""))}
+                                value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string' ? values.representative : values.representative ? values.representative._id : ""))}
                                 onBlur={handleBlur}
                                 onChange={(representative) => {
                                     if (props.edit && values.representative !== representative._id) { setFieldValue("newRepresentative", representative._id); setFieldValue("representative", representative._id) }
@@ -182,7 +191,7 @@ export const StepThreeForm = (props: any) => {
                     props.edit && allowed &&
                     <Row>
                         <Col sm={6}>
-                            <Form.Group style={{textAlign:'right'}}>
+                            <Form.Group style={{ textAlign: 'right' }}>
                                 <Form.Check
                                     name="allowGuarantorLoan"
                                     id="allowGuarantorLoan"
@@ -199,47 +208,69 @@ export const StepThreeForm = (props: any) => {
                 }
             </Can>
             <Can I="updateNationalId" a="customer" passThrough>
-            {allowed =>
+                {allowed =>
                     props.edit && allowed &&
-                <Row>
-                    <Col sm={6}>
-                        <Form.Group controlId="maxLoansAllowed">
-                            <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="maxLoansAllowed"
-                                    data-qc=""
-                                    value={values.maxLoansAllowed}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
-                                    isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
-                                />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.maxLoansAllowed}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col sm={6}>
-                        <Form.Group controlId="guarantorMaxLoans">
-                            <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="guarantorMaxLoans"
-                                    data-qc=""
-                                    value={values.guarantorMaxLoans}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
-                                    isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
-                                />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.guarantorMaxLoans}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
-            }
+                    <>
+                        <Row>
+                            <Col sm={6}>
+                                <Form.Group controlId="maxLoansAllowed">
+                                    <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="maxLoansAllowed"
+                                        data-qc=""
+                                        value={values.maxLoansAllowed}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                        isInvalid={errors.maxLoansAllowed && touched.maxLoansAllowed}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.maxLoansAllowed}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col sm={6}>
+                                <Form.Group controlId="guarantorMaxLoans">
+                                    <Form.Label className="customer-form-label">{`${local.guarantorMaxLoans}`}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="guarantorMaxLoans"
+                                        data-qc=""
+                                        value={values.guarantorMaxLoans}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        disabled={(!allowed && (props.hasLoan || props.isGuarantor))}
+                                        isInvalid={errors.guarantorMaxLoans && touched.guarantorMaxLoans}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.guarantorMaxLoans}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col sm={6}>
+                                <Form.Group controlId="maxPrincipal">
+                                    <Form.Label className="customer-form-label">{`${local.maxCustomerPrincipal}`}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="maxPrincipal"
+                                        data-qc="maxCustomerPrincipal"
+                                        value={values.maxPrincipal}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        // disabled={(!allowed && )}
+                                        isInvalid={errors.maxPrincipal && touched.maxPrincipal}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.maxPrincipal}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </>
+                }
             </Can>
             <Row>
                 <Col sm={12}>
@@ -252,7 +283,6 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="comments"
                                 value={values.comments}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.comments && touched.comments}
                             />}
                         </Can>
