@@ -67,6 +67,11 @@ class UsersList extends Component<Props, State> {
         render: data => data.nationalId
       },
       {
+        title: local.hrCode,
+        key: "hrCode",
+        render: data => data.hrCode
+      },
+      {
         title: local.employment,
         key: "employment",
         render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
@@ -144,7 +149,7 @@ class UsersList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'nationalId', 'key', 'userName']} 
+            dropDownKeys={['name', 'nationalId', 'key', 'userName' , 'hrCode']} 
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             setFrom= {(from) => this.setState({from: from})}
             url="user" from={this.state.from} size={this.state.size} 
