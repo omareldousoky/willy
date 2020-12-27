@@ -17,7 +17,7 @@ import { loading } from '../../../Shared/redux/loading/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
-import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
@@ -68,8 +68,9 @@ interface Props {
   loading: boolean;
   totalCount: number;
   data: any;
+  error: string;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   setLoading: (data) => void;
 };
@@ -142,7 +143,11 @@ class BulkApplicationApproval extends Component<Props, State>{
   }
   getApplications() {
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
-    this.props.search(query);
+    this.props.search(query).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );;
   }
 
   addRemoveItemFromChecked(loan: LoanItem) {
@@ -307,6 +312,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

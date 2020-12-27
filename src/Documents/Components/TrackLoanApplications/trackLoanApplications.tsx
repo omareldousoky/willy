@@ -9,8 +9,9 @@ import TotalWrittenChecksPDF from '../PDF/totalWrittenChecks/totalWrittenChecks'
 import Can from '../../../Mohassel/config/Can';
 import { getApplication } from '../../../Mohassel/Services/APIs/loanApplication/getApplication';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from '../../../Shared/Services/utils';
 import * as local from '../../../Shared/Assets/ar.json';
+import Swal from 'sweetalert2';
 
 interface Product {
   productName: string;
@@ -46,10 +47,11 @@ interface State {
 interface Props {
   history: any;
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   branchId?: string;
 };
@@ -135,10 +137,18 @@ class TrackLoanApplications extends Component<Props, State>{
     } else return null;
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getApplications() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getStatus(status: string) {
     switch (status) {
@@ -219,6 +229,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

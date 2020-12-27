@@ -15,6 +15,7 @@ import ability from '../../config/ability';
 import { manageCustomersArray } from './manageCustomersInitial';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface State {
   size: number;
@@ -28,8 +29,9 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  error: string;
   branchId: string;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
@@ -127,12 +129,20 @@ class CustomersList extends Component<Props, State> {
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+      if(this.props.error){;
+        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+      }
+    });
     this.setState({manageCustomersTabs: manageCustomersArray()})
 
   }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+      if(this.props.error){;
+        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+      }
+    });
   }
   render() {
     return (
@@ -193,6 +203,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.data,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters
