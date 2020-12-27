@@ -113,7 +113,7 @@ class Search extends Component<Props, State> {
     if(this.props.status) obj.status = this.props.status;
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
-    if(this.props.url === 'application' && !obj.status) obj.status='reviewed'
+    if(this.props.url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -327,7 +327,6 @@ class Search extends Component<Props, State> {
                       <div className="dropdown-container">
                         <p className="dropdown-label">{local.status}</p>
                         <Form.Control as="select" className="dropdown-select" data-qc="status"  value={formikProps.values.status ? formikProps.values.status  : 'reviewed' } onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>     
-                           <option value="" data-qc="all" disabled></option>
                            <option  value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
                            <Can I="thirdReview" a="application">
                             <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>

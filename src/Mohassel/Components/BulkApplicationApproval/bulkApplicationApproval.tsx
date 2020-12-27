@@ -179,6 +179,9 @@ class BulkApplicationApproval extends Component<Props, State>{
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
   dateSlice(date) {
     if (!date) {
       return timeToDateyyymmdd(-1)

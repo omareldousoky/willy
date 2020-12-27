@@ -300,8 +300,9 @@ class BulkApplicationReview extends Component<Props, State>{
               > {local.bulkLoanApplicationReviews}
               </Button>
             </div>
-            <hr className="dashed-line" />
-
+                   <hr className="dashed-line" />
+        
+        { this.state.branchId == 'hq'?
             <Search
               searchKeys ={this.state.searchKey}
               dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
@@ -309,8 +310,18 @@ class BulkApplicationReview extends Component<Props, State>{
               from={this.state.from}
               size={this.state.size}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-              hqBranchIdRequest = {this.state.branchId !=='hq'? this.state.branchId :''}
                />
+               :
+               <Search
+               searchKeys ={this.state.searchKey}
+               dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+               url="application"
+               from={this.state.from}
+               size={this.state.size}
+               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+               hqBranchIdRequest = {this.state.branchId}
+                />
+        }
             <DynamicTable
               from={this.state.from}
               size={this.state.size}
