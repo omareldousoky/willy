@@ -202,7 +202,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.state.branchId !== 'hq'? this.state.branchId:'' })
+    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' })
   }
 
   addRemoveItemFromChecked(loan: LoanItem) {
