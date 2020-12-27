@@ -1,5 +1,5 @@
-{
-   
+ {
+   "default_error":{"en" : "Error !","ar": "خطأ !"},
     "lead_not_found":{"en":"Lead not found.","ar":"هذا العميل المحتمل غير موجود"},
     "invalid_lead_status":{"en":"Invalid lead status.","ar":"حالة العميل المحتمل غير صحيحة"},
     "invalid_age":{"en":"Invalid age","ar":"خطأ في السن"},
