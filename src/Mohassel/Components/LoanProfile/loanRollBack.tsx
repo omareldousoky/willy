@@ -47,7 +47,7 @@ class LoanRollBack extends Component<Props, State>{
         const application = await getRollableActionsById(id);
         if (application.status === 'success') {
             this.setState({
-                actions: ( this.props.history.location.state.status === 'canceled' ) ? this.filterForCancelled(application.body.RollbackObjects) : application.body.RollbackObjects,
+                actions: application.body.RollbackObjects ? ( this.props.history.location.state.status === 'canceled' ) ? this.filterForCancelled(application.body.RollbackObjects) : application.body.RollbackObjects : [],
                 applicationId: id,
                 loading: false
             })

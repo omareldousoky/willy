@@ -158,6 +158,10 @@ class TrackLoanApplications extends Component<Props, State>{
         return <div className="status-chip outline created">{local.created}</div>
       case 'reviewed':
         return <div className="status-chip outline reviewed">{local.reviewed}</div>
+      case 'secondReview':
+        return <div className="status-chip outline second-review">{local.secondReviewed}</div>
+      case 'thirdReview':
+        return <div className="status-chip outline third-review">{local.thirdReviewed}</div>
       case 'approved':
         return <div className="status-chip outline approved">{local.approved}</div>
       case 'rejected':

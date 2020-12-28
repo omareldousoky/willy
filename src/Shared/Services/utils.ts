@@ -329,6 +329,8 @@ export const getLoanStatus = (status: string) => {
       case 'created': return local.created;
       case 'underReview': return local.underReview;
       case 'reviewed': return local.reviewed;
+      case 'secondReview': return local.secondReviewed;
+      case 'thirdReview': return local.thirdReviewed;
       case 'approved': return local.approved;
       case 'writtenOff': return local.writtenOffLoan;
       case 'Doubtful': return local.doubtedLoan;

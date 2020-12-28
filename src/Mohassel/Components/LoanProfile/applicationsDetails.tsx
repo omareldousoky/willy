@@ -147,6 +147,14 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                     <td>{local.reviewDate}</td>
                     <td>{timeToArabicDate(props.application.reviewedDate, false)}</td>
                 </tr>}
+                {props.application.secondReviewDate > 0 && <tr>
+                    <td>{local.secondReviewDate}</td>
+                    <td>{timeToArabicDate(props.application.secondReviewDate, false)}</td>
+                </tr>}
+                {props.application.thirdReviewDate > 0 && <tr>
+                    <td>{local.thirdReviewDate}</td>
+                    <td>{timeToArabicDate(props.application.thirdReviewDate, false)}</td>
+                </tr>}
                 {props.application.undoReviewDate > 0 && <tr>
                     <td>{local.unreviewDate}</td>
                     <td>{timeToArabicDate(props.application.undoReviewDate, false)}</td>

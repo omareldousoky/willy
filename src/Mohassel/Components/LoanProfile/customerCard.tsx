@@ -92,7 +92,7 @@ export const CustomerCardView = (props: Props) => {
     <div style={{ textAlign: 'right' }}>
       <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
         onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
-      <CustomerLoanDetailsBoxView application={props.application} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}/>
+      <CustomerLoanDetailsBoxView application={props.application} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
       {props.penalty && <div>
         <h6>{local.penalties}</h6>
         <Form style={{ margin: '20px 0' }}>

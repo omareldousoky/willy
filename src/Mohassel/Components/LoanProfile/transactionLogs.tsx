@@ -36,13 +36,13 @@ const mappers = [
     },
     {
       title: local.amount,
-      key: "authorId",
+      key: "amount",
       render: data => data?.transactionAmount ? data.transactionAmount : 0
     },
     {
       title: local.createdAt,
       key: "createdAt",
-      render: data => data?.truthDate ?  getDateAndTime(data.truthDate) : ''
+      render: data =>  getDateAndTime(data.created.at)
     },
     // {
     //   title: local.customerId,
