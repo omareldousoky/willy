@@ -123,8 +123,10 @@ class UsersList extends Component<Props, State> {
   getUsers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
   render() {
-
     return (
       <div>
         {this.props.withHeader &&

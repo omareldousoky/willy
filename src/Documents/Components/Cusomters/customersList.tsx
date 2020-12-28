@@ -74,6 +74,9 @@ class CustomersList extends Component<Props, State> {
   getCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
   render() {
     return (
       <Card style={{ margin: '20px 50px' }}>

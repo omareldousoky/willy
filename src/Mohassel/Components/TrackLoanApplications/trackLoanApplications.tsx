@@ -230,6 +230,7 @@ class TrackLoanApplications extends Component<Props, State>{
       console.log('error getting branch details')
     }
   }
+
   render() {
     return (
       <>

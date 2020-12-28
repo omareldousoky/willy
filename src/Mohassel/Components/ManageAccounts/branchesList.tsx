@@ -82,6 +82,9 @@ class BranchesList extends Component<Props, State> {
   getBranches() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' });
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
   render() {
     return (
       <div>
