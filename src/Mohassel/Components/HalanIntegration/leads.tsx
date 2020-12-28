@@ -28,7 +28,7 @@ import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 import { Employee } from '../Payment/payment';
 import { getErrorMessage } from '../../../Shared/Services/utils';
-
+import Swal from 'sweetalert2';
 
 interface Props {
   data: any;
