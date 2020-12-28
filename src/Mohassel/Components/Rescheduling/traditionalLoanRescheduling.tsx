@@ -12,7 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
-import { getStatus } from '../../../Shared/Services/utils';
+import { getStatus, getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     application: any;
@@ -87,8 +87,8 @@ class TraditionalLoanRescheduling extends Component<Props, State>{
                 })
                 Swal.fire('', 'Test Success', 'success');
             } else {
-                this.setState({ loading: false })
-                Swal.fire('', 'Test Fail', 'error');
+                this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+
             }
         } else {
             Swal.fire('', local.partiallyPaidInstallmentsExistRescheduleFirst, 'warning');
@@ -119,8 +119,7 @@ class TraditionalLoanRescheduling extends Component<Props, State>{
             this.setState({ loading: false })
             Swal.fire('', 'Installment has been pushed.', 'success').then(() => window.location.reload());
         } else {
-            this.setState({ loading: false })
-            Swal.fire('', 'Installment push Fail', 'error');
+            this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
         }
     }
     render() {

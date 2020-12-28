@@ -180,7 +180,7 @@ class TrackLoanApplications extends Component<Props, State>{
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
@@ -188,7 +188,7 @@ class TrackLoanApplications extends Component<Props, State>{
   getApplications() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
   }

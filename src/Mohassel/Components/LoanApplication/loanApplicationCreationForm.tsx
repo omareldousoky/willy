@@ -10,8 +10,9 @@ import InfoBox from '../userInfoBox';
 import AsyncSelect from 'react-select/async';
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getCookie } from '../../../Shared/Services/getCookie';
-import { parseJwt } from '../../../Shared/Services/utils';
+import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
+import Swal from 'sweetalert2';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -25,6 +26,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             return res.body.data;
         } else {
             setOptions([]);
+            Swal.fire("error", getErrorMessage(res.error.error),"error");
             return [];
         }
     }
@@ -44,6 +46,7 @@ export const LoanApplicationCreationForm = (props: any) => {
             return res.body.data;
         } else {
             setEmployees([]);
+            Swal.fire("Error !",getErrorMessage(res.error.error),"error")
             return [];
         }
     }

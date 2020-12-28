@@ -89,7 +89,7 @@ class UsersList extends Component<Props, State> {
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     })
     this.setState({
       manageAccountTabs: manageAccountsArray()
@@ -106,7 +106,7 @@ class UsersList extends Component<Props, State> {
       Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
     } else {
       this.props.setLoading(false);
-      Swal.fire("error",getErrorMessage(res.error.error),"error");
+      Swal.fire("Error !",getErrorMessage(res.error.error),"error");
     }
 
   }
@@ -122,7 +122,7 @@ class UsersList extends Component<Props, State> {
   async getUsers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
   }

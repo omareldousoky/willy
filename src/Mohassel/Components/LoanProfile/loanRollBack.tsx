@@ -14,7 +14,7 @@ import { Formik } from 'formik';
 import Button from 'react-bootstrap/Button';
 import * as Yup from "yup";
 import Row from 'react-bootstrap/Row';
-import { timeToDateyyymmdd, getDateString } from "../../../Shared/Services/utils";
+import { timeToDateyyymmdd, getDateString, getErrorMessage } from "../../../Shared/Services/utils";
 
 interface State {
     loading: boolean;
@@ -52,8 +52,7 @@ class LoanRollBack extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', 'fetch error', 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false }, ()=> Swal.fire("Error !",getErrorMessage(application.error.error),'error'));
         }
     }
     async rollbackAction(id, date) {
@@ -63,8 +62,7 @@ class LoanRollBack extends Component<Props, State>{
             this.setState({ loading: false })
             Swal.fire('', local.rollbackSuccess, 'success').then(() => this.props.history.goBack())
         } else {
-            Swal.fire('', local.rollbackError, 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false }, ()=> Swal.fire("Error !",getErrorMessage(application.error.error),'error'))
         }
     }
     rollbackConfirmation = (values) => {

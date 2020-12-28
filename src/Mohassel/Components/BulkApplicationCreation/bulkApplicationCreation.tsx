@@ -163,7 +163,7 @@ class BulkApplicationCreation extends Component<Props, State>{
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved" }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
@@ -172,7 +172,7 @@ class BulkApplicationCreation extends Component<Props, State>{
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "approved" }
     this.props.search(query).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
   }

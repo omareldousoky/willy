@@ -145,7 +145,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
     this.props.search(query).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );;
   }

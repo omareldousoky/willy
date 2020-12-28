@@ -130,14 +130,14 @@ class AssignLoanOfficer extends Component<Props, State>{
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
   }
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );
   }

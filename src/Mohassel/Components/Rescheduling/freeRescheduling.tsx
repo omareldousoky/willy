@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import Table from 'react-bootstrap/Table';
-import { getStatus, getDateString } from '../../../Shared/Services/utils';
+import { getStatus, getDateString, getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     application: any;
@@ -105,8 +105,7 @@ class FreeRescheduling extends Component<Props, State>{
             })
             Swal.fire('', local.loanFreeReschedulingTestSuccess, 'success');
         } else {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanFreeReschedulingTestError, 'error');
+            this.setState({ loading: false },() => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
         }
     }
     addRow(values) {
@@ -185,8 +184,7 @@ class FreeRescheduling extends Component<Props, State>{
             this.setState({ loading: false })
             Swal.fire('', local.loanFreeReschedulingSuccess, 'success').then(() => window.location.reload());
         } else {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanFreeReschedulingError, 'error');
+            this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
         }
     }
     getRescheuleDate(values, index){

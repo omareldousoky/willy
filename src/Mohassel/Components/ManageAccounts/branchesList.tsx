@@ -80,7 +80,7 @@ class BranchesList extends Component<Props, State> {
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );;
     this.setState({
@@ -90,7 +90,7 @@ class BranchesList extends Component<Props, State> {
   getBranches() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );;
   }

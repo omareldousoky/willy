@@ -108,7 +108,7 @@ class LoanList extends Component<Props, State> {
   componentDidMount() {
     this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );;
     this.setState({ manageLoansTabs: manageLoansArray() })
@@ -142,7 +142,7 @@ class LoanList extends Component<Props, State> {
     }
     this.props.search(query).then(()=>{
       if(this.props.error)
-      Swal.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
     );;
   }
