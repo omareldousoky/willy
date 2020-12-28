@@ -10,6 +10,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import BackButton from '../BackButton/back-button';
 import Card from 'react-bootstrap/Card';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     title: string;
     history: Array<string>;
@@ -46,7 +47,7 @@ class FormulaCreation extends Component<Props, State>{
             this.setState({ loading: false });
             Swal.fire("success", local.formulaCreated).then(() => { this.props.history.push("/manage-loans/calculation-formulas") })
         } else {
-            Swal.fire("error", local.formulaCreationError, 'error')
+            Swal.fire("error", getErrorMessage(res.error.error), 'error')
             this.setState({ loading: false });
         }
     }

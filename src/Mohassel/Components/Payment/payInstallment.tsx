@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { payment } from "../../../Shared/redux/payment/actions";
 import "./styles.scss";
 import { Employee } from "./payment";
+import Swal from "sweetalert2";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 
 interface FormValues {
   requiredAmount: number;
@@ -126,7 +128,7 @@ class PayInstallment extends Component<Props, State> {
       this.setState({ ...values, employees: res.body.data, payerType: 'employee' });
       return res.body.data;
     } else { 
-      this.setState({ employees: [] });
+      this.setState({ employees: [] }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       return [];
     }
   }

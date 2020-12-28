@@ -15,7 +15,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import local from '../../../Shared/Assets/ar.json';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
-import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
+import { timeToDateyyymmdd, getErrorMessage } from "../../../Shared/Services/utils";
 import { bulkCreation } from '../../Services/APIs/loanApplication/bulkCreation';
 import { bulkApplicationCreationValidation } from './bulkApplicationCreationValidation';
 import Search from '../../../Shared/Components/Search/search';
@@ -68,12 +68,13 @@ interface State {
 interface Props {
   history: Array<any>;
   data: any;
+  error: string;
   branchId: string;
   fromBranch?: boolean;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   setLoading: (data) => void;
 };
@@ -160,12 +161,20 @@ class BulkApplicationCreation extends Component<Props, State>{
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved" });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "approved" }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
     const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "approved" }
-    this.props.search(query);
+    this.props.search(query).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   addRemoveItemFromChecked(selectedApplication: LoanItem) {
     if (this.state.selectedApplications.findIndex(application => application.id === selectedApplication.id) > -1) {
@@ -308,6 +317,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters
