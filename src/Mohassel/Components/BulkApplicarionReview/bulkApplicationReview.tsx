@@ -17,7 +17,7 @@ import { loading } from '../../../Shared/redux/loading/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import { bulkReview } from '../../Services/APIs/loanApplication/bulkReview';
 import { bulkApplicationReviewValidation } from './bulkApplicationReviewValidation';
-import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
@@ -74,8 +74,9 @@ interface Props {
   loading: boolean;
   totalCount: number;
   data: any;
+  error: string;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   setLoading: (data) => void;
 };
@@ -166,7 +167,11 @@ class BulkApplicationReview extends Component<Props, State>{
   componentDidMount() {
     if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
       this.setState({ checkPermission: true });
-      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
+      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''}).then(()=>{
+        if(this.props.error)
+        Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+      }
+      );
       this.props.setSearchFilters({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
       if(this.state.branchId==='hq'){
         this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'review-application']});
@@ -202,7 +207,11 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' })
+    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
 
   addRemoveItemFromChecked(loan: LoanItem) {
@@ -236,7 +245,7 @@ class BulkApplicationReview extends Component<Props, State>{
       Swal.fire('', obj.action==='secondReview'? local.secondReviewSuccess : local.thirdReviewSuccess, 'success').then(() => this.getApplications());
     } else {
       this.props.setLoading(false);
-      Swal.fire('', local.reviewApplicationsError, 'error');
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
     }
   }
   dateSlice(date) {
@@ -410,6 +419,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters
