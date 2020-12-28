@@ -163,7 +163,7 @@ class AssignLoanOfficer extends Component<Props, State>{
       this.setState({ loanOfficers: res.body.data })
       return res.body.data.filter(loanOfficer => loanOfficer.branches.includes(this.state.selectedCustomers[0].branchId));
     } else {
-      this.setState({ loanOfficers: [] })
+      this.setState({ loanOfficers: [] }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
       return [];
     }
   }
@@ -176,7 +176,7 @@ class AssignLoanOfficer extends Component<Props, State>{
       Swal.fire("", `${local.doneMoving} ${this.state.selectedCustomers.length + " " + local.customerSuccess}`, "success")
     } else {
       this.props.setLoading(false);
-      Swal.fire("", local.errorOnMovingCustomers, "error")
+      Swal.fire("Error !",getErrorMessage(res.error.error),'error')
     }
   }
   render() {

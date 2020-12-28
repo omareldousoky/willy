@@ -15,7 +15,7 @@ import { editLead } from '../../Services/APIs/Leads/editLead';
 import { Governorate } from '../CustomerCreation/StepTwoForm';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { leadStepOne, leadStepTwo, leadValidationStepOne, leadValidationStepTwo } from './editLeadValidation';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, getErrorMessage } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 
@@ -97,7 +97,7 @@ class EditLead extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({ governorates: res.body.governorates, loading: false })
     } else {
-      this.setState({ loading: false })
+      this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
     }
   }
   renderStepOne() {
@@ -433,8 +433,7 @@ class EditLead extends Component<Props, State> {
         this.setState({ loading: false })
         Swal.fire('', local.leadEditSuccess, 'success').then(() => this.props.history.push('/halan-integration/leads'))
       } else {
-        this.setState({ loading: false })
-        Swal.fire('', local.leadEditError, 'error')
+        this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
       }
     }
   }
