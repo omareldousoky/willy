@@ -2,7 +2,8 @@
     .early-payment-receipt {
         font-weight: bold;
         page-break-after: always;
-
+        width: 105mm;
+        padding: 20px;
         /* max-width: 400px; */
         & th {
             background-color: lightgrey;
@@ -35,7 +36,7 @@
 @media screen {
     .early-payment-receipt {
         max-width: 800px;
-        display: none;
+        // display: none;
         /* max-width: 400px; */
     }
 }
