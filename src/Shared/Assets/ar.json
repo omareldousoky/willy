@@ -820,5 +820,8 @@
     "oracleIntegrationSuccess":"تم إنشاء القيود المحاسبية بنجاح ",
     "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية",
     "downloadExcel": "تنزيل Excel",
-    "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط"
+    "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط",
+    "monthlyQuarterlyReports": "التقارير الشهرية و الربع سنوية",
+    "monthlyReport": "التقرير الشهري",
+    "quarterReport":" التقرير الربع سنوي"
 }

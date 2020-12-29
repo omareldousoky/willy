@@ -30,9 +30,7 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
 
     }
   }
-  async generateReport() {
 
-  }
   render() {
     return (
       <>
@@ -40,17 +38,14 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
           <Loader type="fullscreen" open={this.state.loading} />
           <Card.Body style={{ padding: 15 }}>
             <div className="custom-card-header">
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.iScoreReports}</Card.Title>
-              <Can I="createIscoreFile" a="report"><Button type='button' variant='primary' onClick={() => this.generateReport()}>{local.requestNewreport}</Button></Can>
+              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.monthlyQuarterlyReports}</Card.Title>
             </div>
             <Card>
               <Card.Body>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
                   <div style={{ display: 'flex' }}>
                     <span style={{ marginLeft: 40 }}>#1</span>
-                    <span style={{ marginLeft: 40 }}>monthly</span>
-                    <span style={{ marginLeft: 40 }}>status</span>
-                    <span style={{ marginLeft: 40 }}>1/1/2021</span>
+                    <span style={{ marginLeft: 40 }}>{local.monthlyReport}</span>
                   </div>
                   <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile('monthly')} />
                 </div>
@@ -61,9 +56,7 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
                   <div style={{ display: 'flex' }}>
                     <span style={{ marginLeft: 40 }}>#2</span>
-                    <span style={{ marginLeft: 40 }}>quarterly</span>
-                    <span style={{ marginLeft: 40 }}>status</span>
-                    <span style={{ marginLeft: 40 }}>1/1/2021</span>
+                    <span style={{ marginLeft: 40 }}>{local.quarterReport}</span>
                   </div>
                   <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile('quarterly')} />
                 </div>

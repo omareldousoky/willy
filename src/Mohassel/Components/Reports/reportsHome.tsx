@@ -33,10 +33,10 @@ class ReportsHome extends Component<{}, State>{
                 permission: 'summarizeTransactions',
                 permissionKey: 'oracleIntegration'
             },{
-                header: 'monthly and quarterly reports',
+                header: local.monthlyQuarterlyReports,
                 stringKey: 'monthlyQuarterlyReports',
-                permission: '',
-                permissionKey: ''
+                permission: 'monthlyReport',
+                permissionKey: 'report'
             }]
         }
     }
