@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Swale from 'sweetalert2';
+import Swal from 'sweetalert2';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
@@ -28,7 +28,6 @@ import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 import { Employee } from '../Payment/payment';
 import { getErrorMessage } from '../../../Shared/Services/utils';
-import Swal from 'sweetalert2';
 
 interface Props {
   data: any;
@@ -177,14 +176,14 @@ class Leads extends Component<Props, State>{
     this.setState({ branchId })
     this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId }).then(()=>{
       if(this.props.error)
-      Swale.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
     }
     );
   }
   getLeadsCustomers() {
     this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId }).then(()=>{
       if(this.props.error)
-      Swale.fire("error",getErrorMessage(this.props.error),"error")
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
     }
     );
   }
@@ -198,7 +197,7 @@ class Leads extends Component<Props, State>{
     }
   }
   async changeLeadState(phoneNumber: string, oldState: string, oldInReviewStatus: string, newState: string, inReviewStatus: string) {
-    Swale.fire({
+    Swal.fire({
       text: local.areYouSure,
       icon: 'warning',
       showCancelButton: true,
@@ -215,10 +214,10 @@ class Leads extends Component<Props, State>{
             if (inReviewStatusRes.status === "success") {
               this.props.setLoading(false);
               this.setState({ openActionsId: "" })
-              Swale.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+              Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
             } else {
               this.props.setLoading(false);
-              Swale.fire('', local.userRoleEditError, 'error');
+              Swal.fire('', local.userRoleEditError, 'error');
             }
           }
         } else {
@@ -240,10 +239,10 @@ class Leads extends Component<Props, State>{
           this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
         } else if (action === 'edit') {
           this.props.history.push('/halan-integration/leads/edit-lead', { leadDetails: data })
-        } else Swale.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+        } else Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
       } else {
         this.props.setLoading(false);
-        Swale.fire('', local.userRoleEditError, 'error');
+        Swal.fire('', local.userRoleEditError, 'error');
       }
     }
 
@@ -283,7 +282,7 @@ class Leads extends Component<Props, State>{
       })
     } else {
       this.props.setLoading(false);
-      Swale.fire("", local.errorOnMovingCustomers, "error")
+      Swal.fire("", local.errorOnMovingCustomers, "error")
     }
   }
   async submitBranchChange() {
