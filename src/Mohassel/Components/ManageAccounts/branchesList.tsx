@@ -12,6 +12,9 @@ import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from "../../../Shared/Services/utils";
+
 interface State {
   size: number;
   from: number;
@@ -20,10 +23,11 @@ interface State {
 interface Props {
   history: any;
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
 }
 
@@ -74,13 +78,21 @@ class BranchesList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );;
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
   }
   getBranches() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );;
   }
   render() {
     return (
@@ -142,6 +154,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.data,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

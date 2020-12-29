@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import Swale from 'sweetalert2';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
@@ -27,15 +27,17 @@ import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 import { Employee } from '../Payment/payment';
-
+import { getErrorMessage } from '../../../Shared/Services/utils';
+import Swal from 'sweetalert2';
 
 interface Props {
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
   history: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;
 }
@@ -173,10 +175,18 @@ class Leads extends Component<Props, State>{
     let branchId = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch'))._id : '';
     branchId = branchId === 'hq' ? '' : branchId;
     this.setState({ branchId })
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId }).then(()=>{
+      if(this.props.error)
+      Swale.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId }).then(()=>{
+      if(this.props.error)
+      Swale.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadStatus(status: string) {
     switch (status) {
@@ -188,7 +198,7 @@ class Leads extends Component<Props, State>{
     }
   }
   async changeLeadState(phoneNumber: string, oldState: string, oldInReviewStatus: string, newState: string, inReviewStatus: string) {
-    Swal.fire({
+    Swale.fire({
       text: local.areYouSure,
       icon: 'warning',
       showCancelButton: true,
@@ -205,10 +215,10 @@ class Leads extends Component<Props, State>{
             if (inReviewStatusRes.status === "success") {
               this.props.setLoading(false);
               this.setState({ openActionsId: "" })
-              Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+              Swale.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
             } else {
               this.props.setLoading(false);
-              Swal.fire('', local.userRoleEditError, 'error');
+              Swale.fire('', local.userRoleEditError, 'error');
             }
           }
         } else {
@@ -230,10 +240,10 @@ class Leads extends Component<Props, State>{
           this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
         } else if (action === 'edit') {
           this.props.history.push('/halan-integration/leads/edit-lead', { leadDetails: data })
-        } else Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+        } else Swale.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
       } else {
         this.props.setLoading(false);
-        Swal.fire('', local.userRoleEditError, 'error');
+        Swale.fire('', local.userRoleEditError, 'error');
       }
     }
 
@@ -273,7 +283,7 @@ class Leads extends Component<Props, State>{
       })
     } else {
       this.props.setLoading(false);
-      Swal.fire("", local.errorOnMovingCustomers, "error")
+      Swale.fire("", local.errorOnMovingCustomers, "error")
     }
   }
   async submitBranchChange() {

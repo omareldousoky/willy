@@ -16,6 +16,7 @@ import { Branch } from '../../../Shared/redux/auth/types';
 import { manageToolsArray } from '../Tools/manageToolsInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Card from 'react-bootstrap/Card';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface GeoArea {
     name: string;
@@ -92,7 +93,7 @@ class GeoAreas extends Component<{}, State> {
                         // branchAreas: this.state.branchAreas.map((branchArea) => branchArea._ === index ? { ...branchArea, disabledUi: !branchArea.disabledUi } : branchArea),
                         loading: false,
                     }, () => this.getBranchAreas())
-                } else this.setState({ loading: false })
+                } else this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
             } else {
                 //Edit 
                 this.setState({ loading: true })
@@ -102,7 +103,7 @@ class GeoAreas extends Component<{}, State> {
                         branchAreas: this.state.branchAreas.map((branchArea) => branchArea._id === areaToggled._id ? { ...branchArea, disabledUi: !branchArea.disabledUi } : branchArea),
                         loading: false,
                     }, () => this.getBranchAreas())
-                } else this.setState({ loading: false })
+                } else this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
             }
         } else if (!submit) {
             this.setState({
@@ -119,8 +120,7 @@ class GeoAreas extends Component<{}, State> {
                 loading: false
             })
         } else {
-            this.setState({ loading: false });
-            Swal.fire('', local.searchError, 'error');
+            this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(branches.error.error),'error'));
 
         }
     }
@@ -134,10 +134,9 @@ class GeoAreas extends Component<{}, State> {
                 loading: false,
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
             this.setState({
                 loading: false,
-            })
+            }, () => Swal.fire("Error !",getErrorMessage(branchAreas.error.error),'error') )
         }
     }
     render() {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, iscoreStatusColor } from "../../../Shared/Services/utils";
+import { downloadFile, getErrorMessage, iscoreStatusColor } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -97,7 +97,7 @@ export const GuarantorTableView = (props: Props) => {
             }
             changeLoading(false);
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("Error !",getErrorMessage(results.error.error),'error');
             changeLoading(false);
         }
     }
@@ -160,8 +160,8 @@ export const GuarantorTableView = (props: Props) => {
             }
             else return { flag: true, customers: merged }
         } else {
-            Swal.fire("error", res.error.details, 'error')
             changeLoading(false);
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return { flag: false }
         }
     }
@@ -186,7 +186,7 @@ export const GuarantorTableView = (props: Props) => {
             if (errorMessage1 || errorMessage2)
                 Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : ''} ${errorMessage2}</span>`, 'error');
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire("Error !",getErrorMessage(selectedGuarantor.error.error),'error');
         }
         changeLoading(false);
     }
@@ -198,7 +198,7 @@ export const GuarantorTableView = (props: Props) => {
         if (selectedGuarantor.status === 'success') {
             Swal.fire(local.guarantorAddedSuccessfully, '', 'success').then(() => { window.location.reload(); });
         } else {
-            Swal.fire('', selectedGuarantor.error.details, 'error');
+            Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
         }
         changeLoading(false);
     }
@@ -222,7 +222,7 @@ export const GuarantorTableView = (props: Props) => {
                 if (selectedGuarantor.status === 'success') {
                     Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(() => { window.location.reload(); });
                 } else {
-                    Swal.fire('', selectedGuarantor.error.details, 'error');
+                    Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
                 }
                 changeLoading(false);
             }
