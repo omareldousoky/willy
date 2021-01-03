@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import {createNewBranch, editBranchById , getBranchById} from '../../../Shared/redux/branch/actions';
 import Swal from 'sweetalert2';
 import { Branch } from '../../../Shared/Services/interfaces';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 interface State {
     step: number;
     step1: BasicValues;
@@ -79,8 +79,8 @@ interface Props {
            Swal.fire('success',local.branchCreated).then(()=>
                  this.props.history.goBack());
         } else {
-            
-            Swal.fire("error",local.branchCreationError);
+            console.log(this.props.branch.error)
+            Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
         }
     }
     async editBranch (values) {
@@ -91,7 +91,7 @@ interface Props {
             Swal.fire('success', local.branchUpdated);
             this.props.history.goBack();
         } else {
-            Swal.fire("error", local.branchUpdateError);
+            Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
         }
     }
     async getBranch(){
@@ -103,6 +103,8 @@ interface Props {
             this.setState({
                 step1: branch,
             })
+        } else {
+            Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
         }
 
     }
