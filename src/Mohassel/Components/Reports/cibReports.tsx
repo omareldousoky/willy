@@ -86,7 +86,7 @@ class CIBReports extends Component<{}, State>{
           <Card.Body style={{ padding: 15 }}>
             <div className="custom-card-header">
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.iScoreReports}</Card.Title>
-              <Can I="cibScreen" a="report"><Button type='button' variant='primary' onClick={() => this.setState({ showModal: true })}>{local.requestNewreport}</Button></Can>
+              <Can I="cibScreen" a="report"><Button type='button' variant='primary' onClick={() => this.setState({ showModal: true })}>{local.newRequest}</Button></Can>
             </div>
             {this.state.data.length > 0 ? this.state.data.map((pdf, index) => {
               return (
