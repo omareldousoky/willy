@@ -10,7 +10,8 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
+import { beneficiaryType, currency, getErrorMessage, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
+import Swal from 'sweetalert2';
 
 interface Props {
     application: any;
@@ -31,7 +32,7 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
             const value = uses.find(use => use.id === props.application.usage).name
             changeUse(value)
         } else {
-            console.log('Err')
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return ''
         }
     }
@@ -146,6 +147,14 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
                     <td>{local.reviewDate}</td>
                     <td>{timeToArabicDate(props.application.reviewedDate, false)}</td>
                 </tr>}
+                {props.application.secondReviewDate > 0 && <tr>
+                    <td>{local.secondReviewDate}</td>
+                    <td>{timeToArabicDate(props.application.secondReviewDate, false)}</td>
+                </tr>}
+                {props.application.thirdReviewDate > 0 && <tr>
+                    <td>{local.thirdReviewDate}</td>
+                    <td>{timeToArabicDate(props.application.thirdReviewDate, false)}</td>
+                </tr>}
                 {props.application.undoReviewDate > 0 && <tr>
                     <td>{local.unreviewDate}</td>
                     <td>{timeToArabicDate(props.application.undoReviewDate, false)}</td>
@@ -181,7 +190,7 @@ export const LoanDetailsBoxView = (props: Props) => {
             const value = uses.find(use => use.id === props.application.usage).name
             changeUse(value)
         } else {
-            console.log('Err')
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return ''
         }
     }
@@ -342,7 +351,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
             const name = res.body.name
             changeOfficerName(name)
         } else {
-            console.log('Err')
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return ''
         }
     }
@@ -406,7 +415,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                     </Form.Group>
                 </Form.Row>
                 {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
-                    <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
+                    <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} application={props.application}/>
                 </Form.Row>}
             </Form>
         </div>

@@ -17,6 +17,7 @@ interface Props {
     application: any;
     id: string;
     handleStatusChange: Function;
+    getGeoArea: Function;
 };
 
 interface State {
@@ -116,13 +117,19 @@ class StatusHelper extends Component<Props, State>{
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.application.guarantors.map(guarantor => <tr key={guarantor._id}>
-                            <td>{guarantor.code}</td>
-                            <td>{guarantor.customerName}</td>
-                            <td>{guarantor.district}</td>
-                            <td>{guarantor.customerHomeAddress}</td>
-                            <td>{guarantor.mobilePhoneNumber}</td>
-                        </tr>)}
+                        {this.props.application.guarantors.map(guarantor => {
+                            const area = this.props.getGeoArea(guarantor.geoAreaId);
+                            return (
+                                <tr key={guarantor._id}>
+                                    <td>{guarantor.code}</td>
+                                    <td>{guarantor.customerName}</td>
+                                    <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
+                                    <td>{guarantor.customerHomeAddress}</td>
+                                    <td>{guarantor.mobilePhoneNumber}</td>
+                                </tr>
+                            )
+                        }
+                        )}
                     </tbody>
                 </Table>}
             </div>

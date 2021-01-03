@@ -7,6 +7,7 @@ import Reports from './reports';
 import IscoreReports from './iscoreReports';
 import Card from 'react-bootstrap/Card';
 import CIBReports from './cibReports';
+import OracleIntegration from './oracleIntegration';
 interface State {
     id: string;
     activeTab: string;
@@ -32,8 +33,12 @@ class ReportsHome extends Component<{}, State>{
                 stringKey: 'cibTPAYReport',
                 permission: 'cibScreen',
                 permissionKey: 'report'
-            }
-        ]
+            }, {
+                header: local.oracleIntegration,
+                stringKey: 'oracleIntegration',
+                permission: 'summarizeTransactions',
+                permissionKey: 'oracleIntegration'
+            }]
         }
     }
     handleOptionChange = (changeEvent) => {
@@ -49,6 +54,8 @@ class ReportsHome extends Component<{}, State>{
                 return <IscoreReports />
             case "cibTPAYReport":
                 return <CIBReports />
+            case "oracleIntegration":
+                return <OracleIntegration />
             default:
                 return null
         }

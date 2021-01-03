@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 
 const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
@@ -7,8 +8,8 @@ endOfDay.setHours(23, 59, 59, 59);
 function getMaxDate(selectedReviewedLoans){
     let maxDate = 0;
     selectedReviewedLoans.forEach(loan => {
-        if(loan.application.reviewedDate > maxDate){
-            maxDate = loan.application.reviewedDate;
+        if(loan.application.thirdReviewDate > maxDate){
+            maxDate = loan.application.thirdReviewDate;
         }
     });
     return maxDate;
@@ -25,7 +26,7 @@ export const bulkApplicationApprovalValidation = Yup.object().shape({
     function (this: any, value: string) {
         const { selectedReviewedLoans } = this.parent;
         const date = new Date(value).valueOf();
-        return getMaxDate(selectedReviewedLoans) <= date
+        return  timeToDateyyymmdd(getMaxDate(selectedReviewedLoans) ) <= timeToDateyyymmdd(date)
     }).required(local.required),
     fundSource: Yup.string().required(local.required),
 })

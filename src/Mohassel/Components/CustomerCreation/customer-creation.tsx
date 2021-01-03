@@ -19,6 +19,7 @@ import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import ability from '../../config/ability';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 
+
 interface CustomerInfo {
   birthDate: number;
   customerName?: string;
@@ -194,8 +195,8 @@ class CustomerCreation extends Component<Props, State>{
         homePhoneNumber: res.body.homePhoneNumber,
         faxNumber: res.body.faxNumber,
         mobilePhoneNumber: res.body.mobilePhoneNumber,
-        customerWebsite: res.body.customerWebsite,
-        emailAddress: res.body.emailAddress
+        customerWebsite: res.body.customerWebsite?.trim(),
+        emailAddress: res.body.emailAddress?.trim()
       };
       const customerBusiness = {
         businessAddressLatLong: res.body.businessAddressLatLong,

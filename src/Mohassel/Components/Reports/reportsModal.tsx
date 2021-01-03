@@ -23,6 +23,7 @@ interface Props {
   show: boolean;
   hideModal: () => void;
   submit: (values) => void;
+  getExcel?: (values) => void;
 }
 
 const ReportsModal = (props: Props) => {
@@ -135,7 +136,8 @@ const ReportsModal = (props: Props) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => { props.hideModal() }}>{local.cancel}</Button>
-              <Button type="submit" variant="primary">{local.submit}</Button>
+              {props.pdf && props.pdf.key && !['customerDetails', 'loanDetails', 'cibPaymentReport'].includes(props.pdf.key) && props.getExcel && <Button variant="primary" onClick={() => { props.getExcel && props.getExcel(formikProps.values) }}>{local.downloadExcel}</Button>}
+              <Button type="submit" variant="primary">{local.downloadPDF}</Button>
             </Modal.Footer>
           </Form>
         }

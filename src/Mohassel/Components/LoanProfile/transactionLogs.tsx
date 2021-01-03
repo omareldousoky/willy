@@ -4,6 +4,8 @@ import { getApplicationTransactionLogs } from '../../Services/APIs/loanApplicati
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getDateAndTime } from '../../Services/getRenderDate';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     id: string;
 }
@@ -34,13 +36,13 @@ const mappers = [
     },
     {
       title: local.amount,
-      key: "authorId",
+      key: "amount",
       render: data => data?.transactionAmount ? data.transactionAmount : 0
     },
     {
       title: local.createdAt,
       key: "createdAt",
-      render: data => data?.truthDate ?  getDateAndTime(data.truthDate) : ''
+      render: data =>  getDateAndTime(data.created.at)
     },
     // {
     //   title: local.customerId,
@@ -79,8 +81,7 @@ class TransactionLogs extends Component<Props, State> {
                 loading: false,
             })
         } else {
-            console.log("error")
-            this.setState({ loading: false })
+            this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
         }
     }
     render() {

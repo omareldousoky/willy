@@ -7,11 +7,12 @@ import { Loader } from '../../../Shared/Components/Loader';
 import StatusHelper from './statusHelper';
 import { rejectApplication, undoreviewApplication, reviewApplication } from '../../Services/APIs/loanApplication/stateHandler';
 import * as local from '../../../Shared/Assets/ar.json';
+import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 interface State {
     prevId: string;
     loading: boolean;
     application: any;
-
+    geoAreas: Array<any>;
 }
 interface Props {
     history: any;
@@ -24,6 +25,7 @@ class LoanStatusChange extends Component<Props, State>{
             prevId: '',
             application: {},
             loading: false,
+            geoAreas: []
         };
     }
     componentDidMount() {
@@ -34,6 +36,7 @@ class LoanStatusChange extends Component<Props, State>{
         this.setState({ loading: true });
         const application = await getApplication(id);
         if (application.status === 'success') {
+            if(application.body.guarantors.length > 0) this.getGeoAreas(application.body.branchId)
             this.setState({
                 application: application.body,
                 loading: false
@@ -42,6 +45,19 @@ class LoanStatusChange extends Component<Props, State>{
             Swal.fire('', 'fetch error', 'error');
             this.setState({ loading: false });
         }
+    }
+    async getGeoAreas(branch) {
+        this.setState({ loading: true })
+        const resGeo = await getGeoAreasByBranch(branch);
+        if (resGeo.status === "success") {
+            this.setState({ loading: false, geoAreas: resGeo.body.data })
+        } else this.setState({ loading: false })
+    }
+    getCustomerGeoArea(geoArea) {
+        const geoAreaObject = this.state.geoAreas.filter(area => area._id === geoArea);
+        if (geoAreaObject.length === 1) {
+            return geoAreaObject[0]
+        } else return { name: '-', active: false }
     }
     async handleStatusChange(values, status) {
         this.setState({ loading: true });
@@ -79,7 +95,7 @@ class LoanStatusChange extends Component<Props, State>{
             <Container style={{ textAlign: 'right' }}>
                 <Loader type="fullscreen" open={this.state.loading} />
                 {Object.keys(this.state.application).length > 0 && <div>
-                    <StatusHelper status={this.props.history.location.state.action} id={this.state.application._id} handleStatusChange={(values, status) => { this.handleStatusChange(values, status) }} application={this.state.application} />
+                    <StatusHelper status={this.props.history.location.state.action} id={this.state.application._id} handleStatusChange={(values, status) => { this.handleStatusChange(values, status) }} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} />
                 </div>}
             </Container>
         )

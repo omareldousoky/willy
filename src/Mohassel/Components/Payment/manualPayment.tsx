@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import AsyncSelect from 'react-select/async';
 import { Formik, FormikProps } from "formik";
 import { searchUserByAction } from "../../Services/APIs/UserByAction/searchUserByAction";
-import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
+import { timeToDateyyymmdd, getErrorMessage } from "../../../Shared/Services/utils";
 import { payment } from "../../../Shared/redux/payment/actions";
 import { Employee } from "./payment";
 import { manualPaymentValidation } from "./paymentValidation";
@@ -16,6 +16,7 @@ import * as local from "../../../Shared/Assets/ar.json";
 import "./styles.scss";
 import { PendingActions } from "../../../Shared/Services/interfaces";
 import { Installment } from "./payInstallment";
+import Swal from "sweetalert2";
 
 interface SelectObject {
   label: string;
@@ -120,7 +121,7 @@ class ManualPayment extends Component<Props, State> {
       this.props.setPayerType('employee');
       return res.body.data;
     } else {
-      this.setState({ employees: [] });
+      this.setState({ employees: [] }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       return [];
     }
   }
@@ -237,24 +238,23 @@ class ManualPayment extends Component<Props, State> {
                         data-qc="installmentNumber"
                         value={this.props.formikProps.values.installmentNumber}
                         onChange={event => {
+                          const installment = this.props.application.installmentsObject.installments.find(installment => installment.id ===Number(event.currentTarget.value))
                           this.props.formikProps.setFieldValue("installmentNumber", event.currentTarget.value);
                           this.props.formikProps.setFieldValue(
                             "requiredAmount",
-                            this.props.application.installmentsObject.installments.find(
-                              installment =>
-                                installment.id ===
-                                Number(event.currentTarget.value)
-                            )?.installmentResponse
+                            (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
+                          );
+                          this.props.formikProps.setFieldValue(
+                            "payAmount",
+                            (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
                           );
                         }}
                       >
                         <option value={-1}></option>
                         {this.props.application.installmentsObject.installments.map(installment => {
                           if (
-                            installment.status !== "partiallyPaid" &&
                             installment.status !== "paid" &&
-                            installment.status !== "rescheduled" &&
-                            installment.dateOfPayment > Date.now()
+                            installment.status !== "rescheduled"
                           )
                             return <option key={installment.id} value={installment.id}>{installment.id}</option>
                         })}

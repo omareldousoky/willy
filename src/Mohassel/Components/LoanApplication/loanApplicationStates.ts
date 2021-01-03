@@ -80,6 +80,7 @@ export interface Application {
         maxIndividualPrincipal: number;
         maxGroupIndividualPrincipal: number;
         maxGroupPrincipal: number;
+        maxGroupReturningIndividualPrincipal: number;
     };
     customerTotalPrincipals: number;
     customerMaxPrincipal: number;
@@ -157,9 +158,9 @@ export const LoanApplicationValidation = Yup.object().shape({
             amount: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", local.customerMaxPrincipalError,
                 function (this: any, value: any) {
                     const { customer } = this.parent
-                    if (customer.maxPrincipal && customer.maxPrincipal > 0 && value <= ((customer.maxPrincipal > customer.maxGroupIndividualPrincipal ? customer.maxGroupIndividualPrincipal : customer.maxPrincipal) - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
+                    if (customer.maxPrincipal && customer.maxPrincipal > 0 && value <= ((customer.maxPrincipal > (customer.paidLoans && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal) ? (customer.paidLoans  && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal) : customer.maxPrincipal) - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
                         return true
-                    } else if (!customer.maxPrincipal && value <= (customer.maxGroupIndividualPrincipal - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
+                    } else if (!customer.maxPrincipal && value <= ((customer.paidLoans && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal) - (customer.totalPrincipals ? customer.totalPrincipals : 0))) {
                         return true
                     } else {
                         return false
