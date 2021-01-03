@@ -160,17 +160,17 @@ class CustomerCreation extends Component<Props, State>{
       this.getCustomerById();
     }
   }
-  formikStep1 = {
+  formikStep1: any = {
     isValid: true,
     values: step1,
     errors: {},
   };
-  formikStep2 = {
+  formikStep2: any = {
     isValid: true,
     values: step2,
     errors: {},
   };
-  formikStep3 = {
+  formikStep3: any = {
     isValid: true,
     values: step3,
     errors: {},
@@ -264,7 +264,7 @@ class CustomerCreation extends Component<Props, State>{
         branchId: res.body.branchId
       } as any);
     } else {
-      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),));
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
     }
   }
   submit = (values: object) => {
