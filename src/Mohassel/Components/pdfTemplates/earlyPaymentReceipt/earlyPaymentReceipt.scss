@@ -1,8 +1,10 @@
 @media screen,print {
     .early-payment-receipt {
-        font-weight: bold;
+        font-weight: 600;
+        color: #000;
         page-break-after: always;
-
+        width: 105mm;
+        padding: 20px;
         /* max-width: 400px; */
         & th {
             background-color: lightgrey;
