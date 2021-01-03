@@ -4,12 +4,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
-import { checkIssueDate } from "../../../Shared/Services/utils";
+import { checkIssueDate, getErrorMessage } from "../../../Shared/Services/utils";
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
+import Swal from 'sweetalert2';
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -82,7 +83,10 @@ export const StepOneForm = (props: any) => {
                       }
                       setFieldValue('birthDate', getBirthdateFromNationalId(value));
                       setFieldValue('gender', getGenderFromNationalId(value));
-                    } else setLoading(false);
+                    } else {
+                      setLoading(false);
+                      Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+                    }
                   }
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}

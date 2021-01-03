@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { timeToDateyyymmdd, downloadFile, iscoreStatusColor } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, downloadFile, iscoreStatusColor, getErrorMessage } from '../../../Shared/Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
@@ -16,6 +16,7 @@ import { CustomerReportsTab } from './customerReportsTab';
 import ClientGuaranteedLoans from "../pdfTemplates/ClientGuaranteedLoans/ClientGuaranteedLoans";
 import ability from '../../config/ability';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import Swal from 'sweetalert2';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -63,6 +64,7 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     } else {
       changeLoading(false);
+      Swal.fire('Error !', getErrorMessage(iScores.error.error),'error');
     }
   }
   const [print, _changePrint] = useState<any>();
@@ -77,6 +79,7 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     } else {
       changeLoading(false);
+      Swal.fire('Error !', getErrorMessage(res.error.error),'error');
     }
   }
   const getGeoArea = async (geoArea, branch) => {
@@ -88,7 +91,10 @@ const CustomerProfile = (props: Props) => {
       if (geoAreaObject.length === 1) {
         setgeoArea(geoAreaObject[0])
       }else setgeoArea({name: '-', active: false})
-    } else changeLoading(false);
+    } else {
+       changeLoading(false);
+       Swal.fire('Error !', getErrorMessage(resGeo.error.error),'error');
+    }
   }
   async function getCustomerDetails() {
     changeLoading(true);
@@ -100,6 +106,7 @@ const CustomerProfile = (props: Props) => {
       await getGeoArea(res.body.geoAreaId, res.body.branchId);
     } else {
       changeLoading(false);
+      Swal.fire('Error !', getErrorMessage(res.error.error),'error');
     }
   }
 

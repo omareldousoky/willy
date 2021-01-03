@@ -8,6 +8,8 @@ import { getGovernorates, getBusinessSectors } from '../../Services/APIs/configA
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 export interface Village {
     villageName: { ar: string };
@@ -62,13 +64,16 @@ export const StepTwoForm = (props: any) => {
         const resGov = await getGovernorates();
         if (resGov.status === "success") {
             setGovernorates(resGov.body.governorates)
-        } else console.log(resGov.error)
+        } else Swal.fire('Error !',getErrorMessage(resGov.error.error),'error');
 
         const resBS = await getBusinessSectors();
         if (resBS.status === "success") {
             setLoading(false);
             setBusinessSectors(resBS.body.sectors)
-        } else setLoading(false);
+        } else {
+            setLoading(false);
+            Swal.fire('Error !', getErrorMessage(resBS.error.error),'error');
+        }
     }
     useEffect(() => {
         getConfig();
