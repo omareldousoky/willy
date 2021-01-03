@@ -131,8 +131,8 @@ class Leads extends Component<Props, State>{
         render: data =>
           data.status !== 'rejected' &&
           <Can I="assignLead" a="halanuser">
-            <span style={{ marginRight: 5, cursor: 'pointer' }}
-              className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openLOModal: true })} />
+            <img style={{ cursor: 'pointer', marginRight: 5 }} alt={"change-loan-officer"}
+              src={require('../../Assets/changeOfficer-inactive.svg')} onClick={() => this.setState({ selectedLead: data, openLOModal: true })} />
           </Can>
       },
       {
@@ -141,8 +141,8 @@ class Leads extends Component<Props, State>{
         render: data =>
           data.status !== 'rejected' &&
           <Can I="assignLead" a="halanuser">
-            <span style={{ marginRight: 5, cursor: 'pointer' }}
-              className="fa fa-home" onClick={() => this.setState({ selectedLead: data, openBranchModal: true })} />
+            <img style={{ cursor: 'pointer', marginRight: 5 }} alt={"change-branch"}
+              src={require('../../Assets/branches-inactive.svg')} onClick={() => this.setState({ selectedLead: data, openBranchModal: true })} />
           </Can>
       },
       {
