@@ -114,7 +114,7 @@ interface State {
     guarantorMaxLoans: number;
     maxLoansAllowed: number;
     maxPrincipal: number;
-    principals: {
+    principals?: {
       maxIndividualPrincipal: number;
       maxGroupIndividualPrincipal: number;
       maxGroupPrincipal: number;
@@ -329,7 +329,7 @@ class CustomerCreation extends Component<Props, State>{
         step3
       })
     } else {
-      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(princples.error.error,'error')));
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(princples.error.error),'error'));
     }
   }
   previousStep(values, step: number): void {
