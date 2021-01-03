@@ -25,6 +25,14 @@ const LoanApplicationDetails = (props) => {
                 return local.created;
               case "approved":
                 return local.approved;
+              case 'underReview': 
+                return local.underReview;
+              case 'rejected': 
+                return local.rejected;  
+              case 'secondReview':
+                return local.secondReviewed;  
+              case 'thirdReview':
+                  return local.thirdReviewed;  
               default:
                 return "";
         }
