@@ -20,6 +20,7 @@ import { getBranches } from "../../Services/APIs/Branch/getBranches";
 import Select from "react-select";
 import { UserDateValues } from "./userDetailsInterfaces";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 
 interface Props {
   id: string;
@@ -87,8 +88,7 @@ class CustomersForUser extends Component<Props, State> {
         loading: false
       },()=>this.getLoanOfficers(''));
     } else {
-      this.setState({ loading: false });
-      Swal.fire("", local.searchError, "error");
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(branches.error.error),'error'));
     }
   }
   componentDidMount() {
@@ -108,7 +108,7 @@ class CustomersForUser extends Component<Props, State> {
         customers: res.body.data,
         loading: false
       });
-    } else this.setState({ loading: false });
+    } else this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
@@ -189,8 +189,8 @@ class CustomersForUser extends Component<Props, State> {
       } else {
         this.setState({ loading: false, selectedCustomers: [] });
         Swal.fire(
-          "",
-          local.actionHasntBeenMadeTheUserIsAssignedToOtherCustomers,
+          "Error !",
+          getErrorMessage(res.error.error),
           "error"
         );
       }
@@ -226,7 +226,7 @@ class CustomersForUser extends Component<Props, State> {
       if (res.status === "success") {
         this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: res.body.data })
       } else {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
+        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
       }
     }
   };
