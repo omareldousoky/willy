@@ -79,7 +79,6 @@ interface Props {
            Swal.fire('success',local.branchCreated).then(()=>
                  this.props.history.goBack());
         } else {
-            console.log(this.props.branch.error)
             Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
         }
     }
