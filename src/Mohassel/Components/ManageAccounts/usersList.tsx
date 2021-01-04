@@ -15,15 +15,17 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
-import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
+import { getErrorMessage, timeToDateyyymmdd } from "../../../Shared/Services/utils";
 
 interface Props {
   history: any;
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  search: (data) => void;
+  statusCode: string;
+  search: (data) => Promise<void>;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;
   branchId?: string;
@@ -67,6 +69,11 @@ class UsersList extends Component<Props, State> {
         render: data => data.nationalId
       },
       {
+        title: local.hrCode,
+        key: "hrCode",
+        render: data => data.hrCode
+      },
+      {
         title: local.employment,
         key: "employment",
         render: data => data.hiringDate? timeToDateyyymmdd(data.hiringDate): ''
@@ -85,13 +92,15 @@ class UsersList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    })
     this.setState({
       manageAccountTabs: manageAccountsArray()
-    })
-    
-    
+    })   
   }
+
   async handleActivationClick(data: any) {
     const req = { id: data._id, status: data.status === "active" ? "inactive" : "active" }
     this.props.setLoading(true);
@@ -102,7 +111,7 @@ class UsersList extends Component<Props, State> {
       Swal.fire("", `${data.username}  ${req.status} `, 'success').then(() => this.getUsers())
     } else {
       this.props.setLoading(false);
-      Swal.fire(res.error.error,res.error.details,"error");
+      Swal.fire("Error !",getErrorMessage(res.error.error),"error");
     }
 
   }
@@ -115,11 +124,14 @@ class UsersList extends Component<Props, State> {
       </>
     );
   }
-  getUsers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId });
+  async getUsers() {
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'user', branchId: this.props.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   render() {
-
     return (
       <div>
         {this.props.withHeader &&
@@ -144,7 +156,7 @@ class UsersList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search 
             searchKeys={['keyword', 'dateFromTo']} 
-            dropDownKeys={['name', 'nationalId', 'key', 'userName']} 
+            dropDownKeys={['name', 'nationalId', 'key', 'userName' , 'hrCode']} 
             searchPlaceholder = {local.searchByBranchNameOrNationalIdOrCode}
             setFrom= {(from) => this.setState({from: from})}
             url="user" from={this.state.from} size={this.state.size} 
@@ -177,6 +189,8 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.data,
+    statusCode: state.search.status,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

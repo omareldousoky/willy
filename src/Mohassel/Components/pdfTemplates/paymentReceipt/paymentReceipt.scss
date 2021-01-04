@@ -1,38 +1,37 @@
 @media screen, print {
     .payment-receipt {
-        font-size: 9px;
-        font-weight: bold;
+        font-size: 12px;
+        font-weight: 600;
         page-break-after: always;
+        color: #000;
         & .receipt-container{
-            width: 500px;
+            width: 105mm;
             padding: 20px;
-            margin: 10px;
             border: 1px solid black;
             & .receipt-header {
                 text-align: center;
                 margin-bottom: 10px;
             }
-            & .receipt-content {
+            & .receipt-data {
                 text-align: right;
+                & div {
+                    display: flex;
+                    margin: 10px 0px;
+                }
                 & .title {
-                    text-align: left;
+                    text-align: right;
+                    width: 25%;
                 }
                 & .info {
                     padding-right: 10px;
-                    margin-right: 0px;
                     border: 1px black solid;
+                    width: 75%;
                 }
                 & .dots {
                     padding-right: 10px;
                     margin-right: 0px;
                 }
             }
-        }
-
-        & .frame {
-            border: 0.5px solid black;
-            padding: 2px;
-            display: inline-block;
         }
         & .logo-print{
             max-width:75px;
@@ -48,7 +47,7 @@
 }
 @media screen {
     .payment-receipt {
-        max-width: 700px;
+        max-width: 105mm;
         display: none;
     }
 }

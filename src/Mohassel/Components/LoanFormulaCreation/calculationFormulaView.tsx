@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import Table from 'react-bootstrap/Table';
 import BackButton from '../BackButton/back-button';
-import { interestType, installmentType, roundDirection, roundWhat } from "../../../Shared/Services/utils";
+import { interestType, installmentType, roundDirection, roundWhat, getErrorMessage } from "../../../Shared/Services/utils";
 
 interface State {
     formula: any;
@@ -40,7 +40,7 @@ class FormulaView extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('error', getErrorMessage(formula.error.error), 'error');
             this.setState({ loading: false });
         }
     }

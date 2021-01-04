@@ -8,7 +8,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from "../../../Shared/Services/utils";
+import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from "../../../Shared/Services/utils";
+import Swal from 'sweetalert2';
 
 interface Props {
   history: Array<any>;
@@ -18,8 +19,9 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  error: string;
   issuedLoansSearchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
 };
 interface State {
@@ -102,7 +104,11 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" });
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );;
   }
   getStatus(status: string) {
     switch (status) {
@@ -133,7 +139,11 @@ class LoanList extends Component<Props, State> {
     } else {
       query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }
     }
-    this.props.search(query);
+    this.props.search(query).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );;
   }
   componentWillUnmount() {
     this.props.setSearchFilters({})
@@ -187,6 +197,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters,

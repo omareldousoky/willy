@@ -16,6 +16,7 @@ import './styles.scss';
 import { setToken } from '../../token';
 import { connect } from 'react-redux';
 import { Auth } from '../../redux/auth/types'
+import { logout } from '../../../Mohassel/Services/APIs/Auth/logout';
 interface Props {
   history: any;
   auth: Auth;
@@ -114,7 +115,8 @@ class NavBar extends Component<Props, State> {
         </div>
         {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
         <div className="item">
-          <Button variant="outline-secondary" onClick={() => {
+          <Button variant="outline-secondary" onClick={ async() => {
+            const res = await logout();
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
