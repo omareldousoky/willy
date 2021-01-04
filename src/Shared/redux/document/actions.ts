@@ -19,21 +19,34 @@ import { deleteDocument as customerDeleteDocument } from '../../../Mohassel/Serv
 import { deleteDocument as applicationDeleteDocument } from '../../../Mohassel/Services/APIs/loanApplication/deleteDocument';
 import { getCustomerDocuments } from '../../../Mohassel/Services/APIs/Customer-Creation/getDocuments';
 import { getApplicationDocuments } from '../../../Mohassel/Services/APIs/loanApplication/getDocuments';
-import {Document} from '../../Services/interfaces'
+import { uploadDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/uploadDeathCertificate';
+import { getDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/getDeathCertificate';
+import { deleteDeathCertificate } from '../../../Mohassel/Services/APIs/DeathCerificate/deleteDeathCertificate';
+import { Document } from '../../Services/interfaces'
 import Swal from 'sweetalert2';
 
 const handleDocuments = (docs: any[], id, type) => {
-    const documents: DocumentsState = []
+    const documents: DocumentsState = [];
+    if(type === "deathCertificate") {
+        if(docs)
+        documents.push({
+            docName: "deathCertificate",
+            imagesFiles: docs,
+        })
+    }
+    else {
     docs?.map((doc) => {
+    
         documents.push({
             docName: doc.name,
             imagesFiles: doc.docs,
         })
     });
+}
     return documents;
 }
 
-export const uploadDocument = (obj,docType) => {
+export const uploadDocument = (obj, docType) => {
     switch (docType) {
         case ('customer'):
             return async (dispatch) => {
@@ -42,9 +55,9 @@ export const uploadDocument = (obj,docType) => {
                 const res = await customerUploadDocument(obj);
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: ADD_DOCUMENT, payload:{body: res.body , status: res.status} })
+                    dispatch({ type: ADD_DOCUMENT, payload: { body: res.body, status: res.status } })
                 } else {
-                    dispatch({ type: ADD_DOCUMENT, payload:{error: res.error , status: res.status} })
+                    dispatch({ type: ADD_DOCUMENT, payload: { error: res.error, status: res.status } })
                 }
             }
         case ('loanApplication'):
@@ -55,19 +68,30 @@ export const uploadDocument = (obj,docType) => {
                 const res = await applicationUploadDocument(obj);;
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: ADD_DOCUMENT, payload:{body: res.body , status: res.status} })
+                    dispatch({ type: ADD_DOCUMENT, payload: { body: res.body, status: res.status } })
                 } else {
-                    dispatch({ type: ADD_DOCUMENT, payload:{error: res.error , status: res.status} })
+                    dispatch({ type: ADD_DOCUMENT, payload: { error: res.error, status: res.status } })
                 }
             }
 
-
+        case ('deathCertificate'):
+            return async (dispatch) => {
+                delete obj.docType;
+                dispatch({ type: 'SET_LOADING', payload: true });
+                const res = await uploadDeathCertificate(obj);;
+                dispatch({ type: 'SET_LOADING', payload: false })
+                if (res.status === "success") {
+                    dispatch({ type: ADD_DOCUMENT, payload: { body: res.body, status: res.status } })
+                } else {
+                    dispatch({ type: ADD_DOCUMENT, payload: { error: res.error, status: res.status } })
+                }
+            }
         default:
             return null;
     }
 }
 
-export const deleteDocument = (obj,docType) => {
+export const deleteDocument = (obj, docType) => {
     switch (docType) {
         case ('customer'):
             return async (dispatch) => {
@@ -76,9 +100,9 @@ export const deleteDocument = (obj,docType) => {
                 const res = await customerDeleteDocument(obj);;
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: DELETE_DOCUMENT, payload:{body:res.body ,status: res.status } })
+                    dispatch({ type: DELETE_DOCUMENT, payload: { body: res.body, status: res.status } })
                 } else {
-                    dispatch({ type: DELETE_DOCUMENT, payload:{error:res.error ,status: res.status } })
+                    dispatch({ type: DELETE_DOCUMENT, payload: { error: res.error, status: res.status } })
                 }
             }
         case ('loanApplication'):
@@ -89,9 +113,21 @@ export const deleteDocument = (obj,docType) => {
                 const res = await applicationDeleteDocument(obj);;
                 dispatch({ type: 'SET_LOADING', payload: false })
                 if (res.status === "success") {
-                    dispatch({ type: DELETE_DOCUMENT, payload:{body:res.body ,status: res.status } })
+                    dispatch({ type: DELETE_DOCUMENT, payload: { body: res.body, status: res.status } })
                 } else {
-                    dispatch({ type: DELETE_DOCUMENT, payload:{error:res.error ,status: res.status } })
+                    dispatch({ type: DELETE_DOCUMENT, payload: { error: res.error, status: res.status } })
+                }
+            }
+        case ('deathCertificate'):
+            return async (dispatch) => {
+                delete obj.docType;
+                dispatch({ type: 'SET_LOADING', payload: true });
+                const res = await deleteDeathCertificate(obj);;
+                dispatch({ type: 'SET_LOADING', payload: false })
+                if (res.status === "success") {
+                    dispatch({ type: DELETE_DOCUMENT, payload: { body: res.body, status: res.status } })
+                } else {
+                    dispatch({ type: DELETE_DOCUMENT, payload: { error: res.error, status: res.status } })
                 }
             }
         default:
@@ -110,7 +146,7 @@ export const getDocuments = (obj) => {
                 if (res.status === "success") {
                     dispatch({ type: GET_DOCUMENTS, payload: handleDocuments(res.body.docs, obj.customerId, documentType) })
                 } else {
-                    Swal.fire("error!",res.error);
+                    Swal.fire("error!", res.error);
                 }
             }
         case ('loanApplication'):
@@ -123,7 +159,18 @@ export const getDocuments = (obj) => {
                 if (res.status === "success") {
                     dispatch({ type: GET_DOCUMENTS, payload: handleDocuments(res.body.docs, obj.applicationId, documentType) })
                 } else {
-                    Swal.fire("error!",res.error);
+                    Swal.fire("error!", res.error);
+                }
+            }
+        case ('deathCertificate'):
+            return async (dispatch) => {
+                dispatch({ type: 'SET_LOADING', payload: true })
+                const res = await getDeathCertificate(obj.customerId);
+                dispatch({ type: 'SET_LOADING', payload: false });
+                if (res.status === "success") {
+                    dispatch({ type: GET_DOCUMENTS, payload: handleDocuments(res.body.docs, obj.applicationId, documentType) })
+                } else {
+                    Swal.fire("error!", res.error);
                 }
             }
         default:
@@ -138,7 +185,7 @@ export const addToDocuments = (newDocument: Document, docName: string) => {
         name: docName,
     }
 }
-export const addNewToDocuments = (newDoc: any) =>{
+export const addNewToDocuments = (newDoc: any) => {
     return {
         type: ADD_NEW_TO_DOCUMENTS,
         payload: newDoc,
@@ -152,7 +199,7 @@ export const deleteFromDocuments = (key: string, docName: string) => {
     }
 }
 
-export const invalidDocument  = (key: string, docName: string) => {
+export const invalidDocument = (key: string, docName: string) => {
     return {
         type: INVALID_DOCUMENT,
         key: key,
@@ -161,8 +208,8 @@ export const invalidDocument  = (key: string, docName: string) => {
 }
 export const addAllToSelectionArray = (images: Image[]) => {
     return {
-      type: ADD_ALL_TO_SELECTION_ARRAY,
-      payload: images,
+        type: ADD_ALL_TO_SELECTION_ARRAY,
+        payload: images,
     }
 
 }
