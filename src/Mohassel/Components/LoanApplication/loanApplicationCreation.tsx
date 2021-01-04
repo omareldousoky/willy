@@ -835,13 +835,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
                             }
                         }
-                        if ((customer.totalPrincipals && customer.maxPrincipal && customer.totalPrincipals >= customer.maxPrincipal) || (customer.totalPrincipals && !customer.maxPrincipal && ((this.state.application.beneficiaryType === "individual" && customer.totalPrincipals >= this.state.application.principals.maxIndividualPrincipal) || (this.state.application.beneficiaryType === "group" && customer.totalPrincipals >= ( customer.paidLoans && customer.paidLoans.length > 0 ? this.state.application.principals.maxGroupReturningIndividualPrincipal : this.state.application.principals.maxGroupIndividualPrincipal))))) {
-                            if (Object.keys(validationObject).includes(customer._id)) {
-                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } } }
-                            } else {
-                                validationObject[customer._id] = { customerName: customer.customerName, totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } };
-                            }
-                        }
+                        // if ((customer.totalPrincipals && customer.maxPrincipal && customer.totalPrincipals >= customer.maxPrincipal) || (customer.totalPrincipals && !customer.maxPrincipal && ((this.state.application.beneficiaryType === "individual" && customer.totalPrincipals >= this.state.application.principals.maxIndividualPrincipal) || (this.state.application.beneficiaryType === "group" && customer.totalPrincipals >= ( customer.paidLoans && customer.paidLoans.length > 0 ? this.state.application.principals.maxGroupReturningIndividualPrincipal : this.state.application.principals.maxGroupIndividualPrincipal))))) {
+                        //     if (Object.keys(validationObject).includes(customer._id)) {
+                        //         validationObject[customer._id] = { ...validationObject[customer._id], ...{ totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } } }
+                        //     } else {
+                        //         validationObject[customer._id] = { customerName: customer.customerName, totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } };
+                        //     }
+                        // }
                     }
                     else {
                         if (customer.applicationIds && customer.applicationIds.length > 0 && !customer.allowGuarantorLoan) {
