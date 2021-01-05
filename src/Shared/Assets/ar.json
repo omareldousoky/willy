@@ -833,5 +833,6 @@
     "secondReviewDate":"تاريخ مراجعة مدير الفرع",
     "thirdReviewDate":"تاريخ مراجعة مدير المركز",
     "secondReviewSuccess":"تمت مراجعة القروض من مدير الفرع",
-    "thirdReviewSuccess":"تمت مراجعة القروض من المركز"
+    "thirdReviewSuccess":"تمت مراجعة القروض من المركز",
+    "customerBalance": "رصيد العميل"
 }

@@ -413,6 +413,15 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
                             <Form.Label>{officer}</Form.Label>
                         </Row>
                     </Form.Group>
+                    <Form.Group as={Col} md="3">
+                        <Row>
+                            <Form.Label>{local.customerBalance}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{props.application.installmentsObject.totalInstallments.installmentSum - 
+                            (props?.application?.installmentsObject?.installments.reduce((accumulator, current) =>  accumulator +  current.totalPaid , 0))}</Form.Label>
+                        </Row>
+                    </Form.Group>
                 </Form.Row>
                 {props.application.guarantors && props.application.guarantors.length > 0 && props.application.product.beneficiaryType === 'individual' && <Form.Row>
                     <GuarantorTableView guarantors={props.application.guarantors} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} application={props.application}/>
