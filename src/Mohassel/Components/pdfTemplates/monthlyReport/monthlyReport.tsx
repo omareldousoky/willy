@@ -1,3 +1,4 @@
+import { produceWithPatches } from 'immer';
 import React from 'react';
 import './monthlyReport.scss';
 
@@ -71,14 +72,14 @@ const MonthlyReport = (props) => {
                 <tr>
                   <td className="td-head"> الفترة :</td>
                   <td className="label"> من</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body"> {props.data.fromDate}</td>
                   <td className="label" style={{ paddingRight: 10 }}> الي</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
                 <tr>
                   <td className="td-head"> تاريخ الاعداد:</td>
                   <td></td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.createdAt}</td>
                 </tr>
               </tbody>
             </table>
@@ -97,10 +98,10 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -125,93 +126,93 @@ const MonthlyReport = (props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.1</td>
                   <td>إجمالى عدد عملاء تمويل أفراد</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.totalIndividualCount.onGoingCutomer}</td>
+                  <td>{props.data.totalIndividualCount.newCustomer}</td>
+                  <td>{props.data.totalIndividualCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.2</td>
                   <td>منهم عدد العملاء – ذكور</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.maleIndividualCount.onGoingCutomer}</td>
+                  <td>{props.data.maleIndividualCount.newCustomer}</td>
+                  <td>{props.data.maleIndividualCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.3</td>
                   <td>منهم عدد العملاء - إناث</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.femaleIndividualCount.onGoingCutomer}</td>
+                  <td>{props.data.femaleIndividualCount.newCustomer}</td>
+                  <td>{props.data.femaleIndividualCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.4</td>
                   <td>إجمالى قيمة أرصدة تمويل أفراد</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.totalIndividualCredit.onGoingCutomer}</td>
+                  <td>{props.data.totalIndividualCredit.newCustomer}</td>
+                  <td>{props.data.totalIndividualCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.5</td>
                   <td>منها أرصدة تمويل لعملاء – ذكور</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.maleIndividualCredit.onGoingCutomer}</td>
+                  <td>{props.data.maleIndividualCredit.newCustomer}</td>
+                  <td>{props.data.maleIndividualCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.6</td>
                   <td>منها أرصدة تمويل لعملاء - إناث</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.femaleIndividualCredit.onGoingCutomer}</td>
+                  <td>{props.data.femaleIndividualCredit.newCustomer}</td>
+                  <td>{props.data.femaleIndividualCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.7</td>
                   <td>إجمالى عدد عقود تمويل جماعى</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.totalGroupLoansCount.onGoingCutomer}</td>
+                  <td>{props.data.totalGroupLoansCount.newCustomer}</td>
+                  <td>{props.data.totalGroupLoansCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.8</td>
                   <td>إجمالى عدد عملاء عقود تمويل جماعى</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.totalGroupCount.onGoingCutomer}</td>
+                  <td>{props.data.totalGroupCount.newCustomer}</td>
+                  <td>{props.data.totalGroupCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.9</td>
                   <td>منهم عدد العملاء – ذكور</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.maleGroupCount.onGoingCutomer}</td>
+                  <td>{props.data.maleGroupCount.newCustomer}</td>
+                  <td>{props.data.maleGroupCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.10</td>
                   <td>منهم عدد العملاء - إناث</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.femaleGroupCount.onGoingCutomer}</td>
+                  <td>{props.data.femaleGroupCount.newCustomer}</td>
+                  <td>{props.data.femaleGroupCount.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.11</td>
                   <td>إجمالى قيمة أرصدة تمويل جماعى</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.totalGroupCredit.onGoingCutomer}</td>
+                  <td>{props.data.totalGroupCredit.newCustomer}</td>
+                  <td>{props.data.totalGroupCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.12</td>
                   <td>منها أرصدة تمويل لعملاء – ذكور</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.maleGroupCredit.onGoingCutomer}</td>
+                  <td>{props.data.maleGroupCredit.newCustomer}</td>
+                  <td>{props.data.maleGroupCredit.total}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.13</td>
                   <td>منها أرصدة تمويل لعملاء - إناث</td>
-                  <td>288,535</td>
-                  <td>28,913</td>
-                  <td>317,448</td>
+                  <td>{props.data.femaleGroupCredit.onGoingCutomer}</td>
+                  <td>{props.data.femaleGroupCredit.newCustomer}</td>
+                  <td>{props.data.femaleGroupCredit.total}</td>
                 </tr>
               </tbody>
             </table>
@@ -223,14 +224,14 @@ const MonthlyReport = (props) => {
                 <p>إجمالي قيمة أرصدة التمويل القائمة</p>
                 <p>(إجمالي قيمة أرصدة تمويل أفراد + إجمالي قيمة أرصدة تمويل جماعي)</p>
               </div>
-              <div className="big-number">3,703,856,728.00</div>
+              <div className="big-number">{props.data.totalCredit}</div>
             </div>
             <div className="totals">
               <div className="lines">
                 <p>عدد العملاء الحاصلون على تمويل</p>
                 <p>(إجمالي عدد عملاء تمويل أفراد + إجمالي عدد عملاء عقود تمويل جماعي)</p>
               </div>
-              <div className="big-number">576351</div>
+              <div className="big-number">{props.data.totalCustomers}</div>
             </div>
           </div>
         </div>
@@ -247,10 +248,10 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -277,10 +278,10 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr style={{ textAlign: 'center' }}>
                   <td> قرض</td>
-                  <td> 1</td>
-                  <td> 2</td>
-                  <td> 3</td>
-                  <td> 4</td>
+                  <td>{props.data.commercialCredit}</td>
+                  <td>{props.data.productionCredit}</td>
+                  <td>{props.data.serviceCredit}</td>
+                  <td>{props.data.agriculturalCredit}</td>
                 </tr>
               </tbody>
             </table>
@@ -292,14 +293,14 @@ const MonthlyReport = (props) => {
                 <p>إجمالي قيمة أرصدة التمويل القائمة</p>
                 <p>(إجمالي قيمة أرصدة تمويل تجاري+إنتاجي/حرفي+خدمي+زراعي)</p>
               </div>
-              <div className="big-number">3,703,856,728.00</div>
+              <div className="big-number">{props.data.fundingWalletAnalysisSheetCredit}</div>
             </div>
             <div className="totals">
               <div className="lines">
                 <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة </p>
                 <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
               </div>
-              <div className="big-number">مطابق</div>
+              <div className="big-number">{ props.data.fundingWalletAnalysisCreditValidation ? "مطابق" : "غير مطابق"}</div>
             </div>
           </div>
           <div className="inner-container">

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import MonthlyReport from '../pdfTemplates/monthlyReport/monthlyReport';
 import QuarterlyReport from '../pdfTemplates/quarterlyReport/quarterlyReport';
+import { monthlyReport } from '../../Services/APIs/Reports/monthlyReport';
 
 interface State {
   loading: boolean;
@@ -25,7 +26,9 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
   async getFile(type: string) {
     this.setState({ print: type }, () => window.print())
     if (type === 'monthly') {
-
+       const res =   await monthlyReport();
+       if(res.status==="success")
+           this.setState({data: res.body});
     } else {
 
     }
