@@ -12,7 +12,7 @@ const FollowUpStatment = (props) => {
     }
     function dateShift(date) {
         const originalDate = new Date(date);
-        const dateInMonth = originalDate.getDate()
+        const dateInMonth = new Date(props.data.creationDate).getDate()
         if (1 <= dateInMonth && dateInMonth <= 10) {
             originalDate.setDate(20)
         } else if (11 <= dateInMonth && dateInMonth <= 20) {
