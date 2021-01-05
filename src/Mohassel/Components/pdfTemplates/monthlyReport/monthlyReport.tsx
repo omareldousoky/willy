@@ -72,7 +72,7 @@ const MonthlyReport = (props) => {
                 <tr>
                   <td className="td-head"> الفترة :</td>
                   <td className="label"> من</td>
-                  <td className="td-body"> {props.data.fromDate}</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td className="label" style={{ paddingRight: 10 }}> الي</td>
                   <td className="td-body">{props.data.toDate}</td>
                 </tr>
@@ -300,7 +300,8 @@ const MonthlyReport = (props) => {
                 <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة </p>
                 <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
               </div>
-              <div className="big-number">{ props.data.fundingWalletAnalysisCreditValidation ? "مطابق" : "غير مطابق"}</div>
+              <div className="big-number">{props.data.fundingWalletAnalysisCreditValidation === "matching" ? "مطابق" :
+                "غير مطابق"}</div>
             </div>
           </div>
           <div className="inner-container">
@@ -323,17 +324,17 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr style={{ textAlign: 'center' }}>
                   <td> قرض</td>
-                  <td> 1</td>
-                  <td> 2</td>
-                  <td> 3</td>
-                  <td> 4</td>
+                  <td>{props.data.commercialCount}</td>
+                  <td>{props.data.productionCount}</td>
+                  <td>{props.data.serviceCount}</td>
+                  <td>{props.data.agriculturalCount}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td> إجمالى</td>
-                  <td> 1</td>
-                  <td> 2</td>
-                  <td> 3</td>
-                  <td> 4</td>
+                  <td>{props.data.commercialCount}</td>
+                  <td>{props.data.productionCount}</td>
+                  <td>{props.data.serviceCount}</td>
+                  <td>{props.data.agriculturalCount}</td>
                 </tr>
               </tbody>
             </table>
@@ -345,14 +346,15 @@ const MonthlyReport = (props) => {
                 <p>إجمالي عدد العملاء الحاصلين على التمويل</p>
                 <p>جمالي عدد العملاء الحاصلين على (تمويل تجاري+إنتاجي/حرفي+خدمي+زراعي)</p>
               </div>
-              <div className="big-number">3,703,856,728.00</div>
+              <div className="big-number">{props.data.fundingWalletAnalysisSheetCount}</div>
             </div>
             <div className="totals">
               <div className="lines">
                 <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل القائمة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة </p>
                 <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
               </div>
-              <div className="big-number">مطابق</div>
+              <div className="big-number">{props.data.fundingWalletAnalysisCountValidation === "matching" ? "مطابق" :
+                "غير مطابق"}</div>
             </div>
           </div>
         </div>
@@ -369,10 +371,10 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body"> {props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -396,86 +398,107 @@ const MonthlyReport = (props) => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.1</td>
-                  <td>أرصدة تمويل منتظمة (أو بتأخير لا يتجاوز أسبوع)</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.2</td>
-                  <td>تأخير حتى 30 يوم</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.3</td>
-                  <td>تأخير حتى 60 يوم</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.4</td>
-                  <td>تأخير حتى 90 يوم</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.5</td>
-                  <td>تأخير حتى 120 يوم</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.6</td>
-                  <td>تأخير يتجاوز 120 يوم</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
-                <tr style={{ textAlign: 'center' }}>
-                  <td>3.7</td>
-                  <td>أرصدة تمويل – أقساط مرحلة</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
-                </tr>
+                {
+                  props.data.arrears((arrear, index) => {
+                    return (
+                      <>
+                        {arrear.tier === "0-7" && <tr key={index} style={{ textAlign: 'center' }}>
+                          <td>3.1</td>
+                          <td>أرصدة تمويل منتظمة (أو بتأخير لا يتجاوز أسبوع)</td>
+                          <td>{arrear.customers}</td>
+                          <td>{arrear.arrears}</td>
+                          <td>{arrear.wallet}</td>
+                          <td>2%</td>
+                          <td>{arrear.provision}</td>
+                        </tr>
+                        }
+
+                        {arrear.tier === "8-30" && <tr  key={index} style={{ textAlign: 'center' }}>
+                          <td>3.2</td>
+                          <td>تأخير حتى 30 يوم</td>
+                          <td>{arrear.customers}</td>
+                          <td>{arrear.arrears}</td>
+                          <td>{arrear.wallet}</td>
+                          <td>10%</td>
+                          <td>{arrear.provision}</td>
+                        </tr>
+                        }
+                        {
+                          arrear.tier === "31-60" && <tr  key={index} style={{ textAlign: 'center' }}>
+                            <td>3.3</td>
+                            <td>تأخير حتى 60 يوم</td>
+                            <td>{arrear.customers}</td>
+                            <td>{arrear.arrears}</td>
+                            <td>{arrear.wallet}</td>
+                            <td>25%</td>
+                            <td>{arrear.provision}</td>
+                          </tr>
+                        }
+                        {
+                          arrear.tier === "61-90" && <tr  key={index} style={{ textAlign: 'center' }}>
+                            <td>3.4</td>
+                            <td>تأخير حتى 90 يوم</td>
+                            <td>{arrear.customers}</td>
+                            <td>{arrear.arrears}</td>
+                            <td>{arrear.wallet}</td>
+                            <td>50%</td>
+                            <td>{arrear.provision}</td>
+                          </tr>
+                        }
+                        {
+                          arrear.tier === "91-120" && <tr   key={index} style={{ textAlign: 'center' }}>
+                            <td>3.5</td>
+                            <td>تأخير حتى 120 يوم</td>
+                            <td>{arrear.customers}</td>
+                            <td>{arrear.arrears}</td>
+                            <td>{arrear.wallet}</td>
+                            <td>70%</td>
+                            <td>{arrear.provision}</td>
+                          </tr>
+                        }
+
+                        {
+                          arrear.tier === "120+" && <tr  key={index} style={{ textAlign: 'center' }}>
+                            <td>3.6</td>
+                            <td>تأخير يتجاوز 120 يوم</td>
+                            <td>{arrear.customers}</td>
+                            <td>{arrear.arrears}</td>
+                            <td>{arrear.wallet}</td>
+                            <td>100%</td>
+                            <td>{arrear.provision}</td>
+                          </tr>
+                        }
+                        {
+                          arrear.tier === "Rescheduled Loans" && <tr  key={index} style={{ textAlign: 'center' }}>
+                            <td>3.7</td>
+                            <td>أرصدة تمويل – أقساط مرحلة</td>
+                            <td>{arrear.customers}</td>
+                            <td>{arrear.arrears}</td>
+                            <td>{arrear.wallet}</td>
+                            <td>2%</td>
+                            <td>{arrear.provision}</td>
+                          </tr>
+                        }
+                      </>
+                    )
+                  })}
                 <tr style={{ textAlign: 'center' }}>
                   <td>3.8</td>
                   <td>أرصدة تمويل معاد جدولتها</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>50%</td>
+                  <td></td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>3.9</td>
                   <td>إجمالى أرصدة التمويل</td>
-                  <td>444747</td>
-                  <td>1807781.5</td>
-                  <td>2892975841</td>
-                  <td>2%</td>
-                  <td>57859517</td>
+                  <td>{props.data.totalCustomers}</td>
+                  <td>{props.data.totalArrears}</td>
+                  <td>{props.data.totalWallet}</td>
+                  <td></td>
+                  <td>{props.data.totalProvision}</td>
                 </tr>
               </tbody>
             </table>
