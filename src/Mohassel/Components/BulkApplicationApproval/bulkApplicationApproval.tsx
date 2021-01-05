@@ -17,7 +17,7 @@ import { loading } from '../../../Shared/redux/loading/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval';
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation';
-import { timeToDateyyymmdd, beneficiaryType } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
@@ -68,8 +68,9 @@ interface Props {
   loading: boolean;
   totalCount: number;
   data: any;
+  error: string;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   setLoading: (data) => void;
 };
@@ -127,9 +128,9 @@ class BulkApplicationApproval extends Component<Props, State>{
         render: data => data.application.principal
       },
       {
-        title: local.reviewDate,
-        key: "reviewDate",
-        render: data => timeToDateyyymmdd(data.application.reviewedDate)
+        title: local.thirdReviewDate,
+        key: "thirdReviewDate",
+        render: data => timeToDateyyymmdd(data.application.thirdReviewDate)
       },
     ]
   }
@@ -141,8 +142,12 @@ class BulkApplicationApproval extends Component<Props, State>{
 
   }
   getApplications() {
-    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" }
-    this.props.search(query);
+    const query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', status: "thirdReview" }
+    this.props.search(query).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
 
   addRemoveItemFromChecked(loan: LoanItem) {
@@ -179,6 +184,9 @@ class BulkApplicationApproval extends Component<Props, State>{
       Swal.fire('', local.bulkLoanError, 'error');
     }
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
   dateSlice(date) {
     if (!date) {
       return timeToDateyyymmdd(-1)
@@ -199,7 +207,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.reviewedApplications}</Card.Title>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.signedApplications}</Card.Title>
                 <span className="text-muted" style={{ marginLeft: 10 }}>{local.maxLoansAllowed + ` (${this.props.totalCount || 0})`}</span>
                 <span className="text-muted">{local.noOfSelectedLoans + ` (${this.state.selectedReviewedLoans.length})`}</span>
               </div>
@@ -217,7 +225,7 @@ class BulkApplicationApproval extends Component<Props, State>{
               url="application"
               from={this.state.from}
               size={this.state.size}
-              status="reviewed" />
+              status="thirdReview" />
             <DynamicTable
               from={this.state.from}
               size={this.state.size}
@@ -248,7 +256,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                 <Modal.Body>
                   <Form.Group as={Row} controlId="approvalDate">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
-                    <Col sm={6}>
+                    <Col sm={7}>
                       <Form.Control
                         type="date"
                         name="approvalDate"
@@ -265,7 +273,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                   </Form.Group>
                   <Form.Group as={Row} controlId="fundSource">
                     <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.fundSource}*`}</Form.Label>
-                    <Col sm={6}>
+                    <Col sm={7}>
                       <Form.Control as="select"
                         name="fundSource"
                         data-qc="fundSource"
@@ -307,6 +315,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

@@ -15,7 +15,7 @@ import { issueLoan } from '../../Services/APIs/createIssueLoan/issueLoan';
 import { testCalculateApplication } from '../../Services/APIs/createIssueLoan/testCalculateApplication';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt } from "../../../Shared/Services/utils";
+import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from "../../../Shared/Services/utils";
 import PaymentReceipt from '../pdfTemplates/paymentReceipt/paymentReceipt';
 interface CustomerData {
   id: string;
@@ -96,7 +96,7 @@ class LoanCreation extends Component<Props, State> {
       const res = await testCalculateApplication(id, new Date(this.state.loanCreationDate).valueOf());
       if (res.status === "success") {
         this.setState({ installmentsData: res.body })
-      } else console.log(res)
+      } else Swal.fire("Error !",getErrorMessage(res.error.error),"error")
     }
     const res = await getApplication(id);
     if (res.status === "success") {
@@ -124,7 +124,9 @@ class LoanCreation extends Component<Props, State> {
       if(type === "issue"){
         this.setState({installmentsData: res.body.installmentsObject})
       }
-    } else this.setState({ loading: false })
+    } else { this.setState({ loading: false },()=>{
+       Swal.fire("Error !",getErrorMessage(res.error.error),"error")
+    }) }
   }
   handleSubmit = async (values) => {
     this.setState({ loading: true })
@@ -136,7 +138,7 @@ class LoanCreation extends Component<Props, State> {
         Swal.fire('', local.loanCreationSuccess, 'success').then(() => this.props.history.push('/track-loan-applications'));
       } else {
         this.setState({ loading: false });
-        Swal.fire('', local.loanCreationError, 'error');
+        Swal.fire('error', getErrorMessage(res.error.error) ,'error');
       }
     } else {
       const obj = {
@@ -149,7 +151,7 @@ class LoanCreation extends Component<Props, State> {
         Swal.fire('', local.loanIssuanceSuccess + `${local.withCode}` + res.body.loanApplicationKey , 'success').then(() => {this.props.history.push('/track-loan-applications')});
       } else {
         this.setState({ loading: false });
-        Swal.fire('', local.loanIssuanceError, 'error');
+        Swal.fire('error', getErrorMessage(res.error.error), 'error');
       }
     }
   }
@@ -176,7 +178,9 @@ class LoanCreation extends Component<Props, State> {
     const res = await testCalculateApplication(id, new Date(creationDate).valueOf());
     if (res.status === "success") {
       this.setState({ installmentsData: res.body, loading: false })
-    } else this.setState({ loading: false });
+    } else this.setState({ loading: false },()=>{
+      Swal.fire("Error !",getErrorMessage(res.error.error),"error");
+    });
   }
   render() {
     return (

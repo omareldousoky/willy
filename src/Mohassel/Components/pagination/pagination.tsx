@@ -27,8 +27,18 @@ const Pagination = props => {
                         props.changeNumber && props.changeNumber('from', 0)
                         changePage(0)
                     }}>
+                        {props.paginationArr ? 
+                        props.paginationArr.map((optionValue,index)=>{
+                            return(
+                                <option key={index} value={optionValue}>{optionValue}</option>
+                            )
+                        })
+                        :
+                        <>
                         <option value={5}>5</option>
                         <option value={10}>10</option>
+                        </>
+                     } 
                     </Form.Control>
                 </div>
                 <div className="pagination-container">

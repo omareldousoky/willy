@@ -4,6 +4,8 @@ import { getApplicationLogs } from '../../Services/APIs/loanApplication/applicat
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getDateAndTime } from '../../Services/getRenderDate';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     id: string;
 }
@@ -71,8 +73,7 @@ class ActionLogs extends Component<Props, State> {
                 loading: false,
             })
         } else {
-            console.log("error")
-            this.setState({ loading: false })
+            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),"error"))
         }
     }
     render() {
