@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import Table from 'react-bootstrap/Table';
-import { getStatus, getDateString } from '../../../Shared/Services/utils';
+import { getStatus, getDateString, getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     application: any;
@@ -105,8 +105,7 @@ class FreeRescheduling extends Component<Props, State>{
             })
             Swal.fire('', local.loanFreeReschedulingTestSuccess, 'success');
         } else {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanFreeReschedulingTestError, 'error');
+            this.setState({ loading: false },() => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
         }
     }
     addRow(values) {
@@ -185,8 +184,7 @@ class FreeRescheduling extends Component<Props, State>{
             this.setState({ loading: false })
             Swal.fire('', local.loanFreeReschedulingSuccess, 'success').then(() => window.location.reload());
         } else {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanFreeReschedulingError, 'error');
+            this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
         }
     }
     getRescheuleDate(values, index){
@@ -321,9 +319,9 @@ class FreeRescheduling extends Component<Props, State>{
                                         </div>
                                         <Button style={{ width: '4%', alignSelf: 'flex-end' }} onClick={() => formikProps.setFieldValue('installments', this.addRow(formikProps.values))}>+</Button>
                                     </div>
-                                    {this.getTotals(formikProps.values).principleSum === this.props.application.installmentsObject.totalInstallments.principal ? <div className="d-flex justify-content-end">
+                                    {parseFloat(this.getTotals(formikProps.values).principleSum.toFixed(2)) === parseFloat(this.props.application.installmentsObject.totalInstallments.principal.toFixed(2)) ? <div className="d-flex justify-content-end">
                                         <Button type="submit" variant="primary" data-qc="submit">{local.submit}</Button>
-                                    </div> : <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {this.getTotals(formikProps.values).principleSum}</h1></div>}
+                                    </div> : <div><h1>{local.principalOfTotalInstallmentsMustBe} {this.props.application.installmentsObject.totalInstallments.principal} {local.itIs} {this.getTotals(formikProps.values).principleSum.toFixed(2)}</h1></div>}
                                 </Col>
                             </Form>
                         }

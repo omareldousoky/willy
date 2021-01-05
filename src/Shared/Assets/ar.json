@@ -265,7 +265,7 @@
     "reviewDateCannotBeBeforeEntryDate": "تاريخ المراجعة يجب أن يكون قبل تاريخ الإدخال",
     "UnreviewDateCannotBeForeReviewDate": "تاريخ إعادة المراجعة يجب أن يكون قبل تاريخ المراجعة",
     "rejectionDateCannotBeForeReviewDate": "تاريخ الرفض يجب أن يكون قبل تاريخ المراجعة",
-    "reviewDateCannotBeBeforeApprovalDate": "تاريخ الموافقه يجب ان يكون بعد تاريخ المراجعه",
+    "reviewDateCannotBeBeforeApprovalDate": "تاريخ الموافقه يجب ان يكون بعد تاريخ مراجعة مدير المركز",
     "creationDateCannotBeBeforeAcceptanceDate": "تاريخ الإنشاء يجب ان يكون بعد تاريخ الموافقة",
     "issuanceDateCannotBeBeforeCreationDate": "تاريخ الإصدار يجب ان يكون بعد تاريخ الإنشاء",
     "show": "إظهار",
@@ -821,5 +821,18 @@
     "oracleIntegrationSuccess":"تم إنشاء القيود المحاسبية بنجاح ",
     "oracleIntegrationFail":"حدث خطأ في إنشاء القيود المحاسبية",
     "downloadExcel": "تنزيل Excel",
-    "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط"
+    "userNameErrorMessage": "يجب أن يحتوى علي أحرف و يجب أن تكون أحرف إنجليزية فقط",
+    "bulkLoanApplicationReviews":"مراجعة وإمضاءات طلبات القروض",
+    "secondReviewed":"رُجعت من مدير الفرع",
+    "thirdReviewed":"رُجعت من مدير المركز",
+    "secondReview":"مراجعه مدير الفرع للقروض",
+    "thirdReview": "مراجعة مدير المركز للقروض",
+    "signedApplications":"قروض تم مراجعتها و إمضائها",
+    "signedDateCannotBeBeforeReviewDate":"تاريخ الإمضاء يجب أن يكون بعد تاريخ المراجعة",
+    "reviewApplicationsError":"حدث خطأ ولم تتم مراجعة القروض",
+    "secondReviewDate":"تاريخ مراجعة مدير الفرع",
+    "thirdReviewDate":"تاريخ مراجعة مدير المركز",
+    "secondReviewSuccess":"تمت مراجعة القروض من مدير الفرع",
+    "thirdReviewSuccess":"تمت مراجعة القروض من المركز",
+    "deathCertificate":"شهاده الوفاه"
 }

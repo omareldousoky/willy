@@ -222,7 +222,7 @@ class SourceOfFund extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search
               searchKeys={['keyword', 'dateFromTo', 'branch']}
-              dropDownKeys={['name', 'nationalId', 'key']}
+              dropDownKeys={['name', 'nationalId', 'key', 'code', 'customerKey']}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               datePlaceholder={local.issuanceDate}
               url="loan"

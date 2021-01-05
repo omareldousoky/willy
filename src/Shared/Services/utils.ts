@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import JsZip from 'jszip';
 import {saveAs} from 'file-saver'
 import Swal from 'sweetalert2';
+import{default as errorMessages}  from '../../Shared/Assets/errorMessages.json'
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -43,6 +44,13 @@ export function beneficiaryType(val: string) {
       return local.group
     default:
       return ''
+  }
+}
+export function getErrorMessage (key: string) {
+  if(key && errorMessages[key] )
+  return errorMessages[key].ar;
+  else {
+    return errorMessages['default_error'].ar;
   }
 }
 export function currency(val: string) {
@@ -321,6 +329,8 @@ export const getLoanStatus = (status: string) => {
       case 'created': return local.created;
       case 'underReview': return local.underReview;
       case 'reviewed': return local.reviewed;
+      case 'secondReview': return local.secondReviewed;
+      case 'thirdReview': return local.thirdReviewed;
       case 'approved': return local.approved;
       case 'writtenOff': return local.writtenOffLoan;
       case 'Doubtful': return local.doubtedLoan;

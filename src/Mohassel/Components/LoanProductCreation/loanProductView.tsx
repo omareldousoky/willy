@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import Table from 'react-bootstrap/Table';
 import BackButton from '../BackButton/back-button';
-import { interestType, installmentType, roundDirection, roundWhat, beneficiaryType, loanNature, currency, periodType, interestPeriod, inAdvanceFrom, inAdvanceType } from "../../../Shared/Services/utils";
+import { beneficiaryType, loanNature, currency, periodType, interestPeriod, inAdvanceFrom, inAdvanceType, getErrorMessage } from "../../../Shared/Services/utils";
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
 
 interface State {
@@ -41,7 +41,7 @@ class ViewProduct extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('error', getErrorMessage(product.error.error), 'error');
             this.setState({ loading: false });
         }
     }
