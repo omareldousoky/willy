@@ -7,7 +7,7 @@ import Tafgeet from 'tafgeetjs';
 const TotalWrittenChecks = (props) => {
     return (
             <div className="total-written-checks-print">
-            <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
+            <table style={{ fontSize: 18, margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
                 <tr style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}><th colSpan={6}>
                     <div className={"logo-print"} ></div></th>
@@ -38,7 +38,7 @@ const TotalWrittenChecks = (props) => {
                                         <td>
                                             <div>الاسم:</div>
                                         </td>
-                                        <td style={{ width: "250px" }}></td>
+                                        <td style={{ width: 400, height: 250 }}></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -67,7 +67,7 @@ const TotalWrittenChecks = (props) => {
                                                 <td>
                                                     <div>الاسم:</div>
                                                 </td>
-                                                <td style={{ width: "250px" }}></td>
+                                                <td style={{ width: 400, height: 250 }}></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -100,7 +100,7 @@ const TotalWrittenChecks = (props) => {
                                             <td>
                                                 <div>الاسم:</div>
                                             </td>
-                                            <td style={{ width: "250px" }}></td>
+                                            <td style={{ width: 400, height: 250 }}></td>
                                         </tr>
                                     </tbody>
                                 </table>
