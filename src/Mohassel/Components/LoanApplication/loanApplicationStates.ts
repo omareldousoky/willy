@@ -121,18 +121,18 @@ export const LoanApplicationValidation = Yup.object().shape({
             } else {
                 return (value >= minPrincipal && value <= maxPrincipal)
             }
-        }).required('required!'),
-        // .test("principal", local.customerMaxPrincipalError,
-        //     function (this: any, value: any) {
-        //         const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
-        //         if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= (customerMaxPrincipal - customerTotalPrincipals)) {
-        //             return true
-        //         } else if (customerMaxPrincipal === 0 && value <= ((beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal) - customerTotalPrincipals)) {
-        //             return true
-        //         } else {
-        //             return false
-        //         }
-        //     }).required('required!'),
+        }).test("principal", local.customerMaxPrincipalError,
+            function (this: any, value: any) {
+                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
+                if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= customerMaxPrincipal) {
+                    // - customerTotalPrincipals
+                    return true
+                } else if (customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal)) {
+                    return true
+                } else {
+                    return false
+                }
+            }).required('required!'),
     applicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     individualApplicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
     applicationFeePercent: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),
