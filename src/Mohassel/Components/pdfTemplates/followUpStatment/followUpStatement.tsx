@@ -10,16 +10,18 @@ const FollowUpStatment = (props) => {
             return props.data.customer[key]
         else return props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer[key];
     }
-    function dateShift(date) {
-        const originalDate = new Date(date);
+    function dateShift(date, index) {
+        const originalDate = new Date(props.data.creationDate);
         const dateInMonth = new Date(props.data.creationDate).getDate()
         if (1 <= dateInMonth && dateInMonth <= 10) {
             originalDate.setDate(20)
+            originalDate.setMonth(originalDate.getMonth() + index)
         } else if (11 <= dateInMonth && dateInMonth <= 20) {
             originalDate.setDate(30)
+            originalDate.setMonth(originalDate.getMonth() + index)
         } else if (21 <= dateInMonth && dateInMonth <= 31) {
             originalDate.setDate(10)
-            originalDate.setMonth(originalDate.getMonth() + 1)
+            originalDate.setMonth(originalDate.getMonth() + 1 + index)
         }
         if (originalDate.getDay() === 5) {
             originalDate.setDate(originalDate.getDate() + 2)
@@ -77,7 +79,7 @@ const FollowUpStatment = (props) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000)) : dateShift(installment.dateOfPayment), false)}</td>
+                                <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000)) : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : (installment.dateOfPayment - 3*(5 * 24 * 60 * 60 * 1000)), false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
                             </tr>
