@@ -51,6 +51,7 @@ const CustomerStatusDetails = (props) => {
                         <tr>
                             <td className="borderless" colSpan={100}>
                                 {props.data.Loans && props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
+                                    let loanTotalInstallments = 0;
                                     return (
                                         <div key={index} style={{ pageBreakAfter: 'always' }}>
                                             <table>
@@ -261,6 +262,8 @@ const CustomerStatusDetails = (props) => {
                                                         <th>عدد أيام التأخير / التبكير</th>
                                                     </tr>
                                                     {loan.installments.map((installment, index) => {
+                                                        if (installment.instTotal)
+                                                            loanTotalInstallments += Number(installment.instTotal);
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{installment.idx}</td>
@@ -282,7 +285,7 @@ const CustomerStatusDetails = (props) => {
                                                         <td>{loan.totalPaid}</td>
                                                         <td>{loan.totalFeesPaid}</td>
                                                         <th>رصيد العميل</th>
-                                                        <td></td>
+                                                        <td>{loan.totalPaid? loanTotalInstallments-Number(loan.totalPaid) : ""}</td>
                                                         <th>أيام التأخير </th>
                                                         <td>{loan.lateDays}</td>
                                                         <th> أيام التبكير </th>
