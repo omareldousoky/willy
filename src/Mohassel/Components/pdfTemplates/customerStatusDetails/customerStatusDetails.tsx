@@ -285,7 +285,7 @@ const CustomerStatusDetails = (props) => {
                                                         <td>{loan.totalPaid}</td>
                                                         <td>{loan.totalFeesPaid}</td>
                                                         <th>رصيد العميل</th>
-                                                        <td>{loan.totalPaid? loanTotalInstallments-Number(loan.totalPaid) : loanTotalInstallments}</td>
+                                                        <td>{loan.totalPaid? (loanTotalInstallments-Number(loan.totalPaid)).toFixed(2): loanTotalInstallments.toFixed(2)}</td>
                                                         <th>أيام التأخير </th>
                                                         <td>{loan.lateDays}</td>
                                                         <th> أيام التبكير </th>
