@@ -3,6 +3,7 @@ import React from 'react';
 import './monthlyReport.scss';
 
 const MonthlyReport = (props) => {
+  console.log(props);
   return (
     <div className="monthly-report" lang="ar" dir="rtl">
 
@@ -399,7 +400,7 @@ const MonthlyReport = (props) => {
               </thead>
               <tbody>
                 {
-                  props.data.arrears((arrear, index) => {
+                  props.data.arrears.map((arrear, index) => {
                     return (
                       <>
                         {arrear.tier === "0-7" && <tr key={index} style={{ textAlign: 'center' }}>

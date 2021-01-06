@@ -24,14 +24,15 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
     }
   }
   async getFile(type: string) {
-    this.setState({ print: type }, () => window.print())
+    this.setState({loading:  true})
     if (type === 'monthly') {
-       const res =   await monthlyReport();
+       const res = await monthlyReport();
        if(res.status==="success")
-           this.setState({data: res.body});
+           this.setState({ print: type,data: res.body},() => window.print());
     } else {
-
+      this.setState({print: type,data: {}},()=> window.print());
     }
+    this.setState({loading: false});
   }
 
   render() {
@@ -67,7 +68,8 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
             </Card>
           </Card.Body>
         </Card>
-        {this.state.print === 'monthly' ? <MonthlyReport data={this.state.data} /> : <QuarterlyReport data={this.state.data} />}
+        {this.state.print === 'monthly' && this.state.data && <MonthlyReport data={this.state.data} /> }
+        {this.state.print === 'quarterly' && <QuarterlyReport />}
       </>
     )
   }
