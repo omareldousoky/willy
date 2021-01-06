@@ -175,9 +175,10 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                             </tr>
                             <tr>
-                            <th style={{padding:'10px 0'}}>رصيد العميل</th>
-                                <td style={{padding:'10px 0'}}>{this.props.data.installmentsObject.totalInstallments.installmentSum -
-                                 (this.props.data?.installmentsObject?.installments.reduce((accumulator, current) =>  accumulator +  current.totalPaid , 0))}</td>
+                                <th colSpan={3} style={{backgroundColor: 'white'}}></th>
+                            <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد العميل</th>
+                                <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.data.installmentsObject.totalInstallments.installmentSum -
+                                 (this.props.data?.installmentsObject?.installments.reduce((accumulator, current) =>  accumulator +  current.totalPaid , 0)))}</td>
                             </tr>
                         </tbody>
                     </table>
