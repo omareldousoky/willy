@@ -270,7 +270,7 @@ const CustomerCardAttachments = (props) => {
           </div>
           <div className="sign">
             <div className="single">
-              <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادارجه فى القوائم السلبيه الدولية</div>
+              <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادراجه فى القوائم السلبيه الدولية</div>
             </div>
             <div className="double">
               <div>اسم عضو الرقابه :
@@ -473,7 +473,7 @@ const CustomerCardAttachments = (props) => {
               </div>
               <div className="sign">
                 <div className="single">
-                  <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادارجه فى القوائم السلبيه الدولية</div>
+                  <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادراجه فى القوائم السلبيه الدولية</div>
                 </div>
                 <div className="double">
                   <div>اسم عضو الرقابه :
