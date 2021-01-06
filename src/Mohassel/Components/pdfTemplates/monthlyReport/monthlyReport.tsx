@@ -50,7 +50,7 @@ const MonthlyReport = (props) => {
                 </tr>
                 <tr>
                   <td className="td-head"> رقم الترخيص :</td>
-                  <td className="td-body"> شركه تساهيل للتمويل متناهي الصغر</td>
+                  <td className="td-body">2</td>
                 </tr>
               </tbody>
             </table>
@@ -386,7 +386,7 @@ const MonthlyReport = (props) => {
             <table className="details">
               <thead>
                 <tr>
-                  <th colSpan={5}>3- إنتظام السداد وجدول المتأخرات</th>
+                  <th colSpan={7}>3- إنتظام السداد وجدول المتأخرات</th>
                 </tr>
                 <tr>
                   <th></th>
