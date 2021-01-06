@@ -136,7 +136,7 @@ const LoanContractForGroup = (props) => {
                     {props.branchDetails.address} لحاجتهم للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال
-                    العامل وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه
+                    العامل لنشاط كل عضوه وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه
                     وقد
                     وافقهم الطرف الأول علي ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
                     الطرفان
@@ -203,7 +203,7 @@ const LoanContractForGroup = (props) => {
                   البالغة {numbersToArabic(props.data.principal)} جنيه
                   وكافة المصروفات الإداريه البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه بواقع {numbersToArabic(props.data.applicationFeesRequired / props.data.group.individualsInGroup.length)} جنيه لكل عضو وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0))} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`} ، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0))} جنيه (${new Tafgeet((props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0)), 'EGP').parse()})`} ، يتم
                   سداده
                   علي {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`}، تبدأ في
@@ -235,7 +235,7 @@ const LoanContractForGroup = (props) => {
                     <div>يتم تحصيل ٢ ج لكل عضوة عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ ج</div>
                     <div> يتم تحصيل ٣ ج لكل عضوة عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ ج حتي أقل من ٢٠٠٠ ج</div>
                     <div>يتم تحصيل ٤ ج لكل عضوة عن كل يوم تأخير إذا كان مبلغ التمويل للمجموعة يتراوح من ٢٠٠٠ ج حتي أقل من ٢٥٠٠ ج</div>
-                    <div>يتم تحصيل ٥ ج لكل عضوة عن كل يوم تأخير اذا كان مبلغ التمويل للمجموعة أكبر من ٢٥٠٠ ج</div>
+                    <div>يتم تحصيل ٥ ج لكل عضوة عن كل يوم تأخير اذا كان مبلغ التمويل للمجموعة أكبر من او يساوى ٢٥٠٠ ج</div>
                   </section>
 
                   <section>
@@ -312,7 +312,7 @@ const LoanContractForGroup = (props) => {
                       <tr>
                         <td>
                           <div><b>الطرف الأول</b></div>
-                          <div><b>السيدة:</b></div>
+                          <div><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
                         </td>
                       </tr>
@@ -343,7 +343,7 @@ const LoanContractForGroup = (props) => {
                   <div className="headtitle textcenter"><u>إقرار وتعهد</u></div>
                   <div>نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة الاقساط المستحقه في مواعيدها
                   المحدده بموجب عقد
-                القرض المؤرخ {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو بأحدي وسائل الدفع
+                القرض المؤرخ في {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو بأحدي وسائل الدفع
                 الالكتروني المعتمده
                 من هيئة الرقابة المالية ولا يحق لنا بأى حال من الاحوال سداد قيمة أي قسط من الاقساط الي
                 شخص اخر غير خزينة فرع
