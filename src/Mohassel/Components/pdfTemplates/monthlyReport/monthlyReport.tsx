@@ -232,7 +232,7 @@ const MonthlyReport = (props) => {
                 <p>عدد العملاء الحاصلون على تمويل</p>
                 <p>(إجمالي عدد عملاء تمويل أفراد + إجمالي عدد عملاء عقود تمويل جماعي)</p>
               </div>
-              <div className="big-number">{props.data.totalCustomers}</div>
+              <div className="big-number">{props.data.totalCount}</div>
             </div>
           </div>
         </div>
