@@ -818,14 +818,21 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             if (res.body.data && res.body.data.length > 0) {
                 merged.forEach(customer => {
                     if (!guarantor) {
-                        if (customer.applicationIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
+                        if (customer.applicationIds && !customer.loanIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
                             validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
                         }
-                        if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
+                        if (customer.loanIds && !customer.applicationIds && customer.loanIds.length >= customer.maxLoansAllowed) {
                             if (Object.keys(validationObject).includes(customer._id)) {
                                 validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
                             } else {
                                 validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                            }
+                        }
+                        if (customer.loanIds && customer.applicationIds && (customer.loanIds.length +  customer.applicationIds.length) >= customer.maxLoansAllowed) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds, applicationIds: customer.applicationIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds , applicationIds: customer.applicationIds  }
                             }
                         }
                         if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
