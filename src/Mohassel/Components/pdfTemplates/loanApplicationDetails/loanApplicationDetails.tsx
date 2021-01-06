@@ -4,17 +4,39 @@ import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd } from "../../../../Shared/Services/utils";
 
 const LoanApplicationDetails = (props) => {
-    function getStatus(status: string) {
+    const getStatus = (status: string) => {
         switch (status) {
-            case 'issued': return local.issued;
-            case 'pending': return local.pending;
-            case 'paid': return local.paid;
-            case 'underReview': return local.underReview;
-            case 'reviewed': return local.reviewed;
-            case 'approved': return local.approved;
-            case 'rejected': return local.rejected;
-            case 'created': return local.created;
-            default: return '';
+            case "unpaid":
+                return local.unpaid;
+              case "pending":
+                return local.pending;
+              case "paid":
+                return local.paid;
+              case "partiallyPaid":
+                return local.partiallyPaid;
+              case "rescheduled":
+                return local.rescheduled;
+              case "cancelled":
+              case "canceled":
+                return local.cancelled;
+              case "issued":
+                return local.issued;
+              case "created":
+                return local.created;
+              case "approved":
+                return local.approved;
+              case 'underReview': 
+                return local.underReview;
+              case 'reviewed': 
+                return local.reviewed;
+              case 'rejected': 
+                return local.rejected;  
+              case 'secondReview':
+                return local.secondReviewed;  
+              case 'thirdReview':
+                  return local.thirdReviewed;  
+              default:
+                return "";
         }
     }
     function getNumberInArabic(number: number) {
@@ -282,15 +304,15 @@ const LoanApplicationDetails = (props) => {
                                     <tr>
                                         <th>نائب مدير ميداني</th>
                                         <td></td>
-                                        <th>تاريخ الزياره</th>
-                                        <td></td>
+                                        <th>تاريخ الزيارة</th>
+                                        <td>{loan.visitationDate}</td>
                                     </tr>
 
                                     <tr>
                                         <th>مدير الفرع</th>
                                         <td>{loan.mgrName}</td>
-                                        <th>تاريخ الزياره</th>
-                                        <td>{timeToDateyyymmdd(new Date(loan.mgrVisitationDate).valueOf())}</td>
+                                        <th>تاريخ زيارة مدير الفرع</th>
+                                        <td>{loan.mgrVisitationDate}</td>
                                     </tr>
 
                                     <tr>
