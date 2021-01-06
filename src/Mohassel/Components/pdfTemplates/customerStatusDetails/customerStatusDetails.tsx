@@ -107,7 +107,7 @@ const CustomerStatusDetails = (props) => {
                                                         <th>العمله</th>
                                                         <td>{currency(loan.currency)}</td>
                                                         <th>رسوم الطوابع</th>
-                                                        <td>{loan.stamps}</td>
+                                                        <td>{numbersToArabic(loan.stamps)}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>رسوم طلب القرض</th>
@@ -117,7 +117,7 @@ const CustomerStatusDetails = (props) => {
                                                         <th>فترة السداد</th>
                                                         <td>{numbersToArabic(loan.periodLength) + " " +numbersToArabic( periodType(loan.periodType))}</td>
                                                         <th>فترة السماح</th>
-                                                        <td>{loan.gracePeriod}</td>
+                                                        <td>{numbersToArabic(loan.gracePeriod)}</td>
                                                         <th>عمولة المندوب</th>
                                                         <td>{numbersToArabic(loan.representativeFees)}</td>
                                                     </tr>
