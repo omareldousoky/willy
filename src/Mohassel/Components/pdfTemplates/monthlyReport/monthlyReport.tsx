@@ -1,4 +1,4 @@
-import { produceWithPatches } from 'immer';
+
 import React from 'react';
 import './monthlyReport.scss';
 
@@ -510,14 +510,15 @@ const MonthlyReport = (props) => {
                 <p>إجمالي عدد العملاء الذين لهم أرصدة تمويل منتظمة أو بتأخير (لا يتجاوز أسبوع + حتى 30 يوم</p>
                 <p> + حتى 60 يوم + حتى 90 يوم + حتى 120 يوم + أكثر من 120 يوم )+ أقساط (مرحلة + معاد جدولتها)</p>
               </div>
-              <div className="big-number">576,351</div>
+              <div className="big-number">{props.data.totalCustomers}</div>
             </div>
             <div className="totals">
               <div className="lines">
                 <p>مدى مطابقة &quot;إجمالي عدد العملاء &quot; بالجدول أعلاه ل&quot;إجمالي عدد العملاء الحاصلين على التمويل</p>
                 <p>&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
               </div>
-              <div className="big-number">مطابق</div>
+              <div className="big-number">{props.data.arrearsCountValidation=== 'matching'? "مطابق" 
+              :"غير مطابق" }</div>
             </div>
           </div>
           <div className="inner-container">
@@ -527,14 +528,15 @@ const MonthlyReport = (props) => {
                 <p>إجمالي قيمة أرصدة التمويل القائمة منتظمة أو بتأخير (لا يتجاوز أسبوع + حتى 30 يوم</p>
                 <p> + حتى 60 يوم + حتى 90 يوم + حتى 120 يوم + أكثر من 120 يوم )+ أقساط (مرحلة + معاد جدولتها) </p>
               </div>
-              <div className="big-number">576,351</div>
+              <div className="big-number">{props.data.totalArrears}</div>
             </div>
             <div className="totals">
               <div className="lines">
                 <p>مدى مطابقة &quot;إجمالي قيمة أرصدة التمويل المستحقة&quot; بالجدول أعلاه ل&quot;إجمالي قيمة أرصدة  </p>
                 <p>التمويل القائمة&quot; بالجدول رقم &quot;1&quot; الخاص بالعملاء و التمويل الممنوح بالصفحة السابقة</p>
               </div>
-              <div className="big-number">مطابق</div>
+              <div className="big-number">{props.data.arrearsCreditValidation==="matching"? "مطابق" 
+              :"غير مطابق" }</div>
             </div>
           </div>
         </div>
@@ -551,10 +553,10 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -578,38 +580,38 @@ const MonthlyReport = (props) => {
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.1</td>
                   <td>إجمالى عدد أرصدة معدومة عملاء تمويل أفراد</td>
-                  <td>406</td>
-                  <td>599</td>
+                  <td>{props.data.individualWrittenOffLoansCount.month}</td>
+                  <td>{props.data.individualWrittenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.2</td>
                   <td>إجمالى قيمة أرصدة تمويل معدومة لعملاء أفراد</td>
-                  <td>406</td>
-                  <td>599</td>
+                  <td>{props.data.individualWrittenOffLoansCredit.month}</td>
+                  <td>{props.data.individualWrittenOffLoansCredit.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.3</td>
                   <td>إجمالى عدد أرصدة معدومة تمويل جماعى</td>
-                  <td>406</td>
-                  <td>599</td>
+                  <td>{props.data.groupWrittenOffLoansCount.month}</td>
+                  <td>{props.data.groupWrittenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.4</td>
                   <td>إجمالى قيمة أرصدة معدومة تمويل جماعى</td>
-                  <td>406</td>
-                  <td>599</td>
+                  <td>{props.data.groupWrittenOffLoansCredit.month}</td>
+                  <td>{props.data.groupWrittenOffLoansCredit.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.5</td>
                   <td>إجمالى عدد أرصدة معدومة لكافة أنواع العملاء</td>
-                  <td>406</td>
-                  <td>599</td>
+                  <td>{props.data.writtenOffLoansCount.month}</td>
+                  <td>{props.data.writtenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>4.6</td>
                   <td>إجمالى قيمة أرصدة معدومة لكافة أنواع العملاء</td>
-                  <td>406</td>
-                  <td>599</td>
+                  <td>{props.data.writtenOffLoansCredit.month}</td>
+                  <td>{props.data.writtenOffLoansCredit.year}</td>
                 </tr>
               </tbody>
             </table>
@@ -627,10 +629,10 @@ const MonthlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -654,14 +656,14 @@ const MonthlyReport = (props) => {
                 <tr style={{ textAlign: 'center' }}>
                   <td>5.1</td>
                   <td>إجمالى عدد أرصدة تمويل لكافة أنواع العملاء </td>
-                  <td>63</td>
-                  <td>290</td>
+                  <td>{props.data.collectedWrittenOffLoansCount.month}</td>
+                  <td>{props.data.collectedWrittenOffLoansCount.year}</td>
                 </tr>
                 <tr style={{ textAlign: 'center' }}>
                   <td>5.2</td>
                   <td>إجمالى قيمة أرصدة تمويل لكافة أنواع العملاء </td>
-                  <td>43389</td>
-                  <td>196981</td>
+                  <td>{props.data.collectedWrittenOffLoansCredit.month}</td>
+                  <td>{props.data.collectedWrittenOffLoansCredit.year}</td>
                 </tr>
               </tbody>
             </table>
