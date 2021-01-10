@@ -16,6 +16,9 @@ print {
         & table {
             width: 100%;
             text-align: center;
+            & .sign {
+                width: 50%;
+            }
         }
         & .divFooter {
             position: absolute;

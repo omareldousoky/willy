@@ -238,7 +238,7 @@ export const numbersToArabic = (input: number | string) => {
     return inputStr.replace(/[0-9]/g, (number) => {
       return id[number]
     });
-  } else return '';
+  } else return '۰';
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {

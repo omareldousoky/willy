@@ -6,14 +6,16 @@ import { numbersToArabic, timeToArabicDate, dayToArabic } from "../../../../Shar
 import Tafgeet from 'tafgeetjs';
 
 const LoanContract = (props) => {
-  function getNumbersOfGuarantor() {
+  function getNumbersOfGuarantor(str: string) {
+    if(str === 'and') str = 'و'
+    else str = 'او'
     switch (props.data.guarantors.length) {
-      case 1: return ' الثالث';
-      case 2: return ' الثالث و الرابع';
-      case 3: return ' الثالث و الرابع و الخامس';
-      case 4: return 'الثالث و الرابع و الخامس و السادس ';
-      case 5: return 'الثالث و الرابع و الخامس و السادس و السابع ';
-      case 6: return 'الثالث و الرابع و الخامس و السادس و السابع و الثامن ';
+      case 1: return ` الثالث`;
+      case 2: return ` الثالث ${str} الرابع`;
+      case 3: return ` الثالث ${str} الرابع ${str} الخامس`;
+      case 4: return `الثالث ${str} الرابع ${str} الخامس ${str} السادس `;
+      case 5: return `الثالث ${str} الرابع ${str} الخامس ${str} السادس ${str} السابع `;
+      case 6: return `الثالث ${str} الرابع ${str} الخامس ${str} السادس ${str} السابع ${str} الثامن `;
       default: return '';
     }
   }
@@ -194,11 +196,11 @@ const LoanContract = (props) => {
                     تمويل رأس المال
                     العامل وذلك وفقا لاحكام القانون رقم ١٤١ لسنة ٢٠١٤ المشار اليه وذلك بضمان وتضامن
                     الطرف
-                    {getNumbersOfGuarantor()} وقد
+                    {getNumbersOfGuarantor('and')} وقد
                     وافقه الطرف الأول علي ذلك وفقا للشروط والضوابط الوارده بهذا العقد وبعد ان اقر
                     الأطراف
                     بأهليتهم القانونيه
-                    للتصرف والتعاقد فقط اتفقوا علي بنود العقد التاليه
+                    للتصرف والتعاقد فقد اتفقوا علي بنود العقد التاليه
 							</div>
                   </section>
 
@@ -214,7 +216,7 @@ const LoanContract = (props) => {
 
                   <section>
                     <div className="title">البند الثاني</div>
-                    <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني مبلغ {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} ويقر
+                    <div>بموجب هذا العقد وافق الطرف الأول علي منح الطرف الثاني قرضا بمبلغ {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`} ويقر
                   الطرف الثاني بأن هذا المبلغ يمثل قرضا عليه يلتزم بسداده للطرف الأول وفقا لما هو وارد
                   بالبند الثالث من هذا
                   العقد
@@ -223,33 +225,32 @@ const LoanContract = (props) => {
 
                   <section>
                     <div className="title">البند الثالث</div>
-                    <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
+                    <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
-                  وكافة تكاليف التمويل البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
+                  وكافة المصروفات الادارية البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + props.data.applicationFeesRequired)} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0))} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
                   سداده
                    علي عدد {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
                   {timeToArabicDate(props.data.installmentsObject.installments[0].dateOfPayment, false)} وينتهي في
-                  {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} - {props.data.customer.governorate} الكائن
-                    {props.branchDetails.address} أو
+                  {timeToArabicDate(props.data.installmentsObject.installments[props.data.installmentsObject.installments.length - 1].dateOfPayment, false)} علي ان يتم السداد النقدي بمقر فرع الطرف الأول الكائن في {props.branchDetails.name} {props.branchDetails.address} أو
                   بأحدي وسائل الدفع
 								الإلكتروني المعتمده من هيئه الرقابه الماليه</div>
                   </section>
 
                   <section>
                     <div className="title">البند الرابع</div>
-                    <div>يقر الطرفان الثاني و{getNumbersOfGuarantor()} بسداد كافة المبالغ الوارده
+                    <div>يقر الطرفان الثاني و{getNumbersOfGuarantor('and')} متضامنين فيما بينهم بسداد كافة المبالغ الوارده
                   بالبند السابق وفقا
-                  للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة تكاليف تمويله
+                  للمواعيد المذكوره به وان هذه المبالغ تعد قيمة القرض وكافة مصروفاته و تكاليف تمويله
 							</div>
                   </section>
 
                   <section>
                     <div className="title">البند الخامس</div>
-                    <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor()} ضامنين متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
+                    <div>يلتزم الأطراف الثاني و{getNumbersOfGuarantor('and')}  متضامنين فيما بينهم بسداد اقساط القرض وفقا لما
                   هو
                   وارد بالبند الثالث
                   من هذا العقد وفي حالة تأخرهم في سداد قيمة اي قسط في تاريخ استحقاقه يلتزموا بسداد
@@ -258,7 +259,7 @@ const LoanContract = (props) => {
                   القسط في اليوم التالي لتاريخ الأستحقاق للقسط وابتداء من اليوم الذي يليه كالتالي :-
 							</div>
                     <div>يتم تحصيل ٥ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أقل من ٢٠٠٠ جنيها</div>
-                    <div>يتم تحصيل ٧.٥ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي أقل من ٣٠٠٠ جنيها</div>
+                    <div>يتم تحصيل ٧.٥ جنيهات عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ٢٠٠٠ جنيها حتي ٣٠٠٠ جنيها</div>
                     <div>يتم تحصيل ١٠ جنيهات عن كل يوم تأخير اذا كان قيمة القسط أكبر من ٣٠٠٠ جنيها</div>
                   </section>
 
@@ -278,18 +279,18 @@ const LoanContract = (props) => {
                     الوارده بهذا العقد
                     وملحقاته ومرفقاته الموقعه (ان وجدت) وبالقوانين الساريه في اي وقت من الأوقات يعد
                     الأطراف
-                   الثاني و{getNumbersOfGuarantor()} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
+                   الثاني و{getNumbersOfGuarantor('and')} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الطرفين
-                  الثاني أو {getNumbersOfGuarantor()} أو جميعهم بباقي قيمة القرض وكافة تكاليف تمويله</div>
-                    <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر مما يلي:-</div>
+                  الثاني أو {getNumbersOfGuarantor('and')} أو جميعهم بباقي قيمة القرض وكافة مصروفاته</div>
+                    <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر ما يلي:-</div>
                     <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                     <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>
-                    <div>٧/٣ في حالة تقديم الطرف الثاني أو {getNumbersOfGuarantor()} بيانات أو معلومات مخالفه للواقع
+                    <div>٧/٣ في حالة تقديم الطرف الثاني أو {getNumbersOfGuarantor('or')} بيانات أو معلومات مخالفه للواقع
                   او
                   غير سليمه وذلك الي
 								المقرض.</div>
-                    <div>٧/٤ في حاله فقد الطرف الثاني أو {getNumbersOfGuarantor()} اهليته أو اشهار افلاسه او اعساره
+                    <div>٧/٤ في حاله فقد الطرف الثاني أو {getNumbersOfGuarantor('or')} اهليته أو اشهار افلاسه او اعساره
                   او
                   وفاته او وضعه تحت
                   الحراسه او توقيع الحجز علي امواله او وضع امواله تحت التحفظ ومنعه من التصرف فيها او
@@ -300,7 +301,7 @@ const LoanContract = (props) => {
                     الممول بالقرض كله
                     او بعضه، او اذا تم التصرف في جزء او كل من المشروع الممول او اذا تم تأجيره للغير.
 							</div>
-                    <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو {getNumbersOfGuarantor()} علي سداد الاقساط في مواعيدها
+                    <div>٧/٦ في حالة عدم قدرة الطرف الثاني أو {getNumbersOfGuarantor('or')} علي سداد الاقساط في مواعيدها
                   او
                   توقف اعمال المشروع
 								الممول لاي سبب من الاسباب</div>
@@ -314,15 +315,15 @@ const LoanContract = (props) => {
 
                   <section>
                     <div className="title">البند التاسع</div>
-                    <div>يقر الطرف {getNumbersOfGuarantor()} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
+                    <div>يقر الطرف {getNumbersOfGuarantor('and')} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
                   لقيمة هذا القرض من
-                  اصل وعوائد وعمولات وكافة تكلفه التمويل بموجب هذا العقد وايا من ملحقاته، ويحق
+                  اصل وعوائد وعمولات وكافة المصروفات المستحقة بموجب هذا العقد وايا من ملحقاته، ويحق
                   للمقرض
                   الرجوع عليه بكامل
-                  قيمة المديونيات المستحقه علي هذا القرض، ولا يحق للطرف {getNumbersOfGuarantor()} الدفع
+                  قيمة المديونيات المستحقه علي هذا القرض، ولا يحق للطرف {getNumbersOfGuarantor('or')} الدفع
                   بالتجريد أو
-                  التقسيم أو اي دوافع
+                  التقسيم أو اي دفوع
                   اخرى في مواجهة المقرض ويحق للمقرض الرجوع عليه وحده او الرجوع عليه وعلي المقترض
                   منفردا او
                   مجتمعين معا بكامل
@@ -402,7 +403,7 @@ const LoanContract = (props) => {
                   <div className="headtitle textcenter"><u>إقرار وتعهد</u></div>
                   <div>نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة الاقساط المستحقه في مواعيدها
                   المحدده بموجب عقد
-                القرض المؤرخ {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق العميل او من
+                 القرض المؤرخ في {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق العميل او من
                 ينوب عنه الي شركة
                 تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو عبر وسائل الدفع
                 الالكتروني المعتمده
@@ -541,7 +542,7 @@ const LoanContract = (props) => {
                         {props.data.guarantors.map((guarantor, index) => {
                           return (
                             <td key={index}>
-                              <div>ضامن/ {guarantor.customerName}</div>
+                              <div>ضامن {getIndexOfGuarantorInAr(index - 2).slice(2)}/ {guarantor.customerName}</div>
                             </td>
                           )
                         })}
@@ -556,13 +557,13 @@ const LoanContract = (props) => {
                       </tr>
                     </tbody>
                   </table>
-                  <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} جنيه من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
+                  <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} جنيه `} من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
 							{timeToArabicDate(0, false)}</div>
                   <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
                   تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات
 							البيع والشراء.</div>
                   <div>لذا وبناء علي رغبتي ارفض عمل اي جدولة للتمويل او تأجيل للاقساط أو الحصول علي فترة سماح
-							لأي اقساط مستحقه طوال فترة التمويل وبأنني ملتزم بسداد الاقساط المسلم لي من الشركه.</div>
+							لأي اقساط مستحقه طوال فترة التمويل وبأنني ملتزم بسداد الاقساط طبقا لجدول الاقساط المسلم لي من الشركه.</div>
 
 
                   <table className="sign">
