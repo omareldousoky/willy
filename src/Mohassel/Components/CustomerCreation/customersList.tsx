@@ -79,6 +79,9 @@ class CustomersList extends Component<Props, State> {
         
         render: data => <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
           <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can>
+          {/* <Can I = '' a = ''> */}
+            <img style = {{cursor: 'pointer' , width:"20px", height:'30px'}} alt={'clearance'} src= {require('../../Assets/clearanceIcon.svg')}  onClick ={()=> this.props.history.push("/customers/create-clearance",{id: data._id})}/>
+            {/* </Can> */}
           <Can I="blockAndUnblockCustomer" a="customer"><span  className='fa icon row-nowrap' style={{width:'120px', fontSize:'13px'}} onClick={() => this.handleActivationClick(data)}> {data.blocked?.isBlocked ? local.unblockCustomer: <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} </span></Can>
           </div>  
       },
