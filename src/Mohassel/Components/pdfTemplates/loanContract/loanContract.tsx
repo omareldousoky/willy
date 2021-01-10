@@ -228,7 +228,7 @@ const LoanContract = (props) => {
                     <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
-                  وكافة المصروفات الادارية البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه الي الطرف
+                  وكافة المصروفات الادارية البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
                   قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0))} جنيه (${new Tafgeet((props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0)), 'EGP').parse()})`}، يتم
                   سداده
@@ -425,20 +425,20 @@ const LoanContract = (props) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td style={{paddingBottom: 150}}>
                           <div>الاسم/ {props.data.customer.customerName}</div>
                         </td>
-                        <td>
+                        <td style={{paddingBottom: 150}}>
                           <div>التوقيع:-----------------------</div>
                         </td>
                       </tr>
                       {props.data.guarantors.map((guarantor, index) => {
                         return (
                           <tr key={index}>
-                            <td>
+                            <td style={{paddingBottom: 150}}>
                               <div>الاسم/ {guarantor.customerName}</div>
                             </td>
-                            <td>
+                            <td style={{paddingBottom: 150}}>
                               <div>التوقيع:-----------------------</div>
                             </td>
                           </tr>
