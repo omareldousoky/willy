@@ -152,7 +152,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <td>{numbersToArabic(installment.installmentResponse)}</td>
                                     <td>{numbersToArabic(installment.principalPaid)}</td>
                                     <td>{numbersToArabic(installment.feesPaid)}</td>
-                                    <td>{getStatus(installment)}</td>
+                                    <td style={{minWidth: 100}}>{getStatus(installment)}</td>
                                     <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                     <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))

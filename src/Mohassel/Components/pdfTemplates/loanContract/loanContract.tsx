@@ -307,7 +307,7 @@ const LoanContract = (props) => {
 								الممول لاي سبب من الاسباب</div>
                   </section>
 
-                  <section>
+                  <section style={{pageBreakAfter: 'always'}}>
                     <div className="title">البند الثامن</div>
                     <div>يلتزم كل طرف من أطراف هذا العقد بسداد الضريبه المستحقه عليه وفقا لاحكام القانون
 							</div>
@@ -368,14 +368,14 @@ const LoanContract = (props) => {
 
                     <tbody>
                       <tr>
-                        <td>
+                        <td style={{paddingBottom: 100}}>
                           <div><b>الطرف الأول</b></div>
-                          <div><b>الأسم:</b></div>
+                          <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
                         </td>
-                        <td>
+                        <td style={{paddingBottom: 100}}>
                           <div><b>الطرف الثاني</b></div>
-                          <div><b>الأسم:</b></div>
+                          <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
                         </td>
                       </tr>
@@ -383,9 +383,9 @@ const LoanContract = (props) => {
 
                         {props.data.guarantors.map((_guarantor, index) => {
                           return (
-                            <td key={index}>
+                            <td key={index} style={{paddingBottom: 100}}>
                               <div><b>الطرف {getIndexOfGuarantorInAr(index)}</b></div>
-                              <div><b>الأسم:</b></div>
+                              <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                               <div><b>التوقيع:</b></div>
                             </td>
                           )
