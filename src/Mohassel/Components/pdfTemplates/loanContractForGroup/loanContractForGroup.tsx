@@ -372,7 +372,7 @@ const LoanContractForGroup = (props) => {
                   </table>
                   {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                     return (
-                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: 20 }}>
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: 20, marginBottom: 100 }}>
                         <div>الاسم/ {individualInGroup.customer.customerName}</div>
                         <div>التوقيع:----------------------------------------------</div>
                       </div>
