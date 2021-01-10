@@ -5,7 +5,8 @@ print {
         font-size: 12px;
         line-height: 1.5em;
         margin: 8px;
-    	page-break-after: always;
+        page-break-after: always;
+        font-family: Arial;
         & .headtitle {
             font-size: 14px;
             font-weight: bolder;
