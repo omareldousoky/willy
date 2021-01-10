@@ -10,7 +10,7 @@ const LoanContractForGroup = (props) => {
     const diff = Date.now() - birthDate;
     const day = 1000 * 60 * 60 * 24;
     const days = Math.floor(diff / day);
-    const months = Math.floor(days / 31);
+    const months = Math.floor(days / 30);
     const years = Math.floor(months / 12);
     return years;
   }
@@ -235,7 +235,7 @@ const LoanContractForGroup = (props) => {
                     <div>يتم تحصيل ٢ ج لكل عضوة عن كل يوم تأخير اذا كان قيمة القسط أقل من ١٥٠٠ ج</div>
                     <div> يتم تحصيل ٣ ج لكل عضوة عن كل يوم تأخير إذا كان قيمة القسط يتراوح من ١٥٠٠ ج حتي أقل من ٢٠٠٠ ج</div>
                     <div>يتم تحصيل ٤ ج لكل عضوة عن كل يوم تأخير إذا كان مبلغ التمويل للمجموعة يتراوح من ٢٠٠٠ ج حتي أقل من ٢٥٠٠ ج</div>
-                    <div>يتم تحصيل ٥ ج لكل عضوة عن كل يوم تأخير اذا كان مبلغ التمويل للمجموعة أكبر من او يساوى ٢٥٠٠ ج</div>
+                    <div>يتم تحصيل ٥ ج لكل عضوة عن كل يوم تأخير اذا كان مبلغ التمويل للمجموعة اكثر من او يساوى ٢٥٠٠ ج</div>
                   </section>
 
                   <section>
@@ -280,7 +280,7 @@ const LoanContractForGroup = (props) => {
 								الممول لاي سبب من الاسباب</div>
                   </section>
 
-                  <section>
+                  <section style={{pageBreakAfter: 'always'}}>
                     <div className="title">البند الثامن</div>
                     <div>يلتزم كل طرف من أطراف هذا العقد بسداد الضريبه المستحقه عليه وفقا لاحكام القانون
 							</div>
@@ -310,7 +310,7 @@ const LoanContractForGroup = (props) => {
 
                     <tbody>
                       <tr>
-                        <td>
+                        <td style={{paddingBottom: 100}}>
                           <div><b>الطرف الأول</b></div>
                           <div><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
@@ -324,7 +324,7 @@ const LoanContractForGroup = (props) => {
                       {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                         return (
                           <tr key={index}>
-                            <td >
+                            <td style={{paddingBottom: 100}}>
                               <div><b>الأسم: {individualInGroup.customer.customerName}</b></div>
                               <div><b>التوقيع:</b></div>
                             </td>
@@ -372,7 +372,7 @@ const LoanContractForGroup = (props) => {
                   </table>
                   {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                     return (
-                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: 20 }}>
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: 20, marginBottom: 100 }}>
                         <div>الاسم/ {individualInGroup.customer.customerName}</div>
                         <div>التوقيع:----------------------------------------------</div>
                       </div>

@@ -228,9 +228,9 @@ const LoanContract = (props) => {
                     <div>يلتزم الطرفان الثاني و{getNumbersOfGuarantor('and')} ضامنين متضامنين فيما بينهم بسداد اجمالي قيمة
                   القرض
                   البالغة {`${numbersToArabic(props.data.principal)} جنيه (${new Tafgeet(props.data.principal, 'EGP').parse()})`}
-                  وكافة المصروفات الادارية البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه الي الطرف
+                  وكافة المصروفات الادارية البالغه {numbersToArabic(props.data.applicationFeesRequired)} جنيه وتكاليف التمويل البالغه {numbersToArabic(props.data.installmentsObject.totalInstallments.feesSum)} جنيه الي الطرف
                   الأول وذلك بواقع مبلغ
-                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0))} جنيه (${new Tafgeet(props.data.installmentsObject.totalInstallments.installmentSum, 'EGP').parse()})`}، يتم
+                  قدره {`${numbersToArabic(props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0))} جنيه (${new Tafgeet((props.data.installmentsObject.totalInstallments.installmentSum + (props.data.applicationFeesRequired ? props.data.applicationFeesRequired : 0)), 'EGP').parse()})`}، يتم
                   سداده
                    علي عدد {numbersToArabic(props.data.installmentsObject.installments.length)} قسط كل {numbersToArabic(props.data.product.periodLength)} {props.data.product.periodType === 'days' ? local.day : local.month}
                   قيمة كل قسط {`${numbersToArabic(props.data.installmentsObject.installments[0].installmentResponse)} جنيه (${new Tafgeet(props.data.installmentsObject.installments[0].installmentResponse, 'EGP').parse()})`} ، تبدأ في
@@ -307,7 +307,7 @@ const LoanContract = (props) => {
 								الممول لاي سبب من الاسباب</div>
                   </section>
 
-                  <section>
+                  <section style={{pageBreakAfter: 'always'}}>
                     <div className="title">البند الثامن</div>
                     <div>يلتزم كل طرف من أطراف هذا العقد بسداد الضريبه المستحقه عليه وفقا لاحكام القانون
 							</div>
@@ -368,14 +368,14 @@ const LoanContract = (props) => {
 
                     <tbody>
                       <tr>
-                        <td>
+                        <td style={{paddingBottom: 100}}>
                           <div><b>الطرف الأول</b></div>
-                          <div><b>الأسم:</b></div>
+                          <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
                         </td>
-                        <td>
+                        <td style={{paddingBottom: 100}}>
                           <div><b>الطرف الثاني</b></div>
-                          <div><b>الأسم:</b></div>
+                          <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
                         </td>
                       </tr>
@@ -383,9 +383,9 @@ const LoanContract = (props) => {
 
                         {props.data.guarantors.map((_guarantor, index) => {
                           return (
-                            <td key={index}>
+                            <td key={index} style={{paddingBottom: 100}}>
                               <div><b>الطرف {getIndexOfGuarantorInAr(index)}</b></div>
-                              <div><b>الأسم:</b></div>
+                              <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                               <div><b>التوقيع:</b></div>
                             </td>
                           )
@@ -425,20 +425,20 @@ const LoanContract = (props) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td style={{paddingBottom: 150}}>
                           <div>الاسم/ {props.data.customer.customerName}</div>
                         </td>
-                        <td>
+                        <td style={{paddingBottom: 150}}>
                           <div>التوقيع:-----------------------</div>
                         </td>
                       </tr>
                       {props.data.guarantors.map((guarantor, index) => {
                         return (
                           <tr key={index}>
-                            <td>
+                            <td style={{paddingBottom: 150}}>
                               <div>الاسم/ {guarantor.customerName}</div>
                             </td>
-                            <td>
+                            <td style={{paddingBottom: 150}}>
                               <div>التوقيع:-----------------------</div>
                             </td>
                           </tr>
