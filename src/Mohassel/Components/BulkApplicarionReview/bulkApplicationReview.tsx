@@ -116,7 +116,7 @@ class BulkApplicationReview extends Component<Props, State>{
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
           {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
+              {data.application?.group?.individualsInGroup?.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
           }
         </div>
@@ -124,12 +124,12 @@ class BulkApplicationReview extends Component<Props, State>{
       {
         title: local.age,
         key: "age",
-        render: data => data.application?.customer?.birthDate ? this.calculateAge(data.application.customer.birthDate) : data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? this.calculateAge(member.customer.birthDate): null )
+        render: data => data.application?.customer?.birthDate ? this.calculateAge(data.application.customer.birthDate) : data.application?.group?.individualsInGroup?.map(member => member.type === 'leader' ? this.calculateAge(member.customer.birthDate): null )
       },
       {
         title: local.nationalId,
         key: "nationalId",
-        render: data => data.application?.customer?.nationalId ? data.application.customer.nationalId : data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer.nationalId: null )
+        render: data => data.application?.customer?.nationalId ? data.application.customer.nationalId : data.application?.group?.individualsInGroup?.map(member => member.type === 'leader' ? member.customer.nationalId: null )
       },
       {
         title: local.noOfInstallments,
@@ -149,7 +149,7 @@ class BulkApplicationReview extends Component<Props, State>{
       {
         title: local.businessActivity,
         key: 'businessActivity',
-        render: data => data.application?.customer?.businessActivity ? data.application.customer.businessActivity  :  data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? member.customer?.businessActivity: null )
+        render: data => data.application?.customer?.businessActivity ? data.application.customer.businessActivity  :  data.application?.group?.individualsInGroup?.map(member => member.type === 'leader' ? member.customer?.businessActivity: null )
       },
       {
         title: local.loanStatus,
