@@ -182,7 +182,7 @@ const LoanContractForGroup = (props) => {
                               <td>{new Tafgeet(individualInGroup.amount, 'EGP').parse()}</td>
                               <td>
                                 <div>
-                                  <b className="word-break">و ذلك لنشاط</b>
+                                  <b className="word-break"> و ذلك لنشاط </b>
                                   <span>
                                     {individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}
                                   </span>
