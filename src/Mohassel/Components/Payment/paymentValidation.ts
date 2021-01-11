@@ -8,14 +8,17 @@ endOfDay.setHours(23, 59, 59, 59);
 export const paymentValidation = Yup.object().shape({
   payAmount: Yup.number()
     .moreThan(0, local.minPayment)
-    .test(
-      "Should not be before acceptance date",
-      local.amountShouldNotExceedReqAmount,
-      function (this: any, value: number) {
-        return value <= this.parent.max;
-      }
-    )
-    .required(local.required),
+    .required(local.required)
+    .when("paymentType", {
+      is: paymentType => paymentType !== "penalties",
+      then: Yup.number().test("Should not exceed required amount",
+        local.amountShouldNotExceedReqAmount,
+        function (this: any, value: number) {
+          return value <= this.parent.max;
+        }
+      ),
+      otherwise: Yup.number().moreThan(0, local.minPayment)
+    }),
   randomPaymentType: Yup.string().when("paymentType", {
     is: paymentType => paymentType === "random",
     then: Yup.string()
@@ -80,12 +83,17 @@ export const earlyPaymentValidation = Yup.object().shape({
 export const manualPaymentValidation = Yup.object().shape({
   payAmount: Yup.number()
     .moreThan(0, local.minPayment)
-    .test("Should not be before acceptance date", local.amountShouldNotExceedReqAmount,
-      function (this: any, value: number) {
-        return value <= this.parent.max
-      }
-    )
-    .required(local.required),
+    .required(local.required)
+    .when("paymentType", {
+      is: paymentType => paymentType !== "penalties",
+      then: Yup.number().test("Should not exceed required amount",
+        local.amountShouldNotExceedReqAmount,
+        function (this: any, value: number) {
+          return value <= this.parent.max;
+        }
+      ),
+      otherwise: Yup.number().moreThan(0, local.minPayment)
+    }),
   truthDate: Yup.string()
     .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;

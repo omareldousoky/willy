@@ -1,60 +1,49 @@
 import React, { Component } from 'react'
-import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader';
-import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
-import { getApplicationDocuments } from '../../Services/APIs/loanApplication/getDocuments';
 import Swal from 'sweetalert2';
+import Button from 'react-bootstrap/Button';
+import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes';
 import * as local from '../../../Shared/Assets/ar.json';
+import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader';
+import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import { Loader } from '../../../Shared/Components/Loader'
-import ability from '../../config/ability'
 import { connect } from 'react-redux';
 import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types';
-import { downloadAsZip, getErrorMessage } from "../../../Shared/Services/utils";
+import { downloadAsZip } from '../../../Shared/Services/utils';
+
 interface Props {
-    application: any;
+    customerId: string;
+    previousStep?: () => void;
     getDocuments: typeof getDocuments;
     addAllToSelectionArray: typeof addAllToSelectionArray;
     clearSelectionArray: typeof clearSelectionArray;
+    edit: boolean;
+    view?: boolean;
     loading: boolean;
     documents: any[];
     selectionArray: Image[];
 }
 interface State {
-    loading: boolean;
     docsOfImagesFiles: any[];
     documentTypes: any[];
+    options: any[];
     selectAll: boolean;
+    loading: boolean;
 }
-class UploadDocuments extends Component<Props, State> {
+class DeathCertificate extends Component<Props, State>  {
     constructor(props: Props) {
         super(props);
         this.state = {
-            loading: false,
             documentTypes: [],
-            selectAll: false,
             docsOfImagesFiles: [[{
                 key: '',
                 url: '',
             }]],
+            options: [],
+            selectAll: false,
+            loading: false,
         }
-    }
-
-    async getDocumentTypes() {
-
-        const query = this.props.application.status === "issued" ? "loanApplication,issuedLoan" : "loanApplication";
-        const response = await getDocumentsTypes('loanApplication,issuedLoan');
-        if (response.status === "success") {
-            this.setState({
-                documentTypes: response.body.documentTypes,
-            })
-
-        } else {
-            Swal.fire("Error !",getErrorMessage(response.error.error),'error')
-        }
-
     }
     selectAllOptions() {
         if (this.state.selectAll === true) {
@@ -74,33 +63,17 @@ class UploadDocuments extends Component<Props, State> {
             this.props.addAllToSelectionArray(images);
         }
     }
-    async getApplicationDocuments() {
-        const res = await getApplicationDocuments(this.props.application._id as string);
-        if (res.status === "success") {
-            if (res.body.docs) {
-                this.setState({
-                    docsOfImagesFiles: res.body.docs,
-                })
-            }
-        } else {
-            Swal.fire("Error !",getErrorMessage(res.error.error),'error')
-        }
-
-    }
     async componentDidMount() {
-        this.setState({ loading: true });
-        this.getDocumentTypes();
-        await this.props.getDocuments({ applicationId: this.props.application._id, docType: this.props.application.status === "issued" ? "issuedLoan" : "loanApplication" })
-        this.setState({ loading: false });
 
-    }
-    checkPermission() {
-        return ability.can('addingDocuments', 'application');
+        if (this.props.edit || this.props.view) {
+            await this.props.getDocuments({ customerId: this.props.customerId, docType: 'deathCertificate'});
+        }
     }
     render() {
+
         return (
             <>
-                <Loader type="fullscreen" open={this.state.loading || this.props.loading} />
+                <Loader type="fullscreen" open={this.props.loading || this.state.loading} />
                 <Row style={{ justifyContent: "space-between" }}>
                     <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
                         <Form.Check
@@ -114,30 +87,31 @@ class UploadDocuments extends Component<Props, State> {
                     <div style={{ textAlign: 'right', padding: "0.75rem 1.25rem", marginRight: '1rem' }}>
                         <Button style={{ width: '150px' }} variant="primary" disabled={this.props.selectionArray.length <= 0} onClick={async () => {
                             this.setState({ loading: true })
-                            const res = await downloadAsZip(this.props.selectionArray, `loan-${this.props.application._id}-${new Date().valueOf()}`);
+                            const res = await downloadAsZip(this.props.selectionArray, `deathCertificate-customer-${this.props.customerId}-${new Date().valueOf()}`);
                             this.setState({ loading: false })
                         }}>{`${local.download}(${this.props.selectionArray.length})`}</Button> </div>
                 </Row>
-                {this.state.documentTypes.map((documentType, index) => {
-                    return (
-                        <DocumentUploader
-                            key={index}
-                            documentType={documentType}
-                            edit={this.checkPermission()}
-                            keyName="applicationId"
-                            keyId={this.props.application._id as string}
-                            view={(this.props.application.status === "paid" || this.props.application.status === "rejected" ||
-                                this.props.application.status === "canceled" || !this.checkPermission()) as boolean}
-                        />
-                    )
+                <DocumentUploader
 
-                })}
+                    documentType={{
+                        pages: 1,
+                        type: 'deathCertificate',
+                        paperType: 'A4',
+                        name: 'deathCertificate',
+                        updatable: false,
+                        active: true,
+                    }}
+                    edit={this.props.edit}
+                    keyName="customerId"
+                    keyId={this.props.customerId}
+                    view={this.props.view}
+                />
             </>
-        )
+        );
     }
     componentWillUnmount() {
         this.props.clearSelectionArray();
-      }
+    }
 }
 const addDocumentToProps = dispatch => {
     return {
@@ -154,4 +128,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, addDocumentToProps)(UploadDocuments);
+export default connect(mapStateToProps, addDocumentToProps)(DeathCertificate);

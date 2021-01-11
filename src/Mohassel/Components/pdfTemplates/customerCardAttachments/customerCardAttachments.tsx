@@ -166,7 +166,7 @@ const CustomerCardAttachments = (props) => {
             </div>
 
             <div className="single">
-              <div>المستفيد الحقيقى من التمويل : ( يذكر اسم الشخص الذى سيحصل على لمال او جزء من المال
+              <div>المستفيد الحقيقى من التمويل : ( يذكر اسم الشخص الذى سيحصل على المال او جزء من المال
               فى حاله كونه شخصا اخر بخلاف العميل )
           <div className="value">---------------------------</div>
               </div>
@@ -270,7 +270,7 @@ const CustomerCardAttachments = (props) => {
           </div>
           <div className="sign">
             <div className="single">
-              <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادارجه فى القوائم السلبيه الدولية</div>
+              <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادراجه فى القوائم السلبيه الدولية</div>
             </div>
             <div className="double">
               <div>اسم عضو الرقابه :
@@ -445,7 +445,7 @@ const CustomerCardAttachments = (props) => {
                 </div>
 
                 <div className="single">
-                  <div>المستفيد الحقيقى من التمويل : ( يذكر اسم الشخص الذى سيحصل على لمال او جزء من المال
+                  <div>المستفيد الحقيقى من التمويل : ( يذكر اسم الشخص الذى سيحصل على المال او جزء من المال
                   فى حاله كونه شخصا اخر بخلاف العميل )
           <div className="value">---------------------------</div>
                   </div>
@@ -458,12 +458,12 @@ const CustomerCardAttachments = (props) => {
                 الحقيقى من التعامل مع ذكر اسم المستفيد
                 الحقيقى ( ان وجد ) ، كما اتعهد بتحديث البيانات فور حدوث اى تغييرات بها أو عند طلب الشركة لذلك
       </div>
-                <div className="triple">
+                <div className="uneven">
                   <div>اسم العميل :
           <div className="value">{individualInGroup.customer.customerName}</div>
                   </div>
                   <div>توقيع العميل
-          <div className="value">---------------------</div>
+          <div className="value">------------------------------------------</div>
                   </div>
 
                   <div>التاريخ :
@@ -473,7 +473,7 @@ const CustomerCardAttachments = (props) => {
               </div>
               <div className="sign">
                 <div className="single">
-                  <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادارجه فى القوائم السلبيه الدولية</div>
+                  <div>العميل وقع أمامى وتحققت من شخصيته وتم التاكد من عدم ادراجه فى القوائم السلبيه الدولية</div>
                 </div>
                 <div className="double">
                   <div>اسم عضو الرقابه :

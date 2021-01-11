@@ -27,15 +27,16 @@ import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 import { Employee } from '../Payment/payment';
-
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
   history: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;
 }
@@ -130,8 +131,8 @@ class Leads extends Component<Props, State>{
         render: data =>
           data.status !== 'rejected' &&
           <Can I="assignLead" a="halanuser">
-            <span style={{ marginRight: 5, cursor: 'pointer' }}
-              className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openLOModal: true })} />
+            <img style={{ cursor: 'pointer', marginRight: 5 }} alt={"change-loan-officer"}
+              src={require('../../Assets/changeOfficer-inactive.svg')} onClick={() => this.setState({ selectedLead: data, openLOModal: true })} />
           </Can>
       },
       {
@@ -140,8 +141,8 @@ class Leads extends Component<Props, State>{
         render: data =>
           data.status !== 'rejected' &&
           <Can I="assignLead" a="halanuser">
-            <span style={{ marginRight: 5, cursor: 'pointer' }}
-              className="fa fa-home" onClick={() => this.setState({ selectedLead: data, openBranchModal: true })} />
+            <img style={{ cursor: 'pointer', marginRight: 5 }} alt={"change-branch"}
+              src={require('../../Assets/branches-inactive.svg')} onClick={() => this.setState({ selectedLead: data, openBranchModal: true })} />
           </Can>
       },
       {
@@ -173,10 +174,18 @@ class Leads extends Component<Props, State>{
     let branchId = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch'))._id : '';
     branchId = branchId === 'hq' ? '' : branchId;
     this.setState({ branchId })
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadStatus(status: string) {
     switch (status) {

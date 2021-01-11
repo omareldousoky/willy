@@ -10,7 +10,8 @@ import { englishToArabic } from '../../Services/statusLanguage';
 import { GuarantorTableView } from './guarantorDetails';
 import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { beneficiaryType, currency, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
+import { beneficiaryType, currency, getErrorMessage, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
+import Swal from 'sweetalert2';
 
 interface Props {
     application: any;
@@ -31,7 +32,7 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
             const value = uses.find(use => use.id === props.application.usage).name
             changeUse(value)
         } else {
-            console.log('Err')
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return ''
         }
     }
@@ -189,7 +190,7 @@ export const LoanDetailsBoxView = (props: Props) => {
             const value = uses.find(use => use.id === props.application.usage).name
             changeUse(value)
         } else {
-            console.log('Err')
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return ''
         }
     }
@@ -350,7 +351,7 @@ export const CustomerLoanDetailsBoxView = (props: Props) => {
             const name = res.body.name
             changeOfficerName(name)
         } else {
-            console.log('Err')
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return ''
         }
     }
