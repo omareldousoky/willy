@@ -6,10 +6,13 @@ import Card from 'react-bootstrap/Card';
 import './clearance.scss';
 import Row from 'react-bootstrap/Row';
 interface Props {
- receiptPhotoURL: string;
-  keyId: string;
+ photoObject: {
+  receiptPhotoURL: string;
+  receiptPhoto: any;
+ };
   review?: boolean;
-  onChange?: any;
+  handlePhotoChange?: any;
+  
 
 }
 interface State {
@@ -89,6 +92,7 @@ class ReceiptPhoto extends Component<Props, State> {
             this.setState({
               imgSrc: reader.result,
             })
+            this.props.handlePhotoChange(reader.result);
           }
           reader.readAsDataURL(file)
           
@@ -98,7 +102,8 @@ class ReceiptPhoto extends Component<Props, State> {
   async deleteDocument(event) {
 
     this.overrideEventDefaults(event);
-    this.setState({imgSrc: ''});
+    this.setState({imgSrc: ''})
+    this.props.handlePhotoChange('');
   }
   dropListener = (event: React.DragEvent<HTMLDivElement>) => {
     this.overrideEventDefaults(event);
@@ -137,14 +142,14 @@ class ReceiptPhoto extends Component<Props, State> {
   }
   renderDropHere(key: number) {
     return (
-      <div key={key} className="receipt-upload-container">
+      <div key={key} className="document-upload-container">
         <h5>Drop here</h5>
       </div>
     )
   }
   renderUploadPhoto(key: number) {
     return (
-      <Card.Body key={key} className="receipt-upload-container"
+      <Card.Body key={key} className="document-upload-container"
         onClick={() => this.triggerInputFile()}
       >
         <img src={this.props.review?  require('../../../Shared/Assets/imagePlaceholder.svg') : require('../../../Shared/Assets/uploadDrag.svg')}
@@ -160,7 +165,7 @@ class ReceiptPhoto extends Component<Props, State> {
 
   renderPhotoByName(key: number) {
     return (
-      <Card.Body key={key} className="receipt-upload-container" >
+      <Card.Body key={key} className="document-upload-container" >
        {!this.props.review && <Row data-qc="document-actions" className="document-actions" >
         <span className="fa icon" onClick={(e) => this.deleteDocument(e)}><img  alt="delete" src={ require('../../../Shared/Assets/deleteIcon.svg')} /></span>
         </Row> }

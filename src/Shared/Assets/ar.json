@@ -841,5 +841,8 @@
     "registrationDate":"تاريخ التسجيل",
     "transactionKey":"رقم مسلسل الحركة المالية",
     "manualReceipt":"إيصال يدوي",
-    "clearanceReason":"سبب طلب المخالصة"
+    "clearanceReason":"سبب طلب المخالصة",
+    "registerClearance":"تسجيل المخالصة",
+    "transactionKeyError": "لا يمكن أن تحتوي المخالصة علي رقم مسلسل الحركة المالية و الإيصال اليدوي معا",
+    "receiptPhoto":"صورة الإيصال"
 }
