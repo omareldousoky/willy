@@ -33,7 +33,7 @@ const CashReceipt = (props) => {
                             </div>
                             <div>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
-                            <table>
+                            <table style={{margin: '50px 0px'}}>
                                 <tbody>
                                     <tr>
                                         <td>
@@ -56,7 +56,7 @@ const CashReceipt = (props) => {
                             <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
 			وتسليم كل عميل مبلغ التمويل الخاص به.</div>
 
-                            <table>
+                            <table style={{marginTop: 50}}>
                                 <tbody>
                                     <tr>
                                         <td>
@@ -93,7 +93,7 @@ const CashReceipt = (props) => {
                                     <div style={{margin: '20px 0px'}}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
                                  تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)
                                 </div>
-                                    <table style={{margin: '40px 0px'}}>
+                                    <table style={{margin: '50px 0px'}}>
                                         <tbody>
                                             <tr>
                                                 <td className="sign">
@@ -115,7 +115,7 @@ const CashReceipt = (props) => {
                                     <div className="headtitle textcenter"> <u>إقرار</u></div>
                                     <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
                                 وتسلم كل عميل مبلغ التمويل الخاص به.</div>
-                                    <table style={{margin: '40px 0px'}}>
+                                    <table style={{marginTop: 50}}>
                                         <tbody>
                                             <tr>
                                                 <td>
