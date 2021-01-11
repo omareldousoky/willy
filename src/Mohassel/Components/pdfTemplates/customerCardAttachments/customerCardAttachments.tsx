@@ -1,6 +1,6 @@
 import React from 'react';
 import './customerCardAttachments.scss';
-import { timeToArabicDate, numbersToArabic, arabicGender } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, arabicGender, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import * as local from '../../../../Shared/Assets/ar.json';
 const CustomerCardAttachments = (props) => {
 
@@ -264,7 +264,7 @@ const CustomerCardAttachments = (props) => {
               </div>
 
               <div>التاريخ :
-                           <div className="value">{timeToArabicDate(0, false)}</div>
+                           <div className="value">{timeToArabicDateNow(false)}</div>
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@ const CustomerCardAttachments = (props) => {
           <div className="value">---------------------</div>
               </div>
               <div>التاريخ :
-                      <div className="value">{timeToArabicDate(0, false)}</div>
+                      <div className="value">{timeToArabicDateNow(false)}</div>
               </div>
             </div>
             <div className="double">
@@ -467,7 +467,7 @@ const CustomerCardAttachments = (props) => {
                   </div>
 
                   <div>التاريخ :
-                           <div className="value">{timeToArabicDate(0, false)}</div>
+                           <div className="value">{timeToArabicDateNow(false)}</div>
                   </div>
                 </div>
               </div>
@@ -480,7 +480,7 @@ const CustomerCardAttachments = (props) => {
           <div className="value">---------------------</div>
                   </div>
                   <div>التاريخ :
-                      <div className="value">{timeToArabicDate(0, false)}</div>
+                      <div className="value">{timeToArabicDateNow(false)}</div>
                   </div>
                 </div>
                 <div className="double">

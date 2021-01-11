@@ -1,7 +1,7 @@
 import React from 'react';
 import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, dayToArabic } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import store from '../../../../Shared/redux/store';
 
 const FollowUpStatment = (props) => {
@@ -42,7 +42,7 @@ const FollowUpStatment = (props) => {
                         <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
-                        <td>{timeToArabicDate(0, true)}</td>
+                        <td>{timeToArabicDateNow(true)}</td>
                         <td></td>
                         <td>{dayToArabic(new Date().getDay())}</td>
                     </tr>

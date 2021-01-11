@@ -240,11 +240,11 @@ export const numbersToArabic = (input: number | string) => {
     });
   } else return '۰';
 }
-
+export const timeToArabicDateNow = (fullDate: boolean): string => {
+  return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
+}
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
-  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
 export const dayToArabic = (index: number): string => {
   const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];

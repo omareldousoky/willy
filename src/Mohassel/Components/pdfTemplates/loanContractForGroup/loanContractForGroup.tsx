@@ -2,7 +2,7 @@ import React from 'react';
 import './loanContractForGroup.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { numbersToArabic, timeToArabicDate, dayToArabic } from "../../../../Shared/Services/utils";
+import { numbersToArabic, timeToArabicDate, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import Tafgeet from 'tafgeetjs';
 
 const LoanContractForGroup = (props) => {
@@ -51,7 +51,7 @@ const LoanContractForGroup = (props) => {
 
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (جماعي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
-                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(0, false)}</div>
+                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDateNow(false)}</div>
                   <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
 							:-</div>
                   <table className="stakeholders">
@@ -343,7 +343,7 @@ const LoanContractForGroup = (props) => {
                   <div className="headtitle textcenter"><u>إقرار وتعهد</u></div>
                   <div>نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة الاقساط المستحقه في مواعيدها
                   المحدده بموجب عقد
-                القرض المؤرخ في {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو بأحدي وسائل الدفع
+                القرض المؤرخ في {timeToArabicDateNow(false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق احد الأعضاء او بواسطة من ينوب عن المجموعة الي شركة تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو بأحدي وسائل الدفع
                 الالكتروني المعتمده
                 من هيئة الرقابة المالية ولا يحق لنا بأى حال من الاحوال سداد قيمة أي قسط من الاقساط الي
                 شخص اخر غير خزينة فرع
@@ -358,7 +358,7 @@ const LoanContractForGroup = (props) => {
                   <div>
                     لذا و بناءً على رغبتنا جميعاً نرفض عمل أي جدولة للتمويل أو تأجيل للاقساط أو الحصول على فترة سماح لأي اقساط مستحقة طوال فترة التمويل وبأننا ملتزمون جميعاً بسداد الأقساط طبقاً لجدول الأقساط المسلم لي من الشركة
               </div>
-                  <div>تحريرا في {timeToArabicDate(0, false)}</div>
+                  <div>تحريرا في {timeToArabicDateNow(false)}</div>
 
                   <table>
 
@@ -385,7 +385,7 @@ const LoanContractForGroup = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDateNow(false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
@@ -452,13 +452,13 @@ const LoanContractForGroup = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDateNow(false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDateNow(false)}</div>
                       <div>{leaderName}</div>
                     </div>
                   </div>
