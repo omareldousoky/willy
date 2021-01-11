@@ -509,14 +509,14 @@ const LoanContract = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <div>القائم بالمراجعه</div>
-                          <div>الاسم: --------------------------</div>
-                          <div>التوقيع: -------------------------</div>
+                          <div style={{marginBottom: 30}}>القائم بالمراجعه</div>
+                          <div style={{marginBottom: 100}}>الاسم: --------------------------</div>
+                          <div style={{marginBottom: 100}}>التوقيع: -------------------------</div>
                         </td>
                         <td>
-                          <div>القائم بالصرف</div>
-                          <div>الاسم: --------------------------</div>
-                          <div>التوقيع: -------------------------</div>
+                          <div style={{marginBottom: 30}}>القائم بالصرف</div>
+                          <div style={{marginBottom: 100}}>الاسم: --------------------------</div>
+                          <div style={{marginBottom: 100}}>التوقيع: -------------------------</div>
                         </td>
                       </tr>
                     </tbody>
