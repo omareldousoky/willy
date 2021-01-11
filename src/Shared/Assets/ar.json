@@ -835,5 +835,11 @@
     "secondReviewSuccess":"تمت مراجعة القروض من مدير الفرع",
     "thirdReviewSuccess":"تمت مراجعة القروض من المركز",
     "deathCertificate":"شهاده الوفاه",
-    "createClearance": "تسجيل نموذج المخالصة"
+    "createClearance": "تسجيل نموذج المخالصة",
+    "financeCode": "كود التمويل",
+    "receiptDate":"تاريخ الإيصال",
+    "registrationDate":"تاريخ التسجيل",
+    "transactionKey":"رقم مسلسل الحركة المالية",
+    "manualReceipt":"إيصال يدوي",
+    "clearanceReason":"سبب طلب المخالصة"
 }
