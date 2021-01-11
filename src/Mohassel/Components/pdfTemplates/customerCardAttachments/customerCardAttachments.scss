@@ -1,8 +1,10 @@
-@media print {
+@media print, screen {
     .customer-card-attachments-print {
         font-size: 10px;
         font-weight: bold;
         page-break-after: always;
+        font-family: Arial;
+        font-weight: 600;
         & .single {
             display: inline-grid;
             width: 100%;
@@ -43,6 +45,33 @@
             justify-items: right;
             align-items: right;
             padding-bottom: 5px;
+        }
+
+        & .uneven {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            &div:nth-child(1){
+                display: inline-grid;
+                width: 100%;
+                /* grid-template-rows: 33% 33% 33%; */
+                grid-template-columns: 66% 66% 66%;
+                /* grid-gap: 3px; */
+                justify-items: right;
+                align-items: right;
+                padding-bottom: 5px;
+            }
+            &div:nth-child(2){
+                display: inline-grid;
+                width: 100%;
+                /* grid-template-rows: 33% 33% 33%; */
+                grid-template-columns: 33% 33% 33%;
+                /* grid-gap: 3px; */
+                justify-items: right;
+                align-items: right;
+                padding-bottom: 5px;
+            }
+            
         }
 
         & .head,

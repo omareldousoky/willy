@@ -75,7 +75,7 @@ const LoanApplicationDetails = (props) => {
                                         <th rowSpan={2}>تفاصيل طلب القرض</th>
                                     </tr>
                                     <tr className="headtitle">
-                                        <th>{timeToArabicDate(0, false)}</th>
+                                        <th>{timeToArabicDate(0, true)}</th>
                                     </tr>
 
                                 </thead>
@@ -304,15 +304,15 @@ const LoanApplicationDetails = (props) => {
                                     <tr>
                                         <th>نائب مدير ميداني</th>
                                         <td></td>
-                                        <th>تاريخ الزياره</th>
-                                        <td></td>
+                                        <th>تاريخ الزيارة</th>
+                                        <td>{loan.visitationDate}</td>
                                     </tr>
 
                                     <tr>
                                         <th>مدير الفرع</th>
                                         <td>{loan.mgrName}</td>
-                                        <th>تاريخ الزياره</th>
-                                        <td>{timeToDateyyymmdd(new Date(loan.mgrVisitationDate).valueOf())}</td>
+                                        <th>تاريخ زيارة مدير الفرع</th>
+                                        <td>{loan.mgrVisitationDate}</td>
                                     </tr>
 
                                     <tr>
