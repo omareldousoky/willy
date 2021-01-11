@@ -100,7 +100,6 @@ class ReceiptPhoto extends Component<Props, State> {
     }
   }
   async deleteDocument(event) {
-
     this.overrideEventDefaults(event);
     this.setState({imgSrc: ''})
     this.props.handlePhotoChange('');
@@ -121,35 +120,16 @@ class ReceiptPhoto extends Component<Props, State> {
     } 
   }
 
-  renderLoading() {
-    return (
-      <div
-        style={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          margin: "20px",
-          flex: 1,
-          backgroundColor: "#ffffff",
-          textAlign: "center",
-          width: "100%",
-          height: "200px",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-      </div>
-    )
-  }
   renderDropHere(key: number) {
     return (
-      <div key={key} className="document-upload-container">
+      <div key={key} className="receipt-upload-container">
         <h5>Drop here</h5>
       </div>
     )
   }
   renderUploadPhoto(key: number) {
     return (
-      <Card.Body key={key} className="document-upload-container"
+      <Card.Body key={key} className="receipt-upload-container"
         onClick={() => this.triggerInputFile()}
       >
         <img src={this.props.review?  require('../../../Shared/Assets/imagePlaceholder.svg') : require('../../../Shared/Assets/uploadDrag.svg')}
@@ -165,13 +145,13 @@ class ReceiptPhoto extends Component<Props, State> {
 
   renderPhotoByName(key: number) {
     return (
-      <Card.Body key={key} className="document-upload-container" >
-       {!this.props.review && <Row data-qc="document-actions" className="document-actions" >
+      <Card.Body key={key} className="receipt-upload-container" >
+       {!this.props.review && <Row data-qc="receipt-actions" className="receipt-actions" >
         <span className="fa icon" onClick={(e) => this.deleteDocument(e)}><img  alt="delete" src={ require('../../../Shared/Assets/deleteIcon.svg')} /></span>
         </Row> }
         <Row style={{ height: "" }}>
           <div>
-            <img className={"uploaded-image"} src={this.state.imgSrc as string} key={key} alt="" />
+            <img className={"uploaded-receipt"} src={this.state.imgSrc as string} key={key} alt="" />
           </div>
         </Row>
       </Card.Body>
@@ -184,6 +164,7 @@ class ReceiptPhoto extends Component<Props, State> {
       <Card style={{
         display: 'flex',
         width: '100%',
+        height: '350px',
         overflowX: "scroll",
         flexDirection: "row",
         flexFlow: "nowrap",
@@ -209,7 +190,7 @@ class ReceiptPhoto extends Component<Props, State> {
           onClick={(event) => {
             event.currentTarget.value = ""
           }} />
-        {this.state.loading ? this.renderLoading()
+        {this.state.loading ? ''
           :
           this.constructArr().map((_value: number, key: number) => {
             if (this.state.imgSrc=== '') {

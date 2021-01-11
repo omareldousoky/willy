@@ -3,7 +3,6 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import Select from 'react-select';
 import * as local from '../../../Shared/Assets/ar.json';
 import { ClearanceValues, ClearanceErrors, ClearanceTouched } from './clearanceFormIntialState';
-import receiptPhoto from './receiptPhoto';
 import ReceiptPhoto from './receiptPhoto';
 
 
@@ -19,8 +18,6 @@ interface Props {
     cancel: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any;
 }
-
-
 
 export const CreateClearanceForm = (props: Props) => {
     const handlePhotoChange = (imageURL) =>{
@@ -172,6 +169,7 @@ export const CreateClearanceForm = (props: Props) => {
             <Row className={"clearance-row"}>
                 <Form.Label className={"clearance-label"}>{local.receiptPhoto}</Form.Label>
                 <ReceiptPhoto
+                data-qc='receiptPhoto'
                 photoObject= {{
                     receiptPhotoURL: props.values.receiptPhotoURL,
                     receiptPhoto: props.values.receiptDate,
