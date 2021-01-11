@@ -284,6 +284,9 @@ class BulkApplicationReview extends Component<Props, State>{
     }
     return 0;
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
   render() {
     return (
       this.state.checkPermission &&
