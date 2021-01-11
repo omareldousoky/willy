@@ -32,6 +32,28 @@ const FollowUpStatment = (props) => {
 
         return originalDate.valueOf()
     }
+    function twoWeekGroupShift(day) {
+        const originalDate = new Date(day)
+        switch (originalDate.getDay()) {
+            case 0:
+                //sunday
+                return originalDate.setDate(originalDate.getDate() - 5).valueOf()
+            case 1:
+                return originalDate.setDate(originalDate.getDate() - 6).valueOf()
+            case 2:
+                return originalDate.setDate(originalDate.getDate() - 7).valueOf()
+            case 3:
+                return originalDate.setDate(originalDate.getDate() - 8).valueOf()
+            case 4:
+                return originalDate.setDate(originalDate.getDate() - 9).valueOf()
+            case 5:
+                return originalDate.setDate(originalDate.getDate() - 10).valueOf()
+            case 6:
+                return originalDate.setDate(originalDate.getDate() - 11).valueOf()
+            default:
+                return originalDate.valueOf()
+        }
+    }
     return (
         <div className="follow-up-statment" dir="rtl" lang="ar">
             <table className="margin">
@@ -79,7 +101,8 @@ const FollowUpStatment = (props) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
-                                <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000)) : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : (installment.dateOfPayment - 3*(5 * 24 * 60 * 60 * 1000)), false)}</td>
+                                <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : (props.data.product.periodLength === 14 && props.data.product.periodType === 'days') ? twoWeekGroupShift(installment.dateOfPayment) : (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000))
+                                    : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : (installment.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)), false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
                             </tr>
