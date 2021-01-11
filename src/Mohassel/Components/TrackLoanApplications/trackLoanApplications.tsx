@@ -238,6 +238,10 @@ class TrackLoanApplications extends Component<Props, State>{
       console.log('error getting branch details')
     }
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
+
   render() {
     return (
       <>
