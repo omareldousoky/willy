@@ -143,10 +143,15 @@ class CreateClearance extends Component<Props, State> {
         }
         clearance.receiptDate = new Date(clearance.receiptDate).valueOf();
         clearance.registrationDate = new Date(clearance.registrationDate).valueOf();
-        return clearance;
+        const formData = new FormData();
+          for(const key in clearance ) {
+              formData.append(key, clearance[key])
+          }
+        return formData;
 
     }
    async createNewClearance (values) {
+       this.setState({loading : true})
        const clearance = this.prepareClearance(values);
        const res = await createClearance(clearance);
        if(res.status==='success'){
@@ -155,6 +160,7 @@ class CreateClearance extends Component<Props, State> {
        } else {
            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
        }
+       this.setState({loading : false})
    }
    async editClearance (values){
        const clearance = this.prepareClearance(values);

@@ -1,6 +1,6 @@
 import axios from '../axios-instance';
 
-export const createClearance = async (data: object) => {
+export const createClearance = async (data: FormData) => {
     const url = process.env.REACT_APP_BASE_URL + "/application/clearance";
     try{
         const res = await axios.post(url,data);

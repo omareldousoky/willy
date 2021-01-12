@@ -37,7 +37,7 @@ class ClearancesList extends Component<Props, State> {
       size: 10,
       from: 0,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
-      searchKey: ['keyword', 'dateFromTo', 'review-application'],
+      searchKey: ['keyword', 'dateFromTo'],
     }
     this.mappers = [
         {
@@ -78,12 +78,12 @@ class ClearancesList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'clearance',  branchId : this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(() => {
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'clearance' }).then(() => {
       if(this.props.error){;
         Swal.fire("error", getErrorMessage(this.props.error),"error" )
       }
       if(this.state.branchId==='hq'){
-        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'review-application']});
+        this.setState({searchKey:['keyword', 'dateFromTo', 'branch' ]});
       }
     })
   }

@@ -196,6 +196,9 @@ class CustomersList extends Component<Props, State> {
       </>
     )
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
 }
 const addSearchToProps = dispatch => {
   return {
