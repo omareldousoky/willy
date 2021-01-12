@@ -73,7 +73,10 @@ class ClearancesList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data =><Can I ="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-clearance", { clearance: {id:data._id} })}></img></Can>
+        render: data =>   <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>  
+        <Can I ="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-clearance", { clearance: {id:data._id} })}/></Can>
+        <Can I ="editClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20 }} onClick={() => this.props.history.push("/customers/review-clearance", { clearance: {id:data._id} })}>{local.reviewClearance}</span></Can>
+        </div>
       },
     ]
   }

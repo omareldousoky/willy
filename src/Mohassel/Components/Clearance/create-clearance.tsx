@@ -15,6 +15,7 @@ import { createClearance } from '../../Services/APIs/clearance/createClearance';
 import { getClearance } from '../../Services/APIs/clearance/getClearance';
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance';
 import { Loader } from '../../../Shared/Components/Loader';
+import { reviewClearance } from '../../Services/APIs/clearance/reviewClearanc';
 interface Props {
     history: any;
     location: {
@@ -60,7 +61,7 @@ class CreateClearance extends Component<Props, State> {
     
     
     componentDidMount() {
-        this.setState({loading: true});
+       
         if(this.props.edit || this.props.review){
             this.getClearanceById();
         }
@@ -68,10 +69,10 @@ class CreateClearance extends Component<Props, State> {
         this.getCustomer(this.props.location.state.id);
         this.getCustomerPaidLoans(this.props.location.state.id);
         }
-        this.setState({loading: false});
     }
     async getClearanceById(){
         if(this.props.location.state.clearance?.id ){
+            this.setState({loading: true});
         const res = await getClearance(this.props.location.state.clearance?.id);
             if(res.status==='success'){
                 this.setState({
@@ -84,9 +85,11 @@ class CreateClearance extends Component<Props, State> {
                 })
                 this.getCustomerPaidLoans(res.body.data.customerId);
             }
+            this.setState({loading: false});
         }
     }
     async getCustomerPaidLoans(id: string){
+        this.setState({loading: true});
         const res=  await getCustomersBalances( {ids: [id]})
         if(res.status==='success'){
             const paidLoansIds: string[] = res.body.data[0].paidLoans;
@@ -102,9 +105,11 @@ class CreateClearance extends Component<Props, State> {
         } else {
             Swal.fire('Error !', getErrorMessage(res.error.error),'error');
         }
+        this.setState({loading: false});
     }
 
     async getCustomer(id: string) {
+        this.setState({loading: true});
         const res = await getCustomerByID(id);
         if (res.status === 'success') {
             this.setState({
@@ -118,6 +123,7 @@ class CreateClearance extends Component<Props, State> {
         else {
             Swal.fire('Error !', getErrorMessage(res.error.error),'error');
         }
+        this.setState({loading: false});
     }
     cancel(){
         this.setState({
@@ -129,9 +135,13 @@ class CreateClearance extends Component<Props, State> {
     }
     submit =  async(values) =>{
         if(this.props.edit){
-
+          this.editClearance(values);
+        } else if(this.props.review) {
+            this.reviewClearance(values);
         }
+        else{
         this.createNewClearance(values);
+        }
     }
     prepareClearance = (values: ClearanceValues) => {
         const clearance =  values;
@@ -141,7 +151,9 @@ class CreateClearance extends Component<Props, State> {
         if(clearance.transactionKey){
             clearance.transactionKey = Number(clearance.transactionKey);
         }
-        clearance.receiptDate = new Date(clearance.receiptDate).valueOf();
+        if(clearance.receiptDate){
+        clearance.receiptDate =  new Date(clearance.receiptDate).valueOf();
+        }
         clearance.registrationDate = new Date(clearance.registrationDate).valueOf();
         const formData = new FormData();
           for(const key in clearance ) {
@@ -173,6 +185,18 @@ class CreateClearance extends Component<Props, State> {
         }
        }
    }
+   async reviewClearance (values){
+    if(this.props.location.state.clearance?.id){
+        this.setState({loading: true})
+        const res = await reviewClearance(this.props.location.state.clearance?.id,{status: values.status})
+        if(res.status==='success'){
+            Swal.fire('Success','','success').then(()=>this.props.history.goBack());
+        } else {
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+        }
+    }
+    this.setState({loading: false});
+   }
     render() {
         return (
             <Card>
@@ -184,7 +208,7 @@ class CreateClearance extends Component<Props, State> {
                     />
                 </Card.Title>
                 <Loader  open = {this.state.loading} type={"fullscreen"} />
-                {this.state.paidLoans.length >0 ?
+                {this.state.paidLoans.length > 0 ?
                 <Card.Body>
                     <Formik
                         enableReinitialize

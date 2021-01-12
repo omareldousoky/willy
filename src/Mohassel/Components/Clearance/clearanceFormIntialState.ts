@@ -11,10 +11,11 @@ export interface ClearanceValues {
     bankName: string;
     notes: string;
     registrationDate: number | string;
-    receiptDate: number | string;
+    receiptDate?: number | string;
     receiptPhoto?: string;
     receiptPhotoURL?: string;
     manualReceipt?: string;
+    status?: string;
     
 }
 export interface ClearanceErrors {
@@ -58,7 +59,8 @@ export const clearanceCreationValidation = Yup.object().shape({
     bankName: Yup.string().trim().required(local.required),
     notes: Yup.string().trim(),
     registrationDate: Yup.string().trim().required(local.required),
-    receiptDate: Yup.string().trim().required(local.required),
+    receiptDate: Yup.string().trim(),
     receiptPhoto: Yup.string().trim(),
     manualReceipt: Yup.string(),
+    status: Yup.string(),
 });

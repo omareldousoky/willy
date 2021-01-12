@@ -17,7 +17,7 @@ interface Props {
 }
 interface State {
   dragging: boolean;
-  imgSrc: string | ArrayBuffer | null;
+  imgSrc: any;
   loading: boolean;
   key: string;
 }
@@ -36,9 +36,9 @@ class ReceiptPhoto extends Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if ((props.edit || props.review)  && props.values.receiptPhotoURL !== state.imgSrc && state.key !== "updated") {
+    if ((props.edit || props.review)  && props.photoObject.receiptPhotoURL !== state.imgSrc && state.key !== "updated") {
       return {
-        imgSrc: props.values.receiptPhotoURL,
+        imgSrc: props.photoObject.receiptPhotoURL,
         key: "updated",
       };
     }
@@ -99,12 +99,11 @@ class ReceiptPhoto extends Component<Props, State> {
         const formData = new FormData();
         const reader = new FileReader();
         const file = files[index];
-        console.log(file);
         reader.onloadend = () => {
           this.setState({
             imgSrc: reader.result,
           })
-          this.props.handlePhotoChange(reader.result);
+          this.props.handlePhotoChange(file);
         }
         reader.readAsDataURL(file)
 
