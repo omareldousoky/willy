@@ -23,6 +23,7 @@ interface Props {
 
 export const CreateClearanceForm = (props: Props) => {
     const [selectedApplication, setApplication] = useState(props.paidLoans.filter((loan) => loan.id === props.values.loanId));
+    const [status, setStatus]= useState(props.values.status);
     const handlePhotoChange = (imageFile) => {
         props.setFieldValue('receiptPhoto', imageFile);
 
@@ -166,12 +167,12 @@ export const CreateClearanceForm = (props: Props) => {
                     </Form.Group>
                 </Row>
                 <Row className={"clearance-row"}>
-                    <Form.Group as={Col} controlId='comments'>
+                    <Form.Group as={Col} controlId='notes'>
                         <Form.Label className={"clearance-label"} >{local.comments}</Form.Label>
                         <Form.Control
                             type='text'
-                            name={"comments"}
-                            data-qc={"comments"}
+                            name={"notes"}
+                            data-qc={"notes"}
                             value={props.values.notes}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
@@ -191,35 +192,50 @@ export const CreateClearanceForm = (props: Props) => {
                             receiptPhotoURL: props.values.receiptPhotoURL,
                             receiptPhoto: props.values.receiptDate,
                         }}
-                        edit = {props.edit}
-                        review= {props.review}
+                        edit={props.edit}
+                        review={props.review}
                         handlePhotoChange={handlePhotoChange}
                     />
                 </Row>
                 {
                     props.review ?
-                        <Form.Group
-                            as={Row}
-                        >
-                            <Col >
-                                <Button
-                                    className={'btn-reject'} style={{ width: '60%' }}
-                                    type="submit"
-                                    onClick={() => { props.setFieldValue('status','rejected'); }}
-                                >{local.rejected}</Button>
-                            </Col>
-                            <Col>
-                                <Button
-                                type='submit'
-                                    className={'btn-submit-next'}
-                                    onClick={() => { 
-                                        props.setFieldValue('status', "approved");
-                                    }}
-                                    style={{ float: 'left', width: '60%' }}
-                                >{local.approved}</Button>
-                            </Col>
-                        </Form.Group>
+                        <>
+                            {status === 'underReview' && <Form.Group
+                                as={Row}
+                            >
+                                <Col >
+                                    <Button
+                                        className={'btn-reject btn-danger'} style={{ width: '60%' }}
+                                        type="submit"
+                                        onClick={() => { props.setFieldValue('status', 'rejected'); }}
+                                    >{local.rejected}</Button>
+                                </Col>
+                                <Col>
+                                    <Button
+                                        type='submit'
+                                        className={'btn-submit-next'}
+                                        onClick={() => {
+                                            props.setFieldValue('status', "approved");
+                                        }}
+                                        style={{ float: 'left', width: '60%' }}
+                                    >{local.approved}</Button>
+                                </Col>
+                            </Form.Group>
+                            }
+                            {status === 'rejected' && <Form.Group
+                                as={Row}
+                            >
+                                <Col >
+                                    <Button
+                                        className={'btn-submit-next'} style={{ width: '60%' }}
+                                        type="submit"
+                                        onClick={() => { props.setFieldValue('status', 'underReview'); }}
+                                    >{local.undoReviewClearance}</Button>
+                                </Col>
+                            </Form.Group>
 
+                            }
+                        </>
                         :
                         <Form.Group
                             as={Row}

@@ -37,7 +37,7 @@ class ClearancesList extends Component<Props, State> {
       size: 10,
       from: 0,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
-      searchKey: ['keyword', 'dateFromTo'],
+      searchKey: ['keyword', 'dateFromTo' , 'clearance-status'],
     }
     this.mappers = [
         {
@@ -74,24 +74,24 @@ class ClearancesList extends Component<Props, State> {
         title: '',
         key: "actions",
         render: data =>   <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>  
-        <Can I ="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-clearance", { clearance: {id:data._id} })}/></Can>
-        <Can I ="editClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20 }} onClick={() => this.props.history.push("/customers/review-clearance", { clearance: {id:data._id} })}>{local.reviewClearance}</span></Can>
+       {data.status === 'underReview' ?  <Can I ="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: {id:data._id} })}/></Can> : null }
+       { data.status !== "approved" ? <Can I ="editClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20 , color:'#7dc356', textDecoration:'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: {id:data._id} })}>{local.reviewClearance}</span></Can> : null}
         </div>
       },
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'clearance' }).then(() => {
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId !== 'hq'? this.state.branchId : ''  }).then(() => {
       if(this.props.error){;
         Swal.fire("error", getErrorMessage(this.props.error),"error" )
       }
       if(this.state.branchId==='hq'){
-        this.setState({searchKey:['keyword', 'dateFromTo', 'branch' ]});
+        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'clearance-status' ]});
       }
     })
   }
   getClearances() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId }).then(() => {
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId !== 'hq'? this.state.branchId : '' }).then(() => {
       if(this.props.error){;
         Swal.fire("error", getErrorMessage(this.props.error),"error" )
       }

@@ -146,6 +146,8 @@ class Search extends Component<Props, State> {
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
         case 'review-application':
           initialState.status = this.props.url === "application"? this.props.issuedLoansSearchFilters.status : '';
+       case 'clearance-status':
+          initialState.status = this.props.url === "clearance" ?   this.props.issuedLoansSearchFilters.status : ''; 
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
@@ -331,6 +333,21 @@ class Search extends Component<Props, State> {
                            <Can I="thirdReview" a="application">
                             <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
                           </Can>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
+                if(searchKey==='clearance-status'){
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          <option value='underReview' data-qc='underReview'>{local.underReview}</option>
+                          <option value='approved' data-qc='approved'>{local.approved}</option>
+                          <option value='rejected' data-qc='rejected'>{local.rejected}</option>
                         </Form.Control>
                       </div>
                     </Col>

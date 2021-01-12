@@ -95,25 +95,6 @@ const appRoutes = [
                </Can>
             
           },
-          {
-            path: "/edit-clearance",
-            label: local.editClearance,
-            render: (props) => 
-             <Can I ="editClearance" a="application">
-              <CreateClearance {...props} edit={true} />
-               </Can>
-            
-          },
-          {
-            
-              path: "/review-clearance",
-              label: local.reviewClearance,
-              render: (props) => 
-               <Can I ="reviewClearance" a="application">
-                <CreateClearance {...props} review={true} />
-                 </Can>
-              
-          }
         ]
       },
       {
@@ -431,6 +412,27 @@ const appRoutes = [
         path: '/clearances',
         label: local.clearances,
         render: (props) => <ClearancesList {...props} />,
+        routes:[
+          {
+            path: "/edit-clearance",
+            label: local.editClearance,
+            render: (props) => 
+             <Can I ="editClearance" a="application">
+              <CreateClearance {...props} edit={true} />
+               </Can>
+            
+          },
+          {
+            
+              path: "/review-clearance",
+              label: local.reviewClearance,
+              render: (props) => 
+               <Can I ="reviewClearance" a="application">
+                <CreateClearance {...props} review={true} />
+                 </Can>
+              
+          }
+        ]
       }
     ]
   },

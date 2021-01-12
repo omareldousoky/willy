@@ -83,7 +83,7 @@ class CreateClearance extends Component<Props, State> {
                         branchName: res.body.data.branchName
                     }
                 })
-                this.getCustomerPaidLoans(res.body.data.customerId);
+               await this.getCustomerPaidLoans(res.body.data.customerId);
             }
             this.setState({loading: false});
         }
