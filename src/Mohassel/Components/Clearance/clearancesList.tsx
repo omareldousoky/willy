@@ -12,12 +12,17 @@ import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { getCookie } from '../../../Shared/Services/getCookie';
+import ClearancePaper from './clearancePaper';
+import { FormCheck } from 'react-bootstrap';
 
 interface State {
   size: number;
   from: number;
   branchId: string;
   searchKey: string[];
+  print: boolean;
+  selectedClearances: any[];
+  checkAll: boolean;
 }
 interface Props {
   history: any;
@@ -30,21 +35,39 @@ interface Props {
   setSearchFilters: (data) => void;
 }
 class ClearancesList extends Component<Props, State> {
-  mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
+  mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {
     super(props);
     this.state = {
       size: 10,
       from: 0,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
-      searchKey: ['keyword', 'dateFromTo' , 'clearance-status'],
+      searchKey: ['keyword', 'dateFromTo', 'clearance-status'],
+      print: false,
+      selectedClearances: [],
+      checkAll: false,
     }
     this.mappers = [
-        {
-            title: local.oneBranch,
-            key: "branchName",
-            render: data => data.branchName
-          },
+      {
+        title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll}></FormCheck>,
+        key: 'selected',
+        render: data => data.status === 'approved'&& <FormCheck
+          type="checkbox"
+          checked={Boolean(this.state.selectedClearances.find(clearance => clearance._id === data._id))}
+          onChange={() => this.addRemoveItemFromChecked(data)}
+        ></FormCheck>
+      },
+      {
+        title: local.oneBranch,
+        key: "branchName",
+        render: data => data.branchName
+      },
+      {
+
+        title: local.bankName,
+        key: "bankName",
+        render: data => data.bankName,
+      },
       {
         title: local.customerCode,
         key: "customerCode",
@@ -73,27 +96,44 @@ class ClearancesList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data =>   <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>  
-       {data.status === 'underReview' ?  <Can I ="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: {id:data._id} })}/></Can> : null }
-       { data.status !== "approved" ? <Can I ="editClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20 , color:'#7dc356', textDecoration:'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: {id:data._id} })}>{local.reviewClearance}</span></Can> : null}
+        render: data => <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          {data.status === 'underReview' ? <Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: data._id } })} /></Can> : null}
+          {data.status !== "approved" ? <Can I="editClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20, color: '#7dc356', textDecoration: 'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: { id: data._id } })}>{local.reviewClearance}</span></Can> : null}
         </div>
       },
     ]
   }
+
+  addRemoveItemFromChecked(clearance) {
+    if (this.state.selectedClearances.findIndex(clearanceItem => clearanceItem._id == clearance._id) > -1) {
+      this.setState({
+        selectedClearances: this.state.selectedClearances.filter(el => el._id !== clearance._id),
+      })
+    } else {
+      this.setState({
+        selectedClearances: [...this.state.selectedClearances, clearance],
+      })
+    }
+  }
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedClearances: this.props.data.filter((clearance)=> clearance.status ==='approved') })
+    } else this.setState({ checkAll: false, selectedClearances: [] })
+  }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId !== 'hq'? this.state.branchId : ''  }).then(() => {
-      if(this.props.error){;
-        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(() => {
+      if (this.props.error) {
+        Swal.fire("error", getErrorMessage(this.props.error), "error")
       }
-      if(this.state.branchId==='hq'){
-        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'clearance-status' ]});
+      if (this.state.branchId === 'hq') {
+        this.setState({ searchKey: ['keyword', 'dateFromTo', 'branch', 'clearance-status'] });
       }
     })
   }
   getClearances() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId !== 'hq'? this.state.branchId : '' }).then(() => {
-      if(this.props.error){;
-        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'clearance', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(() => {
+      if (this.props.error) {
+        Swal.fire("error", getErrorMessage(this.props.error), "error")
       }
     });
   }
@@ -110,52 +150,65 @@ class ClearancesList extends Component<Props, State> {
   }
   render() {
     return (
-      <Card style={{ margin: '20px 50px' }}>
-        <Loader type="fullsection" open={this.props.loading} />
-        <Card.Body style={{ padding: 0 }}>
-          <div className="custom-card-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.clearances}</Card.Title>
-              <span className="text-muted">{local.noOfClearances + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
-            </div>
-          </div>
-          <hr className="dashed-line" />
-          { this.state.branchId == 'hq'?
-            <Search
-              searchKeys ={this.state.searchKey}
-              dropDownKeys={['name',  'customerKey']}
-              url="clearance"
-              from={this.state.from}
-              size={this.state.size}
-              searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-               />
-               :
-               <Search
-               searchKeys ={this.state.searchKey}
-               dropDownKeys={['name', 'customerKey']}
-               url="clearance"
-               from={this.state.from}
-               size={this.state.size}
-               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
-               hqBranchIdRequest = {this.state.branchId}
+      <>
+        <div className="print-none">
+          <Card style={{ margin: '20px 50px' }}>
+            <Loader type="fullsection" open={this.props.loading} />
+            <Card.Body style={{ padding: 0 }}>
+              <div className="custom-card-header">
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.clearances}</Card.Title>
+                  <span className="text-muted">{local.noOfClearances + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+                </div>
+                <Button onClick={() => {
+                  this.setState({ print: true }, () => window.print())
+                }}
+                  disabled={false}
+                  className="big-button"
+                  style={{ marginLeft: 20, height: 70 }}
+                > {local.downloadPDF}
+                </Button>
+              </div>
+              <hr className="dashed-line" />
+              {this.state.branchId == 'hq' ?
+                <Search
+                  searchKeys={this.state.searchKey}
+                  dropDownKeys={['name', 'customerKey']}
+                  url="clearance"
+                  from={this.state.from}
+                  size={this.state.size}
+                  searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                 />
-        }
-          {this.props.data &&
-            <DynamicTable
-              from={this.state.from}
-              size={this.state.size}
-              totalCount={this.props.totalCount}
-              mappers={this.mappers}
-              pagination={true}
-              data={this.props.data}
-              url="clearance"
-              changeNumber={(key: string, number: number) => {
-                this.setState({ [key]: number } as any, () => this.getClearances());
-              }}
-            />
-          }
-        </Card.Body>
-      </Card>
+                :
+                <Search
+                  searchKeys={this.state.searchKey}
+                  dropDownKeys={['name', 'customerKey']}
+                  url="clearance"
+                  from={this.state.from}
+                  size={this.state.size}
+                  searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+                  hqBranchIdRequest={this.state.branchId}
+                />
+              }
+              {this.props.data &&
+                <DynamicTable
+                  from={this.state.from}
+                  size={this.state.size}
+                  totalCount={this.props.totalCount}
+                  mappers={this.mappers}
+                  pagination={true}
+                  data={this.props.data}
+                  url="clearance"
+                  changeNumber={(key: string, number: number) => {
+                    this.setState({ [key]: number } as any, () => this.getClearances());
+                  }}
+                />
+              }
+            </Card.Body>
+          </Card>
+        </div>
+        {this.state.print && <ClearancePaper approvedClearancesList={this.state.selectedClearances} />}
+      </>
     )
   }
 }

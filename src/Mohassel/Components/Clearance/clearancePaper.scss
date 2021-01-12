@@ -1,12 +1,42 @@
 
 @media screen,
 print {
-    .clearance-paper-print  {
-        font-size: 12px;
+    .clearance-paper-print {
+        direction: rtl;
         font-weight: bold;
         padding: 10px 5px;
+        font-size: 16px;
         page-break-after: always;
  
+    & .centerText { 
+        text-align: center;
+        margin-top: 10px;
+        font-size: 19px;
+        font-weight: bold;
+        color: #000000;
+    }
+    & .headtitle {
+        font-size: 12px;
+        font-weight: bolder;
+    }
+
+    & .rightText {
+        text-align: right;
+        margin-top: 10px;
+        color: #000000;
+    }
+
+    & .smallCenter {
+        text-align: center;
+        margin-top: 10px;
+        color: #000000
+    }
+
+    & .leftText {   
+        text-align: left;
+        margin-top: 10px;
+        color: #000000
+    }
     & .logo-print{
         max-width:75px;
         max-height:35px;
@@ -16,6 +46,20 @@ print {
         height: 35px;   
         width: 100px;
         list-style-position: inside;
+    }
+    & .signature1{
+        text-align: center;
+        font-size: 19px;
+        margin: 10px 20px;
+        font-weight: bold;
+        color: #000000;
+    }
+    & .signature2 {
+        text-align: right;
+        font-size: 19px;
+        margin: 10px 20px;
+        font-weight: bold;
+        color: #000000;
     }
  }
 }
