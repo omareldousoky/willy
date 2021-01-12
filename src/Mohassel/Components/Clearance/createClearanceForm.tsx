@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const CreateClearanceForm = (props: Props) => {
-    const [selectedApplication, setApplication] = useState(props.values.loanId);
+    const [selectedApplication, setApplication] = useState(props.paidLoans.filter((loan)=> loan.id === props.values.loanId));
     const handlePhotoChange = (imageURL) =>{
         props.setFieldValue('receiptPhoto',imageURL);
 
@@ -42,11 +42,11 @@ export const CreateClearanceForm = (props: Props) => {
                         data-qc="application"
                         value= {selectedApplication}
                         onChange={(event)=> {
-                            props.values.loanId= event;
+                            props.values.loanId= event.id;
                             setApplication(event);
                         }}
                         options = {props.paidLoans}
-                        getOptionLabel={(option) => option.key}
+                        getOptionLabel={(option) => option.Key}
                         getOptionValue={(option)=> option.id}
                         />
                     </Form.Group>

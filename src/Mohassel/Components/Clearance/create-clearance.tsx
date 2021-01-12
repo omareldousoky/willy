@@ -14,6 +14,7 @@ import { getApplicationsKeys } from '../../Services/APIs/clearance/getApplicagio
 import { createClearance } from '../../Services/APIs/clearance/createClearance';
 import { getClearance } from '../../Services/APIs/clearance/getClearance';
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance';
+import { Loader } from '../../../Shared/Components/Loader';
 interface Props {
     history: any;
     location: {
@@ -37,7 +38,7 @@ interface State {
     step: number;
     step1: ClearanceValues;
     paidLoans: {
-        key: number;
+        Key: number;
        id: string;
     }[];
 }
@@ -88,7 +89,7 @@ class CreateClearance extends Component<Props, State> {
     async getCustomerPaidLoans(id: string){
         const res=  await getCustomersBalances( {ids: [id]})
         if(res.status==='success'){
-            const paidLoansIds: string[] = res.body.data.paidLoans;
+            const paidLoansIds: string[] = res.body.data[0].paidLoans;
             if(paidLoansIds){
                 const paidLoans = await getApplicationsKeys({ids:paidLoansIds});
                 if(paidLoans.status=='success'){
@@ -134,7 +135,14 @@ class CreateClearance extends Component<Props, State> {
     }
     prepareClearance = (values: ClearanceValues) => {
         const clearance =  values;
-        clearance.customerId = this.props.location.state.id;
+        if (!clearance.customerId) {
+            clearance.customerId = this.props.location.state.id;
+        }
+        if(clearance.transactionKey){
+            clearance.transactionKey = Number(clearance.transactionKey);
+        }
+        clearance.receiptDate = new Date(clearance.receiptDate).valueOf();
+        clearance.registrationDate = new Date(clearance.registrationDate).valueOf();
         return clearance;
 
     }
@@ -169,6 +177,7 @@ class CreateClearance extends Component<Props, State> {
                         customerName={this.state.customer.customerName}
                     />
                 </Card.Title>
+                <Loader  open = {this.state.loading} type={"fullscreen"} />
                 {this.state.paidLoans.length >0 ?
                 <Card.Body>
                     <Formik

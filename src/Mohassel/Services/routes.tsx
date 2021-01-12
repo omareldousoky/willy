@@ -51,6 +51,7 @@ import EditLead from '../Components/HalanIntegration/editLead';
 import GeoAreas from '../Components/GeoAreas/geoAreas';
 import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkApplicationReview' ;
 import CreateClearance from '../Components/Clearance/create-clearance';
+import ClearancesList from '../Components/Clearance/clearancesList';
 
 
 const appRoutes = [
@@ -425,6 +426,11 @@ const appRoutes = [
             render: (props) => <AssignLoanOfficer {...props} /> ,
           }
         ]
+      },
+      {
+        path: '/clearances',
+        label: local.clearances,
+        render: (props) => <ClearancesList {...props} />,
       }
     ]
   },

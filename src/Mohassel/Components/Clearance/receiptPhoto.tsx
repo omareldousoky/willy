@@ -36,9 +36,9 @@ class ReceiptPhoto extends Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.values.photo !== state.roles && state.key !== "updated") {
+    if ((props.edit || props.review)  && props.values.receiptPhotoURL !== state.imgSrc && state.key !== "updated") {
       return {
-        imgSrc: props.values.photoURL,
+        imgSrc: props.values.receiptPhotoURL,
         key: "updated",
       };
     }
