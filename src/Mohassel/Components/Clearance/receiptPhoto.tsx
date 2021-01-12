@@ -6,19 +6,20 @@ import Card from 'react-bootstrap/Card';
 import './clearance.scss';
 import Row from 'react-bootstrap/Row';
 interface Props {
- photoObject: {
-  receiptPhotoURL: string;
-  receiptPhoto: any;
- };
+  photoObject: {
+    receiptPhotoURL: string;
+    receiptPhoto: any;
+  };
   review?: boolean;
   handlePhotoChange?: any;
-  
+
 
 }
 interface State {
   dragging: boolean;
   imgSrc: string | ArrayBuffer | null;
   loading: boolean;
+  key: string;
 }
 class ReceiptPhoto extends Component<Props, State> {
   private fileInput: React.RefObject<HTMLInputElement>;
@@ -30,7 +31,18 @@ class ReceiptPhoto extends Component<Props, State> {
       dragging: false,
       imgSrc: '',
       loading: false,
+      key: '',
     }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.values.photo !== state.roles && state.key !== "updated") {
+      return {
+        imgSrc: props.values.photoURL,
+        key: "updated",
+      };
+    }
+    return null;
   }
   triggerInputFile() {
     const limit = 1;
@@ -85,23 +97,23 @@ class ReceiptPhoto extends Component<Props, State> {
     else if (files.length <= imagesLimit) {
       for (let index = 0; index < files.length; index++) {
         const formData = new FormData();
-          const reader = new FileReader();
-          const file = files[index];
-          console.log(file);
-          reader.onloadend = () => {
-            this.setState({
-              imgSrc: reader.result,
-            })
-            this.props.handlePhotoChange(reader.result);
-          }
-          reader.readAsDataURL(file)
-          
+        const reader = new FileReader();
+        const file = files[index];
+        console.log(file);
+        reader.onloadend = () => {
+          this.setState({
+            imgSrc: reader.result,
+          })
+          this.props.handlePhotoChange(reader.result);
+        }
+        reader.readAsDataURL(file)
+
       }
     }
   }
   async deleteDocument(event) {
     this.overrideEventDefaults(event);
-    this.setState({imgSrc: ''})
+    this.setState({ imgSrc: '' })
     this.props.handlePhotoChange('');
   }
   dropListener = (event: React.DragEvent<HTMLDivElement>) => {
@@ -117,7 +129,7 @@ class ReceiptPhoto extends Component<Props, State> {
     const imagesLimit = 1;
     if (event.target.files.length <= imagesLimit && !this.props.review) {
       this.readFiles(event.target.files);
-    } 
+    }
   }
 
   renderDropHere(key: number) {
@@ -132,11 +144,11 @@ class ReceiptPhoto extends Component<Props, State> {
       <Card.Body key={key} className="receipt-upload-container"
         onClick={() => this.triggerInputFile()}
       >
-        <img src={this.props.review?  require('../../../Shared/Assets/imagePlaceholder.svg') : require('../../../Shared/Assets/uploadDrag.svg')}
+        <img src={this.props.review ? require('../../../Shared/Assets/imagePlaceholder.svg') : require('../../../Shared/Assets/uploadDrag.svg')}
           alt="upload-document"
         />
         <div style={{ marginTop: "10px", fontSize: "12px" }}>
-        <div>{this.props.review ? local.documentNotUploadedYet : local.documentUploadDragDropText}</div>
+          <div>{this.props.review ? local.documentNotUploadedYet : local.documentUploadDragDropText}</div>
           {!this.props.review && <div>{local.documentUploadBrowseFileText}</div>}
         </div>
       </Card.Body>
@@ -146,9 +158,9 @@ class ReceiptPhoto extends Component<Props, State> {
   renderPhotoByName(key: number) {
     return (
       <Card.Body key={key} className="receipt-upload-container" >
-       {!this.props.review && <Row data-qc="receipt-actions" className="receipt-actions" >
-        <span className="fa icon" onClick={(e) => this.deleteDocument(e)}><img  alt="delete" src={ require('../../../Shared/Assets/deleteIcon.svg')} /></span>
-        </Row> }
+        {!this.props.review && <Row data-qc="receipt-actions" className="receipt-actions" >
+          <span className="fa icon" onClick={(e) => this.deleteDocument(e)}><img alt="delete" src={require('../../../Shared/Assets/deleteIcon.svg')} /></span>
+        </Row>}
         <Row style={{ height: "" }}>
           <div>
             <img className={"uploaded-receipt"} src={this.state.imgSrc as string} key={key} alt="" />
@@ -171,7 +183,7 @@ class ReceiptPhoto extends Component<Props, State> {
         justifyContent: "flex-start",
         backgroundColor: '#fafafa',
         cursor: 'pointer',
-        border: '#e5e5e5 solid 1px', 
+        border: '#e5e5e5 solid 1px',
         borderRadius: 4
       }}
         data-qc={`upload-${name}`}
@@ -193,7 +205,7 @@ class ReceiptPhoto extends Component<Props, State> {
         {this.state.loading ? ''
           :
           this.constructArr().map((_value: number, key: number) => {
-            if (this.state.imgSrc=== '') {
+            if (this.state.imgSrc === '') {
               if (this.state.dragging) return this.renderDropHere(key)
               else return this.renderUploadPhoto(key)
             } else return this.renderPhotoByName(key)
@@ -204,9 +216,9 @@ class ReceiptPhoto extends Component<Props, State> {
   }
   render() {
     return (
-        <div style={{width:'100%'}}>
-          {this.renderContainer()}
-        </div>
+      <div style={{ width: '100%' }}>
+        {this.renderContainer()}
+      </div>
     )
   }
 }

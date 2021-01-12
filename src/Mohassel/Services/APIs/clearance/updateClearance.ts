@@ -1,9 +1,9 @@
 import axios from '../axios-instance';
 
-export const getApplicationsKeys = async (data: object) => {
-    const url = process.env.REACT_APP_BASE_URL + '/application/applications-keys';
+export const updateClearance = async (id: string ,data: object) => {
+    const url = process.env.REACT_APP_BASE_URL + `/application/clearance/${id}`;
     try{
-        const res = await axios.post(url, data);
+        const res = await axios.put(url,data);
         return { status: "success", body: res.data }
     }
     catch (error) {

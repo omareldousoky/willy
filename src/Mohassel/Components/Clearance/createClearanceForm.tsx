@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useState} from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import Select from 'react-select';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -10,7 +10,9 @@ interface Props {
     values: ClearanceValues;
     errors: ClearanceErrors;
     touched: ClearanceTouched;
+    paidLoans: any[];
     edit: boolean;
+    review: boolean;
     customerKey: string;
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
@@ -20,11 +22,10 @@ interface Props {
 }
 
 export const CreateClearanceForm = (props: Props) => {
+    const [selectedApplication, setApplication] = useState(props.values.loanId);
     const handlePhotoChange = (imageURL) =>{
-       
         props.setFieldValue('receiptPhoto',imageURL);
-         
-    
+
     };
 
     return (
@@ -34,9 +35,20 @@ export const CreateClearanceForm = (props: Props) => {
             onSubmit={props.handleSubmit}
             >
                 <Row className={"clearance-row"}>
-                    <Form.Group as={Col} controlId='applicationKey'>
+                    <Form.Group as={Col} controlId='application'>
                         <Form.Label className={"clearance-label"}>{local.financeCode}</Form.Label>
-                        <Select />
+                        <Select 
+                        name="application"
+                        data-qc="application"
+                        value= {selectedApplication}
+                        onChange={(event)=> {
+                            props.values.loanId= event;
+                            setApplication(event);
+                        }}
+                        options = {props.paidLoans}
+                        getOptionLabel={(option) => option.key}
+                        getOptionValue={(option)=> option.id}
+                        />
                     </Form.Group>
                     <Form.Group as={Col} controlId='customerKey'>
                         <Form.Label className={"clearance-label"}>{local.customerCode}</Form.Label>
@@ -48,7 +60,6 @@ export const CreateClearanceForm = (props: Props) => {
                             disabled />
                     </Form.Group>
                 </Row>
-
                 <Row className={"clearance-row"}>
                     <Form.Group as={Col} controlId='registrationDate'>
                         <Form.Label className={"clearance-label"} >{local.registrationDate}</Form.Label>
@@ -81,7 +92,6 @@ export const CreateClearanceForm = (props: Props) => {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Row>
-
             <Row className={"clearance-row"}>
                 <Form.Group as={Col} controlId='transactionKey'>
                     <Form.Label className={"clearance-label"} >{local.transactionKey}</Form.Label>

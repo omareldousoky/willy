@@ -843,6 +843,9 @@
     "manualReceipt":"إيصال يدوي",
     "clearanceReason":"سبب طلب المخالصة",
     "registerClearance":"تسجيل المخالصة",
+    "reviewClearance": "مراجعه المخالصة",
+    "editClearance":"تعديل نموذج المخالصة",
     "transactionKeyError": "لا يمكن أن تحتوي المخالصة علي رقم مسلسل الحركة المالية و الإيصال اليدوي معا",
-    "receiptPhoto":"صورة الإيصال"
+    "receiptPhoto":"صورة الإيصال",
+    "noLoansForClearance":"لا يوجد قروض مدفوعة لهذا العميل لتسجيل نموذج المخالصة"
 }
