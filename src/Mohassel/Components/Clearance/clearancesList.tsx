@@ -148,6 +148,9 @@ class ClearancesList extends Component<Props, State> {
       default: return null;
     }
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({});
+  }
   render() {
     return (
       <>
@@ -179,6 +182,7 @@ class ClearancesList extends Component<Props, State> {
                   url="clearance"
                   from={this.state.from}
                   size={this.state.size}
+                  datePlaceholder={local.registrationDate}
                   searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                 />
                 :
@@ -188,6 +192,7 @@ class ClearancesList extends Component<Props, State> {
                   url="clearance"
                   from={this.state.from}
                   size={this.state.size}
+                  datePlaceholder={local.registrationDate}
                   searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                   hqBranchIdRequest={this.state.branchId}
                 />
