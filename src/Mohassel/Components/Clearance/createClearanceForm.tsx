@@ -24,10 +24,13 @@ interface Props {
 export const CreateClearanceForm = (props: Props) => {
     const [selectedApplication, setApplication] = useState(props.paidLoans.filter((loan) => loan.id === props.values.loanId));
     const [status, setStatus] = useState(props.values.status);
-    const handlePhotoChange = (imageFile) => {
+    const handleReceiptPhotoChange = (imageFile) => {
         props.setFieldValue('receiptPhoto', imageFile);
 
     };
+    const handleDocumentPhotoChange = (imageFile) => {
+        props.setFieldValue('documentPhoto', imageFile)
+    }
 
     return (
         <div style={{ padding: '2rem 30px' }}>
@@ -186,6 +189,7 @@ export const CreateClearanceForm = (props: Props) => {
                 </Row>
                 <Row className={"clearance-row"}>
                     <Form.Label className={"clearance-label"}>{local.receiptPhoto}</Form.Label>
+                    <Col>
                     <ReceiptPhoto
                         data-qc='receiptPhoto'
                         photoObject={{
@@ -194,8 +198,21 @@ export const CreateClearanceForm = (props: Props) => {
                         }}
                         edit={props.edit}
                         review={props.review}
-                        handlePhotoChange={handlePhotoChange}
+                        handleImageChange={handleReceiptPhotoChange}
                     />
+                    </Col>
+                    <Col>
+                    <ReceiptPhoto 
+                    data-qc='documentPhoto'
+                    edit = {props.edit}
+                    review = {props.review}
+                    documentObject= {{
+                        documentPhotoURL: props.values.documentPhotoURL,
+                        documentPhoto: props.values.documentPhoto
+                      }}
+                      handleImageChange={handleDocumentPhotoChange}
+                    />
+                    </Col>
                 </Row>
                 {
                     props.review ?

@@ -6,12 +6,16 @@ import Card from 'react-bootstrap/Card';
 import './clearance.scss';
 import Row from 'react-bootstrap/Row';
 interface Props {
-  photoObject: {
+  photoObject?: {
     receiptPhotoURL: string;
-    receiptPhoto: any;
+    receiptPhoto: File;
+  };
+  documentObject?: {
+    documentPhotoURL: string;
+    documentPhoto: File;
   };
   review?: boolean;
-  handlePhotoChange?: any;
+  handleImageChange?: any;
 
 
 }
@@ -36,11 +40,20 @@ class ReceiptPhoto extends Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props, state) {
+    if(props.photoObject?.receiptPhotoURL && props.photoObject?.receiptPhotoURL!=='')
     if ((props.edit || props.review)  && props.photoObject.receiptPhotoURL !== state.imgSrc && state.key !== "updated") {
       return {
         imgSrc: props.photoObject.receiptPhotoURL,
         key: "updated",
       };
+    } 
+    if(props.documentObject?.documentPhotoURL && props.documentObject?.documentPhotoURL !== ''){
+      if ((props.edit || props.review)  && props.documentObject.documentPhotoURL !== state.imgSrc && state.key !== "updated") {
+        return {
+          imgSrc: props.documentObject.documentPhotoURL,
+          key: "updated",
+        };
+      }
     }
     return null;
   }
@@ -96,14 +109,13 @@ class ReceiptPhoto extends Component<Props, State> {
     if (flag) Swal.fire('', local.invalidFileType, 'error')
     else if (files.length <= imagesLimit) {
       for (let index = 0; index < files.length; index++) {
-        const formData = new FormData();
         const reader = new FileReader();
         const file = files[index];
         reader.onloadend = () => {
           this.setState({
             imgSrc: reader.result,
           })
-          this.props.handlePhotoChange(file);
+          this.props.handleImageChange(file);
         }
         reader.readAsDataURL(file)
 
@@ -113,7 +125,7 @@ class ReceiptPhoto extends Component<Props, State> {
   async deleteDocument(event) {
     this.overrideEventDefaults(event);
     this.setState({ imgSrc: '' })
-    this.props.handlePhotoChange('');
+    this.props.handleImageChange('');
   }
   dropListener = (event: React.DragEvent<HTMLDivElement>) => {
     this.overrideEventDefaults(event);
@@ -155,6 +167,7 @@ class ReceiptPhoto extends Component<Props, State> {
   }
 
   renderPhotoByName(key: number) {
+    console.log(this.state.imgSrc)
     return (
       <Card.Body key={key} className="receipt-upload-container" >
         {!this.props.review && <Row data-qc="receipt-actions" className="receipt-actions" >
@@ -204,7 +217,7 @@ class ReceiptPhoto extends Component<Props, State> {
         {this.state.loading ? ''
           :
           this.constructArr().map((_value: number, key: number) => {
-            if (this.state.imgSrc === '') {
+            if (this.state.imgSrc === '' ) {
               if (this.state.dragging) return this.renderDropHere(key)
               else return this.renderUploadPhoto(key)
             } else return this.renderPhotoByName(key)

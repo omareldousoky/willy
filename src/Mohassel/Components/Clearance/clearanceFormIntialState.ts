@@ -13,8 +13,10 @@ export interface ClearanceValues {
     notes: string;
     registrationDate: number | string;
     receiptDate?: number | string;
-    receiptPhoto?: string;
+    receiptPhoto?: File;
     receiptPhotoURL?: string;
+    documentPhoto: File;
+    documentPhotoURL?: string;
     manualReceipt?: string;
     status?: string;
     
@@ -49,7 +51,8 @@ export const clearanceData: ClearanceValues =  {
     notes: "",
     registrationDate: '',
     receiptDate: '' ,
-    receiptPhoto: "",
+    receiptPhoto: undefined,
+    documentPhoto: new File([''],''),
     manualReceipt: "",
 }
 
