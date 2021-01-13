@@ -8,7 +8,7 @@ endOfDay.setHours(23, 59, 59, 59);
 export interface ClearanceValues {
     customerId: string;
     loanId: string;
-    transactionKey?: number;
+    transactionKey?: string;
     clearanceReason: string;
     bankName: string;
     notes: string;
@@ -50,14 +50,12 @@ export interface ClearanceTouched {
 export const clearanceData: ClearanceValues =  {
     customerId: "",
     loanId: "",
-    transactionKey: undefined,
+    transactionKey: '',
     clearanceReason: "",
     bankName: "",
     notes: "",
-    registrationDate: '',
-    receiptDate: '' ,
-    receiptPhoto: undefined,
-    documentPhoto: undefined,
+    registrationDate: 0,
+    receiptDate: 0,
     manualReceipt: "",
 }
 

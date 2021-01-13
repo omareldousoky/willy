@@ -1,20 +1,16 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2';
-import * as local from '../../../Shared/Assets/ar.json';
+import * as local from '../../Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import './clearance.scss';
+import './documentPhoto.scss';
 import Row from 'react-bootstrap/Row';
 interface Props {
   photoObject?: {
-    receiptPhotoURL: string;
-    receiptPhoto: File;
+    photoURL: string;
+    photoFile: File;
   };
-  documentObject?: {
-    documentPhotoURL: string;
-    documentPhoto: File;
-  };
-  review?: boolean;
+  view?: boolean;
   handleImageChange?: any;
   name: string;
   handleBlur?: any;
@@ -27,7 +23,7 @@ interface State {
   loading: boolean;
   key: string;
 }
-class ReceiptPhoto extends Component<Props, State> {
+class DocumentPhoto extends Component<Props, State> {
   private fileInput: React.RefObject<HTMLInputElement>;
   private dragEventCounter = 0;
   constructor(props) {
@@ -42,21 +38,13 @@ class ReceiptPhoto extends Component<Props, State> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if(props.photoObject?.receiptPhotoURL && props.photoObject?.receiptPhotoURL!=='')
-    if ((props.edit || props.review)  && props.photoObject.receiptPhotoURL !== state.imgSrc && state.key !== "updated") {
+    if(props.photoObject?.photoURL && props.photoObject?.photoPhotoURL!=='')
+    if ((props.edit || props.view)  && props.photoObject.photoPhotoURL !== state.imgSrc && state.key !== "updated") {
       return {
-        imgSrc: props.photoObject.receiptPhotoURL,
+        imgSrc: props.photoObject.photoURL,
         key: "updated",
       };
     } 
-    if(props.documentObject?.documentPhotoURL && props.documentObject?.documentPhotoURL !== ''){
-      if ((props.edit || props.review)  && props.documentObject.documentPhotoURL !== state.imgSrc && state.key !== "updated") {
-        return {
-          imgSrc: props.documentObject.documentPhotoURL,
-          key: "updated",
-        };
-      }
-    }
     return null;
   }
   triggerInputFile() {
@@ -133,57 +121,54 @@ class ReceiptPhoto extends Component<Props, State> {
     this.overrideEventDefaults(event);
     this.dragEventCounter = 0;
     this.setState({ dragging: false });
-    if (event.dataTransfer.files && event.dataTransfer.files[0] && !this.props.review) {
+    if (event.dataTransfer.files && event.dataTransfer.files[0] && !this.props.view) {
       this.readFiles(event.dataTransfer.files);
     }
   };
   handleOnChange = (event) => {
     event.preventDefault();
     const imagesLimit = 1;
-    if (event.target.files.length <= imagesLimit && !this.props.review) {
+    if (event.target.files.length <= imagesLimit && !this.props.view) {
       this.readFiles(event.target.files);
     }
   }
-
   renderDropHere(key: number) {
     return (
-      <div key={key} className="receipt-upload-container">
+      <div key={key} className="photo-upload-container">
         <h5>Drop here</h5>
       </div>
     )
   }
   renderUploadPhoto(key: number) {
     return (
-      <Card.Body key={key} className="receipt-upload-container"
+      <Card.Body key={key} className="photo-upload-container"
         onClick={() => this.triggerInputFile()}
       >
-        <img src={this.props.review ? require('../../../Shared/Assets/imagePlaceholder.svg') : require('../../../Shared/Assets/uploadDrag.svg')}
+        <img src={this.props.view ? require('../../../Shared/Assets/imagePlaceholder.svg') : require('../../../Shared/Assets/uploadDrag.svg')}
           alt="upload-document"
         />
         <div style={{ marginTop: "10px", fontSize: "12px" }}>
-          <div>{this.props.review ? local.documentNotUploadedYet : local.documentUploadDragDropText}</div>
-          {!this.props.review && <div>{local.documentUploadBrowseFileText}</div>}
+          <div>{this.props.view ? local.documentNotUploadedYet : local.documentUploadDragDropText}</div>
+          {!this.props.view && <div>{local.documentUploadBrowseFileText}</div>}
         </div>
       </Card.Body>
     )
   }
-
   renderPhotoByName(key: number) {
     console.log(this.state.imgSrc)
     return (
-      <Card.Body key={key} className="receipt-upload-container" >
-        {!this.props.review && <Row data-qc="receipt-actions" className="receipt-actions" >
+      <Card.Body key={key} className="photo-upload-container" >
+        {!this.props.view && <Row data-qc="photo-actions" className="photo-actions" >
           <span className="fa icon" onClick={(e) => this.deleteDocument(e)}><img alt="delete" src={require('../../../Shared/Assets/deleteIcon.svg')} /></span>
         </Row>}
         <Row style={{ height: "" }}>
           <div>
-            <img className={"uploaded-receipt"} src={this.state.imgSrc as string} key={key} alt="" />
+            <img className={"uploaded-photo"} src={this.state.imgSrc as string} key={key} alt="" />
           </div>
         </Row>
       </Card.Body>
     )
   }
-
   renderContainer() {
     const Limit = 1;
     return (
@@ -212,7 +197,7 @@ class ReceiptPhoto extends Component<Props, State> {
         onChange = {this.props.handleChange}
       >
 
-        <input disabled={this.props.review} multiple type="file" name="img" style={{ display: 'none' }}
+        <input disabled={this.props.view} multiple type="file" name="img" style={{ display: 'none' }}
           accept="image/png,image/jpeg,image/jpg,image/jpeg"
           ref={this[`fileInput`]} onChange={this.handleOnChange}
           onClick={(event) => {
@@ -240,4 +225,4 @@ class ReceiptPhoto extends Component<Props, State> {
 }
 
 
-export default withRouter(ReceiptPhoto)
+export default withRouter(DocumentPhoto)

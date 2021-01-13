@@ -3,7 +3,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 import Select from 'react-select';
 import * as local from '../../../Shared/Assets/ar.json';
 import { ClearanceValues, ClearanceErrors, ClearanceTouched } from './clearanceFormIntialState';
-import ReceiptPhoto from './receiptPhoto';
+import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto';
 import { theme } from "../../../theme";
 import './clearance.scss'
 interface Props {
@@ -192,15 +192,15 @@ export const CreateClearanceForm = (props: Props) => {
                     <Row><Form.Label className={"clearance-label"}>{local.clearanceReceiptPhoto}</Form.Label> 
                     {props.errors.receiptPhoto && <Form.Label className="errorMsg">{props.errors.receiptPhoto}</Form.Label>} 
                     </Row>
-                    <ReceiptPhoto
+                    <DocumentPhoto
                         data-qc='receiptPhoto'
                         name='receiptPhoto'
                         photoObject={{
-                            receiptPhotoURL: props.values.receiptPhotoURL,
-                            receiptPhoto: props.values.receiptPhoto,
+                            photoURL: props.values.receiptPhotoURL,
+                            photoFile: props.values.receiptPhoto,
                         }}
                         edit={props.edit}
-                        review={props.review}
+                        view={props.review}
                         handleImageChange={handleReceiptPhotoChange}
                         handleBlur={props.handleBlur}
                         handleChange={props.handleChange}
@@ -210,14 +210,14 @@ export const CreateClearanceForm = (props: Props) => {
                    <Row className='row-nowrap'> <Form.Label className={"clearance-label"}>{local.clearanceDocumentPhoto} </Form.Label> 
                    {props.errors.documentPhoto && <Form.Label className="errorMsg">{props.errors.documentPhoto}</Form.Label>}  
                    </Row>   
-                    <ReceiptPhoto 
+                    <DocumentPhoto 
                     data-qc='documentPhoto'
                     name= 'documentPhoto'
                     edit = {props.edit}
-                    review = {props.review}
-                    documentObject= {{
-                        documentPhotoURL: props.values.documentPhotoURL,
-                        documentPhoto: props.values.documentPhoto
+                    view = {props.review}
+                    photoObject= {{
+                        photoURL: props.values.documentPhotoURL,
+                        photoFile: props.values.documentPhoto
                       }}
                       handleImageChange={handleDocumentPhotoChange}
                       handleBlur={props.handleBlur}

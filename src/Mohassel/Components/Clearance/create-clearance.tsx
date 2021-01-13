@@ -75,13 +75,26 @@ class CreateClearance extends Component<Props, State> {
             this.setState({ loading: true });
             const res = await getClearance(this.props.location.state.clearance?.id);
             if (res.status === 'success') {
-                const clearance: ClearanceValues = res.body.data;
+                const clearance: ClearanceValues = {
+                    customerId: res.body.data.customerId,
+                    loanId: res.body.data.loanId,
+                    transactionKey: res.body.data.transactionKey ? res.body.data.transactionKey : '',
+                    clearanceReason: res.body.data.clearanceReason, 
+                    bankName: res.body.data.bankName,
+                    notes: res.body.data.notes,
+                    registrationDate:  res.body.data.registrationDate,
+                    receiptDate: res.body.data.receiptDate,
+                    receiptPhotoURL: res.body.data.receiptPhotoURL,
+                    documentPhotoURL: res.body.data.documentPhotoURL,
+                    manualReceipt: res.body.data.manualReceipt ? res.body.data.manualReceipt : '',
+                    status: res.body.data.status,
+                }
                 if (res.body.data.receiptDate)
                     clearance.receiptDate = timeToDateyyymmdd(res.body.data.receiptDate);
                 if (res.body.data.registrationDate)
                     clearance.registrationDate = timeToDateyyymmdd(res.body.data.registrationDate);
                 this.setState({
-                    step1: res.body.data,
+                    step1: clearance,
                     customer: {
                         key: res.body.data.customerKey,
                         customerName: res.body.data.customerName,
@@ -112,7 +125,6 @@ class CreateClearance extends Component<Props, State> {
         }
         this.setState({ loading: false });
     }
-
     async getCustomer(id: string) {
         this.setState({ loading: true });
         const res = await getCustomerByID(id);
@@ -136,7 +148,6 @@ class CreateClearance extends Component<Props, State> {
             step1: clearanceData,
         });
         this.props.history.goBack();
-
     }
     submit = async (values) => {
         if (this.props.edit) {
@@ -154,18 +165,20 @@ class CreateClearance extends Component<Props, State> {
             clearance.customerId = this.props.location.state.id;
         }
         if (clearance.transactionKey) {
-            clearance.transactionKey = Number(clearance.transactionKey);
+            clearance.transactionKey = clearance.transactionKey;
         }
         if (clearance.receiptDate) {
             clearance.receiptDate = new Date(clearance.receiptDate).valueOf();
         }
+         delete clearance.receiptPhotoURL;
+         delete clearance.documentPhotoURL;
+         delete clearance.status;
         clearance.registrationDate = new Date(clearance.registrationDate).valueOf();
         const formData = new FormData();
         for (const key in clearance) {
             formData.append(key, clearance[key])
         }
         return formData;
-
     }
     async createNewClearance(values) {
         this.setState({ loading: true })
@@ -183,6 +196,7 @@ class CreateClearance extends Component<Props, State> {
         this.setState({loading: true})
         const clearance = this.prepareClearance(values);
         if (this.props.location.state.clearance?.id) {
+            console
             const res = await updateClearance(this.props.location.state.clearance?.id, clearance);
             if (res.status == 'success') {
                 Swal.fire('Success', '', 'success').then(() => this.props.history.goBack());;
