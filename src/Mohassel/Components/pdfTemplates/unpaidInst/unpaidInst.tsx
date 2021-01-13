@@ -18,17 +18,17 @@ const UnpaidInst = (props) => {
           </tr>
           <tr>
             <th>tmohamed0</th>
-            <th style={{fontSize: 18}}>قائمة الاقساط الغير مسددة بمناطق العمل</th>
+            <th style={{ fontSize: 18 }}>قائمة الاقساط الغير مسددة بمناطق العمل</th>
           </tr>
           <tr>
             <th></th>
-            <th style={{fontSize: 18}}>٢٠٢١/٠١/١٠ الى ٢٠٢١/٠١/٠١ من</th>
+            <th style={{ fontSize: 18 }}>٢٠٢١/٠١/١٠ الى ٢٠٢١/٠١/٠١ من</th>
           </tr>
         </thead>
       </table>
-      <div><span>الفرع : </span><span className="grey-background frame" style={{padding: "5px 5px 5px 50px"}}> اسوان - ادفو </span></div>
-      <div style={{marginTop: 20}}><span>منطقة العمل : </span><span className="grey-background frame" style={{padding: "5px 5px 5px 50px"}}> السباعية شرق والشروانة - المحاميد </span></div>
-      <table>
+      <div><span>الفرع : </span><span className="grey-background frame" style={{ padding: "5px 5px 5px 50px" }}> اسوان - ادفو </span></div>
+      <div style={{ marginTop: 20 }}><span>منطقة العمل : </span><span className="grey-background frame" style={{ padding: "5px 5px 5px 50px" }}> السباعية شرق والشروانة - المحاميد </span></div>
+      <table className="repeated-table">
         <thead>
           <tr>
             <th>اسم العميل</th>
@@ -37,7 +37,7 @@ const UnpaidInst = (props) => {
             <th>حالة القسط</th>
             <th>قيمة القسط</th>
             <th>المستحق</th>
-            <th>ت المحمول</th>
+            <th colSpan={2}>ت المحمول</th>
             <th>اسم المندوب</th>
           </tr>
         </thead>
@@ -56,6 +56,29 @@ const UnpaidInst = (props) => {
           </tr>
         </tbody>
       </table>
+      <div className="horizontal-line"></div>
+      <div>
+        <span>إجمالى: منطقة العمل : </span>
+        <span className="grey-background frame" style={{ padding: "5px 5px 5px 50px" }}> السباعية شرق والشروانة - المحاميد </span>
+        <span className="frame" style={{ padding: "5px 5px 5px 50px", textAlign: 'center' }}> 3 </span>
+        <span className="frame" style={{ padding: "5px 5px 5px 50px", textAlign: 'center' }}> 2754.00 </span>
+      </div>
+      <div className="horizontal-line"></div>
+      <div className="horizontal-line"></div>
+      <div>
+        <span> إجمالى : الفرع: </span>
+        <span className="grey-background frame" style={{ padding: "5px 5px 5px 80px" }}> اسوان - ادفو </span>
+        <span className="frame" style={{ padding: "5px 5px 5px 50px", textAlign: 'center' }}> 3 </span>
+        <span className="frame" style={{ padding: "5px 5px 5px 50px", textAlign: 'center' }}> 2754.00 </span>
+      </div>
+      <div className="horizontal-line"></div>
+      <div className="horizontal-line"></div>
+      <div>
+        <span>الإجمالى العام:  </span>
+        <span className="frame" style={{ padding: "5px 5px 5px 50px", textAlign: 'center' }}> 3 </span>
+        <span className="frame" style={{ padding: "5px 5px 5px 50px", textAlign: 'center' }}> 2754.00 </span>
+      </div>
+      <div className="horizontal-line"></div>
     </div>
   )
 }
