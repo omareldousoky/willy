@@ -84,6 +84,9 @@ class CustomersList extends Component<Props, State> {
       }
     });
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
   render() {
     return (
       <Card style={{ margin: '20px 50px' }}>

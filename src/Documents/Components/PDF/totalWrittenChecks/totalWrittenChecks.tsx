@@ -7,7 +7,7 @@ import Tafgeet from 'tafgeetjs';
 const TotalWrittenChecks = (props) => {
     return (
             <div className="total-written-checks-print">
-            <table style={{ fontSize: 18, margin: "10px 0px", textAlign: "center", width: '100%' }}>
+            <table style={{ margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
                 <tr style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}><th colSpan={6}>
                     <div className={"logo-print"} ></div></th>

@@ -208,8 +208,10 @@ class GeoAreas extends Component<{}, State> {
                                         </Form.Group>
                                         {branchArea.disabledUi ?
                                             <span
-                                                style={branchArea.active ? { color: '#7dc356', marginLeft: 20 } : { color: '#d51b1b', marginLeft: 20 }}
-                                                className={branchArea.active ? "fa fa-check-circle fa-lg" : "fa fa-times-circle fa-lg"} />
+                                                style={{ marginLeft: 20 }}>
+                                                <img src={branchArea.active ? require('../../Assets/check-circle.svg') : require('../../Assets/times-circle.svg')} />
+
+                                            </span>
                                             :
                                             <>
                                                 {branchArea._id.length > 0 && <Form.Check
@@ -225,8 +227,9 @@ class GeoAreas extends Component<{}, State> {
                                         <span
                                             onClick={() => branchArea.disabledUi ? this.toggleClick(branchArea, false) : this.toggleClick(branchArea, true)}
                                             style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
-                                            data-qc="editSaveIcon"
-                                            className={branchArea.disabledUi ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
+                                            data-qc="editSaveIcon">
+                                            <img alt={branchArea.disabledUi ? 'edit' : 'save'} src={branchArea.disabledUi ? require('../../Assets/editIcon.svg') : require('../../Assets/save.svg')} />
+                                        </span>
                                     </ListGroup.Item>
                                 )
                             }).reverse()}
