@@ -61,12 +61,15 @@ class NavBar extends Component<Props, State> {
     } else return null;
   }
   componentDidUpdate(prevProps, prevState){
-    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches){
       const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       this.goToBranch(selectedBranch, false);
+    } else  if (this.state.selectedBranch._id==='hq' && prevState.selectedBranch._id !=='hq') {
+      this.goToBranch(this.state.selectedBranch, false);
     }
   }
   async goToBranch(branch: Branch, refresh: boolean) {
+   
     document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.setState({ loading: true, openBranchList: false })
     const res = await contextBranch(branch._id);
@@ -78,6 +81,7 @@ class NavBar extends Component<Props, State> {
     } else console.log(res)
   }
   renderBranchList() {
+
     return (
       <div className="navbar-branch-list">
         <InputGroup style={{ direction: 'ltr', marginLeft: 20 }}>

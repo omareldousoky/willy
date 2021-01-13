@@ -70,7 +70,7 @@ export default class ClearancePaper extends Component<Props, {}> {
                     <div className="rightText" >الساده / {clearance.bankName}</div>
                     <div className="rightText" >تحيه طيبه وبعد ،،،،،</div>
                     <div className="rightText" >تشهد شركه تساهيل للتمويل متناهي الصغر فرع قنا  نجع حمادي</div>
-                    <div className="rightText" >بان السيد / احمد احمد احمد احمد قد قام بتاريخ 12/01/2020 بسداد كامل قيمه التمويل الممنوح له.</div>
+                    <div className="rightText" >بان السيد / ${clearance.customerName} قد قام بتاريخ 12/01/2020 بسداد كامل قيمه التمويل الممنوح له.</div>
                     <div className="rightText" >ب وملحقاته والبالغ قدره {clearance.principal} جنيه {clearance.principal? `(${new Tafgeet(clearance.principal, 'EGP').parse()}))`:''}.</div>
                     <div className="rightText" >وتعتبر هذه المخالصه ابراء لذمه المذكور من ايه مبالغ مستحقه عليه للشركه عن هذا التمويل الممنوح له.</div>
                     <div className="rightText" >بتاريخ {clearance.issuedDate? timeToArabicDate(clearance.issuedDate, false):''}حتي تاريخه </div>
