@@ -264,7 +264,7 @@ const CustomerCardAttachments = (props) => {
               </div>
 
               <div>التاريخ :
-                           <div className="value">{timeToArabicDate(0, false)}</div>
+                           <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@ const CustomerCardAttachments = (props) => {
           <div className="value">---------------------</div>
               </div>
               <div>التاريخ :
-                      <div className="value">{timeToArabicDate(0, false)}</div>
+                      <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
               </div>
             </div>
             <div className="double">
@@ -467,7 +467,7 @@ const CustomerCardAttachments = (props) => {
                   </div>
 
                   <div>التاريخ :
-                           <div className="value">{timeToArabicDate(0, false)}</div>
+                           <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
                   </div>
                 </div>
               </div>
@@ -480,7 +480,7 @@ const CustomerCardAttachments = (props) => {
           <div className="value">---------------------</div>
                   </div>
                   <div>التاريخ :
-                      <div className="value">{timeToArabicDate(0, false)}</div>
+                      <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
                   </div>
                 </div>
                 <div className="double">
