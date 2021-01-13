@@ -16,7 +16,9 @@ interface Props {
   };
   review?: boolean;
   handleImageChange?: any;
-
+  name: string;
+  handleBlur?: any;
+  handleChange?: any;
 
 }
 interface State {
@@ -196,7 +198,7 @@ class ReceiptPhoto extends Component<Props, State> {
         backgroundColor: '#fafafa',
         cursor: 'pointer',
         border: '#e5e5e5 solid 1px',
-        borderRadius: 4
+        borderRadius: 4,
       }}
         data-qc={`upload-${name}`}
         onDrag={this.overrideEventDefaults}
@@ -206,6 +208,8 @@ class ReceiptPhoto extends Component<Props, State> {
         onDragEnter={this.dragenterListener}
         onDragLeave={this.dragleaveListener}
         onDrop={(e) => this.dropListener(e)}
+        onBlur = {this.props.handleBlur}
+        onChange = {this.props.handleChange}
       >
 
         <input disabled={this.props.review} multiple type="file" name="img" style={{ display: 'none' }}

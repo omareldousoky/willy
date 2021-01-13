@@ -1,3 +1,4 @@
+import { FormikErrors, FormikTouched } from 'formik';
 import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
 
@@ -15,7 +16,7 @@ export interface ClearanceValues {
     receiptDate?: number | string;
     receiptPhoto?: File;
     receiptPhotoURL?: string;
-    documentPhoto: File;
+    documentPhoto?: File;
     documentPhotoURL?: string;
     manualReceipt?: string;
     status?: string;
@@ -23,22 +24,26 @@ export interface ClearanceValues {
 }
 export interface ClearanceErrors {
     transactionKey?: string;
+    loanId?: string;
     clearanceReason?: string;
     bankName?: string;
     notes?: string;
     registrationDate?: string;
     receiptDate?: string;
-    receiptPhoto?: string;
+    receiptPhoto?: any;
+    documentPhoto?: any;
     manualReceipt?: string;
 }
 export interface ClearanceTouched {
     transactionKey?: boolean;
+    loanId?: boolean;
     clearanceReason?: boolean;
     bankName?: boolean;
     notes?: boolean;
     registrationDate?: boolean;
     receiptDate?: boolean;
-    receiptPhoto?: boolean;
+    receiptPhoto?: any;
+    documentPhoto?: any;
     manualReceipt?: boolean;
 }
 
@@ -52,13 +57,13 @@ export const clearanceData: ClearanceValues =  {
     registrationDate: '',
     receiptDate: '' ,
     receiptPhoto: undefined,
-    documentPhoto: new File([''],''),
+    documentPhoto: undefined,
     manualReceipt: "",
 }
 
 export const clearanceCreationValidation = Yup.object().shape({
     loanId: Yup.string().trim().required(local.required),
-    transactionKey:Yup.number(),
+    transactionKey:Yup.string().trim(),
     clearanceReason: Yup.string().trim().required(local.required),
     bankName: Yup.string().trim().required(local.required),
     notes: Yup.string().trim(),
@@ -68,7 +73,25 @@ export const clearanceCreationValidation = Yup.object().shape({
     receiptDate: Yup.string().test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
         return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
       }),
-    receiptPhoto: Yup.string().trim(),
+    receiptPhoto: Yup.mixed(),
+    documentPhoto: Yup.mixed().required(local.required),
+    manualReceipt: Yup.string(),
+    status: Yup.string(),
+});
+export const clearanceEditValidation = Yup.object().shape({
+    loanId: Yup.string().trim().required(local.required),
+    transactionKey:Yup.string().trim(),
+    clearanceReason: Yup.string().trim().required(local.required),
+    bankName: Yup.string().trim().required(local.required),
+    notes: Yup.string().trim(),
+    registrationDate: Yup.string().trim().required(local.required).test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+      }),
+    receiptDate: Yup.string().test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+      }),
+    receiptPhoto: Yup.mixed(),
+    documentPhoto: Yup.mixed(),
     manualReceipt: Yup.string(),
     status: Yup.string(),
 });

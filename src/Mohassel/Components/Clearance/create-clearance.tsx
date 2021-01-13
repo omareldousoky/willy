@@ -5,7 +5,7 @@ import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustom
 import { CreateClearanceForm } from './createClearanceForm';
 import { Card } from 'react-bootstrap';
 import { Formik } from 'formik';
-import { clearanceCreationValidation, clearanceData, ClearanceValues } from './clearanceFormIntialState';
+import { clearanceCreationValidation, clearanceData, clearanceEditValidation, ClearanceValues } from './clearanceFormIntialState';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
 import Swal from 'sweetalert2';
@@ -220,7 +220,7 @@ class CreateClearance extends Component<Props, State> {
                         <Formik
                             enableReinitialize
                             initialValues={this.state.step1}
-                            validationSchema={clearanceCreationValidation}
+                            validationSchema={this.props.edit|| this.props.review  ? clearanceEditValidation :clearanceCreationValidation}
                             onSubmit={this.submit}
                             validateOnChange
                             validateOnBlur

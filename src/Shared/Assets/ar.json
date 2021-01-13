@@ -850,5 +850,7 @@
     "noLoansForClearance":"لا يوجد قروض مدفوعة لهذا العميل لتسجيل نموذج المخالصة",
     "noOfClearances":"عدد المخلصات",
     "clearances":"المخالصات",
-    "undoReviewClearance": "إعادة مراجعة المخالصة"
+    "undoReviewClearance": "إعادة مراجعة المخالصة",
+    "clearanceReceiptPhoto":"صورة إيصال المخالصة",
+    "clearanceDocumentPhoto": "صورة مستند المخالصة"
 }

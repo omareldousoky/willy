@@ -5,7 +5,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { ClearanceValues, ClearanceErrors, ClearanceTouched } from './clearanceFormIntialState';
 import ReceiptPhoto from './receiptPhoto';
 import { theme } from "../../../theme";
-
+import './clearance.scss'
 interface Props {
     values: ClearanceValues;
     errors: ClearanceErrors;
@@ -31,7 +31,6 @@ export const CreateClearanceForm = (props: Props) => {
     const handleDocumentPhotoChange = (imageFile) => {
         props.setFieldValue('documentPhoto', imageFile)
     }
-
     return (
         <div style={{ padding: '2rem 30px' }}>
             <Form
@@ -44,10 +43,10 @@ export const CreateClearanceForm = (props: Props) => {
                         <Select
                             name="application"
                             data-qc="application"
-                            style={theme.selectStyle}
+                            styles={theme.selectStyle}
                             value={selectedApplication}
                             onChange={(event) => {
-                                props.values.loanId = event.id;
+                                props.setFieldValue('loanId', event.id)
                                 setApplication(event);
                             }}
                             options={props.paidLoans}
@@ -55,6 +54,7 @@ export const CreateClearanceForm = (props: Props) => {
                             getOptionValue={(option) => option.id}
                             isDisabled={props.edit || props.review}
                         />
+                     {props.errors.loanId && <Form.Label className="errorMsg">{props.errors.loanId}</Form.Label>}
                     </Form.Group>
                     <Form.Group as={Col} controlId='customerKey'>
                         <Form.Label className={"clearance-label"}>{local.customerCode}</Form.Label>
@@ -188,22 +188,31 @@ export const CreateClearanceForm = (props: Props) => {
                     </Form.Group>
                 </Row>
                 <Row className={"clearance-row"}>
-                    <Form.Label className={"clearance-label"}>{local.receiptPhoto}</Form.Label>
                     <Col>
+                    <Row><Form.Label className={"clearance-label"}>{local.clearanceReceiptPhoto}</Form.Label> 
+                    {props.errors.receiptPhoto && <Form.Label className="errorMsg">{props.errors.receiptPhoto}</Form.Label>} 
+                    </Row>
                     <ReceiptPhoto
                         data-qc='receiptPhoto'
+                        name='receiptPhoto'
                         photoObject={{
                             receiptPhotoURL: props.values.receiptPhotoURL,
-                            receiptPhoto: props.values.receiptDate,
+                            receiptPhoto: props.values.receiptPhoto,
                         }}
                         edit={props.edit}
                         review={props.review}
                         handleImageChange={handleReceiptPhotoChange}
+                        handleBlur={props.handleBlur}
+                        handleChange={props.handleChange}
                     />
                     </Col>
                     <Col>
+                   <Row className='row-nowrap'> <Form.Label className={"clearance-label"}>{local.clearanceDocumentPhoto} </Form.Label> 
+                   {props.errors.documentPhoto && <Form.Label className="errorMsg">{props.errors.documentPhoto}</Form.Label>}  
+                   </Row>   
                     <ReceiptPhoto 
                     data-qc='documentPhoto'
+                    name= 'documentPhoto'
                     edit = {props.edit}
                     review = {props.review}
                     documentObject= {{
@@ -211,6 +220,8 @@ export const CreateClearanceForm = (props: Props) => {
                         documentPhoto: props.values.documentPhoto
                       }}
                       handleImageChange={handleDocumentPhotoChange}
+                      handleBlur={props.handleBlur}
+                      handleChange={props.handleChange}
                     />
                     </Col>
                 </Row>
@@ -264,7 +275,8 @@ export const CreateClearanceForm = (props: Props) => {
                                 >{local.cancel}</Button>
                             </Col>
                             <Col>
-                                <Button className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="next">{props.edit ? local.editClearance : local.registerClearance}</Button>
+                                <Button 
+                                className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="next">{props.edit ? local.editClearance : local.registerClearance}</Button>
                             </Col>
                         </Form.Group>
                 }
