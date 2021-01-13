@@ -155,7 +155,6 @@ class DocumentPhoto extends Component<Props, State> {
     )
   }
   renderPhotoByName(key: number) {
-    console.log(this.state.imgSrc)
     return (
       <Card.Body key={key} className="photo-upload-container" >
         {!this.props.view && <Row data-qc="photo-actions" className="photo-actions" >

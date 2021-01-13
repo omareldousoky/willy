@@ -196,7 +196,6 @@ class CreateClearance extends Component<Props, State> {
         this.setState({loading: true})
         const clearance = this.prepareClearance(values);
         if (this.props.location.state.clearance?.id) {
-            console
             const res = await updateClearance(this.props.location.state.clearance?.id, clearance);
             if (res.status == 'success') {
                 Swal.fire('Success', '', 'success').then(() => this.props.history.goBack());;
