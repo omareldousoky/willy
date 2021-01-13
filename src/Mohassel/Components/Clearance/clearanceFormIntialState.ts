@@ -2,7 +2,8 @@ import * as Yup from 'yup';
 import * as local from '../../../Shared/Assets/ar.json';
 
 
-
+const endOfDay: Date = new Date();
+endOfDay.setHours(23, 59, 59, 59);
 export interface ClearanceValues {
     customerId: string;
     loanId: string;
@@ -58,8 +59,12 @@ export const clearanceCreationValidation = Yup.object().shape({
     clearanceReason: Yup.string().trim().required(local.required),
     bankName: Yup.string().trim().required(local.required),
     notes: Yup.string().trim(),
-    registrationDate: Yup.string().trim().required(local.required),
-    receiptDate: Yup.string().trim(),
+    registrationDate: Yup.string().trim().required(local.required).test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+      }),
+    receiptDate: Yup.string().test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
+        return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+      }),
     receiptPhoto: Yup.string().trim(),
     manualReceipt: Yup.string(),
     status: Yup.string(),

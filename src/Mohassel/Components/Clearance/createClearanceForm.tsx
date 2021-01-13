@@ -23,7 +23,7 @@ interface Props {
 
 export const CreateClearanceForm = (props: Props) => {
     const [selectedApplication, setApplication] = useState(props.paidLoans.filter((loan) => loan.id === props.values.loanId));
-    const [status, setStatus]= useState(props.values.status);
+    const [status, setStatus] = useState(props.values.status);
     const handlePhotoChange = (imageFile) => {
         props.setFieldValue('receiptPhoto', imageFile);
 
@@ -225,9 +225,9 @@ export const CreateClearanceForm = (props: Props) => {
                             {status === 'rejected' && <Form.Group
                                 as={Row}
                             >
-                                <Col >
+                                <Col>
                                     <Button
-                                        className={'btn-submit-next'} style={{ width: '60%' }}
+                                        className={'btn-warning'} style={{ width: '30%' }}
                                         type="submit"
                                         onClick={() => { props.setFieldValue('status', 'underReview'); }}
                                     >{local.undoReviewClearance}</Button>
