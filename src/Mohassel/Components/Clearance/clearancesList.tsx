@@ -98,7 +98,7 @@ class ClearancesList extends Component<Props, State> {
         key: "actions",
         render: data => <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           {data.status === 'underReview' ? <Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: data._id } })} /></Can> : null}
-          {data.status !== "approved" ? <Can I="editClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20, color: '#7dc356', textDecoration: 'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: { id: data._id } })}>{local.reviewClearance}</span></Can> : null}
+          {data.status !== "approved" ? <Can I="reviewClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20, color: '#7dc356', textDecoration: 'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: { id: data._id } })}>{local.reviewClearance}</span></Can> : null}
         </div>
       },
     ]
@@ -160,14 +160,16 @@ class ClearancesList extends Component<Props, State> {
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.clearances}</Card.Title>
                   <span className="text-muted">{local.noOfClearances + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                 </div>
+                <Can I = 'reviewClearance' a= 'application'>
                 <Button onClick={() => {
                   this.setState({ print: true }, () => window.print())
                 }}
-                  disabled={false}
+                  disabled={(this.state.selectedClearances.length > 0 ? false: true) as boolean}
                   className="big-button"
                   style={{ marginLeft: 20, height: 70 }}
                 > {local.downloadPDF}
                 </Button>
+                </Can>
               </div>
               <hr className="dashed-line" />
               {this.state.branchId == 'hq' ?
