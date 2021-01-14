@@ -827,6 +827,7 @@
     "thirdReviewed": "رُجعت من مدير المركز",
     "secondReview": "مراجعه مدير الفرع للقروض",
     "thirdReview": "مراجعة مدير المركز للقروض",
+    "operationsReports": "تقارير العمليات‬",
     "signedApplications":"قروض تم مراجعتها و إمضائها",
     "signedDateCannotBeBeforeReviewDate":"تاريخ الإمضاء يجب أن يكون بعد تاريخ المراجعة",
     "reviewApplicationsError":"حدث خطأ ولم تتم مراجعة القروض",
@@ -852,6 +853,5 @@
     "clearances":"المخالصات",
     "undoReviewClearance": "إعادة مراجعة المخالصة",
     "clearanceReceiptPhoto":"صورة إيصال المخالصة",
-    "clearanceDocumentPhoto": "صورة مستند المخالصة",
-    "operationsReports": "تقارير العمليات‬"
+    "clearanceDocumentPhoto": "صورة مستند المخالصة"
 }

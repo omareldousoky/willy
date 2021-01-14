@@ -14,8 +14,10 @@ import {
 import {
     unpaidInstallmentsByOfficer
 } from "../../Services/APIs/Reports/unpaidInstallmentsByOfficer";
+import {fetchUnpaidInstallmentsPerAreaReport, UnpaidInstallmentsPerAreaRequest} from "../../Services/APIs/Reports/unpaidInstallmentsPerArea"
 import Swal from "sweetalert2";
 import LoansBriefing2 from "../pdfTemplates/loansBriefing/loansBriefing2";
+import UnpaidInst from "../pdfTemplates/unpaidInst/unpaidInst";
 import { getDate } from "../../../Shared/Services/utils";
 import UnpaidInstallmentsByOfficer from "../pdfTemplates/unpaidInstallmentsByOfficer/unpaidInstallmentsByOfficer";
 import InstallmentsDuePerOfficerCustomerCard from "../pdfTemplates/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard";
@@ -43,7 +45,8 @@ enum Reports {
     LoanOfficersRepaymentRate1 = "loanOfficersRepaymentRate1",
     LoanOfficersRepaymentRate3 = "loanOfficersRepaymentRate3",
     UnpaidInstallmentsByOfficer = "unpaidInstallmentsByOfficer",
-    InstallmentsDuePerOfficerCustomerCard = 'installmentsDuePerOfficerCustomerCard'
+    InstallmentsDuePerOfficerCustomerCard = 'installmentsDuePerOfficerCustomerCard',
+    UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea"
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -56,7 +59,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 {
                     key: Reports.LoansBriefing2,
                     local: "ملخص الحالات والقروض 2",
-                    inputs: ["dateFromTo"],
+                    inputs: ["dateFromTo", "branches"],
                     permission: "briefingReport",
                 },
                 {
@@ -70,7 +73,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                     local: "الاقساط المستحقة للمندوب كارت العميل",
                     inputs: ["dateFromTo", 'branches'],
                     permission: "installmentsDuePerOfficerCustomerCard",
-                }
+                },
+                {
+                    key: Reports.UnpaidInstallmentsPerArea,
+                    local: "قائمة الاقساط الغير مسددة بمناطق العمل",
+                    inputs: ["dateFromTo", "branches"],
+                    permission: "unpaidInstallmentsPerArea",
+                },
             ],
             selectedPdf: { permission: "" },
             data: {},
@@ -80,9 +89,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         };
     }
     handlePrint(selectedPdf: PDF) {
-        this.setState({ showModal: true, selectedPdf: selectedPdf });
+        this.setState({ showModal: true, selectedPdf: selectedPdf, data: {} });
     }
     handleSubmit(values) {
+		const branches = values.branches.map((branch) => branch._id)
+		values.branches = branches.includes("") ? [] : branches
         switch (this.state.selectedPdf.key) {
             case Reports.LoansBriefing2:
                 return this.fetchLoansBriefing(values);
@@ -90,16 +101,19 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 return this.fetchUnpaidInstallmentsByOfficer(values);
             case Reports.InstallmentsDuePerOfficerCustomerCard:
                 return this.fetchInstallmentsDuePerOfficerCustomerCard(values);
+            case Reports.UnpaidInstallmentsPerArea: 
+                return this.fetchUnpaidInstallments(values);
             default:
                 return null;
         }
     }
     async fetchLoansBriefing(values) {
         this.setState({ loading: true, showModal: false });
-        const { fromDate, toDate } = values;
+        const { fromDate, toDate, branches } = values;
         const request: LoansBriefingReportRequest = {
-            startDate: getDate(fromDate),
-            endDate: getDate(toDate),
+            startDate: fromDate,
+            endDate: toDate,
+			branches,
         };
 
         const res = await fetchLoansBriefingReport(request);
@@ -111,6 +125,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 this.setState(
                     {
                         data: res.body,
+						fromDate,
+						toDate,
                         showModal: false,
                         print: Reports.LoansBriefing2,
                         loading: false,
@@ -182,6 +198,37 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                         fromDate,
                         toDate,
                         print: Reports.UnpaidInstallmentsByOfficer,
+                        loading: false,
+                    },
+                    () => window.print()
+                );
+            }
+        } else {
+            this.setState({ loading: false });
+            console.log(res);
+        }
+    }
+
+    async fetchUnpaidInstallments(values) {
+        const { fromDate, toDate, branches } = values;
+        this.setState({ loading: true, showModal: false, fromDate, toDate });
+        const request: UnpaidInstallmentsPerAreaRequest = {
+            startDate: fromDate,
+            endDate: toDate,
+            branches: branches
+        };
+
+        const res = await fetchUnpaidInstallmentsPerAreaReport(request);
+        if (res.status === "success") {
+            if (!res.body) {
+                this.setState({ loading: false });
+                Swal.fire("error", local.noResults);
+            } else {
+                this.setState(
+                    {
+                        data: res.body,
+                        showModal: false,
+                        print: Reports.UnpaidInstallmentsPerArea,
                         loading: false,
                     },
                     () => window.print()
@@ -277,6 +324,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 )}
                  {this.state.print === Reports.UnpaidInstallmentsByOfficer && (
                     <UnpaidInstallmentsByOfficer data={this.state.data} fromDate={this.state.fromDate} toDate={this.state.toDate} />
+                )}
+                {this.state.print === Reports.UnpaidInstallmentsPerArea && (
+                    <UnpaidInst
+                        data={this.state.data}
+                        fromDate={this.state.fromDate}
+                        toDate={this.state.toDate}
+                    />
                 )}
             </>
         );

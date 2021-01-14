@@ -55,9 +55,9 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
             >
                 <p style={{ margin: "auto", fontSize: "16px" }}>
                     القروض والحالات للفترة من : &nbsp;
-                    {timeToArabicDate(Number(fromDate) || 0, false)} إلى :
+                    {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى :
                     &nbsp;
-                    {timeToArabicDate(Number(toDate) || 0, false)}
+                    {timeToArabicDate(new Date(toDate).valueOf(), false)}
                 </p>
                 <hr className="horizontal-line"></hr>
             </div>
@@ -91,7 +91,7 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
                         data.branchBriefing.map((brief) => {
                             return (
                                 <tr key={brief.branchName}>
-                                    <td>1</td>
+                                    <td></td>
                                     <td colSpan={2}>{brief.branchName}</td>
                                     <td>{brief.individualLoansCount || "0"}</td>
                                     <td className="bg-grey">
@@ -110,7 +110,7 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
                                         {brief.individualRequestsCount || "0"}
                                     </td>
                                     <td className="bg-grey">
-                                        {brief.individualLoansCredit || "0.0"}
+                                        {brief.individualRequestsCredit || "0.0"}
                                     </td>
                                     <td>{brief.groupRequestsCount || "0"}</td>
                                     <td className="bg-grey">
