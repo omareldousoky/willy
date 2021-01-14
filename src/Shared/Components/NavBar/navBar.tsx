@@ -61,9 +61,11 @@ class NavBar extends Component<Props, State> {
     } else return null;
   }
   componentDidUpdate(prevProps, prevState){
-    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches){
       const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       this.goToBranch(selectedBranch, false);
+    } else  if (this.state.selectedBranch._id==='hq' && prevState.selectedBranch._id !=='hq') {
+      this.goToBranch(this.state.selectedBranch, false);
     }
   }
   async goToBranch(branch: Branch, refresh: boolean) {
@@ -200,6 +202,7 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}
             {!this.props.hide && <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>}
             {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
+            {!this.props.hide && <Can  I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
