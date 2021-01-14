@@ -94,6 +94,9 @@ class BranchesList extends Component<Props, State> {
     }
     );;
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
   render() {
     return (
       <div>
