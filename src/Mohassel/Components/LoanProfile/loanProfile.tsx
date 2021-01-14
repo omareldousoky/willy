@@ -6,7 +6,7 @@ import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import InfoBox from '../userInfoBox';
 import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
-import * as local from '../../../Shared/Assets/ar.json';
+import local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
@@ -450,7 +450,7 @@ class LoanProfile extends Component<Props, State>{
         if (res.status === "success") {
             this.setState({ loading: false })
             const options = {}
-            res.body.reasons.map(option => options[option.id] = option.name)
+            res.body.reasons.map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
             return options
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
@@ -559,7 +559,7 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                                 {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
-                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}</p>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan} - {local[this.state.application.writeOffReason.replace(/\s/g, '')]}</p>
                                 </span>}
                                 {this.state.application.isDoubtful && !this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
                                     <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
