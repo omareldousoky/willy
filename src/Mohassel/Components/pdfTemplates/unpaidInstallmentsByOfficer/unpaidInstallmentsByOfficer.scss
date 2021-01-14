@@ -2,7 +2,7 @@
   .print-none {
     display: none;
   }
-  .commissaryDueInstallments {
+  .unpaidInstallmentsByOfficer {
     font-size: 10px;
     font-weight: bold;
     text-align: center;
@@ -29,7 +29,7 @@
   }
 }
 @media screen {
-  .commissaryDueInstallments {
+  .unpaidInstallmentsByOfficer {
     max-width: 700px;
     display: none;
   }

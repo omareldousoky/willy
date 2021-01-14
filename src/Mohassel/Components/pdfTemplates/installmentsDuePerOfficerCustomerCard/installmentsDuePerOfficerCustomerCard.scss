@@ -2,15 +2,16 @@
   .print-none {
     display: none;
   }
-  .commissaryDueInstallmentsClientCard {
+  .installmentsDuePerOfficerCustomerCard {
     font-size: 10px;
     font-weight: bold;
     text-align: center;
     page-break-after: always;
     direction: rtl;
+    width: 95%;
+    margin: auto;
     .branchDiv {
-      width: 95%;
-      margin: auto;
+      width: 100%;
       .CommissaryDiv {
         width: 100%;
         .table {
@@ -31,7 +32,7 @@
   }
 }
 @media screen {
-  .commissaryDueInstallmentsClientCard {
+  .installmentsDuePerOfficerCustomerCard {
     max-width: 700px;
     display: none;
   }

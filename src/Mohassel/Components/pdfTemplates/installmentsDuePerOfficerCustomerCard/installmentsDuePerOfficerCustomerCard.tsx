@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import "./commissaryDueInstallmentsClientCard.scss";
+import React, { Component, Fragment } from "react";
+import "./installmentsDuePerOfficerCustomerCard.scss";
 
 const numbersToArabic = (input) => {
   if (input || input === 0) {
@@ -10,8 +10,16 @@ const numbersToArabic = (input) => {
     });
   } else return "";
 };
-export default class CommissaryDueInstallmentsClientCard extends Component {
-  renderHeader = () => {
+interface InstallmentsDuePerOfficerCustomerCardProps {
+  fromDate: string;
+  toDate: string;
+  data: any;
+}
+
+const InstallmentsDuePerOfficerCustomerCard = (
+  props: InstallmentsDuePerOfficerCustomerCardProps
+) => {
+  const renderHeader = (fromDate, toDate) => {
     return (
       <div style={{ display: "flex" }}>
         <div
@@ -33,33 +41,24 @@ export default class CommissaryDueInstallmentsClientCard extends Component {
           >
             {"شركة تساهيل"}
           </div>
-          <div
-            style={{
-              border: "1px solid black",
-              width: "50%",
-              textAlign: "center",
-            }}
-          >
-            {"أسوان - ادفو"}
-          </div>
         </div>
         <div style={{ flex: 1 }}>
           <p style={{ margin: 0 }}>{"قائمة الإقساط المستحقة بالمندوب"}</p>
           <p style={{ margin: 0 }}>
             <span>{"من "}</span>
-            <span>{"Date1 "}</span>
+            <span>{fromDate}</span>
             <span>{"إلى "}</span>
-            <span>{"Date2"}</span>
+            <span>{toDate}</span>
           </p>
         </div>
         <div style={{ flex: 1 }}>
           <p style={{ margin: 0 }}>{"1/1"}</p>
-          <p style={{ margin: 0 }}>{"Today's Date"}</p>
+          <p style={{ margin: 0 }}>{new Date().toDateString()}</p>
         </div>
       </div>
     );
   };
-  renderBranchNameDiv = (branchName = "") => (
+  const renderBranchNameDiv = (branchName = "") => (
     <div style={{ display: "flex" }}>
       <div style={{ flex: 1 }}>
         <div
@@ -80,19 +79,20 @@ export default class CommissaryDueInstallmentsClientCard extends Component {
               marginRight: 2,
             }}
           >
-            <span>{"أسوان - ادفو"}</span>
-            {/* <span>{branchName}</span> */}
+            <span>{branchName}</span>
           </div>
         </div>
       </div>
       <div style={{ flex: 1 }} />
     </div>
   );
-  renderCommissaryDetailsDiv = (CommissaryName = "") => (
+  const renderCommissaryDetailsDiv = (CommissaryName = "") => (
     <div style={{ display: "flex", margin: "5px 0" }}>
       <div style={{ width: "60%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <p style={{ margin: 0, marginRight: "15%" }}>{"أسم المندوب :"}</p>
+          <p style={{ margin: 0, marginRight: "15%", minWidth: 90 }}>
+            {"أسم المندوب :"}
+          </p>
           <div
             style={{
               backgroundColor: "darkgrey",
@@ -103,10 +103,9 @@ export default class CommissaryDueInstallmentsClientCard extends Component {
               marginRight: 2,
             }}
           >
-            <span>{"علياء عبده أحمد حسين"}</span>
-            {/* <span>{CommissaryName}</span> */}
+            <span>{CommissaryName}</span>
           </div>
-          <div
+          {/* <div
             style={{
               border: "1px solid black",
               minWidth: 160,
@@ -116,22 +115,33 @@ export default class CommissaryDueInstallmentsClientCard extends Component {
             }}
           >
             <span>{"132124123"}</span>
-          </div>
+          </div> */}
         </div>
       </div>
       <div style={{ width: "40%" }} />
     </div>
   );
-  renderSummary = (type, name, count, amount) => {
+  const renderSummary = (type, name = null, count, amount) => {
     return (
       <div style={{ margin: "2px 0" }}>
         <div className="lineStroke" />
         <div style={{ display: "flex", margin: "4px 0" }}>
           <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
-            <span style={{ marginLeft: 4 }}>{"إجمالي : "}</span>
-            <span style={{ marginLeft: 4, minWidth: 90 }}>
-              {type === "Commissary" ? "أسم المندوب : " : "الفرع : "}
-            </span>
+            {type === "Total" ? (
+              <span style={{ marginLeft: 4, minWidth: 130 }}>
+                {"الإجمالي العام : "}
+              </span>
+            ) : (
+              <Fragment>
+                <span style={{ marginLeft: 4, minWidth: 60 }}>
+                  {"إجمالي : "}
+                </span>
+                <span style={{ marginLeft: 4, minWidth: 90 }}>
+                  {type === "Commissary" ? "أسم المندوب : " : "الفرع : "}
+                </span>
+              </Fragment>
+            )}
+
             <div
               style={{
                 backgroundColor: "darkgrey",
@@ -170,81 +180,60 @@ export default class CommissaryDueInstallmentsClientCard extends Component {
       </div>
     );
   };
-  renderCommissaryData = () => {
+  const renderTableBody = (array) => {
     return (
-      <div className="CommissaryDiv">
-        {this.renderCommissaryDetailsDiv()}
-        {this.renderTable()}
-        {this.renderSummary("Commissary", "علياء عبده أحمد حسين", 50, 1500)}
-      </div>
+      <tbody>
+        {array.map((el, idx) => {
+          return (
+            <tr key={idx}>
+              <td>{"ف"}</td>
+              <td>{idx + 1}</td>
+              <td>{el.customerName}</td>
+              <td>{el.installmentNumber}</td>
+              <td>{el.dateOfPayment}</td>
+              <td>{el.lastPaymentDate}</td>
+              <td>{el.lastInstallmentDate}</td>
+              <td>{el.installmentStatus}</td>
+              <td>{numbersToArabic(el.installmentAmount)}</td>
+              <td>{el.amountDue}</td>
+              <td>{numbersToArabic(el.phoneNumber)}</td>
+              <td>{numbersToArabic(el.businessNumber)}</td>
+              <td>
+                <div style={{ display: "flex" }}>
+                  <div style={{ flex: 1 }}>
+                    <span>{el.credit}</span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-evenly",
+                      flex: 1,
+                    }}
+                  >
+                    <span
+                      style={{
+                        backgroundColor: "darkgrey",
+                        minWidth: 30,
+                        marginLeft: 4,
+                      }}
+                    >
+                      {el.sum}
+                    </span>
+                    <span style={{ backgroundColor: "darkgrey", minWidth: 30 }}>
+                      {el.amount}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>{el.address}</td>
+              <td>{el.area}</td>
+            </tr>
+          );
+        })}
+      </tbody>
     );
   };
-
-  renderBranchData = () => {
-    return (
-      <div className="branchDiv">
-        {this.renderBranchNameDiv()}
-        {this.renderCommissaryData()}
-        {this.renderSummary("Branch", "أسوان - ادفو", 80, 2502323)}
-      </div>
-    );
-  };
-  renderData = () => {
-    return (
-      <div className="commissaryDueInstallmentsClientCard" dir="rtl" lang="ar">
-        {this.renderHeader()}
-        {this.renderBranchData()}
-      </div>
-    );
-  };
-  renderTable = () => {
-    let data = [
-      {
-        clientName: "hamada",
-        installmentNumber: 123,
-        dueDate: 873498,
-        lastPaymentDate: 9373737,
-        lastInstallmentDate: 4357547,
-        installmentStatus: "غير مسدد",
-        installmentAmount: 120,
-        dueAmount: 680,
-        phoneNumber: "0233771332",
-        businessNumber: "01273150005",
-        creditSumAmount: { credit: 5434, sum: 12, amount: 0 },
-        address: "alharam",
-        businessDistrict: "Giza",
-      },
-      {
-        clientName: "hamadaaaa222",
-        installmentNumber: 123,
-        dueDate: 873498,
-        lastPaymentDate: 9373737,
-        lastInstallmentDate: 4357547,
-        installmentStatus: "غير مسدد",
-        installmentAmount: 120,
-        dueAmount: 680,
-        phoneNumber: "0233771332",
-        businessNumber: "01273150005",
-        creditSumAmount: { credit: 5434, sum: 12, amount: 0 },
-        address: "alharam",
-        businessDistrict: "Giza",
-      },
-      {
-        clientName: "hamadaaaaaaa333",
-        installmentNumber: 123,
-        dueDate: 873498,
-        lastPaymentDate: 9373737,
-        lastInstallmentDate: 4357547,
-        installmentStatus: "غير مسدد",
-        installmentAmount: 120,
-        dueAmount: 680,
-        phoneNumber: "0233771332",
-        businessNumber: "01273150005",
-        creditSumAmount: { credit: 5434, sum: 12, amount: 0 },
-        address: "alharam",
-        businessDistrict: "Giza",
-      },
-    ];
+  const renderTable = (_data) => {
     return (
       <table className="table">
         <thead>
@@ -266,58 +255,58 @@ export default class CommissaryDueInstallmentsClientCard extends Component {
             <th>{"منطقة العمل"}</th>
           </tr>
         </thead>
-        {this.renderTableBody(data)}
+        {renderTableBody(_data)}
       </table>
     );
   };
-  renderTableBody = (array) => {
+  const renderCommissaryData = (representative) => {
     return (
-      <tbody>
-        {array.map((el, idx) => {
-          return (
-            <tr key={idx}>
-              <td>{"ف"}</td>
-              <td>{idx + 1}</td>
-              <td>{el.clientName}</td>
-              <td>{el.installmentNumber}</td>
-              <td>{el.dueDate}</td>
-              <td>{el.lastPaymentDate}</td>
-              <td>{el.lastInstallmentDate}</td>
-              <td>{el.installmentStatus}</td>
-              <td>{numbersToArabic(el.installmentAmount)}</td>
-              <td>{el.dueAmount}</td>
-              <td>{numbersToArabic(el.phoneNumber)}</td>
-              <td>{numbersToArabic(el.businessNumber)}</td>
-              <td>
-                <div style={{ display: "flex" }}>
-                  <div style={{ flex: 1 }}>
-                    <span>{el.creditSumAmount.credit}</span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
-                      flex: 1,
-                    }}
-                  >
-                    <span style={{ backgroundColor: "darkgrey" }}>
-                      {el.creditSumAmount.sum}
-                    </span>
-                    <span style={{ backgroundColor: "darkgrey" }}>
-                      {el.creditSumAmount.amount}
-                    </span>
-                  </div>
-                </div>
-              </td>
-              <td>{el.address}</td>
-              <td>{el.businessDistrict}</td>
-            </tr>
-          );
-        })}
-      </tbody>
+      <div className="CommissaryDiv">
+        {renderCommissaryDetailsDiv(
+          representative.name ? representative.name : "--"
+        )}
+        {renderTable(representative.customers)}
+        {renderSummary(
+          "Commissary",
+          representative.name ? representative.name : "",
+          representative.count,
+          representative.amount
+        )}
+      </div>
     );
   };
-  render() {
-    return this.renderData();
-  }
-}
+
+  const renderBranchData = (branch) => {
+    return (
+      <div className="branchDiv">
+        {renderBranchNameDiv(branch.name ? branch.name : "--")}
+        {branch.representatives.map((representative) =>
+          renderCommissaryData(representative)
+        )}
+        {renderSummary(
+          "Branch",
+          branch.name ? branch.name : "",
+          branch.count,
+          branch.amount
+        )}
+      </div>
+    );
+  };
+  const renderData = ({ data, fromDate, toDate }) => {
+    return (
+      <div
+        className="installmentsDuePerOfficerCustomerCard"
+        dir="rtl"
+        lang="ar"
+      >
+        {renderHeader(fromDate, toDate)}
+        {data.branches.map((branch) => renderBranchData(branch))}
+        {renderSummary("Total", null, data.count, data.amount)}
+      </div>
+    );
+  };
+  console.log("props", props);
+  return renderData(props);
+};
+
+export default InstallmentsDuePerOfficerCustomerCard;
