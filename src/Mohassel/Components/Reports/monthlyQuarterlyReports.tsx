@@ -7,10 +7,11 @@ import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import MonthlyReport from '../pdfTemplates/monthlyReport/monthlyReport';
 import QuarterlyReport from '../pdfTemplates/quarterlyReport/quarterlyReport';
-import { monthlyReport } from '../../Services/APIs/Reports/monthlyReport';
-import { quarterlyReport } from '../../Services/APIs/Reports/quarterlyReport';
+import { monthlyReport, getMonthlyReportExcel, postMonthlyReportExcel } from '../../Services/APIs/Reports/monthlyReport';
+import { quarterlyReport, getQuarterlyReportExcel, postQuarterlyReportExcel } from '../../Services/APIs/Reports/quarterlyReport';
 import ReportsModal from "./reportsModal";
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import { downloadFile } from '../../../Shared/Services/utils';
 export interface PDF {
   key?: string;
   local?: string;
@@ -70,22 +71,80 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
     if (res.status === "success") {
       this.setState({ loading: false, print: 'monthly', data: res.body }, () => window.print());
     } else {
-      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   async quarterlyReport(values) {
     const date = values.quarterYear.split("-");
     const year = date[0];
     this.setState({ loading: true, showModal: false });
-    if(values){
-    const res = await quarterlyReport({ quarter: `${year}-${values.quarterNumber}` });
-    if (res.status === "success") {
-      this.setState({loading:false ,print: 'quarterly', data: res.body }, () => window.print());
-    }
-    else {
-      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
+    if (values) {
+      const res = await quarterlyReport({ quarter: `${year}-${values.quarterNumber}` });
+      if (res.status === "success") {
+        this.setState({ loading: false, print: 'quarterly', data: res.body }, () => window.print());
+      }
+      else {
+        this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
+      }
     }
   }
+
+  getExcel(values){
+    let obj = {}
+    if(values){
+    const date = values.quarterYear?.split("-");
+    const year = date?.length  > 0 ? date[0] : ''; 
+     obj = {
+      quarter:`${year}-${values.quarterNumber}`,
+    }
+  }
+    switch (this.state.selectedPdf.key) {
+      case 'monthlyReport':
+        return this.getExcelFile(postMonthlyReportExcel,getMonthlyReportExcel,{});
+      case 'quarterlyReport':
+        return this.getExcelFile(postQuarterlyReportExcel,getQuarterlyReportExcel,obj);
+    }
+  }
+  async getExcelFile(func, pollFunc, obj) {
+    this.setState({ loading: true, showModal: false})
+    const res = await func(obj);
+    if (res.status === 'success') {
+      if (Object.keys(res.body).length === 0) {
+        this.setState({ loading: false });
+        Swal.fire("error", local.noResults)
+      } else {
+        this.setState({ loading: true })
+        const pollStart = new Date().valueOf();
+        this.getExcelPoll(pollFunc, res.body.fileId, pollStart);
+      }
+    } else {
+      this.setState({ loading: false });
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+    }
+  }
+  async getExcelPoll(func, id, pollStart) {
+    const pollInstant = new Date().valueOf();
+    if (pollInstant - pollStart < 300000) {
+      const file = await func(id)
+      if (file.status === 'success') {
+        if (['created', 'failed'].includes(file.body.status)) {
+          if (file.body.status === 'created') downloadFile(file.body.presignedUrl)
+          if (file.body.status === 'failed') Swal.fire("error", local.failed)
+          this.setState({
+            showModal: false,
+            loading: false
+          })
+        } else {
+          setTimeout(() => this.getExcelPoll(func, id, pollStart), 5000);
+        }
+      } else {
+        this.setState({ loading: false });
+        console.log(file)
+      }
+    } else {
+      this.setState({ loading: false })
+      Swal.fire("error", 'TimeOut')
+    }
   }
   render() {
     return (
@@ -103,7 +162,7 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
                     <Card.Body>
                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
                         <div style={{ display: 'flex' }}>
-                          <span style={{ marginLeft: 40 }}>#{index +1}</span>
+                          <span style={{ marginLeft: 40 }}>#{index + 1}</span>
                           <span style={{ marginLeft: 40 }}>{pdf.local}</span>
                         </div>
                         <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />
@@ -121,6 +180,7 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
             show={this.state.showModal}
             hideModal={() => this.setState({ showModal: false })}
             submit={(values) => this.handleSubmit(values)}
+            getExcel={(values) => this.getExcel(values)}
           />
         )}
         {this.state.print === 'monthly' && this.state.data && <MonthlyReport data={this.state.data} />}

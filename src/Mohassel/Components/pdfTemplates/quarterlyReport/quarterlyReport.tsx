@@ -157,7 +157,7 @@ const QuarterlyReport = (props: Props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.1</td>
                   <td>معدل نمو المحفظة</td>
-                  <td>{props.data.fundingWalletTrends.walletGrowthRate}%</td>
+                  <td>{props.data.fundingWalletTrends.walletGrowthRate ? props.data.fundingWalletTrends.walletGrowthRate : 0.00 }%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.2</td>
@@ -302,12 +302,12 @@ const QuarterlyReport = (props: Props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.9</td>
                   <td>نسبة أرصدة العملاء بترحيل أقساط – 3 أقساط</td>
-                  <td>{`${props.data.fundingWalletQuality.carryOverInstallmentsCustomersWalletRate ? props.data.fundingWalletQuality.carryOverInstallmentsCustomersWalletRate: 0} %`}</td>
+                  <td>{`${props.data.fundingWalletQuality.carryOverInstallmentsCustomersWalletRate ? props.data.fundingWalletQuality.carryOverInstallmentsCustomersWalletRate: 0.00} %`}</td>
                 </tr> 
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.10</td>
                   <td>نسبة أرصدة العملاء المعاد جدولتها</td>
-                  <td>{`${props.data.fundingWalletQuality.rescheduledCustomerWalletRate ? props.data.fundingWalletQuality.rescheduledCustomerWalletRate: 0} %`}</td>
+                  <td>{`${props.data.fundingWalletQuality.rescheduledCustomerWalletRate ? props.data.fundingWalletQuality.rescheduledCustomerWalletRate: 0.00} %`}</td>
                 </tr>
               </tbody>
             </table>
