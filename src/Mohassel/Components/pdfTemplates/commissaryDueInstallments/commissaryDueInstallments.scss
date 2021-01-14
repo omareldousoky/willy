@@ -1,0 +1,36 @@
+@media print {
+  .print-none {
+    display: none;
+  }
+  .commissaryDueInstallments {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    page-break-after: always;
+    direction: rtl;
+
+    .CommissaryDiv {
+      width: 95%;
+      margin: auto;
+      .table {
+        width: 95%;
+        margin: auto;
+        border-collapse: collapse;
+        th {
+          border-top: 1px solid black;
+          border-bottom: 1px solid black;
+        }
+      }
+    }
+    .lineStroke {
+      height: 2px;
+      background: black;
+    }
+  }
+}
+@media screen {
+  .commissaryDueInstallments {
+    max-width: 700px;
+    display: none;
+  }
+}
