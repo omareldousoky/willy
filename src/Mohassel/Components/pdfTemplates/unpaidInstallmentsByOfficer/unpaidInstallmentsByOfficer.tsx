@@ -10,6 +10,11 @@ const numbersToArabic = (input) => {
     });
   } else return "";
 };
+const installmentStatuses = {
+  unpaid: "لم يستحق",
+  partiallyPaid: "مدفوع جزئيا",
+  pending: "قيد التحقيق",
+};
 
 interface UnpaidInstallmentsByOfficerProps {
   fromDate: string;
@@ -47,7 +52,7 @@ const UnpaidInstallmentsByOfficer = (
           <p style={{ margin: 0 }}>{"قائمة الإقساط المستحقة بالمندوب"}</p>
           <p style={{ margin: 0 }}>
             <span>{"من "}</span>
-            <span>{fromDate}</span>
+            <span>{` ${fromDate} `}</span>
             <span>{"إلى "}</span>
             <span>{toDate}</span>
           </p>
@@ -190,7 +195,7 @@ const UnpaidInstallmentsByOfficer = (
               <td>{el.customerName}</td>
               <td>{el.dateOfPayment}</td>
               <td>{el.installmentNumber}</td>
-              <td>{el.installmentStatus}</td>
+              <td>{installmentStatuses[el.installmentStatus]}</td>
               <td>{numbersToArabic(el.installmentAmount)}</td>
               <td>{el.paidAmount ? el.paidAmount : 0}</td>
               <td>{el.requiredAmount}</td>
@@ -234,9 +239,8 @@ const UnpaidInstallmentsByOfficer = (
           offficer.unpaidInstallmentsByOfficerTotal.representativeName
             ? offficer.unpaidInstallmentsByOfficerTotal.representativeName
             : "--",
-          offficer.unpaidInstallmentsByOfficerTotal
-            .unpaidInstallmentsByOfficerTotal,
           offficer.unpaidInstallmentsByOfficerTotal.count,
+          offficer.unpaidInstallmentsByOfficerTotal.installmentAmounts,
           offficer.unpaidInstallmentsByOfficerTotal.paidAmounts
             ? offficer.unpaidInstallmentsByOfficerTotal.paidAmounts
             : 0,
