@@ -7,6 +7,7 @@ const fetchLoansBriefingReportUrl = `${REACT_APP_BASE_URL}/report/loans-briefing
 export interface LoansBriefingReportRequest {
     startDate: string;
     endDate: string;
+	branches: string[];
 }
 
 interface LoansBriefStats {

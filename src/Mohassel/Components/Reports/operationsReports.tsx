@@ -49,7 +49,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 {
                     key: Reports.LoansBriefing2,
                     local: "ملخص الحالات والقروض 2",
-                    inputs: ["dateFromTo"],
+                    inputs: ["dateFromTo", "branches"],
                     permission: "briefingReport",
                 },
                 {
@@ -70,6 +70,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         this.setState({ showModal: true, selectedPdf: selectedPdf });
     }
     handleSubmit(values) {
+		const branches = values.branches.map((branch) => branch._id)
+		values.branches = branches.includes("") ? [] : branches
         switch (this.state.selectedPdf.key) {
             case Reports.LoansBriefing2:
                 return this.fetchLoansBriefing(values);
@@ -81,10 +83,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     }
     async fetchLoansBriefing(values) {
         this.setState({ loading: true, showModal: false });
-        const { fromDate, toDate } = values;
+        const { fromDate, toDate, branches } = values;
         const request: LoansBriefingReportRequest = {
-            startDate: getDate(fromDate),
-            endDate: getDate(toDate),
+            startDate: fromDate,
+            endDate: toDate,
+			branches,
         };
 
         const res = await fetchLoansBriefingReport(request);
@@ -96,6 +99,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 this.setState(
                     {
                         data: res.body,
+						fromDate,
+						toDate,
                         showModal: false,
                         print: Reports.LoansBriefing2,
                         loading: false,
