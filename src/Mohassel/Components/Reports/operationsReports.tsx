@@ -8,8 +8,10 @@ import {
     fetchLoansBriefingReport,
     LoansBriefingReportRequest,
 } from "../../Services/APIs/Reports/loansBriefingReport";
+import {fetchUnpaidInstallmentsPerAreaReport, UnpaidInstallmentsPerAreaRequest} from "../../Services/APIs/Reports/unpaidInstallmentsPerArea"
 import Swal from "sweetalert2";
 import LoansBriefing2 from "../pdfTemplates/loansBriefing/loansBriefing2";
+import UnpaidInst from "../pdfTemplates/unpaidInst/unpaidInst";
 import { getDate } from "../../../Shared/Services/utils";
 
 export interface PDF {
@@ -34,6 +36,7 @@ enum Reports {
     LoansBriefing2 = "loansBriefing2",
     LoanOfficersRepaymentRate1 = "loanOfficersRepaymentRate1",
     LoanOfficersRepaymentRate3 = "loanOfficersRepaymentRate3",
+    UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea"
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -48,6 +51,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                     local: "ملخص الحالات والقروض 2",
                     inputs: ["dateFromTo", "branches"],
                     permission: "briefingReport",
+                },
+                {
+                    key: Reports.UnpaidInstallmentsPerArea,
+                    local: "قائمة الاقساط الغير مسددة بمناطق العمل",
+                    inputs: ["dateFromTo", "branches"],
+                    permission: "unpaidInstallmentsPerArea",
                 },
             ],
             selectedPdf: { permission: "" },
@@ -66,6 +75,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         switch (this.state.selectedPdf.key) {
             case Reports.LoansBriefing2:
                 return this.fetchLoansBriefing(values);
+            case Reports.UnpaidInstallmentsPerArea: 
+                return this.fetchUnpaidInstallments(values);
             default:
                 return null;
         }
@@ -92,6 +103,37 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
 						toDate,
                         showModal: false,
                         print: Reports.LoansBriefing2,
+                        loading: false,
+                    },
+                    () => window.print()
+                );
+            }
+        } else {
+            this.setState({ loading: false });
+            console.log(res);
+        }
+    }
+
+    async fetchUnpaidInstallments(values) {
+        const { fromDate, toDate, branches } = values;
+        this.setState({ loading: true, showModal: false, fromDate, toDate });
+        const request: UnpaidInstallmentsPerAreaRequest = {
+            startDate: fromDate,
+            endDate: toDate,
+            branches: branches
+        };
+
+        const res = await fetchUnpaidInstallmentsPerAreaReport(request);
+        if (res.status === "success") {
+            if (!res.body) {
+                this.setState({ loading: false });
+                Swal.fire("error", local.noResults);
+            } else {
+                this.setState(
+                    {
+                        data: res.body,
+                        showModal: false,
+                        print: Reports.UnpaidInstallmentsPerArea,
                         loading: false,
                     },
                     () => window.print()
@@ -177,6 +219,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 )}
                 {this.state.print === Reports.LoansBriefing2 && (
                     <LoansBriefing2
+                        data={this.state.data}
+                        fromDate={this.state.fromDate}
+                        toDate={this.state.toDate}
+                    />
+                )}
+                {this.state.print === Reports.UnpaidInstallmentsPerArea && (
+                    <UnpaidInst
                         data={this.state.data}
                         fromDate={this.state.fromDate}
                         toDate={this.state.toDate}
