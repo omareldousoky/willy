@@ -51,7 +51,7 @@ const LoanContractForGroup = (props) => {
 
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (جماعي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
-                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(0, false)}</div>
+                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
                   <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
 							:-</div>
                   <table className="stakeholders">
@@ -182,7 +182,7 @@ const LoanContractForGroup = (props) => {
                               <td>{new Tafgeet(individualInGroup.amount, 'EGP').parse()}</td>
                               <td>
                                 <div>
-                                  <b className="word-break">و ذلك لنشاط</b>
+                                  <b className="word-break"> و ذلك لنشاط </b>
                                   <span>
                                     {individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}
                                   </span>
@@ -372,7 +372,7 @@ const LoanContractForGroup = (props) => {
                   </table>
                   {props.data.group.individualsInGroup.map((individualInGroup, index) => {
                     return (
-                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: 20 }}>
+                      <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: 20, marginBottom: 100 }}>
                         <div>الاسم/ {individualInGroup.customer.customerName}</div>
                         <div>التوقيع:----------------------------------------------</div>
                       </div>
@@ -385,7 +385,7 @@ const LoanContractForGroup = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
@@ -434,14 +434,14 @@ const LoanContractForGroup = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <div>القائم بالمراجعه</div>
-                          <div>الاسم: --------------------------</div>
-                          <div>التوقيع: -------------------------</div>
+                          <div style={{marginBottom: 30}}>القائم بالمراجعه</div>
+                          <div style={{marginBottom: 100}}>الاسم: --------------------------</div>
+                          <div style={{marginBottom: 100}}>التوقيع: -------------------------</div>
                         </td>
                         <td>
-                          <div>القائم بالصرف</div>
-                          <div>الاسم: --------------------------</div>
-                          <div>التوقيع: -------------------------</div>
+                          <div style={{marginBottom: 30}}>القائم بالصرف</div>
+                          <div style={{marginBottom: 100}}>الاسم: --------------------------</div>
+                          <div style={{marginBottom: 100}}>التوقيع: -------------------------</div>
                         </td>
                       </tr>
                     </tbody>
@@ -452,13 +452,13 @@ const LoanContractForGroup = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
                     </div>
                   </div>
