@@ -165,9 +165,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                     },
                     () => {
                         window.print()
-                        this.setState({
-                            print: '' 
-                        })
                     }
                 );
             }
