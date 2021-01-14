@@ -141,13 +141,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     }
     async fetchInstallmentsDuePerOfficerCustomerCard(values) {
         this.setState({ loading: true, showModal: false });
-        const { fromDate, toDate } = values;
-        const branches = values.branches.map((branch) => branch._id)
+        const { fromDate, toDate , branches} = values;
         const obj = {
             startdate: getDate(fromDate),
             enddate: getDate(toDate),
-            branches: branches.includes("") ? [""] : branches,
-            // all: branches.includes("") ? "1" : "0",
+            branches,
           }
 
         const res = await installmentsDuePerOfficerCustomerCard(obj);
@@ -176,12 +174,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
 
     async fetchUnpaidInstallmentsByOfficer(values) {
         this.setState({ loading: true, showModal: false });
-        const { fromDate, toDate } = values;
-        const branches = values.branches.map((branch) => branch._id)
+        const { fromDate, toDate, branches } = values;
         const obj = {
             startdate: getDate(fromDate),
             enddate: getDate(toDate),
-            branches: branches.includes("") ? [""] : branches,
+            branches,
             // all: branches.includes("") ? "1" : "0",
           }
 
@@ -319,12 +316,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                         toDate={this.state.toDate}
                     />
                 )}
-                {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard && (
+                {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard ?(
                     <InstallmentsDuePerOfficerCustomerCard data={this.state.data} fromDate={this.state.fromDate} toDate={this.state.toDate} />
-                )}
-                 {this.state.print === Reports.UnpaidInstallmentsByOfficer && (
+                ) : null}
+                 {this.state.print === Reports.UnpaidInstallmentsByOfficer ? (
                     <UnpaidInstallmentsByOfficer data={this.state.data} fromDate={this.state.fromDate} toDate={this.state.toDate} />
-                )}
+                ) : null}
                 {this.state.print === Reports.UnpaidInstallmentsPerArea && (
                     <UnpaidInst
                         data={this.state.data}
