@@ -256,8 +256,6 @@ const UnpaidInstallmentsByOfficer = (
   };
   const renderData = ({ data, fromDate, toDate }) => {
     const _data = data.response;
-    console.log("data", data);
-    console.log("_data", _data);
     return (
       <div className="unpaidInstallmentsByOfficer" dir="rtl" lang="ar">
         {renderHeader(fromDate, toDate)}
@@ -273,8 +271,6 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     );
   };
-
-  console.log("props", props);
   return renderData(props);
 };
 

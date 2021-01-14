@@ -86,7 +86,10 @@ const InstallmentsDuePerOfficerCustomerCard = (
       <div style={{ flex: 1 }} />
     </div>
   );
-  const renderCommissaryDetailsDiv = (CommissaryName = "") => (
+  const renderCommissaryDetailsDiv = (
+    CommissaryName = "",
+    CommissaryID = null
+  ) => (
     <div style={{ display: "flex", margin: "5px 0" }}>
       <div style={{ width: "60%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -105,17 +108,19 @@ const InstallmentsDuePerOfficerCustomerCard = (
           >
             <span>{CommissaryName}</span>
           </div>
-          {/* <div
-            style={{
-              border: "1px solid black",
-              minWidth: 160,
-              textAlign: "left",
-              paddingRight: 5,
-              marginRight: 2,
-            }}
-          >
-            <span>{"132124123"}</span>
-          </div> */}
+          {CommissaryID ? (
+            <div
+              style={{
+                border: "1px solid black",
+                minWidth: 160,
+                textAlign: "left",
+                paddingRight: 5,
+                marginRight: 2,
+              }}
+            >
+              <span>{CommissaryID}</span>
+            </div>
+          ) : null}
         </div>
       </div>
       <div style={{ width: "40%" }} />
@@ -263,7 +268,8 @@ const InstallmentsDuePerOfficerCustomerCard = (
     return (
       <div className="CommissaryDiv">
         {renderCommissaryDetailsDiv(
-          representative.name ? representative.name : "--"
+          representative.name ? representative.name : "--",
+          representative.id
         )}
         {renderTable(representative.customers)}
         {renderSummary(
@@ -305,7 +311,6 @@ const InstallmentsDuePerOfficerCustomerCard = (
       </div>
     );
   };
-  console.log("props", props);
   return renderData(props);
 };
 
