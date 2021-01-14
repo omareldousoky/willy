@@ -10,6 +10,11 @@ const numbersToArabic = (input) => {
     });
   } else return "";
 };
+const installmentStatuses = {
+  unpaid: "لم يستحق",
+  partiallyPaid: "مدفوع جزئيا",
+  pending: "قيد التحقيق",
+};
 interface InstallmentsDuePerOfficerCustomerCardProps {
   fromDate: string;
   toDate: string;
@@ -198,7 +203,7 @@ const InstallmentsDuePerOfficerCustomerCard = (
               <td>{el.dateOfPayment}</td>
               <td>{el.lastPaymentDate}</td>
               <td>{el.lastInstallmentDate}</td>
-              <td>{el.installmentStatus}</td>
+              <td>{installmentStatuses[el.installmentStatus]}</td>
               <td>{numbersToArabic(el.installmentAmount)}</td>
               <td>{el.amountDue}</td>
               <td>{numbersToArabic(el.phoneNumber)}</td>
