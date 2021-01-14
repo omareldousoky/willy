@@ -163,7 +163,9 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                         print: Reports.InstallmentsDuePerOfficerCustomerCard,
                         loading: false,
                     },
-                    () => window.print()
+                    () => {
+                        window.print()
+                    }
                 );
             }
         } else {

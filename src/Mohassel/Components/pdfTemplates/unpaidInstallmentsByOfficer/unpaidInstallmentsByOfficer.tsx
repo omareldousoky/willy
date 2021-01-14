@@ -81,8 +81,7 @@ const UnpaidInstallmentsByOfficer = (
               marginRight: 2,
             }}
           >
-            <span>{"علياء عبده أحمد حسين"}</span>
-            {/* <span>{CommissaryName}</span> */}
+            <span>{CommissaryName}</span>
           </div>
           <div
             style={{
@@ -132,7 +131,7 @@ const UnpaidInstallmentsByOfficer = (
               style={{
                 backgroundColor: "darkgrey",
                 border: "1px solid black",
-                minWidth: 320,
+                minWidth: 330,
                 textAlign: "right",
                 paddingRight: 2,
                 marginLeft: 4,
@@ -251,11 +250,13 @@ const UnpaidInstallmentsByOfficer = (
   };
   const calculateTotal = (data, key) => {
     let total = 0;
-    data.forEach((el) => {
-      if (el.unpaidInstallmentsByOfficerTotal[key]) {
-        total += el.unpaidInstallmentsByOfficerTotal[key];
-      }
-    });
+    if(data){
+      data.forEach((el) => {
+        if (el.unpaidInstallmentsByOfficerTotal[key]) {
+          total += el.unpaidInstallmentsByOfficerTotal[key];
+        }
+      });
+    }
     return total;
   };
   const renderData = ({ data, fromDate, toDate }) => {
@@ -263,7 +264,7 @@ const UnpaidInstallmentsByOfficer = (
     return (
       <div className="unpaidInstallmentsByOfficer" dir="rtl" lang="ar">
         {renderHeader(fromDate, toDate)}
-        {_data.map((offficer) => renderCommissaryData(offficer))}
+        {_data ? _data.map((offficer) => renderCommissaryData(offficer)) : null}
         {renderSummary(
           "Total",
           null,
