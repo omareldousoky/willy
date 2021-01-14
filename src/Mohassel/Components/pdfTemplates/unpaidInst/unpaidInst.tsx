@@ -4,6 +4,8 @@ import local from "../../../../Shared/Assets/ar.json";
 import { numbersToArabic, timeToArabicDate } from "../../../../Shared/Services/utils"
 
 const UnpaidInst = (props) => {
+  const startDate = new Date(props.fromDate).valueOf()
+  const endDate = new Date(props.toDate).valueOf()
   return (
     <div>
       {props.data?.branches?.map((branch, index) => {
@@ -24,7 +26,7 @@ const UnpaidInst = (props) => {
                 </tr>
                 <tr>
                   <th></th>
-                  <th style={{ fontSize: 18 }}> من {timeToArabicDate(props.startDate, false)} الي {timeToArabicDate(props.endDate, false)}</th>
+                  <th style={{ fontSize: 18 }}> من {timeToArabicDate(startDate, false)} الي {timeToArabicDate(endDate, false)}</th>
                 </tr>
               </thead>
             </table>
@@ -42,7 +44,8 @@ const UnpaidInst = (props) => {
                         <th>حالة القسط</th>
                         <th>قيمة القسط</th>
                         <th>المستحق</th>
-                        <th colSpan={2}>ت المحمول</th>
+                        <th>ت المحمول</th>
+                        <th>العنوان</th>
                         <th>اسم المندوب</th>
                       </tr>
                     </thead>
