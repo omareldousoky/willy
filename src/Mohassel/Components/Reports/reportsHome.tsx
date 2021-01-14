@@ -37,8 +37,6 @@ class ReportsHome extends Component<{}, State> {
                 {
                     header: local.monthlyQuarterlyReports,
                     stringKey: 'monthlyQuarterlyReports',
-                    permission: 'monthlyReport',
-                    permissionKey: 'report'
                 }]
         }
     }

@@ -856,5 +856,6 @@
     "clearanceDocumentPhoto": "صورة مستند المخالصة",
     "monthlyQuarterlyReports": "التقارير الشهرية و الربع سنوية",
     "monthlyReport": "التقرير الشهري",
-    "quarterReport":" التقرير الربع سنوي"
+    "quarterReport":" التقرير الربع سنوي",
+    "noOfQuarter":"إختر الربع السنوي"
 }

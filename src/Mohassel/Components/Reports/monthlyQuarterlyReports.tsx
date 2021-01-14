@@ -8,11 +8,23 @@ import Can from '../../config/Can';
 import MonthlyReport from '../pdfTemplates/monthlyReport/monthlyReport';
 import QuarterlyReport from '../pdfTemplates/quarterlyReport/quarterlyReport';
 import { monthlyReport } from '../../Services/APIs/Reports/monthlyReport';
-import {quarterlyReport} from '../../Services/APIs/Reports/quarterlyReport';
+import { quarterlyReport } from '../../Services/APIs/Reports/quarterlyReport';
+import ReportsModal from "./reportsModal";
+import { getErrorMessage } from '../../../Shared/Services/utils';
+export interface PDF {
+  key?: string;
+  local?: string;
+  inputs?: Array<string>;
+  permission: string;
+}
+
 interface State {
   loading: boolean;
   print: string;
   data: any;
+  pdfsArray?: Array<PDF>;
+  selectedPdf: PDF;
+  showModal: boolean;
 }
 class MonthlyQuarterlyReports extends Component<{}, State>{
   constructor(props) {
@@ -20,23 +32,61 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
     this.state = {
       loading: false,
       print: '',
+      pdfsArray: [
+        {
+          key: 'monthlyReport',
+          local: 'التقرير الشهري',
+          inputs: [],
+          permission: 'monthlyReport'
+        },
+        {
+          key: 'quarterlyReport',
+          local: 'التقرير الربع سنوي',
+          inputs: ["quarterYear", "quarterNumber"],
+          permission: 'quarterlyReport'
+        }
+      ],
       data: {},
+      showModal: false,
+      selectedPdf: { permission: "" },
     }
   }
-  async getFile(type: string) {
-    this.setState({loading:  true})
-    if (type === 'monthly') {
-       const res = await monthlyReport();
-       if(res.status==="success")
-           this.setState({ print: type,data: res.body},() => window.print());
-    } else {
-      const res = await quarterlyReport({quarter: "2020-04"});
-      if(res.status ==="success")
-           this.setState({print: type,data: res.body},()=> window.print());
+  handlePrint(selectedPdf: PDF) {
+    this.setState({ showModal: true, selectedPdf: selectedPdf });
+  }
+  async handleSubmit(values) {
+    switch (this.state.selectedPdf.key) {
+      case 'monthlyReport':
+        return this.monthlyReport();
+      case 'quarterlyReport':
+        return this.quarterlyReport(values);
     }
-    this.setState({loading: false});
+
   }
 
+  async monthlyReport() {
+    this.setState({ loading: true, showModal: false });
+    const res = await monthlyReport();
+    if (res.status === "success") {
+      this.setState({ loading: false, print: 'monthly', data: res.body }, () => window.print());
+    } else {
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
+    }
+  }
+  async quarterlyReport(values) {
+    const date = values.quarterYear.split("-");
+    const year = date[0];
+    this.setState({ loading: true, showModal: false });
+    if(values){
+    const res = await quarterlyReport({ quarter: `${year}-${values.quarterNumber}` });
+    if (res.status === "success") {
+      this.setState({loading:false ,print: 'quarterly', data: res.body }, () => window.print());
+    }
+    else {
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
+    }
+  }
+  }
   render() {
     return (
       <>
@@ -46,32 +96,35 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
             <div className="custom-card-header">
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.monthlyQuarterlyReports}</Card.Title>
             </div>
-            <Card>
-              <Card.Body>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
-                  <div style={{ display: 'flex' }}>
-                    <span style={{ marginLeft: 40 }}>#1</span>
-                    <span style={{ marginLeft: 40 }}>{local.monthlyReport}</span>
-                  </div>
-                  <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile('monthly')} />
-                </div>
-              </Card.Body>
-            </Card>
-            <Card>
-              <Card.Body>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
-                  <div style={{ display: 'flex' }}>
-                    <span style={{ marginLeft: 40 }}>#2</span>
-                    <span style={{ marginLeft: 40 }}>{local.quarterReport}</span>
-                  </div>
-                  <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile('quarterly')} />
-                </div>
-              </Card.Body>
-            </Card>
+            {this.state.pdfsArray?.map((pdf, index) => {
+              return (
+                <Can I={pdf.permission} a="report" key={index}>
+                  <Card>
+                    <Card.Body>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px 20px', fontWeight: 'bold', alignItems: 'center' }}>
+                        <div style={{ display: 'flex' }}>
+                          <span style={{ marginLeft: 40 }}>#{index +1}</span>
+                          <span style={{ marginLeft: 40 }}>{pdf.local}</span>
+                        </div>
+                        <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.handlePrint(pdf)} />
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Can>
+              );
+            })}
           </Card.Body>
         </Card>
-        {this.state.print === 'monthly' && this.state.data && <MonthlyReport data={this.state.data} /> }
-        {this.state.print === 'quarterly' && <QuarterlyReport />}
+        {this.state.showModal && (
+          <ReportsModal
+            pdf={this.state.selectedPdf}
+            show={this.state.showModal}
+            hideModal={() => this.setState({ showModal: false })}
+            submit={(values) => this.handleSubmit(values)}
+          />
+        )}
+        {this.state.print === 'monthly' && this.state.data && <MonthlyReport data={this.state.data} />}
+        {this.state.print === 'quarterly' && <QuarterlyReport data={this.state.data} />}
       </>
     )
   }
