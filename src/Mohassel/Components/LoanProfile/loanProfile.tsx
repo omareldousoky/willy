@@ -49,6 +49,7 @@ import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManu
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment';
 import { numTo2Decimal } from '../CIB/textFiles';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -113,7 +114,7 @@ class LoanProfile extends Component<Props, State>{
                 loading: false
             })
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         }
     }
 
@@ -130,7 +131,7 @@ class LoanProfile extends Component<Props, State>{
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(application.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
     }
     async getCachediScores(application) {
@@ -159,7 +160,7 @@ class LoanProfile extends Component<Props, State>{
         if (iScores.status === "success") {
             this.setState({ iscores: iScores.body.data, loading: false })
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(iScores.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(iScores.error.error), 'error'))
         }
     }
     setTabsToRender(application) {
@@ -227,7 +228,7 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ activeTab: 'loanDetails' })
             this.getPendingActions();
         }
-        if(application.body.status === "canceled"){
+        if (application.body.status === "canceled") {
             tabsToRender.push(financialTransactionsTab)
         }
         tabsToRender.push(logsTab)
@@ -243,7 +244,7 @@ class LoanProfile extends Component<Props, State>{
         const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             this.setState({ loading: false, geoAreas: resGeo.body.data })
-        } else this.setState({ loading: false },()=>Swal.fire("Error !",getErrorMessage(resGeo.error.error),'error'))
+        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(resGeo.error.error), 'error'))
     }
     getCustomerGeoArea(geoArea) {
         const geoAreaObject = this.state.geoAreas.filter(area => area._id === geoArea);
@@ -257,13 +258,13 @@ class LoanProfile extends Component<Props, State>{
         if (res.status === "success") {
             this.setState({ loading: false, pendingActions: res.body })
         }
-        else this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+        else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     async getBranchData(branchId: string) {
         const res = await getBranch(branchId);
         if (res.status === 'success') {
             this.setState({ branchDetails: res.body.data })
-        } else Swal.fire("Error !",getErrorMessage(res.error.error),'error');
+        } else Swal.fire("Error !", getErrorMessage(res.error.error), 'error');
     }
     async calculatePenalties() {
         this.setState({ loading: true });
@@ -273,14 +274,14 @@ class LoanProfile extends Component<Props, State>{
         });
         if (res.body) {
             this.setState({ penalty: res.body.penalty, loading: false });
-        } else this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
     }
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
                 return <LoanDetailsTableView application={this.state.application} />
             case 'loanGuarantors':
-                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
+                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -326,13 +327,13 @@ class LoanProfile extends Component<Props, State>{
             if (res.status === "success") {
                 this.setState({ loading: false, randomPendingActions: this.state.randomPendingActions.filter(el => el._id !== randomPendingActionId) })
                 Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getManualOtherPayments(this.props.history.location.state.id));
-            } else this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+            } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         } else {
             const res = await rejectManualPayment(this.props.history.location.state.id);
             if (res.status === "success") {
                 this.setState({ loading: false, pendingActions: {} })
                 Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
-            } else this.setState({ loading: false }, ()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+            } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         }
     }
     async approveManualPayment(randomPendingActionId: string) {
@@ -378,7 +379,7 @@ class LoanProfile extends Component<Props, State>{
                     this.setState({ loading: false })
                     Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
                 } else {
-                    this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                    this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                 }
             }
         })
@@ -415,7 +416,7 @@ class LoanProfile extends Component<Props, State>{
             this.getCachediScores(this.state.application)
             this.setState({ loading: false })
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(iScore.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(iScore.error.error), 'error'))
         }
     }
     cancelApplication() {
@@ -437,16 +438,31 @@ class LoanProfile extends Component<Props, State>{
                     this.setState({ loading: false })
                     Swal.fire('', local.applicationCancelSuccess, 'success').then(() => window.location.reload());
                 } else {
-                    this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                    this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
 
                 }
             }
         })
     }
+    async getWriteOffReasons() {
+        this.setState({ loading: true });
+        const res = await getWriteOffReasons();
+        if (res.status === "success") {
+            this.setState({ loading: false })
+            const options = {}
+            res.body.reasons.map(option => options[option.id] = option.name)
+            return options
+        } else {
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+            return {}
+        }
+    }
     async writeOffApplication() {
+        const options = await this.getWriteOffReasons()
         const { value: text } = await Swal.fire({
             title: local.writeOffReason,
-            input: 'text',
+            input: 'select',
+            inputOptions: options,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -477,7 +493,7 @@ class LoanProfile extends Component<Props, State>{
                         this.setState({ loading: false })
                         Swal.fire('', local.loanWriteOffSuccess, 'success').then(() => window.location.reload());
                     } else {
-                        this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                        this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                     }
                 }
             })
@@ -517,7 +533,7 @@ class LoanProfile extends Component<Props, State>{
                         this.setState({ loading: false })
                         Swal.fire('', local.loanDoubtSuccess, 'success').then(() => window.location.reload());
                     } else {
-                        this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                        this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                     }
                 }
             })
