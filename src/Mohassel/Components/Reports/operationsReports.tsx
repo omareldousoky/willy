@@ -67,7 +67,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         };
     }
     handlePrint(selectedPdf: PDF) {
-        this.setState({ showModal: true, selectedPdf: selectedPdf });
+        this.setState({ showModal: true, selectedPdf: selectedPdf, data: {} });
     }
     handleSubmit(values) {
 		const branches = values.branches.map((branch) => branch._id)
