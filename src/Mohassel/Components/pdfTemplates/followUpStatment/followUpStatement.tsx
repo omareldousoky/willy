@@ -54,6 +54,16 @@ const FollowUpStatment = (props) => {
                 return originalDate.valueOf()
         }
     }
+    function shiftDaysBackAvoidingWeeekend(day){
+        const originalDate = new Date(day)
+        if (originalDate.getDay() === 5) {
+            originalDate.setDate(originalDate.getDate() - 1)
+        }
+        if (originalDate.getDay() === 6) {
+            originalDate.setDate(originalDate.getDate() - 2)
+        }
+        return originalDate.valueOf()
+    }
     return (
         <div className="follow-up-statment" dir="rtl" lang="ar">
             <table className="margin">
@@ -102,7 +112,7 @@ const FollowUpStatment = (props) => {
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
                                 <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : (props.data.product.periodLength === 14 && props.data.product.periodType === 'days') ? twoWeekGroupShift(installment.dateOfPayment) : (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000))
-                                    : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : (installment.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)), false)}</td>
+                                    : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(installment.dateOfPayment, index) : shiftDaysBackAvoidingWeeekend(installment.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)), false)}</td>
                                 <td>{numbersToArabic(installment.installmentResponse)}</td>
                                 <td></td>
                             </tr>
