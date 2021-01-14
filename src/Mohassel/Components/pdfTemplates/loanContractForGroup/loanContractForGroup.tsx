@@ -51,7 +51,7 @@ const LoanContractForGroup = (props) => {
 
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (جماعي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
-                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(0, false)}</div>
+                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
                   <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
 							:-</div>
                   <table className="stakeholders">
@@ -385,7 +385,7 @@ const LoanContractForGroup = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
@@ -452,13 +452,13 @@ const LoanContractForGroup = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDate(0, false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
                     </div>
                   </div>

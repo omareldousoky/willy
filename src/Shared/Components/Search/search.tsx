@@ -336,6 +336,21 @@ class Search extends Component<Props, State> {
                     </Col>
                   )
                 }
+                if(searchKey==='clearance-status'){
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          <option value='underReview' data-qc='underReview'>{local.underReview}</option>
+                          <option value='approved' data-qc='approved'>{local.approved}</option>
+                          <option value='rejected' data-qc='rejected'>{local.rejected}</option>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
                 if (searchKey === 'branch' && this.viewBranchDropdown()) {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>

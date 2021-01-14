@@ -168,7 +168,7 @@ export const StepTwoForm = (props: any) => {
                                 isInvalid={errors.district && touched.district}
                                 disabled={!values.governorate}
                             >
-                                <option value="" disabled></option>
+                                <option value=""></option>
                                 {governorates.find(gov => gov.governorateName.ar === values.governorate)?.districts.map((district, index) => {
                                     return <option key={index} value={district.districtName.ar} >{district.districtName.ar}</option>
                                 })}
@@ -190,7 +190,7 @@ export const StepTwoForm = (props: any) => {
                                 isInvalid={errors.village && touched.village}
                                 disabled={!values.district}
                             >
-                                <option value="" disabled></option>
+                                <option value=""></option>
                                 {governorates.find(gov => gov.governorateName.ar === values.governorate)?.districts
                                     .find(district => district.districtName.ar === values.district)?.villages?.map((village, index) => {
                                         return <option key={index} value={village.villageName.ar} >{village.villageName.ar}</option>
@@ -319,7 +319,7 @@ export const StepTwoForm = (props: any) => {
                                 isInvalid={errors.businessActivity && touched.businessActivity}
                                 disabled={!values.businessSector}
                             >
-                                <option value="" disabled></option>
+                                <option value=""></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
                                     .map((activity, index) => {
                                         return <option key={index} value={activity.i18n.ar} >{activity.i18n.ar}</option>
@@ -341,7 +341,7 @@ export const StepTwoForm = (props: any) => {
                                 isInvalid={errors.businessSpeciality && touched.businessSpeciality}
                                 disabled={!values.businessActivity}
                             >
-                                <option value="" disabled></option>
+                                <option value=""></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
                                     .find(activity => activity.i18n.ar === values.businessActivity)?.specialties?.map((speciality, index) => {
                                         return <option key={index} value={speciality.businessSpecialtyName.ar} >{speciality.businessSpecialtyName.ar}</option>

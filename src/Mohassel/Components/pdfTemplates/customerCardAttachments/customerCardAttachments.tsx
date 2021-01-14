@@ -264,7 +264,7 @@ const CustomerCardAttachments = (props) => {
               </div>
 
               <div>التاريخ :
-                           <div className="value">{timeToArabicDate(0, false)}</div>
+                           <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@ const CustomerCardAttachments = (props) => {
           <div className="value">---------------------</div>
               </div>
               <div>التاريخ :
-                      <div className="value">{timeToArabicDate(0, false)}</div>
+                      <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
               </div>
             </div>
             <div className="double">
@@ -311,7 +311,7 @@ const CustomerCardAttachments = (props) => {
                       <td>ترخيص رقم (٢)</td>
                     </tr>
                     <tr>
-                      <td>رقم السجل التجارى : {numbersToArabic(individualInGroup.customer.businessLicenseNumber)}</td>
+                      <td>رقم السجل التجارى :٨٤٢٠٩ </td>
                       <td rowSpan={2} >العنوان : {props.branchDetails.address}</td>
                       <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
                     </tr>
@@ -467,7 +467,7 @@ const CustomerCardAttachments = (props) => {
                   </div>
 
                   <div>التاريخ :
-                           <div className="value">{timeToArabicDate(0, false)}</div>
+                           <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
                   </div>
                 </div>
               </div>
@@ -480,7 +480,7 @@ const CustomerCardAttachments = (props) => {
           <div className="value">---------------------</div>
                   </div>
                   <div>التاريخ :
-                      <div className="value">{timeToArabicDate(0, false)}</div>
+                      <div className="value">{timeToArabicDate(props.data.creationDate, false)}</div>
                   </div>
                 </div>
                 <div className="double">

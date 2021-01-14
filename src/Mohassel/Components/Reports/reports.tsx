@@ -65,7 +65,7 @@ class Reports extends Component<{}, State> {
       pdfsArray: [
         { key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey'], permission: 'customerDetails' },
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'], permission: 'loanDetails' },
-        { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
+        { key: 'branchLoanList', local: 'ملخص الحالات والقروض', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
         { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo', 'branches'], permission: 'penalties' },
         { key: 'CrossedOutLoans', local: 'قائمة حركات إعدام ديون القروض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
