@@ -1,7 +1,41 @@
 import React from 'react';
 import './quarterlyReport.scss';
 
-const QuarterlyReport = (props) => {
+interface Props {
+  data: {
+    fundingWalletTrends: {
+      individualAverageLoan: number;
+      individualAverageWallet: number;
+      groupAverageLoan: number;
+      groupAverageWallet: number;
+      averageDaysToFinishIndividualLoans: number;
+      averageDaysToFinishGroupLoans: number;
+      collectionExpectations1To30: number;
+      collectionExpectations31To90: number;
+      collectionExpectations91To180: number;
+      collectionExpectations181To270: number;
+      collectionExpectations271To365: number;
+      collectionExpectationsAfterYear: number;
+      walletGrowthRate: number;
+    };
+    fundingWalletQuality: {
+      writtenOffLoansRate: number;
+      riskCoverageRate: number;
+      committedCustomersWalletRate: number;
+      lateCustomersWalletTo30DaysRate: number;
+      lateCustomersWalletTo60DaysRate: number;
+      lateCustomersWalletTo90DaysRate: number;
+      lateCustomersWalletTo120DaysRate: number;
+      lateCustomersWalletAfter120DaysRate: number;
+      carryOverInstallmentsCustomersWalletRate: number;
+      rescheduledCustomerWalletRate: number;
+    };
+    fromDate: string;
+    toDate: string;
+    createdAt: string;
+  };
+}
+const QuarterlyReport = (props: Props) => {
   return (
     <div className="quarterly-report" lang="ar" dir="rtl">
       {/* page one */}
@@ -48,7 +82,7 @@ const QuarterlyReport = (props) => {
                 </tr>
                 <tr>
                   <td className="td-head"> رقم الترخيص :</td>
-                  <td className="td-body"> شركه تساهيل للتمويل متناهي الصغر</td>
+                  <td className="td-body">2</td>
                 </tr>
               </tbody>
             </table>
@@ -71,14 +105,14 @@ const QuarterlyReport = (props) => {
                 <tr>
                   <td className="td-head"> الفترة :</td>
                   <td className="label"> من</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body"> {props.data.fromDate}</td>
                   <td className="label" style={{ paddingRight: 10 }}> الي</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body"> {props.data.toDate}</td>
                 </tr>
                 <tr>
                   <td className="td-head"> تاريخ الاعداد:</td>
                   <td></td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.createdAt}</td>
                 </tr>
               </tbody>
             </table>
@@ -97,10 +131,10 @@ const QuarterlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body"> {props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -123,67 +157,67 @@ const QuarterlyReport = (props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.1</td>
                   <td>معدل نمو المحفظة</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.walletGrowthRate}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.2</td>
                   <td>متوسط قيمة التمويل للعميل عند المنح (تمويل فردي)</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.individualAverageLoan}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.3</td>
                   <td>متوسط قيمة رصيد التمويل للعميل بنهاية الفترة (تمويل فردي)</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.individualAverageWallet}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.4</td>
                   <td>متوسط قيمة التمويل للعميل عند المنح (تمويل جماعي)</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.groupAverageLoan}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.5</td>
                   <td>متوسط قيمة رصيد التمويل للعميل بنهاية الفترة (تمويل جماعي)</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.groupAverageWallet}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.6</td>
                   <td>متوسط أجل محفظة التمويل (باليوم)</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.averageDaysToFinishIndividualLoans}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.7</td>
                   <td>متوسط أجل محفظة التمويل الجماعي (باليوم)</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.averageDaysToFinishGroupLoans}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.8</td>
                   <td>قيمة ما يتوقع تحصيله خلال 30 يوم أو أقل</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.collectionExpectations1To30}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.9</td>
                   <td>قيمة ما يتوقع تحصيله بين 31 يوم إلى 90 يوم</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.collectionExpectations31To90}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.10</td>
                   <td>قيمة ما يتوقع تحصيله بين 91 يوم إلى 180 يوم</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.collectionExpectations91To180}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.11</td>
                   <td>قيمة ما يتوقع تحصيله بين 181 يوم إلى 270 يوم</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.collectionExpectations181To270}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.12</td>
                   <td>قيمة ما يتوقع تحصيله بين 271 يوم إلى 365 يوم</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.collectionExpectations271To365}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>1.13</td>
                   <td>قيمة ما يتوقع تحصيله بعد أكثر من سنة</td>
-                  <td>18%</td>
+                  <td>{props.data.fundingWalletTrends.collectionExpectationsAfterYear}%</td>
                 </tr>
               </tbody>
             </table>
@@ -202,10 +236,10 @@ const QuarterlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -228,52 +262,52 @@ const QuarterlyReport = (props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.1</td>
                   <td>معدل الديون المعدومة</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.writtenOffLoansRate}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.2</td>
                   <td>معدل تغطية المخاطر</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.riskCoverageRate}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.3</td>
                   <td>نسبة أرصدة العملاء المنتظمة</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.committedCustomersWalletRate}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.4</td>
                   <td>نسبة أرصدة العملاء بتأخير حتى 30 يوم</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.lateCustomersWalletTo30DaysRate}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.5</td>
                   <td>نسبة أرصدة العملاء بتأخير حتى 60 يوم</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.lateCustomersWalletTo60DaysRate}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.6</td>
                   <td>نسبة أرصدة العملاء بتأخير حتى 90 يوم</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.lateCustomersWalletTo90DaysRate}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.7</td>
                   <td>نسبة أرصدة العملاء بتأخير حتى 120 يوم</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.lateCustomersWalletTo120DaysRate}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.8</td>
                   <td>نسبة أرصدة العملاء بتأخير يتجاوز 120 يوم</td>
-                  <td>0.09</td>
+                  <td>{props.data.fundingWalletQuality.lateCustomersWalletAfter120DaysRate}%</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.9</td>
                   <td>نسبة أرصدة العملاء بترحيل أقساط – 3 أقساط</td>
-                  <td>0.09</td>
-                </tr>
+                  <td>{`${props.data.fundingWalletQuality.carryOverInstallmentsCustomersWalletRate ? props.data.fundingWalletQuality.carryOverInstallmentsCustomersWalletRate: 0} %`}</td>
+                </tr> 
                 <tr>
                   <td style={{ textAlign: 'center' }}>2.10</td>
                   <td>نسبة أرصدة العملاء المعاد جدولتها</td>
-                  <td>0.09</td>
+                  <td>{`${props.data.fundingWalletQuality.rescheduledCustomerWalletRate ? props.data.fundingWalletQuality.rescheduledCustomerWalletRate: 0} %`}</td>
                 </tr>
               </tbody>
             </table>
@@ -292,10 +326,10 @@ const QuarterlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -318,17 +352,17 @@ const QuarterlyReport = (props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>3.1</td>
                   <td>معدل السيولة السريعة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>3.2</td>
                   <td>معدل السيولة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>3.3</td>
                   <td>معدل استحقاقات القروض الممنوحة للجمعية/ المؤسسة الأهلية</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>
@@ -347,10 +381,10 @@ const QuarterlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -373,17 +407,17 @@ const QuarterlyReport = (props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>4.1</td>
                   <td>متوسط تكلفة الجنيه تمويل للمحفظة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>4.2</td>
                   <td>نسبة تكلفة التمويل إلى إجمالى المصروفات</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>4.3</td>
                   <td>متوسط تكلفة التشغيل لكل عميل</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>
@@ -402,10 +436,10 @@ const QuarterlyReport = (props) => {
               <tbody>
                 <tr>
                   <td className="td-head"> الفترة من :</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.fromDate}</td>
                   <td></td>
                   <td className="td-head" style={{ paddingRight: 10 }}> إلى:</td>
-                  <td className="td-body"> 10/01/2020</td>
+                  <td className="td-body">{props.data.toDate}</td>
                 </tr>
               </tbody>
             </table>
@@ -428,22 +462,22 @@ const QuarterlyReport = (props) => {
                 <tr>
                   <td style={{ textAlign: 'center' }}>5.1</td>
                   <td>عدد العاملين بنهاية الفترة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>5.2</td>
                   <td>عدد مسئولى التمويل بنهاية الفترة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>5.3</td>
                   <td>نسبة عدد العملاء إلى عدد العاملين بنهاية الفترة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ textAlign: 'center' }}>5.4</td>
                   <td>نسبة عدد العملاء إلى مسئولى التمويل بنهاية الفترة</td>
-                  <td>0.09</td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>

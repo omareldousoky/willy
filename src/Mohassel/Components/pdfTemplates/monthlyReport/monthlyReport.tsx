@@ -3,7 +3,6 @@ import React from 'react';
 import './monthlyReport.scss';
 
 const MonthlyReport = (props) => {
-  console.log(props);
   return (
     <div className="monthly-report" lang="ar" dir="rtl">
 

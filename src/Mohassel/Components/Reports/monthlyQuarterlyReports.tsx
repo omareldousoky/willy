@@ -8,7 +8,7 @@ import Can from '../../config/Can';
 import MonthlyReport from '../pdfTemplates/monthlyReport/monthlyReport';
 import QuarterlyReport from '../pdfTemplates/quarterlyReport/quarterlyReport';
 import { monthlyReport } from '../../Services/APIs/Reports/monthlyReport';
-
+import {quarterlyReport} from '../../Services/APIs/Reports/quarterlyReport';
 interface State {
   loading: boolean;
   print: string;
@@ -30,7 +30,9 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
        if(res.status==="success")
            this.setState({ print: type,data: res.body},() => window.print());
     } else {
-      this.setState({print: type,data: {}},()=> window.print());
+      const res = await quarterlyReport({quarter: "2020-04"});
+      if(res.status ==="success")
+           this.setState({print: type,data: res.body},()=> window.print());
     }
     this.setState({loading: false});
   }
