@@ -311,7 +311,9 @@ const InstallmentsDuePerOfficerCustomerCard = (
         lang="ar"
       >
         {renderHeader(fromDate, toDate)}
-        {data.branches.map((branch) => renderBranchData(branch))}
+        {data && data.branches
+          ? data.branches.map((branch) => renderBranchData(branch))
+          : null}
         {renderSummary("Total", null, data.count, data.amount)}
       </div>
     );
