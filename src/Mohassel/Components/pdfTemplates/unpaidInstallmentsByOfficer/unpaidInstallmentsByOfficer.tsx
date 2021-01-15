@@ -64,7 +64,7 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     );
   };
-  const renderCommissaryDetailsDiv = (CommissaryName = "") => (
+  const renderCommissaryDetailsDiv = (CommissaryName = "", representativeCode = '') => (
     <div style={{ display: "flex", margin: "5px 0" }}>
       <div style={{ width: "70%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -83,7 +83,8 @@ const UnpaidInstallmentsByOfficer = (
           >
             <span>{CommissaryName}</span>
           </div>
-          <div
+          {/* block below is commented for now, pending nadim to add representativeCode in the API `/report/unpaid-installments-by-officer` */}
+          {/* <div
             style={{
               border: "1px solid black",
               minWidth: 160,
@@ -92,8 +93,8 @@ const UnpaidInstallmentsByOfficer = (
               marginRight: 2,
             }}
           >
-            <span>{"132124123"}</span>
-          </div>
+            <span>{representativeCode}</span>
+          </div> */}
         </div>
       </div>
       <div style={{ width: "30%" }} />
