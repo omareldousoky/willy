@@ -20,6 +20,7 @@ import { getBranches } from "../../Services/APIs/Branch/getBranches";
 import Select from "react-select";
 import { UserDateValues } from "./userDetailsInterfaces";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { LoanOfficer } from "../../../Shared/Services/interfaces";
 
 interface Props {
   id: string;
@@ -50,7 +51,7 @@ interface State {
   branch: any;
   moveMissing: boolean;
   LoanOfficerSelectLoader: boolean;
-  LoanOfficerSelectOptions: Array<any>;
+  LoanOfficerSelectOptions: Array<LoanOfficer>;
 }
 interface Branch {
   _id: string;
@@ -210,7 +211,7 @@ class CustomersForUser extends Component<Props, State> {
       if (res.status === "success") {
         this.setState({
           LoanOfficerSelectLoader: false,
-          LoanOfficerSelectOptions: this.state.branch._id !== this.props.user.mainBranchId ? res.body.data.filter(LO => LO._id !== this.props.id) : res.body.data
+          LoanOfficerSelectOptions: res.body.data
         })
       } else {
         this.setState({ LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
