@@ -20,6 +20,7 @@ import { getBranches } from "../../Services/APIs/Branch/getBranches";
 import Select from "react-select";
 import { UserDateValues } from "./userDetailsInterfaces";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { LoanOfficer } from "../../../Shared/Services/interfaces";
 import { getErrorMessage } from "../../../Shared/Services/utils";
 
 interface Props {
@@ -51,7 +52,7 @@ interface State {
   branch: any;
   moveMissing: boolean;
   LoanOfficerSelectLoader: boolean;
-  LoanOfficerSelectOptions: Array<any>;
+  LoanOfficerSelectOptions: Array<LoanOfficer>;
 }
 interface Branch {
   _id: string;
@@ -199,32 +200,19 @@ class CustomersForUser extends Component<Props, State> {
 
   getLoanOfficers = async searchKeyWord => {
     this.setState({LoanOfficerSelectLoader: true})
-    let res;
-    const sameBranch = this.state.branch
-    ? this.state.branch._id ===
-      this.props.user.branchesObjects[0]._id
-    : false;
     if (this.state.branch && this.state.branch._id) {
-      if (!sameBranch)
-        res = await searchLoanOfficer({
+        const res = await searchLoanOfficer({
           from: 0,
           size: 1000,
           name: searchKeyWord,
           status: "active",
-          excludedIds: [this.props.id],
-          branchId: this.state.branch._id 
-        });
-      else
-        res = await searchLoanOfficer({
-          from: 0,
-          size: 1000,
-          name: searchKeyWord,
-          status: "active",
-          excludedIds: [this.props.id],
           branchId: this.state.branch._id 
         });
       if (res.status === "success") {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: res.body.data })
+        this.setState({
+          LoanOfficerSelectLoader: false,
+          LoanOfficerSelectOptions: res.body.data
+        })
       } else {
         this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
       }
