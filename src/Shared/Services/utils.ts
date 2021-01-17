@@ -238,7 +238,7 @@ export const numbersToArabic = (input: number | string) => {
     return inputStr.replace(/[0-9]/g, (number) => {
       return id[number]
     });
-  } else return '';
+  } else return '۰';
 }
 
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
@@ -439,3 +439,24 @@ export const iscoreStatusColor = (score: any) => {
   const iScoreStatusObj = {color: iscoreColor, status: iscorStatus}
   return iScoreStatusObj
 }
+
+export const getCurrentTime = () => {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    // get time in xx:xx:xx format
+    return `${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${
+        s < 10 ? `0${s}` : s
+    }`;
+};
+
+export const getDate = (epochDate: number) => {
+	// avoid toISOString to maintain local time
+    const date = new Date(epochDate);
+    const d = date.getDate();
+    const m = date.getMonth() + 1;
+    const y = date.getFullYear();
+    // get date in yyyy-mm-dd format
+    return `${y}-${m > 9 ? m : `0${m}`}-${d > 9 ? d : `0${d}`}`;
+};
