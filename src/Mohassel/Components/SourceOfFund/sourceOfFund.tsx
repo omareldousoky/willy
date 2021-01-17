@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate, getErrorMessage } from '../../../Shared/Services/utils';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Can from '../../config/Can';
@@ -173,7 +173,9 @@ class SourceOfFund extends Component<Props, State> {
     if (res.status === "success") {
       this.props.setLoading(false);
       Swal.fire("", local.changeSourceFundSuccess, "success").then(() => this.getLoans());
-    } else this.props.setLoading(false);
+    } else {this.props.setLoading(false);
+       Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+       }
   }
   async getOldFiles() {
     this.setState({ openModal: '', oldFilesDate: '' });
@@ -185,7 +187,7 @@ class SourceOfFund extends Component<Props, State> {
       downloadTxtFile(res.body.loans, false, date)
     } else {
       this.props.setLoading(false);
-      Swal.fire("", local.noResults, "error")
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
     }
   }
   render() {

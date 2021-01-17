@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { manageToolsArray } from '../Tools/manageToolsInitials';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     history: any;
@@ -67,8 +68,7 @@ class PrincipleThreshold extends Component<Props, State> {
                 principals
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false } , () => Swal.fire('Error !', getErrorMessage(princples.error.error), 'error'));
         }
     }
     update = (values) => {
@@ -89,8 +89,7 @@ class PrincipleThreshold extends Component<Props, State> {
                     this.setState({ loading: false })
                     Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() => window.location.reload());
                 } else {
-                    this.setState({ loading: false })
-                    Swal.fire('', local.principalMaxChangeError, 'error');
+                    this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
                 }
             }
         })
