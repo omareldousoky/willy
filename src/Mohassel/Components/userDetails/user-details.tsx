@@ -41,12 +41,13 @@ class UserDetails extends Component<Props, State> {
         nationalIdIssueDate: 0,
         gender: "",
         birthDate: 0,
-        branches: [""],
+        branches: [],
         roles: [],
         _id: "",
         hiringDate: 0,
         hrCode: "",
         mobilePhoneNumber: "",
+        mainBranchId: "",
         status: "",
         branchesObjects: [{ _id: "", name: "" }]
       }

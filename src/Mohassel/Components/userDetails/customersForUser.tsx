@@ -199,34 +199,21 @@ class CustomersForUser extends Component<Props, State> {
 
   getLoanOfficers = async searchKeyWord => {
     this.setState({LoanOfficerSelectLoader: true})
-    let res;
-    const sameBranch = this.state.branch
-    ? this.state.branch._id ===
-      this.props.user.branchesObjects[0]._id
-    : false;
     if (this.state.branch && this.state.branch._id) {
-      if (!sameBranch)
-        res = await searchLoanOfficer({
+        const res = await searchLoanOfficer({
           from: 0,
           size: 1000,
           name: searchKeyWord,
           status: "active",
-          excludedIds: [this.props.id],
-          branchId: this.state.branch._id 
-        });
-      else
-        res = await searchLoanOfficer({
-          from: 0,
-          size: 1000,
-          name: searchKeyWord,
-          status: "active",
-          excludedIds: [this.props.id],
           branchId: this.state.branch._id 
         });
       if (res.status === "success") {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: res.body.data })
+        this.setState({
+          LoanOfficerSelectLoader: false,
+          LoanOfficerSelectOptions: this.state.branch._id !== this.props.user.mainBranchId ? res.body.data.filter(LO => LO._id !== this.props.id) : res.body.data
+        })
       } else {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
+        this.setState({ LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
       }
     }
   };
