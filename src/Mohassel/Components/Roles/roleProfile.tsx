@@ -15,6 +15,7 @@ import RoleUsers from './roleUsers';
 import Button from 'react-bootstrap/Button';
 import BackButton from '../BackButton/back-button';
 import { withRouter } from 'react-router-dom';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Role {
     permissions: Array<any>;
     hasBranch: boolean;
@@ -75,7 +76,7 @@ class RoleProfile extends Component<Props, State>{
                 allSections: res.body.actions
             })
         } else {
-            this.setState({ loading: false })
+            this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'))
         }
     }
     renderContent() {

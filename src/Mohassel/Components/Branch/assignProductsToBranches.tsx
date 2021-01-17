@@ -5,7 +5,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getProducts } from '../../Services/APIs/loanProduct/getProduct';
 import { assignProductsToBranches, unassignProductsToBranches } from '../../Services/APIs/Branch/assignProductsToBranches';
-import { customFilterOption } from '../../../Shared/Services/utils';
+import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
 import DualBox from '../DualListBox/dualListBox';
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form';
@@ -90,7 +90,7 @@ class AssignProductsToBranches extends Component<Props, State>{
             })
         } else {
             this.setState({ loading: false }, () => {
-                Swal.fire("error", local.searchError)
+                Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             })
         }
     }
@@ -109,7 +109,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                     selectedBranches: haveBranches,
                 })
             } else {
-                Swal.fire("error", res.error);
+                Swal.fire("Error !",getErrorMessage(res.error.error),'error')
             }
         }
         this.setState({ loading: false });
@@ -161,7 +161,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                 loading: false,
                 noErrors: false,
             })
-            Swal.fire("error", local.assignProductsToBranchesError)
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error')
         }
     }
     async unassignProductsToBranches(_ids: string[]) {
@@ -180,7 +180,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                 noErrors: false,
             })
 
-             Swal.fire("error", local.unassignProductsToBranchesError)
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
         }
     }
     render() {
