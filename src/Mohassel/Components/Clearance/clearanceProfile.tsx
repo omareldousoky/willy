@@ -1,0 +1,190 @@
+import React, { Component, CSSProperties } from 'react'
+import { Loader } from '../../../Shared/Components/Loader'
+import BackButton from '../BackButton/back-button';
+import * as local from '../../../Shared/Assets/ar.json';
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
+import Can from '../../config/Can';
+import { theme } from '../../../theme'
+import { withRouter } from 'react-router-dom';
+import Card from 'react-bootstrap/Card';
+import { Clearance } from '../../../Shared/Services/interfaces';
+import Table from 'react-bootstrap/Table';
+import CustomerBasicsCard from './basicInfoCustomer';
+import { getClearance } from '../../Services/APIs/clearance/getClearance';
+import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto';
+import { timeToDate } from '../../../Shared/Services/utils';
+import { Row } from 'react-bootstrap';
+
+interface Props {
+    history: any;
+    location: {
+        state: {
+            id: string;
+        };
+    };
+}
+interface State {
+    loading: boolean;
+    tabsArray: Array<Tab>;
+    activeTab: string;
+    data: Clearance;
+
+}
+const header: CSSProperties = {
+    textAlign: "right",
+    fontSize: "14px",
+    width: "15%",
+    color: theme.colors.lightGrayText
+}
+const cell: CSSProperties = {
+    textAlign: "right",
+    padding: "10px",
+    fontSize: "14px",
+    fontWeight: "bold",
+    color: theme.colors.blackText,
+
+}
+class ClearanceProfile extends Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            activeTab: 'clearanceDetails',
+            tabsArray: [],
+            loading: false,
+            data: {
+                _id: "",
+                bankName: "",
+                beneficiaryType: "",
+                branchId: "",
+                branchName: "",
+                clearanceReason: "",
+                customerId: "",
+                customerKey: "",
+                customerName: "",
+                customerNationalId: 0,
+                documentPhotoURL: "",
+                issuedDate: 0,
+                lastPaidInstDate: 0,
+                loanId: "",
+                loanKey: 0,
+                notes: "",
+                principal: 0,
+                receiptDate: 0,
+                receiptPhotoURL: "",
+                registrationDate: 0,
+                status: "",
+            }
+        }
+    }
+    componentDidMount() {
+        this.setState({
+            tabsArray: [{
+                header: local.mainInfo,
+                stringKey: 'mainInfo',
+            },
+            {
+                header: local.documents,
+                stringKey: 'documents',
+            }
+            ]
+        })
+    }
+    async getClearanceById() {
+        const res = await getClearance(this.props.location.state.id);
+        if (res.status === 'success') {
+            this.setState({
+                data: res.body.data,
+            })
+        }
+    }
+    renderMainInfo() {
+        return (
+            <Table striped bordered hover >
+                <tbody>
+                    <tr><td style={header}>{local.registrationDate}*</td><td style={cell}>{timeToDate(this.state.data.registrationDate)}</td></tr>
+                    <tr><td style={header}>{local.receiptDate}*</td><td style={cell}>{timeToDate(this.state.data.receiptDate)}</td></tr>
+                    {this.state.data.transactionKey && <tr><td style={header}>{local.transactionKey}</td><td style={cell}>{this.state.data.transactionKey}</td></tr>}
+                    {this.state.data.manualReceipt && <tr><td style={header}>{local.manualReceipt}</td><td style={cell}>{this.state.data.manualReceipt}</td></tr>}
+                    <tr><td style={header}>{local.clearanceReason}*</td><td style={cell}>{this.state.data.clearanceReason}</td></tr>
+                    <tr><td style={header}>{local.bankName}*</td><td style={cell}>{this.state.data.bankName}</td></tr>
+                    <tr><td style={header}>{local.comments}*</td><td style={cell}>{this.state.data.notes}</td></tr>
+                    <tr><td style={header}>{local.status}</td><td style={cell}>{this.state.data.status}</td></tr>
+                </tbody>
+
+            </Table>
+        )
+    }
+    renderPhotos() {
+        return (
+            <>
+                <Row>
+                    <DocumentPhoto
+                        data-qc='receiptPhoto'
+                        name='receiptPhoto'
+                        photoObject={{
+                            photoURL: this.state.data.receiptPhotoURL,
+                            photoFile: "",
+                        }}
+                        edit={false}
+                        view={true}
+                    />
+                </Row>
+                <Row>
+                    <DocumentPhoto
+                        data-qc='documentPhoto'
+                        name='documentPhoto'
+                        photoObject={{
+                            photoURL: this.state.data.documentPhotoURL,
+                            photoFile: "",
+                        }}
+                        edit={false}
+                        view={true}
+                    />
+                </Row>
+            </>
+        )
+    }
+    renderContent() {
+        switch (this.state.activeTab) {
+            case 'mainInfo':      
+                return this.renderMainInfo();
+            case 'documents':
+                return this.renderPhotos(); 
+            default:
+                return null;
+        }
+    }
+    render() {
+        return (
+            <>
+                <Loader open={this.state.loading} type="fullscreen" />
+                <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
+                    <BackButton title={local.viewCustomer} className="print-none" />
+                    <Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: this.props.location.state.id } })} /></Can>
+                    <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
+                    {local.editClearance}
+                </div>
+                <Card>
+                    <CardNavBar
+                        header={'here'}
+                        array={this.state.tabsArray}
+                        active={this.state.activeTab}
+                        selectTab={(stringKey: string) => { this.setState({ activeTab: stringKey }) }}
+                    />
+                    <Card.Title>
+                        <CustomerBasicsCard
+                            customerKey={this.state.data.customerKey}
+                            branchName={this.state.data.bankName}
+                            customerName={this.state.data.customerName}
+                        />
+                    </Card.Title>
+                    <Card.Body>
+                        {this.renderContent()}
+                    </Card.Body>
+                </Card>
+            </>
+        )
+    }
+}
+
+export default withRouter(ClearanceProfile);
