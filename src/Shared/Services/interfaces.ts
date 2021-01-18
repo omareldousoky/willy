@@ -142,4 +142,29 @@ export interface LoanOfficer {
     status: string;
     username: string;
     _id: string;
-}
+  }
+  export interface Clearance {
+    _id: string;
+    bankName: string;
+    beneficiaryType: string;
+    branchId: string;
+    branchName:  string;
+    clearanceReason: string;
+    customerId: string;
+    customerKey: string;
+    customerName: string;
+    customerNationalId: number;
+    documentPhotoURL: string;
+    issuedDate: number | string;
+    lastPaidInstDate: number;
+    loanId: string;
+    loanKey: number;
+    notes: string;
+    principal: number;
+    receiptDate: number;
+    receiptPhotoURL: string;
+    registrationDate: number;
+    status: string;
+    transactionKey?: number;
+    manualReceipt?: string;
+  }

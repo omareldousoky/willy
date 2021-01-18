@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+    <g id="prefix__warning_ic_circle_81px" transform="translate(-606 -268.949)">
+        <g id="prefix__Ellipse_513" fill="#fff" stroke="#d51b1b" stroke-width="2px" data-name="Ellipse 513" transform="translate(606 268.949)">
+            <circle cx="15" cy="15" r="15" stroke="none"/>
+            <circle cx="15" cy="15" r="14" fill="none"/>
+        </g>
+        <path id="prefix__Union_14" fill="#d51b1b" d="M16002-7700.049a1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1zm0-4v-8a1 1 0 0 1 1-1 1 1 0 0 1 1 1v8a1 1 0 0 1-1 1 1 1 0 0 1-1-1.001z" data-name="Union 14" transform="translate(-15382 7989.999)"/>
+    </g>
+</svg>
