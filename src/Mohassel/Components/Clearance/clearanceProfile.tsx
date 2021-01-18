@@ -12,8 +12,10 @@ import Table from 'react-bootstrap/Table';
 import CustomerBasicsCard from './basicInfoCustomer';
 import { getClearance } from '../../Services/APIs/clearance/getClearance';
 import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto';
-import { timeToDate } from '../../../Shared/Services/utils';
-import { Row } from 'react-bootstrap';
+import { getErrorMessage, timeToDate } from '../../../Shared/Services/utils';
+import { Container, Form, Row } from 'react-bootstrap';
+import './clearance.scss'
+import Swal from 'sweetalert2';
 
 interface Props {
     history: any;
@@ -86,21 +88,28 @@ class ClearanceProfile extends Component<Props, State> {
                 header: local.documents,
                 stringKey: 'documents',
             }
-            ]
+            ],
+           activeTab: 'mainInfo',
         })
+        this.getClearanceById();
     }
     async getClearanceById() {
+        this.setState({loading: true})
         const res = await getClearance(this.props.location.state.id);
         if (res.status === 'success') {
             this.setState({
                 data: res.body.data,
+                loading: false,
             })
+        } else {
+            this.setState({loading: false},
+                ()=> Swal.fire('Error !', getErrorMessage(res.error.error), "error"));
         }
     }
     renderMainInfo() {
         return (
-            <Table striped bordered hover >
-                <tbody>
+            <Table striped bordered hover>
+                <tbody style={{padding:"2rem 0"}}>
                     <tr><td style={header}>{local.registrationDate}*</td><td style={cell}>{timeToDate(this.state.data.registrationDate)}</td></tr>
                     <tr><td style={header}>{local.receiptDate}*</td><td style={cell}>{timeToDate(this.state.data.receiptDate)}</td></tr>
                     {this.state.data.transactionKey && <tr><td style={header}>{local.transactionKey}</td><td style={cell}>{this.state.data.transactionKey}</td></tr>}
@@ -108,16 +117,17 @@ class ClearanceProfile extends Component<Props, State> {
                     <tr><td style={header}>{local.clearanceReason}*</td><td style={cell}>{this.state.data.clearanceReason}</td></tr>
                     <tr><td style={header}>{local.bankName}*</td><td style={cell}>{this.state.data.bankName}</td></tr>
                     <tr><td style={header}>{local.comments}*</td><td style={cell}>{this.state.data.notes}</td></tr>
-                    <tr><td style={header}>{local.status}</td><td style={cell}>{this.state.data.status}</td></tr>
+                    <tr><td style={header}>{local.status}*</td><td style={cell}>{this.state.data.status}</td></tr>
                 </tbody>
-
             </Table>
         )
     }
     renderPhotos() {
         return (
-            <>
+            <Container>
                 <Row>
+                <Row className='row-nowrap mr-1' > <Form.Label className={"clearance-label"}>{local.clearanceReceiptPhoto}</Form.Label>  
+                 </Row>   
                     <DocumentPhoto
                         data-qc='receiptPhoto'
                         name='receiptPhoto'
@@ -130,6 +140,8 @@ class ClearanceProfile extends Component<Props, State> {
                     />
                 </Row>
                 <Row>
+                <Row className='row-nowrap mr-1'> <Form.Label className={"clearance-label"}>{local.clearanceDocumentPhoto}</Form.Label>  
+                 </Row>   
                     <DocumentPhoto
                         data-qc='documentPhoto'
                         name='documentPhoto'
@@ -141,7 +153,7 @@ class ClearanceProfile extends Component<Props, State> {
                         view={true}
                     />
                 </Row>
-            </>
+            </Container>
         )
     }
     renderContent() {
@@ -158,11 +170,11 @@ class ClearanceProfile extends Component<Props, State> {
         return (
             <>
                 <Loader open={this.state.loading} type="fullscreen" />
-                <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
-                    <BackButton title={local.viewCustomer} className="print-none" />
-                    <Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: this.props.location.state.id } })} /></Can>
-                    <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
+                <div style={{ paddingLeft: 30 }}>
+                    {this.state.data.status==='underReview' && <><Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: this.props.location.state.id } })} /></Can>
                     {local.editClearance}
+                    </>
+                    }
                 </div>
                 <Card>
                     <CardNavBar
