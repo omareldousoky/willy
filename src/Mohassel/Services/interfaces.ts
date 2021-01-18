@@ -33,9 +33,7 @@ export interface LoansBriefingReportResponse extends LoansBriefRow {
     branchBriefing: BranchBrief[];
 }
 
-export interface OfficerPercentPaymentRow {
-    officerName: string;
-    hiringDate: string;
+interface CommonOfficerPercentPayment {
     issuedCount?: number;
     issuedAmount?: number;
     firstMonth?: number;
@@ -49,14 +47,24 @@ export interface OfficerPercentPaymentRow {
     collections?: number;
 }
 
+export interface OfficerPercentPaymentRow extends CommonOfficerPercentPayment {
+    officerName: string;
+    hiringDate: string;
+}
+
+export type OfficerPercentPaymentTotalRow = CommonOfficerPercentPayment;
 export interface OfficerPercentPaymentBranch {
     branchName: string;
     activeOfficers?: Array<OfficerPercentPaymentRow>;
     inactiveOfficers?: Array<OfficerPercentPaymentRow>;
+    inactiveOfficersTotal?: OfficerPercentPaymentTotalRow;
+    activeOfficersTotal?: OfficerPercentPaymentTotalRow;
+    total?: OfficerPercentPaymentTotalRow;
 }
 
 export interface OfficerPercentPaymentResponse {
     response: Array<OfficerPercentPaymentBranch>;
+    total?: OfficerPercentPaymentTotalRow;
 }
 
 interface CommonOfficerBranchPercentPayment {

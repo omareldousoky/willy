@@ -1,9 +1,10 @@
 import React from "react";
-import { timeToArabicDate } from "../../../../Shared/Services/utils";
 import {
     OfficerPercentPaymentResponse,
     OfficerPercentPaymentRow,
+    OfficerPercentPaymentTotalRow,
 } from "../../../Services/interfaces";
+import OfficersPercentPaymentHeader from "./officerPercentPaymentHeader";
 import "./officersPercentPayment.scss";
 import OfficersPercentPaymentFooter from "./officersPercentPaymentFooter";
 
@@ -53,31 +54,31 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
     const previous3Months = getPrevious3Months(fromDate);
 
     const populateTotalRow = (
-        data: unknown,
+        data?: OfficerPercentPaymentTotalRow,
         totalName?: string
     ): JSX.Element => (
         <tr className="border-top border-bottom border-dark">
             <td colSpan={5}>{totalName ? `إجمالى ${totalName}` : ""}</td>
-            <td>{19}</td>
-            <td>392000.00</td>
-            <td>1525000.00</td>
-            <td>1593500.00</td>
-            <td>1500500.00</td>
-            <td colSpan={2}>1,005,570</td>
-            <td colSpan={2}>795,177</td>
-            <td>%79.08</td>
-            <td>821</td>
-            <td>10,566,124</td>
-            <td>898,926</td>
+            <td>{data?.issuedCount || "0"}</td>
+            <td>{data?.issuedAmount || "0.00"}</td>
+            <td>{data?.firstMonth || "0.00"}</td>
+            <td>{data?.secondMonth || "0.00"}</td>
+            <td>{data?.thirdMonth || "0.00"}</td>
+            <td colSpan={2}>{data?.expectedPayments || "0"}</td>
+            <td colSpan={2}>{data?.paid || "0.00"}</td>
+            <td>{formatPercent(data?.paidPercent) || "%00.00"}</td>
+            <td>{data?.walletCount || "0"}</td>
+            <td>{data?.walletAmount || "0.00"}</td>
+            <td colSpan={2}>{data?.collections || "0.00"}</td>
         </tr>
     );
-    // TODO: get totals from BE
     const populateTableBody = (
         officers: Array<OfficerPercentPaymentRow>,
-        officersTypeLabel: string
-    ): Array<JSX.Element> =>
-        officers.map((officer, i) => (
-            <>
+        officersTypeLabel: string,
+        officersTotal?: OfficerPercentPaymentTotalRow
+    ): JSX.Element => (
+        <>
+            {officers.map((officer) => (
                 <tr key={officer.officerName}>
                     <td colSpan={4} className="text-right">
                         {officer.officerName}
@@ -95,33 +96,13 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
                     <td>{officer.walletAmount || "0.00"}</td>
                     <td colSpan={2}>{officer.collections || "0.00"}</td>
                 </tr>
-                {i == officers.length - 1 &&
-                    populateTotalRow(12, officersTypeLabel)}
-            </>
-        ));
+            ))}
+            {populateTotalRow(officersTotal, officersTypeLabel)}
+        </>
+    );
     return (
         <div className="officers-payment" lang="ar">
-            <div className="wrapper">
-                <span className="logo-print" role="img" />
-                <p className="m-0 ml-3 text-left text-sm">
-                    ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-                </p>
-            </div>
-            <p className="mr-3 text-right">شركة تساهيل للتمويل متناهي الصغر</p>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "95%",
-                }}
-            >
-                <p style={{ margin: "auto", fontSize: "16px" }}>
-                    تقرير نسب السداد و الانتاجيه للمندوبين : من &nbsp;
-                    {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى
-                    : &nbsp;
-                    {timeToArabicDate(new Date(toDate).valueOf(), false)}
-                </p>
-            </div>
+            <OfficersPercentPaymentHeader toDate={toDate} fromDate={fromDate} />
             {data.response
                 ? data.response.map((branchData, i) => (
                       <>
@@ -174,7 +155,8 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
                                           </tr>
                                           {populateTableBody(
                                               branchData.activeOfficers,
-                                              OfficersType.Active
+                                              OfficersType.Active,
+                                              branchData.activeOfficersTotal
                                           )}
                                       </>
                                   )}
@@ -187,13 +169,17 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
                                           </tr>
                                           {populateTableBody(
                                               branchData.inactiveOfficers,
-                                              OfficersType.Inactive
+                                              OfficersType.Inactive,
+                                              branchData.inactiveOfficersTotal
                                           )}
                                       </>
                                   )}
-                                  {populateTotalRow(15, branchData.branchName)}
+                                  {populateTotalRow(
+                                      branchData.total,
+                                      branchData.branchName
+                                  )}
                                   {data.response.length - 1 == i &&
-                                      populateTotalRow(15)}
+                                      populateTotalRow(data.total)}
                               </tbody>
                           </table>
                       </>
