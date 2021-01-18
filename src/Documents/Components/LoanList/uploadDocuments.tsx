@@ -12,7 +12,7 @@ import { Loader } from '../../../Shared/Components/Loader'
 import { connect } from 'react-redux';
 import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types';
-import { downloadAsZip } from "../../../Shared/Services/utils";
+import { downloadAsZip, getErrorMessage } from "../../../Shared/Services/utils";
 import Container from 'react-bootstrap/Container';
 import { withRouter } from 'react-router-dom';
 interface Props {
@@ -55,7 +55,7 @@ class UploadDocuments extends Component<Props, State> {
             })
 
         } else {
-            Swal.fire("error", "error in getting customer documents", "error");
+            Swal.fire("Error !", getErrorMessage(response.error.error), "error");
         }
 
     }
@@ -86,7 +86,7 @@ class UploadDocuments extends Component<Props, State> {
                 })
             }
         } else {
-            Swal.fire("error", "error in getting application documents", "error");
+            Swal.fire("Error !",getErrorMessage(res.error.error) , "error");
         }
 
     }
@@ -99,8 +99,7 @@ class UploadDocuments extends Component<Props, State> {
                 application: application.body
             }, () => this.props.getDocuments({ applicationId: this.state.application._id, docType: this.state.application.status === "issued" ? "issuedLoan" : "loanApplication" }))
         } else {
-            Swal.fire('', 'fetch error', 'error')
-            this.setState({ loading: false })
+            this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(application.error.error),'error'))
         }
     }
     async componentDidMount() {

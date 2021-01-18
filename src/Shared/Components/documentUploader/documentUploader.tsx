@@ -5,7 +5,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
-import { download, downloadAsZip } from '../../Services/utils';
+import { download, getErrorMessage } from '../../Services/utils';
 import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
 import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments, AddToSelectionArray, RemoveFromSelectionArray } from '../../redux/document/actions'
@@ -64,7 +64,7 @@ class DocumentUploader extends Component<Props, State> {
   }
   calculateLimit() {
 
-    return (this.getImageFilesLength() - this.calculateNumOfValidDocuments(name));
+    return (this.getImageFilesLength() - this.calculateNumOfValidDocuments(this.props.documentType.name));
 
   }
   triggerInputFile() {
@@ -145,7 +145,7 @@ class DocumentUploader extends Component<Props, State> {
           }
           reader.readAsDataURL(file)
         } else {
-          Swal.fire("", local.documentUploadError, "error")
+          Swal.fire("Error !",getErrorMessage(this.props.document.error.error)  , "error")
         }
       }
     }
@@ -166,7 +166,7 @@ class DocumentUploader extends Component<Props, State> {
       this.props.invalidDocument(data.key, name);
     }
     else {
-      Swal.fire("", local.deleteError, "error")
+      Swal.fire("Error !", getErrorMessage(this.props.document.error.error), "error")
     }
 
   }
@@ -180,7 +180,7 @@ class DocumentUploader extends Component<Props, State> {
   };
   handleOnChange = (event) => {
     event.preventDefault();
-    const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
+    const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(this.props.documentType.name);
     if (event.target.files.length <= imagesLimit && this.getImageFilesLength() <= imagesLimit && !this.props.view) {
       this.readFiles(event.target.files, this.props.documentType.name);
     } else {

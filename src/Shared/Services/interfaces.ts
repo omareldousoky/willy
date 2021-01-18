@@ -106,7 +106,7 @@ export interface DocumentType {
     updatable?: boolean;
     isHidden?: boolean;
 }
-export interface GuaranteedLoan{
+export interface GuaranteedLoan {
     guarantorOrder: string;
     customerKey: string;
     applicationCode: string;
@@ -117,8 +117,8 @@ export interface GuaranteedLoan{
     issueDate?: string;
 }
 export interface GuaranteedLoans {
-        data: Array<GuaranteedLoan>;
-        GuarantorName: string;
+    data: Array<GuaranteedLoan>;
+    GuarantorName: string;
 }
 
 export interface Document {
@@ -127,6 +127,21 @@ export interface Document {
     valid: boolean;
     delete?: boolean;
     selected?: boolean;
+}
+
+export interface LoanOfficer {
+    birthDate: number;
+    branches: Array<string>;
+    gender: string;
+    hrCode: string;
+    mainBranchId: string;
+    mainRoleId: string;
+    name: string;
+    nationalId: string;
+    roles: Array<string>;
+    status: string;
+    username: string;
+    _id: string;
   }
   export interface Clearance {
     _id: string;
