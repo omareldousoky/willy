@@ -10,6 +10,8 @@ import Can from '../../config/Can';
 import Form from 'react-bootstrap/Form';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
   history: Array<string>;
@@ -57,8 +59,7 @@ class RolesList extends Component<Props, State> {
         loading: false
       })
     } else {
-      console.log("error")
-      this.setState({ loading: false })
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'))
     }
   }
   render() {
