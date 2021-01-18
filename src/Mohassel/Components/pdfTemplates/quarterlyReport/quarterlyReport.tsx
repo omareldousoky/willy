@@ -55,7 +55,7 @@ const QuarterlyReport = (props: Props) => {
           </div>
           <div className="bottom-text">
             <div className="inner-container">
-              التوقيت: خلال أسبوعين من نهاية كل شهر ميلادى
+              التوقيت: خلال ستة أسابيع من نهاية كل ربع سنة مالية
             </div>
           </div>
           <p style={{ textAlign: 'center' }}>التقرير ربع السنوى يعد على أساس تراكمى (ثلاثة أشهر، ستة أشهر، تسعة أشهر، وسنة)</p>
