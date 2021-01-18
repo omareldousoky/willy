@@ -15,7 +15,7 @@ import { editLead } from '../../Services/APIs/Leads/editLead';
 import { Governorate } from '../CustomerCreation/StepTwoForm';
 import { getGovernorates } from '../../Services/APIs/configApis/config';
 import { leadStepOne, leadStepTwo, leadValidationStepOne, leadValidationStepTwo } from './editLeadValidation';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, getErrorMessage } from '../../../Shared/Services/utils';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 
@@ -42,7 +42,7 @@ export interface LeadStepTwo {
   businessGovernate: string;
   businessCity: string;
   businessArea: string;
-  businessAddress: string;
+  businessStreet: string;
   businessAddressDescription: string;
 }
 interface State {
@@ -84,7 +84,7 @@ class EditLead extends Component<Props, State> {
         businessGovernate: lead.businessGovernate,
         businessCity: lead.businessCity,
         businessArea: lead.businessArea,
-        businessAddress: lead.businessAddress,
+        businessStreet: lead.businessStreet,
         businessAddressDescription: lead.businessAddressDescription,
       },
       loading: true,
@@ -97,7 +97,7 @@ class EditLead extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({ governorates: res.body.governorates, loading: false })
     } else {
-      this.setState({ loading: false })
+      this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
     }
   }
   renderStepOne() {
@@ -349,21 +349,21 @@ class EditLead extends Component<Props, State> {
               </Row>
               <Row>
                 <Col sm={4}>
-                  <Form.Group controlId="businessAddress">
+                  <Form.Group controlId="businessStreet">
                     <Form.Label className="customer-form-label" column>{local.streetName}</Form.Label>
                     <InputGroup>
                       <Form.Control
                         type="text"
-                        name="businessAddress"
-                        data-qc="businessAddress"
-                        value={formikProps.values.businessAddress}
+                        name="businessStreet"
+                        data-qc="businessStreet"
+                        value={formikProps.values.businessStreet}
                         onChange={formikProps.handleChange}
                         onBlur={formikProps.handleBlur}
-                        isInvalid={Boolean(formikProps.errors.businessAddress && formikProps.touched.businessAddress)}
+                        isInvalid={Boolean(formikProps.errors.businessStreet && formikProps.touched.businessStreet)}
                       />
                     </InputGroup>
                     <Form.Control.Feedback type="invalid">
-                      {formikProps.errors.businessAddress}
+                      {formikProps.errors.businessStreet}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
@@ -433,8 +433,7 @@ class EditLead extends Component<Props, State> {
         this.setState({ loading: false })
         Swal.fire('', local.leadEditSuccess, 'success').then(() => this.props.history.push('/halan-integration/leads'))
       } else {
-        this.setState({ loading: false })
-        Swal.fire('', local.leadEditError, 'error')
+        this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
       }
     }
   }

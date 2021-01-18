@@ -131,7 +131,7 @@ class RoleCreation extends Component<Props, State> {
             keyArray.splice(i18nI, 1);
             keyArray.map((key) => {
               const value = action[key];
-              if ((rolePermissions[roleSection] & value) === value) {
+              if ((BigInt(rolePermissions[roleSection]) & BigInt(value)).toString() === BigInt(value).toString()) {
                 if (!Object.keys(rolePermissionsArray).includes(roleSection)) {
                   rolePermissionsArray[roleSection] = [];
                 }

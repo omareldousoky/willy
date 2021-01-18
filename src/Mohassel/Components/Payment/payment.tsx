@@ -5,7 +5,7 @@ import { Formik, FormikProps } from 'formik';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { PendingActions } from '../../../Shared/Services/interfaces';
 import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
@@ -230,7 +230,7 @@ class Payment extends Component<Props, State>{
       this.setState({ employees: res.body.data, payerType: 'employee' });
       return res.body.data;
     } else { 
-      this.setState({ employees: [] });
+      this.setState({ employees: [] }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       return [];
     }
   }
@@ -274,7 +274,7 @@ class Payment extends Component<Props, State>{
           this.props.print({print: 'payment'});
           this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
           }
         } else {
           const obj = {
@@ -292,7 +292,7 @@ class Payment extends Component<Props, State>{
             this.props.print({print: 'payment'});
             this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
           }
         }
       } else if(this.props.paymentType === "random") {
@@ -314,7 +314,7 @@ class Payment extends Component<Props, State>{
             this.props.print({print: 'randomPayment'});
             this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }), () => Swal.fire("Error !",getErrorMessage(res.error.error),'error');
           }
       }
       else if(this.props.paymentType === "penalties") {
@@ -337,7 +337,7 @@ class Payment extends Component<Props, State>{
              );
              this.calculatePenalties();
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
           }
         }
         else if(this.state.penaltyAction==='cancel'){
@@ -350,7 +350,7 @@ class Payment extends Component<Props, State>{
             Swal.fire("", local.penaltyCancelledSuccessfully, "success")
             this.calculatePenalties()
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
           }
         }
       }
@@ -370,7 +370,7 @@ class Payment extends Component<Props, State>{
         this.props.print({print: 'payEarly'});
         this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
       } else {
-        this.setState({ loadingFullScreen: false });
+        this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       }
     } else {
       if (this.props.paymentType === "normal") {
@@ -394,7 +394,7 @@ class Payment extends Component<Props, State>{
           this.setState({ loadingFullScreen: false });
           Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
-          this.setState({ loadingFullScreen: false });
+          this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
         }
       } else {
         const obj = {
@@ -416,7 +416,7 @@ class Payment extends Component<Props, State>{
           this.setState({ loadingFullScreen: false });
           Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
-          this.setState({ loadingFullScreen: false });
+          this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
         }
       }
       } else {
@@ -446,7 +446,7 @@ class Payment extends Component<Props, State>{
             this.setState({ loadingFullScreen: false });
             Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
           }
         }
       }
@@ -466,7 +466,7 @@ class Payment extends Component<Props, State>{
         requiredAmount: res.body.requiredAmount,
       });
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
     }
   }
   componentWillUnmount() {
@@ -575,7 +575,7 @@ class Payment extends Component<Props, State>{
     });
     if (res.body) {
       this.setState({ penalty: res.body.penalty, loadingFullScreen: false });
-    } else this.setState({ loadingFullScreen: false });
+    } else this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
   }
   render() {
     return (

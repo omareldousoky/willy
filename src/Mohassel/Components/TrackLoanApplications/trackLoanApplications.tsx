@@ -10,7 +10,7 @@ import Search from '../../../Shared/Components/Search/search';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt, iscoreDate, downloadFile, iscoreStatusColor } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, downloadFile, iscoreStatusColor } from '../../../Shared/Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
@@ -56,10 +56,11 @@ interface State {
 interface Props {
   history: any;
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   branchId?: string;
 };
@@ -172,16 +173,23 @@ class TrackLoanApplications extends Component<Props, State>{
       })
       this.setState({ iScoreCustomers: customers, loading: false })
     } else {
-      Swal.fire('', 'fetch error', 'error')
-      this.setState({ loading: false })
+      this.setState({ loading: false }, () =>    Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error'))
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getStatus(status: string) {
     switch (status) {
@@ -191,6 +199,10 @@ class TrackLoanApplications extends Component<Props, State>{
         return <div className="status-chip outline created">{local.created}</div>
       case 'reviewed':
         return <div className="status-chip outline reviewed">{local.reviewed}</div>
+      case 'secondReview':
+        return <div className="status-chip outline second-review">{local.secondReviewed}</div>
+      case 'thirdReview':
+        return <div className="status-chip outline third-review">{local.thirdReviewed}</div>
       case 'approved':
         return <div className="status-chip outline approved">{local.approved}</div>
       case 'rejected':
@@ -226,6 +238,10 @@ class TrackLoanApplications extends Component<Props, State>{
       console.log('error getting branch details')
     }
   }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
+  }
+
   render() {
     return (
       <>
@@ -272,7 +288,7 @@ class TrackLoanApplications extends Component<Props, State>{
               />
             </Card.Body>
           </Card>
-          <Modal show={this.state.iScoreModal} backdrop="static">
+          <Modal show={this.state.iScoreModal} backdrop="static" size='lg'>
             <Modal.Header>
               <Modal.Title>
                 iScore
@@ -323,6 +339,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.applications,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

@@ -7,6 +7,7 @@ import {theme} from '../../../theme';
 import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Village {
     villageName: { ar: string };
     villageLegacyCode: number;
@@ -69,8 +70,7 @@ export default class Governorates extends  React.Component<Props,State>  {
         }  else {
             this.setState({
                 governorate: {label: this.props.values.governorate , value: 0}
-            })
-            Swal.fire("error", local.governoratesError)
+            }, () => Swal.fire("Error !",getErrorMessage(resGov.error.error),'error'))
         }
       this.setState({loading:false});
 

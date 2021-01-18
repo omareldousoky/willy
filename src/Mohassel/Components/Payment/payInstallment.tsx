@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { payment } from "../../../Shared/redux/payment/actions";
 import "./styles.scss";
 import { Employee } from "./payment";
+import Swal from "sweetalert2";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 
 interface FormValues {
   requiredAmount: number;
@@ -126,7 +128,7 @@ class PayInstallment extends Component<Props, State> {
       this.setState({ ...values, employees: res.body.data, payerType: 'employee' });
       return res.body.data;
     } else { 
-      this.setState({ employees: [] });
+      this.setState({ employees: [] }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       return [];
     }
   }
@@ -193,27 +195,26 @@ class PayInstallment extends Component<Props, State> {
                               name="installmentNumber"
                               data-qc="installmentNumber"
                               onChange={event => {
+                                const installment = this.props.installments.find(installment => installment.id ===Number(event.currentTarget.value))
                                 formikBag.setFieldValue(
                                   "installmentNumber",
                                   event.currentTarget.value
                                 );
                                 formikBag.setFieldValue(
                                   "requiredAmount",
-                                  this.props.installments.find(
-                                    installment =>
-                                      installment.id ===
-                                      Number(event.currentTarget.value)
-                                  )?.installmentResponse
+                                  (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
+                                );
+                                formikBag.setFieldValue(
+                                  "payAmount",
+                                  (installment ? (installment.installmentResponse - installment?.totalPaid) : 0)
                                 );
                               }}
                             >
                               <option value={-1}></option>
                               {this.props.installments.map(installment => {
                                 if (
-                                  installment.status !== "partiallyPaid" &&
                                   installment.status !== "paid" &&
-                                  installment.status !== "rescheduled" &&
-                                  installment.dateOfPayment > Date.now()
+                                  installment.status !== "rescheduled"
                                 )
                                   return (
                                     <option
@@ -301,6 +302,25 @@ class PayInstallment extends Component<Props, State> {
                         ></Form.Control>
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.payAmount}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Col} controlId="truthDate">
+                      <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
+                      <Col>
+                        <Form.Control
+                          type="date"
+                          name="truthDate"
+                          data-qc="truthDate"
+                          value={formikBag.values.truthDate}
+                          onBlur={formikBag.handleBlur}
+                          onChange={formikBag.handleChange}
+                          isInvalid={Boolean(formikBag.errors.truthDate) && Boolean(formikBag.touched.truthDate)}
+                          disabled
+                        >
+                        </Form.Control>
+                        <Form.Control.Feedback type="invalid">
+                          {formikBag.errors.truthDate}
                         </Form.Control.Feedback>
                       </Col>
                     </Form.Group>

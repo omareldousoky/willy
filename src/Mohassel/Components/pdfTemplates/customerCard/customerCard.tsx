@@ -93,7 +93,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <div className="frame">{this.props.data.product.beneficiaryType === "individual" ? this.props.data.customer.customerName : this.props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.customerName}</div>
                                 </td>
                                 <td> التاريخ
-					<div className="frame">{timeToArabicDate(0, false)}</div>
+					<div className="frame">{timeToArabicDate(this.props.data.creationDate, false)}</div>
                                 </td>
                                 <td> المندوب
 					<div className="frame">{(this.props.data.product.beneficiaryType === 'group') ? this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : this.props.data.customer.representativeName}</div>
@@ -152,7 +152,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <td>{numbersToArabic(installment.installmentResponse)}</td>
                                     <td>{numbersToArabic(installment.principalPaid)}</td>
                                     <td>{numbersToArabic(installment.feesPaid)}</td>
-                                    <td>{getStatus(installment)}</td>
+                                    <td style={{minWidth: 100}}>{getStatus(installment)}</td>
                                     <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                     <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))

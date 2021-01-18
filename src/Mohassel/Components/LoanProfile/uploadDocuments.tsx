@@ -12,7 +12,7 @@ import ability from '../../config/ability'
 import { connect } from 'react-redux';
 import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types';
-import { downloadAsZip } from "../../../Shared/Services/utils";
+import { downloadAsZip, getErrorMessage } from "../../../Shared/Services/utils";
 interface Props {
     application: any;
     getDocuments: typeof getDocuments;
@@ -52,7 +52,7 @@ class UploadDocuments extends Component<Props, State> {
             })
 
         } else {
-            Swal.fire("error", "error in getting customer documents", "error");
+            Swal.fire("Error !",getErrorMessage(response.error.error),'error')
         }
 
     }
@@ -83,7 +83,7 @@ class UploadDocuments extends Component<Props, State> {
                 })
             }
         } else {
-            Swal.fire("error", "error in getting application documents", "error");
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error')
         }
 
     }

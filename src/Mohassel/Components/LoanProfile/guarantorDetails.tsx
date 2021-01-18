@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, iscoreStatusColor } from "../../../Shared/Services/utils";
+import { downloadFile, getErrorMessage, iscoreStatusColor } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import ModalFooter from 'react-bootstrap/ModalFooter';
 import { editGuarantors } from '../../Services/APIs/loanApplication/editGuarantors';
+import ability from '../../config/ability';
 
 interface Props {
     guarantors: any;
@@ -96,7 +97,7 @@ export const GuarantorTableView = (props: Props) => {
             }
             changeLoading(false);
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("Error !",getErrorMessage(results.error.error),'error');
             changeLoading(false);
         }
     }
@@ -159,8 +160,8 @@ export const GuarantorTableView = (props: Props) => {
             }
             else return { flag: true, customers: merged }
         } else {
-            Swal.fire("error", res.error.details, 'error')
             changeLoading(false);
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             return { flag: false }
         }
     }
@@ -185,7 +186,7 @@ export const GuarantorTableView = (props: Props) => {
             if (errorMessage1 || errorMessage2)
                 Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : ''} ${errorMessage2}</span>`, 'error');
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire("Error !",getErrorMessage(selectedGuarantor.error.error),'error');
         }
         changeLoading(false);
     }
@@ -197,7 +198,7 @@ export const GuarantorTableView = (props: Props) => {
         if (selectedGuarantor.status === 'success') {
             Swal.fire(local.guarantorAddedSuccessfully, '', 'success').then(() => { window.location.reload(); });
         } else {
-            Swal.fire('', selectedGuarantor.error.details, 'error');
+            Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
         }
         changeLoading(false);
     }
@@ -221,7 +222,7 @@ export const GuarantorTableView = (props: Props) => {
                 if (selectedGuarantor.status === 'success') {
                     Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(() => { window.location.reload(); });
                 } else {
-                    Swal.fire('', selectedGuarantor.error.details, 'error');
+                    Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
                 }
                 changeLoading(false);
             }
@@ -234,11 +235,11 @@ export const GuarantorTableView = (props: Props) => {
         changeSelectedId('');
         changeModal(false);
     }
-    const pass = props.status && ['reviewed', 'created', 'approved'].includes(props.status)
+    const pass = props.status && ['reviewed', 'created', 'approved', 'secondReview', 'thirdReview'].includes(props.status)
     return (
         <>
             <div className="d-flex flex-column align-items-start justify-content-center ">
-                {pass && <Can I="editApplicationGuarantors" a="application"><Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button></Can>}
+                {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <Button variant='primary' style={{ marginBottom: 10 }} onClick={() => changeModal(true)}>{local.addGuarantor}</Button>}
                 {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
@@ -251,7 +252,7 @@ export const GuarantorTableView = (props: Props) => {
                             {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
-                            {pass && <Can I="editApplicationGuarantors" a="application"><th></th></Can>}
+                            {((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <th></th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -270,7 +271,7 @@ export const GuarantorTableView = (props: Props) => {
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
                                     <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
                                 </Can>}
-                                {pass && (props.guarantors.length > props.application.product.noOfGuarantors) && <Can I="editApplicationGuarantors" a="application"><td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td></Can>}
+                                {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
                             </tr>)
                         }
                         )}

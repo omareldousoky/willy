@@ -399,6 +399,7 @@ class CustomersForUser extends Component<Props, State> {
           totalCount={this.state.totalCustomers}
           pagination={true}
           dataLength={this.state.customers.length}
+          paginationArr= {[10,100,500,1000]}
           changeNumber={(key: string, number: number) => {
             this.setState({ [key]: number } as any, () =>
               this.getCustomersForUser()

@@ -13,6 +13,14 @@ export const manageApplicationsArray = (): Card[] => {
       path: '/track-loan-applications',
     })
   }
+  if(ability.can('secondReview','application') || ability.can('thirdReview','application')){
+    manageLoanArr.push({
+      icon: 'bulkLoanApplicationsReview',
+      header: local.bulkLoanApplicationReviews,
+      desc: local.bulkLoanApplicationReviews,
+      path: '/track-loan-applications/bulk-reviews'
+    })
+  }
   if (ability.can('approveLoanApplication', 'application')) {
     manageLoanArr.push({
       icon: 'bulkLoanApplicationsApproval',

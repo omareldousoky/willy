@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
-import Search from  '../../../Shared/Components/Search/search';
+import Search from '../../../Shared/Components/Search/search';
 import Can from '../../../Mohassel/config/Can';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import Swal from 'sweetalert2';
 
 interface State {
   size: number;
@@ -20,8 +21,9 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  error: string;
   branchId: string;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
@@ -64,15 +66,26 @@ class CustomersList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <Can I="updateCustomer" a="customer"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img></Can>
+        render: data => <Can I="updateCustomer" a="customer"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../../Shared/Assets/upload.svg')} onClick={() => this.props.history.push("/edit-customer-document", { id: data._id })}></img></Can>
       },
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+      if(this.props.error){;
+        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+      }
+    })
   }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+      if(this.props.error){;
+        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+      }
+    });
+  }
+  componentWillUnmount(){
+    this.props.setSearchFilters({})
   }
   render() {
     return (
@@ -82,27 +95,27 @@ class CustomersList extends Component<Props, State> {
           <div className="custom-card-header">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.customers}</Card.Title>
-              <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
+              <span className="text-muted">{local.noOfCustomers + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
             </div>
           </div>
           <hr className="dashed-line" />
-          <Search 
-          searchKeys={['keyword', 'dateFromTo', 'governorate']} 
-          dropDownKeys={['name', 'nationalId', 'key', 'code']} 
-          searchPlaceholder ={local.searchByBranchNameOrNationalIdOrCode}
-          url="customer" 
-          from={this.state.from} size={this.state.size}  
-          setFrom= {(from) => this.setState({from: from})}
-          hqBranchIdRequest = {this.props.branchId}/>
+          <Search
+            searchKeys={['keyword', 'dateFromTo', 'governorate']}
+            dropDownKeys={['name', 'nationalId', 'key', 'code']}
+            searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
+            url="customer"
+            from={this.state.from} size={this.state.size}
+            setFrom={(from) => this.setState({ from: from })}
+            hqBranchIdRequest={this.props.branchId} />
           {this.props.data &&
             <DynamicTable
-              from={this.state.from} 
-              size={this.state.size} 
+              from={this.state.from}
+              size={this.state.size}
               totalCount={this.props.totalCount}
               mappers={this.mappers}
               pagination={true}
               data={this.props.data}
-              url="customer" 
+              url="customer"
               changeNumber={(key: string, number: number) => {
                 this.setState({ [key]: number } as any, () => this.getCustomers());
               }}
@@ -122,6 +135,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.data,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

@@ -15,6 +15,7 @@ import ability from '../../config/ability';
 import { manageCustomersArray } from './manageCustomersInitial';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface State {
   size: number;
@@ -28,8 +29,9 @@ interface Props {
   totalCount: number;
   loading: boolean;
   searchFilters: any;
+  error: string;
   branchId: string;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
 }
 class CustomersList extends Component<Props, State> {
@@ -77,6 +79,9 @@ class CustomersList extends Component<Props, State> {
         
         render: data => <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>  {ability.can('updateCustomer', 'customer') || ability.can('updateNationalId','customer')? <img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/customers/edit-customer", { id: data._id })}></img>: null}
           <Can I='getCustomer' a='customer'><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/customers/view-customer", { id: data._id })}></img></Can>
+          <Can I ="newClearance" a="application">
+          <img style={{ cursor: 'pointer', width: "20px", height: '30px' }} alt={'clearance'} src={require('../../Assets/clearanceIcon.svg')} onClick={() => this.props.history.push("/customers/create-clearance", { id: data._id})}/>
+            </Can>
           <Can I="blockAndUnblockCustomer" a="customer"><span  className='fa icon row-nowrap' style={{width:'120px', fontSize:'13px'}} onClick={() => this.handleActivationClick(data)}> {data.blocked?.isBlocked ? local.unblockCustomer: <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} </span></Can>
           </div>  
       },
@@ -127,12 +132,20 @@ class CustomersList extends Component<Props, State> {
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+      if(this.props.error){;
+        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+      }
+    });
     this.setState({manageCustomersTabs: manageCustomersArray()})
 
   }
   getCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'customer', branchId: this.props.branchId }).then(() => {
+      if(this.props.error){;
+        Swal.fire("error", getErrorMessage(this.props.error),"error" )
+      }
+    });
   }
   render() {
     return (
@@ -183,6 +196,9 @@ class CustomersList extends Component<Props, State> {
       </>
     )
   }
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
 }
 const addSearchToProps = dispatch => {
   return {
@@ -193,6 +209,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.data,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

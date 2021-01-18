@@ -407,3 +407,4 @@ depends_on:
   - unit-test
   - PushToEcr
   - kubernetes
+  

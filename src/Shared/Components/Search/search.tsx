@@ -18,6 +18,7 @@ import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/conf
 import { loading } from '../../redux/loading/actions';
 import {getActionsList} from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList';
 import Swal from 'sweetalert2';
+import Can from '../../../Mohassel/config/Can';
 
 interface InitialFormikState {
   name?: string;
@@ -112,6 +113,7 @@ class Search extends Component<Props, State> {
     if(this.props.status) obj.status = this.props.status;
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
+    if(this.props.url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -142,6 +144,8 @@ class Search extends Component<Props, State> {
           initialState.branchId = this.props.url === "loan"? this.props.issuedLoansSearchFilters.branchId : '';
         case 'status-application':
           initialState.status = this.props.url === "loan"? this.props.issuedLoansSearchFilters.status : '';
+        case 'review-application':
+          initialState.status = this.props.url === "application"? this.props.issuedLoansSearchFilters.status : '';
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
@@ -306,10 +310,42 @@ class Search extends Component<Props, State> {
                           <option value="" data-qc="all">{local.all}</option>
                           <option value='underReview' data-qc='underReview'>{local.underReview}</option>
                           <option value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                          <option value='secondReview' data-qc='secondReview'>{local.secondReviewed}</option>
+                          <option value='thirdReview' data-qc='thirdReview'>{local.thirdReviewed}</option>
                           <option value='approved' data-qc='approved'>{local.approved}</option>
                           <option value='created' data-qc='created'>{local.created}</option>
                           <option value='rejected' data-qc='rejected'>{local.rejected}</option>
                           <option value='canceled' data-qc='canceled'>{local.cancelled}</option>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
+                if(searchKey === 'review-application') {
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status"  value={formikProps.values.status ? formikProps.values.status  : 'reviewed' } onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>     
+                           <option  value='reviewed' data-qc='reviewed'>{local.reviewed}</option>
+                           <Can I="thirdReview" a="application">
+                            <option value='secondReview' data-qc='secondReviewed'>{local.secondReviewed}</option>
+                          </Can>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
+                if(searchKey==='clearance-status'){
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          <option value='underReview' data-qc='underReview'>{local.underReview}</option>
+                          <option value='approved' data-qc='approved'>{local.approved}</option>
+                          <option value='rejected' data-qc='rejected'>{local.rejected}</option>
                         </Form.Control>
                       </div>
                     </Col>

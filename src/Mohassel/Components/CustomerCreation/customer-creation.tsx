@@ -19,6 +19,7 @@ import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import ability from '../../config/ability';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 
+
 interface CustomerInfo {
   birthDate: number;
   customerName?: string;

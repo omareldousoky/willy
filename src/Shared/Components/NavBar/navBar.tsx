@@ -16,6 +16,7 @@ import './styles.scss';
 import { setToken } from '../../token';
 import { connect } from 'react-redux';
 import { Auth } from '../../redux/auth/types'
+import { logout } from '../../../Mohassel/Services/APIs/Auth/logout';
 interface Props {
   history: any;
   auth: Auth;
@@ -60,9 +61,11 @@ class NavBar extends Component<Props, State> {
     } else return null;
   }
   componentDidUpdate(prevProps, prevState){
-    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches ){
+    if(this.props.auth.validBranches && this.props.auth.validBranches[0] && !prevProps.auth.validBranches){
       const selectedBranch = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch')) : '';
       this.goToBranch(selectedBranch, false);
+    } else  if (this.state.selectedBranch._id==='hq' && prevState.selectedBranch._id !=='hq') {
+      this.goToBranch(this.state.selectedBranch, false);
     }
   }
   async goToBranch(branch: Branch, refresh: boolean) {
@@ -114,7 +117,8 @@ class NavBar extends Component<Props, State> {
         </div>
         {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
         <div className="item">
-          <Button variant="outline-secondary" onClick={() => {
+          <Button variant="outline-secondary" onClick={ async() => {
+            const res = await logout();
             document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
             window.location.href = process.env.REACT_APP_LOGIN_URL || '';
@@ -198,6 +202,7 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can  I="viewActionLogs" a='user' ><Nav.Link onClick={()=> this.props.history.push('/logs')}>{local.logs}</Nav.Link></Can>}
             {!this.props.hide && <Can I="viewReports" a='report' ><Nav.Link onClick={() => this.props.history.push('/reports')}>{local.reports}</Nav.Link></Can>}
             {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
+            {!this.props.hide && <Can  I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
