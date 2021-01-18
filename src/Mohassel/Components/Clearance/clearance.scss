@@ -41,3 +41,19 @@
     font-size: 80%;
     color: #d51b1b;
 }
+.icon-td {
+        border-top: none !important;
+}
+
+.error-container {
+    border: 1px solid #d51b1b;
+    color:  #000;;
+    background-color: #f6cfd4;
+    display: flex;
+    padding: 20px 40px;
+    border-radius: 6px;
+    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+}

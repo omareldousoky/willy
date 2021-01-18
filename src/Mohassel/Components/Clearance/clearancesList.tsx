@@ -96,10 +96,11 @@ class ClearancesList extends Component<Props, State> {
       {
         title: '',
         key: "actions",
-        render: data => <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          {data.status === 'underReview' ? <Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: data._id } })} /></Can> : null}
-          {data.status !== "approved" ? <Can I="reviewClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20, color: '#7dc356', textDecoration: 'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: { id: data._id } })}>{local.reviewClearance}</span></Can> : null}
-        </div>
+        render: data => <table style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <td className="icon-td"><Can I= "getClearance" a="application"><img style={{cursor: 'pointer'}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => this.props.history.push("/clearances/clearance-profile", { id: data._id })}></img></Can></td>
+          <td className="icon-td">{data.status === 'underReview' ? <Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: data._id } })} /></Can> : null}</td>
+          <td className="icon-td">{data.status !== "approved" ? <Can I="reviewClearance" a="application"><span style={{ cursor: 'pointer', marginLeft: 20, color: '#7dc356', textDecoration: 'underline' }} onClick={() => this.props.history.push("/clearances/review-clearance", { clearance: { id: data._id } })}>{local.reviewClearance}</span></Can> : null}</td>
+        </table>
       },
     ]
   }

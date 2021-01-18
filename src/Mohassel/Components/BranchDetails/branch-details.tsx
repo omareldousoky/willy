@@ -16,8 +16,9 @@ import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
+import Swal from 'sweetalert2';
+import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
 import Managers from '../managerHierarchy/managers';
-import { timeToArabicDate } from '../../../Shared/Services/utils';
 import SupervisionLevels from '../managerHierarchy/supervisionLevels';
 interface Props {
     history: any;
@@ -102,6 +103,8 @@ interface State {
                 data: {...this.props.branch.body.data, products},
                 _id,
             })
+        } else {
+            Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
         }
     }
 
@@ -165,7 +168,7 @@ interface State {
                
         }
          else {
-            this.setState({productsLoading: false});
+            this.setState({productsLoading: false},()=>  Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error'));
              return [];
          }
        
