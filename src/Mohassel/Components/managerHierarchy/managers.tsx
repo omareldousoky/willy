@@ -42,7 +42,7 @@ export default class Managers extends Component<Props, State> {
         }
     }
     componentDidMount() {
-        if(ability.can("updateBranchHierarchy","branch")){
+        if(ability.can("updateBranchManagersHierarchy","branch")){
             this.setState({disabled:false})
         }
         this.setState({ loading: true });
@@ -121,7 +121,7 @@ export default class Managers extends Component<Props, State> {
                         <Row><UsersSearch usersOfBranch={this.state.usersOfBranch} objectKey={'branchManager'} item={this.state.values}  disabled = {this.state.disabled}/> </Row>
                     </Form.Group>
                 </Form>
-                <Can I="updateBranchHierarchy" a="branch">
+                <Can I="updateBranchManagersHierarchy" a="branch">
                     <Form.Group>
                         <Button className={'save-button'} onClick={async () => {
                             await this.updateManagers();

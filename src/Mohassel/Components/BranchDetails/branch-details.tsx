@@ -135,13 +135,13 @@ interface State {
             stringKey: 'issuedLoan',
         })
     }
-    if(ability.can("getBranchHierarchy","branch")) {
+    if(ability.can("getBranchManagersHierarchy","branch")) {
         tabsToRender.push({
             header: local.managers,
             stringKey: 'managers'
         })
     }
-    if(ability.can("getGroupLeadersHierarchy","branch")){
+    if(ability.can("getOfficersGroups","branch")){
         tabsToRender.push({
             header: local.levelsOfSupervision,
             stringKey: 'levelsOfSupervision'
@@ -178,7 +178,7 @@ interface State {
              case 'customers':   return (<Can I='getCustomer' a='customer'><CustomersList {...{branchId: this.state._id}}/></Can>)
              case 'loanApplication': return (<Can I='getLoanApplication' a='application'><TrackLoanApplications {...{branchId: this.state._id}}/></Can>)
              case 'issuedLoan': return (<Can I='getIssuedLoan' a='application'> <LoanList {...{branchId: this.state._id, fromBranch: true}}/></Can>)
-             case 'managers' : return (<Can I = "getBranchHierarchy" a="branch"> <Managers 
+             case 'managers' : return (<Can I = "getBranchManagersHierarchy" a="branch"> <Managers 
                  branchId ={this.state._id}
                  branchCode={this.state.data.branchCode} 
                  name ={this.state.data.name}
@@ -187,7 +187,7 @@ interface State {
 
                  /></Can>)
              case 'levelsOfSupervision'  : return (
-              <Can I="getGroupLeadersHierarchy"  a="branch"><SupervisionLevels
+              <Can I="getOfficersGroups"  a="branch"><SupervisionLevels
                  branchId ={this.state._id}
                  branchCode={this.state.data.branchCode} 
                  name ={this.state.data.name}
