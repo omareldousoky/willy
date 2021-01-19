@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from "react-redux";
 import './randomPayment.scss';
-import { timeToArabicDate } from "../../../../Shared/Services/utils"
+import { timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils"
 interface Props {
 	branches: {
 		rows: {
@@ -64,7 +64,7 @@ const RandomPayment = (props: Props) => {
 									<table>
 										<tbody>
 											<tr className="head-title">
-												<th>{timeToArabicDate(0, true)}</th>
+												<th>{timeToArabicDateNow(true)}</th>
 												<th>{props.name}</th>
 											</tr>
 											<tr className="head-title">

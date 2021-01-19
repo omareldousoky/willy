@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Component } from 'react';
 import './earlyPayment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, getStatus } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, getStatus, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 interface Props {
     data: any;
     earlyPaymentData: any;
@@ -95,7 +95,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                 <td className="title bold">{this.props.branchDetails.name} - {this.props.branchDetails.governorate}</td>
                             </tr>
                             <tr>
-                                <td>{timeToArabicDate(0, true)}</td>
+                                <td>{timeToArabicDateNow(true)}</td>
                                 <td className="title2 bold"><u>السداد المعجل</u></td>
                                 <td>1/1</td>
                             </tr>
@@ -109,7 +109,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                     <div className="frame">{(this.props.data.product.beneficiaryType === "individual") ? this.props.data.customer.customerName : this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName}</div>
                                 </td>
                                 <td> التاريخ
-					<div className="frame">{timeToArabicDate(0, false)}</div>
+					<div className="frame">{timeToArabicDateNow(false)}</div>
                                 </td>
                                 <td> المندوب
 					<div className="frame">{(this.props.data.product.beneficiaryType === 'group') ? this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : this.props.data.customer.representativeName}</div>
@@ -122,7 +122,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                     <table>
                         <tbody>
                             <tr>
-                                <td>تاريخ الحساب <div className="frame">{timeToArabicDate(0, false)}</div>
+                                <td>تاريخ الحساب <div className="frame">{timeToArabicDateNow(false)}</div>
                                 </td>
                                 <td>فترة السداد <div className="frame">{this.props.data.product.periodType === 'days' ? local.daily : local.inAdvanceFromMonthly}</div>
                                 </td>

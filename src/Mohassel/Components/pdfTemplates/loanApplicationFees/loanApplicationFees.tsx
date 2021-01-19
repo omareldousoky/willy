@@ -1,6 +1,6 @@
 import React from 'react';
 import './loanApplicationFees.scss';
-import { timeToArabicDate } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 
 interface Props {
     result: {
@@ -73,7 +73,7 @@ const LoanApplicationFees = (props: Props) => {
                             <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.startDate, false)} الي {timeToArabicDate(props.endDate, false)}</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={4}>{timeToArabicDateNow(true)}</th>
                             <th colSpan={6}>جنيه مصري</th>
                         </tr>
                         <tr>

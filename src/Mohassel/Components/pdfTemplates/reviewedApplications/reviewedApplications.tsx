@@ -1,7 +1,7 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate, timeToArabicDate, beneficiaryType } from '../../../../Shared/Services/utils';
+import { ageCalculate, beneficiaryType, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 import store from '../../../../Shared/redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal() {
@@ -26,7 +26,7 @@ const ReviewedApplicationsPDF = (props) => {
                             <td className="title">{props.branchDetails.name}</td>
                         </tr>
                         <tr>
-                            <td>{timeToArabicDate(0, true)}</td>
+                            <td>{timeToArabicDateNow(true)}</td>
                             <td></td>
                             <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                         </tr>
