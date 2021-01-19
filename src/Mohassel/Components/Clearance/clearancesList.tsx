@@ -168,6 +168,8 @@ class ClearancesList extends Component<Props, State> {
       this.props.setLoading(false);
       this.setState({ print: true }, () => window.print())
       this.getClearances()
+    } else {
+      this.props.setLoading(false);
     }
   }
   render() {
