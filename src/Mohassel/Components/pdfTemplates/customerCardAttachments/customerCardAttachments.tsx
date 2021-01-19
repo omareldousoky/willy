@@ -1,6 +1,6 @@
 import React from 'react';
 import './customerCardAttachments.scss';
-import { timeToArabicDate, numbersToArabic, arabicGender, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, arabicGender } from "../../../../Shared/Services/utils";
 import * as local from '../../../../Shared/Assets/ar.json';
 const CustomerCardAttachments = (props) => {
 
