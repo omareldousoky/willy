@@ -9,7 +9,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from './manageLoansInitials';
-import { interestType } from "../../../Shared/Services/utils";
+import { getErrorMessage, interestType } from "../../../Shared/Services/utils";
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { Formula } from '../LoanApplication/loanApplicationCreation';
 import Form from 'react-bootstrap/Form';
@@ -85,8 +85,7 @@ class FormulaList extends Component<Props, State> {
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error'));
         }
     }
     render() {

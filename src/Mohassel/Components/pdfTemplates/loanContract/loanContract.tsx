@@ -78,7 +78,7 @@ const LoanContract = (props) => {
 
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
-                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDateNow(false)}</div>
+                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
                   <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
 							:-</div>
                   <table className="stakeholders">
@@ -282,7 +282,7 @@ const LoanContract = (props) => {
                    الثاني و{getNumbersOfGuarantor('and')} مخفقين في الوفاء بالتزاماتهم التعاقديه والقانونيه ويعتبر هذا العقد مفسوخا من
                   تلقاء نفسه دون الحاجه
                   للرجوع الي اعذار او اتخاذ اجراءات قضائيه ويحق للطرف الاول فورا مطالبة أى من الطرفين
-                  الثاني أو {getNumbersOfGuarantor('and')} أو جميعهم بباقي قيمة القرض وكافة مصروفاته</div>
+                  الثاني أو {getNumbersOfGuarantor('and')} أو جميعهم بباقي قيمة القرض وكافة مصروفاته و تكاليف تمويله </div>
                     <div>ومن حالات الاخفاق علي سبيل المثال وليس الحصر ما يلي:-</div>
                     <div>٧/١ عدم سداد اي قسط من الاقساط طبقا للشروط والضوابط الوارده بهذا العقد</div>
                     <div>٧/٢ في حالة إستخدام مبلغ القرض في غير الغرض الممنوح من أجله الوارد بهذا العقد</div>
@@ -368,12 +368,12 @@ const LoanContract = (props) => {
 
                     <tbody>
                       <tr>
-                        <td style={{paddingBottom: 100}}>
+                        <td style={{paddingBottom: 70}}>
                           <div><b>الطرف الأول</b></div>
                           <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
                         </td>
-                        <td style={{paddingBottom: 100}}>
+                        <td style={{paddingBottom: 70}}>
                           <div><b>الطرف الثاني</b></div>
                           <div style={{marginBottom: 30}}><b>الأسم:</b></div>
                           <div><b>التوقيع:</b></div>
@@ -383,9 +383,9 @@ const LoanContract = (props) => {
 
                         {props.data.guarantors.map((_guarantor, index) => {
                           return (
-                            <td key={index} style={{paddingBottom: 100}}>
+                            <td key={index} style={{paddingBottom: 70}}>
                               <div><b>الطرف {getIndexOfGuarantorInAr(index)}</b></div>
-                              <div style={{marginBottom: 30}}><b>الأسم:</b></div>
+                              <div style={{marginBottom: 20}}><b>الأسم:</b></div>
                               <div><b>التوقيع:</b></div>
                             </td>
                           )
@@ -425,20 +425,20 @@ const LoanContract = (props) => {
                         </td>
                       </tr>
                       <tr>
-                        <td style={{paddingBottom: 150}}>
+                        <td style={{paddingBottom: 80}}>
                           <div>الاسم/ {props.data.customer.customerName}</div>
                         </td>
-                        <td style={{paddingBottom: 150}}>
+                        <td style={{paddingBottom: 80}}>
                           <div>التوقيع:-----------------------</div>
                         </td>
                       </tr>
                       {props.data.guarantors.map((guarantor, index) => {
                         return (
                           <tr key={index}>
-                            <td style={{paddingBottom: 150}}>
+                            <td style={{paddingBottom: 80}}>
                               <div>الاسم/ {guarantor.customerName}</div>
                             </td>
-                            <td style={{paddingBottom: 150}}>
+                            <td style={{paddingBottom: 80}}>
                               <div>التوقيع:-----------------------</div>
                             </td>
                           </tr>
@@ -455,7 +455,7 @@ const LoanContract = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDateNow(false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{props.data.customer.customerName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
@@ -509,14 +509,14 @@ const LoanContract = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <div>القائم بالمراجعه</div>
-                          <div>الاسم: --------------------------</div>
-                          <div>التوقيع: -------------------------</div>
+                          <div style={{marginBottom: 30}}>القائم بالمراجعه</div>
+                          <div style={{marginBottom: 100}}>الاسم: --------------------------</div>
+                          <div style={{marginBottom: 100}}>التوقيع: -------------------------</div>
                         </td>
                         <td>
-                          <div>القائم بالصرف</div>
-                          <div>الاسم: --------------------------</div>
-                          <div>التوقيع: -------------------------</div>
+                          <div style={{marginBottom: 30}}>القائم بالصرف</div>
+                          <div style={{marginBottom: 100}}>الاسم: --------------------------</div>
+                          <div style={{marginBottom: 100}}>التوقيع: -------------------------</div>
                         </td>
                       </tr>
                     </tbody>
@@ -597,13 +597,13 @@ const LoanContract = (props) => {
                     <div className="title_last">
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDateNow(false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{props.data.customer.customerName}</div>
 
                       <div style={{ margin: '2em', borderTop: '2px solid black' }}></div>
                       <Barcode value={props.data.applicationKey} />
                       <div>{props.data.applicationKey}</div>
-                      <div>{timeToArabicDateNow(false)}</div>
+                      <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{props.data.customer.customerName}</div>
                     </div>
                   </div>

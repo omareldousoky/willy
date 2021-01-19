@@ -1,0 +1,39 @@
+@media print {
+  .print-none {
+    display: none;
+  }
+  .installmentsDuePerOfficerCustomerCard {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    page-break-after: always;
+    direction: rtl;
+    width: 95%;
+    margin: auto;
+    .branchDiv {
+      width: 100%;
+      .CommissaryDiv {
+        width: 100%;
+        .table {
+          width: 95%;
+          margin: auto;
+          border-collapse: collapse;
+          th {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+          }
+        }
+      }
+    }
+    .lineStroke {
+      height: 2px;
+      background: black;
+    }
+  }
+}
+@media screen {
+  .installmentsDuePerOfficerCustomerCard {
+    max-width: 700px;
+    display: none;
+  }
+}
