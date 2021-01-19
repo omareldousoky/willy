@@ -16,6 +16,8 @@ import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
@@ -99,6 +101,8 @@ interface State {
                 data: {...this.props.branch.body.data, products},
                 _id,
             })
+        } else {
+            Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
         }
     }
 
@@ -150,7 +154,7 @@ interface State {
                
         }
          else {
-            this.setState({productsLoading: false});
+            this.setState({productsLoading: false},()=>  Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error'));
              return [];
          }
        

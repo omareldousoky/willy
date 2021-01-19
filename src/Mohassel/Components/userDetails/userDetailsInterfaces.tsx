@@ -20,6 +20,7 @@ export interface UserDateValues {
   updated: {at: number; by: string};
   roles: Role[];
   branches?: string[];
+  mainBranchId: string;
   nationalId: string;
   nationalIdIssueDate: number;
   birthDate: number;

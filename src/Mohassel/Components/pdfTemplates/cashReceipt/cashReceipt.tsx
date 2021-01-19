@@ -29,7 +29,7 @@ const CashReceipt = (props) => {
 
                             <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                             <div>  تحريرا في
-			<span>{' ' + timeToArabicDate(0, false) + ' '}</span>
+			<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span>
                             </div>
                             <div>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
@@ -88,7 +88,7 @@ const CashReceipt = (props) => {
 
                                     <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                                     <div>  تحريرا في
-                                    <span>{' ' + timeToArabicDate(0, false) + ' '}</span>
+                                    <span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span>
                                     </div>
                                     <div style={{margin: '20px 0px'}}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
                                  تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)

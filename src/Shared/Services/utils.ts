@@ -439,3 +439,14 @@ export const iscoreStatusColor = (score: any) => {
   const iScoreStatusObj = {color: iscoreColor, status: iscorStatus}
   return iScoreStatusObj
 }
+
+export const getCurrentTime = () => {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    // get time in xx:xx:xx format
+    return `${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${
+        s < 10 ? `0${s}` : s
+    }`;
+};

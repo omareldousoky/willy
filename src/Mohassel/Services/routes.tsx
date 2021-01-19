@@ -50,6 +50,9 @@ import LeadProfile from '../Components/HalanIntegration/leadProfile';
 import EditLead from '../Components/HalanIntegration/editLead';
 import GeoAreas from '../Components/GeoAreas/geoAreas';
 import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkApplicationReview' ;
+import CreateClearance from '../Components/Clearance/create-clearance';
+import ClearancesList from '../Components/Clearance/clearancesList';
+import ClearanceProfile from '../Components/Clearance/clearanceProfile';
 
 
 const appRoutes = [
@@ -83,6 +86,15 @@ const appRoutes = [
             path: "/move-customers",
             label: local.moveCustomers,
             render: (props) => <Can I="changeOfficer" a="customer"><MoveCustomers {...props} /></Can>
+          },
+          {
+            path: "/create-clearance",
+            label: local.createClearance,
+            render: (props) => 
+             <Can I ="newClearance" a="application">
+              <CreateClearance {...props} />
+               </Can>
+            
           },
         ]
       },
@@ -394,6 +406,39 @@ const appRoutes = [
             path: "/exchange",
             label: local.assignOrChangeLoanOfficer,
             render: (props) => <AssignLoanOfficer {...props} /> ,
+          }
+        ]
+      },
+      {
+        path: '/clearances',
+        label: local.clearances,
+        render: (props) => <Can I = "getClearance" a="application"> <ClearancesList {...props} /></Can>,
+        routes:[
+          {
+            path: "/edit-clearance",
+            label: local.editClearance,
+            render: (props) => 
+             <Can I ="editClearance" a="application">
+              <CreateClearance {...props} edit={true} />
+               </Can>
+            
+          },
+          {
+            
+              path: "/review-clearance",
+              label: local.reviewClearance,
+              render: (props) => 
+               <Can I ="reviewClearance" a="application">
+                <CreateClearance {...props} review={true} />
+                 </Can>
+              
+          },
+          {
+            path: "/clearance-profile",
+            label: local.clearanceDetails,
+            render: (props) => <Can I= "getClearance" a="application">
+              <ClearanceProfile  {...props}/>
+            </Can>
           }
         ]
       }
