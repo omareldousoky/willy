@@ -1,6 +1,6 @@
 import React from 'react';
 import Tafgeet from 'tafgeetjs';
-import { timeToArabicDate, numbersToArabic } from "../../../../Shared/Services/utils";
+import { numbersToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import './earlyPaymentReceipt.scss';
 
 const EarlyPaymentReceipt = (props) => {
@@ -35,7 +35,7 @@ const EarlyPaymentReceipt = (props) => {
                     <tbody>
                         <tr>
                             <th className="frame">التاريخ</th>
-                            <td className="frame">{timeToArabicDate(0, false)}</td>
+                            <td className="frame">{timeToArabicDateNow(false)}</td>
 
                         </tr>
                         <tr>
