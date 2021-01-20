@@ -82,12 +82,12 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                                     </Form.Control.Feedback>}
                                                 </Col>
                                             </Form.Group>
-                                            {index !== 0 && <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>}
+                                            {index !== 0 && <Button type="button" className="mb-2" onClick={() => arrayHelpers.remove(index)}> - </Button>}
                                         </div>
                                     ))}
-                                    {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <button
+                                    {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <Button
                                         type="button"
-                                        onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</button>}
+                                        onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</Button>}
                                 </div>
                             )}
                         />
