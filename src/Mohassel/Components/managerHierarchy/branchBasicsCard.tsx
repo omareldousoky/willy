@@ -10,6 +10,18 @@ interface Props {
     status: string;
 
 }
+export interface Managers {
+    branchId?: string;
+    operationsManager: string;
+    areaManager: string;
+    areaSupervisor: string;
+    centerManager: string;
+    branchManager: string;
+}
+export interface UserOfBranch {
+    name: string;
+    _id: string;
+}
 export default function BranchBasicsCard(props: Props) {
     return (
         <div className="branch-basics-card">

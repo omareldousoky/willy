@@ -18,8 +18,8 @@ import Can from '../../config/Can';
 import ability from '../../config/ability';
 import Swal from 'sweetalert2';
 import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
-import Managers from '../managerHierarchy/managers';
 import SupervisionLevels from '../managerHierarchy/supervisionLevels';
+import ManagerProfile from '../managerHierarchy/managersView';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
@@ -181,13 +181,12 @@ interface State {
              case 'customers':   return (<Can I='getCustomer' a='customer'><CustomersList {...{branchId: this.state._id}}/></Can>)
              case 'loanApplication': return (<Can I='getLoanApplication' a='application'><TrackLoanApplications {...{branchId: this.state._id}}/></Can>)
              case 'issuedLoan': return (<Can I='getIssuedLoan' a='application'> <LoanList {...{branchId: this.state._id, fromBranch: true}}/></Can>)
-             case 'managers' : return (<Can I = "getBranchManagersHierarchy" a="branch"> <Managers 
+             case 'managers' : return (<Can I = "getBranchManagersHierarchy" a="branch"> <ManagerProfile 
                  branchId ={this.state._id}
                  branchCode={this.state.data.branchCode} 
                  name ={this.state.data.name}
                  createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
                  status ={this.state.data.status}
-
                  /></Can>)
              case 'levelsOfSupervision'  : return (
               <Can I="getOfficersGroups"  a="branch"><SupervisionLevels

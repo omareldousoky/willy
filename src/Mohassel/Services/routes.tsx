@@ -53,6 +53,7 @@ import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkAppli
 import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
 import ClearanceProfile from '../Components/Clearance/clearanceProfile';
+import Managers from '../Components/managerHierarchy/managersCreation';
 
 
 const appRoutes = [
@@ -321,6 +322,11 @@ const appRoutes = [
                 path: "/branch-details",
                 label: local.branchDetails,
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
+              },
+              {
+                path: "/edit-managers",
+                label: local.managers,
+                render: (props) => <Can I='updateBranchManagersHierarchy' a='branch'><Managers {...props} /> </Can>
               }
             ]
           }
@@ -420,8 +426,7 @@ const appRoutes = [
             render: (props) => 
              <Can I ="editClearance" a="application">
               <CreateClearance {...props} edit={true} />
-               </Can>
-            
+               </Can>    
           },
           {
             
