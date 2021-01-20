@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
 import SupervisionLevels from '../managerHierarchy/supervisionLevels';
 import ManagerProfile from '../managerHierarchy/managersView';
+import  SupervisionsProfile  from '../managerHierarchy/supervisionsProfile';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
@@ -144,7 +145,7 @@ interface State {
             stringKey: 'managers'
         })
     }
-    if(ability.can("getOfficersGroups","branch")){
+    if(true){ //ability.can("getOfficersGroups","branch")
         tabsToRender.push({
             header: local.levelsOfSupervision,
             stringKey: 'levelsOfSupervision'
@@ -189,13 +190,15 @@ interface State {
                  status ={this.state.data.status}
                  /></Can>)
              case 'levelsOfSupervision'  : return (
-              <Can I="getOfficersGroups"  a="branch"><SupervisionLevels
-                 branchId ={this.state._id}
-                 branchCode={this.state.data.branchCode} 
-                 name ={this.state.data.name}
-                 createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
-                 status ={this.state.data.status}
-                  /></Can> 
+             // <Can I="getOfficersGroups"  a="branch">
+                <SupervisionsProfile
+                branchId ={this.state._id}
+                branchCode={this.state.data.branchCode} 
+                name ={this.state.data.name}
+                createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
+                status ={this.state.data.status} 
+                 />
+                  //</Can> 
              ) 
              default: return null;   
         }

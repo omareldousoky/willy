@@ -5,20 +5,24 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Button, Form, Row } from 'react-bootstrap';
 import { updateOfficersGroups } from '../../Services/APIs/ManagerHierarchy/updateOfficersGroups';
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
-import { searchUsers } from "../../Services/APIs/Users/searchUsers";
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import Can from '../../config/Can';
+import { withRouter } from 'react-router-dom';
 import ability from '../../config/ability';
 import { Loader } from '../../../Shared/Components/Loader';
-import { GroupsApproval } from './groupsApproval';
 import Swal from 'sweetalert2';
 import { officersGroupsApproval } from '../../Services/APIs/ManagerHierarchy/officersGroupsApproval';
 interface Props {
-    branchId: string;
-    name: string;
-    branchCode: number;
-    createdAt: string;
-    status: string;
-
+    history: any;
+    location: {
+        state: {
+            branchId: string;
+            name: string;
+            branchCode: number;
+            createdAt: string;
+            status: string;
+        };
+    };
 }
 export interface Group {
     leader: string;
@@ -33,7 +37,7 @@ interface State {
     startDate: number;
 
 }
-export default class SupervisionLevels extends Component<Props, State> {
+ class SupervisionLevels extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -50,12 +54,12 @@ export default class SupervisionLevels extends Component<Props, State> {
             this.setState({ disabled: false })
         }
 
-        this.getUsers();
+        this.getLoanOfficers();
         this.getGroups();
     }
     async getGroups() {
         this.setState({ loading: true })
-        const res = await getOfficersGroups(this.props.branchId)
+        const res = await getOfficersGroups(this.props.location.state.branchId)
         if (res.status = "success") {
             this.setState({
                 groups: res.body.data.groups ? res.body.data.groups : [] ,
@@ -68,17 +72,17 @@ export default class SupervisionLevels extends Component<Props, State> {
 
     async updateGroups() {
         this.setState({ loading: true })
-        const res = await updateOfficersGroups({ groups: this.state.groups }, this.props.branchId);
+        const res = await updateOfficersGroups({ groups: this.state.groups }, this.props.location.state.branchId);
         this.setState({ loading: false })
     }
-    async getUsers() {
+    async getLoanOfficers() {
         this.setState({ loading: true })
         const obj = {
-            branchId: this.props.branchId,
+            branchId: this.props.location.state.branchId,
             from: 0,
             size: 1000,
         };
-        const res = await searchUsers(obj);
+        const res = await searchLoanOfficer(obj);
         if (res.status === "success") {
             this.setState({
                 usersOfBranch: res.body.data
@@ -94,7 +98,7 @@ export default class SupervisionLevels extends Component<Props, State> {
                 <th>${local.transactionType}</th>
                 <th>${local.createdAt}</th>
                 </thead>
-                <tbody><tr><td>${this.props.name}</td>
+                <tbody><tr><td>${this.props.location.state.name}</td>
                 <td>${local.levelsOfSupervision}</td>
                 <td>${this.state.startDate}</td>
                 </tr></tbody>`
@@ -113,7 +117,7 @@ export default class SupervisionLevels extends Component<Props, State> {
             if(isConfirm.value){
                 this.setState({loading: true});
                 const res = await officersGroupsApproval({
-                    branchId: this.props.branchId
+                    branchId: this.props.location.state.branchId
                 })
                 if(res.status==="success"){
                     this.setState({loading: false})
@@ -138,37 +142,27 @@ export default class SupervisionLevels extends Component<Props, State> {
         return (
             <div>
                 <Loader open={this.state.loading} type="fullscreen" />
-                {this.state.groups && this.state.status !== "approved" && <GroupsApproval
-                    branchName={this.props.name}
-                    branchCode={this.props.branchCode}
-                    startDate={this.state.startDate}
-                    approveOfficersGroup={async () => {
-                        await this.approveGroups();
-                    }
-
-                    }
-                />}
                 <BranchBasicsCard
-                    name={this.props.name}
-                    branchCode={this.props.branchCode}
-                    createdAt={this.props.createdAt}
-                    status={this.props.status}
+                    name={this.props.location.state.name}
+                    branchCode={this.props.location.state.branchCode}
+                    createdAt={this.props.location.state.createdAt}
+                    status={this.props.location.state.status}
                 />
                 <Row>
-                    {this.state.groups.map((item, index) => {
-                        return (
-                            <SupervisionGroup key={index} seqNo={index + 1} deleteGroup={this.removeGroup} usersOfBranch={this.state.usersOfBranch} group={item} />);
-                    })
-                    }
-                    <Row className={'add-supervisor-container'}>
+                <Row className={'add-supervisor-container'}>
                         <span className={'add-member'} onClick={() => {
                             const newGroup = this.state.groups;
                             newGroup.push({ leader: '', officers: [] });
                             this.setState({ groups: newGroup });
                         }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addGroupManager}</span>
                     </Row>
+                    {this.state.groups.map((item, index) => {
+                        return (
+                            <SupervisionGroup key={index} seqNo={index + 1} deleteGroup={this.removeGroup} usersOfBranch={this.state.usersOfBranch} group={item} />);
+                    })
+                    }
                 </Row>
-                <Can I="updateGroupLeadersHierarchy" a="branch">
+                {/* <Can I="updateGroupLeadersHierarchy" a="branch"> */}
                     <Form.Group>
                         <Button
                             onClick={async () => {
@@ -177,9 +171,10 @@ export default class SupervisionLevels extends Component<Props, State> {
                             className={'save-button'}
                         >{local.save}</Button>
                     </Form.Group>
-                </Can>
+                {/* </Can> */}
             </div>
 
         )
     }
 }
+export default withRouter(SupervisionLevels);

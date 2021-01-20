@@ -26,7 +26,7 @@ export class SupervisionGroup extends Component<Props, State> {
                 <div className={'group-supervisor-row'}>
                     <Col sm={6}>
                         <Form.Label className="supervision-label" as={Col}>{`${local.groupManager} ( ${this.props.seqNo} )`}</Form.Label>
-                        {<Row> <UsersSearch usersOfBranch={this.props.usersOfBranch} objectKey={'leader'} item={this.props.group} /></Row> }
+                        {<Row><UsersSearch usersOfBranch={this.props.usersOfBranch} objectKey={'leader'} item={this.props.group} /></Row> }
                     </Col> 
                     <div onClick={this.props.deleteGroup}>
                         <img src={require('../../../Shared/Assets/deleteIcon.svg')} />

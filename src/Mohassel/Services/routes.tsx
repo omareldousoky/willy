@@ -54,6 +54,7 @@ import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
 import ClearanceProfile from '../Components/Clearance/clearanceProfile';
 import Managers from '../Components/managerHierarchy/managersCreation';
+import SupervisionLevels from '../Components/managerHierarchy/supervisionLevels';
 
 
 const appRoutes = [
@@ -327,12 +328,15 @@ const appRoutes = [
                 path: "/edit-managers",
                 label: local.managers,
                 render: (props) => <Can I='updateBranchManagersHierarchy' a='branch'><Managers {...props} /> </Can>
+              },
+              {
+                path: "/edit-groups",
+                label: local.levelsOfSupervision,
+                render: (props) => <SupervisionLevels {...props}/>
               }
             ]
           }
-
         ]
-
       },
       // {
       //   path: "/manage-finances",

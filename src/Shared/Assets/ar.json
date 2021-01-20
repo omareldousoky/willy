@@ -871,5 +871,6 @@
     "transactionNeedsInspection":"هناك عملية قيد التحقيق",
     "approveGroupsConfirmation": "تأكيد الموافقه علي مستويات الإشراف",
     "approveGroupsSuccess":"تمت الموافقة على مستويات الإشراف",
-    "approveGroupsError":"حدث خطأ ولم تتم الموافقة"
+    "approveGroupsError":"حدث خطأ ولم تتم الموافقة",
+    "editSuperVisionGroups":"تعديل بيانات مستويات الإشراف"
 }

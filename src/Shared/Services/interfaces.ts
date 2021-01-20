@@ -142,13 +142,13 @@ export interface LoanOfficer {
     status: string;
     username: string;
     _id: string;
-  }
-  export interface Clearance {
+}
+export interface Clearance {
     _id: string;
     bankName: string;
     beneficiaryType: string;
     branchId: string;
-    branchName:  string;
+    branchName: string;
     clearanceReason: string;
     customerId: string;
     customerKey: string;
@@ -167,4 +167,10 @@ export interface LoanOfficer {
     status: string;
     transactionKey?: number;
     manualReceipt?: string;
-  }
+}
+export interface OfficersGroup {
+    id: string;
+    leader: string;
+    officers: string[];
+    status: string;
+}
