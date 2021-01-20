@@ -16,6 +16,7 @@ import CustomersForUser from "./customersForUser";
 import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
 import Can from "../../config/Can";
 import ability from "../../config/ability";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 interface Props {
   history: any;
 }
@@ -41,12 +42,13 @@ class UserDetails extends Component<Props, State> {
         nationalIdIssueDate: 0,
         gender: "",
         birthDate: 0,
-        branches: [""],
+        branches: [],
         roles: [],
         _id: "",
         hiringDate: 0,
         hrCode: "",
         mobilePhoneNumber: "",
+        mainBranchId: "",
         status: "",
         branchesObjects: [{ _id: "", name: "" }]
       }
@@ -65,8 +67,7 @@ class UserDetails extends Component<Props, State> {
       await this.getUserDetails();
       Swal.fire("success", `${this.state.data.username} is ${req.status} now`);
     } else {
-      this.setState({ isLoading: false });
-      Swal.fire("error");
+      this.setState({ isLoading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   setUserDetails(data: any): UserDateValues {
@@ -88,8 +89,7 @@ class UserDetails extends Component<Props, State> {
         isLoading: false
       });
     } else {
-      this.setState({ isLoading: false });
-      Swal.fire("error", local.userDetialsError);
+      this.setState({ isLoading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
     }
   }
   componentDidMount() {

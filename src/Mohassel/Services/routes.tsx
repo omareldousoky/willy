@@ -52,6 +52,7 @@ import GeoAreas from '../Components/GeoAreas/geoAreas';
 import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkApplicationReview' ;
 import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
+import ClearanceProfile from '../Components/Clearance/clearanceProfile';
 
 
 const appRoutes = [
@@ -411,7 +412,7 @@ const appRoutes = [
       {
         path: '/clearances',
         label: local.clearances,
-        render: (props) => <ClearancesList {...props} />,
+        render: (props) => <Can I = "getClearance" a="application"> <ClearancesList {...props} /></Can>,
         routes:[
           {
             path: "/edit-clearance",
@@ -431,6 +432,13 @@ const appRoutes = [
                 <CreateClearance {...props} review={true} />
                  </Can>
               
+          },
+          {
+            path: "/clearance-profile",
+            label: local.clearanceDetails,
+            render: (props) => <Can I= "getClearance" a="application">
+              <ClearanceProfile  {...props}/>
+            </Can>
           }
         ]
       }

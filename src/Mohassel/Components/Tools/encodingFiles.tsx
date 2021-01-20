@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
-import { documentTypeLocalization } from '../../../Shared/Services/utils';
+import { documentTypeLocalization, getErrorMessage } from '../../../Shared/Services/utils';
 import { manageToolsArray } from './manageToolsInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 interface Props {
@@ -51,7 +51,7 @@ class EncodingFiles extends Component<Props, State> {
             })
         } else {
             this.setState({ loading: false })
-            Swal.fire("error", local.getDocumentsTypesError);
+            Swal.fire("Error !", getErrorMessage(res.error.error),'error');
         }
     }
     componentDidMount() {
