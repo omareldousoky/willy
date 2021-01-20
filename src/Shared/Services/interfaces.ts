@@ -71,6 +71,10 @@ export interface Customer {
     guarantorMaxLoans?: number;
     maxPrincipal?: number;
     _id?: string;
+	blocked?: {
+		isBlocked?: boolean;
+		reason?: string;
+	}
 }
 
 export interface Action {
