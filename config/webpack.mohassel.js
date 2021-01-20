@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const config = require('./config');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = () => {
     return {
@@ -49,9 +50,21 @@ module.exports = () => {
         devServer: {
             historyApiFallback: true,
         },
+		  optimization: {
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+					test: /[\\/]node_modules[\\/]/,
+					name: 'vendors',
+					chunks: 'all',
+					},
+				},
+			},
+		},
         plugins: [
             new HtmlWebpackPlugin({
-                template: './src/Mohassel/index.html'
+                template: './src/Mohassel/index.html',
+				filename: 'index.[hash].html'
             }),
             new webpack.DefinePlugin({
                 'process.env': {
@@ -62,7 +75,8 @@ module.exports = () => {
                     REACT_APP_DOMAIN: JSON.stringify(config.REACT_APP_DOMAIN),
                     REACT_APP_LTS_SUBDOMAIN: JSON.stringify(config.REACT_APP_LTS_SUBDOMAIN),
                 },}),
-            new ForkTsCheckerWebpackPlugin({eslint: true})
+            new ForkTsCheckerWebpackPlugin({eslint: true}),
+			new CleanWebpackPlugin()
         ]
     }
 };
