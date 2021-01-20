@@ -84,7 +84,7 @@ class ClearancesList extends Component<Props, State> {
       {
         title: local.printed,
         key: "printed",
-        render: data => data.printed ? <img alt="printed" src={require('../../Assets/check-circle.svg')} /> : null
+        render: data => data.printed ? <img alt="printed" src={require('../../Assets/check-circle.svg')} /> : <img alt="printed" src={require('../../Assets/times-circle.svg')} />
       },
       {
         title: local.customerType,
