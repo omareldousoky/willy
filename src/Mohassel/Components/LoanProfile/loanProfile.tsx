@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions';
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment';
-import { getBranch } from '../../Services/APIs/Branch/getBranch';
+import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch';
 import InfoBox from '../userInfoBox';
 import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
@@ -65,7 +65,7 @@ interface State {
     earlyPaymentData: EarlyPayment;
     pendingActions: PendingActions;
     manualPaymentEditId: string;
-    branchDetails: any;
+    branchDetails?: BranchDetails;
     receiptData: any;
     iscores: any;
     penalty: number;
@@ -92,7 +92,6 @@ class LoanProfile extends Component<Props, State>{
             earlyPaymentData: {},
             pendingActions: {},
             manualPaymentEditId: '',
-            branchDetails: {},
             receiptData: {},
             iscores: [],
             penalty: 0,
@@ -263,7 +262,10 @@ class LoanProfile extends Component<Props, State>{
         const res = await getBranch(branchId);
         if (res.status === 'success') {
             this.setState({ branchDetails: res.body?.data })
-        } else Swal.fire("Error !",getErrorMessage(res.error.error as string),'error');
+        } else {
+			const err = res.error as Record<string, string>;
+			Swal.fire("Error !", getErrorMessage(err.error), 'error');
+		}
     }
     async calculatePenalties() {
         this.setState({ loading: true });
@@ -278,7 +280,7 @@ class LoanProfile extends Component<Props, State>{
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
-                return <LoanDetailsTableView application={this.state.application} branchName={this.state.branchDetails.name}/>
+                return <LoanDetailsTableView application={this.state.application} branchName={this.state.branchDetails?.name}/>
             case 'loanGuarantors':
                 return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
             case 'loanLogs':
