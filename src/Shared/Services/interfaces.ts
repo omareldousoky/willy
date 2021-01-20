@@ -74,7 +74,7 @@ export interface Customer {
 	blocked?: {
 		isBlocked?: boolean;
 		reason?: string;
-	}
+	};
 }
 
 export interface Action {
