@@ -20,7 +20,7 @@ export interface BranchDetails {
 	licenseNumber?: string;
 }
 interface BranchDetailsResponse extends Trace {
-	data: BranchDetails
+	data: BranchDetails;
 }
 
 export const getBranch = async (_id: string): Promise<ApiResponse<BranchDetailsResponse>> => {

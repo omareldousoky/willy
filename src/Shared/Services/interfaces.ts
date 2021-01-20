@@ -175,6 +175,6 @@ interface Signature {
 }
 
 export interface Trace {
-	created: Signature
-	updated: Signature
+	created: Signature;
+	updated: Signature;
 }
