@@ -12,6 +12,7 @@ import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOff
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { beneficiaryType, currency, getErrorMessage, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
 import Swal from 'sweetalert2';
+import { getBranchById } from '../../../Shared/redux/branch/actions';
 
 interface Props {
     application: any;
@@ -36,7 +37,22 @@ export const LoanDetailsTableView = (props: LoanDetailsProps) => {
             return ''
         }
     }
+	async function getBranchName() {
+		const _id = props.application.branchId;
+	// 	const products = await this.getProductsByBranch(_id);
+	// 	await this.props.getBranchById(_id);
+	// 	if(this.props.branch.status === "success") {
+	// 		this.setState({
+	// 			data: {...this.props.branch.body.data, products},
+	// 			_id,
+	// 		})
+	// } else {
+	// 	Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error');
+	// }
+	}
+
     useEffect(() => {
+	console.log('Helloooo')
         const id = (props.application.product.beneficiaryType === 'group') ? props.application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : props.application.customer.representative
         getLoanUsages()
     }, [])

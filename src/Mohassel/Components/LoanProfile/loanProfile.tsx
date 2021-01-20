@@ -262,8 +262,8 @@ class LoanProfile extends Component<Props, State>{
     async getBranchData(branchId: string) {
         const res = await getBranch(branchId);
         if (res.status === 'success') {
-            this.setState({ branchDetails: res.body.data })
-        } else Swal.fire("Error !",getErrorMessage(res.error.error),'error');
+            this.setState({ branchDetails: res.body?.data })
+        } else Swal.fire("Error !",getErrorMessage(res.error.error as string),'error');
     }
     async calculatePenalties() {
         this.setState({ loading: true });
@@ -278,7 +278,7 @@ class LoanProfile extends Component<Props, State>{
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
-                return <LoanDetailsTableView application={this.state.application} />
+                return <LoanDetailsTableView application={this.state.application} branchName={this.state.branchDetails.name}/>
             case 'loanGuarantors':
                 return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
             case 'loanLogs':

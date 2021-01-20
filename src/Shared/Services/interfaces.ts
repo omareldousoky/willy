@@ -168,3 +168,13 @@ export interface LoanOfficer {
     transactionKey?: number;
     manualReceipt?: string;
   }
+
+interface Signature {
+	by: string;
+	at: number;
+}
+
+export interface Trace {
+	created: Signature
+	updated: Signature
+}
