@@ -854,6 +854,7 @@
     "undoReviewClearance": "إعادة مراجعة المخالصة",
     "clearanceReceiptPhoto":"صورة إيصال المخالصة",
     "clearanceDocumentPhoto": "صورة مستند المخالصة",
+    "printed": "تمت طباعته",
     "clearanceDetails": "تفاصيل نموذج المخالصة",
     "penaltyMessage": "يوجد غرامه علي العميل بقيمه"
 }
