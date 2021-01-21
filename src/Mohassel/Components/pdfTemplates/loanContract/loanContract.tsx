@@ -307,13 +307,13 @@ const LoanContract = (props) => {
 								الممول لاي سبب من الاسباب</div>
                   </section>
 
-                  <section style={{pageBreakAfter: 'always'}}>
+                  <section>
                     <div className="title">البند الثامن</div>
                     <div>يلتزم كل طرف من أطراف هذا العقد بسداد الضريبه المستحقه عليه وفقا لاحكام القانون
 							</div>
                   </section>
 
-                  <section>
+                  <section style={{pageBreakBefore: "always"}}>
                     <div className="title">البند التاسع</div>
                     <div>يقر الطرف {getNumbersOfGuarantor('and')} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
