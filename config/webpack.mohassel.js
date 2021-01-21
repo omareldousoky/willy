@@ -4,6 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const config = require('./config');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = (env) => {
 	const isProd = !!env.production
@@ -30,10 +32,25 @@ module.exports = (env) => {
                     },
                     exclude: /dist/,
                 },
-                {
-                    test: /\.(s?)css$/,
-                    use: ['style-loader', 'css-loader', 'sass-loader'],
-                },
+                // sass-loader
+				{
+					test: /\.(sc|c)ss$/,
+					use: [
+						MiniCssExtractPlugin.loader,
+						{
+							loader: 'css-loader',
+							options: {
+								sourceMap: true,
+							},
+						},
+						{
+							loader: 'sass-loader',
+							options: {
+								sourceMap: true,
+							},
+						},
+					],
+				},
                 {
                     test: /\.(png|svg|jpg)$/,
                     use: [
@@ -68,6 +85,9 @@ module.exports = (env) => {
 				filename: isProd ? 'index.[hash].html' : 'index.html',
 				chunks: ['main', 'vendors'],
             }),
+			new MiniCssExtractPlugin({
+				filename: '[name].[contenthash].css',
+			}),
             new webpack.DefinePlugin({
                 'process.env': {
                     REACT_APP_BASE_URL: JSON.stringify(config.REACT_APP_BASE_URL),
@@ -78,7 +98,12 @@ module.exports = (env) => {
                     REACT_APP_LTS_SUBDOMAIN: JSON.stringify(config.REACT_APP_LTS_SUBDOMAIN),
                 },}),
             new ForkTsCheckerWebpackPlugin({eslint: true}),
-			new CleanWebpackPlugin()
-        ]
+			new CleanWebpackPlugin(),
+			isProd ? new OptimizeCssAssetsPlugin({
+				cssProcessorPluginOptions: {
+					preset: ['default', { discardComments: { removeAll: true } }],
+				},
+			}) :  false,
+        ].filter(Boolean)
     }
 };
