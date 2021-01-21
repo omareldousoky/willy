@@ -74,7 +74,7 @@ class CustomersForUser extends Component<Props, State> {
       branches: [],
       branch: this.props.user.branchesObjects
         ? this.props.user.branchesObjects[0]
-        : null,
+        : { _id: "", name: "" },
       moveMissing: false,
       LoanOfficerSelectLoader: false, 
       LoanOfficerSelectOptions: []
@@ -145,9 +145,7 @@ class CustomersForUser extends Component<Props, State> {
       newUser: this.state.selectedLO ? this.state.selectedLO._id : "",
       customers: this.state.selectedCustomers.map(customer => customer._id)
     };
-    if (this.state.branch._id !== this.props.user.branchesObjects[0]._id) {
-      data.branchId = this.state.branch._id;
-    }
+    data.branchId = this.state.branch._id;
     if (this.state.moveMissing === true) {
       data.moveMissing = true;
     }
