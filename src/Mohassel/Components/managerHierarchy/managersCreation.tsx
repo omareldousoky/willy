@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import * as local from '../../../Shared/Assets/ar.json';
-import BranchBasicsCard from './branchBasicsCard';
 import UsersSearch from './usersSearch';
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { getManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/getManagerHierarchy";
@@ -10,16 +9,10 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
 import { withRouter } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
-    location: {
-        state: {
             branchId: string;
-            name: string;
-            branchCode: number;
-            createdAt: string;
-            status: string;
-        };
-    };
 }
 interface State {
     usersOfBranch: any[];
@@ -55,7 +48,7 @@ interface State {
     }
     async getUsers() {
         const obj = {
-            branchId: this.props.location.state.branchId,
+            branchId: this.props.branchId,
             from: 0,
             size: 1000,
         };
@@ -67,7 +60,7 @@ interface State {
         }
     }
     async getManagers() {
-        const res = await getManagerHierarchy(this.props.location.state.branchId);
+        const res = await getManagerHierarchy(this.props.branchId);
         if (res.status === "success") {
             const values = {
                 operationsManager: res.body.data.operationsManager,
@@ -83,7 +76,12 @@ interface State {
     }
     async updateManagers() {
         this.setState({ loading: true });
-        await updateManagerHierarchy(this.state.values, this.props.location.state.branchId)
+      const res=  await updateManagerHierarchy(this.state.values, this.props.branchId);
+        if(res.status=='success'){
+            Swal.fire('Success !',local.updateSuccess ,'success');
+        } else {
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+        }
         this.setState({ loading: false });
 
     }
@@ -91,12 +89,6 @@ interface State {
         return (
             <div>
                 <Loader open={this.state.loading} type={'fullscreen'} />
-                <BranchBasicsCard
-                    name={this.props.location.state.name}
-                    branchCode={this.props.location.state.branchCode}
-                    createdAt={this.props.location.state.createdAt}
-                    status={this.props.location.state.status}
-                />
                 <Form className="managers-form">
                     <Form.Group className={'managers-form-group'} as={Col} id="operationsManager">
                         <Form.Label className={"managers-label"} >{local.operationsManager}</Form.Label>
