@@ -240,11 +240,11 @@ export const numbersToArabic = (input: number | string) => {
     });
   } else return '۰';
 }
-
+export const timeToArabicDateNow = (fullDate: boolean): string => {
+  return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
+}
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
-  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
 export const dayToArabic = (index: number): string => {
   const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
@@ -449,14 +449,4 @@ export const getCurrentTime = () => {
     return `${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${
         s < 10 ? `0${s}` : s
     }`;
-};
-
-export const getDate = (epochDate: number) => {
-	// avoid toISOString to maintain local time
-    const date = new Date(epochDate);
-    const d = date.getDate();
-    const m = date.getMonth() + 1;
-    const y = date.getFullYear();
-    // get date in yyyy-mm-dd format
-    return `${y}-${m > 9 ? m : `0${m}`}-${d > 9 ? d : `0${d}`}`;
 };

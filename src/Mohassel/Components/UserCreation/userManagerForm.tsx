@@ -7,11 +7,12 @@ import Col from "react-bootstrap/Col";
 import "./userCreation.scss";
 import * as local from "../../../Shared/Assets/ar.json";
 import { theme } from "../../../theme";
-import { customFilterOption } from '../../../Shared/Services/utils';
+import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
 import { MainChoosesValues } from "./userCreationinterfaces";
 import Button from "react-bootstrap/Button";
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { Loader } from "../../../Shared/Components/Loader";
+import Swal from "sweetalert2";
 
 interface Props {
   roles: any[];
@@ -90,14 +91,18 @@ class UserManagerForm extends Component<Props, State> {
       this.setState({ loading: true });
       const res = await searchUsers(obj);
       const users: any[] = [];
+      if(res.status === "success"){
       res.body.data.map((user: any) => {
         users.push({
           label: user.name,
           value: user._id,
         });
       });
-
       this.setState({ managersList: users, loading: false });
+    }
+      else {
+         this.setState({loading: false}, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
+      }
     }
   }
   render() {

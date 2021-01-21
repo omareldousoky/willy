@@ -11,7 +11,7 @@ import { DocumentType } from '../../../Shared/Services/interfaces'
 import { connect } from 'react-redux';
 import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
 import {Image} from '../../../Shared/redux/document/types';
-import { downloadAsZip } from '../../../Shared/Services/utils';
+import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils';
 interface State {
   docsOfImagesFiles: any[];
   documentTypes: any[];
@@ -70,7 +70,7 @@ class DocumentsUpload extends Component<Props, State>{
         documentTypes: response.body.documentTypes,
       })
     } else {
-      Swal.fire("error", "error in getting customer documents", "error");
+      Swal.fire("Error !", getErrorMessage(response.error.error), "error");
     }
     if (this.props.edit || this.props.view) {
       await this.props.getDocuments({ customerId: this.props.customerId, docType: 'customer' });

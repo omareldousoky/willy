@@ -20,6 +20,8 @@ import { getBranches } from "../../Services/APIs/Branch/getBranches";
 import Select from "react-select";
 import { UserDateValues } from "./userDetailsInterfaces";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { LoanOfficer } from "../../../Shared/Services/interfaces";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 
 interface Props {
   id: string;
@@ -50,7 +52,7 @@ interface State {
   branch: any;
   moveMissing: boolean;
   LoanOfficerSelectLoader: boolean;
-  LoanOfficerSelectOptions: Array<any>;
+  LoanOfficerSelectOptions: Array<LoanOfficer>;
 }
 interface Branch {
   _id: string;
@@ -72,7 +74,7 @@ class CustomersForUser extends Component<Props, State> {
       branches: [],
       branch: this.props.user.branchesObjects
         ? this.props.user.branchesObjects[0]
-        : null,
+        : { _id: "", name: "" },
       moveMissing: false,
       LoanOfficerSelectLoader: false, 
       LoanOfficerSelectOptions: []
@@ -87,8 +89,7 @@ class CustomersForUser extends Component<Props, State> {
         loading: false
       },()=>this.getLoanOfficers(''));
     } else {
-      this.setState({ loading: false });
-      Swal.fire("", local.searchError, "error");
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(branches.error.error),'error'));
     }
   }
   componentDidMount() {
@@ -108,7 +109,7 @@ class CustomersForUser extends Component<Props, State> {
         customers: res.body.data,
         loading: false
       });
-    } else this.setState({ loading: false });
+    } else this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
@@ -144,9 +145,7 @@ class CustomersForUser extends Component<Props, State> {
       newUser: this.state.selectedLO ? this.state.selectedLO._id : "",
       customers: this.state.selectedCustomers.map(customer => customer._id)
     };
-    if (this.state.branch._id !== this.props.user.branchesObjects[0]._id) {
-      data.branchId = this.state.branch._id;
-    }
+    data.branchId = this.state.branch._id;
     if (this.state.moveMissing === true) {
       data.moveMissing = true;
     }
@@ -189,8 +188,8 @@ class CustomersForUser extends Component<Props, State> {
       } else {
         this.setState({ loading: false, selectedCustomers: [] });
         Swal.fire(
-          "",
-          local.actionHasntBeenMadeTheUserIsAssignedToOtherCustomers,
+          "Error !",
+          getErrorMessage(res.error.error),
           "error"
         );
       }
@@ -199,34 +198,21 @@ class CustomersForUser extends Component<Props, State> {
 
   getLoanOfficers = async searchKeyWord => {
     this.setState({LoanOfficerSelectLoader: true})
-    let res;
-    const sameBranch = this.state.branch
-    ? this.state.branch._id ===
-      this.props.user.branchesObjects[0]._id
-    : false;
     if (this.state.branch && this.state.branch._id) {
-      if (!sameBranch)
-        res = await searchLoanOfficer({
+        const res = await searchLoanOfficer({
           from: 0,
           size: 1000,
           name: searchKeyWord,
           status: "active",
-          excludedIds: [this.props.id],
-          branchId: this.state.branch._id 
-        });
-      else
-        res = await searchLoanOfficer({
-          from: 0,
-          size: 1000,
-          name: searchKeyWord,
-          status: "active",
-          excludedIds: [this.props.id],
           branchId: this.state.branch._id 
         });
       if (res.status === "success") {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: res.body.data })
+        this.setState({
+          LoanOfficerSelectLoader: false,
+          LoanOfficerSelectOptions: res.body.data
+        })
       } else {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
+        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
       }
     }
   };

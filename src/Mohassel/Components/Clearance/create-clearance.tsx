@@ -13,9 +13,10 @@ import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/uti
 import { getApplicationsKeys } from '../../Services/APIs/clearance/getApplicagionsKey';
 import { createClearance } from '../../Services/APIs/clearance/createClearance';
 import { getClearance } from '../../Services/APIs/clearance/getClearance';
+import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalties';
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance';
 import { Loader } from '../../../Shared/Components/Loader';
-import { reviewClearance } from '../../Services/APIs/clearance/reviewClearanc';
+import { reviewClearance } from '../../Services/APIs/clearance/reviewClearance';
 interface Props {
     history: any;
     location: {
@@ -42,6 +43,7 @@ interface State {
         Key: number;
         id: string;
     }[];
+    penalty: number;
 }
 class CreateClearance extends Component<Props, State> {
     constructor(props: Props) {
@@ -56,6 +58,7 @@ class CreateClearance extends Component<Props, State> {
             step1: clearanceData,
             paidLoans: [],
             loading: false,
+            penalty: 0
         }
     }
 
@@ -70,6 +73,16 @@ class CreateClearance extends Component<Props, State> {
             this.getCustomerPaidLoans(this.props.location.state.id);
         }
     }
+    async calculatePenalty(loanId: string) {
+        this.setState({ loading: true });
+        const res = await calculatePenalties({
+          id: loanId,
+          truthDate: new Date().getTime()
+        });
+        if (res.body) {
+          this.setState({ penalty: res.body.penalty, loading: false });
+        } else this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+      }
     async getClearanceById() {
         if (this.props.location.state.clearance?.id) {
             this.setState({ loading: true });
@@ -101,6 +114,7 @@ class CreateClearance extends Component<Props, State> {
                         branchName: res.body.data.branchName
                     }
                 })
+                await this.calculatePenalty(res.body.data.loanId)
                 await this.getCustomerPaidLoans(res.body.data.customerId);
             }
             this.setState({ loading: false });
@@ -217,8 +231,20 @@ class CreateClearance extends Component<Props, State> {
         }
         this.setState({ loading: false });
     }
+    renderPenaltyStrike(){
+        return(
+        this.state.penalty   ?
+        <div className="error-container">
+            <img alt="error" src={require('../../Assets/error-red-circle.svg')} style={{ marginLeft: 20 }} />
+            <h4><span style={{margin:'0 10px'}}> {local.penaltyMessage}</span> <span style={{ color: '#d51b1b'}}>{this.state.penalty}</span></h4>
+        </div>
+        : null
+        );
+    }
     render() {
         return (
+            <>
+            { this.renderPenaltyStrike()}
             <Card>
                 <Card.Title>
                     <CustomerBasicsCard
@@ -244,6 +270,7 @@ class CreateClearance extends Component<Props, State> {
                                     review={this.props.review}
                                     customerKey={this.state.customer.key}
                                     paidLoans={this.state.paidLoans}
+                                    penalty= {this.state.penalty}
                                 />
                             }
                         </Formik>
@@ -254,6 +281,7 @@ class CreateClearance extends Component<Props, State> {
                     </div>
                 }
             </Card>
+            </>
         )
     }
 }
