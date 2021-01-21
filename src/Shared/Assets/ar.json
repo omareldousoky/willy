@@ -857,5 +857,6 @@
     "monthlyQuarterlyReports": "التقارير الشهرية و الربع سنوية",
     "monthlyReport": "التقرير الشهري",
     "quarterReport":" التقرير الربع سنوي",
-    "noOfQuarter":"إختر الربع السنوي"
+    "noOfQuarter":"إختر الربع السنوي",
+    "dateCantBeBefore2021":"التاريخ يجب أن يبدأ من سنة 2021"
 }
