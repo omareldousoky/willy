@@ -5,8 +5,12 @@ import { OfficersGroup } from '../../../Shared/Services/interfaces';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { theme } from '../../../theme'
 import Table from 'react-bootstrap/Table';
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import './managerHierarchy.scss'
 import * as local from '../../../Shared/Assets/ar.json';
+import { Button, Card } from 'react-bootstrap';
+import SupervisionLevelsCreation from './supervisionLevelsCreation';
+import BranchBasicsCard from './branchBasicsCard';
 
 interface Props {
     history: any;
@@ -25,6 +29,8 @@ interface State {
     };
     loanOfficers: Map<string, string>;
     loading: boolean;
+    tabsArray: Array<Tab>;
+    activeTab: string;
 }
 const header: CSSProperties = {
     textAlign: "right",
@@ -47,6 +53,8 @@ const cell: CSSProperties = {
         this.state = {
             loading: false,
             loanOfficers: new Map(),
+            activeTab: 'supervisionDetails',
+            tabsArray: [],
             data: {
                 id: "",
                 branchId: "",
@@ -64,6 +72,32 @@ const cell: CSSProperties = {
 
 
     componentDidMount() {
+        this.setState({
+            tabsArray:[{
+                header: local.levelsOfSupervision,
+                stringKey: 'supervisionDetails'
+            },
+            {
+              header: local.createSuperVisionGroups,
+              stringKey: 'createSuperVisionGroups',
+            },
+            {
+                header: local.editSuperVisionGroups,
+                stringKey: 'editSuperVisionGroups'
+            },
+            {
+             header: local.deleteSuperVisionGroups,
+             stringKey: 'deleteSuperVisionGroups'   
+            },
+            {
+                header: local.approveSuperVisionGroups,
+                stringKey: 'approveSuperVisionGroups'
+            },{
+                header: local.unApproveSuperVisionGroups,
+                stringKey: 'unApproveSuperVisionGroups'
+            }
+            ]
+        })
         this.getLoanOfficers();
     }
 
@@ -88,41 +122,65 @@ const cell: CSSProperties = {
         }
         this.setState({ loading: false })
     }
-
+  renderMainInfo(){
+      return (
+        <Table striped bordered hover>
+        {this.state.data.groups.map((group, index) => {
+            return (
+                <tbody style={{ padding: "2rem 0" , textAlign:"right", fontWeight:'bold'}} key={index}>
+                    <tr style={{ height: '50px' }}><td style={header}>{local.groupManager}</td><td>{this.state.loanOfficers.get(group.leader)}</td></tr>
+                    <tr style={{ height: '50px' }}><td style={header}>{local.loanOfficerOrCoordinator}</td><td style={cell}>
+                        <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', flexFlow:'row wrap '}}>
+                        {group.officers.map((officer, i) => {
+                            return (
+                                    <div
+                                        key={i}
+                                        className={'labelBtn'}>
+                                        {this.state.loanOfficers.get(officer)}
+                                    </div>
+                            )}
+                        )}
+                        </div>
+                        </td></tr>
+                </tbody>
+            )}
+        )}
+    </Table>
+      )
+  }
+  renderContent(){
+      switch (this.state.activeTab) {
+          case 'supervisionDetails':
+            return  this.renderMainInfo();
+         case 'createSuperVisionGroups': 
+            return <SupervisionLevelsCreation />
+          default:
+              return null;
+      }
+  }
     render() {
         return (
-            <div>
-                <div style={{paddingLeft: 30 }}>
-                    <div style={{ cursor: 'pointer', margin: 20,display:'flex'}}><img style={{marginLeft:'10px'}} alt={'edit'} src={require('../../Assets/editIcon.svg')}  onClick={()=>this.props.history.push('/manage-accounts/branches/edit-groups',{
-                              branchId: this.props.branchId,
-                              branchCode: this.props.branchCode,
-                              createdAt: this.props.createdAt,
-                              status:this.props.status,
-                    })} />{local.editSuperVisionGroups}</div>
-                </div>
-                <Table striped bordered hover>
-                    {this.state.data.groups.map((group, index) => {
-                        return (
-                            <tbody style={{ padding: "2rem 0" , textAlign:"right", fontWeight:'bold'}} key={index}>
-                                <tr style={{ height: '50px' }}><td style={header}>{local.groupManager}</td><td>{this.state.loanOfficers.get(group.leader)}</td></tr>
-                                <tr style={{ height: '50px' }}><td style={header}>{local.loanOfficerOrCoordinator}</td><td style={cell}>
-                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', flexFlow:'row wrap '}}>
-                                    {group.officers.map((officer, i) => {
-                                        return (
-                                                <div
-                                                    key={i}
-                                                    className={'labelBtn'}>
-                                                    {this.state.loanOfficers.get(officer)}
-                                                </div>
-                                        )}
-                                    )}
-                                    </div>
-                                    </td></tr>
-                            </tbody>
-                        )}
-                    )}
-                </Table>
-            </div>
+            <>
+                <Card>
+                    <CardNavBar
+                        header={'here'}
+                        array={this.state.tabsArray}
+                        active={this.state.activeTab}
+                        selectTab={(stringKey: string) => { this.setState({ activeTab: stringKey }) }}
+                    />
+                    <Card.Title>
+                    <BranchBasicsCard
+                    name={this.props.name}
+                    branchCode={this.props.branchCode}
+                    createdAt={this.props.createdAt}
+                    status={this.props.status}
+                />
+                    </Card.Title>
+                <Card.Body>
+                    {this.renderContent()}
+                </Card.Body>
+            </Card>
+            </>
         )
     }
 }

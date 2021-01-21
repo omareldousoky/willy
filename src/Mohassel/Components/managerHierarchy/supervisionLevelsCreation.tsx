@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import BranchBasicsCard from './branchBasicsCard';
 import { SupervisionGroup } from './supervisionGroup';
 import * as local from '../../../Shared/Assets/ar.json';
 import { Button, Form, Row } from 'react-bootstrap';
@@ -14,15 +13,7 @@ import Swal from 'sweetalert2';
 import { officersGroupsApproval } from '../../Services/APIs/ManagerHierarchy/officersGroupsApproval';
 interface Props {
     history: any;
-    location: {
-        state: {
-            branchId: string;
-            name: string;
-            branchCode: number;
-            createdAt: string;
-            status: string;
-        };
-    };
+    branchId: string;
 }
 export interface Group {
     leader: string;
@@ -37,7 +28,7 @@ interface State {
     startDate: number;
 
 }
- class SupervisionLevels extends Component<Props, State> {
+ class SupervisionLevelsCreation extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -59,7 +50,7 @@ interface State {
     }
     async getGroups() {
         this.setState({ loading: true })
-        const res = await getOfficersGroups(this.props.location.state.branchId)
+        const res = await getOfficersGroups(this.props.branchId)
         if (res.status = "success") {
             this.setState({
                 groups: res.body.data.groups ? res.body.data.groups : [] ,
@@ -72,13 +63,13 @@ interface State {
 
     async updateGroups() {
         this.setState({ loading: true })
-        const res = await updateOfficersGroups({ groups: this.state.groups }, this.props.location.state.branchId);
+        const res = await updateOfficersGroups({ groups: this.state.groups }, this.props.branchId);
         this.setState({ loading: false })
     }
     async getLoanOfficers() {
         this.setState({ loading: true })
         const obj = {
-            branchId: this.props.location.state.branchId,
+            branchId: this.props.branchId,
             from: 0,
             size: 1000,
         };
@@ -89,47 +80,6 @@ interface State {
             })
         }
         this.setState({ loading: false })
-    }
-    async approveGroups() {
-        const table = document.createElement("table");
-        table.className = "swal-table";
-        table.innerHTML = `<thead><tr>
-                <th>${local.branch}</th>
-                <th>${local.transactionType}</th>
-                <th>${local.createdAt}</th>
-                </thead>
-                <tbody><tr><td>${this.props.location.state.name}</td>
-                <td>${local.levelsOfSupervision}</td>
-                <td>${this.state.startDate}</td>
-                </tr></tbody>`
-
-        Swal.fire({
-            width: 700,
-            title: local.installmentPaymentConfirmation,
-            html: table,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: local.submit,
-            cancelButtonText: local.cancel,
-            confirmButtonColor: '#7dc356',
-            cancelButtonColor: '#d33',
-        }).then(async (isConfirm) => {
-            if(isConfirm.value){
-                this.setState({loading: true});
-                const res = await officersGroupsApproval({
-                    branchId: this.props.location.state.branchId
-                })
-                if(res.status==="success"){
-                    this.setState({loading: false})
-                    Swal.fire('success',local.approveGroupsSuccess)
-                }else{
-                    this.setState({loading: false})
-                    Swal.fire('error', local.approveGroupsError)
-                }
-            }
-        }
-
-        )
     }
     removeGroup = (index) => {
         const newGroups = this.state.groups;
@@ -142,12 +92,6 @@ interface State {
         return (
             <div>
                 <Loader open={this.state.loading} type="fullscreen" />
-                <BranchBasicsCard
-                    name={this.props.location.state.name}
-                    branchCode={this.props.location.state.branchCode}
-                    createdAt={this.props.location.state.createdAt}
-                    status={this.props.location.state.status}
-                />
                 <Row>
                 <Row className={'add-supervisor-container'}>
                         <span className={'add-member'} onClick={() => {
@@ -177,4 +121,4 @@ interface State {
         )
     }
 }
-export default withRouter(SupervisionLevels);
+export default withRouter(SupervisionLevelsCreation);

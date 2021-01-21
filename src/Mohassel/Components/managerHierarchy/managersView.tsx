@@ -8,9 +8,7 @@ import { theme } from '../../../theme'
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto';
 import { getErrorMessage, timeToDate } from '../../../Shared/Services/utils';
-import { Container, Form, Row } from 'react-bootstrap';
 import BranchBasicsCard, { Managers, UserOfBranch } from './branchBasicsCard';;
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { getManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/getManagerHierarchy";
@@ -110,7 +108,7 @@ class ManagerProfile extends Component<Props, State> {
                     status={this.props.status}
                 />
                 <div style={{ paddingLeft: 30 }}>
-                    <Can I='updateBranchManagersHierarchy' a='branch'><img alt={"edit"} onClick={()=> this.props.history.push('/branches/edit-managers',{
+                    <Can I='updateBranchManagersHierarchy' a='branch'><img alt={"edit"} onClick={()=> this.props.history.push('/manage-accounts/branches/branch-details/edit-managers',{
                         branchId: this.props.branchId,
                         branchCode: this.props.branchCode,
                         createdAt: this.props.createdAt,

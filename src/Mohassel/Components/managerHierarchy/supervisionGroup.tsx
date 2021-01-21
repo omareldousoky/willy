@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Col, Form, Row } from 'react-bootstrap';
 import * as local from '../../../Shared/Assets/ar.json';
 import './managerHierarchy.scss';
-import { Group } from './supervisionLevels';
+import { Group } from './supervisionLevelsCreation';
 import UsersSearch from './usersSearch';
 interface Props {
     seqNo: number;

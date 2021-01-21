@@ -872,5 +872,9 @@
     "approveGroupsConfirmation": "تأكيد الموافقه علي مستويات الإشراف",
     "approveGroupsSuccess":"تمت الموافقة على مستويات الإشراف",
     "approveGroupsError":"حدث خطأ ولم تتم الموافقة",
-    "editSuperVisionGroups":"تعديل بيانات مستويات الإشراف"
+    "editSuperVisionGroups":"تعديل مستويات الإشراف الحالية",
+    "deleteSuperVisionGroups":"الحذف من مستويات الإشراف الحالية",
+    "createSuperVisionGroups": "إضافة مستويات إشراف جديدة",
+    "approveSuperVisionGroups": "مراجعة مستويات الإشراف",
+    "unApproveSuperVisionGroups":"إعاده مراجعة مستويات الإشراف"
 }
