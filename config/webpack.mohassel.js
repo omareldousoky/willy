@@ -5,7 +5,8 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const config = require('./config');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-module.exports = () => {
+module.exports = (env) => {
+	const isProd = !!env.production
     return {
         entry: './src/Mohassel/index.tsx',
         resolve: {
@@ -64,7 +65,8 @@ module.exports = () => {
         plugins: [
             new HtmlWebpackPlugin({
                 template: './src/Mohassel/index.html',
-				filename: 'index.[hash].html'
+				filename: isProd ? 'index.[hash].html' : 'index.html',
+				chunks: ['main', 'vendors'],
             }),
             new webpack.DefinePlugin({
                 'process.env': {
