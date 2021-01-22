@@ -1,17 +1,17 @@
-import React, { Component, CSSProperties } from 'react'
-import { 
-    withRouter } from 'react-router-dom';
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom';
 import { OfficersGroup } from '../../../Shared/Services/interfaces';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { theme } from '../../../theme'
+import './managerHierarchy.scss'
 import Table from 'react-bootstrap/Table';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import './managerHierarchy.scss'
-import  local from '../../../Shared/Assets/ar.json';
-import { Button, Card } from 'react-bootstrap';
+import local from '../../../Shared/Assets/ar.json';
+import { Card } from 'react-bootstrap';
 import SupervisionLevelsCreation from './supervisionLevelsCreation';
 import BranchBasicsCard from './branchBasicsCard';
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
+import SupervisionLevelsActions from './supervisionLevelsActions';
 
 interface Props {
     history: any;
@@ -33,22 +33,7 @@ interface State {
     tabsArray: Array<Tab>;
     activeTab: string;
 }
-const header: CSSProperties = {
-    textAlign: "right",
-    fontSize: "14px",
-    fontWeight:"bold",
-    width: "15%",
-    color: theme.colors.lightGrayText
-}
-const cell: CSSProperties = {
-    textAlign: "right",
-    padding: "10px",
-    fontSize: "14px",
-    fontWeight: "bold",
-    color: theme.colors.blackText,
-
-}
- class SupervisionsProfile extends Component<Props, State> {
+class SupervisionsProfile extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -61,12 +46,12 @@ const cell: CSSProperties = {
                 branchId: "",
                 startDate: 0,
                 groups: [{
-                    id:'',
-                leader:'',
-                officers: [],
-                status:'',
+                    id: '',
+                    leader: '',
+                    officers: [],
+                    status: '',
 
-            }]
+                }]
             },
         }
     }
@@ -74,26 +59,26 @@ const cell: CSSProperties = {
 
     componentDidMount() {
         this.setState({
-            tabsArray:[{
+            tabsArray: [{
                 header: local.levelsOfSupervision,
                 stringKey: 'supervisionDetails'
             },
             {
-              header: local.createSuperVisionGroups,
-              stringKey: 'createSuperVisionGroups',
+                header: local.createSuperVisionGroups,
+                stringKey: 'createSuperVisionGroups',
             },
             {
                 header: local.editSuperVisionGroups,
                 stringKey: 'editSuperVisionGroups'
             },
             {
-             header: local.deleteSuperVisionGroups,
-             stringKey: 'deleteSuperVisionGroups'   
+                header: local.deleteSuperVisionGroups,
+                stringKey: 'deleteSuperVisionGroups'
             },
             {
                 header: local.approveSuperVisionGroups,
                 stringKey: 'approveSuperVisionGroups'
-            },{
+            }, {
                 header: local.unApproveSuperVisionGroups,
                 stringKey: 'unApproveSuperVisionGroups'
             }
@@ -130,56 +115,78 @@ const cell: CSSProperties = {
         if (res.status = "success") {
             if (res.body.data)
                 this.setState({
-                  data: res.body.data,
+                    data: res.body.data,
                 })
         }
         this.setState({ loading: false })
     }
-  renderMainInfo(){
-      return (
-        <Table striped bordered hover>
-        {this.state.data.groups.map((group, index) => {
-            return (
-                <tbody style={{ padding: "2rem 0" , textAlign:"right", fontWeight:'bold'}} key={index}>
-                    <tr style={{ height: '50px' }}><td style={header}>{local.groupManager}</td><td>{this.state.loanOfficers.get(group.leader)}</td></tr>
-                    <tr style={{ height: '50px' }}><td style={header}>{local.loanOfficerOrCoordinator}</td><td style={cell}>
-                        <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', flexFlow:'row wrap '}}>
-                        {group.officers.map((officer, i) => {
-                            return (
-                                    <div
-                                        key={i}
-                                        className={'labelBtn'}>
-                                        {this.state.loanOfficers.get(officer)}
+    renderMainInfo() {
+        return (
+            <>
+            {
+                this.state.data.groups.map((group, index) => {
+                    return (
+                        <Table striped bordered hover key={group.id}>
+                            <tbody style={{ padding: "2rem 0", textAlign: "right", fontWeight: 'bold' }} key={index}>
+                                <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{this.state.loanOfficers.get(group.leader)}</td></tr>
+                                <tr style={{ height: '50px' }}><td className="header">{local.loanOfficerOrCoordinator}</td><td className="cell">
+                                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap ' }}>
+                                        {group.officers.map((officer, i) => {
+                                            return (
+                                                <div
+                                                    key={i}
+                                                    className={'labelBtn'}>
+                                                    {this.state.loanOfficers.get(officer)}
+                                                </div>
+                                            )
+                                        }
+                                        )}
                                     </div>
-                            )}
-                        )}
-                        </div>
-                        </td></tr>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.status}</td><td style={cell}>{group.status ? local[group.status]:null}</td></tr>
-                </tbody>
-            )}
-        )}
-    </Table>
-      )
-  }
-  renderContent(){
-      switch (this.state.activeTab) {
-          case 'supervisionDetails':
-            return  this.renderMainInfo();
-         case 'createSuperVisionGroups': 
-            return <SupervisionLevelsCreation  
-            branchId={this.props.branchId} 
-            mode={'create'}
-            />
-         case 'editSuperVisionGroups':
-             return <SupervisionLevelsCreation 
+                                </td></tr>
+                                <tr style={{ height: '50px' }}><td className="header">{local.status}</td><td className="cell">{group.status ? local[group.status] : null}</td></tr>
+                            </tbody>
+                        </Table>
+                    )
+                }
+                )
+            }
+            </>
+        )
+        
+    }
+    renderContent() {
+        switch (this.state.activeTab) {
+            case 'supervisionDetails':
+                return this.renderMainInfo();
+            case 'createSuperVisionGroups':
+                return <SupervisionLevelsCreation
+                    branchId={this.props.branchId}
+                    mode={'create'}
+                />
+            case 'editSuperVisionGroups':
+                return <SupervisionLevelsCreation
+                    branchId={this.props.branchId}
+                    mode={'edit'}
+                />
+             case 'deleteSuperVisionGroups': 
+             return <SupervisionLevelsActions 
              branchId={this.props.branchId}
-             mode={'edit'}
-             />   
-          default:
-              return null;
-      }
-  }
+             mode={'delete'}
+             /> 
+            case 'approveSuperVisionGroups':
+                return <SupervisionLevelsActions 
+                branchId={this.props.branchId}
+                mode={'approve'}
+                /> 
+                case 'unApproveSuperVisionGroups':
+                    return <SupervisionLevelsActions 
+                    branchId={this.props.branchId}
+                    mode={'unapprove'}
+                    /> 
+            default:
+                return null;
+        }
+    }
     render() {
         return (
             <>
@@ -191,17 +198,17 @@ const cell: CSSProperties = {
                         selectTab={(stringKey: string) => { this.setState({ activeTab: stringKey }) }}
                     />
                     <Card.Title>
-                    <BranchBasicsCard
-                    name={this.props.name}
-                    branchCode={this.props.branchCode}
-                    createdAt={this.props.createdAt}
-                    status={this.props.status}
-                />
+                        <BranchBasicsCard
+                            name={this.props.name}
+                            branchCode={this.props.branchCode}
+                            createdAt={this.props.createdAt}
+                            status={this.props.status}
+                        />
                     </Card.Title>
-                <Card.Body>
-                    {this.renderContent()}
-                </Card.Body>
-            </Card>
+                    <Card.Body>
+                        {this.renderContent()}
+                    </Card.Body>
+                </Card>
             </>
         )
     }

@@ -47,8 +47,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
         if (res.status = "success") {
-            if (res.body.data && (this.props.mode==='edit' || this.props.mode=== 'delete')) {
-                console.log("woh");
+            if (res.body.data && (this.props.mode==='edit')) {
                 const data = res.body.data.groups?.filter((group) => group.status === "pending");
                 this.setState({
                     groups: res.body.data.groups ? data : [],
