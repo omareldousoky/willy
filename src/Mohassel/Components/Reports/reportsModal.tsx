@@ -92,7 +92,6 @@ const ReportsModal = (props: Props) => {
                               min={formikProps.values.fromDate}
                               onChange={formikProps.handleChange}
                               isInvalid={Boolean(formikProps.errors.toDate && formikProps.touched.toDate)}
-                              onBlur= {formikProps.handleBlur}
                               disabled={!Boolean(formikProps.values.fromDate)}
                             >
                             </Form.Control>
@@ -150,7 +149,7 @@ const ReportsModal = (props: Props) => {
                               data-qc="quarterYear"
                               value={formikProps.values.quarterYear}
                               isInvalid={Boolean(formikProps.errors.quarterYear && formikProps.touched.quarterYear)}
-
+                              onBlur= {formikProps.handleBlur}
                               onChange={(e) => {
                                 formikProps.setFieldValue("quarterYear",  e.currentTarget.value);
                                 if (e.currentTarget.value === "") formikProps.setFieldValue("quarterYear", "")
@@ -187,7 +186,7 @@ const ReportsModal = (props: Props) => {
             <Modal.Footer>
               <Button variant="secondary" onClick={() => { props.hideModal() }}>{local.cancel}</Button>
               {props.pdf && props.pdf.key && !['customerDetails', 'loanDetails', 'cibPaymentReport'].includes(props.pdf.key) && props.getExcel && <Button 
-              disabled={formikProps.errors.quarterYear}
+              disabled={!!formikProps.errors.quarterYear}
               variant="primary" onClick={() => { props.getExcel && props.getExcel(formikProps.values) }}>{local.downloadExcel}</Button>}
               <Button type="submit" variant="primary">{local.downloadPDF}</Button>
             </Modal.Footer>

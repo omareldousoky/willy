@@ -10,5 +10,5 @@ export const reportsModalValidation = Yup.object().shape({
     quarterYear:  Yup.string().test(
         "Min Date", local.dateCantBeBefore2021,
         (value: any) => { return value ? new Date(value).valueOf() >= currentYear.valueOf() : true }
-    ).required(local.required),
+    ),
 })
