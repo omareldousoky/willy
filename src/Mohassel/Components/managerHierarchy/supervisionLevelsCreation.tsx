@@ -29,6 +29,7 @@ interface State {
     status: string;
     startDate: number;
     visitedIds: string[];
+    selectAll: boolean;
 
 }
 class SupervisionLevelsCreation extends Component<Props, State> {
@@ -41,23 +42,24 @@ class SupervisionLevelsCreation extends Component<Props, State> {
             loading: false,
             visitedIds: [],
             status: '',
+            selectAll: false,
             startDate: 0
         }
     }
     componentDidMount() {
         this.getLoanOfficers();
-        if(!this.props.create)
+        if (!this.props.create)
             this.getGroups();
     }
     async getGroups() {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
         if (res.status = "success") {
-            if (res.body.data &&( this.props.edit || this.props.delete)){
+            if (res.body.data && (this.props.edit || this.props.delete)) {
                 console.log("woh");
-            const data = res.body.data.groups?.filter((group)=> group.status==="pending");
+                const data = res.body.data.groups?.filter((group) => group.status === "pending");
                 this.setState({
-                    groups: res.body.data.groups ? data: [],
+                    groups: res.body.data.groups ? data : [],
                     startDate: res.body.data.startDate,
                 })
             }
@@ -100,13 +102,13 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                 Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
             }
         }
-        else if(this.props.edit) {
+        else if (this.props.edit) {
             const obj = {
                 branchId: this.props.branchId,
                 groups: this.state.groups,
             }
-            const res = await updateOfficersGroups(obj,this.props.branchId)
-            if(res.status==='success'){
+            const res = await updateOfficersGroups(obj, this.props.branchId)
+            if (res.status === 'success') {
                 Swal.fire('Success', '', 'success').then(() => window.location.reload());
             } else {
                 Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
@@ -117,15 +119,26 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         return (
             <div>
                 <Loader open={this.state.loading} type="fullscreen" />
-               <Row>
-               {this.props.create && <Row className={'add-supervisor-container'}>
+                <Row>
+                    {this.props.create && <Row className={'add-supervisor-container'}>
                         <span className={'add-member'} onClick={() => {
                             const newGroup = this.state.groups;
                             newGroup.push({ leader: '', officers: [] });
                             this.setState({ groups: newGroup });
                         }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addGroupManager}</span>
                     </Row>
-               }
+                    }
+                    {
+                        (this.props.delete || this.props.approve || this.props.unApprove) && <Row>
+                            <Form.Check
+                                type='checkbox'
+                                id='check-all'
+                                label={local.checkAll}
+                                checked={this.state.selectAll}
+                                // onChange={() => this.selectAllOptions()}
+                            />
+                        </Row>
+                    }
                     {this.state.groups.map((item, index) => {
                         return (
                             <SupervisionGroup key={index}
@@ -138,15 +151,15 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                     })
                     }
                 </Row>
-                {(ability.can('createOfficersGroup','branch') || ability.can('updateOfficersGroup','branch')) &&
+                {(ability.can('createOfficersGroup', 'branch') || ability.can('updateOfficersGroup', 'branch')) &&
                     <Form.Group>
                         <Button
-                        style={{width:'300px'}}
+                            style={{ width: '300px' }}
                             onClick={async () => {
                                 await this.submit();
                             }}
                             className={'save-button'}
-                        >{this.props.create? local.createSuperVisionGroups : local.editSuperVisionGroups}</Button>
+                        >{this.props.create ? local.createSuperVisionGroups : local.editSuperVisionGroups}</Button>
                     </Form.Group>
                 }
             </div>
