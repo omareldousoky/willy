@@ -169,8 +169,8 @@ export interface Clearance {
     manualReceipt?: string;
 }
 export interface OfficersGroup {
-    id: string;
+    id?: string;
     leader: string;
     officers: string[];
-    status: string;
+    status?: string;
 }

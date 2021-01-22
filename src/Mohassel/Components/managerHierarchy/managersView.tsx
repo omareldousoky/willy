@@ -8,8 +8,8 @@ import { theme } from '../../../theme'
 import { withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import { getErrorMessage, timeToDate } from '../../../Shared/Services/utils';
-import BranchBasicsCard, { Managers, UserOfBranch } from './branchBasicsCard';;
+import { getErrorMessage, } from '../../../Shared/Services/utils';
+import BranchBasicsCard, { Managers } from './branchBasicsCard';;
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { getManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/getManagerHierarchy";
 import Swal from 'sweetalert2';

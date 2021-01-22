@@ -92,6 +92,8 @@ class UsersSearch extends Component<Props, State> {
                         isSearchable = {true}
                         onChange={(event)=>{
                             this.props.item[this.props.objectKey]=event._id;
+                         const index =  this.props.usersOfBranch.findIndex((user)=> user._id === event._id)
+                         this.props.usersOfBranch.splice(index,1);
                            this.checkError();
                         }}
                         value={this.props.usersOfBranch?.find(

@@ -7,10 +7,11 @@ import { theme } from '../../../theme'
 import Table from 'react-bootstrap/Table';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import './managerHierarchy.scss'
-import * as local from '../../../Shared/Assets/ar.json';
+import  local from '../../../Shared/Assets/ar.json';
 import { Button, Card } from 'react-bootstrap';
 import SupervisionLevelsCreation from './supervisionLevelsCreation';
 import BranchBasicsCard from './branchBasicsCard';
+import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
 
 interface Props {
     history: any;
@@ -61,9 +62,9 @@ const cell: CSSProperties = {
                 startDate: 0,
                 groups: [{
                     id:'',
-                leader:'5f3d3f03418a3a8fe4376399',
-                officers: ['5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db', '5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db', '5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db','5ec28990d1aabc09c46c45db'],
-                status:'pending',
+                leader:'',
+                officers: [],
+                status:'',
 
             }]
             },
@@ -99,6 +100,7 @@ const cell: CSSProperties = {
             ]
         })
         this.getLoanOfficers();
+        this.getGroups();
     }
 
     async getLoanOfficers() {
@@ -122,6 +124,17 @@ const cell: CSSProperties = {
         }
         this.setState({ loading: false })
     }
+    async getGroups() {
+        this.setState({ loading: true })
+        const res = await getOfficersGroups(this.props.branchId)
+        if (res.status = "success") {
+            if (res.body.data)
+                this.setState({
+                  data: res.body.data,
+                })
+        }
+        this.setState({ loading: false })
+    }
   renderMainInfo(){
       return (
         <Table striped bordered hover>
@@ -142,6 +155,7 @@ const cell: CSSProperties = {
                         )}
                         </div>
                         </td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.status}</td><td style={cell}>{group.status ? local[group.status]:null}</td></tr>
                 </tbody>
             )}
         )}
@@ -153,7 +167,15 @@ const cell: CSSProperties = {
           case 'supervisionDetails':
             return  this.renderMainInfo();
          case 'createSuperVisionGroups': 
-            return <SupervisionLevelsCreation />
+            return <SupervisionLevelsCreation  
+            branchId={this.props.branchId} 
+            create={true}
+            />
+         case 'editSuperVisionGroups':
+             return <SupervisionLevelsCreation 
+             branchId={this.props.branchId}
+             edit={true}
+             />   
           default:
               return null;
       }
