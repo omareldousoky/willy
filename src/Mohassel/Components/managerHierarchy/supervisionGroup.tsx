@@ -9,11 +9,7 @@ interface Props {
     deleteGroup: any;
     group: OfficersGroup;
     usersOfBranch: any[];
-    create?: boolean;
-    edit?: boolean;
-    delete?: boolean;
-    approve?: boolean;
-    unApprove?: boolean;
+    mode: string;
 }
 interface State {
     officers: string[];
@@ -33,31 +29,30 @@ export class SupervisionGroup extends Component<Props, State> {
                         <Form.Label className="supervision-label" as={Col}>{`${local.groupManager} ( ${this.props.seqNo} )`}</Form.Label>
                         {<Row><UsersSearch usersOfBranch={this.props.usersOfBranch} objectKey={'leader'} item={this.props.group} /></Row> }
                     </Col> 
-                 {this.props.create &&  <div onClick={this.props.deleteGroup}>
+                 {(this.props.mode ==='create') &&  <div onClick={this.props.deleteGroup}>
                         <img src={require('../../../Shared/Assets/deleteIcon.svg')} />
                     </div>}
                 </div>
                 <Row className={'officers-container'}>
                 {
-                    this.state.officers.map((officer, index) => {
+                    this.state.officers.map((officer , index) => {
                         
                         return (
-                            <Col key={officer} sm={6}>
+                            <Col key={index} sm={6}>
                                 <Form.Label className={'supervision-label'}><img onClick={()=>{
-                                    const newOfficers = this.state.officers;
-                                    console.log("before",this.state.officers[index])
-                                   const x= newOfficers.splice(index,1);
-                                   console.log("after",x)
+                                    let newOfficers: string[] = []
+                                    newOfficers = this.state.officers;
+                                    newOfficers.splice(index,1);
                                     this.setState({officers: newOfficers});
                                     this.props.group.officers = newOfficers;
                                 }} alt="removeIcon"  src ={require('../../Assets/removeIcon.svg')}/> {local.loanOfficerOrCoordinator}</Form.Label>
-                               <Row className="row-nowrap"><UsersSearch usersOfBranch = {this.props.usersOfBranch} objectKey={index} item={this.props.group.officers} disabled={(this.props.delete || this.props.approve || this.props.unApprove) as boolean} /></Row>
+                               <Row className="row-nowrap"><UsersSearch usersOfBranch = {this.props.usersOfBranch} objectKey={index} item={this.props.group.officers} /></Row>
                             </Col>
                         )
                     })
                 }
                 </Row>
-            { (this.props.create || this.props.edit) &&  <Row className="add-member-container">
+            { (this.props.mode ==='create' || this.props.mode ==='edit') &&  <Row className="add-member-container">
                     <span className={'add-member'} onClick={()=>{
                         const newOfficers = this.props.group.officers;
                         newOfficers.push('');

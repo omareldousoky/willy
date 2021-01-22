@@ -169,12 +169,12 @@ const cell: CSSProperties = {
          case 'createSuperVisionGroups': 
             return <SupervisionLevelsCreation  
             branchId={this.props.branchId} 
-            create={true}
+            mode={'create'}
             />
          case 'editSuperVisionGroups':
              return <SupervisionLevelsCreation 
              branchId={this.props.branchId}
-             edit={true}
+             mode={'edit'}
              />   
           default:
               return null;
