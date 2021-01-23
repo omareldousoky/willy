@@ -81,9 +81,11 @@ class SupervisionLevelsActions extends Component<Props, State> {
             checkAll: false,
             chosenStatus: this.props.mode === 'unapprove' ? 'approved' : 'pending',
         })
+        this.setState({loading:true})
         await this.getUsers();
         await this.getLoanOfficers();
         await this.getGroups();
+        this.setState({loading: false})
     }
     submit = async () => {
         const obj = {
@@ -124,7 +126,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
         }
     }
     async getLoanOfficers() {
-        this.setState({})
         const obj = {
             branchId: this.props.branchId,
             from: 0,
@@ -143,10 +144,8 @@ class SupervisionLevelsActions extends Component<Props, State> {
                 loanOfficers: officers,
             })
         }
-        this.setState({ loading: false })
     }
     async getUsers() {
-        this.setState({ loading: true })
         const obj = {
             branchId: this.props.branchId,
             from: 0,
@@ -165,14 +164,12 @@ class SupervisionLevelsActions extends Component<Props, State> {
                 userOfBranch: users,
             })
         }
-        this.setState({ loading: false })
     }
     async getGroups() {
-        this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
-        if (res.body?.data?.group?.length) {
+        if (res.body?.data) {
             const resData = res.body.data
-            resData.groups = res.body.data?.groups?.filter((group) => group.status === this.state.chosenStatus);
+            resData.groups = res.body.data.groups.filter((group) => group.status === this.state.chosenStatus);
             if (res.status = "success") {
                 if (res.body.data)
                     this.setState({
@@ -180,7 +177,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
                     })
             }
         }
-        this.setState({ loading: false })
     }
     addRemoveItemFromChecked(group: OfficersGroup) {
         if (this.state.selectedGroups.findIndex(groupItem => groupItem.id === group.id) > -1) {
