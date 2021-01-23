@@ -878,5 +878,7 @@
     "createSuperVisionGroups": "إضافة مستويات إشراف جديدة",
     "approveSuperVisionGroups": "مراجعة مستويات الإشراف",
     "unApproveSuperVisionGroups":"إعاده مراجعة مستويات الإشراف",
-    "updateSuccess":"تم التغيير بنجاح"
+    "updateSuccess":"تم التغيير بنجاح",
+    "noOfSupervisionGroups":"عدد مجموعات مستويات الإشراف",
+    "noUsersInBranch": "لا يوجد موظفين في الفرع"
 }

@@ -53,6 +53,7 @@ import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkAppli
 import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
 import ClearanceProfile from '../Components/Clearance/clearanceProfile';
+import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 
 const appRoutes = [
   {
@@ -437,6 +438,10 @@ const appRoutes = [
             </Can>
           }
         ]
+      },{
+        path: '/supervisions-levels',
+        label: local.levelsOfSupervision,
+        render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
       }
     ]
   },

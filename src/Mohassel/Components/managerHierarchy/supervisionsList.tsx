@@ -86,9 +86,9 @@ class SupervisionGroupsList extends Component<Props, State> {
   getStatus(status: string) {
     switch (status) {
       case 'pending':
-        return <div className="status-chip outline under-review">{local.pending}</div>
+        return <div className="status-chip outline under-review" style={{width:'100px'}}>{local.pending}</div>
       case 'approved':
-        return <div className="status-chip outline approved">{local.approved}</div>
+        return <div className="status-chip outline approved" style={{width:'100px'}}>{local.approved}</div>
       default: return null;
     }
   }
@@ -105,7 +105,7 @@ class SupervisionGroupsList extends Component<Props, State> {
               <div className="custom-card-header">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.levelsOfSupervision}</Card.Title>
-                  <span className="text-muted">{local.noOfClearances + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
+                  <span className="text-muted">{local.noOfSupervisionGroups + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                 </div>
                 <Select
                     
@@ -119,7 +119,6 @@ class SupervisionGroupsList extends Component<Props, State> {
                   url="supervisionsGroups"
                   from={this.state.from}
                   size={this.state.size}
-                  datePlaceholder={local.registrationDate}
                   searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                 />
                 :
@@ -129,7 +128,6 @@ class SupervisionGroupsList extends Component<Props, State> {
                   url="supervisionsGroups"
                   from={this.state.from}
                   size={this.state.size}
-                  datePlaceholder={local.registrationDate}
                   searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                   hqBranchIdRequest={this.state.branchId}
                 />

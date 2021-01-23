@@ -103,7 +103,7 @@ class ManagerProfile extends Component<Props, State> {
         const res = await searchUsers(obj);
         if (res.status === "success") {
             const users = new Map();
-            res.body.data.map((user)=> {return(users.set(user._id,user.name))})
+            res.body.data.map((user) => { return (users.set(user._id, user.name)) })
             this.setState({
                 usersOfBranch: users
             })
@@ -152,7 +152,7 @@ class ManagerProfile extends Component<Props, State> {
                     createdAt={this.props.createdAt}
                     status={this.props.status}
                 />
-                <Card>
+                {this.state.usersOfBranch ? <Card>
                     <CardNavBar
                         header={'here'}
                         array={this.state.tabsArray}
@@ -163,6 +163,11 @@ class ManagerProfile extends Component<Props, State> {
                         {this.renderContent()}
                     </Card.Body>
                 </Card>
+                    : <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                        <img alt='no-data-found' src={require('../../../Shared/Assets/no-results-found.svg')} />
+                        <h4>{local.noResultsFound}</h4>
+                    </div>
+                }
             </>
         )
     }

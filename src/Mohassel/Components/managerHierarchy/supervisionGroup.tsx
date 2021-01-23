@@ -8,6 +8,7 @@ interface Props {
     seqNo: number;
     deleteGroup: any;
     group: OfficersGroup;
+    loanOfficersOfBranch: any[];
     usersOfBranch: any[];
     mode: string;
 }
@@ -46,7 +47,7 @@ export class SupervisionGroup extends Component<Props, State> {
                                     this.setState({officers: newOfficers});
                                     this.props.group.officers = newOfficers;
                                 }} alt="removeIcon"  src ={require('../../Assets/removeIcon.svg')}/> {local.loanOfficerOrCoordinator}</Form.Label>
-                               <Row className="row-nowrap"><UsersSearch usersOfBranch = {this.props.usersOfBranch} objectKey={index} item={this.props.group.officers} /></Row>
+                               <Row className="row-nowrap"><UsersSearch usersOfBranch = {this.props.loanOfficersOfBranch} objectKey={index} item={this.props.group.officers} /></Row>
                             </Col>
                         )
                     })
