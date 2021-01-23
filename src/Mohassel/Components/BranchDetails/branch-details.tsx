@@ -190,7 +190,7 @@ interface State {
                  status ={this.state.data.status}
                  /></Can>)
              case 'levelsOfSupervision'  : return (
-             // <Can I="getOfficersGroups"  a="branch">
+              <Can I="getOfficersGroups"  a="branch">
                 <SupervisionsProfile
                 branchId ={this.state._id}
                 branchCode={this.state.data.branchCode} 
@@ -198,7 +198,7 @@ interface State {
                 createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
                 status ={this.state.data.status} 
                  />
-                  //</Can> 
+                  </Can> 
              ) 
              default: return null;   
         }

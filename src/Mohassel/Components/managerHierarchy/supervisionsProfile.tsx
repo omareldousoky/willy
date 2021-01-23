@@ -13,6 +13,7 @@ import SupervisionLevelsCreation from './supervisionLevelsCreation';
 import BranchBasicsCard from './branchBasicsCard';
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
 import SupervisionLevelsActions from './supervisionLevelsActions';
+import ability from '../../config/ability';
 
 interface Props {
     history: any;
@@ -55,31 +56,38 @@ class SupervisionsProfile extends Component<Props, State> {
 
 
     componentDidMount() {
-        this.setState({
-            tabsArray: [{
-                header: local.levelsOfSupervision,
+        const tabsToRender= [{
+            header: local.levelsOfSupervision,
                 stringKey: 'supervisionDetails'
-            },
-            {
+        }];
+          
+            if(ability.can('createOfficersGroup','branch'))
+            tabsToRender.push({
                 header: local.createSuperVisionGroups,
                 stringKey: 'createSuperVisionGroups',
-            },
-            {
+            })
+            if(ability.can('updateOfficersGroup', 'branch'))
+            tabsToRender.push({
                 header: local.editSuperVisionGroups,
                 stringKey: 'editSuperVisionGroups'
-            },
-            {
+            })
+            if(ability.can('deleteOfficersGroup', 'branch'))
+            tabsToRender.push({
                 header: local.deleteSuperVisionGroups,
                 stringKey: 'deleteSuperVisionGroups'
-            },
-            {
+            })
+            if(ability.can('approveOfficersGroup', 'branch'))
+            tabsToRender.push({
                 header: local.approveSuperVisionGroups,
                 stringKey: 'approveSuperVisionGroups'
-            }, {
+            })
+            if(ability.can('unApproveOfficersGroup', 'branch'))
+             tabsToRender.push({
                 header: local.unApproveSuperVisionGroups,
                 stringKey: 'unApproveSuperVisionGroups'
-            }
-            ]
+            })
+        this.setState({
+            tabsArray:tabsToRender,
         })
         this.getUsers();
         this.getLoanOfficers();

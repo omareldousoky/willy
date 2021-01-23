@@ -880,5 +880,7 @@
     "unApproveSuperVisionGroups":"إعاده مراجعة مستويات الإشراف",
     "updateSuccess":"تم التغيير بنجاح",
     "noOfSupervisionGroups":"عدد مجموعات مستويات الإشراف",
-    "noUsersInBranch": "لا يوجد موظفين في الفرع"
+    "noUsersInBranch": "لا يوجد موظفين في الفرع",
+    "chooseOperationType":"إختر نوع العملية",
+    "getSupervisionGroups":"مشاهدة كل مستويات الإشراف"
 }

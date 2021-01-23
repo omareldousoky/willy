@@ -12,17 +12,28 @@ import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { getCookie } from '../../../Shared/Services/getCookie';
-import { FormCheck } from 'react-bootstrap';
+import { Col, Form, FormCheck, Row } from 'react-bootstrap';
 import Select from 'react-select';
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
+import { searchUsers } from "../../Services/APIs/Users/searchUsers";
+import { theme } from '../../../theme';
+import ability from '../../config/ability';
 
 interface State {
   size: number;
   from: number;
   branchId: string;
   searchKey: string[];
+  options:  {
+    label: string;
+    value: string;
+  }[];
   print: boolean;
   selectedGroups: any[];
   checkAll: boolean;
+  chosenStatus: string;
+  loanOfficers: Map<string, string>;
+  userOfBranch: Map<string, string>;
 }
 interface Props {
   history: any;
@@ -42,10 +53,14 @@ class SupervisionGroupsList extends Component<Props, State> {
       size: 10,
       from: 0,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
-      searchKey: ['keyword', 'dateFromTo','supervisions-status' ],
+      searchKey: [''],
       print: false,
       selectedGroups: [],
       checkAll: false,
+      options:[{label:local.getSupervisionGroups,value:'' }],
+      chosenStatus: '',
+      loanOfficers: new Map(),
+      userOfBranch: new Map(),
     }
     this.mappers = []
   }
@@ -67,12 +82,24 @@ class SupervisionGroupsList extends Component<Props, State> {
     } else this.setState({ checkAll: false, selectedGroups: [] })
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(() => {
+    const selectOptions =[{label:local.getSupervisionGroups, value:''}]
+    if (ability.can('approveOfficersGroup', 'branch'))
+      selectOptions.push({
+        label: local.approveSuperVisionGroups,
+        value: 'pending'
+      });
+    if (ability.can('unApproveOfficersGroup', 'branch'))
+      selectOptions.push({
+        label: local.unApproveSuperVisionGroups,
+        value: 'approved'
+      })
+      this.setState({options: selectOptions})
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '', status:this.state.chosenStatus }).then(() => {
       if (this.props.error) {
         Swal.fire("error", getErrorMessage(this.props.error), "error")
       }
       if (this.state.branchId === 'hq') {
-        this.setState({ searchKey: ['keyword', 'dateFromTo', 'branch','supervisions-status' ] });
+        this.setState({ searchKey: ['branch'] });
       }
     })
   }
@@ -83,6 +110,27 @@ class SupervisionGroupsList extends Component<Props, State> {
       }
     });
   }
+  async getLoanOfficers() {
+    this.props
+    const obj = {
+        branchId: this.state.branchId,
+        from: 0,
+        size: 1000,
+    };
+    const res = await searchLoanOfficer(obj);
+    if (res.status === "success") {
+        const data: any[] = res.body.data;
+        const officers = new Map()
+        data.map((officer) => {
+            return (officers.set(officer._id, officer.name));
+
+        })
+        this.setState({
+            loanOfficers: officers,
+        })
+    }
+
+}
   getStatus(status: string) {
     switch (status) {
       case 'pending':
@@ -107,15 +155,24 @@ class SupervisionGroupsList extends Component<Props, State> {
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.levelsOfSupervision}</Card.Title>
                   <span className="text-muted">{local.noOfSupervisionGroups + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                 </div>
-                <Select
-                    
-                 />
               </div>
               <hr className="dashed-line" />
+              <>
+              <Col sm={6}>
+                <Form.Label as={Row} style={{fontWeight:'bolder', textAlign:"right",margin:'9px'}}>{local.chooseOperationType}</Form.Label>
+                <Select
+                    styles={theme.selectStyle}
+                    placeholder={local.chooseOperationType}
+                    onChange={(event)=>{
+                      this.props.setSearchFilters({
+                        status: event
+                      })
+                    }}
+                    options={this.state.options}
+                 /></Col>
               {this.state.branchId == 'hq' ?
                 <Search
                   searchKeys={this.state.searchKey}
-                  dropDownKeys={['name', 'customerKey']}
                   url="supervisionsGroups"
                   from={this.state.from}
                   size={this.state.size}
@@ -124,7 +181,6 @@ class SupervisionGroupsList extends Component<Props, State> {
                 :
                 <Search
                   searchKeys={this.state.searchKey}
-                  dropDownKeys={['name', 'customerKey']}
                   url="supervisionsGroups"
                   from={this.state.from}
                   size={this.state.size}
@@ -146,6 +202,7 @@ class SupervisionGroupsList extends Component<Props, State> {
                   }}
                 />
               }
+              </>
             </Card.Body>
           </Card>
         </div>
