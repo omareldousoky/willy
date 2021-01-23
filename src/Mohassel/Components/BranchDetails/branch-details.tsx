@@ -18,7 +18,6 @@ import Can from '../../config/Can';
 import ability from '../../config/ability';
 import Swal from 'sweetalert2';
 import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
-import SupervisionLevels from '../managerHierarchy/supervisionLevelsCreation';
 import ManagerProfile from '../managerHierarchy/managersView';
 import  SupervisionsProfile  from '../managerHierarchy/supervisionsProfile';
 interface Props {
@@ -145,7 +144,7 @@ interface State {
             stringKey: 'managers'
         })
     }
-    if(true){ //ability.can("getOfficersGroups","branch")
+    if(ability.can("getOfficersGroups","branch")) {
         tabsToRender.push({
             header: local.levelsOfSupervision,
             stringKey: 'levelsOfSupervision'
