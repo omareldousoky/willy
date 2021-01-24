@@ -23,9 +23,9 @@ const LoanContract = (props) => {
     switch (index) {
       case -2: return 'الأول';
       case -1: return 'الثاني';
-      case 0: return ' الثالث';
-      case 1: return ' الرابع';
-      case 2: return ' الخامس';
+      case 0: return 'الثالث';
+      case 1: return 'الرابع';
+      case 2: return 'الخامس';
       case 3: return 'السادس';
       case 4: return 'السابع';
       case 5: return 'الثامن';
@@ -79,8 +79,7 @@ const LoanContract = (props) => {
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
                   <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
-                  <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
-							:-</div>
+                  <div>حرر هذا العقد في فرع {props.branchDetails.name} الكائن في:{props.branchDetails.address} بين كلا من:-</div>
                   <table className="stakeholders">
                     <tbody>
                       <tr>
