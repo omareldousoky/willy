@@ -214,7 +214,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
                         onChange={(e) => this.checkAll(e)}
                     />
                     {
-                        this.state.data.groups.map((group, index) => {
+                        this.state.data.groups?.map((group, index) => {
                             return (
                                 <Row key={group.id} className="row-nowrap" style={{ margin: '10px', justifyContent: 'flex-start' }}>
                                     <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: '15px' }}>
@@ -229,7 +229,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
                                             <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{this.state.userOfBranch.get(group.leader)}</td></tr>
                                             <tr style={{ height: '50px' }}><td className="header">{local.loanOfficerOrCoordinator}</td><td className="cell">
                                                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap ' }}>
-                                                    {group?.officers.map((officer, i) => {
+                                                    {group.officers?.map((officer, i) => {
                                                         return (
                                                             <div
                                                                 key={i}

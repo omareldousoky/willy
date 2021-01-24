@@ -14,6 +14,7 @@ import BranchBasicsCard from './branchBasicsCard';
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
 import SupervisionLevelsActions from './supervisionLevelsActions';
 import ability from '../../config/ability';
+import { Loader } from '../../../Shared/Components/Loader';
 
 interface Props {
     history: any;
@@ -167,12 +168,13 @@ class SupervisionsProfile extends Component<Props, State> {
                                     <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{this.state.userOfBranch.get(group.leader)}</td></tr>
                                     <tr style={{ height: '50px' }}><td className="header">{local.loanOfficerOrCoordinator}</td><td className="cell">
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap ' }}>
-                                            {group?.officers.map((officer, i) => {
+                                            {group.officers?.map((officer, i) => {
+                                                const officerName = this.state.loanOfficers.get(officer)
                                                 return (
-                                                    <div
+                                                 officerName && <div
                                                         key={i}
                                                         className={'labelBtn'}>
-                                                        {this.state.loanOfficers.get(officer)}
+                                                        {officerName}
                                                     </div>
                                                 )
                                             }
@@ -245,6 +247,7 @@ class SupervisionsProfile extends Component<Props, State> {
                         />
                     </Card.Title>
                     <Card.Body>
+                        <Loader open={this.state.loading}type="fullscreen" />
                         {this.renderContent()}
                     </Card.Body>
                 </Card>
