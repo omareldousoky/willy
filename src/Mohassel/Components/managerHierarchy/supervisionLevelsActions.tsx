@@ -229,7 +229,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
                                             <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{this.state.userOfBranch.get(group.leader)}</td></tr>
                                             <tr style={{ height: '50px' }}><td className="header">{local.loanOfficerOrCoordinator}</td><td className="cell">
                                                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap ' }}>
-                                                    {group.officers.map((officer, i) => {
+                                                    {group?.officers.map((officer, i) => {
                                                         return (
                                                             <div
                                                                 key={i}
