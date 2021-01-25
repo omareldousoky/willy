@@ -1,8 +1,9 @@
 
 import React from 'react';
+import { MonthReport } from '../../../../Shared/Services/interfaces';
 import './monthlyReport.scss';
 
-const MonthlyReport = (props) => {
+const MonthlyReport = (props: {data: MonthReport}) => {
   return (
     <div className="monthly-report" lang="ar" dir="rtl">
 

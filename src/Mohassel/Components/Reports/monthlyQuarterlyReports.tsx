@@ -12,6 +12,7 @@ import { quarterlyReport, getQuarterlyReportExcel, postQuarterlyReportExcel } fr
 import ReportsModal from "./reportsModal";
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { downloadFile } from '../../../Shared/Services/utils';
+import { MonthReport, QuarterReport } from '../../../Shared/Services/interfaces';
 export interface PDF {
   key?: string;
   local?: string;
@@ -22,7 +23,7 @@ export interface PDF {
 interface State {
   loading: boolean;
   print: string;
-  data: any;
+  data: QuarterReport | MonthReport | object;
   pdfsArray?: Array<PDF>;
   selectedPdf: PDF;
   showModal: boolean;
@@ -183,8 +184,8 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
             getExcel={(values) => this.getExcel(values)}
           />
         )}
-        {this.state.print === 'monthly' && this.state.data && <MonthlyReport data={this.state.data} />}
-        {this.state.print === 'quarterly' && <QuarterlyReport data={this.state.data} />}
+        {this.state.print === 'monthly' && this.state.data && <MonthlyReport data={this.state.data as MonthReport} />}
+        {this.state.print === 'quarterly' && <QuarterlyReport data={this.state.data as QuarterReport} />}
       </>
     )
   }
