@@ -104,7 +104,7 @@ class CustomersForUser extends Component<Props, State> {
   }
   async getCustomersForUser(name?: string) {
     this.setState({ loading: true });
-		if (!this.props.user.branchesObjects[0]._id && !this.state.currentOfficerBranch) return Swal.fire('Error !', local.chooseOfficerBranch, 'error')
+		if (!this.props.user.branchesObjects[0]._id && !this.state.currentOfficerBranch) return Swal.fire('Error !', local.chooseBranch, 'error')
     const res = await searchCustomer({
       name: name,
       size: this.state.size,
@@ -144,7 +144,7 @@ class CustomersForUser extends Component<Props, State> {
   }
   async submit() {
     this.setState({ loading: true, openModal: false });
-		const moveToBranchId = this.state.moveToBranch._id;
+		const moveToBranchId = this.state.moveToBranch?._id || "";
 		const currentOfficerBranchId = this.state.currentOfficerBranch?._id;
     const data: {
       user: string;
@@ -278,7 +278,7 @@ class CustomersForUser extends Component<Props, State> {
           </InputGroup.Append>
          <Col sm={12} dir="rtl" className="p-0 mt-3">
 					<Select
-						placeholder={local.chooseOfficerBranch}
+						placeholder={local.chooseBranch}
 						name="currentOfficerBranch"
 						data-qc="currentOfficerBranch"
 						value={this.state.currentOfficerBranch}
