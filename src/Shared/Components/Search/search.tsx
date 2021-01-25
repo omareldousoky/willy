@@ -31,6 +31,7 @@ interface InitialFormikState {
   branchId?: string;
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
+  printed?: boolean;
 }
 interface Props {
   size: number;
@@ -149,7 +150,9 @@ class Search extends Component<Props, State> {
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
-          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;;
+          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;
+        case 'printed':
+          initialState.printed = false;
       }
     })
     return initialState;
@@ -406,6 +409,22 @@ class Search extends Component<Props, State> {
                             onChange={(e) => formikProps.setFieldValue('isWrittenOff', e.currentTarget.checked)}
                             label={local.writtenOffLoans}
                             disabled={formikProps.values.isDoubtful}
+                        />
+                    </Form.Group>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'printed') {
+                  return (
+                    <Col key={index} sm={3} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId='writtenOff'>
+                        <Form.Check
+                            type='checkbox'
+                            name='printed'
+                            data-qc='printedCheck'
+                            checked={formikProps.values.printed}
+                            onChange={(e) => formikProps.setFieldValue('printed', e.currentTarget.checked)}
+                            label={local.printed}
                         />
                     </Form.Group>
                     </Col>

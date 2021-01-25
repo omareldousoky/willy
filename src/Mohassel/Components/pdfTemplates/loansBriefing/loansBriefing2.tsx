@@ -4,7 +4,7 @@ import {
     getCurrentTime,
     timeToArabicDate,
 } from "../../../../Shared/Services/utils";
-import { LoansBriefingReportResponse } from "../../../Services/APIs/Reports/loansBriefingReport";
+import { LoansBriefingReportResponse } from "../../../Services/interfaces";
 import "./loansBriefing.scss";
 
 interface LoansBriefing2Props {
@@ -55,8 +55,8 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
             >
                 <p style={{ margin: "auto", fontSize: "16px" }}>
                     القروض والحالات للفترة من : &nbsp;
-                    {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى :
-                    &nbsp;
+                    {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى
+                    : &nbsp;
                     {timeToArabicDate(new Date(toDate).valueOf(), false)}
                 </p>
                 <hr className="horizontal-line"></hr>
@@ -110,7 +110,8 @@ const LoansBriefing2 = (props: LoansBriefing2Props) => {
                                         {brief.individualRequestsCount || "0"}
                                     </td>
                                     <td className="bg-grey">
-                                        {brief.individualRequestsCredit || "0.0"}
+                                        {brief.individualRequestsCredit ||
+                                            "0.0"}
                                     </td>
                                     <td>{brief.groupRequestsCount || "0"}</td>
                                     <td className="bg-grey">

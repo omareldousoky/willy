@@ -1,6 +1,6 @@
 import React from 'react';
 import './customerStatusDetails.scss';
-import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 
 const CustomerStatusDetails = (props) => {
     function getCustomerStatus(status: string) {
@@ -28,7 +28,7 @@ const CustomerStatusDetails = (props) => {
                             <th colSpan={3}>المركز الرئيسي</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={3}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={3}>{timeToArabicDateNow(true)}</th>
                         </tr>
                         <tr>
                             <th colSpan={100} className="horizontal-line"></th>

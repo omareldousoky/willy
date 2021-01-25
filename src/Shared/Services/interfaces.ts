@@ -71,6 +71,10 @@ export interface Customer {
     guarantorMaxLoans?: number;
     maxPrincipal?: number;
     _id?: string;
+	blocked?: {
+		isBlocked?: boolean;
+		reason?: string;
+	};
 }
 
 export interface Action {
@@ -106,7 +110,7 @@ export interface DocumentType {
     updatable?: boolean;
     isHidden?: boolean;
 }
-export interface GuaranteedLoan{
+export interface GuaranteedLoan {
     guarantorOrder: string;
     customerKey: string;
     applicationCode: string;
@@ -117,8 +121,8 @@ export interface GuaranteedLoan{
     issueDate?: string;
 }
 export interface GuaranteedLoans {
-        data: Array<GuaranteedLoan>;
-        GuarantorName: string;
+    data: Array<GuaranteedLoan>;
+    GuarantorName: string;
 }
 
 export interface Document {
@@ -127,4 +131,54 @@ export interface Document {
     valid: boolean;
     delete?: boolean;
     selected?: boolean;
+}
+
+export interface LoanOfficer {
+    birthDate: number;
+    branches: Array<string>;
+    gender: string;
+    hrCode: string;
+    mainBranchId: string;
+    mainRoleId: string;
+    name: string;
+    nationalId: string;
+    roles: Array<string>;
+    status: string;
+    username: string;
+    _id: string;
   }
+  export interface Clearance {
+    _id: string;
+    bankName: string;
+    beneficiaryType: string;
+    branchId: string;
+    branchName:  string;
+    clearanceReason: string;
+    customerId: string;
+    customerKey: string;
+    customerName: string;
+    customerNationalId: number;
+    documentPhotoURL: string;
+    issuedDate: number | string;
+    lastPaidInstDate: number;
+    loanId: string;
+    loanKey: number;
+    notes: string;
+    principal: number;
+    receiptDate: number;
+    receiptPhotoURL: string;
+    registrationDate: number;
+    status: string;
+    transactionKey?: number;
+    manualReceipt?: string;
+  }
+
+interface Signature {
+	by: string;
+	at: number;
+}
+
+export interface Trace {
+	created: Signature;
+	updated: Signature;
+}

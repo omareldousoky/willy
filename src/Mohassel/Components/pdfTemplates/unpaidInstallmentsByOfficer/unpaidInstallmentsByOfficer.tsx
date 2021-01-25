@@ -10,6 +10,11 @@ const numbersToArabic = (input) => {
     });
   } else return "";
 };
+const installmentStatuses = {
+  unpaid: "لم يستحق",
+  partiallyPaid: "مدفوع جزئيا",
+  pending: "قيد التحقيق",
+};
 
 interface UnpaidInstallmentsByOfficerProps {
   fromDate: string;
@@ -47,7 +52,7 @@ const UnpaidInstallmentsByOfficer = (
           <p style={{ margin: 0 }}>{"قائمة الإقساط المستحقة بالمندوب"}</p>
           <p style={{ margin: 0 }}>
             <span>{"من "}</span>
-            <span>{fromDate}</span>
+            <span>{` ${fromDate} `}</span>
             <span>{"إلى "}</span>
             <span>{toDate}</span>
           </p>
@@ -59,7 +64,7 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     );
   };
-  const renderCommissaryDetailsDiv = (CommissaryName = "") => (
+  const renderCommissaryDetailsDiv = (CommissaryName = "", representativeCode = '') => (
     <div style={{ display: "flex", margin: "5px 0" }}>
       <div style={{ width: "70%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -76,10 +81,10 @@ const UnpaidInstallmentsByOfficer = (
               marginRight: 2,
             }}
           >
-            <span>{"علياء عبده أحمد حسين"}</span>
-            {/* <span>{CommissaryName}</span> */}
+            <span>{CommissaryName}</span>
           </div>
-          <div
+          {/* block below is commented for now, pending nadim to add representativeCode in the API `/report/unpaid-installments-by-officer` */}
+          {/* <div
             style={{
               border: "1px solid black",
               minWidth: 160,
@@ -88,8 +93,8 @@ const UnpaidInstallmentsByOfficer = (
               marginRight: 2,
             }}
           >
-            <span>{"132124123"}</span>
-          </div>
+            <span>{representativeCode}</span>
+          </div> */}
         </div>
       </div>
       <div style={{ width: "30%" }} />
@@ -127,7 +132,7 @@ const UnpaidInstallmentsByOfficer = (
               style={{
                 backgroundColor: "darkgrey",
                 border: "1px solid black",
-                minWidth: 320,
+                minWidth: 330,
                 textAlign: "right",
                 paddingRight: 2,
                 marginLeft: 4,
@@ -190,7 +195,7 @@ const UnpaidInstallmentsByOfficer = (
               <td>{el.customerName}</td>
               <td>{el.dateOfPayment}</td>
               <td>{el.installmentNumber}</td>
-              <td>{el.installmentStatus}</td>
+              <td>{installmentStatuses[el.installmentStatus]}</td>
               <td>{numbersToArabic(el.installmentAmount)}</td>
               <td>{el.paidAmount ? el.paidAmount : 0}</td>
               <td>{el.requiredAmount}</td>
@@ -234,9 +239,8 @@ const UnpaidInstallmentsByOfficer = (
           offficer.unpaidInstallmentsByOfficerTotal.representativeName
             ? offficer.unpaidInstallmentsByOfficerTotal.representativeName
             : "--",
-          offficer.unpaidInstallmentsByOfficerTotal
-            .unpaidInstallmentsByOfficerTotal,
           offficer.unpaidInstallmentsByOfficerTotal.count,
+          offficer.unpaidInstallmentsByOfficerTotal.installmentAmounts,
           offficer.unpaidInstallmentsByOfficerTotal.paidAmounts
             ? offficer.unpaidInstallmentsByOfficerTotal.paidAmounts
             : 0,
@@ -247,11 +251,13 @@ const UnpaidInstallmentsByOfficer = (
   };
   const calculateTotal = (data, key) => {
     let total = 0;
-    data.forEach((el) => {
-      if (el.unpaidInstallmentsByOfficerTotal[key]) {
-        total += el.unpaidInstallmentsByOfficerTotal[key];
-      }
-    });
+    if(data){
+      data.forEach((el) => {
+        if (el.unpaidInstallmentsByOfficerTotal[key]) {
+          total += el.unpaidInstallmentsByOfficerTotal[key];
+        }
+      });
+    }
     return total;
   };
   const renderData = ({ data, fromDate, toDate }) => {
@@ -259,7 +265,7 @@ const UnpaidInstallmentsByOfficer = (
     return (
       <div className="unpaidInstallmentsByOfficer" dir="rtl" lang="ar">
         {renderHeader(fromDate, toDate)}
-        {_data.map((offficer) => renderCommissaryData(offficer))}
+        {_data ? _data.map((offficer) => renderCommissaryData(offficer)) : null}
         {renderSummary(
           "Total",
           null,
