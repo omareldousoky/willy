@@ -278,7 +278,7 @@ class CustomersForUser extends Component<Props, State> {
           </InputGroup.Append>
          <Col sm={12} dir="rtl" className="p-0 mt-3">
 					<Select
-						placeholder="اختر فرع المندوب"
+						placeholder={local.chooseOfficerBranch}
 						name="currentOfficerBranch"
 						data-qc="currentOfficerBranch"
 						value={this.state.currentOfficerBranch}
