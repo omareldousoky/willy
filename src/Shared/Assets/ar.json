@@ -855,5 +855,6 @@
     "clearanceReceiptPhoto":"صورة إيصال المخالصة",
     "clearanceDocumentPhoto": "صورة مستند المخالصة",
     "clearanceDetails": "تفاصيل نموذج المخالصة",
-    "penaltyMessage": "يوجد غرامه علي العميل بقيمه"
+    "penaltyMessage": "يوجد غرامه علي العميل بقيمه",
+		"chooseOfficerBranch": "يجب اختيار فرع المندوب"
 }
