@@ -33,7 +33,13 @@ class ReportsHome extends Component<{}, State> {
                 {
                     header: local.operationsReports,
                     stringKey: "operationsReports",
-                },  
+                }, 
+                {
+                    header: local.oracleIntegration,
+                    stringKey: 'oracleIntegration',
+                    permission: 'summarizeTransactions',
+                    permissionKey: 'oracleIntegration'
+                }, 
                 {
                     header: local.monthlyQuarterlyReports,
                     stringKey: 'monthlyQuarterlyReports',
