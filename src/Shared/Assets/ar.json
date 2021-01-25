@@ -853,7 +853,13 @@
     "clearances":"المخالصات",
     "undoReviewClearance": "إعادة مراجعة المخالصة",
     "clearanceReceiptPhoto":"صورة إيصال المخالصة",
+    "penaltyMessage": "يوجد غرامه علي العميل بقيمه",
     "clearanceDocumentPhoto": "صورة مستند المخالصة",
+    "printed": "تمت طباعته",
     "clearanceDetails": "تفاصيل نموذج المخالصة",
-    "penaltyMessage": "يوجد غرامه علي العميل بقيمه"
+    "monthlyQuarterlyReports": "التقارير الشهرية و الربع سنوية",
+    "monthlyReport": "التقرير الشهري",
+    "quarterReport":" التقرير الربع سنوي",
+    "noOfQuarter":"إختر الربع السنوي",
+    "dateCantBeBefore2021":"التاريخ يجب أن يبدأ من سنة 2021"
 }

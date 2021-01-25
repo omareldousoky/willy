@@ -102,5 +102,6 @@
     "missing_branch_manager_or_manager_visit_date":{"en":"Missing input of Branch Manager or visit date.","ar":"بيانات مدير الفرع أو تاريخ الزيارة غير مكتملة"},
     "invalid_branch_manager_id":{"en":"Invalid Branch Manager ID","ar":"خطأ بتعريف مدير الفرع"},
     "early_pay_partially_paid":{"en":"Can't early pay with an installlment partially paid","ar":"لا يمكن سداد معجل لقرض لديه قسط مدفوع جزئي"},
-    "application_locked":{"en":"This application is locked, you can't edit any of its details.","ar":"هذا الطلب مغلق مؤقتاً، لا يمكنك تغيير أي من بياناته الأن , حاول مره أخري"}
+    "application_locked":{"en":"This application is locked, you can't edit any of its details.","ar":"هذا الطلب مغلق مؤقتاً، لا يمكنك تغيير أي من بياناته الأن , حاول مره أخري"},
+    "quarter_snapshot_missing":{"en":"The quarter snapshot needed to produce the report is missing.","ar":"نسخة البيانات ربع السنوية غير موجودة"}
 }
