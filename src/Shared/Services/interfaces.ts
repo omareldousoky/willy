@@ -182,3 +182,170 @@ export interface Trace {
 	created: Signature;
 	updated: Signature;
 }
+
+export interface QuarterReport{
+    fundingWalletTrends: {
+        individualAverageLoan: number;
+        individualAverageWallet: number;
+        groupAverageLoan: number;
+        groupAverageWallet: number;
+        averageDaysToFinishIndividualLoans: number;
+        averageDaysToFinishGroupLoans: number;
+        collectionExpectations1To30: number;
+        collectionExpectations31To90: number;
+        collectionExpectations91To180: number;
+        collectionExpectations181To270: number;
+        collectionExpectations271To365: number;
+        collectionExpectationsAfterYear: number;
+        walletGrowthRate: number;
+      };
+      fundingWalletQuality: {
+        writtenOffLoansRate: number;
+        riskCoverageRate: number;
+        committedCustomersWalletRate: number;
+        lateCustomersWalletTo30DaysRate: number;
+        lateCustomersWalletTo60DaysRate: number;
+        lateCustomersWalletTo90DaysRate: number;
+        lateCustomersWalletTo120DaysRate: number;
+        lateCustomersWalletAfter120DaysRate: number;
+        carryOverInstallmentsCustomersWalletRate: number;
+        rescheduledCustomerWalletRate: number;
+      };
+      fromDate: string;
+      toDate: string;
+      createdAt: string;
+    }
+
+    export interface MonthReport{
+        totalIndividualCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        maleIndividualCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        femaleIndividualCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        totalIndividualCredit: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        maleIndividualCredit: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        femaleIndividualCredit: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        totalGroupCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        maleGroupCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        femaleGroupCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        totalGroupCredit: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        maleGroupCredit: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        femaleGroupCredit: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+        totalCredit: number;
+        totalCount: number;
+        commercialCount: number;
+        commercialCredit: number;
+        productionCount: number;
+        productionCredit: number;
+        serviceCount: number;
+        serviceCredit: number;
+        agriculturalCount: number;
+        agriculturalCredit: number;
+        individualWrittenOffLoansCount: {
+            month: number;
+            year: number;
+        };
+        individualWrittenOffLoansCredit: {
+            month: number;
+            year: number;
+        };
+        groupWrittenOffLoansCount: {
+            month: number;
+            year: number;
+        };
+        groupWrittenOffLoansCredit: {
+            month: number;
+            year: number;
+        };
+        writtenOffLoansCount: {
+            month: number;
+            year: number;
+        };
+        writtenOffLoansCredit: {
+            month: number;
+            year: number;
+        };
+        collectedWrittenOffLoansCount: {
+            month: number;
+            year: number;
+        };
+        collectedWrittenOffLoansCredit: {
+            month: number;
+            year: number;
+        };
+        arrears: [
+            {
+                tier: string;
+                customers: number;
+                arrears: number;
+                wallet: number;
+                provision: number;
+            }
+        ];
+        totalCustomers: number;
+        totalArrears: number;
+        totalWallet: number;
+        totalProvision: number;
+        fromDate: string;
+        toDate: string;
+        createdAt: string;
+        fundingWalletAnalysisCountValidation: string;
+        fundingWalletAnalysisCreditValidation: string;
+        arrearsCountValidation: string;
+        arrearsCreditValidation: string;
+        fundingWalletAnalysisSheetCount: number;
+        fundingWalletAnalysisSheetCredit: number;
+        arrearsSheetCount: number;
+        arrearsSheetCredit: number;
+        totalGroupLoansCount: {
+            onGoingCutomer: number;
+            newCustomer: number;
+            total: number;
+        };
+    }
