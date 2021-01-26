@@ -23,7 +23,7 @@ interface State {
     loanOfficers: Array<LoanOfficer>;
 }
 interface Group{
-    id: string;
+    id?: string;
     leader: string;
     officers: string[];
 }
@@ -122,9 +122,14 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     prepareGroups(){
         const groups: Group[] = [];
         this.state.groups?.map((group)=>{
-            if(group.id){
+            if(group.id && this.props.mode==='edit'){
                 groups.push({
                     id: group.id,
+                    leader: group.leader.id,
+                    officers: group.officers ?  group.officers.map(officer=> officer.id) : [],
+                })
+            } else if(this.props.mode==='create'){
+                groups.push({
                     leader: group.leader.id,
                     officers: group.officers ?  group.officers.map(officer=> officer.id) : [],
                 })

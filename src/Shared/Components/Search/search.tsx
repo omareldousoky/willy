@@ -45,6 +45,7 @@ interface Props {
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
   issuedLoansSearchFilters: any;
+  chosenStatus?: string;
   setFrom?: (from: number) => void;
   search: (data) => void;
   searchFilters: (data) => void;
@@ -114,6 +115,7 @@ class Search extends Component<Props, State> {
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
     if(this.props.url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
+    if(this.props.url==='supervisionsGroups') {obj.status = this.props.chosenStatus}
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);

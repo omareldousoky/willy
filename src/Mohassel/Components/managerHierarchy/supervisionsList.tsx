@@ -87,14 +87,20 @@ class SupervisionGroupsList extends Component<Props, State> {
         render: data => data?.leader?.name
       },
       {
+        title: local.status,
+        key:'status',
+        render: data => this.getStatus(data.status)
+      },
+      {
         title: local.loanOfficerOrCoordinator,
         key: 'officers',
-        render: data =>  data.officers&& <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap'}}>
+        render: data =>  data.officers&& <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow:'wrap'}}>
         {data.officers?.map((officer, i) => {
             return (
              officer?.name && <div
                     key={i}
                     className={'labelBtn'}
+                    style={{ flex: "1 0 21%", flexGrow: 1,maxWidth:'16rem', overflowY: "scroll"}}
                     >
                     {officer.name}
                 </div>
@@ -102,11 +108,6 @@ class SupervisionGroupsList extends Component<Props, State> {
         }
         )}
     </div>
-      },
-      {
-        title: local.status,
-        key:'status',
-        render: data => this.getStatus(data.status)
       }
     ]
   }
@@ -124,7 +125,7 @@ class SupervisionGroupsList extends Component<Props, State> {
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedGroups: this.props.data.filter((group)=> group.status ==='pending') })
+      this.setState({ checkAll: true, selectedGroups: this.props.data.filter((group)=> group.status ===this.state.chosenStatus) })
     } else this.setState({ checkAll: false, selectedGroups: [] })
   }
   componentDidMount() {
@@ -193,7 +194,12 @@ class SupervisionGroupsList extends Component<Props, State> {
     this.setState({
       chosenStatus: event.value
     })
-    this.props.search({...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '', status: event.value})
+    const branch= this.state.branchId !== 'hq' ? this.state.branchId : ''
+    if( this.state.branchId !== 'hq')
+    this.props.search({...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', status: event.value, branchId: this.state.branchId })
+    else{
+      this.props.search({...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', status: event.value})
+    }
   }
   submit= () =>{
       const branchesGroupIds = this.prepareSubmit();
@@ -263,6 +269,7 @@ async unApproveOfficers(branchesGroupIds) {
                   url="supervisionsGroups"
                   from={this.state.from}
                   size={this.state.size}
+                  chosenStatus={this.state.chosenStatus}
                   searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                 />
                 :
@@ -271,6 +278,7 @@ async unApproveOfficers(branchesGroupIds) {
                   url="supervisionsGroups"
                   from={this.state.from}
                   size={this.state.size}
+                  chosenStatus={this.state.chosenStatus}
                   searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                   hqBranchIdRequest={this.state.branchId}
                 />
