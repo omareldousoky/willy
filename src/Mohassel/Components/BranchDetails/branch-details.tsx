@@ -223,7 +223,7 @@ interface State {
             
             <div className={'rowContainer'}>
                 <BackButton title={local.branchDetails} />
-                {this.renderEditIcon()}
+                <Can I='createBranch' a='branch'>{this.renderEditIcon()}</Can>
             </div>
             <Card  className={'card'}>
             <Loader type="fullscreen" open={this.props.loading || this.state.productsLoading}  />

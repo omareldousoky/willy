@@ -77,8 +77,8 @@ class BranchesList extends Component<Props, State> {
         render: data => <>
           <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')}
             onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } }) }}></img>
-          <img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}
-            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } }) }}></img>
+         <Can I='createBranch' a='branch'><img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } }) }}></img> </Can> 
         </>
       },
     ]
