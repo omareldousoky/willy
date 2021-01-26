@@ -174,3 +174,18 @@ export interface OfficersGroup {
     officers: {id: string; name: string}[];
     status?: string;
 }
+export interface GroupsByBranch{
+    id: string;
+    status: string;
+    branchId: string;
+    startDate: string;
+    leader: {
+        id: string;
+        name: string;
+    };
+    officers: 
+        {
+            id: string;
+            name: string;
+        }[];
+}

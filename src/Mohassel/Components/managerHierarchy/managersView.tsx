@@ -100,6 +100,7 @@ class ManagerProfile extends Component<Props, State> {
         const obj = {
             from: 0,
             size: 1000,
+            status: 'active'
         };
         const res = await searchUsers(obj);
         if (res.status === "success") {

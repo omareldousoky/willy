@@ -17,7 +17,7 @@ import { Col, Form, FormCheck, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { theme } from '../../../theme';
 import ability from '../../config/ability';
-import { OfficersGroup } from '../../../Shared/Services/interfaces';
+import { GroupsByBranch, OfficersGroup } from '../../../Shared/Services/interfaces';
 
 interface State {
   size: number;
@@ -29,12 +29,12 @@ interface State {
     value: string;
   }[];
   print: boolean;
-  selectedGroups: any[];
+  selectedGroups: GroupsByBranch[];
   checkAll: boolean;
   chosenStatus: string;
 }
 interface Props {
-  data: OfficersGroup[];
+  data: GroupsByBranch[];
   totalCount: number;
   loading: boolean;
   searchFilters: object;
@@ -63,7 +63,7 @@ class SupervisionGroupsList extends Component<Props, State> {
         key: 'selected',
         render: data => data.status ===  this.state.chosenStatus && <FormCheck
           type="checkbox"
-          checked={Boolean(this.state.selectedGroups.find(group => group._id === data._id))}
+          checked={Boolean(this.state.selectedGroups.find(group => group.id === data.id))}
           onChange={() => this.addRemoveItemFromChecked(data)}
         ></FormCheck>
       },
@@ -98,9 +98,9 @@ class SupervisionGroupsList extends Component<Props, State> {
   }
 
   addRemoveItemFromChecked(group) {
-    if (this.state.selectedGroups.findIndex(groupItem => groupItem._id == group._id) > -1) {
+    if (this.state.selectedGroups.findIndex(groupItem => groupItem.id == group.id) > -1) {
       this.setState({
-        selectedGroups: this.state.selectedGroups.filter(el => el._id !== group._id),
+        selectedGroups: this.state.selectedGroups.filter(el => el.id !== group.id),
       })
     } else {
       this.setState({
@@ -160,6 +160,9 @@ class SupervisionGroupsList extends Component<Props, State> {
     })
     this.props.search({...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '', status: event.value})
   }
+  submit= () =>{
+    console.log(this.state.selectedGroups)
+  }
   render() {
     return (
       <>
@@ -172,6 +175,13 @@ class SupervisionGroupsList extends Component<Props, State> {
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.levelsOfSupervision}</Card.Title>
                   <span className="text-muted">{local.noOfSupervisionGroups + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                 </div>
+              {this.state.chosenStatus &&  <Button onClick={this.submit}
+                disabled={!Boolean(this.state.selectedGroups.length)}
+                className="big-button"
+                style={{ marginLeft: 20, height: 70 }}
+              > {this.state.chosenStatus=='pending'? local.approveSuperVisionGroups : local.unApproveSuperVisionGroups}
+              </Button>
+              }
               </div>
               <hr className="dashed-line" />
               <>
