@@ -112,6 +112,7 @@ class BranchesList extends Component<Props, State> {
   }
   componentWillUnmount(){
     this.props.setSearchFilters({})
+    this.props.search({url: 'clearData'})
   }
   render() {
     return (
@@ -144,7 +145,16 @@ class BranchesList extends Component<Props, State> {
              from={this.state.from} 
              size={this.state.size} />
             }
-            {this.props.data|| this.state.branch &&
+            {
+              this.state.branch &&
+              <DynamicTable
+              totalCount={1}
+              mappers={this.mappers}
+              pagination={false}
+              data={[this.state.branch]}
+            />
+            }
+            {this.props.data &&
               <DynamicTable
                 url="branch"
                 from={this.state.from} 
@@ -152,7 +162,7 @@ class BranchesList extends Component<Props, State> {
                 totalCount={ this.props.totalCount}
                 mappers={this.mappers}
                 pagination={true}
-                data={this.state.branchId==='hq' ? this.props.data : [this.state.branch]}
+                data={this.props.data}
                 changeNumber={(key: string, number: number) => {
                   this.setState({ [key]: number } as any, () => this.getBranches());
                 }}
