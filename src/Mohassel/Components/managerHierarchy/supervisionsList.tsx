@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
-import Can from '../../config/Can';
 import './managerHierarchy.scss'
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
@@ -17,8 +16,10 @@ import { Col, Form, FormCheck, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { theme } from '../../../theme';
 import ability from '../../config/ability';
-import { GroupsByBranch, OfficersGroup } from '../../../Shared/Services/interfaces';
-
+import { GroupsByBranch } from '../../../Shared/Services/interfaces';
+import { approveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/approveOfficersGroups';
+import { unApproveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/unApproveOfficersGroups';
+import { loading } from '../../../Shared/redux/loading/actions';
 interface State {
   size: number;
   from: number;
@@ -41,6 +42,13 @@ interface Props {
   error: string;
   search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
+  setLoading: (data) => void;
+}
+interface BranchId{
+  branchId: string;
+}
+interface GroupIds{
+  groupIds: string[];
 }
 class SupervisionGroupsList extends Component<Props, State> {
   mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
@@ -151,6 +159,27 @@ class SupervisionGroupsList extends Component<Props, State> {
       default: return null;
     }
   }
+  prepareSubmit(){
+    const selectedGroupsMap: Map<string, string[]> = new Map();
+    this.state.selectedGroups.map((group)=>{
+          if(selectedGroupsMap.has(group.branchId)){
+             selectedGroupsMap.get(group.branchId)?.push(group.id)
+          } else{
+            selectedGroupsMap.set(group.branchId,[group.id]);
+          }
+    })
+    const branchesGroupIds: {
+      branchId: string;
+      groupIds: string[];
+    }[] = [];
+    selectedGroupsMap.forEach((value, key) => {  
+         branchesGroupIds.push({
+           branchId: key,
+          groupIds: value
+         })
+  });
+    return branchesGroupIds;
+  }
   componentWillUnmount(){
     this.props.setSearchFilters({});
   }
@@ -161,8 +190,35 @@ class SupervisionGroupsList extends Component<Props, State> {
     this.props.search({...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '', status: event.value})
   }
   submit= () =>{
-    console.log(this.state.selectedGroups)
+      const branchesGroupIds = this.prepareSubmit();
+      if(this.state.chosenStatus==='pending'){
+        this.approveOfficers(branchesGroupIds)
+      } else if(this.state.chosenStatus==='approved'){
+        this.unApproveOfficers(branchesGroupIds)
+      }
   }
+  async approveOfficers(branchesGroupIds) {
+    this.props.setLoading(true);
+    const res = await approveOfficersGroups({ branchesGroupIds })
+    if (res.status === 'success') {
+      this.props.setLoading(false);
+        Swal.fire('Success', '', 'success').then(() => window.location.reload())
+    } else {
+      this.props.setLoading(false);
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+    }
+}
+async unApproveOfficers(branchesGroupIds) {
+  this.props.setLoading(true);
+  const res = await unApproveOfficersGroups({branchesGroupIds})
+  if (res.status === 'success') {
+    this.props.setLoading(false);
+      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+  } else {
+    this.props.setLoading(false);
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+  }
+}
   render() {
     return (
       <>
@@ -239,6 +295,7 @@ const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
     setSearchFilters: data => dispatch(searchFilters(data)),
+    setLoading: data => dispatch(loading(data))
   };
 };
 const mapStateToProps = state => {
