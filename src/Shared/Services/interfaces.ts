@@ -170,7 +170,7 @@ export interface Clearance {
 }
 export interface OfficersGroup {
     id?: string;
-    leader: string;
-    officers: string[];
+    leader: {id: string; name: string};
+    officers: {id: string; name: string}[];
     status?: string;
 }

@@ -3,8 +3,6 @@ import './managerHierarchy.scss';
 import local from '../../../Shared/Assets/ar.json';
 import { Row, Form, Table, Button } from 'react-bootstrap';
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { OfficersGroup } from '../../../Shared/Services/interfaces';
 import ability from '../../config/ability';
 import { deleteOfficersGroups } from '../../Services/APIs/ManagerHierarchy/deleteOfficersGroups';
@@ -25,8 +23,6 @@ interface State {
         startDate: number;
         groups: OfficersGroup[];
     };
-    loanOfficers: Map<string, string>;
-    userOfBranch: Map<string, string>;
     loading: boolean;
     selectedGroups: OfficersGroup[];
     checkAll: boolean;
@@ -38,15 +34,13 @@ class SupervisionLevelsActions extends Component<Props, State> {
         super(props);
         this.state = {
             loading: false,
-            loanOfficers: new Map(),
-            userOfBranch: new Map(),
             data: {
                 id: "",
                 branchId: "",
                 startDate: 0,
                 groups: [{
                     id: '',
-                    leader: '',
+                    leader: {id:'', name:''},
                     officers: [],
                     status: '',
 
@@ -69,8 +63,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
     async initialState() {
         this.setState({
             loading: false,
-            loanOfficers: new Map(),
-            userOfBranch: new Map(),
             data: {
                 id: "",
                 branchId: "",
@@ -82,8 +74,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
             chosenStatus: this.props.mode === 'unapprove' ? 'approved' : 'pending',
         })
         this.setState({loading:true})
-        await this.getUsers();
-        await this.getLoanOfficers();
         await this.getGroups();
         this.setState({loading: false})
     }
@@ -123,46 +113,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
             Swal.fire('Success', '', 'success').then(() => window.location.reload())
         } else {
             Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
-        }
-    }
-    async getLoanOfficers() {
-        const obj = {
-            branchId: this.props.branchId,
-            from: 0,
-            size: 1000,
-        };
-        const res = await searchLoanOfficer(obj);
-        if (res.status === "success") {
-            const data: any[] = res.body.data;
-            const officers = new Map()
-            if (data.length)
-                data.map((officer) => {
-                    return (officers.set(officer._id, officer.name));
-
-                })
-            this.setState({
-                loanOfficers: officers,
-            })
-        }
-    }
-    async getUsers() {
-        const obj = {
-            branchId: this.props.branchId,
-            from: 0,
-            size: 1000,
-        };
-        const res = await searchUsers(obj);
-        if (res.status === "success") {
-            const data: any[] = res.body.data;
-            const users = new Map()
-            if (data.length)
-                data.map((user) => {
-                    return (users.set(user._id, user.name));
-
-                })
-            this.setState({
-                userOfBranch: users,
-            })
         }
     }
     async getGroups() {
@@ -226,7 +176,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
                                     </Row>
                                     <Table striped bordered hover>
                                         <tbody style={{ padding: "2rem 0", textAlign: "right", fontWeight: 'bold' }} key={index}>
-                                            <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{this.state.userOfBranch.get(group.leader)}</td></tr>
+                                            <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{group.leader.name}</td></tr>
                                             <tr style={{ height: '50px' }}><td className="header">{local.loanOfficerOrCoordinator}</td><td className="cell">
                                                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap ' }}>
                                                     {group.officers?.map((officer, i) => {
@@ -234,7 +184,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
                                                             <div
                                                                 key={i}
                                                                 className={'labelBtn'}>
-                                                                {this.state.loanOfficers.get(officer)}
+                                                                {officer.name}
                                                             </div>
                                                         )
                                                     }

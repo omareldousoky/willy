@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 import { OfficersGroup } from '../../../Shared/Services/interfaces';
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import './managerHierarchy.scss'
 import Table from 'react-bootstrap/Table';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
@@ -31,8 +29,6 @@ interface State {
         startDate: number;
         groups: OfficersGroup[];
     };
-    loanOfficers: Map<string, string>;
-    userOfBranch: Map<string, string>;
     loading: boolean;
     tabsArray: Array<Tab>;
     activeTab: string;
@@ -42,8 +38,6 @@ class SupervisionsProfile extends Component<Props, State> {
         super(props);
         this.state = {
             loading: false,
-            loanOfficers: new Map(),
-            userOfBranch: new Map(),
             activeTab: 'supervisionDetails',
             tabsArray: [],
             data: {
@@ -90,53 +84,9 @@ class SupervisionsProfile extends Component<Props, State> {
         this.setState({
             tabsArray:tabsToRender,
         })
-        this.getUsers();
-        this.getLoanOfficers();
         this.getGroups();
     }
 
-    async getLoanOfficers() {
-        this.setState({ loading: true })
-        const obj = {
-            branchId: this.props.branchId,
-            from: 0,
-            size: 1000,
-        };
-        const res = await searchLoanOfficer(obj);
-        if (res.status === "success") {
-            const data: any[] = res.body.data;
-            const officers = new Map()
-            data.map((officer) => {
-                return (officers.set(officer._id, officer.name));
-
-            })
-            this.setState({
-                loanOfficers: officers,
-            })
-        }
-        this.setState({ loading: false })
-    }
-    async getUsers() {
-        this.setState({ loading: true })
-        const obj = {
-            branchId: this.props.branchId,
-            from: 0,
-            size: 1000,
-        };
-        const res = await searchUsers(obj);
-        if (res.status === "success") {
-            const data: any[] = res.body.data;
-            const users = new Map()
-            data.map((user) => {
-                return (users.set(user._id, user.name));
-
-            })
-            this.setState({
-                userOfBranch: users,
-            })
-        }
-        this.setState({ loading: false })
-    }
     async getGroups() {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
@@ -165,16 +115,16 @@ class SupervisionsProfile extends Component<Props, State> {
                         return (
                             <Table striped bordered hover key={group.id}>
                                 <tbody style={{ padding: "2rem 0", textAlign: "right", fontWeight: 'bold' }} key={index}>
-                                    <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{this.state.userOfBranch.get(group.leader)}</td></tr>
+                                    <tr style={{ height: '50px' }}><td className="header">{local.groupManager}</td><td>{group.leader.name}</td></tr>
                                     <tr style={{ height: '50px' }}><td className="header">{local.loanOfficerOrCoordinator}</td><td className="cell">
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap ' }}>
                                             {group.officers?.map((officer, i) => {
-                                                const officerName = this.state.loanOfficers.get(officer)
+
                                                 return (
-                                                 officerName && <div
+                                                 officer.name && <div
                                                         key={i}
                                                         className={'labelBtn'}>
-                                                        {officerName}
+                                                        {officer.name}
                                                     </div>
                                                 )
                                             }

@@ -4,32 +4,31 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Button, Form, Row } from 'react-bootstrap';
 import { updateOfficersGroups } from '../../Services/APIs/ManagerHierarchy/updateOfficersGroups';
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups';
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import ability from '../../config/ability';
 import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { createOfficersGroups } from '../../Services/APIs/ManagerHierarchy/createOfficersGroups';
 import { getErrorMessage } from '../../../Shared/Services/utils';
-import { OfficersGroup } from '../../../Shared/Services/interfaces';
+import { LoanOfficer, OfficersGroup } from '../../../Shared/Services/interfaces';
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
+import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 interface Props {
     branchId: string;
     mode: string;
 }
 interface State {
     groups: OfficersGroup[];
-    usersOfBranch: any[];
-    loanOfficersOfBranch: any[];
     loading: boolean;
-
+    users: Array<LoanOfficer>;
+    loanOfficers: Array<LoanOfficer>;
 }
 class SupervisionLevelsCreation extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
             groups: [],
-            usersOfBranch: [],
-            loanOfficersOfBranch: [],
+            users: [],
+            loanOfficers: [],
             loading: false,
         }
     }
@@ -39,14 +38,34 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     async initialState() {
         this.setState({
             groups: [],
-            usersOfBranch: [],
+            users: [],
+            loanOfficers:[],
             loading: false,
         })
-        await this.getUsersOfBranch();
-        await this.getLoanOfficers();
         if (this.props.mode !== 'create')
             await this.getGroups();
+        await this.getUsers();
+        await this.getLoanOfficers();    
     }
+    async getUsers() {
+        this.setState({loading: true})
+         const query = { from: 0, size: 1000, status: 'active' };
+          const res = await searchUsers(query);
+          if (res.status == 'success' && res.body.data) {
+            this.setState({ users: res.body.data })
+          }
+          this.setState({loading: false})
+      }
+      async getLoanOfficers(){
+        this.setState({loading: true})
+           const query = { from: 0, size: 1000, status: 'active' };
+            const officerQuery = { ...query, branchId: this.props.branchId }
+           const res = await searchLoanOfficer(officerQuery);
+           if (res.status == 'success' && res.body.data) {
+            this.setState({ loanOfficers: res.body.data })
+          }
+          this.setState({loading: false})
+      }
     async getGroups() {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
@@ -59,37 +78,6 @@ class SupervisionLevelsCreation extends Component<Props, State> {
             }
         }
         this.setState({ loading: false })
-    }
-
-    async getLoanOfficers() {
-        this.setState({ loading: true })
-        const obj = {
-            branchId: this.props.branchId,
-            from: 0,
-            size: 1000,
-        };
-        const res = await searchLoanOfficer(obj);
-        if (res.status === "success") {
-            this.setState({
-                loanOfficersOfBranch: res.body.data
-            })
-        }
-        this.setState({ loading: false })
-    }
-    async getUsersOfBranch() {
-        this.setState({ loading: true })
-        const obj = {
-            branchId: this.props.branchId,
-            from: 0,
-            size: 1000,
-        };
-        const res = await searchUsers(obj);
-        if (res.status === 'success') {
-            this.setState({
-                usersOfBranch: res.body.data
-            })
-        }
-        this.setState({ loading: false });
     }
     removeGroup = (index) => {
         const newGroups = this.state.groups;
@@ -133,12 +121,12 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         return (
             <div>
                 <Loader open={this.state.loading} type="fullscreen" />
-                {((this.props.mode === 'create' && this.state.usersOfBranch.length) || this.state.groups.length) ? <>
+                {((this.props.mode === 'create' && this.state.users.length) || this.state.groups.length) ? <>
                     <Row>
-                        {this.props.mode === 'create' &&this.state.usersOfBranch.length && <Row className={'add-supervisor-container'}>
+                        {this.props.mode === 'create' &&this.state.users.length && <Row className={'add-supervisor-container'}>
                             <span className={'add-member'} onClick={() => {
                                 const newGroup = this.state.groups;
-                                newGroup.push({ leader: '', officers: [] });
+                                newGroup.push({ leader: {id:'',name:''}, officers: [] });
                                 this.setState({ groups: newGroup });
                             }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addGroupManager}</span>
                         </Row>
@@ -146,11 +134,14 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                         {this.state.groups.map((item, index) => {
                             return (
                                 <SupervisionGroup
+                                    branchId={this.props.branchId}
                                     mode={this.props.mode}
                                     key={index}
                                     seqNo={index + 1} deleteGroup={this.removeGroup}
-                                    loanOfficersOfBranch={this.state.loanOfficersOfBranch}
-                                    usersOfBranch={this.state.usersOfBranch} group={item} />);
+                                    group={item} 
+                                    users={this.state.users}
+                                    loanOfficers={this.state.loanOfficers}
+                                    />);
                         })
                         }
                     </Row>
