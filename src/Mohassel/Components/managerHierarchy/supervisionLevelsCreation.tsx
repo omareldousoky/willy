@@ -22,6 +22,11 @@ interface State {
     users: Array<LoanOfficer>;
     loanOfficers: Array<LoanOfficer>;
 }
+interface Group{
+    id: string;
+    leader: string;
+    officers: string[];
+}
 class SupervisionLevelsCreation extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -49,7 +54,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     }
     async getUsers() {
         this.setState({loading: true})
-         const query = { from: 0, size: 1000, status: 'active' };
+         const query = { from: 0, size: 1000, status: 'active', branchId: this.props.branchId };
           const res = await searchUsers(query);
           if (res.status == 'success' && res.body.data) {
             this.setState({ users: res.body.data })
@@ -76,6 +81,8 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                     groups: res.body.data.groups ? data : [],
                 })
             }
+        } else {
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
         }
         this.setState({ loading: false })
     }
@@ -90,7 +97,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         if (this.props.mode === 'create') {
             const obj = {
                 branchId: this.props.branchId,
-                groups: this.state.groups,
+                groups: this.prepareGroups(),
             };
             const res = await createOfficersGroups(obj);
             if (res.status === 'success') {
@@ -102,7 +109,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         else if (this.props.mode === 'edit') {
             const obj = {
                 branchId: this.props.branchId,
-                groups: this.state.groups,
+                groups: this.prepareGroups(),
             }
             const res = await updateOfficersGroups(obj, this.props.branchId)
             if (res.status === 'success') {
@@ -111,6 +118,20 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                 Swal.fire('Error c!', getErrorMessage(res.error.error), 'error');
             }
         }
+    }
+    prepareGroups(){
+        const groups: Group[] = [];
+        this.state.groups?.map((group)=>{
+            if(group.id){
+                groups.push({
+                    id: group.id,
+                    leader: group.leader.id,
+                    officers: group.officers ?  group.officers.map(officer=> officer.id) : [],
+                })
+            }
+
+        })
+        return groups;
     }
     componentDidUpdate(pervProps) {
         if (this.props.mode !== pervProps.mode) {

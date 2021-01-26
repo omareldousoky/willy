@@ -73,9 +73,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
             checkAll: false,
             chosenStatus: this.props.mode === 'unapprove' ? 'approved' : 'pending',
         })
-        this.setState({loading:true})
         await this.getGroups();
-        this.setState({loading: false})
     }
     submit = async () => {
         const obj = {
@@ -117,14 +115,21 @@ class SupervisionLevelsActions extends Component<Props, State> {
     }
     async getGroups() {
         const res = await getOfficersGroups(this.props.branchId)
-        if (res.body?.data) {
+        if (res.body?.data && res.body.data?.groups.length) {
             const resData = res.body.data
             resData.groups = res.body.data.groups.filter((group) => group.status === this.state.chosenStatus);
-            if (res.status = "success") {
-                if (res.body.data)
+            if (res.status === "success") {
+                if (res.body.data){
                     this.setState({
                         data: res.body.data,
-                    })
+                        loading: false,
+                    })} 
+                    else{
+                        this.setState({loading: false})
+                    }
+            } else {
+                this.setState({loading: false});
+                 Swal.fire('Error!', getErrorMessage(res.error.error), 'error');
             }
         }
     }

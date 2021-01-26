@@ -12,6 +12,8 @@ import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOffic
 import SupervisionLevelsActions from './supervisionLevelsActions';
 import ability from '../../config/ability';
 import { Loader } from '../../../Shared/Components/Loader';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     history: any;
@@ -50,38 +52,38 @@ class SupervisionsProfile extends Component<Props, State> {
 
 
     componentDidMount() {
-        const tabsToRender= [{
+        const tabsToRender = [{
             header: local.levelsOfSupervision,
-                stringKey: 'supervisionDetails'
+            stringKey: 'supervisionDetails'
         }];
-          
-            if(ability.can('createOfficersGroup','branch'))
+
+        if (ability.can('createOfficersGroup', 'branch'))
             tabsToRender.push({
                 header: local.createSuperVisionGroups,
                 stringKey: 'createSuperVisionGroups',
             })
-            if(ability.can('updateOfficersGroup', 'branch'))
+        if (ability.can('updateOfficersGroup', 'branch'))
             tabsToRender.push({
                 header: local.editSuperVisionGroups,
                 stringKey: 'editSuperVisionGroups'
             })
-            if(ability.can('deleteOfficersGroup', 'branch'))
+        if (ability.can('deleteOfficersGroup', 'branch'))
             tabsToRender.push({
                 header: local.deleteSuperVisionGroups,
                 stringKey: 'deleteSuperVisionGroups'
             })
-            if(ability.can('approveOfficersGroup', 'branch'))
+        if (ability.can('approveOfficersGroup', 'branch'))
             tabsToRender.push({
                 header: local.approveSuperVisionGroups,
                 stringKey: 'approveSuperVisionGroups'
             })
-            if(ability.can('unApproveOfficersGroup', 'branch'))
-             tabsToRender.push({
+        if (ability.can('unApproveOfficersGroup', 'branch'))
+            tabsToRender.push({
                 header: local.unApproveSuperVisionGroups,
                 stringKey: 'unApproveSuperVisionGroups'
             })
         this.setState({
-            tabsArray:tabsToRender,
+            tabsArray: tabsToRender,
         })
         this.getGroups();
     }
@@ -89,13 +91,20 @@ class SupervisionsProfile extends Component<Props, State> {
     async getGroups() {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
-        if (res.status = "success") {
+        if (res.status === "success") {
             if (res.body.data)
                 this.setState({
                     data: res.body.data,
+                    loading: false,
                 })
+            else {
+                this.setState({ loading: false })
+            }
         }
-        this.setState({ loading: false })
+        else {
+            this.setState({ loading: false });
+            Swal.fire('Error!', getErrorMessage(res.error.error), 'error');
+        }
     }
     getStatus(status: string) {
         switch (status) {
@@ -108,7 +117,7 @@ class SupervisionsProfile extends Component<Props, State> {
     }
     renderMainInfo() {
         return (
-            this.state.data.groups.length ? <>
+            this.state.data?.groups?.length ? <>
                 {
                     this.state.data.groups.map((group, index) => {
                         return (
@@ -120,7 +129,7 @@ class SupervisionsProfile extends Component<Props, State> {
                                             {group.officers?.map((officer, i) => {
 
                                                 return (
-                                                 officer.name && <div
+                                                    officer.name && <div
                                                         key={i}
                                                         className={'labelBtn'}>
                                                         {officer.name}
@@ -196,7 +205,7 @@ class SupervisionsProfile extends Component<Props, State> {
                         />
                     </Card.Title>
                     <Card.Body>
-                        <Loader open={this.state.loading}type="fullscreen" />
+                        <Loader open={this.state.loading} type="fullscreen" />
                         {this.renderContent()}
                     </Card.Body>
                 </Card>

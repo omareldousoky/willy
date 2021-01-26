@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import AsyncSelect from 'react-select/async';
@@ -29,6 +27,7 @@ interface Props {
   isLoanOfficer?: boolean;
   branchId?: string;
   usersInitial: Array<LoanOfficer>;
+  isManager?: boolean;
 }
 class UsersSearch extends Component<Props, State> {
   constructor(props: Props) {
@@ -56,7 +55,7 @@ class UsersSearch extends Component<Props, State> {
     }
   }
    getUsers= async(input: string)=>{
-    const query = { from: 0, size: 1000, status: 'active', hrCode: '', name: '', nationalId: '' }
+    const query = { from: 0, size: 1000, status: 'active', hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey==='leader' ? this.props.branchId: ''}
     query[this.state.dropDownValue] = input;
 
     if (this.props.isLoanOfficer) {
@@ -81,7 +80,11 @@ class UsersSearch extends Component<Props, State> {
     }
   }
   selectUser(event){
+    if(this.props.isManager)
     this.props.item[this.props.objectKey] = event._id 
+    else {
+      this.props.item[this.props.objectKey]= {id: event._id , name: event.name}
+    }
     const index = this.state.users.findIndex((user) => user._id === event._id)
     this.state.users.splice(index, 1);
     this.checkError();
@@ -124,7 +127,7 @@ class UsersSearch extends Component<Props, State> {
               name="users"
               data-qc="users"
               styles={theme.selectStyle}
-              getOptionValue={(option) => option._id}
+              getOptionValue={(option) => option[this.state.dropDownValue]}
               getOptionLabel={(option) => option.name}
               loadOptions={this.getUsers}
               onChange={(user) => { this.selectUser(user) }
