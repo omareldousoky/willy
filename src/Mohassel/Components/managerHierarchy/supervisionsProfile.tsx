@@ -4,7 +4,6 @@ import { OfficersGroup } from '../../../Shared/Services/interfaces';
 import './managerHierarchy.scss'
 import Table from 'react-bootstrap/Table';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
-import './managerHierarchy.scss'
 import local from '../../../Shared/Assets/ar.json';
 import { Card } from 'react-bootstrap';
 import SupervisionLevelsCreation from './supervisionLevelsCreation';

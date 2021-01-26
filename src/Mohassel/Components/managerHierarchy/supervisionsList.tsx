@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import Can from '../../config/Can';
+import './managerHierarchy.scss'
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
@@ -14,10 +15,9 @@ import { getErrorMessage } from '../../../Shared/Services/utils';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import { Col, Form, FormCheck, Row } from 'react-bootstrap';
 import Select from 'react-select';
-import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { theme } from '../../../theme';
 import ability from '../../config/ability';
+import { OfficersGroup } from '../../../Shared/Services/interfaces';
 
 interface State {
   size: number;
@@ -32,15 +32,12 @@ interface State {
   selectedGroups: any[];
   checkAll: boolean;
   chosenStatus: string;
-  loanOfficers: Map<string, string>;
-  userOfBranch: Map<string, string>;
 }
 interface Props {
-  history: any;
-  data: any;
+  data: OfficersGroup[];
   totalCount: number;
   loading: boolean;
-  searchFilters: any;
+  searchFilters: object;
   error: string;
   search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
@@ -59,10 +56,45 @@ class SupervisionGroupsList extends Component<Props, State> {
       checkAll: false,
       options:[{label:local.getSupervisionGroups,value:'' }],
       chosenStatus: '',
-      loanOfficers: new Map(),
-      userOfBranch: new Map(),
     }
-    this.mappers = []
+    this.mappers = [
+      {
+        title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll}></FormCheck>,
+        key: 'selected',
+        render: data => data.status ===  this.state.chosenStatus && <FormCheck
+          type="checkbox"
+          checked={Boolean(this.state.selectedGroups.find(group => group._id === data._id))}
+          onChange={() => this.addRemoveItemFromChecked(data)}
+        ></FormCheck>
+      },
+      {
+        title: local.groupManager,
+        key: 'leader',
+        render: data => data?.leader?.name
+      },
+      {
+        title: local.loanOfficerOrCoordinator,
+        key: 'officers',
+        render: data =>  data.officers&& <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow: 'row wrap'}}>
+        {data.officers?.map((officer, i) => {
+            return (
+             officer?.name && <div
+                    key={i}
+                    className={'labelBtn'}
+                    >
+                    {officer.name}
+                </div>
+            )
+        }
+        )}
+    </div>
+      },
+      {
+        title: local.status,
+        key:'status',
+        render: data => this.getStatus(data.status)
+      }
+    ]
   }
 
   addRemoveItemFromChecked(group) {
@@ -104,33 +136,12 @@ class SupervisionGroupsList extends Component<Props, State> {
     })
   }
   getSupervisionsGroups() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(() => {
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups',status: this.state.chosenStatus ,branchId: this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(() => {
       if (this.props.error) {
         Swal.fire("error", getErrorMessage(this.props.error), "error")
       }
     });
   }
-  async getLoanOfficers() {
-    this.props
-    const obj = {
-        branchId: this.state.branchId,
-        from: 0,
-        size: 1000,
-    };
-    const res = await searchLoanOfficer(obj);
-    if (res.status === "success") {
-        const data: any[] = res.body.data;
-        const officers = new Map()
-        data.map((officer) => {
-            return (officers.set(officer._id, officer.name));
-
-        })
-        this.setState({
-            loanOfficers: officers,
-        })
-    }
-
-}
   getStatus(status: string) {
     switch (status) {
       case 'pending':
@@ -142,6 +153,12 @@ class SupervisionGroupsList extends Component<Props, State> {
   }
   componentWillUnmount(){
     this.props.setSearchFilters({});
+  }
+  selectState = (event) =>{
+    this.setState({
+      chosenStatus: event.value
+    })
+    this.props.search({...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'supervisionsGroups', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '', status: event.value})
   }
   render() {
     return (
@@ -164,9 +181,7 @@ class SupervisionGroupsList extends Component<Props, State> {
                     styles={theme.selectStyle}
                     placeholder={local.chooseOperationType}
                     onChange={(event)=>{
-                      this.props.setSearchFilters({
-                        status: event
-                      })
+                     this.selectState(event);
                     }}
                     options={this.state.options}
                  /></Col>
