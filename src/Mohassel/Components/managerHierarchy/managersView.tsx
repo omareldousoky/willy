@@ -98,7 +98,6 @@ class ManagerProfile extends Component<Props, State> {
     async getUsersOfBranch() {
         this.setState({loading: true});
         const obj = {
-            branchId: this.props.branchId,
             from: 0,
             size: 1000,
         };
@@ -118,7 +117,7 @@ class ManagerProfile extends Component<Props, State> {
                 <Table striped bordered hover>
                     <tbody style={{ padding: "2rem 0" }}>
                         <tr style={{ height: '50px' }}><td style={header}>{local.operationsManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.operationsManager)}</td></tr>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.districtManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.areaSupervisor)}</td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.districtManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.areaManager)}</td></tr>
                         <tr style={{ height: '50px' }}><td style={header}>{local.districtSupervisor}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.areaSupervisor)}</td></tr>
                         <tr style={{ height: '50px' }}><td style={header}>{local.centerManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.centerManager)}</td></tr>
                         <tr style={{ height: '50px' }}><td style={header}>{local.branchManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.branchManager)}</td></tr>

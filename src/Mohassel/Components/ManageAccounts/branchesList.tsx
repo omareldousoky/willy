@@ -146,7 +146,7 @@ class BranchesList extends Component<Props, State> {
              size={this.state.size} />
             }
             {
-              this.state.branch &&
+              (this.state.branchId !=='hq' && this.state.branch ) &&
               <DynamicTable
               totalCount={1}
               mappers={this.mappers}
