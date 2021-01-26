@@ -40,7 +40,6 @@ class UsersSearch extends Component<Props, State> {
       updateKey:'',
     }
   }
-
   getArValue(key: string) {
     switch (key) {
       case 'name': return local.name;
@@ -49,7 +48,6 @@ class UsersSearch extends Component<Props, State> {
       default: return '';
     }
   }
-
   checkError() {
     if (this.props.item[this.props.objectKey] == "") {
       this.setState({ showError: true })
@@ -96,9 +94,7 @@ class UsersSearch extends Component<Props, State> {
         }
       }
       return null;
-  }
-  
-
+  } 
   render() {
     return (
       <>

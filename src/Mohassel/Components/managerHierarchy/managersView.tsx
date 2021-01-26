@@ -1,6 +1,5 @@
 import React, { Component, CSSProperties } from 'react'
 import { Loader } from '../../../Shared/Components/Loader'
-import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
@@ -85,6 +84,7 @@ class ManagerProfile extends Component<Props, State> {
         })
     }
     async getManagers() {
+        this.setState({loading: true})
         const res = await getManagerHierarchy(this.props.branchId);
         if (res.status === "success") {
             this.setState({
@@ -93,8 +93,10 @@ class ManagerProfile extends Component<Props, State> {
         } else {
             Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
         }
+        this.setState({loading: false})
     }
     async getUsersOfBranch() {
+        this.setState({loading: true});
         const obj = {
             branchId: this.props.branchId,
             from: 0,
@@ -108,9 +110,9 @@ class ManagerProfile extends Component<Props, State> {
                 usersOfBranch: users
             })
         }
+        this.setState({loading: false});
     }
     renderMainInfo() {
-
         return (
             this.state.data ?
                 <Table striped bordered hover>
