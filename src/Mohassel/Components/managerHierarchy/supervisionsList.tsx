@@ -76,6 +76,12 @@ class SupervisionGroupsList extends Component<Props, State> {
         ></FormCheck>
       },
       {
+        title: local.oneBranch,
+        key: 'branch',
+        render: data =>  data?.branch?.name,
+
+      },
+      {
         title: local.groupManager,
         key: 'leader',
         render: data => data?.leader?.name
