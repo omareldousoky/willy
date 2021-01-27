@@ -35,7 +35,6 @@ class SupervisionLevelsCreation extends Component<Props, State> {
             users: [],
             loanOfficers: [],
             loading: false,
-            disabled: false,
         }
     }
     componentDidMount() {
