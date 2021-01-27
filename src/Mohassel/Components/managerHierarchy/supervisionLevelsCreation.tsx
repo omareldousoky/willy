@@ -59,7 +59,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     }
     async getUsers() {
         this.setState({ loading: true })
-        const query = { from: 0, size: 100, status: 'active', branchId: this.props.branchId };
+        const query = { from: 0, size: 500, status: 'active', branchId: this.props.branchId };
         const res = await searchUsers(query); 
         if (res.status == 'success' && res.body.data) {
             this.setState({ users: res.body.data })
@@ -68,7 +68,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     }
     async getLoanOfficers() {
         this.setState({ loading: true })
-        const query = { from: 0, size: 100, status: 'active' };
+        const query = { from: 0, size: 500, };
         const officerQuery = { ...query, branchId: this.props.branchId }
         const res = await searchLoanOfficer(officerQuery);
         if (res.status == 'success' && res.body.data) {

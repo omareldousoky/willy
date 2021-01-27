@@ -38,16 +38,14 @@ export class SupervisionGroup extends Component<Props, State> {
                 </div>
                 <Row className={'officers-container'}>
                 {
-                    this.state.officers.map((officer , index) => {
-                        
+                    this.state.officers.map((officer , index) => {   
                         return (
                             <Col key={index} sm={6}>
                                 <Form.Label className={'supervision-label'}><img onClick={()=>{
-                                    let newOfficers: {id: string; name: string}[] = []
-                                    newOfficers = this.state.officers;
+                                    const newOfficers = this.state.officers;
                                     newOfficers.splice(index,1);
-                                    this.setState({officers: newOfficers});
                                     this.props.group.officers = newOfficers;
+                                    this.setState({officers: newOfficers});
                                 }} alt="removeIcon"  src ={require('../../Assets/removeIcon.svg')}/> {local.loanOfficerOrCoordinator}</Form.Label>
                                <Row className="row-nowrap"><UsersSearch usersInitial={this.props.loanOfficers} isLoanOfficer objectKey={index} item={this.props.group.officers} branchId={this.props.branchId} /></Row>
                             </Col>
@@ -59,10 +57,10 @@ export class SupervisionGroup extends Component<Props, State> {
                     <span className={'add-member'} onClick={()=>{
                         const newOfficers = this.props.group.officers;
                         newOfficers.push({id:'', name:''})
+                        this.props.group.officers = newOfficers;
                        this.setState({
                            officers : newOfficers,
                        })
-                       this.props.group.officers = newOfficers;
                     }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addLoanOfficer}</span>
                 </Row>}
             </div>

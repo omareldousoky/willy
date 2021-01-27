@@ -54,7 +54,7 @@ class UsersSearch extends Component<Props, State> {
     }
   }
   getUsers = async (input: string) => {
-    const query = { from: 0, size: 100, status: 'active', hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey === 'leader' ? this.props.branchId : '' }
+    const query = { from: 0, size: 500, hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey === 'leader' ? this.props.branchId : '' }
     query[this.state.dropDownValue] = input;
 
     if (this.props.isLoanOfficer) {
@@ -68,7 +68,7 @@ class UsersSearch extends Component<Props, State> {
         return [];
       }
     } else {
-      const res = await searchUsers(query);
+      const res = await searchUsers({...query, status:'active'});
       if (res.status == 'success' && res.body.data) {
         this.setState({ users: res.body.data })
         return res.body.data;
@@ -81,7 +81,11 @@ class UsersSearch extends Component<Props, State> {
   selectUser(event) {
     this.props.item[this.props.objectKey] = { id: event._id, name: event.name }
     const index = this.state.users.findIndex((user) => user._id === event._id)
-    this.state.users.splice(index, 1);
+    const newUsers = this.state.users;
+    newUsers.splice(index,1)
+    this.setState({
+      users: newUsers
+    })
     this.checkError();
   }
   static getDerivedStateFromProps(props, state) {
@@ -127,9 +131,9 @@ class UsersSearch extends Component<Props, State> {
               loadOptions={this.getUsers}
               onChange={(user) => { this.selectUser(user) }
               }
-              value={this.state.users?.find(
-                (item) => item?._id === (this.props.item[this.props.objectKey]?.id || this.props.item[this.props.objectKey])
-              )}
+              value={this.props.item[this.props.objectKey].id ? this.state.users?.find(
+                (item) => item._id === (this.props.item[this.props.objectKey].id)
+              ):{id:"", name:""}}
               cacheOptions
               defaultOptions
             />
