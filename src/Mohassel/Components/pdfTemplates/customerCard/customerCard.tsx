@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './customerCard.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, getStatus } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, getStatus, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import store from '../../../../Shared/redux/store';
 
 interface Props {
@@ -74,7 +74,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td style={{ fontSize: "8px" }}>{store.getState().auth.name}</td>
                             </tr>
                             <tr>
-                                <td>{timeToArabicDate(0, true)}</td>
+                                <td>{timeToArabicDateNow(true)}</td>
                                 <td className="title2 bold"><u>كارت العميل</u></td>
                                 <td></td>
                             </tr>

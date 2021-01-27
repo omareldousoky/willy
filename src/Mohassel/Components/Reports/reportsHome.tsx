@@ -1,3 +1,4 @@
+import MonthlyQuarterlyReports from './monthlyQuarterlyReports';
 import React, { Component } from "react";
 import * as local from "../../../Shared/Assets/ar.json";
 import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
@@ -32,15 +33,18 @@ class ReportsHome extends Component<{}, State> {
                 {
                     header: local.operationsReports,
                     stringKey: "operationsReports",
-                },
+                }, 
                 {
                     header: local.oracleIntegration,
-                    stringKey: "oracleIntegration",
-                    permission: "summarizeTransactions",
-                    permissionKey: "oracleIntegration",
-                },
-            ],
-        };
+                    stringKey: 'oracleIntegration',
+                    permission: 'summarizeTransactions',
+                    permissionKey: 'oracleIntegration'
+                }, 
+                {
+                    header: local.monthlyQuarterlyReports,
+                    stringKey: 'monthlyQuarterlyReports',
+                }]
+        }
     }
     handleOptionChange = (changeEvent) => {
         this.setState({
@@ -57,6 +61,8 @@ class ReportsHome extends Component<{}, State> {
                 return <OracleIntegration />;
             case "operationsReports":
                 return <OperationsReports />;
+            case "monthlyQuarterlyReports":
+                return <MonthlyQuarterlyReports/>
             default:
                 return null;
         }

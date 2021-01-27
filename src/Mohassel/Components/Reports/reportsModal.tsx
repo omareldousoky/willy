@@ -14,7 +14,9 @@ import { Branch } from '../../../Shared/Services/interfaces';
 interface InitialFormikState {
   fromDate?: string;
   toDate?: string;
+  quarterYear?: string;
   branches: Array<Branch>;
+  quarterNumber?: string;
   key?: string;
 }
 
@@ -31,12 +33,14 @@ const ReportsModal = (props: Props) => {
     props.submit(values);
   }
   function getInitialValues() {
-    const initValues: InitialFormikState = {branches: []}
+    const initValues: InitialFormikState = { branches: [] }
     props.pdf.inputs?.forEach(input => {
-      switch(input) {
+      switch (input) {
         case 'dateFromTo': initValues.fromDate = ''; initValues.toDate = '';
         case 'branches': initValues.branches = [];
         case 'customerKey': initValues.key = ''
+        case 'quarterYear': initValues.quarterYear = '';
+        case 'quarterNumber': initValues.quarterNumber = '01';
       }
     })
     return initValues;
@@ -94,8 +98,8 @@ const ReportsModal = (props: Props) => {
 
                           </div>
                           <span style={{ color: 'red' }}>
-                          {formikProps.errors.toDate}
-                        </span>
+                            {formikProps.errors.toDate}
+                          </span>
                         </Form.Group>
                       </Col>
                     )
@@ -103,7 +107,7 @@ const ReportsModal = (props: Props) => {
                   if (input === 'branches') {
                     return (
                       <Col key={index} sm={12} style={{ marginTop: 20 }}>
-                        <BranchesDropDown multiselect={true} onSelectBranch={(branches) => {formikProps.setFieldValue('branches', branches) }} />                        
+                        <BranchesDropDown multiselect={true} onSelectBranch={(branches) => { formikProps.setFieldValue('branches', branches) }} />
                         <span style={{ color: 'red' }}>
                           {formikProps.errors.branches}
                         </span>
@@ -115,7 +119,7 @@ const ReportsModal = (props: Props) => {
                       <Col sm={12} key={index} style={{ marginTop: 20 }}>
                         <Form.Group controlId="key">
                           <div className="dropdown-container">
-                            <p className="dropdown-label" style={{width: 150}}>{local.customerCode}</p>
+                            <p className="dropdown-label" style={{ width: 150 }}>{local.customerCode}</p>
                             <Form.Control
                               className="dropdown-select"
                               name="key"
@@ -131,12 +135,59 @@ const ReportsModal = (props: Props) => {
                       </Col>
                     )
                   }
+                  if (input === 'quarterYear') {
+                    return (
+                      <Col sm={12} key={index}>
+                        <Form.Group controlId="quarterYear">
+                          <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
+                            <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300, textAlign: 'center' }}>{local.date}</p>
+                            <span>{local.from}</span>
+                            <Form.Control
+                              style={{ marginLeft: 20, border: 'none' }}
+                              type="date"
+                              name="quarterYear"
+                              data-qc="quarterYear"
+                              value={formikProps.values.quarterYear}
+                              isInvalid={Boolean(formikProps.errors.quarterYear && formikProps.touched.quarterYear)}
+                              onBlur= {formikProps.handleBlur}
+                              onChange={(e) => {
+                                formikProps.setFieldValue("quarterYear",  e.currentTarget.value);
+                                if (e.currentTarget.value === "") formikProps.setFieldValue("quarterYear", "")
+                              }}
+                            >
+                            </Form.Control>
+                            <Form.Control.Feedback type="invalid">{formikProps.errors.quarterYear}</Form.Control.Feedback>
+                          </div>
+                        </Form.Group>
+                      </Col>
+                    )
+                  }
+                  if (input === 'quarterNumber') {
+                    return (
+                      <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                        <div className="dropdown-container" style={{ flex: 1, alignItems: 'center' }}>
+                          <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 300, textAlign:'center' }}>{local.noOfQuarter}</p>
+                          <Form.Control as="select" className="dropdown-select" data-qc="quarterNumber"
+                             name="quarterNumber"
+                            value={formikProps.values.quarterNumber}
+                            onChange={(e) => { formikProps.setFieldValue('quarterNumber', e.currentTarget.value)}}>
+                            <option value='01' data-qc='approved'>{'1'}</option>
+                            <option value='02' data-qc='created'>{'2'}</option>
+                            <option value='03' data-qc='rejected'>{'3'}</option>
+                            <option value='04' data-qc='canceled'>{'4'}</option>
+                          </Form.Control>
+                        </div>
+                      </Col>
+                    )
+                  }
                 })}
               </Row>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={() => { props.hideModal() }}>{local.cancel}</Button>
-              {props.pdf && props.pdf.key && !['customerDetails', 'loanDetails', 'cibPaymentReport'].includes(props.pdf.key) && props.getExcel && <Button variant="primary" onClick={() => { props.getExcel && props.getExcel(formikProps.values) }}>{local.downloadExcel}</Button>}
+              {props.pdf && props.pdf.key && !['customerDetails', 'loanDetails', 'cibPaymentReport'].includes(props.pdf.key) && props.getExcel && <Button 
+              disabled={!!formikProps.errors.quarterYear}
+              variant="primary" onClick={() => { props.getExcel && props.getExcel(formikProps.values) }}>{local.downloadExcel}</Button>}
               <Button type="submit" variant="primary">{local.downloadPDF}</Button>
             </Modal.Footer>
           </Form>

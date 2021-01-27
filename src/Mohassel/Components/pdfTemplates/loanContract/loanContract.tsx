@@ -2,7 +2,7 @@ import React from 'react';
 import './loanContract.scss';
 import * as Barcode from 'react-barcode';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { numbersToArabic, timeToArabicDate, dayToArabic } from "../../../../Shared/Services/utils";
+import { numbersToArabic, timeToArabicDate, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import Tafgeet from 'tafgeetjs';
 
 const LoanContract = (props) => {
@@ -23,9 +23,9 @@ const LoanContract = (props) => {
     switch (index) {
       case -2: return 'الأول';
       case -1: return 'الثاني';
-      case 0: return ' الثالث';
-      case 1: return ' الرابع';
-      case 2: return ' الخامس';
+      case 0: return 'الثالث';
+      case 1: return 'الرابع';
+      case 2: return 'الخامس';
       case 3: return 'السادس';
       case 4: return 'السابع';
       case 5: return 'الثامن';
@@ -79,8 +79,7 @@ const LoanContract = (props) => {
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
                   <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
-                  <div>حرر هذا العقد في فرع {props.branchDetails.name} - {props.data.customer.governorate} الكائن في:{props.branchDetails.address} بين كلا من
-							:-</div>
+                  <div>حرر هذا العقد في فرع {props.branchDetails.name} الكائن في:{props.branchDetails.address} بين كلا من:-</div>
                   <table className="stakeholders">
                     <tbody>
                       <tr>
@@ -307,13 +306,13 @@ const LoanContract = (props) => {
 								الممول لاي سبب من الاسباب</div>
                   </section>
 
-                  <section style={{pageBreakAfter: 'always'}}>
+                  <section>
                     <div className="title">البند الثامن</div>
                     <div>يلتزم كل طرف من أطراف هذا العقد بسداد الضريبه المستحقه عليه وفقا لاحكام القانون
 							</div>
                   </section>
 
-                  <section>
+                  <section style={{pageBreakBefore: "always"}}>
                     <div className="title">البند التاسع</div>
                     <div>يقر الطرف {getNumbersOfGuarantor('and')} الضامنين المتضامنين بأنها يكفلا علي سبيل التضامن الطرف
                   الثاني
@@ -403,7 +402,7 @@ const LoanContract = (props) => {
                   <div className="headtitle textcenter"><u>إقرار وتعهد</u></div>
                   <div>نقر نحن الموقعين أدناه بإلتزامنا وتعهدنا بسداد وتسليم قيمة الاقساط المستحقه في مواعيدها
                   المحدده بموجب عقد
-                 القرض المؤرخ في {timeToArabicDate(0, false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق العميل او من
+                 القرض المؤرخ في {timeToArabicDateNow(false)} وحتي تمام سدادها بالكامل، وأن يكون السداد عن طريق العميل او من
                 ينوب عنه الي شركة
                 تساهيل للتمويل متناهي الصغر ذاتها وبمقر خزينة فرع الشركة المتعامل معه أو عبر وسائل الدفع
                 الالكتروني المعتمده
@@ -414,7 +413,7 @@ const LoanContract = (props) => {
                 للشركة الرجوع علي العميل والضامنين في أي وقت من الاوقات بقيمة مالم يتم سداده لخزينة فرع
                 الشركة ودون أدني
 							اعتراض مننا علي ذلك وهذا اقرار منا بذلك ولا يحق لنا الرجوع فيه حاليا او مستقبلا.</div>
-                  <div>تحريرا في {timeToArabicDate(0, false)}</div>
+                  <div>تحريرا في {timeToArabicDateNow(false)}</div>
 
                   <table>
 
@@ -558,7 +557,7 @@ const LoanContract = (props) => {
                     </tbody>
                   </table>
                   <div>بأنني قد استلمت تمويل قدره: {`${numbersToArabic(props.data.principal)} جنيه `} من شركة تساهيل للتمويل متناهي الصغر بتاريخ:
-							{timeToArabicDate(0, false)}</div>
+							{timeToArabicDateNow(false)}</div>
                   <div>وذلك بهدف تطوير وزيادة رأس مال النشاط، وأنني غير متضرر من الظروف الحالية والتي لها
                   تأثير عام علي جميع الأنشطة الأقتصاديه والمشروعات وقد ينتج عن هذه الاحداث ركود في حركات
 							البيع والشراء.</div>

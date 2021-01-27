@@ -335,6 +335,18 @@ const CustomerProfile = (props: Props) => {
                 <td>{local.comments}</td>
                 <td>{customerDetails?.comments}</td>
               </tr>
+            {customerDetails?.blocked && customerDetails?.blocked?.isBlocked && (
+              <tr>
+                <td>{local.blockReason}</td>
+                <td>{customerDetails.blocked.reason || ''}</td>
+              </tr>
+            )}
+            {customerDetails?.blocked && !customerDetails?.blocked?.isBlocked && customerDetails?.blocked?.reason && (
+              <tr>
+                <td>{local.unblockReason}</td>
+                <td>{customerDetails.blocked.reason || ''}</td>
+              </tr>
+            )}
             </tbody>
           </Table>}
           {activeTab === 'documents' &&

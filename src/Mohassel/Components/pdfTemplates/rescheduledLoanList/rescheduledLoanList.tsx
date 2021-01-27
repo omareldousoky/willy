@@ -1,6 +1,6 @@
 import React from 'react';
 import './rescheduledLoanList.scss';
-import { timeToArabicDate, getTimestamp } from '../../../../Shared/Services/utils'
+import { timeToArabicDate, getTimestamp, timeToArabicDateNow } from '../../../../Shared/Services/utils'
 import { englishToArabic } from '../../../Services/statusLanguage';
 
 const RescheduledLoanList = (props) => {
@@ -24,7 +24,7 @@ const RescheduledLoanList = (props) => {
                             <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={4}>{timeToArabicDateNow(true)}</th>
                             <th colSpan={6}>جنيه مصري</th>
                         </tr>
                         <tr>
