@@ -29,9 +29,10 @@ class PaymentIcons extends Component<Props, {}> {
     const installments: Array<number> = [];
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
-        if (installment.status !== "paid")
+        if (installment.status !== "paid" && installment.status !== "rescheduled"){
           total = total + installment.installmentResponse - installment.totalPaid;
-        installments.push(installment.id);
+          installments.push(installment.id);
+        }
       } else return total;
     })
     return { total: total, installments: installments };
