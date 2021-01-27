@@ -12,11 +12,11 @@ interface Props {
 }
 export interface Managers {
     branchId?: string;
-    operationsManager: string;
-    areaManager: string;
-    areaSupervisor: string;
-    centerManager: string;
-    branchManager: string;
+    operationsManager: { id: string; name: string };
+    areaManager: { id: string; name: string };
+    areaSupervisor: { id: string; name: string };
+    centerManager: { id: string; name: string };
+    branchManager: { id: string; name: string };
 }
 export interface UserOfBranch {
     name: string;

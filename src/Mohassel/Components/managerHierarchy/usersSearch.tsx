@@ -27,7 +27,6 @@ interface Props {
   isLoanOfficer?: boolean;
   branchId?: string;
   usersInitial: Array<LoanOfficer>;
-  isManager?: boolean;
 }
 class UsersSearch extends Component<Props, State> {
   constructor(props: Props) {
@@ -36,7 +35,7 @@ class UsersSearch extends Component<Props, State> {
       dropDownValue: 'hrCode',
       showError: false,
       users: [],
-      updateKey:'',
+      updateKey: '',
     }
   }
   getArValue(key: string) {
@@ -54,8 +53,8 @@ class UsersSearch extends Component<Props, State> {
       this.setState({ showError: false })
     }
   }
-   getUsers= async(input: string)=>{
-    const query = { from: 0, size: 100, status: 'active', hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey==='leader' ? this.props.branchId: ''}
+  getUsers = async (input: string) => {
+    const query = { from: 0, size: 100, status: 'active', hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey === 'leader' ? this.props.branchId : '' }
     query[this.state.dropDownValue] = input;
 
     if (this.props.isLoanOfficer) {
@@ -65,7 +64,7 @@ class UsersSearch extends Component<Props, State> {
         this.setState({ users: res.body.data });
         return res.body.data;
       } else {
-        this.setState({users: [],})
+        this.setState({ users: [], })
         return [];
       }
     } else {
@@ -73,31 +72,27 @@ class UsersSearch extends Component<Props, State> {
       if (res.status == 'success' && res.body.data) {
         this.setState({ users: res.body.data })
         return res.body.data;
-      }else {
-        this.setState({users: [],})
+      } else {
+        this.setState({ users: [], })
         return [];
       }
     }
   }
-  selectUser(event){
-    if(this.props.isManager)
-    this.props.item[this.props.objectKey] = event._id 
-    else {
-      this.props.item[this.props.objectKey]= {id: event._id , name: event.name}
-    }
+  selectUser(event) {
+    this.props.item[this.props.objectKey] = { id: event._id, name: event.name }
     const index = this.state.users.findIndex((user) => user._id === event._id)
     this.state.users.splice(index, 1);
     this.checkError();
   }
   static getDerivedStateFromProps(props, state) {
-      if(state.updateKey!=='updated' && props.usersInitial.length > 0 && props.usersInitial !== state.users){
-        return{
-          updateKey:'updated',
-          users: props.usersInitial,
-        }
+    if (state.updateKey !== 'updated' && props.usersInitial.length > 0 && props.usersInitial !== state.users) {
+      return {
+        updateKey: 'updated',
+        users: props.usersInitial,
       }
-      return null;
-  } 
+    }
+    return null;
+  }
   render() {
     return (
       <>
@@ -120,7 +115,7 @@ class UsersSearch extends Component<Props, State> {
           </InputGroup.Append>
           <div style={{ margin: 0, width: "60%" }}>
             <AsyncSelect
-            key={this.props.objectKey}
+              key={this.props.objectKey}
               onBlur={() => {
                 this.checkError();
               }}

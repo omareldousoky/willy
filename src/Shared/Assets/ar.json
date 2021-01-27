@@ -869,7 +869,7 @@
     "searchUserBranchPlaceholder":"البحث بكود الموارد البشريه أو الرقم القومي أو الإسم",
     "transactionType":"نوع العملية",
     "transactionNeedsInspection":"هناك عملية قيد التحقيق",
-    "editManagers": "تعديل الميديرين",
+    "editManagers": "تعديل المديرين",
     "approveGroupsConfirmation": "تأكيد الموافقه علي مستويات الإشراف",
     "approveGroupsSuccess":"تمت الموافقة على مستويات الإشراف",
     "approveGroupsError":"حدث خطأ ولم تتم الموافقة",

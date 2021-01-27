@@ -47,8 +47,13 @@ class SupervisionLevelsCreation extends Component<Props, State> {
             loanOfficers: [],
             loading: false,
         })
-        if (this.props.mode !== 'create')
+        if (this.props.mode === 'edit'){
             await this.getGroups();
+        } else {
+            this.setState({
+                groups:[],
+            })
+        }
         await this.getUsers();
         await this.getLoanOfficers();
     }
@@ -126,12 +131,12 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                 groups.push({
                     id: group.id,
                     leader: group.leader.id,
-                    officers: group.officers ? group.officers.map(officer => officer.id) : [],
+                    officers: group.officers ? group.officers.filter(officer => officer.id).map(officer=>officer.id) : [],
                 })
             } else if (this.props.mode === 'create') {
                 groups.push({
                     leader: group.leader.id,
-                    officers: group.officers ? group.officers.map(officer => officer.id) : [],
+                    officers: group.officers ? group.officers.filter(officer => officer.id).map(officer=>officer.id) : [],
                 })
             }
 
@@ -174,7 +179,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                     {(ability.can('createOfficersGroup', 'branch') || ability.can('updateOfficersGroup', 'branch')) &&
                         <Form.Group>
                             <Button
-                                disabled={(!this.state.groups.length|| this.state.groups.some((group)=> !group.leader.id))}
+                                disabled={(!this.state.groups.length)}
                                 style={{ width: '300px' }}
                                 onClick={async () => {
                                     await this.submit();

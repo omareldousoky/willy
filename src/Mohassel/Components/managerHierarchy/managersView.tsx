@@ -9,7 +9,6 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { getErrorMessage, } from '../../../Shared/Services/utils';
 import BranchBasicsCard, { Managers } from './branchBasicsCard';;
-import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { getManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/getManagerHierarchy";
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
@@ -25,7 +24,6 @@ interface Props {
 interface State {
     loading: boolean;
     data: Managers;
-    usersOfBranch: Map<string, string>;
     tabsArray: Array<Tab>;
     activeTab: string;
 
@@ -55,18 +53,16 @@ class ManagerProfile extends Component<Props, State> {
                 stringKey: 'mainInfo'
             }],
             data: {
-                branchManager: "",
+                branchManager: {id:"", name:""},
                 branchId: "",
-                operationsManager: "",
-                areaManager: "",
-                areaSupervisor: "",
-                centerManager: ""
+                operationsManager: {id:"", name:""},
+                areaManager: {id:"", name:""},
+                areaSupervisor: {id:"", name:""},
+                centerManager: {id:"", name:""}
             },
-            usersOfBranch: new Map(),
         }
     }
     componentDidMount() {
-        this.getUsersOfBranch();
         this.getManagers();
         const tabsToRender: Array<Tab> = [{
             header: local.managers,
@@ -85,7 +81,6 @@ class ManagerProfile extends Component<Props, State> {
     }
     componentDidUpdate(prevProps,prevState){
         if(this.state.activeTab !== prevState.activeTab){
-            this.getUsersOfBranch();
             this.getManagers();
         }
 
@@ -102,33 +97,16 @@ class ManagerProfile extends Component<Props, State> {
         }
         this.setState({loading: false})
     }
-    async getUsersOfBranch() {
-        this.setState({loading: true});
-        const obj = {
-            from: 0,
-            size: 100,
-            status: 'active'
-        };
-        const res = await searchUsers(obj);
-        if (res.status === "success") {
-            const users = new Map();
-            res.body.data.map((user) => { return (users.set(user._id, user.name)) })
-            this.setState({
-                usersOfBranch: users
-            })
-        }
-        this.setState({loading: false});
-    }
     renderMainInfo() {
         return (
             this.state.data ?
                 <Table striped bordered hover>
                     <tbody style={{ padding: "2rem 0" }}>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.operationsManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.operationsManager)}</td></tr>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.districtManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.areaManager)}</td></tr>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.districtSupervisor}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.areaSupervisor)}</td></tr>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.centerManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.centerManager)}</td></tr>
-                        <tr style={{ height: '50px' }}><td style={header}>{local.branchManager}</td><td style={cell}>{this.state.usersOfBranch.get(this.state.data.branchManager)}</td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.operationsManager}</td><td style={cell}>{this.state.data?.operationsManager?.name}</td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.districtManager}</td><td style={cell}>{this.state.data?.areaManager?.name}</td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.districtSupervisor}</td><td style={cell}>{this.state.data?.areaSupervisor?.name}</td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.centerManager}</td><td style={cell}>{this.state.data?.centerManager?.name}</td></tr>
+                        <tr style={{ height: '50px' }}><td style={header}>{local.branchManager}</td><td style={cell}>{this.state.data?.branchManager?.name}</td></tr>
                     </tbody>
                 </Table>
                 : <div style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -166,7 +144,7 @@ class ManagerProfile extends Component<Props, State> {
                     createdAt={this.props.createdAt}
                     status={this.props.status}
                 />
-                {this.state.usersOfBranch ? <Card>
+                  <Card>
                     <CardNavBar
                         header={'here'}
                         array={this.state.tabsArray}
@@ -177,11 +155,6 @@ class ManagerProfile extends Component<Props, State> {
                         {this.renderContent()}
                     </Card.Body>
                 </Card>
-                    : <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                        <img alt='no-data-found' src={require('../../../Shared/Assets/no-results-found.svg')} />
-                        <h4>{local.noResultsFound}</h4>
-                    </div>
-                }
             </>
         )
     }
