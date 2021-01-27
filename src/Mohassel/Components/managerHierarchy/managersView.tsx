@@ -83,6 +83,13 @@ class ManagerProfile extends Component<Props, State> {
             tabsArray: tabsToRender,
         })
     }
+    componentDidUpdate(prevProps,prevState){
+        if(this.state.activeTab !== prevState.activeTab){
+            this.getUsersOfBranch();
+            this.getManagers();
+        }
+
+    }
     async getManagers() {
         this.setState({loading: true})
         const res = await getManagerHierarchy(this.props.branchId);
@@ -99,7 +106,7 @@ class ManagerProfile extends Component<Props, State> {
         this.setState({loading: true});
         const obj = {
             from: 0,
-            size: 1000,
+            size: 100,
             status: 'active'
         };
         const res = await searchUsers(obj);

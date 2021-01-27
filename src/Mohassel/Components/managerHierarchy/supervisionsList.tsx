@@ -94,13 +94,13 @@ class SupervisionGroupsList extends Component<Props, State> {
       {
         title: local.loanOfficerOrCoordinator,
         key: 'officers',
-        render: data =>  data.officers&& <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow:'wrap'}}>
+        render: data =>  data.officers&& <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', flexFlow:"wrap", height:"80px" ,overflowY: "auto"}}>
         {data.officers?.map((officer, i) => {
             return (
              officer?.name && <div
                     key={i}
                     className={'labelBtn'}
-                    style={{ flex: "1 0 21%", flexGrow: 1,maxWidth:'16rem', overflowY: "scroll"}}
+                    style={{ flex: "1 0 21%", flexGrow: 1,maxWidth:'16rem' , height:'40px',textAlign:'center'}}
                     >
                     {officer.name}
                 </div>

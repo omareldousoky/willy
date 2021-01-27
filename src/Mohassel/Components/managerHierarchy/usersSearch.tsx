@@ -55,7 +55,7 @@ class UsersSearch extends Component<Props, State> {
     }
   }
    getUsers= async(input: string)=>{
-    const query = { from: 0, size: 1000, status: 'active', hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey==='leader' ? this.props.branchId: ''}
+    const query = { from: 0, size: 100, status: 'active', hrCode: '', name: '', nationalId: '', branchId: this.props.objectKey==='leader' ? this.props.branchId: ''}
     query[this.state.dropDownValue] = input;
 
     if (this.props.isLoanOfficer) {
@@ -133,7 +133,7 @@ class UsersSearch extends Component<Props, State> {
               onChange={(user) => { this.selectUser(user) }
               }
               value={this.state.users?.find(
-                (item) => item._id === (this.props.item[this.props.objectKey].id || this.props.item[this.props.objectKey])
+                (item) => item?._id === (this.props.item[this.props.objectKey]?.id || this.props.item[this.props.objectKey])
               )}
               cacheOptions
               defaultOptions

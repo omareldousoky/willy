@@ -22,7 +22,7 @@ interface State {
     users: Array<LoanOfficer>;
     loanOfficers: Array<LoanOfficer>;
 }
-interface Group{
+interface Group {
     id?: string;
     leader: string;
     officers: string[];
@@ -35,6 +35,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
             users: [],
             loanOfficers: [],
             loading: false,
+            disabled: false,
         }
     }
     componentDidMount() {
@@ -44,33 +45,33 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         this.setState({
             groups: [],
             users: [],
-            loanOfficers:[],
+            loanOfficers: [],
             loading: false,
         })
         if (this.props.mode !== 'create')
             await this.getGroups();
         await this.getUsers();
-        await this.getLoanOfficers();    
+        await this.getLoanOfficers();
     }
     async getUsers() {
-        this.setState({loading: true})
-         const query = { from: 0, size: 1000, status: 'active', branchId: this.props.branchId };
-          const res = await searchUsers(query);
-          if (res.status == 'success' && res.body.data) {
+        this.setState({ loading: true })
+        const query = { from: 0, size: 100, status: 'active', branchId: this.props.branchId };
+        const res = await searchUsers(query); 
+        if (res.status == 'success' && res.body.data) {
             this.setState({ users: res.body.data })
-          }
-          this.setState({loading: false})
-      }
-      async getLoanOfficers(){
-        this.setState({loading: true})
-           const query = { from: 0, size: 1000, status: 'active' };
-            const officerQuery = { ...query, branchId: this.props.branchId }
-           const res = await searchLoanOfficer(officerQuery);
-           if (res.status == 'success' && res.body.data) {
+        }
+        this.setState({ loading: false })
+    }
+    async getLoanOfficers() {
+        this.setState({ loading: true })
+        const query = { from: 0, size: 100, status: 'active' };
+        const officerQuery = { ...query, branchId: this.props.branchId }
+        const res = await searchLoanOfficer(officerQuery);
+        if (res.status == 'success' && res.body.data) {
             this.setState({ loanOfficers: res.body.data })
-          }
-          this.setState({loading: false})
-      }
+        }
+        this.setState({ loading: false })
+    }
     async getGroups() {
         this.setState({ loading: true })
         const res = await getOfficersGroups(this.props.branchId)
@@ -82,7 +83,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                 })
             }
         } else {
-            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
         }
         this.setState({ loading: false })
     }
@@ -119,19 +120,19 @@ class SupervisionLevelsCreation extends Component<Props, State> {
             }
         }
     }
-    prepareGroups(){
+    prepareGroups() {
         const groups: Group[] = [];
-        this.state.groups?.map((group)=>{
-            if(group.id && this.props.mode==='edit'){
+        this.state.groups?.map((group) => {
+            if (group.id && this.props.mode === 'edit') {
                 groups.push({
                     id: group.id,
                     leader: group.leader.id,
-                    officers: group.officers ?  group.officers.map(officer=> officer.id) : [],
+                    officers: group.officers ? group.officers.map(officer => officer.id) : [],
                 })
-            } else if(this.props.mode==='create'){
+            } else if (this.props.mode === 'create') {
                 groups.push({
                     leader: group.leader.id,
-                    officers: group.officers ?  group.officers.map(officer=> officer.id) : [],
+                    officers: group.officers ? group.officers.map(officer => officer.id) : [],
                 })
             }
 
@@ -149,14 +150,6 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                 <Loader open={this.state.loading} type="fullscreen" />
                 {((this.props.mode === 'create' && this.state.users.length) || this.state.groups.length) ? <>
                     <Row>
-                        {this.props.mode === 'create' &&this.state.users.length && <Row className={'add-supervisor-container'}>
-                            <span className={'add-member'} onClick={() => {
-                                const newGroup = this.state.groups;
-                                newGroup.push({ leader: {id:'',name:''}, officers: [] });
-                                this.setState({ groups: newGroup });
-                            }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addGroupManager}</span>
-                        </Row>
-                        }
                         {this.state.groups.map((item, index) => {
                             return (
                                 <SupervisionGroup
@@ -164,17 +157,25 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                                     mode={this.props.mode}
                                     key={index}
                                     seqNo={index + 1} deleteGroup={this.removeGroup}
-                                    group={item} 
+                                    group={item}
                                     users={this.state.users}
                                     loanOfficers={this.state.loanOfficers}
-                                    />);
+                                />);
                         })
+                        }
+                        {this.props.mode === 'create' && this.state.users.length && <Row className={'add-supervisor-container'}>
+                            <span className={'add-member'} onClick={() => {
+                                const newGroup = this.state.groups;
+                                newGroup.push({ leader: { id: '', name: '' }, officers: [] });
+                                this.setState({ groups: newGroup });
+                            }} ><img className={'green-add-icon'} src={require('../../Assets/greenAdd.svg')} />{local.addGroupManager}</span>
+                        </Row>
                         }
                     </Row>
                     {(ability.can('createOfficersGroup', 'branch') || ability.can('updateOfficersGroup', 'branch')) &&
                         <Form.Group>
                             <Button
-                                disabled={!this.state.groups.length}
+                                disabled={(!this.state.groups.length|| this.state.groups.some((group)=> !group.leader.id))}
                                 style={{ width: '300px' }}
                                 onClick={async () => {
                                     await this.submit();
@@ -186,7 +187,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                 </>
                     : <div style={{ textAlign: 'center', marginBottom: 40 }}>
                         <img alt='no-data-found' src={require('../../../Shared/Assets/no-results-found.svg')} />
-                        <h4>{this.props.mode==='create'? local.noUsersInBranch :local.noResultsFound}</h4>
+                        <h4>{this.props.mode === 'create' ? local.noUsersInBranch : local.noResultsFound}</h4>
                     </div>
                 }
             </div>
