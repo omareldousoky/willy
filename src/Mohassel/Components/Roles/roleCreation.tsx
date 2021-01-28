@@ -21,7 +21,7 @@ import { theme } from "../../../theme";
 import { getRoles } from "../../Services/APIs/Roles/roles";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import { customFilterOption } from '../../../Shared/Services/utils';
+import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
 export interface Section {
   _id: string;
   key: string;
@@ -84,7 +84,7 @@ class RoleCreation extends Component<Props, State> {
         sections,
       });
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   async getRolesForManager() {
@@ -96,8 +96,7 @@ class RoleCreation extends Component<Props, State> {
         loading: false,
       });
     } else {
-      this.setState({ loading: false });
-      Swal.fire("error", local.getManagerRolesError);
+      this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   prepareManagerRolesOptions(roles: Array<any>) {
@@ -148,7 +147,7 @@ class RoleCreation extends Component<Props, State> {
         permissions: rolePermissionsArray,
       });
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   renderSteps() {
@@ -337,8 +336,7 @@ class RoleCreation extends Component<Props, State> {
             this.props.history.push("/manage-accounts");
           });
         } else {
-          Swal.fire("error", local.userRoleCreationError, "error");
-          this.setState({ loading: false });
+          this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
         }
       } else {
         this.setState({ loading: true });
@@ -356,8 +354,7 @@ class RoleCreation extends Component<Props, State> {
             this.props.history.push("/manage-accounts");
           });
         } else {
-          Swal.fire("error", local.userRoleEditError, "error");
-          this.setState({ loading: false });
+          this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
         }
       }
     } else {

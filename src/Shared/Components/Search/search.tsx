@@ -31,6 +31,7 @@ interface InitialFormikState {
   branchId?: string;
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
+  printed?: boolean;
 }
 interface Props {
   size: number;
@@ -45,6 +46,7 @@ interface Props {
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
   issuedLoansSearchFilters: any;
+  chosenStatus?: string;
   setFrom?: (from: number) => void;
   search: (data) => void;
   searchFilters: (data) => void;
@@ -114,6 +116,7 @@ class Search extends Component<Props, State> {
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
     if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
     if(this.props.url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
+    if(this.props.url==='supervisionsGroups') {obj.status = this.props.chosenStatus}
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -149,7 +152,9 @@ class Search extends Component<Props, State> {
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
-          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;;
+          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;
+        case 'printed':
+          initialState.printed = false;
       }
     })
     return initialState;
@@ -406,6 +411,22 @@ class Search extends Component<Props, State> {
                             onChange={(e) => formikProps.setFieldValue('isWrittenOff', e.currentTarget.checked)}
                             label={local.writtenOffLoans}
                             disabled={formikProps.values.isDoubtful}
+                        />
+                    </Form.Group>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'printed') {
+                  return (
+                    <Col key={index} sm={3} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId='writtenOff'>
+                        <Form.Check
+                            type='checkbox'
+                            name='printed'
+                            data-qc='printedCheck'
+                            checked={formikProps.values.printed}
+                            onChange={(e) => formikProps.setFieldValue('printed', e.currentTarget.checked)}
+                            label={local.printed}
                         />
                     </Form.Group>
                     </Col>

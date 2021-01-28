@@ -14,6 +14,13 @@ export const theme = {
             border: `1px solid ${theme.colors.veryLightGray}`, // default border color
             boxShadow: "none" // no box-shadow
           }),
+          placeholder: base => ({
+        
+                ...base,
+                fontSize: '13px',
+                fontWeight: 'normal',
+            }),
+    
           menu: (base, state) => ({
             ...base,
             border: `1px solid ${theme.colors.veryLightGray}`,

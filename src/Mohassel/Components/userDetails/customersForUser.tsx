@@ -20,6 +20,8 @@ import { getBranches } from "../../Services/APIs/Branch/getBranches";
 import Select from "react-select";
 import { UserDateValues } from "./userDetailsInterfaces";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { LoanOfficer } from "../../../Shared/Services/interfaces";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 
 interface Props {
   id: string;
@@ -36,6 +38,11 @@ interface Customer {
     reason?: string;
 };
 }
+
+interface Branch {
+  _id: string;
+  name: string;
+}
 interface State {
   customers: Array<Customer>;
   selectedCustomers: Array<Customer>;
@@ -47,14 +54,12 @@ interface State {
   selectedLO: { _id?: string } | undefined;
   filterCustomers: string;
   branches: Array<Branch>;
-  branch: any;
+  moveToBranch: any;
+  currentOfficerBranch: Branch;
   moveMissing: boolean;
-  LoanOfficerSelectLoader: boolean;
-  LoanOfficerSelectOptions: Array<any>;
-}
-interface Branch {
-  _id: string;
-  name: string;
+  loanOfficerSelectLoader: boolean;
+  loanOfficerSelectOptions: Array<LoanOfficer>;
+	checkAll: boolean;
 }
 class CustomersForUser extends Component<Props, State> {
   constructor(props) {
@@ -70,12 +75,16 @@ class CustomersForUser extends Component<Props, State> {
       selectedLO: {},
       filterCustomers: "",
       branches: [],
-      branch: this.props.user.branchesObjects
+      moveToBranch: this.props.user.branchesObjects
         ? this.props.user.branchesObjects[0]
-        : null,
+        : { _id: "", name: "" },
       moveMissing: false,
-      LoanOfficerSelectLoader: false, 
-      LoanOfficerSelectOptions: []
+      loanOfficerSelectLoader: false,
+      loanOfficerSelectOptions: [],
+			currentOfficerBranch: this.props.user.branchesObjects
+        ? this.props.user.branchesObjects[0]
+        : { _id: "", name: "" },
+			checkAll: false
     };
     this.getBranches();
   }
@@ -87,8 +96,7 @@ class CustomersForUser extends Component<Props, State> {
         loading: false
       },()=>this.getLoanOfficers(''));
     } else {
-      this.setState({ loading: false });
-      Swal.fire("", local.searchError, "error");
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(branches.error.error),'error'));
     }
   }
   componentDidMount() {
@@ -96,11 +104,13 @@ class CustomersForUser extends Component<Props, State> {
   }
   async getCustomersForUser(name?: string) {
     this.setState({ loading: true });
+		if (!this.props.user.branchesObjects[0]._id && !this.state.currentOfficerBranch) return Swal.fire('Error !', local.chooseBranch, 'error')
     const res = await searchCustomer({
       name: name,
       size: this.state.size,
       from: this.state.from,
-      representativeId: this.props.id
+      representativeId: this.props.id,
+			branchId: this.state.currentOfficerBranch?._id || this.props.user.branchesObjects[0]._id,
     });
     if (res.status === "success") {
       this.setState({
@@ -108,12 +118,12 @@ class CustomersForUser extends Component<Props, State> {
         customers: res.body.data,
         loading: false
       });
-    } else this.setState({ loading: false });
+    } else this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState({ selectedCustomers: this.state.customers.filter(customer=> customer.blocked?.isBlocked !== true) });
-    } else this.setState({ selectedCustomers: [] });
+      this.setState({ checkAll: true, selectedCustomers: this.state.customers.filter(customer => customer.blocked?.isBlocked !== true) });
+    } else this.setState({ checkAll: false, selectedCustomers: [] });
   }
   addRemoveItemFromChecked(customer: Customer) {
     if (
@@ -134,19 +144,20 @@ class CustomersForUser extends Component<Props, State> {
   }
   async submit() {
     this.setState({ loading: true, openModal: false });
+		const moveToBranchId = this.state.moveToBranch?._id || "";
+		const currentOfficerBranchId = this.state.currentOfficerBranch?._id;
     const data: {
       user: string;
       newUser: string | undefined;
       customers: Array<string | undefined>;
+			branchId: string;
       [k: string]: any;
     } = {
       user: this.props.id,
       newUser: this.state.selectedLO ? this.state.selectedLO._id : "",
-      customers: this.state.selectedCustomers.map(customer => customer._id)
+      customers: this.state.selectedCustomers.map(customer => customer._id),
+			branchId: moveToBranchId === currentOfficerBranchId ? "" : moveToBranchId
     };
-    if (this.state.branch._id !== this.props.user.branchesObjects[0]._id) {
-      data.branchId = this.state.branch._id;
-    }
     if (this.state.moveMissing === true) {
       data.moveMissing = true;
     }
@@ -163,7 +174,7 @@ class CustomersForUser extends Component<Props, State> {
         "success"
       ).then(() => {
         this.setState(
-          { openModal: false, moveMissing: false, selectedCustomers: [] },
+          { openModal: false, moveMissing: false, selectedCustomers: [], checkAll: false },
           () => this.getCustomersForUser()
         );
       });
@@ -187,10 +198,10 @@ class CustomersForUser extends Component<Props, State> {
           });
         });
       } else {
-        this.setState({ loading: false, selectedCustomers: [] });
+        this.setState({ loading: false, selectedCustomers: [], checkAll: false });
         Swal.fire(
-          "",
-          local.actionHasntBeenMadeTheUserIsAssignedToOtherCustomers,
+          "Error !",
+          getErrorMessage(res.error.error),
           "error"
         );
       }
@@ -198,35 +209,22 @@ class CustomersForUser extends Component<Props, State> {
   }
 
   getLoanOfficers = async searchKeyWord => {
-    this.setState({LoanOfficerSelectLoader: true})
-    let res;
-    const sameBranch = this.state.branch
-    ? this.state.branch._id ===
-      this.props.user.branchesObjects[0]._id
-    : false;
-    if (this.state.branch && this.state.branch._id) {
-      if (!sameBranch)
-        res = await searchLoanOfficer({
+    this.setState({ loanOfficerSelectLoader: true, loanOfficerSelectOptions: [], selectedLO: {} })
+    if (this.state.moveToBranch && this.state.moveToBranch._id) {
+        const res = await searchLoanOfficer({
           from: 0,
           size: 1000,
           name: searchKeyWord,
           status: "active",
-          excludedIds: [this.props.id],
-          branchId: this.state.branch._id 
-        });
-      else
-        res = await searchLoanOfficer({
-          from: 0,
-          size: 1000,
-          name: searchKeyWord,
-          status: "active",
-          excludedIds: [this.props.id],
-          branchId: this.state.branch._id 
+          branchId: this.state.moveToBranch._id 
         });
       if (res.status === "success") {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: res.body.data })
+        this.setState({
+          loanOfficerSelectLoader: false,
+          loanOfficerSelectOptions: res.body.data
+        })
       } else {
-        this.setState({LoanOfficerSelectLoader: false, LoanOfficerSelectOptions: [] })
+        this.setState({loanOfficerSelectLoader: false, loanOfficerSelectOptions: [] }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
       }
     }
   };
@@ -278,6 +276,27 @@ class CustomersForUser extends Component<Props, State> {
               <span className="fa fa-search fa-rotate-90"></span>
             </InputGroup.Text>
           </InputGroup.Append>
+         <Col sm={12} dir="rtl" className="p-0 mt-3">
+					<Select
+						placeholder={local.chooseBranch}
+						name="currentOfficerBranch"
+						data-qc="currentOfficerBranch"
+						value={this.state.currentOfficerBranch}
+						enableReinitialize={false}
+						onChange={event => {
+							if (event) {
+								const newBranch: Branch = event as Branch
+								if (this.state.currentOfficerBranch?._id && newBranch._id !== this.state.currentOfficerBranch._id)
+									this.setState({ currentOfficerBranch: event as Branch},()=>this.getCustomersForUser());
+							}
+						}}
+						type="text"
+						getOptionLabel={option => option.name}
+						getOptionValue={option => option._id}
+						options={this.props.user.branchesObjects}
+						defaultValue={this.props.user.branchesObjects[0]}
+					/>
+				</Col>
         </InputGroup>
         {this.state.totalCustomers > 0 ? (
           <Table striped hover style={{ textAlign: "right" }}>
@@ -287,7 +306,8 @@ class CustomersForUser extends Component<Props, State> {
                   <FormCheck
                     style={{marginRight:"-14px"}}
                     type="checkbox"
-                    onClick={e => this.checkAll(e)}
+                    onChange={e => this.checkAll(e)}
+										checked={this.state.checkAll}
                   ></FormCheck>
                 </th>
                 <th>{local.customerCode}</th>
@@ -346,14 +366,14 @@ class CustomersForUser extends Component<Props, State> {
               <Col sm={12}>
                 <Select
                   placeholder={local.chooseBranch}
-                  name="branch"
-                  data-qc="branch"
-                  value={this.state.branch}
+                  name="moveToBranch"
+                  data-qc="moveToBranch"
+                  value={this.state.moveToBranch}
                   enableReinitialize={false}
                   onChange={event => {
                     if (!event)
-                      this.setState({ branch: event, selectedLO: event },()=>this.getLoanOfficers(''));
-                    else this.setState({ branch: event },()=>this.getLoanOfficers(''));
+                      this.setState({ moveToBranch: event, selectedLO: event },()=>this.getLoanOfficers(''));
+                    else this.setState({ moveToBranch: event },()=>this.getLoanOfficers(''));
                   }}
                   type="text"
                   getOptionLabel={option => option.name}
@@ -372,8 +392,8 @@ class CustomersForUser extends Component<Props, State> {
                     else this.setState({ selectedLO: {} });
                   }}
                   value={this.state.selectedLO}
-                  LoanOfficerSelectLoader={this.state.LoanOfficerSelectLoader}
-                  LoanOfficerSelectOptions={this.state.LoanOfficerSelectOptions}
+                  LoanOfficerSelectLoader={this.state.loanOfficerSelectLoader}
+                  LoanOfficerSelectOptions={this.state.loanOfficerSelectOptions}
                 />
               </Col>
             </Row>
@@ -385,7 +405,7 @@ class CustomersForUser extends Component<Props, State> {
                   disabled={
                     (this.state.selectedLO
                       ? !Boolean(this.state.selectedLO._id)
-                      : true) || this.state.branch === null
+                      : true) || this.state.moveToBranch === null
                   }
                   variant="primary"
                 >

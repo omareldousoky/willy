@@ -10,6 +10,7 @@ import { createDocumentsType } from '../../Services/APIs/encodingFiles/createDoc
 import { editDocumentsType } from '../../Services/APIs/encodingFiles/editDocumentType';
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     history: any;
     edit: boolean;
@@ -44,7 +45,7 @@ class DocumentTypeCreation extends Component<Props, State> {
             Swal.fire('success', local.documentTypeEditSuccessMessage);
             this.props.history.goBack();
         } else {
-            Swal.fire('error', local.documentTypeEditErrorMessage);
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
         }
     }
 
@@ -55,7 +56,7 @@ class DocumentTypeCreation extends Component<Props, State> {
             Swal.fire('success', local.documentTypeCreationSuccessMessage);
             this.props.history.goBack();
         } else {
-            Swal.fire('error', local.documentTypeCreationErrorMessage);
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
         }
     }
     submit = (values) => {

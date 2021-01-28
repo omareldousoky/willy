@@ -12,6 +12,7 @@ import { manageLoansArray } from './manageLoansInitials';
 import { Formula } from '../LoanApplication/loanApplicationCreation';
 import Form from 'react-bootstrap/Form';
 import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     history: any;
@@ -81,8 +82,7 @@ class LoanProducts extends Component<Props, State> {
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(products.error.error),'error'));
         }
     }
     render() {

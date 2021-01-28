@@ -7,12 +7,13 @@ import './userCreation.scss'
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
-import { checkIssueDate } from '../../../Shared/Services/utils';
+import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';
 import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHRCodeDUP';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
+import Swal from 'sweetalert2';
 interface Props {
     values: Values;
     errors: Errors;
@@ -95,7 +96,10 @@ export const UserDataForm = (props: Props) => {
                                         setDuplicateUserNameNID(res.body.data.userName);
                                         props.setFieldValue('birthDate', getBirthdateFromNationalId(value));
                                         props.setFieldValue('gender', getGenderFromNationalId(value));
-                                    } else setNationalIdLoading(false);
+                                    } else {
+                                        setNationalIdLoading(false);
+                                        Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+                                    }
                                 }
                             }}
                             isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
@@ -198,7 +202,10 @@ export const UserDataForm = (props: Props) => {
                                     setLoading(false);
                                     props.setFieldValue('hrCodeChecker', res.body.data.exists);
                                     setDuplicateUserNameHR(res.body.data.userName);
-                                } else setLoading(false);
+                                } else {
+                                    setLoading(false);
+                                    Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+                                }
 
                             }}
                             onBlur={props.handleBlur}
@@ -284,7 +291,10 @@ export const UserDataForm = (props: Props) => {
                         if (res.status === 'success') {
                             setLoading(false);
                             props.setFieldValue('usernameChecker', res.body.data.exists);
-                        } else setLoading(false);
+                        } else {
+                            setLoading(false);
+                            Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+                        }
 
                     }}
                     onBlur={props.handleBlur}

@@ -1,7 +1,7 @@
 import React from 'react';
 import './loanApplicationDetails.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 
 const LoanApplicationDetails = (props) => {
     const getStatus = (status: string) => {
@@ -75,7 +75,7 @@ const LoanApplicationDetails = (props) => {
                                         <th rowSpan={2}>تفاصيل طلب القرض</th>
                                     </tr>
                                     <tr className="headtitle">
-                                        <th>{timeToArabicDate(0, true)}</th>
+                                        <th>{timeToArabicDateNow(true)}</th>
                                     </tr>
 
                                 </thead>
