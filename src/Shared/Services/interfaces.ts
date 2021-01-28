@@ -146,13 +146,13 @@ export interface LoanOfficer {
     status: string;
     username: string;
     _id: string;
-  }
-  export interface Clearance {
+}
+export interface Clearance {
     _id: string;
     bankName: string;
     beneficiaryType: string;
     branchId: string;
-    branchName:  string;
+    branchName: string;
     clearanceReason: string;
     customerId: string;
     customerKey: string;
@@ -349,3 +349,24 @@ export interface QuarterReport{
             total: number;
         };
     }
+export interface OfficersGroup {
+    id?: string;
+    leader: {id: string; name: string};
+    officers: {id: string; name: string}[];
+    status?: string;
+}
+export interface GroupsByBranch{
+    id: string;
+    status: string;
+    branchId: string;
+    startDate: string;
+    leader: {
+        id: string;
+        name: string;
+    };
+    officers: 
+        {
+            id: string;
+            name: string;
+        }[];
+}
