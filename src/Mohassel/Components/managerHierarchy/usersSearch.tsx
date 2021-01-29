@@ -131,9 +131,11 @@ class UsersSearch extends Component<Props, State> {
               loadOptions={this.getUsers}
               onChange={(user) => { this.selectUser(user) }
               }
-              value={this.props.item[this.props.objectKey].id ? this.state.users?.find(
+              value={this.state.users?.find(
+                (item) => item?._id === (this.props.item[this.props.objectKey]?.id)
+              ) ?  this.state.users?.find(
                 (item) => item._id === (this.props.item[this.props.objectKey].id)
-              ):{id:"", name:""}}
+              ):this.props.item[this.props.objectKey]}
               cacheOptions
               defaultOptions
             />
