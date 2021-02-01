@@ -82,6 +82,14 @@ const CustomerStatusDetails = (props) => {
                                                         <th>صادره من</th>
                                                         <td></td>
                                                     </tr>
+																										<tr>
+																											<th>الموبيل</th>
+																											<td>{props.data.MobilePhoneNumber || ""}</td>
+																											<th>تليفون المنزل</th>
+																											<td>{props.data.HomePhoneNumber || ""}</td>
+																											<th>تليفون العمل</th>
+																											<td>{props.data.BusinessPhoneNumber || ""}</td>
+																										</tr>
                                                     <tr>
                                                         <th>ملاحظات</th>
                                                         <td colSpan={3}></td>
@@ -319,6 +327,14 @@ const CustomerStatusDetails = (props) => {
 																						<td>{props.data.nationalId}</td>
 																						<th>صادره من</th>
 																						<td></td>
+																				</tr>
+																				<tr>
+																						<th>الموبيل</th>
+																						<td>{props.data.MobilePhoneNumber || ""}</td>
+																						<th>تليفون المنزل</th>
+																						<td>{props.data.HomePhoneNumber || ""}</td>
+																						<th>تليفون العمل</th>
+																						<td>{props.data.BusinessPhoneNumber || ""}</td>
 																				</tr>
 																				<tr>
 																						<th>ملاحظات</th>
