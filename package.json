@@ -48,7 +48,7 @@
     "@casl/react": "^2.0.2",
     "@react-pdf/renderer": "^1.6.8",
     "@types/react-dom": "^16.9.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.2",

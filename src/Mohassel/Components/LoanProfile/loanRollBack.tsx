@@ -102,6 +102,17 @@ class LoanRollBack extends Component<Props, State>{
         'approveManualRandomPayment', 'rejectManualRandomPayment'];
         return array.filter( action => actionList.includes(action.action))
     }
+    getMinDate() {
+        const minDate = "2021-02-01"
+        let compared = ""
+        if(this.state.actionToRollback.transactions && this.state.actionToRollback.transactions[0]) {
+            compared = getDateString(this.state.actionToRollback.transactions[0].truthDate)
+        } else {
+            compared = getDateString(this.state.actionToRollback.insertedAt)
+        }
+        if(new Date(compared).valueOf() > new Date(minDate).valueOf()) return compared
+        else return minDate
+    }
     render() {
         return (
             <>
@@ -145,7 +156,7 @@ class LoanRollBack extends Component<Props, State>{
                                                 value={formikProps.values.truthDate}
                                                 onBlur={formikProps.handleBlur}
                                                 onChange={formikProps.handleChange}
-                                                min={this.state.actionToRollback.transactions && this.state.actionToRollback.transactions[0] ? getDateString(this.state.actionToRollback.transactions[0].truthDate) : getDateString(this.state.actionToRollback.insertedAt)}
+                                                min={this.getMinDate()}
                                                 isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
                                             />
                                             <Form.Control.Feedback type="invalid">
