@@ -16,6 +16,10 @@ interface State {
     totalDaysEarly: number;
 }
 
+export function shareInGroup(value, total, installment){
+    const share = ((value/total)*installment).toFixed(2);
+    return share
+}
 class CustomerCardPDF extends Component<Props, State> {
     constructor(props) {
         super(props);
@@ -52,7 +56,7 @@ class CustomerCardPDF extends Component<Props, State> {
         this.props.data.installmentsObject.installments.forEach(installment => {
             max = max + installment[key];
         })
-        return max;
+        return max.toFixed(2);
     }
     render() {
         return (
@@ -196,6 +200,8 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <tr>
                                         <th>كود العضو</th>
                                         <th>اسم العضو</th>
+                                        <th>التمويل</th>
+                                        <th>القسط</th>
                                         <th>المنطقه</th>
                                         <th>العنوان</th>
                                         <th>تليفون</th>
@@ -222,6 +228,8 @@ class CustomerCardPDF extends Component<Props, State> {
                                             <tr key={index}>
                                                 <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                                 <td>{individualInGroup.customer.customerName}</td>
+                                                <td>{numbersToArabic(individualInGroup.amount)}</td>
+                                                <td>{numbersToArabic(shareInGroup(individualInGroup.amount, this.props.data.principal, this.props.data.installmentsObject.installments[0].installmentResponse))}</td>
                                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                                 <td>{individualInGroup.customer.customerHomeAddress}</td>
                                                 <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>

@@ -49,6 +49,7 @@ import { rejectManualOtherPayment } from '../../Services/APIs/Payment/rejectManu
 import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveManualOtherPayment';
 import { numTo2Decimal } from '../CIB/textFiles';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import { FollowUpStatementView } from './followupStatementView';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -114,7 +115,7 @@ class LoanProfile extends Component<Props, State>{
                 loading: false
             })
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         }
     }
 
@@ -131,7 +132,7 @@ class LoanProfile extends Component<Props, State>{
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(application.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
         if (application.body.status === 'pending' || application.body.status === 'issued') {
             const totalRemain = await this.getRemainingLoan(application.body.customer._id, application.body.status);
@@ -176,7 +177,7 @@ class LoanProfile extends Component<Props, State>{
         if (iScores.status === "success") {
             this.setState({ iscores: iScores.body.data, loading: false })
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(iScores.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(iScores.error.error), 'error'))
         }
     }
     setTabsToRender(application) {
@@ -198,6 +199,12 @@ class LoanProfile extends Component<Props, State>{
             header: local.customerCard,
             stringKey: 'customerCard'
         };
+        const followUpStatementTab ={
+            header: local.followUpStatement,
+            stringKey: 'followUpStatement',
+            permission: 'followUpStatement',
+            permissionKey: 'application'
+        }
         const paymentTab = {
             header: local.payments,
             stringKey: 'loanPayments',
@@ -232,6 +239,7 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "paid") tabsToRender.push(customerCardTab)
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
+            tabsToRender.push(followUpStatementTab)
             tabsToRender.push(reschedulingTab)
             tabsToRender.push(paymentTab)
         }
@@ -244,7 +252,7 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ activeTab: 'loanDetails' })
             this.getPendingActions();
         }
-        if(application.body.status === "canceled"){
+        if (application.body.status === "canceled") {
             tabsToRender.push(financialTransactionsTab)
         }
         tabsToRender.push(logsTab)
@@ -260,7 +268,7 @@ class LoanProfile extends Component<Props, State>{
         const resGeo = await getGeoAreasByBranch(branch);
         if (resGeo.status === "success") {
             this.setState({ loading: false, geoAreas: resGeo.body.data })
-        } else this.setState({ loading: false },()=>Swal.fire("Error !",getErrorMessage(resGeo.error.error),'error'))
+        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(resGeo.error.error), 'error'))
     }
     getCustomerGeoArea(geoArea) {
         const geoAreaObject = this.state.geoAreas.filter(area => area._id === geoArea);
@@ -274,16 +282,16 @@ class LoanProfile extends Component<Props, State>{
         if (res.status === "success") {
             this.setState({ loading: false, pendingActions: res.body })
         }
-        else this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+        else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     async getBranchData(branchId: string) {
         const res = await getBranch(branchId);
         if (res.status === 'success') {
             this.setState({ branchDetails: res.body?.data })
         } else {
-			const err = res.error as Record<string, string>;
-			Swal.fire("Error !", getErrorMessage(err.error), 'error');
-		}
+            const err = res.error as Record<string, string>;
+            Swal.fire("Error !", getErrorMessage(err.error), 'error');
+        }
     }
     async calculatePenalties() {
         this.setState({ loading: true });
@@ -293,14 +301,14 @@ class LoanProfile extends Component<Props, State>{
         });
         if (res.body) {
             this.setState({ penalty: res.body.penalty, loading: false });
-        } else this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
     }
     renderContent() {
         switch (this.state.activeTab) {
             case 'loanDetails':
-                return <LoanDetailsTableView application={this.state.application} branchName={this.state.branchDetails?.name}/>
+                return <LoanDetailsTableView application={this.state.application} branchName={this.state.branchDetails?.name} />
             case 'loanGuarantors':
-                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status}/>
+                return <GuarantorTableView guarantors={this.state.application.guarantors} customerId={this.state.application.customer._id} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
             case 'loanLogs':
                 return <Logs id={this.props.history.location.state.id} />
             case 'loanPayments':
@@ -313,6 +321,8 @@ class LoanProfile extends Component<Props, State>{
                     paymentType={"normal"} randomPendingActions={this.state.randomPendingActions} />
             case 'customerCard':
                 return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
+            case 'followUpStatement':
+                return <FollowUpStatementView application={this.state.application} print={() => this.setState({ print: 'followUpStatement' }, () => window.print())} />
             case 'loanRescheduling':
                 return <Rescheduling application={this.state.application} test={false} />
             case 'loanReschedulingTest':
@@ -346,13 +356,13 @@ class LoanProfile extends Component<Props, State>{
             if (res.status === "success") {
                 this.setState({ loading: false, randomPendingActions: this.state.randomPendingActions.filter(el => el._id !== randomPendingActionId) })
                 Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getManualOtherPayments(this.props.history.location.state.id));
-            } else this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+            } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         } else {
             const res = await rejectManualPayment(this.props.history.location.state.id);
             if (res.status === "success") {
                 this.setState({ loading: false, pendingActions: {} })
                 Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
-            } else this.setState({ loading: false }, ()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+            } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         }
     }
     async approveManualPayment(randomPendingActionId: string) {
@@ -398,7 +408,7 @@ class LoanProfile extends Component<Props, State>{
                     this.setState({ loading: false })
                     Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() => this.getAppByID(this.props.history.location.state.id));
                 } else {
-                    this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                    this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                 }
             }
         })
@@ -435,7 +445,7 @@ class LoanProfile extends Component<Props, State>{
             this.getCachediScores(this.state.application)
             this.setState({ loading: false })
         } else {
-            this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(iScore.error.error),'error'))
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(iScore.error.error), 'error'))
         }
     }
     cancelApplication() {
@@ -457,7 +467,7 @@ class LoanProfile extends Component<Props, State>{
                     this.setState({ loading: false })
                     Swal.fire('', local.applicationCancelSuccess, 'success').then(() => window.location.reload());
                 } else {
-                    this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                    this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
 
                 }
             }
@@ -497,7 +507,7 @@ class LoanProfile extends Component<Props, State>{
                         this.setState({ loading: false })
                         Swal.fire('', local.loanWriteOffSuccess, 'success').then(() => window.location.reload());
                     } else {
-                        this.setState({ loading: false },()=> Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                        this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                     }
                 }
             })
@@ -537,7 +547,7 @@ class LoanProfile extends Component<Props, State>{
                         this.setState({ loading: false })
                         Swal.fire('', local.loanDoubtSuccess, 'success').then(() => window.location.reload());
                     } else {
-                        this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
+                        this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                     }
                 }
             })
@@ -656,6 +666,7 @@ class LoanProfile extends Component<Props, State>{
                             : <LoanContractForGroup data={this.state.application} branchDetails={this.state.branchDetails} />
                         }
                     </>}
+                {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} />}

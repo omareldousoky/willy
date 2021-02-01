@@ -13,7 +13,7 @@ interface Props {
   print: () => void;
   getGeoArea?: Function;
 }
-function getStatus(data) {
+export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
   const todaysDate = new Date().valueOf();
   switch (data.status) {

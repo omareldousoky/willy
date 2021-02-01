@@ -180,7 +180,7 @@ class CustomerCreation extends Component<Props, State>{
     const res = await getCustomerByID(this.props.location.state.id)
     if (res.status === 'success') {
       const customerInfo = {
-        customerName: res.body.customerName,
+        customerName: res.body.customerName?.trim(),
         nationalId: res.body.nationalId,
         birthDate: timeToDateyyymmdd(res.body.birthDate),
         gender: res.body.gender,

@@ -50,8 +50,7 @@ const CustomerStatusDetails = (props) => {
                     <tbody>
                         <tr>
                             <td className="borderless" colSpan={100}>
-                                {props.data.Loans && props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
-                                    let loanTotalInstallments = 0;
+                                {props.data.Loans && props.data.Loans.length > 0 ? props.data.Loans.map((loan, index) => {
                                     return (
                                         <div key={index} style={{ pageBreakAfter: 'always' }}>
                                             <table>
@@ -83,9 +82,17 @@ const CustomerStatusDetails = (props) => {
                                                         <th>صادره من</th>
                                                         <td></td>
                                                     </tr>
+																										<tr>
+																											<th>الموبيل</th>
+																											<td>{props.data.MobilePhoneNumber || ""}</td>
+																											<th>تليفون المنزل</th>
+																											<td>{props.data.HomePhoneNumber || ""}</td>
+																											<th>تليفون العمل</th>
+																											<td>{props.data.BusinessPhoneNumber || ""}</td>
+																										</tr>
                                                     <tr>
                                                         <th>ملاحظات</th>
-                                                        <td colSpan={3}></td>
+																												<td colSpan={3}>{props.data.Comments || ""}</td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={100} className="horizontal-line"></td>
@@ -295,7 +302,49 @@ const CustomerStatusDetails = (props) => {
                                             </table>
                                         </div>
                                     )
-                                })}
+                                }): (
+																	<table>
+																		<tbody>
+																				<tr>
+																						<th className="frame gray" colSpan={100}>بيانات العميل</th>
+																				</tr>
+																				<tr>
+																						<th>الفرع الحالي</th>
+																						<td>{props.data.accountBranch}</td>
+																						<th>المندوب الحالي</th>
+																						<td>{props.data.officerName}</td>
+																				</tr>
+																				<tr>
+																						<th>الرقم القومي</th>
+																						<td>{numbersToArabic(props.data.nationalId)}</td>
+																						<th>بتاريخ</th>
+																						<td>{timeToArabicDate(props.data.nationalIdIssueDate, false)}</td>
+																						<th>النوع</th>
+																						<td>{arabicGender(props.data.gender)}</td>
+																				</tr>
+																				<tr>
+																						<th>تاريخ الميلاد</th>
+																						<td>{timeToArabicDate(props.data.birthDate, false)}</td>
+																						<th>البطاقه</th>
+																						<td>{props.data.nationalId}</td>
+																						<th>صادره من</th>
+																						<td></td>
+																				</tr>
+																				<tr>
+																						<th>الموبيل</th>
+																						<td>{props.data.MobilePhoneNumber || ""}</td>
+																						<th>تليفون المنزل</th>
+																						<td>{props.data.HomePhoneNumber || ""}</td>
+																						<th>تليفون العمل</th>
+																						<td>{props.data.BusinessPhoneNumber || ""}</td>
+																				</tr>
+																				<tr>
+																						<th>ملاحظات</th>
+																						<td colSpan={3}>{props.data.Comments || ""}</td>
+																				</tr>
+																		</tbody>
+																</table>
+																)}
                             </td>
                         </tr>
                     </tbody>

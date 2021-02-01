@@ -450,3 +450,13 @@ export const getCurrentTime = () => {
         s < 10 ? `0${s}` : s
     }`;
 };
+
+export const getFullCustomerKey = (
+  shortenedCode: string
+): number | undefined => {
+  const re = /\d{1,3}\/\d{1,7}/g;
+	const matchResult = shortenedCode.match(re) || [];
+	if (!matchResult.length) return undefined;
+  const [branch, customer] = matchResult[0].split("/");
+  return Number(`11${branch.padStart(3, "0")}${customer.padStart(7, "0")}`);
+};

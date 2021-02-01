@@ -11,7 +11,7 @@ const numbersToArabic = (input) => {
   } else return "";
 };
 const installmentStatuses = {
-  unpaid: "لم يستحق",
+  unpaid: "غير مسدد",
   partiallyPaid: "مدفوع جزئيا",
   pending: "قيد التحقيق",
 };
