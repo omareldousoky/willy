@@ -135,7 +135,8 @@ class LoanProfile extends Component<Props, State>{
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
         if (application.body.status === 'pending' || application.body.status === 'issued') {
-            const totalRemain = await this.getRemainingLoan(application.body.customer._id, application.body.status);
+            const id = application.body.product.beneficiaryType === 'group' ? application.body?.group?.individualsInGroup[0]?.customer?._id : application.body.customer._id;
+            const totalRemain = await this.getRemainingLoan(id, application.body.status);
             if (totalRemain) {
                 this.setState({ remainingTotal: totalRemain })
             }

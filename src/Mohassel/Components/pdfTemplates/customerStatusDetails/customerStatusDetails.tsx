@@ -270,7 +270,6 @@ const CustomerStatusDetails = (props) => {
                                                     </tr>
                                                     {loan.installments.map((installment, index) => {
                                                         if (installment.instTotal)
-                                                            loanTotalInstallments += Number(installment.instTotal);
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{installment.idx}</td>
