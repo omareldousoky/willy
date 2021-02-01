@@ -155,7 +155,7 @@ class Reports extends Component<{}, State> {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
-       const remainingTotal = await this.getRemainingLoan(res.body._id);
+       const remainingTotal = await this.getRemainingLoan(res.body.customerID);
         this.setState({
           data: {...res.body, remainingTotal }, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
         }, () => window.print())

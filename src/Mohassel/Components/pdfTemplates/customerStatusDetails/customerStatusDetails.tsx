@@ -11,6 +11,7 @@ const CustomerStatusDetails = (props) => {
             default: return '';
         }
     }
+    console.log(props)
     return (
             <div className="customer-status-details" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
@@ -285,7 +286,7 @@ const CustomerStatusDetails = (props) => {
                                                         <td>{numbersToArabic(loan.totalPaid)}</td>
                                                         <td>{numbersToArabic(loan.totalFeesPaid)}</td>
                                                         <th>رصيد العميل</th>
-                                                        <td>{loan.status===('pening'|| 'issued') ? numbersToArabic(props.data.remainingTotla) :0}</td>
+                                                        <td>{(loan.status==='pending' || loan.status=== 'issued') ? numbersToArabic(props.data.remainingTotal) :0}</td>
                                                         <th>أيام التأخير </th>
                                                         <td>{numbersToArabic(loan.lateDays)}</td>
                                                         <th> أيام التبكير </th>
