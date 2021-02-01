@@ -890,5 +890,6 @@
     "noUsersInBranch": "لا يوجد موظفين في الفرع",
     "chooseOperationType":"إختر نوع العملية",
     "getSupervisionGroups":"مشاهدة كل مستويات الإشراف",
-    "onlyArabicLetters": "أحرف عربيه فقط و مسافة واحدة بين الكلمات"
+    "onlyArabicLetters": "أحرف عربيه فقط و مسافة واحدة بين الكلمات",
+    "installmentSerialNumber": "رقم تسلسل القسط"
 }
