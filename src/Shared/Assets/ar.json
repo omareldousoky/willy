@@ -325,7 +325,7 @@
     "createdBy": "تم الإنشاء بواسطة",
     "late": "متأخر",
     "paid": "مدفوع",
-    "unpaid": "لم يستحق",
+    "unpaid": "غير مسدد",
     "rescheduled": "مجدول",
     "partiallyPaid": "مدفوع جزئيا",
     "cancelled": "ملغي",
@@ -889,5 +889,6 @@
     "noUsersInBranch": "لا يوجد موظفين في الفرع",
     "chooseOperationType":"إختر نوع العملية",
     "getSupervisionGroups":"مشاهدة كل مستويات الإشراف",
+    "onlyArabicLetters": "أحرف عربيه فقط و مسافة واحدة بين الكلمات",
     "followUpStatement":"بيان متابعه"
 }
