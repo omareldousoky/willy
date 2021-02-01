@@ -888,5 +888,6 @@
     "noOfSupervisionGroups":"عدد مجموعات مستويات الإشراف",
     "noUsersInBranch": "لا يوجد موظفين في الفرع",
     "chooseOperationType":"إختر نوع العملية",
-    "getSupervisionGroups":"مشاهدة كل مستويات الإشراف"
+    "getSupervisionGroups":"مشاهدة كل مستويات الإشراف",
+    "followUpStatement":"بيان متابعه"
 }
