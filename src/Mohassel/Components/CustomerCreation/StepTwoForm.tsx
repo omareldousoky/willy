@@ -285,7 +285,8 @@ export const StepTwoForm = (props: any) => {
                 <Col sm={12}>
                     <Form.Group controlId="businessSector">
                         <Form.Label className="customer-form-label">{`${local.businessSector}*`}</Form.Label>
-                            <Form.Control as="select"
+                        <Can I="updateCustomerHasLoan" a="customer" passThrough>
+                            {allowed => <Form.Control as="select"
                                 type="select"
                                 name="businessSector"
                                 data-qc="businessSector"
@@ -297,12 +298,14 @@ export const StepTwoForm = (props: any) => {
                                     setFieldValue('businessSpeciality', '');
                                 }}
                                 isInvalid={errors.businessSector && touched.businessSector}
+                                disabled={(!allowed && props.edit && props.hasLoan)}
                             >
                                 <option value="" disabled></option>
                                 {businessSectors?.map((businessSector, index) => {
                                     return <option key={index} value={businessSector.i18n.ar} >{businessSector.i18n.ar}</option>
                                 })}
-                            </Form.Control>
+                            </Form.Control>} 
+                            </Can>
                     </Form.Group>
                 </Col>
             </Row>
@@ -310,7 +313,8 @@ export const StepTwoForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="businessActivity">
                         <Form.Label className="customer-form-label">{`${local.businessActivity}*`}</Form.Label>
-                            <Form.Control as="select"
+                        <Can I="updateCustomerHasLoan" a="customer" passThrough>
+                            {allowed =><Form.Control as="select"
                                 type="select"
                                 name="businessActivity"
                                 data-qc="businessActivity"
@@ -322,20 +326,22 @@ export const StepTwoForm = (props: any) => {
                                     setFieldValue('businessSpeciality', '');
                                 }}
                                 isInvalid={errors.businessActivity && touched.businessActivity}
-                                disabled={!values.businessSector}
+                                disabled={!values.businessSector || (!allowed && props.edit && props.hasLoan)}
                             >
                                 <option value=""></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
                                     .map((activity, index) => {
                                         return <option key={index} value={activity.i18n.ar} >{activity.i18n.ar}</option>
                                     })}
-                            </Form.Control>
+                            </Form.Control>}
+                            </Can>
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
                     <Form.Group controlId="businessSpeciality">
                         <Form.Label className="customer-form-label">{local.businessSpeciality}</Form.Label>
-                            <Form.Control as="select"
+                        <Can I="updateCustomerHasLoan" a="customer" passThrough>
+                            {allowed =><Form.Control as="select"
                                 type="select"
                                 name="businessSpeciality"
                                 data-qc="businessSpeciality"
@@ -344,14 +350,15 @@ export const StepTwoForm = (props: any) => {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 isInvalid={errors.businessSpeciality && touched.businessSpeciality}
-                                disabled={!values.businessActivity}
+                                disabled={!values.businessActivity || (!allowed && props.edit && props.hasLoan)}
                             >
                                 <option value=""></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
                                     .find(activity => activity.i18n.ar === values.businessActivity)?.specialties?.map((speciality, index) => {
                                         return <option key={index} value={speciality.businessSpecialtyName.ar} >{speciality.businessSpecialtyName.ar}</option>
                                     })}
-                            </Form.Control>
+                            </Form.Control>}
+                            </Can>
                     </Form.Group>
                 </Col>
             </Row>
