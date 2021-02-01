@@ -103,7 +103,7 @@ class LoanRollBack extends Component<Props, State>{
         return array.filter( action => actionList.includes(action.action))
     }
     getMinDate() {
-        let minDate = "2021-02-01"
+        const minDate = "2021-02-01"
         let compared = ""
         if(this.state.actionToRollback.transactions && this.state.actionToRollback.transactions[0]) {
             compared = getDateString(this.state.actionToRollback.transactions[0].truthDate)
