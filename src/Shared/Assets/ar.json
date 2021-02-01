@@ -861,5 +861,6 @@
     "monthlyReport": "التقرير الشهري",
     "quarterReport":" التقرير الربع سنوي",
     "noOfQuarter":"إختر الربع السنوي",
-    "dateCantBeBefore2021":"التاريخ يجب أن يبدأ من سنة 2021"
+    "dateCantBeBefore2021":"التاريخ يجب أن يبدأ من سنة 2021",
+    "dateCantBeBeforeFeb2021":"التاريخ يجب أن يبدأ من فبراير 2021"
 }
