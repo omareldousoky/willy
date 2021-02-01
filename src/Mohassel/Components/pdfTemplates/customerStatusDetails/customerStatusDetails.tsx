@@ -11,7 +11,6 @@ const CustomerStatusDetails = (props) => {
             default: return '';
         }
     }
-    console.log(props)
     return (
             <div className="customer-status-details" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
