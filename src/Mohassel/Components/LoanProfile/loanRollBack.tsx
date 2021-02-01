@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 import * as Yup from "yup";
 import Row from 'react-bootstrap/Row';
 import { timeToDateyyymmdd, getDateString, getErrorMessage } from "../../../Shared/Services/utils";
+import { rollbackValidation } from '../Payment/paymentValidation';
 
 interface State {
     loading: boolean;
@@ -136,7 +137,7 @@ class LoanRollBack extends Component<Props, State>{
                     <Formik
                         initialValues={{ truthDate: timeToDateyyymmdd(-1) }}
                         onSubmit={this.rollbackConfirmation}
-                        validationSchema={Yup.object().shape({ truthDate: Yup.date().required(local.required) })}
+                        validationSchema={rollbackValidation}
                         validateOnBlur
                         validateOnChange
                     >
