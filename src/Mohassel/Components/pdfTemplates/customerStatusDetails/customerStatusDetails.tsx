@@ -92,7 +92,7 @@ const CustomerStatusDetails = (props) => {
 																										</tr>
                                                     <tr>
                                                         <th>ملاحظات</th>
-                                                        <td colSpan={3}></td>
+																												<td colSpan={3}>{props.data.Comments || ""}</td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={100} className="horizontal-line"></td>
@@ -338,7 +338,7 @@ const CustomerStatusDetails = (props) => {
 																				</tr>
 																				<tr>
 																						<th>ملاحظات</th>
-																						<td colSpan={3}></td>
+																						<td colSpan={3}>{props.data.Comments || ""}</td>
 																				</tr>
 																		</tbody>
 																</table>
