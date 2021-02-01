@@ -325,7 +325,7 @@
     "createdBy": "تم الإنشاء بواسطة",
     "late": "متأخر",
     "paid": "مدفوع",
-    "unpaid": "لم يستحق",
+    "unpaid": "غير مسدد",
     "rescheduled": "مجدول",
     "partiallyPaid": "مدفوع جزئيا",
     "cancelled": "ملغي",
@@ -862,6 +862,7 @@
     "quarterReport":" التقرير الربع سنوي",
     "noOfQuarter":"إختر الربع السنوي",
     "dateCantBeBefore2021":"التاريخ يجب أن يبدأ من سنة 2021",
+    "dateCantBeBeforeFeb2021":"التاريخ يجب أن يبدأ من فبراير 2021",
     "managers":"المديرين",
     "levelsOfSupervision":"مستويات الإشراف",
     "operationsManager":"مدير العمليات",
@@ -888,5 +889,10 @@
     "noOfSupervisionGroups":"عدد مجموعات مستويات الإشراف",
     "noUsersInBranch": "لا يوجد موظفين في الفرع",
     "chooseOperationType":"إختر نوع العملية",
-    "getSupervisionGroups":"مشاهدة كل مستويات الإشراف"
+    "getSupervisionGroups":"مشاهدة كل مستويات الإشراف",
+    "onlyArabicLetters": "أحرف عربيه فقط و مسافة واحدة بين الكلمات",
+    "installmentSerialNumber": "رقم تسلسل القسط",
+		"customerShortenedCode": "كود العميل المختصر",
+    "followUpStatement":"بيان متابعه",
+    "customerBalance": "رصيد العميل"
 }
