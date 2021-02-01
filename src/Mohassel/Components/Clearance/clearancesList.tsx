@@ -186,14 +186,12 @@ class ClearancesList extends Component<Props, State> {
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.clearances}</Card.Title>
                   <span className="text-muted">{local.noOfClearances + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                 </div>
-                <Can I = 'reviewClearance' a= 'application'>
                   <Button onClick={() => { this.print() }}
                   disabled={(this.state.selectedClearances.length > 0 ? false: true) as boolean}
                   className="big-button"
                   style={{ marginLeft: 20, height: 70 }}
                 > {local.downloadPDF}
                 </Button>
-                </Can>
               </div>
               <hr className="dashed-line" />
               {this.state.branchId == 'hq' ?
