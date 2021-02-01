@@ -50,7 +50,7 @@ import { approveManualOtherPayment } from '../../Services/APIs/Payment/approveMa
 import { numTo2Decimal } from '../CIB/textFiles';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { FollowUpStatementView } from './followupStatementView';
-
+import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -72,6 +72,7 @@ interface State {
     penalty: number;
     randomPendingActions: Array<any>;
     geoAreas: Array<any>;
+    remainingTotal: number;
 }
 
 interface Props {
@@ -97,7 +98,8 @@ class LoanProfile extends Component<Props, State>{
             iscores: [],
             penalty: 0,
             randomPendingActions: [],
-            geoAreas: []
+            geoAreas: [],
+            remainingTotal: 0,
         };
     }
     componentDidMount() {
@@ -131,6 +133,23 @@ class LoanProfile extends Component<Props, State>{
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
+        }
+        if (application.body.status === 'pending' || application.body.status === 'issued') {
+            const id = application.body.product.beneficiaryType === 'group' ? application.body?.group?.individualsInGroup[0]?.customer?._id : application.body.customer._id;
+            const totalRemain = await this.getRemainingLoan(id, application.body.status);
+            if (totalRemain) {
+                this.setState({ remainingTotal: totalRemain })
+            }
+        }
+    }
+    async  getRemainingLoan(id: string,status: string) {
+        if (status === 'pending' || status === 'issued' && id) {
+            const res = await remainingLoan(id)
+            if (res.status === "success") {
+                return res.body.remainingTotal;
+            } else {
+                return 0;
+            }
         }
     }
     async getCachediScores(application) {
@@ -640,7 +659,7 @@ class LoanProfile extends Component<Props, State>{
                 {this.state.print === 'all' &&
                     <>
                         <CashReceiptPDF data={this.state.application} />
-                        <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />
+                        <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />
                         {this.state.application.product.beneficiaryType === "individual" ?
@@ -649,7 +668,7 @@ class LoanProfile extends Component<Props, State>{
                         }
                     </>}
                 {this.state.print === 'followUpStatement' && <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} />}
-                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} />}
+                {this.state.print === 'customerCard' && <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} />}
                 {this.state.print === 'earlyPayment' && <EarlyPaymentPDF data={this.state.application} earlyPaymentData={this.state.earlyPaymentData} branchDetails={this.state.branchDetails} />}
                 {this.state.print === 'payment' && <PaymentReceipt receiptData={this.state.receiptData} data={this.state.application} />}
                 {this.state.print === 'payEarly' && <EarlyPaymentReceipt receiptData={this.state.receiptData} branchDetails={this.state.branchDetails} earlyPaymentData={this.state.earlyPaymentData} data={this.state.application} />}

@@ -893,5 +893,6 @@
     "onlyArabicLetters": "أحرف عربيه فقط و مسافة واحدة بين الكلمات",
     "installmentSerialNumber": "رقم تسلسل القسط",
 		"customerShortenedCode": "كود العميل المختصر",
-    "followUpStatement":"بيان متابعه"
+    "followUpStatement":"بيان متابعه",
+    "customerBalance": "رصيد العميل"
 }

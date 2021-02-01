@@ -9,6 +9,7 @@ interface Props {
     branchDetails: any;
     penalty: number;
     getGeoArea: Function;
+    remainingTotal: number;
 }
 interface State {
     totalDaysLate: number;
@@ -177,6 +178,11 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td>{this.state.totalDaysLate > 0 ? numbersToArabic(this.state.totalDaysLate) : numbersToArabic(0)}</td>
                                 <th>ايام التبكير</th>
                                 <td>{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
+                            </tr>
+                            <tr>
+                                <th colSpan={3} style={{backgroundColor: 'white'}}></th>
+                            <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد العميل</th>
+                                <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.remainingTotal)}</td>
                             </tr>
                         </tbody>
                     </table>

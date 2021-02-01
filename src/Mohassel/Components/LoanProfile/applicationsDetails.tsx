@@ -12,6 +12,7 @@ import { getLoanOfficer } from './../../Services/APIs/LoanOfficers/searchLoanOff
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { beneficiaryType, currency, getErrorMessage, interestPeriod, periodType, timeToArabicDate } from "../../../Shared/Services/utils";
 import Swal from 'sweetalert2';
+import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 
 interface Props {
     application: any;
@@ -38,7 +39,6 @@ export const LoanDetailsTableView = ({ application, branchName }: LoanDetailsPro
             return ''
         }
     }
-
     useEffect(() => {
         const id = (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.find(member => member.type === 'leader').customer.representative : application.customer.representative
         getLoanUsages()
@@ -352,6 +352,7 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
 // this is used in the customer Card/status
 export const CustomerLoanDetailsBoxView = ({ application, getGeoArea }: Props) => {
     const [officer, changeOfficerName] = useState('')
+    const [remainingTotal, changeRemaining] = useState(0);
     async function getOfficerName(id) {
         const res = await getLoanOfficer(id);
         if (res.status === "success") {
@@ -362,8 +363,21 @@ export const CustomerLoanDetailsBoxView = ({ application, getGeoArea }: Props) =
             return ''
         }
     }
+
+    async function getRemainingLoan(id: string,status: string) {
+        if(status==='pending'|| status==='issued' && id){
+        const  res = await remainingLoan(id)
+        if(res.status==="success") {
+          changeRemaining(res.body.remainingTotal);
+        } else {
+            changeRemaining(0);
+        }
+       }
+    }
     useEffect(() => {
         getOfficerName(application.customer.representative);
+        const id = application.product.beneficiaryType === 'group' ? application?.group?.individualsInGroup[0]?.customer?._id : application.customer._id;
+        getRemainingLoan(id, application.status)
     }, [])
     return (
         <div>
@@ -418,6 +432,14 @@ export const CustomerLoanDetailsBoxView = ({ application, getGeoArea }: Props) =
                         </Row>
                         <Row>
                             <Form.Label>{officer}</Form.Label>
+                        </Row>
+                    </Form.Group>
+                    <Form.Group as={Col} md="3">
+                        <Row>
+                            <Form.Label>{local.customerBalance}</Form.Label>
+                        </Row>
+                        <Row>
+                            <Form.Label>{remainingTotal}</Form.Label>
                         </Row>
                     </Form.Group>
                 </Form.Row>
