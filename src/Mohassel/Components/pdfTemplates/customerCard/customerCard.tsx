@@ -9,6 +9,7 @@ interface Props {
     branchDetails: any;
     penalty: number;
     getGeoArea: Function;
+    remainingTotal: number;
 }
 interface State {
     totalDaysLate: number;
@@ -177,8 +178,7 @@ class CustomerCardPDF extends Component<Props, State> {
                             <tr>
                                 <th colSpan={3} style={{backgroundColor: 'white'}}></th>
                             <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد العميل</th>
-                                <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.data.installmentsObject.totalInstallments.installmentSum -
-                                 (this.props.data?.installmentsObject?.installments.reduce((accumulator, current) =>  accumulator +  current.totalPaid , 0)))}</td>
+                                <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.remainingTotal)}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -285,7 +285,7 @@ const CustomerStatusDetails = (props) => {
                                                         <td>{numbersToArabic(loan.totalPaid)}</td>
                                                         <td>{numbersToArabic(loan.totalFeesPaid)}</td>
                                                         <th>رصيد العميل</th>
-                                                        <td>{loan.status==='pening'|| 'issued' ? props.data.remainingTotla :0}</td>
+                                                        <td>{loan.status===('pening'|| 'issued') ? numbersToArabic(props.data.remainingTotla) :0}</td>
                                                         <th>أيام التأخير </th>
                                                         <td>{numbersToArabic(loan.lateDays)}</td>
                                                         <th> أيام التبكير </th>

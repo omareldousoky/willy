@@ -157,7 +157,6 @@ class Reports extends Component<{}, State> {
       } else {
        const remainingTotal = await this.getRemainingLoan(res.body._id);
         this.setState({
-
           data: {...res.body, remainingTotal }, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
         }, () => window.print())
       }
