@@ -12,7 +12,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { search, searchFilters, issuedLoansSearchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDropDowns';
-import { parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getFullCustomerKey, parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { getCookie } from '../../Services/getCookie';
 import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
@@ -100,6 +100,7 @@ class Search extends Component<Props, State> {
   submit = async (values) => {
     let obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
     delete obj.keyword;
+		const { url } = this.props
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
     if (obj.hasOwnProperty('toDate'))
@@ -111,16 +112,26 @@ class Search extends Component<Props, State> {
     if(obj.code) obj.code = isNaN(Number(obj.code)) ? 10 : Number(obj.code);
     if(obj.customerKey) obj.customerKey = Number(obj.customerKey);
     if(obj.customerCode) obj.customerCode = Number(obj.customerCode);
-    if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
+    if (obj.customerShortenedCode) {
+      if (url === "customer")
+        obj.key = Number(
+          getFullCustomerKey(obj.customerShortenedCode) || undefined
+        );
+      if (url === "application" || url === "loan")
+        obj.customerKey = Number(
+          getFullCustomerKey(obj.customerShortenedCode) || undefined
+        );
+    }
+    if(url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
     if(this.props.status) obj.status = this.props.status;
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
-    if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
-    if(this.props.url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
-    if(this.props.url==='supervisionsGroups') {obj.status = this.props.chosenStatus}
+    if(url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
+    if(url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
+    if(url==='supervisionsGroups') {obj.status = this.props.chosenStatus}
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
-    this.props.search({ ...obj, from: 0, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
+    this.props.search({ ...obj, from: 0, size: this.props.size, url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
   removeEmptyArg(obj) {
     Object.keys(obj).forEach(el => {
@@ -168,19 +179,22 @@ class Search extends Component<Props, State> {
       else return false;
     } else return true;
   }
+	
   getArValue(key: string){
-    switch(key) {
-      case 'name': return local.name;
-      case 'nationalId': return local.nationalId;
-      case 'key': return local.code;
-      case 'code': return local.partialCode;
-      case 'authorName': return local.employeeName;
-      case 'customerKey': return local.customerCode;
-      case 'customerCode': return local.customerPartialCode;
-      case 'userName': return local.username;
-      case 'hrCode': return local.hrCode;
-      default: return '';
-    }
+		const arDropDownValue = {
+			'name': local.name,
+			'nationalId': local.nationalId,
+			'key': local.code,
+			'code': local.partialCode,
+			'authorName': local.employeeName,
+			'customerKey': local.customerCode,
+			'customerCode': local.customerPartialCode,
+			'userName': local.username,
+			'hrCode': local.hrCode,
+			'customerShortenedCode': local.customerShortenedCode,
+			'default': ''
+		};
+		return arDropDownValue[key]
   }
   render() {
     return (

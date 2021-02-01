@@ -82,7 +82,7 @@ export const GuarantorTableView = (props: Props) => {
     }
     async function handleSearch(key, query) {
         const obj = {
-            [key]: (key === 'key') ? Number(query) : query,
+            [key]: query,
             from: 0,
             size: 1000,
             excludedIds: [props.customerId, ...props.guarantors.map(guar => guar._id)]

@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { getFullCustomerKey } from '../../../Shared/Services/utils';
 interface Customer {
     birthDate?: any;
     customerName?: string;
@@ -61,7 +62,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownArray: ['name', 'key', 'nationalId', 'code'],
+            dropDownArray: ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'],
             dropDownValue: 'name'
         }
     }
@@ -82,17 +83,33 @@ class CustomerSearch extends Component<Props, State>{
             case 'nationalId': return local.nationalId;
             case 'key': return local.code;
             case 'code': return local.partialCode;
+            case 'customerShortenedCode': return local.customerShortenedCode;
             default: return '';
         }
     }
-    handleSubmit = (e) => {
-        e.preventDefault();
-        if ((this.state.dropDownValue === 'nationalId' || this.state.dropDownValue === 'key' || this.state.dropDownValue === 'code') && isNaN(Number(this.state.searchKey))) {
-            Swal.fire("", local.SearchOnlyNumbers, "error");
-        } else {
-            this.props.handleSearch(this.state.dropDownValue, (this.state.dropDownValue === 'code') ? Number(this.state.searchKey) : this.state.searchKey)
-        }
-    };
+	handleSubmit = (e) => {
+    e.preventDefault();
+		const { handleSearch } = this.props;
+		const { dropDownValue, searchKey } = this.state;
+		const isKey = dropDownValue === "key";
+		const isCode = dropDownValue === "code";
+
+    if (
+      (dropDownValue === "nationalId" || isKey || isCode) &&
+      isNaN(Number(searchKey))
+    ) {
+      Swal.fire("", local.SearchOnlyNumbers, "error");
+    } else {
+      const isCustomerShortenedCode = dropDownValue === "customerShortenedCode";
+      const modifiedSearchKey = isCustomerShortenedCode
+        ? getFullCustomerKey(searchKey)
+        : searchKey;
+      handleSearch(
+        isCustomerShortenedCode ? "key" : dropDownValue,
+        isCode || isKey ? Number(modifiedSearchKey) : modifiedSearchKey
+      );
+    }
+  };
     render() {
         return (
             <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column', ...this.props.style }}>

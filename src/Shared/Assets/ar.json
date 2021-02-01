@@ -892,5 +892,6 @@
     "getSupervisionGroups":"مشاهدة كل مستويات الإشراف",
     "onlyArabicLetters": "أحرف عربيه فقط و مسافة واحدة بين الكلمات",
     "installmentSerialNumber": "رقم تسلسل القسط",
+		"customerShortenedCode": "كود العميل المختصر",
     "followUpStatement":"بيان متابعه"
 }
