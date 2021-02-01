@@ -50,7 +50,7 @@ const CustomerStatusDetails = (props) => {
                     <tbody>
                         <tr>
                             <td className="borderless" colSpan={100}>
-                                {props.data.Loans && props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
+                                {props.data.Loans && props.data.Loans.length > 0 ? props.data.Loans.map((loan, index) => {
                                     return (
                                         <div key={index} style={{ pageBreakAfter: 'always' }}>
                                             <table>
@@ -292,7 +292,41 @@ const CustomerStatusDetails = (props) => {
                                             </table>
                                         </div>
                                     )
-                                })}
+                                }): (
+																	<table>
+																		<tbody>
+																				<tr>
+																						<th className="frame gray" colSpan={100}>بيانات العميل</th>
+																				</tr>
+																				<tr>
+																						<th>الفرع الحالي</th>
+																						<td>{props.data.accountBranch}</td>
+																						<th>المندوب الحالي</th>
+																						<td>{props.data.officerName}</td>
+																				</tr>
+																				<tr>
+																						<th>الرقم القومي</th>
+																						<td>{numbersToArabic(props.data.nationalId)}</td>
+																						<th>بتاريخ</th>
+																						<td>{timeToArabicDate(props.data.nationalIdIssueDate, false)}</td>
+																						<th>النوع</th>
+																						<td>{arabicGender(props.data.gender)}</td>
+																				</tr>
+																				<tr>
+																						<th>تاريخ الميلاد</th>
+																						<td>{timeToArabicDate(props.data.birthDate, false)}</td>
+																						<th>البطاقه</th>
+																						<td>{props.data.nationalId}</td>
+																						<th>صادره من</th>
+																						<td></td>
+																				</tr>
+																				<tr>
+																						<th>ملاحظات</th>
+																						<td colSpan={3}></td>
+																				</tr>
+																		</tbody>
+																</table>
+																)}
                             </td>
                         </tr>
                     </tbody>
