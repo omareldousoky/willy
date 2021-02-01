@@ -206,8 +206,9 @@ const InstallmentsDuePerOfficerCustomerCard = (
               <td>{installmentStatuses[el.installmentStatus]}</td>
               <td>{numbersToArabic(el.installmentAmount)}</td>
               <td>{el.amountDue}</td>
-              <td>{numbersToArabic(el.phoneNumber)}</td>
-              <td>{numbersToArabic(el.businessNumber)}</td>
+              <td>{numbersToArabic(el.mobilePhone) || "لا يوجد"}</td>
+              <td>{numbersToArabic(el.homePhone) || "لا يوجد"}</td>
+              <td>{numbersToArabic(el.businessPhone) || "لا يوجد"}</td>
               <td>
                 <div style={{ display: "flex" }}>
                   <div style={{ flex: 1 }}>
@@ -258,6 +259,7 @@ const InstallmentsDuePerOfficerCustomerCard = (
             <th>{"حالة القسط"}</th>
             <th>{"قيمة القسط"}</th>
             <th>{"المستحق"}</th>
+            <th>{"الموبيل"}</th>
             <th>{"ت المنزل"}</th>
             <th>{"ت العمل"}</th>
             <th>{"رصيد مبلغ/عدد"}</th>
