@@ -4,6 +4,7 @@ import { getBirthdateFromNationalId } from "../../Services/nationalIdValidation"
 
 const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
+const beforeFeb2021 = new Date("1-31-2021").setHours(23, 59, 59, 59).valueOf()
 
 export const paymentValidation = Yup.object().shape({
   payAmount: Yup.number()
@@ -45,7 +46,13 @@ export const paymentValidation = Yup.object().shape({
   truthDate: Yup.string()
     .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
-    }),
+    }).when("paymentType", {
+      is: paymentType => paymentType !== "normal",
+      then: Yup.string().test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
+        return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
+      }),
+      otherwise: Yup.string()
+    })
 });
 
 export const earlyPaymentValidation = Yup.object().shape({
@@ -77,6 +84,9 @@ export const earlyPaymentValidation = Yup.object().shape({
   truthDate: Yup.string()
     .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+    })
+    .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
+      return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
     }),
 })
 
@@ -97,6 +107,9 @@ export const manualPaymentValidation = Yup.object().shape({
   truthDate: Yup.string()
     .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
       return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
+    })
+    .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
+      return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
     }),
   receiptNumber: Yup.string().required(local.required),
   payerType: Yup.string().required(local.required),
@@ -111,4 +124,11 @@ export const manualPaymentValidation = Yup.object().shape({
     otherwise: Yup.string()
   }),
   payerNationalId: Yup.string()
+})
+
+export const rollbackValidation = Yup.object().shape({
+  truthDate: Yup.date().required(local.required)
+    .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
+      return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
+    }),
 })
