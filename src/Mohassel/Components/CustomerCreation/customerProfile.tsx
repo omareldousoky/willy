@@ -33,6 +33,7 @@ export interface Score {
   iscore: string;
   nationalId: string;
   url?: string;
+  bankCode?: string;
 }
 const tabs: Array<Tab> = [
   {

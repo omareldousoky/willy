@@ -502,6 +502,6 @@ export const iscoreBank = (bankId: string) => {
     case 'PC04000001': return 'بنك مصر'
     case 'SB80000001': return 'بنك التنميه الصناعيه المصرى'
     case 'SB82010001': return 'البنك الرئيسى للتنمية والائتمان الزراعى'
-    default: return '';
+    default: return 'not  found';
   }
 }

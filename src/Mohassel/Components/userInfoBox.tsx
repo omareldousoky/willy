@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import * as local from '../../Shared/Assets/ar.json';
 import { getRenderDate } from '../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
-import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor } from '../../Shared/Services/utils';
+import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../Shared/Services/utils';
 import Can from '../config/Can';
 import { Score } from './CustomerCreation/customerProfile';
 
@@ -68,6 +68,7 @@ class InfoBox extends Component<Props, State>{
                         <Row>
                             <Form.Label style={{ color: iscoreStatusColor(iscore.iscore).color }}>{iscore.iscore} </Form.Label>
                             <Form.Label>{iscoreStatusColor(iscore.iscore).status} </Form.Label>
+                            <Form.Label>{iscore.bankCode && iscoreBank(iscore.bankCode)}</Form.Label>
                             {iscore.url && <Col>
                                 <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iscore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
                             </Col>}
