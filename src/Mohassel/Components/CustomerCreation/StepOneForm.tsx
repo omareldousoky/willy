@@ -148,7 +148,7 @@ export const StepOneForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-              disabled={(!allowed && props.edit && props.hasLoan) || !ability.can("updateNationalId", "customer")}
+              disabled={(!allowed && props.edit && props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
@@ -243,8 +243,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={6}>
           <Form.Group controlId="faxNumber">
             <Form.Label className="customer-form-label">{local.faxNumber}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
-              {allowed =><Form.Control
+              <Form.Control
               type="text"
               name="faxNumber"
               data-qc="faxNumber"
@@ -259,9 +258,7 @@ export const StepOneForm = (props: any) => {
               maxLength={11}
               minLength={10}
               isInvalid={errors.faxNumber && touched.faxNumber}
-              disabled={(!allowed && props.edit)}
-            />}
-            </Can>
+            />
             <Form.Control.Feedback type="invalid">
               {errors.faxNumber}
             </Form.Control.Feedback>
@@ -293,8 +290,7 @@ export const StepOneForm = (props: any) => {
 
       <Form.Group controlId="emailAddress">
         <Form.Label className="customer-form-label">{local.emailAddress}</Form.Label>
-        <Can I="updateNationalId" a="customer" passThrough>
-          {allowed =><Form.Control
+          <Form.Control
           type="text"
           name="emailAddress"
           data-qc="emailAddress"
@@ -302,17 +298,14 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.emailAddress && touched.emailAddress}
-          disabled={(!allowed && props.edit)}
-          />}
-        </Can>
+          />
         <Form.Control.Feedback type="invalid">
           {errors.emailAddress}
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group controlId="customerWebsite">
         <Form.Label className="customer-form-label">{local.customerWebsite}</Form.Label>
-        <Can I="updateNationalId" a="customer" passThrough>
-          {allowed => <Form.Control
+          <Form.Control
           type="text"
           name="customerWebsite"
           data-qc="customerWebsite"
@@ -320,9 +313,7 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.customerWebsite && touched.customerWebsite}
-          disabled={(!allowed && props.edit)}
-        />}
-        </Can>
+        />
         <Form.Control.Feedback type="invalid">
           {errors.customerWebsite}
         </Form.Control.Feedback>
