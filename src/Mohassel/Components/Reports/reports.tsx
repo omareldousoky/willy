@@ -37,6 +37,7 @@ import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } fr
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 import { downloadFile } from '../../../Shared/Services/utils';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
+import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport';
 
 export interface PDF {
   key?: string;
@@ -113,6 +114,7 @@ class Reports extends Component<{}, State> {
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       case 'cibPaymentReport': return this.getCibPaymentReport(values);
       case 'manualPayments': return this.getManualPayments(values);
+      case 'customerTransactionReport': return this.getCustomerTransactions(values);
       default: return null;
     }
   }
@@ -522,6 +524,35 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getCustomerTransactions(values) {
+    this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
+    const branches = values.branches.map((branch) => branch._id)
+    const obj = {
+      startdate: values.fromDate,
+      enddate: values.toDate,
+      branchList: branches.includes("") ? [""] : branches,
+      all: branches.includes("") || branches === [] ? "1" : "0",
+    }
+    // const res = await getManualPayments(obj);
+    // if (res.status === 'success') {
+    //   if (Object.keys(res.body).length === 0) {
+    //     this.setState({ loading: false });
+    //     Swal.fire("error", local.noResults)
+    //   } else {
+        this.setState({
+          // data: { result: res.body, },
+          fromDate: values.fromDate,
+          toDate: values.toDate,
+          showModal: false,
+          print: 'customerTransactionReport',
+          loading: false,
+        }, () => window.print())
+    //   }
+    // } else {
+    //   this.setState({ loading: false });
+    //   console.log(res)
+    // }
+  }
   async getExcelFile(func, pollFunc, values) {
     this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
     const obj = {
@@ -613,7 +644,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} canceled={this.state.data.canceled} net={this.state.data.net} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
-        {this.state.print === "customerTransactionReport" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
+        {this.state.print === "customerTransactionReport" && <CustomerTransactionReport result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
       </>
     )
   }
