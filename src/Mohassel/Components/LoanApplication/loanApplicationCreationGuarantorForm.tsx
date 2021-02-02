@@ -8,7 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import InfoBox from '../userInfoBox';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
-import { getGuarantorNumberInArabic } from '../../../Shared/Services/utils';
+import { guarantorOrderLocal } from '../../../Shared/Services/utils';
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -23,7 +23,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         <h5>{local.guarantorInfo}</h5>
                         <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                             {values.guarantors.map((guarantor, i) => {
-                                const text = getGuarantorNumberInArabic(i + 1)
+                                const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
                                 return (
                                     <Row key={i} style={{ width: '100%' }}>
                                         <CustomerSearch

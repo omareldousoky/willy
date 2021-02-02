@@ -12,7 +12,7 @@ import { LoanDetailsTableView } from '../LoanProfile/applicationsDetails';
 import InfoBox from '../userInfoBox';
 import Table from 'react-bootstrap/Table';
 import { getRejectionReasons } from '../../Services/APIs/configApis/config';
-import { getGuarantorNumberInArabic } from '../../../Shared/Services/utils';
+import { guarantorOrderLocal } from '../../../Shared/Services/utils';
 interface Props {
     status: string;
     application: any;
@@ -123,7 +123,7 @@ class StatusHelper extends Component<Props, State>{
                             const area = this.props.getGeoArea(guarantor.geoAreaId);
                             return (
                                 <tr key={guarantor._id}>
-                                    <td>{getGuarantorNumberInArabic(i + 1)}</td>
+                                    <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
                                     <td>{guarantor.code}</td>
                                     <td>{guarantor.customerName}</td>
                                     <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>

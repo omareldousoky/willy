@@ -461,18 +461,16 @@ export const getFullCustomerKey = (
   return Number(`11${branch.padStart(3, "0")}${customer.padStart(7, "0")}`);
 };
 
-export const getGuarantorNumberInArabic = (number: number) => {
-  switch (number) {
-      case 1: return 'الضامن الاول';
-      case 2: return 'الضامن الثاني';
-      case 3: return 'الضامن الثالث';
-      case 4: return 'الضامن الرابع';
-      case 5: return 'الضامن الخامس';
-      case 6: return 'الضامن السادس';
-      case 7: return 'الضامن السابع';
-      case 8: return 'الضامن الثامن';
-      case 9: return 'الضامن التاسع';
-      case 10: return 'الضامن العاشر';
-      default: return '';
-  }
+export const guarantorOrderLocal = {
+  0: "الضامن الاول",
+  1: "الضامن الثاني",
+  2: "الضامن الثالث",
+  3: "الضامن الرابع",
+  4: "الضامن الخامس",
+  5: "الضامن السادس",
+  6: "الضامن السابع",
+  7: "الضامن الثامن",
+  8: "الضامن التاسع",
+  9: "الضامن العاشر",
+  default: "الضامن"
 };
