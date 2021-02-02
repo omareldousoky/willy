@@ -1,127 +1,252 @@
-import React, { Component } from "react";
+import React, { ChangeEvent, PureComponent, SyntheticEvent } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Form from 'react-bootstrap/Form';
-import { changePassword } from '../../../Mohassel/Services/APIs/Auth/changePassword';
-import { logout } from '../../../Mohassel/Services/APIs/Auth/logout';
-import * as local from '../../Assets/ar.json';
-import { arabicGender } from "../../Services/utils";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
+import { changePassword } from "../../../Mohassel/Services/APIs/Auth/changePassword";
+import { logout } from "../../../Mohassel/Services/APIs/Auth/logout";
+import * as local from "../../Assets/ar.json";
+import { clearAllCookies } from "../../Services/getCookie";
+import { getErrorMessage } from "../../Services/utils";
 
-interface Props {
+interface ChangePasswordModalProps {
   show: boolean;
   handleClose: Function;
 }
 
-interface State {
-  oldPassword: string;
+interface ChangePasswordModalState {
+  currentPassword: string;
   newPassword: string;
-  errorInNewPassword: boolean;
+  confirmNewPassword: string;
+  newPasswordError?: string;
+  confirmNewPasswordError?: string;
+  error?: string;
 }
 
-export default class ChangePasswordModal extends Component<Props, State> {
-  state = {
-    oldPassword: "",
-    newPassword: "",
-    errorInNewPassword: false
-  };
+class ChangePasswordModal extends PureComponent<
+  ChangePasswordModalProps,
+  ChangePasswordModalState
+> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+    };
+  }
+
   handleClose = () => {
     const { handleClose } = this.props;
-    this.setState({
-        oldPassword: "",
+    this.setState(
+      {
+        currentPassword: "",
         newPassword: "",
-        errorInNewPassword: false
-
-    }, () => handleClose());
+        confirmNewPassword: "",
+      },
+      () => handleClose()
+    );
   };
-  handleChange = (key: string, value: string) =>{
-    let errorInNewPassword = this.state.errorInNewPassword;
+  handleChange = (key: string, value: string) => {
+    const {
+      newPassword,
+      currentPassword,
+      confirmNewPassword,
+      newPasswordError,
+      confirmNewPasswordError,
+      error,
+    } = this.state;
     const re = /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
-    if(key==='newPassword'){
-      const trimmedValue = value.trim()
-      if (trimmedValue === '' || re.test(trimmedValue)) errorInNewPassword = false
-      else errorInNewPassword = true
+    if (error) this.setState({ error: undefined });
+    if (key === "currentPassword" && newPassword) {
+      if (newPassword === value)
+        this.setState({
+          newPasswordError: local.newPasswordAsCurrentPasswordError,
+        });
+      else if (newPasswordError === local.newPasswordAsCurrentPasswordError)
+        this.setState({ newPasswordError: undefined });
     }
-    const newState = { [key]: value, errorInNewPassword } as Pick<State, keyof State>;
-    this.setState(newState)
+    if (key === "newPassword") {
+      if (!re.test(value))
+        this.setState({ newPasswordError: local.wrongNewPassword });
+      else if (value === currentPassword)
+        this.setState({
+          newPasswordError: local.newPasswordAsCurrentPasswordError,
+        });
+      else if (confirmNewPassword)
+        confirmNewPasswordError && confirmNewPassword === value
+          ? this.setState({ confirmNewPasswordError: undefined })
+          : this.setState({
+              confirmNewPasswordError: local.confirmPasswordCheck,
+            });
+      else this.setState({ newPasswordError: undefined });
+    }
 
-  }
-  handleSubmit = async ()=> {
-    const { oldPassword, newPassword} = this.state;
-    const res = await changePassword({ oldPassword, newPassword: newPassword.trim() });
-    if(res.status==='success'){
-      const res2 = await logout();
-      document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-      document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-      window.location.href = process.env.REACT_APP_LOGIN_URL || '';
+    if (key === "confirmNewPassword") {
+      if (this.state.newPassword !== value)
+        this.setState({ confirmNewPasswordError: local.confirmPasswordCheck });
+      else this.setState({ confirmNewPasswordError: undefined });
     }
+  };
+  handleSubmit = async () => {
+    const { currentPassword, newPassword } = this.state;
+    const res = await changePassword({
+      oldPassword: currentPassword,
+      newPassword,
+    });
+    if (res.status === "success") {
+      await logout();
+      clearAllCookies();
+      window.location.href = process.env.REACT_APP_LOGIN_URL || "";
+    }
+    if (res.status === "error") {
+      this.setState({ error: getErrorMessage(res.error.error) });
+    }
+  };
+
+  handleCloseModal() {
+    this.setState({
+      newPasswordError: undefined,
+      confirmNewPasswordError: undefined,
+      error: undefined,
+    });
+    this.handleClose();
   }
   render() {
     const { show } = this.props;
-    const { oldPassword, newPassword, errorInNewPassword } = this.state;
+    const {
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+      confirmNewPasswordError,
+      newPasswordError,
+      error,
+    } = this.state;
+    const disableSubmit =
+      !currentPassword ||
+      !newPassword ||
+      !confirmNewPassword ||
+      !!newPasswordError ||
+      !!confirmNewPasswordError;
     return (
-      <Modal show={show} onHide={() => this.handleClose()}>
+      <Modal show={show} onHide={() => this.handleCloseModal()}>
         <Modal.Header closeButton>
           <Modal.Title>{local.changePassword}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Col sm={12}>
-              <Form.Group controlId="interest" style={{ textAlign: 'right' }}>
-                <Form.Label column sm={6} style={{ marginRight: 0 }}>
-                  {local.oldPassword}
-                  {/* Old Password */}
-                </Form.Label>
-                <InputGroup>
-                  <Form.Control
-                    type="string"
-                    name="oldPassword"
-                    data-qc="oldPassword"
-                    value={oldPassword}
-                    onChange={(e) => {this.handleChange('oldPassword', e.target.value)}}
-                  />
-                </InputGroup>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12}>
-              <Form.Group controlId="interest" style={{ textAlign: 'right' }}>
-                <Form.Label column sm={6} style={{ marginRight: 0 }}>
-                  {local.newPassword}
-                  {/* New Password */}
-                </Form.Label>
-                <InputGroup>
-                  <Form.Control
-                    type="string"
-                    name="newPassword"
-                    data-qc="newPassword"
-                    value={newPassword}
-                    onChange={(e) => {this.handleChange('newPassword', e.target.value)}}
-                    isInvalid={errorInNewPassword}
-                  />
-                   <Form.Control.Feedback type="invalid">
-                    {local.wrongNewPassword}
-                  </Form.Control.Feedback>
-                </InputGroup>
-              </Form.Group>
-            </Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="outline-secondary"
-            onClick={() => this.handleClose()}
-          >
-            {local.cancel}
-          </Button>
-          <Button variant="outline-primary" onClick={() => this.handleSubmit()} disabled={!oldPassword || !newPassword || errorInNewPassword || oldPassword === newPassword}>
-            {local.save}
-          </Button>
-        </Modal.Footer>
+        <Form
+          onSubmit={(e: SyntheticEvent) => {
+            e.preventDefault();
+            console.log(disableSubmit);
+            if (!disableSubmit) return this.handleSubmit();
+          }}
+        >
+          <Modal.Body>
+            <Row>
+              <Col sm={12}>
+                <Form.Group controlId="currentPassword" className="text-right">
+                  <Form.Label column sm={6} className="mr-0 pr-0">
+                    {local.currentPassword}
+                  </Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      type="password"
+                      name="currentPassword"
+                      data-qc="currentPassword"
+                      value={currentPassword}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const trimmedValue = e.target.value.trim();
+                        this.setState({ currentPassword: trimmedValue });
+                        this.handleChange("currentPassword", trimmedValue);
+                      }}
+                    />
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12}>
+                <Form.Group controlId="newPassword" className="text-right">
+                  <Form.Label column sm={6} className="mr-0 pr-0">
+                    {local.newPassword}
+                  </Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      type="password"
+                      name="newPassword"
+                      data-qc="newPassword"
+                      className="rounded"
+                      value={newPassword}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const trimmedValue = e.target.value.trim();
+                        this.setState({ newPassword: trimmedValue });
+                        this.handleChange("newPassword", trimmedValue);
+                      }}
+                      isInvalid={!!newPasswordError}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {newPasswordError}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12}>
+                <Form.Group
+                  controlId="confirmNewPassword"
+                  className="text-right"
+                >
+                  <Form.Label column sm={6} className="mr-0 pr-0">
+                    {local.confirmNewPassword}
+                  </Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      type="password"
+                      name="confirmNewPassword"
+                      data-qc="confirmNewPassword"
+                      className="rounded"
+                      value={confirmNewPassword}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const trimmedValue = e.target.value.trim();
+                        this.setState({ confirmNewPassword: trimmedValue });
+                        this.handleChange("confirmNewPassword", trimmedValue);
+                      }}
+                      isInvalid={!!confirmNewPasswordError}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {confirmNewPasswordError}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                {error && <p className="text-danger text-right">{error}</p>}
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="outline-secondary"
+              onClick={() => this.handleClose()}
+            >
+              {local.cancel}
+            </Button>
+            <Button
+              variant="outline-primary"
+              type={disableSubmit ? "button" : "submit"}
+              disabled={disableSubmit}
+            >
+              {local.save}
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     );
   }
 }
+
+export default ChangePasswordModal;

@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import * as local from '../../Assets/ar.json';
 import Can from '../../../Mohassel/config/Can';
 import { Loader } from '../Loader';
-import { getCookie } from '../../Services/getCookie';
+import { clearAllCookies, getCookie } from '../../Services/getCookie';
 import { parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { contextBranch } from '../../../Mohassel/Services/APIs/Login/contextBranch';
 import ability from '../../../Mohassel/config/ability';
@@ -119,20 +119,32 @@ class NavBar extends Component<Props, State> {
             })}
         </div>
         {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
-        <div className="item">
-          <Button variant="outline-success" style={{ backgroundColor: '#7dc356', borderColor: '#7dc356', color: 'white' }} 
-            onClick={() => { this.setState({ openChangePassword: true }) }}>{local.changePassword}</Button>
+        <div className="d-flex mt-3 mx-4">
+          <Button
+            variant="success"
+            className="w-100 text-white m-auto"
+            onClick={() => {
+              this.setState({ openChangePassword: true });
+            }}
+          >
+            {local.changePassword}
+          </Button>
         </div>
-        <div className="item">
-          <Button variant="outline-secondary" onClick={ async() => {
-            const res = await logout();
-            document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            window.location.href = process.env.REACT_APP_LOGIN_URL || '';
-          }}>{local.logOut}</Button>
+        <div className="d-flex my-3 mx-4">
+          <Button
+            variant="outline-secondary"
+            className="w-100 m-auto"
+            onClick={async () => {
+              await logout();
+              clearAllCookies();
+              window.location.href = process.env.REACT_APP_LOGIN_URL || "";
+            }}
+          >
+            {local.logOut}
+          </Button>
         </div>
       </div>
-    )
+    );
   }
   renderNoResults() {
     return (
