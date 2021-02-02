@@ -13,6 +13,7 @@ import { getCookie } from '../../../Shared/Services/getCookie';
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import Swal from 'sweetalert2';
+import ability from '../../config/ability';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -193,7 +194,7 @@ export const StepThreeForm = (props: any) => {
             </Row>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
-                    props.edit && allowed &&
+                    props.edit && allowed && ability.can("updateCustomerHasLoan","customer") &&
                     <Row>
                         <Col sm={6}>
                             <Form.Group style={{ textAlign: 'right' }}>
@@ -214,10 +215,10 @@ export const StepThreeForm = (props: any) => {
             </Can>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
-                    props.edit && allowed &&
+                    props.edit && allowed && 
                     <>
                         <Row>
-                            <Col sm={6}>
+                            {ability.can("updateCustomerHasLoan","customer") && <> <Col sm={6}>
                                 <Form.Group controlId="maxLoansAllowed">
                                     <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
                                     <Form.Control
@@ -252,7 +253,7 @@ export const StepThreeForm = (props: any) => {
                                         {errors.guarantorMaxLoans}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                            </Col>
+                            </Col> </>}
                         </Row>
                         <Row>
                             <Col sm={6}>
