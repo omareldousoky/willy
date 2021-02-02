@@ -14,11 +14,14 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from "../../../Shared/Services/utils";
-
+import { getCookie } from '../../../Shared/Services/getCookie';
+import { getBranch } from '../../Services/APIs/Branch/getBranch';
 interface State {
   size: number;
   from: number;
   manageAccountTabs: any[];
+  branchId: string;
+  branch: object;
 }
 interface Props {
   history: any;
@@ -39,6 +42,9 @@ class BranchesList extends Component<Props, State> {
       size: 10,
       from: 0,
       manageAccountTabs: [],
+      branchId: JSON.parse(getCookie('ltsbranch'))._id,
+      branch:{},
+
     }
     this.mappers = [
       {
@@ -71,31 +77,43 @@ class BranchesList extends Component<Props, State> {
         render: data => <>
           <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"view"} src={require('../../Assets/view.svg')}
             onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/branch-details", state: { details: data._id } }) }}></img>
-          <img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}
-            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } }) }}></img>
+         <Can I='createBranch' a='branch'><img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}
+            onClick={() => { this.props.history.push({ pathname: "/manage-accounts/branches/edit-branch", state: { details: data._id } }) }}></img> </Can> 
         </>
       },
     ]
   }
   componentDidMount() {
+    if(this.state.branchId==='hq'){
     this.props.search({ size: this.state.size, from: this.state.from, url: 'branch' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
-    );;
+    );
+  } else {
+    this.getBranchByID();
+  }
     this.setState({
       manageAccountTabs: manageAccountsArray()
     })
   }
   getBranches() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch' }).then(()=>{
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'branch', branchId: this.state.branchId !== 'hq' ? this.state.branchId : '' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
-    );;
+    );
+  }
+  async getBranchByID(){
+      const res = await getBranch(this.state.branchId);
+      if(res.status=='success'){
+        if(res.body?.data)
+        this.setState({branch: res.body.data})
+      }
   }
   componentWillUnmount(){
     this.props.setSearchFilters({})
+    this.props.search({url: 'clearData'})
   }
   render() {
     return (
@@ -119,7 +137,7 @@ class BranchesList extends Component<Props, State> {
               </div>
             </div>
             <hr className="dashed-line" />
-            <Search
+            {this.state.branchId === 'hq' && <Search
               searchKeys={['keyword', 'dateFromTo']} 
               dropDownKeys={['name', 'code']} 
               searchPlaceholder={local.searchByBranchNameOrCode}
@@ -127,12 +145,22 @@ class BranchesList extends Component<Props, State> {
               setFrom= {(from) => this.setState({from: from})}
              from={this.state.from} 
              size={this.state.size} />
+            }
+            {
+              (this.state.branchId !=='hq' && this.state.branch ) &&
+              <DynamicTable
+              totalCount={1}
+              mappers={this.mappers}
+              pagination={false}
+              data={[this.state.branch]}
+            />
+            }
             {this.props.data &&
               <DynamicTable
                 url="branch"
                 from={this.state.from} 
                 size={this.state.size}
-                totalCount={this.props.totalCount}
+                totalCount={ this.props.totalCount}
                 mappers={this.mappers}
                 pagination={true}
                 data={this.props.data}

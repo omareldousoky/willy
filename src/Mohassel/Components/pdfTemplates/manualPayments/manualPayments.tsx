@@ -53,7 +53,7 @@ const statusLocalization = (status: string) => {
         case 'partiallyPaid':
             return ('مدفوع جزئيا');
         case 'unpaid':
-            return ('لم يستحق');
+            return ('غير مسدد');
         case 'pending':
             return ('قيد التحقيق');
         case 'issued':

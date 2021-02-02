@@ -17,7 +17,9 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
 import Swal from 'sweetalert2';
-import { getErrorMessage } from '../../../Shared/Services/utils';
+import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
+import ManagerProfile from '../managerHierarchy/managersView';
+import  SupervisionsProfile  from '../managerHierarchy/supervisionsProfile';
 interface Props {
     history: any;
     getBranchById: typeof getBranchById;
@@ -136,6 +138,18 @@ interface State {
             stringKey: 'issuedLoan',
         })
     }
+    if(ability.can("getBranchManagersHierarchy","branch")) {
+        tabsToRender.push({
+            header: local.managers,
+            stringKey: 'managers'
+        })
+    }
+    if(ability.can("getOfficersGroups","branch")) {
+        tabsToRender.push({
+            header: local.levelsOfSupervision,
+            stringKey: 'levelsOfSupervision'
+        })
+    }
 
       this.setState({
           tabsArray: tabsToRender
@@ -167,6 +181,24 @@ interface State {
              case 'customers':   return (<Can I='getCustomer' a='customer'><CustomersList {...{branchId: this.state._id}}/></Can>)
              case 'loanApplication': return (<Can I='getLoanApplication' a='application'><TrackLoanApplications {...{branchId: this.state._id}}/></Can>)
              case 'issuedLoan': return (<Can I='getIssuedLoan' a='application'> <LoanList {...{branchId: this.state._id, fromBranch: true}}/></Can>)
+             case 'managers' : return (<Can I = "getBranchManagersHierarchy" a="branch"> <ManagerProfile 
+                 branchId ={this.state._id}
+                 branchCode={this.state.data.branchCode} 
+                 name ={this.state.data.name}
+                 createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
+                 status ={this.state.data.status}
+                 /></Can>)
+             case 'levelsOfSupervision'  : return (
+              <Can I="getOfficersGroups"  a="branch">
+                <SupervisionsProfile
+                branchId ={this.state._id}
+                branchCode={this.state.data.branchCode} 
+                name ={this.state.data.name}
+                createdAt = { this.state.data.created?.at ? timeToArabicDate(this.state.data.created.at , true) : ''}
+                status ={this.state.data.status} 
+                 />
+                  </Can> 
+             ) 
              default: return null;   
         }
     }
@@ -191,7 +223,7 @@ interface State {
             
             <div className={'rowContainer'}>
                 <BackButton title={local.branchDetails} />
-                {this.renderEditIcon()}
+                <Can I='createBranch' a='branch'>{this.renderEditIcon()}</Can>
             </div>
             <Card  className={'card'}>
             <Loader type="fullscreen" open={this.props.loading || this.state.productsLoading}  />

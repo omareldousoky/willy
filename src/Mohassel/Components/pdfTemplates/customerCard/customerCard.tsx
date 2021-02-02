@@ -9,12 +9,17 @@ interface Props {
     branchDetails: any;
     penalty: number;
     getGeoArea: Function;
+    remainingTotal: number;
 }
 interface State {
     totalDaysLate: number;
     totalDaysEarly: number;
 }
 
+export function shareInGroup(value, total, installment){
+    const share = ((value/total)*installment).toFixed(2);
+    return share
+}
 class CustomerCardPDF extends Component<Props, State> {
     constructor(props) {
         super(props);
@@ -51,7 +56,7 @@ class CustomerCardPDF extends Component<Props, State> {
         this.props.data.installmentsObject.installments.forEach(installment => {
             max = max + installment[key];
         })
-        return max;
+        return max.toFixed(2);
     }
     render() {
         return (
@@ -174,6 +179,11 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <th>ايام التبكير</th>
                                 <td>{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                             </tr>
+                            <tr>
+                                <th colSpan={3} style={{backgroundColor: 'white'}}></th>
+                            <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد العميل</th>
+                                <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.remainingTotal)}</td>
+                            </tr>
                         </tbody>
                     </table>
                     <table className="tablestyle" style={{ border: "1px black solid" }}>
@@ -190,6 +200,8 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <tr>
                                         <th>كود العضو</th>
                                         <th>اسم العضو</th>
+                                        <th>التمويل</th>
+                                        <th>القسط</th>
                                         <th>المنطقه</th>
                                         <th>العنوان</th>
                                         <th>تليفون</th>
@@ -216,6 +228,8 @@ class CustomerCardPDF extends Component<Props, State> {
                                             <tr key={index}>
                                                 <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                                 <td>{individualInGroup.customer.customerName}</td>
+                                                <td>{numbersToArabic(individualInGroup.amount)}</td>
+                                                <td>{numbersToArabic(shareInGroup(individualInGroup.amount, this.props.data.principal, this.props.data.installmentsObject.installments[0].installmentResponse))}</td>
                                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                                 <td>{individualInGroup.customer.customerHomeAddress}</td>
                                                 <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
