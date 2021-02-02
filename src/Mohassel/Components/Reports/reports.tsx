@@ -79,6 +79,7 @@ class Reports extends Component<{}, State> {
         { key: 'loanApplicationFees', local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
         { key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen' },
         { key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo', 'branches'], permission: 'manualPayments' },
+        { key: 'customerTransactionReport', local: 'الحركة تبعا للعميل', inputs: ['dateFromTo'], permission: 'manualPayments' },
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -612,6 +613,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} canceled={this.state.data.canceled} net={this.state.data.net} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
+        {this.state.print === "customerTransactionReport" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
       </>
     )
   }
