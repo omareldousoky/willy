@@ -37,6 +37,7 @@ import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } fr
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 import { downloadFile } from '../../../Shared/Services/utils';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
+import { ArrearsPayed } from '../pdfTemplates/ arrearsPayed/ arrearsPayed';
 
 export interface PDF {
   key?: string;
@@ -79,6 +80,7 @@ class Reports extends Component<{}, State> {
         { key: 'loanApplicationFees', local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
         { key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen' },
         { key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo', 'branches'], permission: 'manualPayments' },
+        {key: 'arrearsPayed', local: ' حركات سداد على المتأخرات', permission:'manualPayments',}
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -112,6 +114,7 @@ class Reports extends Component<{}, State> {
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
       case 'cibPaymentReport': return this.getCibPaymentReport(values);
       case 'manualPayments': return this.getManualPayments(values);
+      case 'arrearsPayed': return this.getArrearsPayed();
       default: return null;
     }
   }
@@ -567,6 +570,12 @@ class Reports extends Component<{}, State> {
       Swal.fire("error", 'TimeOut')
     }
   }
+  async getArrearsPayed() {
+    this.setState({
+      print: 'arrearsPayed',
+      showModal: false,
+    }, () => window.print())
+  }
   render() {
     return (
       <>
@@ -612,6 +621,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} canceled={this.state.data.canceled} net={this.state.data.net} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
+        {this.state.print === "arrearsPayed" && <ArrearsPayed />}
       </>
     )
   }
