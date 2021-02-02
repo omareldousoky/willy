@@ -11,6 +11,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
+import ability from '../../config/ability';
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -46,7 +47,7 @@ export const StepOneForm = (props: any) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isInvalid={errors.customerName && touched.customerName}
-                disabled={(!allowed && props.edit && props.hasLoan)}
+                disabled={(!allowed && props.edit && props.hasLoan) || !ability.can("updateNationalId", "customer")}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -91,7 +92,7 @@ export const StepOneForm = (props: any) => {
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}
                 maxLength={14}
-                disabled={(!allowed && props.edit && props.hasLoan)}
+                disabled={(!allowed && props.edit && props.hasLoan) || !ability.can("updateNationalId", "customer")}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -147,7 +148,7 @@ export const StepOneForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-              disabled={(!allowed && props.edit && props.hasLoan)}
+              disabled={(!allowed && props.edit && props.hasLoan) || !ability.can("updateNationalId", "customer")}
               />}
             </Can>
             <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
