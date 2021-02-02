@@ -27,8 +27,6 @@ interface Props {
 interface State {
   size: number;
   from: number;
-  iScoreModal: boolean;
-  iScoreCustomers: any;
   loading: boolean;
   searchKeys: any;
   manageLoansTabs: any[];
@@ -41,8 +39,6 @@ class LoanList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      iScoreModal: false,
-      iScoreCustomers: [],
       loading: false,
       searchKeys: ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff'],
       manageLoansTabs: []

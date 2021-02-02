@@ -435,7 +435,7 @@ export const iscoreStatusColor = (score: any) => {
   else if (score === -1) { iscoreColor = '#ffbad2'; iscorStatus = 'خطأ عند الاستعلام'; }
   else if (score === 1) { iscoreColor = '#c0c0c0'; iscorStatus = 'لا توجد بيانات متاحه'; }
   else if (score === 0) { iscoreColor = '#ffffff'; iscorStatus = 'التقييم الرقمى غيرمتاح'; }
-  else { iscoreColor = '#c0c0c0'; iscorStatus = '-'; }
+  else { iscoreColor = '#c0c0c0'; iscorStatus = ''; }
   const iScoreStatusObj = { color: iscoreColor, status: iscorStatus }
   return iScoreStatusObj
 }
