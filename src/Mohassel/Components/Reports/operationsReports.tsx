@@ -23,6 +23,7 @@ import {
 } from "../../Services/APIs/Reports/officersPercentPayment";
 import OfficersPercentPayment from "../pdfTemplates/officersPercentPayment/officersPercentPayment";
 import OfficerBranchPercentPayment from "../pdfTemplates/officersPercentPayment/officersBranchPercentPayment";
+import LeakedCustomersPDF from "../pdfTemplates/LeakedCustomers/leakedCustomers";
 
 export interface PDF {
     key?: string;
@@ -49,6 +50,7 @@ enum Reports {
     UnpaidInstallmentsByOfficer = "unpaidInstallmentsByOfficer",
     InstallmentsDuePerOfficerCustomerCard = "installmentsDuePerOfficerCustomerCard",
     UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea",
+    LeakedCustomers = "leakedCustomers"
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -94,6 +96,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                     inputs: ["dateFromTo", "branches"],
                     permission: "officerBranchPercentPayment",
                 },
+                {
+                    key: Reports.LeakedCustomers,
+                    local:"تقرير العملاء المتسربون",
+                    inputs:["dateFromTo"], //should be changed
+                    permission:"officerBranchPercentPayment" //should be changed
+                }
             ],
             selectedPdf: { permission: "" },
             data: {},
@@ -130,6 +138,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 return this.fetchOfficersPercentPayment(values);
             case Reports.OfficersBranchPercentPayment:
                 return this.fetchOfficersBranchPercentPayment(values);
+            case Reports.LeakedCustomers:
+                return this.fetchLeakedCustomers(values);
             default:
                 return null;
         }
@@ -211,6 +221,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             this.reportRequest(values)
         );
         this.handleFetchReport(res, Reports.OfficersBranchPercentPayment);
+    }
+
+    async fetchLeakedCustomers(values) {
+        // this.handleFetchReport()
+        window.print()
+        this.setState({loading: false, print: Reports.LeakedCustomers})
     }
     render() {
         return (
@@ -322,6 +338,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 )}
                 {this.state.print === Reports.OfficersBranchPercentPayment && (
                     <OfficerBranchPercentPayment
+                        data={this.state.data}
+                        fromDate={this.state.fromDate}
+                        toDate={this.state.toDate}
+                    />
+                )}
+                {console.log(this.state.print)}
+                {this.state.print === Reports.LeakedCustomers && (
+                    <LeakedCustomersPDF
                         data={this.state.data}
                         fromDate={this.state.fromDate}
                         toDate={this.state.toDate}
