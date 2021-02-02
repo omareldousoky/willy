@@ -460,3 +460,19 @@ export const getFullCustomerKey = (
   const [branch, customer] = matchResult[0].split("/");
   return Number(`11${branch.padStart(3, "0")}${customer.padStart(7, "0")}`);
 };
+
+export const getGuarantorNumberInArabic = (number: number) => {
+  switch (number) {
+      case 1: return 'الضامن الاول';
+      case 2: return 'الضامن الثاني';
+      case 3: return 'الضامن الثالث';
+      case 4: return 'الضامن الرابع';
+      case 5: return 'الضامن الخامس';
+      case 6: return 'الضامن السادس';
+      case 7: return 'الضامن السابع';
+      case 8: return 'الضامن الثامن';
+      case 9: return 'الضامن التاسع';
+      case 10: return 'الضامن العاشر';
+      default: return '';
+  }
+};

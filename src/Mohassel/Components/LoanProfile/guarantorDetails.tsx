@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, getErrorMessage, iscoreStatusColor } from "../../../Shared/Services/utils";
+import { downloadFile, getErrorMessage, getGuarantorNumberInArabic, iscoreStatusColor } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -243,6 +243,7 @@ export const GuarantorTableView = (props: Props) => {
                 {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{local.guarantorCode}</th>
                             <th>{local.name}</th>
                             <th>{local.area}</th>
@@ -260,6 +261,7 @@ export const GuarantorTableView = (props: Props) => {
                             const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
                             const area = props.getGeoArea(guar.geoAreaId);
                             return (<tr key={i}>
+                                <td>{getGuarantorNumberInArabic(i + 1)}</td>
                                 <td>{guar.key}</td>
                                 <td>{guar.customerName}</td>
                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
@@ -279,10 +281,10 @@ export const GuarantorTableView = (props: Props) => {
                 </Table>
                     : <p>{local.noGuarantors}</p>}
             </div>
-            {modalView && <Modal show={modalView} onHide={() => changeModal(false)}>
+            {modalView && <Modal size='lg' show={modalView} onHide={() => changeModal(false)}>
                 <Loader type='fullsection' open={loading} />
                 <Modal.Header>
-                    <Modal.Title>{local.addGuarantor}</Modal.Title>
+                    <Modal.Title>{local.add} {getGuarantorNumberInArabic(props.guarantors.length + 1)}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <CustomerSearch
@@ -292,6 +294,7 @@ export const GuarantorTableView = (props: Props) => {
                         searchResults={searchResults}
                         selectCustomer={(guarantor) => { selectGuarantor(guarantor) }}
                         selectedCustomer={selectedGuarantor}
+                        header={getGuarantorNumberInArabic(props.guarantors.length + 1)}
                     />
                 </Modal.Body>
                 <ModalFooter>
