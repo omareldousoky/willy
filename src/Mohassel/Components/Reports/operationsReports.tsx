@@ -23,7 +23,9 @@ import {
 } from "../../Services/APIs/Reports/officersPercentPayment";
 import OfficersPercentPayment from "../pdfTemplates/officersPercentPayment/officersPercentPayment";
 import OfficerBranchPercentPayment from "../pdfTemplates/officersPercentPayment/officersBranchPercentPayment";
-import PartialPayment from "../pdfTemplates/partialPayment/partialPayment";
+import { fetchDueInstallmentsReport } from "../../Services/APIs/Reports/dueInstallments";
+import DueInstallments from "../pdfTemplates/dueInstallments/dueInstallments";
+import { convertToTimestamp } from "../../../Shared/Services/utils";
 
 export interface PDF {
   key?: string;
@@ -50,7 +52,7 @@ enum Reports {
   UnpaidInstallmentsByOfficer = "unpaidInstallmentsByOfficer",
   InstallmentsDuePerOfficerCustomerCard = "installmentsDuePerOfficerCustomerCard",
   UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea",
-  PartialPayment = "partialPayment",
+  DueInstallments = "dueInstallments",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -97,11 +99,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           permission: "officerBranchPercentPayment",
         },
         {
-          key: Reports.PartialPayment,
+          key: Reports.DueInstallments,
           local: "ملخص الأقساط المستحقة (تقرير السداد الجزئي) ",
           inputs: ["dateFromTo", "branches"],
-          // TODO: change
-          permission: "officerBranchPercentPayment",
+          permission: "dueInstallments",
         },
       ],
       selectedPdf: { permission: "" },
@@ -139,6 +140,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchOfficersPercentPayment(values);
       case Reports.OfficersBranchPercentPayment:
         return this.fetchOfficersBranchPercentPayment(values);
+      case Reports.DueInstallments:
+        return this.fetchDueInstallments(values);
       default:
         return null;
     }
@@ -146,7 +149,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
 
   handleFetchReport(res: ApiResponse<any>, report: Reports) {
     if (res.status === "success") {
-      if (!res.body) {
+      if (!res.body || !Object.keys(res.body).length) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults);
       } else {
@@ -219,6 +222,19 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     );
     this.handleFetchReport(res, Reports.OfficersBranchPercentPayment);
   }
+
+  async fetchDueInstallments(values) {
+    const { fromDate, toDate } = values;
+    const res = await fetchDueInstallmentsReport(
+      this.reportRequest({
+        ...values,
+        fromDate: convertToTimestamp(fromDate),
+        toDate: convertToTimestamp(toDate),
+      })
+    );
+    this.handleFetchReport(res, Reports.DueInstallments);
+  }
+
   render() {
     return (
       <>
@@ -268,16 +284,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                           alt="download"
                           data-qc="download"
                           src={require(`../../Assets/green-download.svg`)}
-                          onClick={() =>
-                            // this.handlePrint(pdf)
-                            this.setState(
-                              {
-                                selectedPdf: pdf,
-                                loading: false,
-                              },
-                              () => window.print()
-                            )
-                          }
+                          onClick={() => this.handlePrint(pdf)}
                         />
                       </div>
                     </Card.Body>
@@ -337,13 +344,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             toDate={this.state.toDate}
           />
         )}
-        {/* {this.state.print === Reports.PartialPayment && ( */}
-        <PartialPayment
-          data={this.state.data}
-          fromDate={this.state.fromDate}
-          toDate={this.state.toDate}
-        />
-        {/* )} */}
+        {this.state.print === Reports.DueInstallments && (
+          <DueInstallments
+            data={this.state.data}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+          />
+        )}
       </>
     );
   }

@@ -231,9 +231,10 @@ export const pathTo = route => {
   return [...pathTo(route.parent), route];
 };
 
-export const numbersToArabic = (input: number | string) => {
+export const numbersToArabic = (input?: number | string) => {
+  if (input === undefined) return "۰";
   if (input || input === 0) {
-    const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
+    const id = ['۰', '۱', '۲', '۳', '٤', '٥', '٦', '۷', '۸', '۹'];
     const inputStr = input.toString();
     return inputStr.replace(/[0-9]/g, (number) => {
       return id[number]
@@ -450,3 +451,9 @@ export const getCurrentTime = () => {
         s < 10 ? `0${s}` : s
     }`;
 };
+
+export const convertToTimestamp = (date?: string | number): number => {
+	const today = new Date().valueOf();
+	return date ?  new Date(date).valueOf() || today : today;
+}
+
