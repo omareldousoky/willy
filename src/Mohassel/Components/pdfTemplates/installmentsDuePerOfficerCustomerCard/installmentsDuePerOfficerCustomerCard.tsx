@@ -21,9 +21,17 @@ interface InstallmentsDuePerOfficerCustomerCardProps {
   data: any;
 }
 
+function setPageSize() {
+  const style = document.createElement('style');
+  style.innerHTML = `@page {size: landscape}`;
+  style.id = 'page-orientation';
+  document.head.appendChild(style);
+}
+
 const InstallmentsDuePerOfficerCustomerCard = (
   props: InstallmentsDuePerOfficerCustomerCardProps
 ) => {
+  setPageSize();
   const renderHeader = (fromDate, toDate) => {
     return (
       <div style={{ display: "flex" }}>
