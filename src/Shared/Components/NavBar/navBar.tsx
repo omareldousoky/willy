@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import * as local from '../../Assets/ar.json';
 import Can from '../../../Mohassel/config/Can';
 import { Loader } from '../Loader';
-import { getCookie } from '../../Services/getCookie';
+import { clearAllCookies, getCookie } from '../../Services/getCookie';
 import { parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { contextBranch } from '../../../Mohassel/Services/APIs/Login/contextBranch';
 import ability from '../../../Mohassel/config/ability';
@@ -17,6 +17,7 @@ import { setToken } from '../../token';
 import { connect } from 'react-redux';
 import { Auth } from '../../redux/auth/types'
 import { logout } from '../../../Mohassel/Services/APIs/Auth/logout';
+import ChangePasswordModal from "../changePasswordModal/changePasswordModal";
 interface Props {
   history: any;
   auth: Auth;
@@ -32,6 +33,7 @@ interface State {
   openBranchList: boolean;
   loading: boolean;
   searchKeyWord: string;
+  openChangePassword: boolean;
 }
 class NavBar extends Component<Props, State> {
   constructor(props: Props) {
@@ -44,7 +46,8 @@ class NavBar extends Component<Props, State> {
       searchKeyWord: '',
       branches: [],
       openBranchList: false,
-      loading: false
+      loading: false,
+      openChangePassword: false
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -116,16 +119,32 @@ class NavBar extends Component<Props, State> {
             })}
         </div>
         {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord)).length === 0 ? this.renderNoResults() : null}
-        <div className="item">
-          <Button variant="outline-secondary" onClick={ async() => {
-            const res = await logout();
-            document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            document.cookie = "ltsbranch=; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-            window.location.href = process.env.REACT_APP_LOGIN_URL || '';
-          }}>{local.logOut}</Button>
+        <div className="d-flex mt-3 mx-4">
+          <Button
+            variant="success"
+            className="w-100 text-white m-auto"
+            onClick={() => {
+              this.setState({ openChangePassword: true });
+            }}
+          >
+            {local.changePassword}
+          </Button>
+        </div>
+        <div className="d-flex my-3 mx-4">
+          <Button
+            variant="outline-secondary"
+            className="w-100 m-auto"
+            onClick={async () => {
+              await logout();
+              clearAllCookies();
+              window.location.href = process.env.REACT_APP_LOGIN_URL || "";
+            }}
+          >
+            {local.logOut}
+          </Button>
         </div>
       </div>
-    )
+    );
   }
   renderNoResults() {
     return (
@@ -207,6 +226,10 @@ class NavBar extends Component<Props, State> {
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
+        <ChangePasswordModal
+          show={this.state.openChangePassword}
+          handleClose={()=> this.setState({ openChangePassword:false })}
+        />
       </>
     )
   }
