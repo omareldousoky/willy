@@ -38,17 +38,6 @@ class ChangePasswordModal extends PureComponent<
     };
   }
 
-  handleClose = () => {
-    const { handleClose } = this.props;
-    this.setState(
-      {
-        currentPassword: "",
-        newPassword: "",
-        confirmNewPassword: "",
-      },
-      () => handleClose()
-    );
-  };
   handleChange = (key: string, value: string) => {
     const {
       newPassword,
@@ -77,9 +66,13 @@ class ChangePasswordModal extends PureComponent<
         });
       else if (confirmNewPassword)
         confirmNewPasswordError && confirmNewPassword === value
-          ? this.setState({ confirmNewPasswordError: undefined })
+          ? this.setState({
+              confirmNewPasswordError: undefined,
+              newPasswordError: undefined,
+            })
           : this.setState({
               confirmNewPasswordError: local.confirmPasswordCheck,
+              newPasswordError: undefined,
             });
       else this.setState({ newPasswordError: undefined });
     }
@@ -107,12 +100,18 @@ class ChangePasswordModal extends PureComponent<
   };
 
   handleCloseModal() {
-    this.setState({
-      newPasswordError: undefined,
-      confirmNewPasswordError: undefined,
-      error: undefined,
-    });
-    this.handleClose();
+    const { handleClose } = this.props;
+    this.setState(
+      {
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+        newPasswordError: undefined,
+        confirmNewPasswordError: undefined,
+        error: undefined,
+      },
+      () => handleClose()
+    );
   }
   render() {
     const { show } = this.props;
@@ -230,13 +229,13 @@ class ChangePasswordModal extends PureComponent<
           <Modal.Footer>
             <Button
               variant="outline-secondary"
-              onClick={() => this.handleClose()}
+              onClick={() => this.handleCloseModal()}
             >
               {local.cancel}
             </Button>
             <Button
               variant="outline-primary"
-              type={disableSubmit ? "button" : "submit"}
+              type="submit"
               disabled={disableSubmit}
             >
               {local.save}
