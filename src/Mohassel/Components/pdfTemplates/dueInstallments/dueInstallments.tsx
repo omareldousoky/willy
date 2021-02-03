@@ -100,8 +100,8 @@ const DueInstallments = (props: DueInstallmentsProps) => {
             </td>
           </tr>
           <tr>
-            <td colSpan={2} className="border-0">
-              الإجمالى العام :
+            <td colSpan={2} className="border-0" dir="rtl">
+              : الإجمالى العام 
             </td>
             <td colSpan={2} className="bg-grey">
               عدد العملاء / اقساط
