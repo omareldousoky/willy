@@ -50,9 +50,14 @@ const actionsLocalization = (action: string) => {
 
 const CustomerTransactionReport = (props: Props) => {
 	return (
-			<div dir="rtl" lang="ar" className="random-payment-print">
-			
-			</div>
+		<div dir="rtl" lang="ar" className="random-payment-print">
+			<table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
+				<tr style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+					<th style={{ backgroundColor: 'grey' }} colSpan={6}>شركة تساهيل للتمويل متناهى الصغر</th>
+				</tr>
+				<tr style={{ height: "10px" }}></tr>
+			</table>
+		</div>
 	)
 }
 
