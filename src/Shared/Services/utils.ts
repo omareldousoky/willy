@@ -231,15 +231,10 @@ export const pathTo = route => {
   return [...pathTo(route.parent), route];
 };
 
-export const numbersToArabic = (input: number | string) => {
-  if (input || input === 0) {
-    const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
-    const inputStr = input.toString();
-    return inputStr.replace(/[0-9]/g, (number) => {
-      return id[number]
-    });
-  } else return '۰';
-}
+// allow `0` to be replaced
+export const numbersToArabic = (input?: number | string) => 
+	input === undefined ? '٠' : input.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d])
+
 export const timeToArabicDateNow = (fullDate: boolean): string => {
   return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
@@ -474,3 +469,8 @@ export const guarantorOrderLocal = {
   9: "الضامن العاشر",
   default: "الضامن"
 };
+export const convertToTimestamp = (date?: string | number): number => {
+	const today = new Date().valueOf();
+	return date ?  new Date(date).valueOf() || today : today;
+}
+
