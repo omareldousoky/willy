@@ -246,6 +246,7 @@ export const GuarantorTableView = (props: Props) => {
                             <th></th>
                             <th>{local.guarantorCode}</th>
                             <th>{local.name}</th>
+                            <th>{local.nationalId}</th>
                             <th>{local.area}</th>
                             <th>{local.customerHomeAddress}</th>
                             <th>{local.telephone}</th>
@@ -264,6 +265,7 @@ export const GuarantorTableView = (props: Props) => {
                                 <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
                                 <td>{guar.key}</td>
                                 <td>{guar.customerName}</td>
+                                <td>{guar.nationalId}</td>
                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                 <td>{guar.customerHomeAddress}</td>
                                 <td>{guar.mobilePhoneNumber}</td>
