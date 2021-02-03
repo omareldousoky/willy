@@ -138,7 +138,6 @@ class ChangePasswordModal extends PureComponent<
         <Form
           onSubmit={(e: SyntheticEvent) => {
             e.preventDefault();
-            console.log(disableSubmit);
             if (!disableSubmit) return this.handleSubmit();
           }}
         >
