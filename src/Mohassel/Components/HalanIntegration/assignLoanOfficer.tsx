@@ -20,14 +20,16 @@ import { getDateAndTime } from '../../Services/getRenderDate';
 import { search } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
   history: Array<any>;
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
   setLoading: (data) => void;
 }
@@ -126,10 +128,18 @@ class AssignLoanOfficer extends Component<Props, State>{
   }
 
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead' }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead' }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
@@ -153,7 +163,7 @@ class AssignLoanOfficer extends Component<Props, State>{
       this.setState({ loanOfficers: res.body.data })
       return res.body.data.filter(loanOfficer => loanOfficer.branches.includes(this.state.selectedCustomers[0].branchId));
     } else {
-      this.setState({ loanOfficers: [] })
+      this.setState({ loanOfficers: [] }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
       return [];
     }
   }
@@ -166,7 +176,7 @@ class AssignLoanOfficer extends Component<Props, State>{
       Swal.fire("", `${local.doneMoving} ${this.state.selectedCustomers.length + " " + local.customerSuccess}`, "success")
     } else {
       this.props.setLoading(false);
-      Swal.fire("", local.errorOnMovingCustomers, "error")
+      Swal.fire("Error !",getErrorMessage(res.error.error),'error')
     }
   }
   render() {
@@ -271,6 +281,7 @@ const addSearchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     data: state.search.data,
+    error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
     searchFilters: state.searchFilters

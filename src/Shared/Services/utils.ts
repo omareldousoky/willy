@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import JsZip from 'jszip';
 import {saveAs} from 'file-saver'
 import Swal from 'sweetalert2';
+import{default as errorMessages}  from '../../Shared/Assets/errorMessages.json'
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -43,6 +44,13 @@ export function beneficiaryType(val: string) {
       return local.group
     default:
       return ''
+  }
+}
+export function getErrorMessage (key: string) {
+  if(key && errorMessages[key] )
+  return errorMessages[key].ar;
+  else {
+    return errorMessages['default_error'].ar;
   }
 }
 export function currency(val: string) {
@@ -230,13 +238,13 @@ export const numbersToArabic = (input: number | string) => {
     return inputStr.replace(/[0-9]/g, (number) => {
       return id[number]
     });
-  } else return '';
+  } else return '۰';
 }
-
+export const timeToArabicDateNow = (fullDate: boolean): string => {
+  return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
+}
 export const timeToArabicDate = (timeStamp: number, fullDate: boolean): string => {
-  if (timeStamp !== 0)
     return fullDate ? new Date(timeStamp).toLocaleString('ar-EG') : new Date(timeStamp).toLocaleDateString('ar-EG')
-  else return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
 export const dayToArabic = (index: number): string => {
   const weekday = [local.sunday, local.monday, local.tuesday, local.wednesday, local.thursday, local.friday, local.saturday];
@@ -281,7 +289,7 @@ export const getStatus = (installment) => {
       case 'pending': return local.pending;
       case 'paid': return local.paid;
       case 'partiallyPaid': return local.partiallyPaid;
-      case 'rescheduled': return local.rescheduled;
+      case 'rescheduled': return `${local.rescheduled}${installment.earlyPaymentReschedule ? (' - ' + local.earlyPayment) : ''}`;
       case 'cancelled': return local.cancelled;
       case 'canceled': return local.cancelled;
       case 'issued': return local.issued;
@@ -321,6 +329,8 @@ export const getLoanStatus = (status: string) => {
       case 'created': return local.created;
       case 'underReview': return local.underReview;
       case 'reviewed': return local.reviewed;
+      case 'secondReview': return local.secondReviewed;
+      case 'thirdReview': return local.thirdReviewed;
       case 'approved': return local.approved;
       case 'writtenOff': return local.writtenOffLoan;
       case 'Doubtful': return local.doubtedLoan;
@@ -429,3 +439,24 @@ export const iscoreStatusColor = (score: any) => {
   const iScoreStatusObj = {color: iscoreColor, status: iscorStatus}
   return iScoreStatusObj
 }
+
+export const getCurrentTime = () => {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    // get time in xx:xx:xx format
+    return `${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${
+        s < 10 ? `0${s}` : s
+    }`;
+};
+
+export const getFullCustomerKey = (
+  shortenedCode: string
+): number | undefined => {
+  const re = /\d{1,3}\/\d{1,7}/g;
+	const matchResult = shortenedCode.match(re) || [];
+	if (!matchResult.length) return undefined;
+  const [branch, customer] = matchResult[0].split("/");
+  return Number(`11${branch.padStart(3, "0")}${customer.padStart(7, "0")}`);
+};

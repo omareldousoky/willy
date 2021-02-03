@@ -12,7 +12,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
-import { timeToDateyyymmdd, parseJwt } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, parseJwt, getErrorMessage } from '../../../Shared/Services/utils';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import BackButton from '../BackButton/back-button';
 import store from '../../../Shared/redux/store';
@@ -70,7 +70,7 @@ class FormulaTest extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('error', getErrorMessage(formulas.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -95,7 +95,7 @@ class FormulaTest extends Component<Props, State>{
             this.setState({ loading: false, result: { result: res.body.data, formulaName: formulaName } });
             Swal.fire("success", local.formulaTested)
         } else {
-            Swal.fire("error", local.formulaTestError, 'error')
+            Swal.fire("error", getErrorMessage(res.error.error), 'error')
             this.setState({ loading: false });
         }
     }

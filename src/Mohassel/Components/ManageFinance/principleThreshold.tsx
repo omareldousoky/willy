@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { manageToolsArray } from '../Tools/manageToolsInitials';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     history: any;
@@ -26,6 +27,7 @@ interface Principals {
     maxIndividualPrincipal: number;
     maxGroupIndividualPrincipal: number;
     maxGroupPrincipal: number;
+    maxGroupReturningIndividualPrincipal: number;
 }
 interface State {
     loading: boolean;
@@ -42,6 +44,7 @@ class PrincipleThreshold extends Component<Props, State> {
                 maxIndividualPrincipal: 0,
                 maxGroupIndividualPrincipal: 0,
                 maxGroupPrincipal: 0,
+                maxGroupReturningIndividualPrincipal: 0
             },
             manageToolsTabs: []
         }
@@ -58,14 +61,14 @@ class PrincipleThreshold extends Component<Props, State> {
                 maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
                 maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
                 maxGroupPrincipal: princples.body.maxGroupPrincipal,
+                maxGroupReturningIndividualPrincipal: princples.body.maxGroupReturningIndividualPrincipal
             }
             this.setState({
                 loading: false,
                 principals
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false } , () => Swal.fire('Error !', getErrorMessage(princples.error.error), 'error'));
         }
     }
     update = (values) => {
@@ -86,8 +89,7 @@ class PrincipleThreshold extends Component<Props, State> {
                     this.setState({ loading: false })
                     Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() => window.location.reload());
                 } else {
-                    this.setState({ loading: false })
-                    Swal.fire('', local.principalMaxChangeError, 'error');
+                    this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
                 }
             }
         })
@@ -108,6 +110,7 @@ class PrincipleThreshold extends Component<Props, State> {
                         validationSchema={Yup.object().shape({
                             maxIndividualPrincipal: Yup.number().integer().required(local.required),
                             maxGroupIndividualPrincipal: Yup.number().lessThan(Yup.ref('maxGroupPrincipal'),local.individualInGroupPrincipalMustBeLessThanGroupPrincipal).integer().required(local.required),
+                            maxGroupReturningIndividualPrincipal: Yup.number().lessThan(Yup.ref('maxGroupPrincipal'),local.individualInGroupPrincipalMustBeLessThanGroupPrincipal).integer().required(local.required),
                             maxGroupPrincipal: Yup.number().integer().required(local.required)
                         })}
                         validateOnBlur
@@ -148,6 +151,23 @@ class PrincipleThreshold extends Component<Props, State> {
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {formikProps.errors.maxGroupIndividualPrincipal}
+                                        </Form.Control.Feedback>
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group className="data-group" controlId="maxGroupReturningIndividualPrincipal">
+                                    <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxGroupReturningIndividualPrincipal}*`}</Form.Label>
+                                    <Col sm={6}>
+                                        <Form.Control
+                                            type="number"
+                                            name="maxGroupReturningIndividualPrincipal"
+                                            data-qc="maxGroupReturningIndividualPrincipal"
+                                            value={formikProps.values.maxGroupReturningIndividualPrincipal}
+                                            onBlur={formikProps.handleBlur}
+                                            onChange={formikProps.handleChange}
+                                            isInvalid={Boolean(formikProps.errors.maxGroupReturningIndividualPrincipal) && Boolean(formikProps.touched.maxGroupReturningIndividualPrincipal)}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {formikProps.errors.maxGroupReturningIndividualPrincipal}
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>

@@ -1,7 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
-import { timeToArabicDate } from '../../../../Shared/Services/utils';
+import { timeToArabicDate, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 interface Props {
     result: {
         days: {
@@ -53,7 +53,7 @@ const statusLocalization = (status: string) => {
         case 'partiallyPaid':
             return ('مدفوع جزئيا');
         case 'unpaid':
-            return ('لم يستحق');
+            return ('غير مسدد');
         case 'pending':
             return ('قيد التحقيق');
         case 'issued':
@@ -68,7 +68,7 @@ const ManualPayments = (props: Props) => {
             <div className="manual-payments" dir="rtl" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -83,7 +83,7 @@ const ManualPayments = (props: Props) => {
                             <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.fromDate, false)} الي {timeToArabicDate(props.toDate, false)}</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={4}>{timeToArabicDateNow(true)}</th>
                             <th colSpan={6}>جنيه مصري</th>
                         </tr>
                     </thead>
@@ -103,7 +103,7 @@ const ManualPayments = (props: Props) => {
                                             <th colSpan={2}>تاريخ استحقاق القسط</th>
                                             <th colSpan={2}>حالة القسط</th>
                                             <th>أصل</th>
-                                            <th>القيمه المسدده مصاريف</th>
+                                            <th>القيمه المسدده تكلفه تمويل </th>
                                             <th>إجمالي</th>
                                         </tr>
                                         <tr>

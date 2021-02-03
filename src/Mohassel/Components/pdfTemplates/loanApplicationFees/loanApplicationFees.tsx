@@ -1,6 +1,6 @@
 import React from 'react';
 import './loanApplicationFees.scss';
-import { timeToArabicDate } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 
 interface Props {
     result: {
@@ -59,7 +59,7 @@ const LoanApplicationFees = (props: Props) => {
             <div className="loan-application-fees" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table className="report-container">
@@ -73,7 +73,7 @@ const LoanApplicationFees = (props: Props) => {
                             <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.startDate, false)} الي {timeToArabicDate(props.endDate, false)}</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={4}>{timeToArabicDateNow(true)}</th>
                             <th colSpan={6}>جنيه مصري</th>
                         </tr>
                         <tr>
@@ -98,7 +98,7 @@ const LoanApplicationFees = (props: Props) => {
                                                     <th>تاريخ القرض</th>
                                                     <th>الحالة الان</th>
                                                     <th>أصل</th>
-                                                    <th colSpan={2}>قيمة الحركة فائدة</th>
+                                                    <th colSpan={2}>قيمة تكلفه التمويل</th>
                                                     <th colSpan={2}>إجمالي</th>
                                                     <th>حالة الحركة</th>
                                                 </tr>

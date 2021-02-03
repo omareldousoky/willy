@@ -10,8 +10,9 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import { getCookie } from '../../../Shared/Services/getCookie';
-import { parseJwt } from '../../../Shared/Services/utils';
+import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import Swal from 'sweetalert2';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -37,6 +38,7 @@ export const StepThreeForm = (props: any) => {
             return res.body.data;
         } else {
             setLoanOfficers([]);
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
             return [];
         }
     }
@@ -46,7 +48,10 @@ export const StepThreeForm = (props: any) => {
         if (resGeo.status === "success") {
             setLoading(false);
             setgeoDivisions(resGeo.body.data ? resGeo.body.data.filter(area => area.active) : [])
-        } else setLoading(false);
+        } else{
+         setLoading(false);
+         Swal.fire('Error !', getErrorMessage(resGeo.error.error),'error');
+        }
     }
     useEffect(() => {
         const token = getCookie('token');
@@ -283,7 +288,6 @@ export const StepThreeForm = (props: any) => {
                                 data-qc="comments"
                                 value={values.comments}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.comments && touched.comments}
                             />}
                         </Can>

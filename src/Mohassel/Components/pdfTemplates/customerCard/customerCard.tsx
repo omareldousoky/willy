@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './customerCard.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, getStatus } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, getStatus, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import store from '../../../../Shared/redux/store';
 
 interface Props {
@@ -9,12 +9,17 @@ interface Props {
     branchDetails: any;
     penalty: number;
     getGeoArea: Function;
+    remainingTotal: number;
 }
 interface State {
     totalDaysLate: number;
     totalDaysEarly: number;
 }
 
+export function shareInGroup(value, total, installment){
+    const share = ((value/total)*installment).toFixed(2);
+    return share
+}
 class CustomerCardPDF extends Component<Props, State> {
     constructor(props) {
         super(props);
@@ -51,14 +56,14 @@ class CustomerCardPDF extends Component<Props, State> {
         this.props.data.installmentsObject.installments.forEach(installment => {
             max = max + installment[key];
         })
-        return max;
+        return max.toFixed(2);
     }
     render() {
         return (
                 <div className="customer-card-print" style={{ direction: "rtl" }} lang="ar">
                 <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                     <tr style={{ height: "10px" }}></tr>
-                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th style = {{backgroundColor: 'white'}} colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th  style = {{backgroundColor: 'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th style = {{backgroundColor: 'white'}} colSpan={6}><div className={"logo-print"}></div></th><th  style = {{backgroundColor: 'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                     <tr style={{ height: "10px" }}></tr>
                 </table>
                     <table>
@@ -74,7 +79,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td style={{ fontSize: "8px" }}>{store.getState().auth.name}</td>
                             </tr>
                             <tr>
-                                <td>{timeToArabicDate(0, true)}</td>
+                                <td>{timeToArabicDateNow(true)}</td>
                                 <td className="title2 bold"><u>كارت العميل</u></td>
                                 <td></td>
                             </tr>
@@ -93,7 +98,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <div className="frame">{this.props.data.product.beneficiaryType === "individual" ? this.props.data.customer.customerName : this.props.data.group.individualsInGroup.find(customer => customer.type === 'leader').customer.customerName}</div>
                                 </td>
                                 <td> التاريخ
-					<div className="frame">{timeToArabicDate(0, false)}</div>
+					<div className="frame">{timeToArabicDate(this.props.data.creationDate, false)}</div>
                                 </td>
                                 <td> المندوب
 					<div className="frame">{(this.props.data.product.beneficiaryType === 'group') ? this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : this.props.data.customer.representativeName}</div>
@@ -134,10 +139,10 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <th>القسط</th>
                                 <th>تاريخ الآستحقاق</th>
                                 <th> قيمة القسط</th>
-                                <th>الفائدة</th>
+                                <th>تكلفه التمويل</th>
                                 <th>اجمالي القيمة</th>
                                 <th>قيمه مسدده</th>
-                                <th>فائدة مسدده</th>
+                                <th>تكلفه التمويل مسدده</th>
                                 <th>الحاله</th>
                                 <th>تاريخ الحاله</th>
                                 <th>ايام التأخير</th>
@@ -152,7 +157,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <td>{numbersToArabic(installment.installmentResponse)}</td>
                                     <td>{numbersToArabic(installment.principalPaid)}</td>
                                     <td>{numbersToArabic(installment.feesPaid)}</td>
-                                    <td>{getStatus(installment)}</td>
+                                    <td style={{minWidth: 100}}>{getStatus(installment)}</td>
                                     <td>{installment.paidAt ? timeToArabicDate(installment.paidAt, false) : ''}</td>
                                     <td>{installment.paidAt ?
                                         numbersToArabic(Math.round((new Date(installment.paidAt).setHours(23, 59, 59, 59) - new Date(installment.dateOfPayment).setHours(23, 59, 59, 59)) / (1000 * 60 * 60 * 24)))
@@ -174,6 +179,11 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <th>ايام التبكير</th>
                                 <td>{numbersToArabic(this.state.totalDaysEarly < 0 ? this.state.totalDaysEarly * -1 : this.state.totalDaysEarly)}</td>
                             </tr>
+                            <tr>
+                                <th colSpan={3} style={{backgroundColor: 'white'}}></th>
+                            <th colSpan={2} style={{padding:'10px 0', marginRight:'2rem'}}>رصيد العميل</th>
+                                <td  colSpan={2} style={{padding:'10px 0'}}>{numbersToArabic(this.props.remainingTotal)}</td>
+                            </tr>
                         </tbody>
                     </table>
                     <table className="tablestyle" style={{ border: "1px black solid" }}>
@@ -190,6 +200,8 @@ class CustomerCardPDF extends Component<Props, State> {
                                     <tr>
                                         <th>كود العضو</th>
                                         <th>اسم العضو</th>
+                                        <th>التمويل</th>
+                                        <th>القسط</th>
                                         <th>المنطقه</th>
                                         <th>العنوان</th>
                                         <th>تليفون</th>
@@ -216,6 +228,8 @@ class CustomerCardPDF extends Component<Props, State> {
                                             <tr key={index}>
                                                 <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                                 <td>{individualInGroup.customer.customerName}</td>
+                                                <td>{numbersToArabic(individualInGroup.amount)}</td>
+                                                <td>{numbersToArabic(shareInGroup(individualInGroup.amount, this.props.data.principal, this.props.data.installmentsObject.installments[0].installmentResponse))}</td>
                                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                                 <td>{individualInGroup.customer.customerHomeAddress}</td>
                                                 <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
@@ -258,7 +272,7 @@ class CustomerCardPDF extends Component<Props, State> {
                         معجل
                         ٥٪
                 من باقي المبلغ المستحق (اصل) المراد تعجيل الوفاه به</li>
-                        <li>يحق للشركه مطالبه قيمة القرض وكافة المصروفات وتكاليف تمويله في حالة استخدام مبلغ القرض في غرض غير
+                        <li>يحق للشركه مطالبه قيمة القرض وكافة تكاليف تمويله في حالة استخدام مبلغ القرض في غرض غير
                         استخدامه
                         داخل
 			النشاط او اغلاق النشاط</li>

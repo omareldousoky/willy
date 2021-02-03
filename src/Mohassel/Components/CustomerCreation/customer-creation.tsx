@@ -15,9 +15,10 @@ import { StepThreeForm } from './StepThreeForm';
 import DocumentsUpload from './documentsUpload';
 import { createCustomer } from '../../Services/APIs/Customer-Creation/createCustomer';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import ability from '../../config/ability';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
+
 
 interface CustomerInfo {
   birthDate: number;
@@ -113,7 +114,7 @@ interface State {
     guarantorMaxLoans: number;
     maxLoansAllowed: number;
     maxPrincipal: number;
-    principals: {
+    principals?: {
       maxIndividualPrincipal: number;
       maxGroupIndividualPrincipal: number;
       maxGroupPrincipal: number;
@@ -159,17 +160,17 @@ class CustomerCreation extends Component<Props, State>{
       this.getCustomerById();
     }
   }
-  formikStep1 = {
+  formikStep1: any = {
     isValid: true,
     values: step1,
     errors: {},
   };
-  formikStep2 = {
+  formikStep2: any = {
     isValid: true,
     values: step2,
     errors: {},
   };
-  formikStep3 = {
+  formikStep3: any = {
     isValid: true,
     values: step3,
     errors: {},
@@ -179,7 +180,7 @@ class CustomerCreation extends Component<Props, State>{
     const res = await getCustomerByID(this.props.location.state.id)
     if (res.status === 'success') {
       const customerInfo = {
-        customerName: res.body.customerName,
+        customerName: res.body.customerName?.trim(),
         nationalId: res.body.nationalId,
         birthDate: timeToDateyyymmdd(res.body.birthDate),
         gender: res.body.gender,
@@ -194,8 +195,8 @@ class CustomerCreation extends Component<Props, State>{
         homePhoneNumber: res.body.homePhoneNumber,
         faxNumber: res.body.faxNumber,
         mobilePhoneNumber: res.body.mobilePhoneNumber,
-        customerWebsite: res.body.customerWebsite,
-        emailAddress: res.body.emailAddress
+        customerWebsite: res.body.customerWebsite?.trim(),
+        emailAddress: res.body.emailAddress?.trim()
       };
       const customerBusiness = {
         businessAddressLatLong: res.body.businessAddressLatLong,
@@ -263,8 +264,7 @@ class CustomerCreation extends Component<Props, State>{
         branchId: res.body.branchId
       } as any);
     } else {
-      this.setState({ loading: false });
-      Swal.fire('error', local.searchError, 'error');
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
     }
   }
   submit = (values: object) => {
@@ -301,8 +301,7 @@ class CustomerCreation extends Component<Props, State>{
         this.setState({ loading: false });
         Swal.fire("", local.customerEdited, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
       } else {
-        Swal.fire("error", local.customerCreationError)
-        this.setState({ loading: false });
+        this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
       }
     } else {
       const res = await createCustomer(objToSubmit);
@@ -310,8 +309,7 @@ class CustomerCreation extends Component<Props, State>{
         this.setState({ loading: false });
         Swal.fire("", local.customerCreated + ' ' + local.withCode + ' ' + res.body.customerKey, "success").then(() => { this.setState({ step: 4, customerId: res.body.customerId }) })
       } else {
-        Swal.fire("error", local.customerCreationError)
-        this.setState({ loading: false });
+        this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
       }
     }
   }
@@ -331,8 +329,7 @@ class CustomerCreation extends Component<Props, State>{
         step3
       })
     } else {
-      Swal.fire('', local.searchError, 'error');
-      this.setState({ loading: false });
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(princples.error.error),'error'));
     }
   }
   previousStep(values, step: number): void {

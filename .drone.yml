@@ -1,4 +1,5 @@
 kind: pipeline
+type: kubernetes
 name: notify-pipeline-start
 
 steps:
@@ -33,6 +34,7 @@ steps:
 ---
 
 kind: pipeline
+type: kubernetes
 name: unit-test
 
 steps:
@@ -67,6 +69,7 @@ trigger:
 
 ---
 kind: pipeline
+type: kubernetes
 name: PushToEcr
 
 steps:
@@ -81,6 +84,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/login.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/login
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     region: us-east-1
@@ -119,6 +123,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/login.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/login
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     region: us-east-1
@@ -152,6 +157,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/mohassel.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/mohassel
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     build_args_from_env:
@@ -188,6 +194,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/mohassel.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/mohassel
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     build_args_from_env:
@@ -219,6 +226,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/documents.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/documents
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     build_args_from_env:
@@ -255,6 +263,7 @@ steps:
     secret_key:
       from_secret: aws_secret_access_key
     dockerfile: Docker/documents.Dockerfile
+    mirror: http://docker-cache.fintech.halan.io:7000
     repo: fintech/${DRONE_REPO_NAME}/documents
     registry: 624792314775.dkr.ecr.us-east-1.amazonaws.com
     build_args_from_env:
@@ -282,6 +291,7 @@ depends_on:
 
 
 kind: pipeline
+type: kubernetes
 name: kubernetes
 
 steps:
@@ -359,6 +369,7 @@ depends_on:
 
 ---
 kind: pipeline
+type: kubernetes
 name: Endnotify
 
 steps:
@@ -396,3 +407,4 @@ depends_on:
   - unit-test
   - PushToEcr
   - kubernetes
+  

@@ -12,6 +12,7 @@ import BackButton from '../BackButton/back-button';
 import Button from 'react-bootstrap/Button';
 import { removeMemberFromGroup } from '../../Services/APIs/loanApplication/removeMemberFromGroup';
 import { getSeperationReasons } from '../../Services/APIs/configApis/config';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Member {
     type: string;
     amount: number;
@@ -67,7 +68,7 @@ class GroupMemberSeperation extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', 'fetch error', 'error');
+            Swal.fire("Error !",getErrorMessage(application.error.error),'error');
             this.setState({ loading: false });
         }
     }
@@ -80,7 +81,7 @@ class GroupMemberSeperation extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', 'fetch error', 'error');
+            Swal.fire("Error !",getErrorMessage(application.error.error),'error');
             this.setState({ loading: false });
         }
     }
@@ -133,8 +134,8 @@ class GroupMemberSeperation extends Component<Props, State>{
                 }
             })
         } else {
-            Swal.fire("error", local.seperationError, 'error')
-            this.setState({ loading: false });
+            this.setState({ loading: false },()=>Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+            
         }
     }
     render() {

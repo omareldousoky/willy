@@ -1,7 +1,7 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate, timeToArabicDate, beneficiaryType } from '../../../../Shared/Services/utils';
+import { ageCalculate, beneficiaryType, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 import store from '../../../../Shared/redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal() {
@@ -13,7 +13,7 @@ const ReviewedApplicationsPDF = (props) => {
             <div className="reviewed-applications-print" style={{ direction: "rtl" }} lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor:'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor:'white'}}><div className={"logo-print"}></div></th><th style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
                 <table>
@@ -26,7 +26,7 @@ const ReviewedApplicationsPDF = (props) => {
                             <td className="title">{props.branchDetails.name}</td>
                         </tr>
                         <tr>
-                            <td>{timeToArabicDate(0, true)}</td>
+                            <td>{timeToArabicDateNow(true)}</td>
                             <td></td>
                             <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                         </tr>

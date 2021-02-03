@@ -14,6 +14,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import BackButton from '../BackButton/back-button';
 import Card from 'react-bootstrap/Card';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     title: string;
@@ -105,7 +106,7 @@ class LoanProductCreation extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('error', getErrorMessage(formulas.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -125,7 +126,7 @@ class LoanProductCreation extends Component<Props, State>{
                 product
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('error',getErrorMessage(princples.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -152,7 +153,7 @@ class LoanProductCreation extends Component<Props, State>{
                     Swal.fire("success",local.updateLoanProductPrincipalsSuccess)
                 } else {
                     this.setState({loading: false});
-                    Swal.fire("error", local.updateLoanProductPrincipalsError);
+                    Swal.fire("error", getErrorMessage(res.error.error) ,'error');
                 }
             
         }else {
@@ -167,7 +168,7 @@ class LoanProductCreation extends Component<Props, State>{
             this.setState({ loading: false });
             Swal.fire("success", local.loanProductCreated).then(() => { this.props.history.push("/manage-loans/loan-products") })
         } else {
-            Swal.fire("error", local.loanProductCreationError, 'error')
+            Swal.fire("Error !",getErrorMessage(res.error.error), 'error')
             this.setState({ loading: false });
         }
     }
@@ -185,7 +186,7 @@ class LoanProductCreation extends Component<Props, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('error', getErrorMessage(product.error.error), 'error');
             this.setState({ loading: false });
         }
     }

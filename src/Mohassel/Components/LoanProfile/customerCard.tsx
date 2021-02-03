@@ -13,7 +13,7 @@ interface Props {
   print: () => void;
   getGeoArea?: Function;
 }
-function getStatus(data) {
+export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
   const todaysDate = new Date().valueOf();
   switch (data.status) {
@@ -25,7 +25,12 @@ function getStatus(data) {
     case 'pending':
       return <div className="status-chip pending">{local.pending}</div>
     case 'rescheduled':
-      return <div className="status-chip rescheduled">{local.rescheduled}</div>
+      return (
+        <div className="status-chip rescheduled" style={data.earlyPaymentReschedule? {flexDirection: 'column', minHeight: 50}: {}}>
+          <span>{local.rescheduled}</span>
+          {data.earlyPaymentReschedule ? <span> ({local.earlyPayment})</span> : null}
+        </div>
+      )
     case 'partiallyPaid':
       return <div className="status-chip partially-paid">{local.partiallyPaid}</div>
     case 'cancelled':
@@ -36,6 +41,13 @@ function getStatus(data) {
   }
 }
 export const CustomerCardView = (props: Props) => {
+  const renderPaidAt = (data) =>{
+    if(data.paidAt){
+      return (<div style={{width:'100px'}}>{getRenderDate(data.paidAt)}</div>)
+    } else {
+      return '';
+    }
+}
   const mappers = [
     {
       title: local.installmentNumber,
@@ -80,14 +92,14 @@ export const CustomerCardView = (props: Props) => {
     {
       title: local.statusDate,
       key: "paidAt",
-      render: data => data.paidAt ? getRenderDate(data.paidAt) : ''
+      render: data => renderPaidAt(data),
     },
   ]
   return (
     <div style={{ textAlign: 'right' }}>
       <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
         onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
-      <CustomerLoanDetailsBoxView application={props.application} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}/>
+      <CustomerLoanDetailsBoxView application={props.application} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
       {props.penalty && <div>
         <h6>{local.penalties}</h6>
         <Form style={{ margin: '20px 0' }}>

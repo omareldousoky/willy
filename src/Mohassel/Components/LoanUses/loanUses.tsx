@@ -9,6 +9,8 @@ import { updateLoanUsage } from '../../Services/APIs/LoanUsage/updateLoanUsage';
 import * as local from '../../../Shared/Assets/ar.json';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoanDetailsArray } from '../ManageLoanDetails/manageLoanDetailsInitials';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface LoanUse {
   name: string;
@@ -43,7 +45,7 @@ class LoanUses extends Component<{}, State> {
         temp: res.body.usages.map(usage => usage.name)
       });
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
     }
   }
   addLoanUse() {
@@ -76,7 +78,7 @@ class LoanUses extends Component<{}, State> {
             loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse),
             loading: false,
           })
-        } else this.setState({ loading: false })
+        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
       } else {
         //Edit 
         this.setState({ loading: true })
@@ -86,7 +88,7 @@ class LoanUses extends Component<{}, State> {
             loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse),
             loading: false,
           })
-        } else this.setState({ loading: false })
+        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
       }
     } else if (!submit) {
       this.setState({
@@ -104,24 +106,23 @@ class LoanUses extends Component<{}, State> {
           active={array.map(item => { return item.icon }).indexOf('loanUses')}
         />
         <Container style={{ marginTop: 20 }}>
-          <Form.Control
-            type="text"
-            data-qc="filterLoanUsage"
-            placeholder={local.search}
-            style={{ marginBottom: 20 }}
-            maxLength={100}
-            value={this.state.filterLoanUsage}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterLoanUsage: e.currentTarget.value })}
-          />
-          <div style={{ display: 'flex', textAlign: 'center' }}>
-            <h4 style={{ textAlign: 'right' }}>{local.loanUses}</h4>
+          <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
+            <Form.Control
+              type="text"
+              data-qc="filterLoanUsage"
+              placeholder={local.search}
+              maxLength={100}
+              value={this.state.filterLoanUsage}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterLoanUsage: e.currentTarget.value })}
+            />
+            {/* <h4 style={{ textAlign: 'right' }}>{local.loanUses}</h4> */}
             <span
               onClick={() => this.addLoanUse()}
               className="fa fa-plus fa-lg"
-              style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
+              style={{ margin: '0px 20px', color: '#7dc356', cursor: 'pointer' }}
             />
           </div>
-          <ListGroup style={{ textAlign: 'right', position: 'absolute', marginBottom: 30 }}>
+          <ListGroup style={{ textAlign: 'right', width: '30%', marginBottom: 30 }}>
             <Loader type="fullsection" open={this.state.loading} />
             {this.state.loanUses
               .filter(loanUse => loanUse.name.toLocaleLowerCase().includes(this.state.filterLoanUsage.toLocaleLowerCase()))

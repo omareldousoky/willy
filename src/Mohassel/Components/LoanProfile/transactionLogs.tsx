@@ -4,6 +4,8 @@ import { getApplicationTransactionLogs } from '../../Services/APIs/loanApplicati
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getDateAndTime } from '../../Services/getRenderDate';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     id: string;
 }
@@ -18,29 +20,34 @@ interface State {
 }
 const mappers = [
     {
-      title: local.action,
-      key: "action",
-      render: data => data.action ?  data.action : ''
+        title: local.action,
+        key: "action",
+        render: data => data.action ? data.action : ''
     },
     {
-      title: local.manualPayment,
-      key: "manualPayment",
-      render: data => data.manualPayment ?  local.yes : local.no
+        title: local.manualPayment,
+        key: "manualPayment",
+        render: data => data.manualPayment ? local.yes : local.no
     },
     {
-      title: local.author,
-      key: "authorName",
-      render: data => data?.created.userName ? data.created.userName : ''
+        title: local.author,
+        key: "authorName",
+        render: data => data?.created.userName ? data.created.userName : ''
     },
     {
-      title: local.amount,
-      key: "authorId",
-      render: data => data?.transactionAmount ? data.transactionAmount : 0
+        title: local.amount,
+        key: "amount",
+        render: data => data?.transactionAmount ? data.transactionAmount : 0
     },
     {
-      title: local.createdAt,
-      key: "createdAt",
-      render: data => data?.truthDate ?  getDateAndTime(data.truthDate) : ''
+        title: local.installmentSerialNumber,
+        key: 'installmentSerial',
+        render: data => data.installmentSerial || '-'
+    },
+    {
+        title: local.createdAt,
+        key: "createdAt",
+        render: data => getDateAndTime(data.created.at)
     },
     // {
     //   title: local.customerId,
@@ -52,7 +59,7 @@ const mappers = [
     //     key: "customerBranchId",
     //     render: data => data.customerBranchId
     //   },
-  ]
+]
 class TransactionLogs extends Component<Props, State> {
     constructor(props) {
         super(props);
@@ -70,35 +77,34 @@ class TransactionLogs extends Component<Props, State> {
     }
     async getLogs(id) {
         this.setState({ loading: true })
-        const res = await getApplicationTransactionLogs(id,this.state.size , this.state.pageToken);
+        const res = await getApplicationTransactionLogs(id, this.state.size, this.state.pageToken);
         if (res.status === "success") {
             this.setState({
-                data: res.body.data?res.body.data:[],
+                data: res.body.data ? res.body.data : [],
                 totalCount: res.body.totalCount,
                 pageToken: res.body.pageToken,
                 loading: false,
             })
         } else {
-            console.log("error")
-            this.setState({ loading: false })
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
         }
     }
     render() {
         return (
             <>
                 <Loader type="fullsection" open={this.state.loading} />
-                                  {this.state.data.length > 0 ?
-                                        <DynamicTable 
-                                        totalCount={this.state.totalCount} 
-                                        pagination={true}
-                                        data={this.state.data} 
-                                        mappers={mappers}
-                                        changeNumber={(key: string, number: number) => {
-                                            this.setState({ [key]: number } as any, () => this.getLogs(this.props.id));
-                                        }}
-                                         />
+                {this.state.data.length > 0 ?
+                    <DynamicTable
+                        totalCount={this.state.totalCount}
+                        pagination={true}
+                        data={this.state.data}
+                        mappers={mappers}
+                        changeNumber={(key: string, number: number) => {
+                            this.setState({ [key]: number } as any, () => this.getLogs(this.props.id));
+                        }}
+                    />
                     :
-                <p style={{textAlign: 'center'}}>{local.noLogsFound}</p>
+                    <p style={{ textAlign: 'center' }}>{local.noLogsFound}</p>
                 }
             </>
         )

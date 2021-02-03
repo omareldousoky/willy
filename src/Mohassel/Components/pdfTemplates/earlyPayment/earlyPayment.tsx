@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Component } from 'react';
 import './earlyPayment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, getStatus } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, numbersToArabic, getStatus, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 interface Props {
     data: any;
     earlyPaymentData: any;
@@ -84,7 +84,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                 <div className="early-payment-print" style={{ direction: "rtl" }} lang="ar">
                 <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                     <tr style={{ height: "10px" }}></tr>
-                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor:'white'}}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th  style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style={{backgroundColor:'white'}}><div className={"logo-print"}></div></th><th  style={{backgroundColor:'white'}} colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                     <tr style={{ height: "10px" }}></tr>
                 </table>
                     <table>
@@ -95,7 +95,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                 <td className="title bold">{this.props.branchDetails.name} - {this.props.branchDetails.governorate}</td>
                             </tr>
                             <tr>
-                                <td>{timeToArabicDate(0, true)}</td>
+                                <td>{timeToArabicDateNow(true)}</td>
                                 <td className="title2 bold"><u>السداد المعجل</u></td>
                                 <td>1/1</td>
                             </tr>
@@ -109,7 +109,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                     <div className="frame">{(this.props.data.product.beneficiaryType === "individual") ? this.props.data.customer.customerName : this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.customerName}</div>
                                 </td>
                                 <td> التاريخ
-					<div className="frame">{timeToArabicDate(0, false)}</div>
+					<div className="frame">{timeToArabicDateNow(false)}</div>
                                 </td>
                                 <td> المندوب
 					<div className="frame">{(this.props.data.product.beneficiaryType === 'group') ? this.props.data.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName : this.props.data.customer.representativeName}</div>
@@ -122,7 +122,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                     <table>
                         <tbody>
                             <tr>
-                                <td>تاريخ الحساب <div className="frame">{timeToArabicDate(0, false)}</div>
+                                <td>تاريخ الحساب <div className="frame">{timeToArabicDateNow(false)}</div>
                                 </td>
                                 <td>فترة السداد <div className="frame">{this.props.data.product.periodType === 'days' ? local.daily : local.inAdvanceFromMonthly}</div>
                                 </td>
@@ -160,10 +160,10 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                 <th className="border">القسط</th>
                                 <th className="border">تاريخ الآستحقاق</th>
                                 <th className="border"> اصل القسط</th>
-                                <th className="border">الفائدة</th>
+                                <th className="border">تكلفه التمويل</th>
                                 <th className="border">اجمالي القيمة</th>
                                 <th className="border">قيمه مسدده</th>
-                                <th className="border">فائدة مسدده</th>
+                                <th className="border">تكلفه التمويل مسدده</th>
                                 <th className="border">الحاله</th>
                                 <th className="border">تاريخ الحاله</th>
                                 <th className="border">ايام التأخير</th>
@@ -212,7 +212,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                             <tr>
                                 <td></td>
                                 <th className="border">الاجمالي</th>
-                                <th className="border">فائدة</th>
+                                <th className="border">تكلفه التمويل</th>
                                 <th className="border">الأصل</th>
                                 <td></td>
                                 <td></td>
@@ -233,7 +233,7 @@ class EarlyPaymentPDF extends Component<Props, State> {
                                 <td></td>
                                 <th className="border">اقساط يجب سدادها</th>
                                 <th className="border">الرصيد الأصل</th>
-                                <th className="border">{numbersToArabic(this.props.data.product.earlyPaymentFees)}%  (مصاريف الترحيل)</th>
+                                <th className="border">{numbersToArabic(this.props.data.product.earlyPaymentFees)}%  (تكلفه تمويل الترحيل)</th>
                                 <th className="border">إجمالي السداد المعجل</th>
                                 <td></td>
                                 <td></td>

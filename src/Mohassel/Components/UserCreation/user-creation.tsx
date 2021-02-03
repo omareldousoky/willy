@@ -26,7 +26,7 @@ import { getUserRolesAndBranches } from "../../Services/APIs/User-Creation/getUs
 import { createUser } from "../../Services/APIs/User-Creation/createUser";
 import { editUser } from "../../Services/APIs/User-Creation/editUser";
 import { getUserDetails } from "../../Services/APIs/Users/userDetails";
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import Card from "react-bootstrap/Card";
 import UserManagerForm from "./userManagerForm";
 import { step2 } from "../CustomerCreation/customerFormIntialState";
@@ -43,6 +43,8 @@ interface State {
   step3: MainChoosesValues;
   branchesLabeled: Array<object>;
   rolesLabeled: Array<object>;
+  nationalId: string;
+  username: string;
 }
 class UserCreation extends Component<Props, State> {
   constructor(props: Props) {
@@ -55,11 +57,14 @@ class UserCreation extends Component<Props, State> {
       step3: initialStep3,
       branchesLabeled: [],
       rolesLabeled: [],
+      nationalId: "",
+      username: "",
     };
   }
   async getUser() {
     const _id = this.props.history.location.state.details;
     const res = await getUserDetails(_id);
+    if(res.status === "success"){
     const step1Data: Values = {
       name: res.body.user.name,
       username: res.body.user.username,
@@ -73,6 +78,10 @@ class UserCreation extends Component<Props, State> {
       password: "",
       confirmPassword: "",
     };
+    this.setState({
+      nationalId: res.body.user.nationalId,
+      username: res.body.user.username,
+    })
     const step2data: RolesBranchesValues = { roles: [], branches: [] };
     res.body.roles?.forEach((role) => {
       step2data.roles.push({
@@ -94,6 +103,9 @@ class UserCreation extends Component<Props, State> {
       manager: res.body.user.manager,
     };
     this.setState({ step1: step1Data, step2: step2data, step3: step3data });
+  } else {
+    Swal.fire('Error', getErrorMessage(res.error.error),'error');
+  }
   }
   async getUserRolePermissions() {
     const RolesAndBranches = await getUserRolesAndBranches();
@@ -113,7 +125,7 @@ class UserCreation extends Component<Props, State> {
         rolesLabeled: labeldRoles,
       });
     } else {
-      Swal.fire("", local.searchError, "error");
+      Swal.fire("Error !", getErrorMessage(RolesAndBranches[0].error.error), "error");
       this.setState({
         loading: false,
       });
@@ -129,7 +141,7 @@ class UserCreation extends Component<Props, State> {
         branchesLabeled: labeldBranches,
       });
     } else {
-      Swal.fire("", local.searchError, "error");
+      Swal.fire("Error !", getErrorMessage(RolesAndBranches[1].error.error), "error");
     }
   }
   componentDidMount() {
@@ -188,14 +200,14 @@ class UserCreation extends Component<Props, State> {
   async createUser(user) {
     this.setState({ loading: true });
     const res = await createUser({ user });
+    this.setState({ loading: false });
     if (res.status === "success") {
       Swal.fire("success", local.userCreated).then(() => {
         this.props.history.goBack();
       });
     } else {
-      Swal.fire("error", local.userCreationError);
+      Swal.fire("Error !", getErrorMessage(res.error.error), 'error');
     }
-    this.setState({ loading: false });
   }
   async editUser(user) {
     const id = this.props.history.location.state.details;
@@ -207,8 +219,7 @@ class UserCreation extends Component<Props, State> {
         this.props.history.goBack();
       });
     } else {
-      Swal.fire("error", local.userCreationError);
-      this.setState({ loading: false });
+      this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
     }
   }
   submit = async (values: any) => {
@@ -275,7 +286,9 @@ class UserCreation extends Component<Props, State> {
             {...formikProps}
             edit={this.props.edit}
             _id = {this.props.edit? this.props.history.location.state.details : ""}
-            cancle={() => this.cancel()}
+            username = {this.state.username}
+            nationalId= {this.state.nationalId}
+            cancel={() => this.cancel()}
           />
         )}
       </Formik>

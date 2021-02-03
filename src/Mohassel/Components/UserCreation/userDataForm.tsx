@@ -7,27 +7,34 @@ import './userCreation.scss'
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
-import { checkIssueDate } from '../../../Shared/Services/utils';
+import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';
 import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHRCodeDUP';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
+import Swal from 'sweetalert2';
 interface Props {
     values: Values;
     errors: Errors;
     touched: Touched;
     edit?: boolean;
     _id?: string;
+    username: string;
+    nationalId: string;
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
-    cancle: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+    cancel: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any;
 }
 export const UserDataForm = (props: Props) => {
+
     const handleSubmit = props.handleSubmit;
     const [loading, setLoading] = useState(false);
+    const [duplicateUserNameNID, setDuplicateUserNameNID] = useState('');
+    const [duplicateUserNameHR, setDuplicateUserNameHR] = useState('');
+    const [nationalIdLoading, setNationalIdLoading] = useState(false);
     return (
         <Form
             onSubmit={handleSubmit}
@@ -66,41 +73,50 @@ export const UserDataForm = (props: Props) => {
                             className={'user-data-label'}
                         >{`${local.nationalId}*`}
                         </Form.Label>
-                        <Can I="edit" a="NationalId" passThrough>
-                            {allowed => <Form.Control
-                                type={"text"}
-                                placeholder={`${local.example} : ${local.nationalIdPlaceholder}`}
-                                name={"nationalId"}
-                                data-qc={"nationalId"}
-                                value={props.values.nationalId}
-                                onBlur={props.handleBlur}
-                                onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
-                                    const re = /^\d*$/;
-                                    const { name, value } = event.currentTarget;
-                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                        props.setFieldValue('nationalId', value)
+                        <Can I ="updateNationalIdAndUsername" a="user" passThrough>
+                        {allowed => <Form.Control
+                            type={"text"}
+                            placeholder={`${local.example} : ${local.nationalIdPlaceholder}`}
+                            name={"nationalId"}
+                            data-qc={"nationalId"}
+                            value={props.values.nationalId}
+                            onBlur={props.handleBlur}
+                            onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                                const re = /^\d*$/;
+                                const { name, value } = event.currentTarget;
+                                if ((!props.edit && event.currentTarget.value === '') || re.test(event.currentTarget.value)) {
+                                    props.setFieldValue('nationalId', value)
+                                }
+                                if (value.length === 14) {
+                                    setNationalIdLoading(true);
+                                    const res = await checkNationalIdDuplicates(value);
+                                    if (res.status === 'success') {
+                                        setNationalIdLoading(false);
+                                        props.setFieldValue('nationalIdChecker', res.body.data.exists);
+                                        setDuplicateUserNameNID(res.body.data.userName);
+                                        props.setFieldValue('birthDate', getBirthdateFromNationalId(value));
+                                        props.setFieldValue('gender', getGenderFromNationalId(value));
+                                    } else {
+                                        setNationalIdLoading(false);
+                                        Swal.fire('Error !', getErrorMessage(res.error.error),'error');
                                     }
-                                    if (value.length === 14) {
-                                        setLoading(true);
-                                        const res = await checkNationalIdDuplicates(value);
-                                        if (res.status === 'success') {
-                                            setLoading(false);
-                                            props.setFieldValue('nationalIdChecker', res.body.Exists);
-                                            props.setFieldValue('birthDate', getBirthdateFromNationalId(value));
-                                            props.setFieldValue('gender', getGenderFromNationalId(value));
-                                        } else setLoading(false);
-                                    }
-                                }}
-                                isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
-                                maxLength={14}
-                                disabled={(!allowed && props.edit)}
-                            />
-                            }
+                                }
+                            }}
+                            isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
+                            maxLength={14}
+                            disabled={((!allowed && props.edit) && props.nationalId) as boolean}
+                        />}
                         </Can>
+
                         <Form.Control.Feedback
                             type="invalid">
-                            {props.errors.nationalId}
+                            {props.errors.nationalId + (duplicateUserNameNID? ": " + duplicateUserNameNID: '')}
                         </Form.Control.Feedback>
+                        <Col sm={1}>
+                            <Col sm={1}>
+                                <Loader type="inline" open={nationalIdLoading} />
+                            </Col>
+                        </Col>
                     </Form.Group>
                 </Col>
                 <Col sm={4}>
@@ -157,7 +173,7 @@ export const UserDataForm = (props: Props) => {
                     onChange={props.handleChange}
                     isInvalid={(props.errors.nationalIdIssueDate && props.touched.nationalIdIssueDate) as boolean}
                 />
-                <Form.Control.Feedback type="invalid" style={checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
+                <Form.Control.Feedback type="invalid" style={!props.edit && props.values.nationalIdIssueDate == 0 ? checkIssueDate(props.values.nationalIdIssueDate) !== "" ? { display: 'block' } : {} : {}}>
                     {props.errors.nationalIdIssueDate || checkIssueDate(props.values.nationalIdIssueDate)}
                 </Form.Control.Feedback>
             </Form.Group>
@@ -176,16 +192,20 @@ export const UserDataForm = (props: Props) => {
                             type={"text"}
                             name={"hrCode"}
                             data-qc={"hrCode"}
-                            value={props.values.hrCode.trim()}
+                            value={props.values.hrCode?.trim()}
                             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                                 props.setFieldValue('hrCode', event.currentTarget.value);
                                 setLoading(true);
-                                const res = await checkHRCodeDuplicates(event.currentTarget.value,props._id);
+                                const res = await checkHRCodeDuplicates(event.currentTarget.value, props._id);
 
                                 if (res.status === 'success') {
                                     setLoading(false);
-                                    props.setFieldValue('hrCodeChecker', res.body.Exists);
-                                } else setLoading(false);
+                                    props.setFieldValue('hrCodeChecker', res.body.data.exists);
+                                    setDuplicateUserNameHR(res.body.data.userName);
+                                } else {
+                                    setLoading(false);
+                                    Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+                                }
 
                             }}
                             onBlur={props.handleBlur}
@@ -193,7 +213,7 @@ export const UserDataForm = (props: Props) => {
                         />
                         <Form.Control.Feedback
                             type="invalid">
-                            {props.errors.hrCode}
+                            {props.errors.hrCode + (duplicateUserNameHR? ": " + duplicateUserNameHR: '')}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
@@ -257,7 +277,8 @@ export const UserDataForm = (props: Props) => {
                     className={'user-data-label'}
                 >{`${local.username}*`}
                 </Form.Label>
-                <Form.Control
+                <Can I ="updateNationalIdAndUsername" a="user" passThrough>
+                {allowed => <Form.Control
                     type={"text"}
                     name={"username"}
                     data-qc={"username"}
@@ -265,18 +286,22 @@ export const UserDataForm = (props: Props) => {
                     onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
                         props.setFieldValue('username', event.currentTarget.value);
                         setLoading(true);
-                        const res = await checkUsernameDuplicates(event.currentTarget.value.trim());
+                        const res = await checkUsernameDuplicates(event.currentTarget.value?.trim());
 
                         if (res.status === 'success') {
                             setLoading(false);
-                            props.setFieldValue('usernameChecker', res.body.Exists);
-                        } else setLoading(false);
+                            props.setFieldValue('usernameChecker', res.body.data.exists);
+                        } else {
+                            setLoading(false);
+                            Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+                        }
 
                     }}
                     onBlur={props.handleBlur}
-                    disabled={props.edit}
+                    disabled={((!allowed && props.edit) && props.username) as boolean}
                     isInvalid={(props.errors.username && props.touched.username) as boolean}
-                />
+                />}
+                </Can>
                 <Form.Control.Feedback
                     type="invalid">
                     {props.errors.username}
@@ -314,14 +339,14 @@ export const UserDataForm = (props: Props) => {
                 <Col>
                     <Form.Label
                         className={'user-data-label'}
-                    >{props.edit ? local.confrimPassword : `${local.confrimPassword}*`}
+                    >{props.edit ? local.confirmPassword : `${local.confirmPassword}*`}
                     </Form.Label>
                     <Form.Control
                         type={"password"}
                         name={'confirmPassword'}
                         data-qc={'confirmPassword'}
                         value={props.values.confirmPassword}
-                        placeholder={`${local.confrimPassword}*`}
+                        placeholder={`${local.confirmPassword}*`}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         isInvalid={(props.errors.confirmPassword && props.touched.confirmPassword) as boolean}
@@ -340,7 +365,7 @@ export const UserDataForm = (props: Props) => {
                 <Col >
                     <Button
                         className={'btn-cancel-prev'} style={{ width: '60%' }}
-                        onClick={() => { props.cancle() }}
+                        onClick={() => { props.cancel() }}
                     >{local.cancel}</Button>
                 </Col>
                 <Col>

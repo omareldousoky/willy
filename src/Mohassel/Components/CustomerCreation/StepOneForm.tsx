@@ -4,12 +4,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
-import { checkIssueDate } from "../../../Shared/Services/utils";
+import { checkIssueDate, getErrorMessage } from "../../../Shared/Services/utils";
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import Map from '../Map/map';
 import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
+import Swal from 'sweetalert2';
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -36,7 +37,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="customerName">
             <Form.Label className="customer-form-label" column>{`${local.name}*`}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
                 type="text"
                 name="customerName"
@@ -45,7 +46,7 @@ export const StepOneForm = (props: any) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isInvalid={errors.customerName && touched.customerName}
-                disabled={(!allowed && props.edit)}
+                disabled={(!allowed && props.edit && props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -58,7 +59,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={5}>
           <Form.Group controlId="nationalId">
             <Form.Label className="customer-form-label">{`${local.nationalId}*`}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
                 type="text"
                 name="nationalId"
@@ -82,12 +83,15 @@ export const StepOneForm = (props: any) => {
                       }
                       setFieldValue('birthDate', getBirthdateFromNationalId(value));
                       setFieldValue('gender', getGenderFromNationalId(value));
-                    } else setLoading(false);
+                    } else {
+                      setLoading(false);
+                      Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+                    }
                   }
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}
                 maxLength={14}
-                disabled={(!allowed && props.edit)}
+                disabled={(!allowed && props.edit && props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -134,7 +138,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={5}>
           <Form.Group controlId="nationalIdIssueDate">
             <Form.Label className="customer-form-label">{`${local.nationalIdIssueDate}*`}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
               type="date"
               name="nationalIdIssueDate"
@@ -143,8 +147,8 @@ export const StepOneForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-              disabled={(!allowed && props.edit)}
-            />}
+              disabled={(!allowed && props.edit && props.hasLoan)}
+              />}
             </Can>
             <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
               {errors.nationalIdIssueDate || checkIssueDate(values.nationalIdIssueDate)}

@@ -14,24 +14,29 @@ import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import Search from '../../../Shared/Components/Search/search';
 import Can from '../../config/Can';
+import { Branch } from '../../../Shared/redux/auth/types';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { changeLeadState, changeInReviewLeadState } from '../../Services/APIs/Leads/changeLeadState';
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { assignLeadToLO } from '../../Services/APIs/Leads/assignLeadToLO';
+import { searchBranches } from '../../Services/APIs/Branch/searchBranches';
+import { changeLeadBranch } from '../../Services/APIs/Leads/changeLeadBranch';
 import { search } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
-
+import { Employee } from '../Payment/payment';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
   data: any;
+  error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
   history: any;
-  search: (data) => void;
+  search: (data) => Promise<void>;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;
 }
@@ -45,9 +50,12 @@ interface State {
   size: number;
   from: number;
   openActionsId: string;
-  openModal: boolean;
+  openLOModal: boolean;
+  openBranchModal: boolean;
   loanOfficers: Array<any>;
+  branches: Array<any>;
   selectedLO: any;
+  selectedBranch: any;
   selectedLead: any;
   branchId: string;
 }
@@ -67,9 +75,12 @@ class Leads extends Component<Props, State>{
       size: 10,
       from: 0,
       openActionsId: '',
-      openModal: false,
+      openLOModal: false,
+      openBranchModal: false,
       loanOfficers: [],
+      branches: [],
       selectedLO: {},
+      selectedBranch: {},
       selectedLead: {},
       branchId: ''
     }
@@ -120,8 +131,18 @@ class Leads extends Component<Props, State>{
         render: data =>
           data.status !== 'rejected' &&
           <Can I="assignLead" a="halanuser">
-            <span style={{ marginRight: 5, cursor: 'pointer' }}
-              className="fa fa-exchange-alt" onClick={() => this.setState({ selectedLead: data, openModal: true })} />
+            <img style={{ cursor: 'pointer', marginRight: 5 }} alt={"change-loan-officer"}
+              src={require('../../Assets/changeOfficer-inactive.svg')} onClick={() => this.setState({ selectedLead: data, openLOModal: true })} />
+          </Can>
+      },
+      {
+        title: () => <Can I="assignLead" a="halanuser">{local.chooseBranch}</Can>,
+        key: "changeLeadBranch",
+        render: data =>
+          data.status !== 'rejected' &&
+          <Can I="assignLead" a="halanuser">
+            <img style={{ cursor: 'pointer', marginRight: 5 }} alt={"change-branch"}
+              src={require('../../Assets/branches-inactive.svg')} onClick={() => this.setState({ selectedLead: data, openBranchModal: true })} />
           </Can>
       },
       {
@@ -153,10 +174,18 @@ class Leads extends Component<Props, State>{
     let branchId = getCookie('ltsbranch') ? JSON.parse(getCookie('ltsbranch'))._id : '';
     branchId = branchId === 'hq' ? '' : branchId;
     this.setState({ branchId })
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'lead', branchId: branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadsCustomers() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId });
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'lead', branchId: this.state.branchId }).then(()=>{
+      if(this.props.error)
+      Swal.fire("error",getErrorMessage(this.props.error),"error")
+    }
+    );
   }
   getLeadStatus(status: string) {
     switch (status) {
@@ -231,14 +260,39 @@ class Leads extends Component<Props, State>{
       return [];
     }
   }
-  async submit() {
+  getBranches = async (input: string) => {
+    const res = await searchBranches({ from: 0, size: 1000, name: input });
+    if (res.status === "success") {
+      this.setState({ branches: res.body.data })
+      return res.body.data.filter(branch => branch._id !== this.state.selectedLead.branchId);
+    } else {
+      this.setState({ branches: [] })
+      return [];
+    }
+  }
+  async submitLOChange() {
     this.props.setLoading(true);
     const res = await assignLeadToLO(this.state.selectedLead.phoneNumber, this.state.selectedLO._id, this.state.selectedLead.uuid);
     if (res.status === "success") {
       this.props.setLoading(false);
-      this.setState({ openModal: false })
+      this.setState({ openLOModal: false })
       Swal.fire("", `${local.doneMoving} ${local.customerSuccess}`, "success").then(() => {
         this.setState({ selectedLO: {}, selectedLead: {} });
+        this.getLeadsCustomers();
+      })
+    } else {
+      this.props.setLoading(false);
+      Swal.fire("", local.errorOnMovingCustomers, "error")
+    }
+  }
+  async submitBranchChange() {
+    this.props.setLoading(true);
+    const res = await changeLeadBranch(this.state.selectedLead.phoneNumber, this.state.selectedBranch._id, this.state.selectedLead.uuid);
+    if (res.status === "success") {
+      this.props.setLoading(false);
+      this.setState({ openBranchModal: false })
+      Swal.fire("", `${local.doneMoving} ${local.customerSuccess}`, "success").then(() => {
+        this.setState({ selectedBranch: {}, selectedLead: {} });
         this.getLeadsCustomers();
       })
     } else {
@@ -291,7 +345,7 @@ class Leads extends Component<Props, State>{
             }
           </Card.Body>
         </Card>
-        <Modal size="lg" show={this.state.openModal} onHide={() => this.setState({ openModal: false })}>
+        <Modal size="lg" show={this.state.openLOModal} onHide={() => this.setState({ openLOModal: false })}>
           <Modal.Header closeButton>
             <Modal.Title style={{ margin: " 0 auto" }}>
               {local.chooseRepresentative}
@@ -317,7 +371,43 @@ class Leads extends Component<Props, State>{
               <Col >
                 <Button
                   style={{ width: "100%", height: "100%" }}
-                  onClick={() => this.submit()}
+                  onClick={() => this.submitLOChange()}
+                  disabled={false}
+                  variant="primary"
+                >
+                  {local.submit}
+                </Button>
+              </Col>
+            </Row>
+          </Modal.Body>
+        </Modal>
+        <Modal size="lg" show={this.state.openBranchModal} onHide={() => this.setState({ openBranchModal: false })}>
+          <Modal.Header closeButton>
+            <Modal.Title style={{ margin: " 0 auto" }}>
+              {local.chooseBranch}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row style={{ padding: "10px 40px" }}>
+              <Form.Label className="data-label">{local.chooseBranch}</Form.Label>
+              <Col sm={12}>
+                <AsyncSelect
+                  name="branches"
+                  data-qc="branches"
+                  value={this.state.branches.find(branch => branch._id === this.state.selectedBranch?._id)}
+                  onChange={(branch) => this.setState({ selectedBranch: branch })}
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option._id}
+                  loadOptions={(input) => this.getBranches(input)}
+                  cacheOptions defaultOptions
+                />
+              </Col>
+            </Row>
+            <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
+              <Col >
+                <Button
+                  style={{ width: "100%", height: "100%" }}
+                  onClick={() => this.submitBranchChange()}
                   disabled={false}
                   variant="primary"
                 >

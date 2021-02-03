@@ -19,6 +19,7 @@ import { downloadTxtFile } from './textFiles';
 import Swal from 'sweetalert2';
 import { manageLoansArray } from '../LoanList/manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
   history: Array<any>;
@@ -159,8 +160,7 @@ class CIB extends Component<Props, State> {
         loading: false,
       })
     } else {
-      this.setState({ loading: false })
-      console.log(res);
+      this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'))
     }
   }
   async submit() {
@@ -175,7 +175,7 @@ class CIB extends Component<Props, State> {
     if (res.status === "success") {
       this.setState({ selectedCustomers: [], loading: false, principalSelectedSum: 0, data: [], filteredData: [] });
       Swal.fire("", local.changeSourceFundSuccess, "success").then(() => downloadTxtFile(res.body.loans, false, 0));
-    } else this.setState({ loading: false });
+    } else this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
   }
   getArrayOfNumbers() {
     const totalPages: Array<number> = [];

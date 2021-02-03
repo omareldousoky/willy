@@ -1,7 +1,7 @@
 import React from 'react';
 import './testCalculateFormula.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, numbersToArabic, dayToArabic } from '../../../../Shared/Services/utils';
+import { timeToArabicDate, numbersToArabic, dayToArabic, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 import store from '../../../../Shared/redux/store';
 
 const TestCalculateFormulaPDF = (props) => {
@@ -10,7 +10,7 @@ const TestCalculateFormulaPDF = (props) => {
             <table className="margin" >
                 <thead style={{ fontSize: "12px" }}>
                     <tr style={{ height: "10px" }}></tr>
-                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                    <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                     <tr style={{ height: "10px" }}></tr>
                 </thead>
                 <tbody>
@@ -20,7 +20,7 @@ const TestCalculateFormulaPDF = (props) => {
                         <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
-                        <td>{timeToArabicDate(0, true)}</td>
+                        <td>{timeToArabicDateNow(true)}</td>
                         <td></td>
                         <td>{dayToArabic(new Date().getDay())}</td>
                     </tr>
@@ -37,7 +37,7 @@ const TestCalculateFormulaPDF = (props) => {
                         <th>الرقم المسلسل</th>
                         <th>قيمة القسط</th>
                         <th>الأصل</th>
-                        <th>الفائدة</th>
+                        <th>تكلفه التمويل</th>
                         <th>تاريخ الآستحقاق</th>
                     </tr>
                     {props.data.result?.output.map(installment => {

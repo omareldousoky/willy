@@ -1,20 +1,42 @@
 import React from 'react';
 import './loanApplicationDetails.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 
 const LoanApplicationDetails = (props) => {
-    function getStatus(status: string) {
+    const getStatus = (status: string) => {
         switch (status) {
-            case 'issued': return local.issued;
-            case 'pending': return local.pending;
-            case 'paid': return local.paid;
-            case 'underReview': return local.underReview;
-            case 'reviewed': return local.reviewed;
-            case 'approved': return local.approved;
-            case 'rejected': return local.rejected;
-            case 'created': return local.created;
-            default: return '';
+            case "unpaid":
+                return local.unpaid;
+              case "pending":
+                return local.pending;
+              case "paid":
+                return local.paid;
+              case "partiallyPaid":
+                return local.partiallyPaid;
+              case "rescheduled":
+                return local.rescheduled;
+              case "cancelled":
+              case "canceled":
+                return local.cancelled;
+              case "issued":
+                return local.issued;
+              case "created":
+                return local.created;
+              case "approved":
+                return local.approved;
+              case 'underReview': 
+                return local.underReview;
+              case 'reviewed': 
+                return local.reviewed;
+              case 'rejected': 
+                return local.rejected;  
+              case 'secondReview':
+                return local.secondReviewed;  
+              case 'thirdReview':
+                  return local.thirdReviewed;  
+              default:
+                return "";
         }
     }
     function getNumberInArabic(number: number) {
@@ -32,10 +54,10 @@ const LoanApplicationDetails = (props) => {
         }
     }
     return (
-        <div className="loan-application-details" lang="ar">      
-            <table style={{ fontSize: "12px", margin:"10px 0px", textAlign:"center", width:'100%' }}>
+        <div className="loan-application-details" lang="ar">
+            <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
                 <tr style={{ height: "10px" }}></tr>
-                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><img style={{ width: "70px", height: "35px" }} src={require('../../../../Shared/Assets/Logo.svg')} /></th><th colSpan={6} >ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
+                <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6} >ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
                 <tr style={{ height: "10px" }}></tr>
             </table>
             {
@@ -53,7 +75,7 @@ const LoanApplicationDetails = (props) => {
                                         <th rowSpan={2}>تفاصيل طلب القرض</th>
                                     </tr>
                                     <tr className="headtitle">
-                                        <th>{timeToArabicDate(0, false)}</th>
+                                        <th>{timeToArabicDateNow(true)}</th>
                                     </tr>
 
                                 </thead>
@@ -121,7 +143,7 @@ const LoanApplicationDetails = (props) => {
                                     </tr>
                                     <tr>
                                         <th>تليفون محمول</th>
-                                        <td>{props.data.mobilePhoneNumber + " - " + props.data.homePhoneNumber}</td>
+                                        <td>{(props.data.mobilePhoneNumber ? props.data.mobilePhoneNumber : '') + " - " + (props.data.homePhoneNumber ? props.data.homePhoneNumber : '')}</td>
                                     </tr>
                                     <tr>
                                         <th>الموقع الالكتروني</th>
@@ -259,16 +281,16 @@ const LoanApplicationDetails = (props) => {
                                         <td>{loan.periodLength} {periodType(loan.periodType)}</td>
                                         <th>حساب السداد</th>
                                         <td></td>
-                                        <th>فائدة إداريه القسط</th>
+                                        <th>تكلفه تمويل إداريه القسط</th>
                                         <td>{loan.adminFees}</td>
                                     </tr>
 
 
                                     <tr>
-                                        <th>الفائدة الموزعه</th>
+                                        <th>تكلفه التمويل الموزعه</th>
                                         <td>{loan.productInterest}% {interestPeriod(loan.interestPeriod)}</td>
-                                        <th>الفائدة المقدمه</th>
-                                        <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من الفائدة الموزعه</td>
+                                        <th>تكلفه التمويل المقدمه</th>
+                                        <td>{loan.inAdvanceFees}% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                     </tr>
 
                                     <tr>
@@ -282,15 +304,15 @@ const LoanApplicationDetails = (props) => {
                                     <tr>
                                         <th>نائب مدير ميداني</th>
                                         <td></td>
-                                        <th>تاريخ الزياره</th>
-                                        <td></td>
+                                        <th>تاريخ الزيارة</th>
+                                        <td>{loan.visitationDate}</td>
                                     </tr>
 
                                     <tr>
                                         <th>مدير الفرع</th>
                                         <td>{loan.mgrName}</td>
-                                        <th>تاريخ الزياره</th>
-                                        <td>{timeToDateyyymmdd(new Date(loan.mgrVisitationDate).valueOf())}</td>
+                                        <th>تاريخ زيارة مدير الفرع</th>
+                                        <td>{loan.mgrVisitationDate}</td>
                                     </tr>
 
                                     <tr>
@@ -303,7 +325,7 @@ const LoanApplicationDetails = (props) => {
                             <table>
                                 <tbody>
                                     <tr>
-                                        {loan.beneficiaryType === "individual" && loan.guarantors && loan.guarantors.length > 0 && loan.guarantors.map((guarantor, index) => {
+                                        {loan.beneficiaryType === "individual" && loan.guarantors && loan.guarantors.length > 0 && Object.keys(loan.guarantors[0]).length > 0 && loan.guarantors.map((guarantor, index) => {
                                             return (
                                                 <td key={index}>
                                                     <table>
@@ -361,24 +383,46 @@ const LoanApplicationDetails = (props) => {
                                                             <tr>
                                                                 <th>الرقم القومي</th>
                                                                 <td>{member.nationalId}</td>
-                                                                <th>تاريخ الأصدار</th>
-                                                                <td>{member.nationalIdIssueDate}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>النوع</th>
                                                                 <td>{arabicGender(member.gender)}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th>تاريخ الميلاد</th>
                                                                 <td>{member.customerBirthDate}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>التليفون</th>
                                                                 <td>{member.homePhoneNumber + member.mobilePhoneNumber ? ` - ${member.mobilePhoneNumber}` : ''}</td>
+                                                            </tr>
+                                                            <tr>
                                                                 <th>الرقم البريدي</th>
                                                                 <td>{member.homePostalCode}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>العنوان</th>
                                                                 <td>{member.customerHomeAddress}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>قطاع العمل</th>
+                                                                <td>{member.businessSector}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>النشاط</th>
+                                                                <td>{member.businessActivity}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>التخصص</th>
+                                                                <td>{member.businessSpecialty}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>حصة العضو من قيمة القرض</th>
+                                                                <td>{member.amount}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>تاريخ الأصدار</th>
+                                                                <td>{member.nationalIdIssueDate}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

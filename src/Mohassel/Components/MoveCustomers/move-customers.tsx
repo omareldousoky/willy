@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import FormCheck from "react-bootstrap/FormCheck";
 import InputGroup from "react-bootstrap/InputGroup";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
-import { parseJwt } from "../../../Shared/Services/utils";
+import { getErrorMessage, parseJwt } from "../../../Shared/Services/utils";
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Form from "react-bootstrap/Form";
@@ -113,7 +113,7 @@ export class MoveCustomers extends Component<{}, State>  {
             this.setState({
                 LoanOfficerSelectLoader: false,
                 LoanOfficerSelectOptions: []
-            })
+            }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
         }
         const activeRes = await searchLoanOfficer({ name: searchKeyWord, from: this.state.from, size: 1000, branchId: tokenData.branch, status: 'active' })
         if (activeRes.status === "success") {
@@ -123,7 +123,7 @@ export class MoveCustomers extends Component<{}, State>  {
         } else {
             this.setState({
                 activeLoanOfficerSelectOptions: []
-            })
+            },() => Swal.fire('Error !',getErrorMessage(activeRes.error.error),'error'));
         }
     }
 
@@ -166,7 +166,7 @@ export class MoveCustomers extends Component<{}, State>  {
         }
         else {
             this.setState({ loading: false }, () => {
-                Swal.fire("error", local.errorOnMovingCustomers);
+                Swal.fire("Error !", getErrorMessage(res.error.error),'error');
             })
 
         }
@@ -194,7 +194,7 @@ export class MoveCustomers extends Component<{}, State>  {
                 customers: res.body.data,
                 loading: false
             });
-        } else this.setState({ loading: false });
+        } else this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
     }
     render() {
 
@@ -360,6 +360,7 @@ export class MoveCustomers extends Component<{}, State>  {
                                         totalCount={this.state.totalCustomers}
                                         pagination={true}
                                         dataLength={this.state.customers.length}
+                                        paginationArr= {[10,100,500,1000]}
                                         changeNumber={(key: string, number: number) => {
                                             this.setState({ [key]: number } as any, () =>
                                                 this.getCustomersForUser()

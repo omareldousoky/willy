@@ -5,8 +5,8 @@ import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan';
 import { searchApplication } from '../../../Mohassel/Services/APIs/loanApplication/searchApplication';
 import {searchActionLogs} from '../../../Mohassel/Services/APIs/ActionLogs/searchActionLogs';
 import { searchLeads } from '../../../Mohassel/Services/APIs/Leads/searchLeads';
-
-
+import {searchClearance} from '../../../Mohassel/Services/APIs/clearance/searchClearance'
+import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups';
 export const search = (obj) => {
     switch (obj.url) {
         case ('customer'):
@@ -16,10 +16,10 @@ export const search = (obj) => {
                 const res = await searchCustomer(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
         case ('branch'):
@@ -29,10 +29,10 @@ export const search = (obj) => {
                 const res = await searchBranches(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
         case ('user'):
@@ -42,10 +42,10 @@ export const search = (obj) => {
                 const res = await searchUsers(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
         case ('loan'):
@@ -55,10 +55,10 @@ export const search = (obj) => {
                 const res = await searchLoan(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
         case ('application'):
@@ -68,10 +68,10 @@ export const search = (obj) => {
                 const res = await searchApplication(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
         case ('actionLogs'):
@@ -81,10 +81,10 @@ export const search = (obj) => {
                 const res = await searchActionLogs(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
         case ('lead'):
@@ -94,12 +94,38 @@ export const search = (obj) => {
                 const res = await searchLeads(obj);
                 if (res.status === "success") {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    dispatch({ type: 'SEARCH', payload: res.body })
+                    dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
                 } else {
                     dispatch({ type: 'SET_LOADING', payload: false })
-                    console.log("Error!", "Disconnected, login again", "error")
+                    dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
+         case('clearance'):
+            return async (dispatch) => {
+                delete obj.url;
+                dispatch({ type: 'SET_LOADING', payload: true })
+                const res = await searchClearance(obj);
+                if (res.status === 'success') {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
+                } else {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
+                }
+            }
+         case ('supervisionsGroups'):
+             return async (dispatch)=>{
+                    delete obj.url;
+                    dispatch({ type: 'SET_LOADING', payload: true })
+                    const res = await searchGroups(obj);
+                    if (res.status === 'success') {
+                        dispatch({ type: 'SET_LOADING', payload: false })
+                        dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
+                    } else {
+                        dispatch({ type: 'SET_LOADING', payload: false })
+                        dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
+                    }  
+             }     
         case ('clearData'):
             return (dispatch) => {
                 dispatch({ type: 'CLEAR_DATA', payload: {} })
