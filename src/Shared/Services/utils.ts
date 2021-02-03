@@ -460,3 +460,17 @@ export const getFullCustomerKey = (
   const [branch, customer] = matchResult[0].split("/");
   return Number(`11${branch.padStart(3, "0")}${customer.padStart(7, "0")}`);
 };
+
+export const guarantorOrderLocal = {
+  0: "الضامن الاول",
+  1: "الضامن الثاني",
+  2: "الضامن الثالث",
+  3: "الضامن الرابع",
+  4: "الضامن الخامس",
+  5: "الضامن السادس",
+  6: "الضامن السابع",
+  7: "الضامن الثامن",
+  8: "الضامن التاسع",
+  9: "الضامن العاشر",
+  default: "الضامن"
+};
