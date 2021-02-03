@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 import * as Yup from "yup";
 import Row from 'react-bootstrap/Row';
 import { timeToDateyyymmdd, getDateString, getErrorMessage } from "../../../Shared/Services/utils";
+import { rollbackValidation } from '../Payment/paymentValidation';
 
 interface State {
     loading: boolean;
@@ -102,6 +103,17 @@ class LoanRollBack extends Component<Props, State>{
         'approveManualRandomPayment', 'rejectManualRandomPayment'];
         return array.filter( action => actionList.includes(action.action))
     }
+    getMinDate() {
+        const minDate = "2021-02-01"
+        let compared = ""
+        if(this.state.actionToRollback.transactions && this.state.actionToRollback.transactions[0]) {
+            compared = getDateString(this.state.actionToRollback.transactions[0].truthDate)
+        } else {
+            compared = getDateString(this.state.actionToRollback.insertedAt)
+        }
+        if(new Date(compared).valueOf() > new Date(minDate).valueOf()) return compared
+        else return minDate
+    }
     render() {
         return (
             <>
@@ -125,7 +137,7 @@ class LoanRollBack extends Component<Props, State>{
                     <Formik
                         initialValues={{ truthDate: timeToDateyyymmdd(-1) }}
                         onSubmit={this.rollbackConfirmation}
-                        validationSchema={Yup.object().shape({ truthDate: Yup.date().required(local.required) })}
+                        validationSchema={rollbackValidation}
                         validateOnBlur
                         validateOnChange
                     >
@@ -145,7 +157,7 @@ class LoanRollBack extends Component<Props, State>{
                                                 value={formikProps.values.truthDate}
                                                 onBlur={formikProps.handleBlur}
                                                 onChange={formikProps.handleChange}
-                                                min={this.state.actionToRollback.transactions && this.state.actionToRollback.transactions[0] ? getDateString(this.state.actionToRollback.transactions[0].truthDate) : getDateString(this.state.actionToRollback.insertedAt)}
+                                                min={this.getMinDate()}
                                                 isInvalid={Boolean(formikProps.errors.truthDate) && Boolean(formikProps.touched.truthDate)}
                                             />
                                             <Form.Control.Feedback type="invalid">

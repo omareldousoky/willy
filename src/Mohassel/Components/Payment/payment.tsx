@@ -5,7 +5,7 @@ import { Formik, FormikProps } from 'formik';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
-import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getDateString, getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { PendingActions } from '../../../Shared/Services/interfaces';
 import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
@@ -135,7 +135,7 @@ class Payment extends Component<Props, State>{
       {
         title: local.dateOfPayment,
         key: "dateOfPayment",
-        render: data => timeToDateyyymmdd(data.dateOfPayment)
+        render: data => getDateString(data.dateOfPayment)
       },
       {
         title: local.installmentStatus,

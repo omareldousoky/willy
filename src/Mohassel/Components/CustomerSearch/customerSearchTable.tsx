@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { getFullCustomerKey } from '../../../Shared/Services/utils';
 interface Customer {
     birthDate?: any;
     customerName?: string;
@@ -49,6 +50,7 @@ interface Props {
     removeCustomer?: Function;
     selectedCustomer: Customer;
     style?: object;
+    header?: string;
 };
 
 interface State {
@@ -61,7 +63,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownArray: ['name', 'key', 'nationalId', 'code'],
+            dropDownArray: ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'],
             dropDownValue: 'name'
         }
     }
@@ -82,24 +84,40 @@ class CustomerSearch extends Component<Props, State>{
             case 'nationalId': return local.nationalId;
             case 'key': return local.code;
             case 'code': return local.partialCode;
+            case 'customerShortenedCode': return local.customerShortenedCode;
             default: return '';
         }
     }
-    handleSubmit = (e) => {
-        e.preventDefault();
-        if ((this.state.dropDownValue === 'nationalId' || this.state.dropDownValue === 'key' || this.state.dropDownValue === 'code') && isNaN(Number(this.state.searchKey))) {
-            Swal.fire("", local.SearchOnlyNumbers, "error");
-        } else {
-            this.props.handleSearch(this.state.dropDownValue, (this.state.dropDownValue === 'code') ? Number(this.state.searchKey) : this.state.searchKey)
-        }
-    };
+	handleSubmit = (e) => {
+    e.preventDefault();
+		const { handleSearch } = this.props;
+		const { dropDownValue, searchKey } = this.state;
+		const isKey = dropDownValue === "key";
+		const isCode = dropDownValue === "code";
+
+    if (
+      (dropDownValue === "nationalId" || isKey || isCode) &&
+      isNaN(Number(searchKey))
+    ) {
+      Swal.fire("", local.SearchOnlyNumbers, "error");
+    } else {
+      const isCustomerShortenedCode = dropDownValue === "customerShortenedCode";
+      const modifiedSearchKey = isCustomerShortenedCode
+        ? getFullCustomerKey(searchKey)
+        : searchKey;
+      handleSearch(
+        isCustomerShortenedCode ? "key" : dropDownValue,
+        isCode || isKey ? Number(modifiedSearchKey) : modifiedSearchKey
+      );
+    }
+  };
     render() {
         return (
             <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column', ...this.props.style }}>
 
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <p style={{ margin: 'auto 20px' }}>{local.search}</p>
+                        <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>
                         <InputGroup style={{ direction: 'ltr' }}>
                             <FormControl
                                 type="text"
@@ -141,7 +159,7 @@ class CustomerSearch extends Component<Props, State>{
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{ width: '50%' }}><h4>{local.noResults}</h4></div>}
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
-                        <h5>{local.guarantor + ` ` + this.props.source}</h5>
+                        <h5>{this.props.source}</h5>
                         <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
                     </div>
                     <div className="d-flex flex-row">

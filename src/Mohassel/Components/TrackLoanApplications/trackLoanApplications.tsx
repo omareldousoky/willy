@@ -10,7 +10,7 @@ import Search from '../../../Shared/Components/Search/search';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, downloadFile, iscoreStatusColor, getFullCustomerKey, iscoreBank } from '../../../Shared/Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
@@ -185,11 +185,21 @@ class TrackLoanApplications extends Component<Props, State>{
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
-      if(this.props.error)
-      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
-    }
-    );
+		const { searchFilters, search, error, branchId } = this.props;
+    const { customerShortenedCode, customerKey } = searchFilters;
+    const { size, from } = this.state;
+    search({
+      ...searchFilters,
+      customerKey: !!customerShortenedCode
+        ? getFullCustomerKey(customerShortenedCode)
+        : customerKey || undefined,
+      size,
+      from,
+      url: "application",
+      branchId,
+    }).then(() => {
+      if (error) Swal.fire("Error !", getErrorMessage(error), "error");
+    });
   }
   getStatus(status: string) {
     switch (status) {
@@ -266,8 +276,20 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
               <hr className="dashed-line" />
               <Search
-                searchKeys={['keyword', 'dateFromTo', 'branch', 'status-application']}
-                dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+                searchKeys={[
+                  "keyword",
+                  "dateFromTo",
+                  "branch",
+                  "status-application",
+                ]}
+                dropDownKeys={[
+                  "name",
+                  "nationalId",
+                  "key",
+                  "customerKey",
+                  "customerCode",
+                  "customerShortenedCode",
+                ]}
                 url="application"
                 from={this.state.from}
                 size={this.state.size}

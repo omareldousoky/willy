@@ -164,6 +164,7 @@ class ManualPayment extends Component<Props, State> {
                         type="date"
                         name="truthDate"
                         data-qc="truthDate"
+                        min="2021-02-01"
                         value={this.props.formikProps.values.truthDate}
                         onBlur={this.props.formikProps.handleBlur}
                         onChange={this.props.formikProps.handleChange}

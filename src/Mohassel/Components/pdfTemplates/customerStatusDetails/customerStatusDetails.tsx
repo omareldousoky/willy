@@ -1,6 +1,6 @@
 import React from 'react';
 import './customerStatusDetails.scss';
-import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender, timeToArabicDateNow, guarantorOrderLocal } from "../../../../Shared/Services/utils";
 
 const CustomerStatusDetails = (props) => {
     function getCustomerStatus(status: string) {
@@ -50,7 +50,7 @@ const CustomerStatusDetails = (props) => {
                     <tbody>
                         <tr>
                             <td className="borderless" colSpan={100}>
-                                {props.data.Loans && props.data.Loans.length > 0 && props.data.Loans.map((loan, index) => {
+                                {props.data.Loans && props.data.Loans.length > 0 ? props.data.Loans.map((loan, index) => {
                                     return (
                                         <div key={index} style={{ pageBreakAfter: 'always' }}>
                                             <table>
@@ -78,13 +78,21 @@ const CustomerStatusDetails = (props) => {
                                                         <th>تاريخ الميلاد</th>
                                                         <td>{timeToArabicDate(props.data.birthDate, false)}</td>
                                                         <th>البطاقه</th>
-                                                        <td>{props.data.nationalId}</td>
+                                                        <td>{numbersToArabic(props.data.nationalId)}</td>
                                                         <th>صادره من</th>
                                                         <td></td>
                                                     </tr>
+																										<tr>
+																											<th>الموبيل</th>
+																											<td>{props.data.MobilePhoneNumber || ""}</td>
+																											<th>تليفون المنزل</th>
+																											<td>{props.data.HomePhoneNumber || ""}</td>
+																											<th>تليفون العمل</th>
+																											<td>{props.data.BusinessPhoneNumber || ""}</td>
+																										</tr>
                                                     <tr>
                                                         <th>ملاحظات</th>
-                                                        <td colSpan={3}></td>
+																												<td colSpan={3}>{props.data.Comments || ""}</td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={100} className="horizontal-line"></td>
@@ -98,33 +106,33 @@ const CustomerStatusDetails = (props) => {
                                                     </tr>
                                                     <tr>
                                                         <th>رقم القرض</th>
-                                                        <td>{loan.idx}</td>
+                                                        <td>{numbersToArabic(loan.idx)}</td>
                                                         <th>تاريخ القرض</th>
                                                         <td>{timeToArabicDate(loan.creationDate, false)}</td>
                                                         <th>القيمة</th>
-                                                        <td>{loan.principal}</td>
+                                                        <td>{numbersToArabic(loan.principal)}</td>
                                                         <th>العمله</th>
                                                         <td>{currency(loan.currency)}</td>
                                                         <th>رسوم الطوابع</th>
-                                                        <td>{loan.stamps}</td>
+                                                        <td>{numbersToArabic(loan.stamps)}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>رسوم طلب القرض</th>
-                                                        <td>{loan.applicationFees}</td>
+                                                        <td>{numbersToArabic(loan.applicationFees)}</td>
                                                         <th>عدد الأقساط</th>
-                                                        <td>{loan.numInst}</td>
+                                                        <td>{numbersToArabic(loan.numInst)}</td>
                                                         <th>فترة السداد</th>
-                                                        <td>{loan.periodLength + " " + periodType(loan.periodType)}</td>
+                                                        <td>{numbersToArabic(loan.periodLength) + " " +numbersToArabic( periodType(loan.periodType))}</td>
                                                         <th>فترة السماح</th>
-                                                        <td>{loan.gracePeriod}</td>
+                                                        <td>{numbersToArabic(loan.gracePeriod)}</td>
                                                         <th>عمولة المندوب</th>
-                                                        <td>{loan.representativeFees}</td>
+                                                        <td>{numbersToArabic(loan.representativeFees)}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>تكلفه التمويل القسط</th>
-                                                        <td>{loan.feesInstallment}</td>
+                                                        <td>{numbersToArabic(loan.feesInstallment)}</td>
                                                         <th>تكلفه التمويل الموزعه</th>
-                                                        <td>{loan.interest} % سنويا</td>
+                                                        <td>{numbersToArabic(loan.interest)} % سنويا</td>
                                                         <th>تكلفه التمويل المقدمه</th>
                                                         <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                                     </tr>
@@ -136,11 +144,11 @@ const CustomerStatusDetails = (props) => {
                                                         <th>حالة القرض</th>
                                                         <td>{getLoanStatus(loan.status)}</td>
                                                         <th>غرامات مسدده</th>
-                                                        <td>{loan.penaltiesPaid === "None" ? '' : loan.penaltiesPaid}</td>
+                                                        <td>{loan.penaltiesPaid === "None" ? '' : numbersToArabic(loan.penaltiesPaid)}</td>
                                                         <th>غرامات معفاه</th>
-                                                        <td>{loan.penaltiesCanceled === "None" ? '' : loan.penaltiesCanceled}</td>
+                                                        <td>{loan.penaltiesCanceled === "None" ? '' : numbersToArabic(loan.penaltiesCanceled)}</td>
                                                         <th>غرامات مستحقه</th>
-                                                        <td>{loan.penalties === "None" ? '' : loan.penalties}</td>
+                                                        <td>{loan.penalties === "None" ? '' : numbersToArabic(loan.penalties)}</td>
                                                     </tr>
                                                     {loan.rejectionReason !== "None" ?
                                                         <tr>
@@ -171,7 +179,7 @@ const CustomerStatusDetails = (props) => {
                                                                     <table>
                                                                         <thead>
                                                                             <tr>
-                                                                                <th className="frame gray" colSpan={100}>الضامن الرئيسي</th>
+                                                                                <th className="frame gray" colSpan={100}>{guarantorOrderLocal[index > 10 ? "default" : index]}</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -183,13 +191,13 @@ const CustomerStatusDetails = (props) => {
                                                                             </tr>
                                                                             <tr>
                                                                                 <th>الرقم القومي</th>
-                                                                                <td>{guarantor.nationalId}</td>
+                                                                                <td>{numbersToArabic(guarantor.nationalId)}</td>
                                                                                 <th>تاريخ الأصدار</th>
                                                                                 <td>{guarantor.nationalIdIssueDate ? timeToArabicDate(guarantor.nationalIdIssueDate, false) : ''}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <th>تاريخ الميلاد</th>
-                                                                                <td>{guarantor.birthDate}</td>
+                                                                                <td>{guarantor.birthDate ?timeToArabicDate(guarantor.birthDate , false) : ''}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <th>العنوان</th>
@@ -197,9 +205,9 @@ const CustomerStatusDetails = (props) => {
                                                                             </tr>
                                                                             <tr>
                                                                                 <th>التليفون</th>
-                                                                                <td>{guarantor.mobilePhoneNumber}</td>
+                                                                                <td>{numbersToArabic(guarantor.mobilePhoneNumber)}</td>
                                                                                 <th>الرقم البريدي</th>
-                                                                                <td>{guarantor.homePostalCode}</td>
+                                                                                <td>{numbersToArabic(guarantor.homePostalCode)}</td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <th>البطاقه صادره من</th>
@@ -234,9 +242,9 @@ const CustomerStatusDetails = (props) => {
                                                     {loan.groupMembers.map((member, index) => {
                                                         return (
                                                             <tr key={index}>
-                                                                <td>{member.key}</td>
+                                                                <td>{numbersToArabic(member.key)}</td>
                                                                 <td>{member.customerName}</td>
-                                                                <td>{member.amount}</td>
+                                                                <td>{numbersToArabic(member.amount)}</td>
                                                                 {member.type === "leader" ? <td>رئيس المجموعه</td> : null}
                                                             </tr>
                                                         )
@@ -261,38 +269,81 @@ const CustomerStatusDetails = (props) => {
                                                         <th>عدد أيام التأخير / التبكير</th>
                                                     </tr>
                                                     {loan.installments.map((installment, index) => {
+                                                        if (installment.instTotal)
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{installment.idx}</td>
                                                                 <td>{installment.dateOfPayment? timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false): ''}</td>
-                                                                <td style={{ direction: 'ltr' }}>{installment.instTotal}</td>
-                                                                <td style={{ direction: 'ltr' }}>{installment.feesInstallment}</td>
-                                                                <td style={{ direction: 'ltr' }}>{installment.totalPaid}</td>
-                                                                <td style={{ direction: 'ltr' }}>{installment.feesPaid}</td>
+                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.instTotal)}</td>
+                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.feesInstallment)}</td>
+                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.totalPaid)}</td>
+                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.feesPaid)}</td>
                                                                 <td>{getStatus(installment)}</td>
                                                                 <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>
-                                                                <td>{installment.delay}</td>
+                                                                <td>{numbersToArabic(installment.delay)}</td>
                                                             </tr>
                                                         )
                                                     })}
                                                     <tr>
                                                         <td className="borderless" colSpan={2}></td>
-                                                        <td>{loan.instTotalDue}</td>
-                                                        <td>{loan.feesInstallmentDue}</td>
-                                                        <td>{loan.totalPaid}</td>
-                                                        <td>{loan.totalFeesPaid}</td>
+                                                        <td>{numbersToArabic(loan.instTotalDue)}</td>
+                                                        <td>{numbersToArabic(loan.feesInstallmentDue)}</td>
+                                                        <td>{numbersToArabic(loan.totalPaid)}</td>
+                                                        <td>{numbersToArabic(loan.totalFeesPaid)}</td>
                                                         <th>رصيد العميل</th>
-                                                        <td></td>
+                                                        <td>{(loan.status==='pending' || loan.status=== 'issued') ? numbersToArabic(props.data.remainingTotal) :0}</td>
                                                         <th>أيام التأخير </th>
-                                                        <td>{loan.lateDays}</td>
+                                                        <td>{numbersToArabic(loan.lateDays)}</td>
                                                         <th> أيام التبكير </th>
-                                                        <td>{loan.earlyDays}</td>
+                                                        <td>{numbersToArabic(loan.earlyDays)}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     )
-                                })}
+                                }): (
+																	<table>
+																		<tbody>
+																				<tr>
+																						<th className="frame gray" colSpan={100}>بيانات العميل</th>
+																				</tr>
+																				<tr>
+																						<th>الفرع الحالي</th>
+																						<td>{props.data.accountBranch}</td>
+																						<th>المندوب الحالي</th>
+																						<td>{props.data.officerName}</td>
+																				</tr>
+																				<tr>
+																						<th>الرقم القومي</th>
+																						<td>{numbersToArabic(props.data.nationalId)}</td>
+																						<th>بتاريخ</th>
+																						<td>{timeToArabicDate(props.data.nationalIdIssueDate, false)}</td>
+																						<th>النوع</th>
+																						<td>{arabicGender(props.data.gender)}</td>
+																				</tr>
+																				<tr>
+																						<th>تاريخ الميلاد</th>
+																						<td>{timeToArabicDate(props.data.birthDate, false)}</td>
+																						<th>البطاقه</th>
+																						<td>{props.data.nationalId}</td>
+																						<th>صادره من</th>
+																						<td></td>
+																				</tr>
+																				<tr>
+																						<th>الموبيل</th>
+																						<td>{props.data.MobilePhoneNumber || ""}</td>
+																						<th>تليفون المنزل</th>
+																						<td>{props.data.HomePhoneNumber || ""}</td>
+																						<th>تليفون العمل</th>
+																						<td>{props.data.BusinessPhoneNumber || ""}</td>
+																				</tr>
+																				<tr>
+																						<th>ملاحظات</th>
+																						<td colSpan={3}>{props.data.Comments || ""}</td>
+																				</tr>
+																		</tbody>
+																</table>
+																)}
                             </td>
                         </tr>
                     </tbody>
