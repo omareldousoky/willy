@@ -899,5 +899,6 @@
     "followUpStatement":"بيان متابعه",
     "customerBalance": "رصيد العميل",
 		"confirmNewPassword": "تأكيد كلمة المرور",
-		"newPasswordAsCurrentPasswordError": "كلمة المرور الجديدة يجب أن تكون مختلفة عن الحالية"
+		"newPasswordAsCurrentPasswordError": "كلمة المرور الجديدة يجب أن تكون مختلفة عن الحالية",
+    "manageLoanDetails":"اعدادت القروض"
 }
