@@ -894,5 +894,6 @@
     "installmentSerialNumber": "رقم تسلسل القسط",
 		"customerShortenedCode": "كود العميل المختصر",
     "followUpStatement":"بيان متابعه",
-    "customerBalance": "رصيد العميل"
+    "customerBalance": "رصيد العميل",
+    "manageLoanDetails":"اعدادت القروض"
 }
