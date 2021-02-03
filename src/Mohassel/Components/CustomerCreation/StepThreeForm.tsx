@@ -185,7 +185,7 @@ export const StepThreeForm = (props: any) => {
             </Row>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
-                    props.edit && allowed && ability.can("updateCustomerHasLoan","customer") &&
+                    ((props.edit && allowed && ability.can("updateCustomerHasLoan","customer")) || (props.edit && allowed && !props.hasLoan)) &&
                     <Row>
                         <Col sm={6}>
                             <Form.Group style={{ textAlign: 'right' }}>
@@ -209,7 +209,7 @@ export const StepThreeForm = (props: any) => {
                     props.edit && allowed && 
                     <>
                         <Row>
-                            {ability.can("updateCustomerHasLoan","customer") && <> <Col sm={6}>
+                            {(ability.can("updateCustomerHasLoan","customer") || !props.hasLoan) && <> <Col sm={6}>
                                 <Form.Group controlId="maxLoansAllowed">
                                     <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
                                     <Form.Control
@@ -247,7 +247,7 @@ export const StepThreeForm = (props: any) => {
                             </Col> </>}
                         </Row>
                         <Row>
-                            <Col sm={6}>
+                        {(ability.can("updateCustomerHasLoan","customer") || !props.hasLoan) && <Col sm={6}>
                                 <Form.Group controlId="maxPrincipal">
                                     <Form.Label className="customer-form-label">{`${local.maxCustomerPrincipal}`}</Form.Label>
                                     <Form.Control
@@ -264,7 +264,7 @@ export const StepThreeForm = (props: any) => {
                                         {errors.maxPrincipal}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                            </Col>
+                            </Col>}
                         </Row>
                     </>
                 }
