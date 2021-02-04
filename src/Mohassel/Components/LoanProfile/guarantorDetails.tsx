@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, getErrorMessage, iscoreStatusColor } from "../../../Shared/Services/utils";
+import { downloadFile, getErrorMessage, guarantorOrderLocal, iscoreStatusColor } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -243,8 +243,10 @@ export const GuarantorTableView = (props: Props) => {
                 {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{local.guarantorCode}</th>
                             <th>{local.name}</th>
+                            <th>{local.nationalId}</th>
                             <th>{local.area}</th>
                             <th>{local.customerHomeAddress}</th>
                             <th>{local.telephone}</th>
@@ -260,8 +262,10 @@ export const GuarantorTableView = (props: Props) => {
                             const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
                             const area = props.getGeoArea(guar.geoAreaId);
                             return (<tr key={i}>
+                                <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
                                 <td>{guar.key}</td>
                                 <td>{guar.customerName}</td>
+                                <td>{guar.nationalId}</td>
                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                 <td>{guar.customerHomeAddress}</td>
                                 <td>{guar.mobilePhoneNumber}</td>
@@ -279,10 +283,10 @@ export const GuarantorTableView = (props: Props) => {
                 </Table>
                     : <p>{local.noGuarantors}</p>}
             </div>
-            {modalView && <Modal show={modalView} onHide={() => changeModal(false)}>
+            {modalView && <Modal size='lg' show={modalView} onHide={() => changeModal(false)}>
                 <Loader type='fullsection' open={loading} />
                 <Modal.Header>
-                    <Modal.Title>{local.addGuarantor}</Modal.Title>
+                    <Modal.Title>{local.add} {guarantorOrderLocal[props.guarantors.length > 10 ? "default" : props.guarantors.length]}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <CustomerSearch
@@ -292,6 +296,7 @@ export const GuarantorTableView = (props: Props) => {
                         searchResults={searchResults}
                         selectCustomer={(guarantor) => { selectGuarantor(guarantor) }}
                         selectedCustomer={selectedGuarantor}
+                        header={guarantorOrderLocal[props.guarantors.length > 10 ? "default" : props.guarantors.length ]}
                     />
                 </Modal.Body>
                 <ModalFooter>
