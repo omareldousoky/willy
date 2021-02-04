@@ -47,7 +47,7 @@ export const StepOneForm = (props: any) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isInvalid={errors.customerName && touched.customerName}
-                disabled={(!allowed && props.edit && props.hasLoan) || (props.edit && !ability.can("updateNationalId", "customer")) || !ability.can("createCustomer", "customer")}
+                disabled={(!allowed && props.edit && props.hasLoan) || (props.edit && !ability.can("updateNationalId", "customer") && !props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -92,7 +92,7 @@ export const StepOneForm = (props: any) => {
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}
                 maxLength={14}
-                disabled={(!allowed && props.edit && props.hasLoan) || (props.edit && !ability.can("updateNationalId", "customer")) || !ability.can("createCustomer", "customer")}
+                disabled={(!allowed && props.edit && props.hasLoan) || (props.edit && !ability.can("updateNationalId", "customer") && !props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
