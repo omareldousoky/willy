@@ -1,19 +1,24 @@
 @media screen,
 print {
     .arrears-individuals {
-        font-size: 12px;
-        direction: rtl;
-        margin: 10px;
         font-weight: bold;
+        text-align: center;
+        padding: 10px 5px;
         page-break-after: always;
-        text-align: right;
-        
+        direction: rtl;
+		-webkit-print-color-adjust: exact;
+		background-color: #fff;
+        font-size: 11px;
+        width: 100%;        
         & tbody {
             line-height: 1.5em;
             margin: 0 10px ;
         }
         td {
             text-align: right;
+        }
+        td{
+            width: 100px;
         }
     
         & .headtitle {
@@ -43,6 +48,10 @@ print {
             background-color: lightgrey;
             -webkit-print-color-adjust: exact;
             border: 0.5px solid black;
+        }
+        .babyBlue {
+            background-color: #bcecee;
+            -webkit-print-color-adjust: exact;
         }
     
         & .horizontal-line {
