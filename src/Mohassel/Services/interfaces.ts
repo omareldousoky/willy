@@ -140,7 +140,7 @@ export interface LeakedCustomer {
     latestIssueDate: string;
     latestPaymentDate: string;
     latestIssuedPrincipal: number;
-    installmentsCount: number
+    installmentsCount: number;
     earlyDays: number;
     workArea: string;
     representative: string;
