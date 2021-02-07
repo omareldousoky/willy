@@ -1,6 +1,8 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import AsyncSelect from "react-select/async";
+import { useStore } from "react-redux";
 import Select from "react-select";
+import { Auth, Branch } from "../../../Shared/redux/auth/types";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
 
@@ -42,9 +44,16 @@ export const LoanOfficersDropDown = props => {
   );
 };
 
-export const BranchesDropDown = props => {
+type BranchDropDownProps = {
+  fromReports?: boolean;
+  multiselect?: boolean;
+  value?: string;
+  onSelectBranch: (branch: Branch) => void;
+}
+export const BranchesDropDown = (props: BranchDropDownProps) => {
   const [options, setOptions] = useState<any>([]);
   const [value, setValue] = useState(options.find(o => o._id === props.value));
+  const store = useStore();
   const customStyles = {
     control: provided => ({
       ...provided,
@@ -55,18 +64,26 @@ export const BranchesDropDown = props => {
       }
     })
   };
-  const getBranches = async searchKeyWord => {
-    const res = await searchBranches({
-      from: 0,
-      size: 1000,
-      name: searchKeyWord
-    });
-    if (res.status === "success") {
-      setOptions([{ name: local.allBranches, _id: "" }, ...res.body.data]);
-      return [{ name: local.allBranches, _id: "" }, ...res.body.data];
+  const getBranches = async (searchKeyWord: string) => {
+    if (props.fromReports) {
+      const auth: Auth = store.getState().auth
+      let branches: Array<Branch> = auth.validBranches;
+      if (!auth.requireBranch) branches = [{ name: local.allBranches, _id: "" }, ...branches]
+      return branches.filter(branch => branch.name.includes(searchKeyWord))
     } else {
-      return [];
+      const res = await searchBranches({
+        from: 0,
+        size: 1000,
+        name: searchKeyWord
+      });
+      if (res.status === "success") {
+        setOptions([{ name: local.allBranches, _id: "" }, ...res.body.data]);
+        return [{ name: local.allBranches, _id: "" }, ...res.body.data];
+      } else {
+        return [];
+      }
     }
+
   };
   return (
     <div className="dropdown-container" style={{ flex: 2, paddingLeft: 0 }}>
@@ -79,7 +96,7 @@ export const BranchesDropDown = props => {
         placeholder={local.chooseBranch}
         value={value || options.find(option => option._id === props.value)}
         isMulti={props.multiselect}
-        onChange={branch => {props.onSelectBranch(branch); setValue(branch);}}
+        onChange={branch => { props.onSelectBranch(branch); setValue(branch); }}
         getOptionLabel={option => option.name}
         getOptionValue={option => option._id}
         loadOptions={getBranches}
