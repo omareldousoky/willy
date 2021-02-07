@@ -65,9 +65,9 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
     })
   };
   const getBranches = async (searchKeyWord: string) => {
-    if (props.onlyValidBranches) {
-      const auth: Auth = store.getState().auth
-      let branches: Array<Branch> = auth.validBranches;
+    const auth: Auth = store.getState().auth
+    let branches: Array<Branch> = auth.validBranches;
+    if (props.onlyValidBranches && branches !== null) {
       if (!auth.requireBranch) branches = [{ name: local.allBranches, _id: "" }, ...branches]
       return branches.filter(branch => branch.name.includes(searchKeyWord))
     } else {
