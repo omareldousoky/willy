@@ -101,7 +101,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                     key: Reports.LeakedCustomers,
                     local:"تقرير العملاء المتسربون",
                     inputs:["dateFromTo", "branches"],
-                    permission:"motasareboonReport"
+                    permission:"churnedCustomers"
                 }
             ],
             selectedPdf: { permission: "" },
