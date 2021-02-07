@@ -24,6 +24,7 @@ import {
 import OfficersPercentPayment from "../pdfTemplates/officersPercentPayment/officersPercentPayment";
 import OfficerBranchPercentPayment from "../pdfTemplates/officersPercentPayment/officersBranchPercentPayment";
 import LeakedCustomersPDF from "../pdfTemplates/LeakedCustomers/leakedCustomers";
+import { fetchLeakedCustomersReport } from "../../Services/APIs/Reports/leakedCustomers";
 
 export interface PDF {
     key?: string;
@@ -99,8 +100,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                 {
                     key: Reports.LeakedCustomers,
                     local:"تقرير العملاء المتسربون",
-                    inputs:["dateFromTo"], //should be changed
-                    permission:"officerBranchPercentPayment" //should be changed
+                    inputs:["dateFromTo", "branches"],
+                    permission:"motasareboonReport"
                 }
             ],
             selectedPdf: { permission: "" },
@@ -224,9 +225,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     }
 
     async fetchLeakedCustomers(values) {
-        // this.handleFetchReport()
-        window.print()
-        this.setState({loading: false, print: Reports.LeakedCustomers})
+        const res = await fetchLeakedCustomersReport(
+            this.reportRequest(values)
+        );
+        this.handleFetchReport(res, Reports.LeakedCustomers);
     }
     render() {
         return (
@@ -250,7 +252,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                         </div>
                         {this.state.pdfsArray?.map((pdf, index) => {
                             return (
-                                <Can I={pdf.permission} a="report" key={index}>
+                                // <Can I={pdf.permission} a="report" key={index}>
                                     <Card key={index}>
                                         <Card.Body>
                                             <div
@@ -287,7 +289,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                                             </div>
                                         </Card.Body>
                                     </Card>
-                                </Can>
+                                // </Can>
                             );
                         })}
                     </Card.Body>
@@ -343,7 +345,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                         toDate={this.state.toDate}
                     />
                 )}
-                {console.log(this.state.print)}
                 {this.state.print === Reports.LeakedCustomers && (
                     <LeakedCustomersPDF
                         data={this.state.data}

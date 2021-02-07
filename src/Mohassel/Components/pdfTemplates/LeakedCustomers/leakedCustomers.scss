@@ -2,11 +2,10 @@
 print {
     .leaked-customers {
         text-align: right;
-        font-size: 10px;
+        font-size: 8px;
         line-height: 1.5em;
         page-break-after: always;
         font-family: Arial;
-        
         & table {
             width: 100%;
             border-collapse: separate;
@@ -25,14 +24,11 @@ print {
             }
         }
     }
-
-    
-
 }
 
 @media screen {
     .leaked-customers {
         max-width: 624px;
-        // display: none;
+        display: none;
     }
 }
