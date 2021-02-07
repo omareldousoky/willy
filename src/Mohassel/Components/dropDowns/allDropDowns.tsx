@@ -45,7 +45,7 @@ export const LoanOfficersDropDown = props => {
 };
 
 type BranchDropDownProps = {
-  fromReports?: boolean;
+  onlyValidBranches?: boolean;
   multiselect?: boolean;
   value?: string;
   onSelectBranch: (branch: Branch) => void;
@@ -65,7 +65,7 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
     })
   };
   const getBranches = async (searchKeyWord: string) => {
-    if (props.fromReports) {
+    if (props.onlyValidBranches) {
       const auth: Auth = store.getState().auth
       let branches: Array<Branch> = auth.validBranches;
       if (!auth.requireBranch) branches = [{ name: local.allBranches, _id: "" }, ...branches]
