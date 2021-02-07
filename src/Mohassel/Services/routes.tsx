@@ -53,7 +53,7 @@ import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkAppli
 import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
 import ClearanceProfile from '../Components/Clearance/clearanceProfile';
-
+import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 
 const appRoutes = [
   {
@@ -190,11 +190,17 @@ const appRoutes = [
         ]
       },
       {
-        path: "/loan-uses",
-        label: local.loanUses,
-        render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+        path: "/manage-loan-details",
+        label: local.manageLoanDetails,
+        render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>,
+        routes: [
+          {
+            path: "/loan-uses",
+            label: local.loanUses,
+            render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+          }
+        ]
       },
-      
       {
         path: "/manage-loans",
         label: local.loans,
@@ -321,12 +327,10 @@ const appRoutes = [
                 path: "/branch-details",
                 label: local.branchDetails,
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
-              }
+              },
             ]
           }
-
         ]
-
       },
       // {
       //   path: "/manage-finances",
@@ -368,17 +372,7 @@ const appRoutes = [
       {
         path: "/reports",
         label: local.reports,
-        render: () => <ReportsHome/>
-      },
-      {
-        path: "/move-customers",
-        label: local.moveCustomers,
-        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
-      },
-      {
-        path: "/bulk-creation",
-        label: local.bulkApplicationCreation,
-        render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
+        render: () => <ReportsHome />
       },
       {
         path: "/halan-integration",
@@ -388,7 +382,7 @@ const appRoutes = [
           {
             path: "/leads",
             label: local.applicantsLeads,
-            render: (props) => <Leads {...props} /> ,
+            render: (props) => <Leads {...props} />,
             routes: [
               {
                 path: "/view-lead",
@@ -405,7 +399,7 @@ const appRoutes = [
           {
             path: "/exchange",
             label: local.assignOrChangeLoanOfficer,
-            render: (props) => <AssignLoanOfficer {...props} /> ,
+            render: (props) => <AssignLoanOfficer {...props} />,
           }
         ]
       },
@@ -420,8 +414,7 @@ const appRoutes = [
             render: (props) => 
              <Can I ="editClearance" a="application">
               <CreateClearance {...props} edit={true} />
-               </Can>
-            
+               </Can>    
           },
           {
             
@@ -441,6 +434,10 @@ const appRoutes = [
             </Can>
           }
         ]
+      },{
+        path: '/supervisions-levels',
+        label: local.levelsOfSupervision,
+        render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
       }
     ]
   },

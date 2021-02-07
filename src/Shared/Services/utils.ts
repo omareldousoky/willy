@@ -231,15 +231,10 @@ export const pathTo = route => {
   return [...pathTo(route.parent), route];
 };
 
-export const numbersToArabic = (input: number | string) => {
-  if (input || input === 0) {
-    const id = ['۰', '۱', '۲', '۳', '٤', '۵', '٦', '۷', '۸', '۹'];
-    const inputStr = input.toString();
-    return inputStr.replace(/[0-9]/g, (number) => {
-      return id[number]
-    });
-  } else return '۰';
-}
+// allow `0` to be replaced
+export const numbersToArabic = (input?: number | string) => 
+	input === undefined ? '٠' : input.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d])
+
 export const timeToArabicDateNow = (fullDate: boolean): string => {
   return fullDate ? new Date().toLocaleString('ar-EG') : new Date().toLocaleDateString('ar-EG')
 }
@@ -450,3 +445,32 @@ export const getCurrentTime = () => {
         s < 10 ? `0${s}` : s
     }`;
 };
+
+export const getFullCustomerKey = (
+  shortenedCode: string
+): number | undefined => {
+  const re = /\d{1,3}\/\d{1,7}/g;
+	const matchResult = shortenedCode.match(re) || [];
+	if (!matchResult.length) return undefined;
+  const [branch, customer] = matchResult[0].split("/");
+  return Number(`11${branch.padStart(3, "0")}${customer.padStart(7, "0")}`);
+};
+
+export const guarantorOrderLocal = {
+  0: "الضامن الاول",
+  1: "الضامن الثاني",
+  2: "الضامن الثالث",
+  3: "الضامن الرابع",
+  4: "الضامن الخامس",
+  5: "الضامن السادس",
+  6: "الضامن السابع",
+  7: "الضامن الثامن",
+  8: "الضامن التاسع",
+  9: "الضامن العاشر",
+  default: "الضامن"
+};
+export const convertToTimestamp = (date?: string | number): number => {
+	const today = new Date().valueOf();
+	return date ?  new Date(date).valueOf() || today : today;
+}
+
