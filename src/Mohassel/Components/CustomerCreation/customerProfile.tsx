@@ -19,6 +19,7 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import DeathCertificate from './deathCertificate';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
+import { CustomerCategorization } from './customerCategorization';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -148,6 +149,9 @@ const CustomerProfile = (props: Props) => {
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
         <BackButton title={local.viewCustomer} className="print-none" />
+        {customerDetails?.hasLoan && <Can I="customerCategorization" a="customer">
+          <CustomerCategorization id={props.location.state.id} />
+        </Can>}
         {(ability.can('updateCustomer', 'customer') || ability.can('updateNationalId', 'customer')) && <div className="print-none" style={{ cursor: 'pointer' }} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
           <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
           {local.edit}
