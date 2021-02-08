@@ -1,8 +1,8 @@
 import React from "react";
 import { timeToArabicDateNow } from "../../../../Shared/Services/utils";
-import './arrearsPayed.scss'
+import './paidArrears.scss'
 
-export const ArrearsPayed = (props) => {
+export const PaidArrears = (props) => {
     return (
         <div className="arrears-payed" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
