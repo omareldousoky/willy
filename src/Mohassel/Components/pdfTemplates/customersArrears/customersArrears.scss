@@ -32,6 +32,11 @@ print {
 			}
 		}
 
+		& .branch-data-container {
+			display: flex;
+			flex-direction: column;
+		}
+
 		& .report-title {
 			font-size: 1.2rem !important;
 			margin: auto;
@@ -42,38 +47,35 @@ print {
 			margin: 0 10px;
 		}
 
-		td {
-			text-align: center;
-		}
-
 		& table {
 			width: 100vw;
 			margin-bottom: 5px;
+			margin: auto;
+			border-collapse: collapse;
 
 			& tbody {
 				page-break-inside: avoid;
 			}
 		}
 
-		& thead.report-header {
-			display: table-header-group;
-		}
-
 		small {
 			font-size: 0.75rem;
 			font-weight: 800;
-
 		}
 
-		& table td {
+		& table tbody tr td {
 			font-size: 0.8rem;
 			border: 0.5px solid black;
+			page-break-inside: avoid;
+			text-align: center;
+			white-space: nowrap;
 		}
 
-		& thead th {
+		& table thead tr th {
 			background-color: lightgrey;
 			-webkit-print-color-adjust: exact;
 			border: 0.5px solid black;
+			page-break-inside: avoid;
 		}
 
 		.baby-blue {

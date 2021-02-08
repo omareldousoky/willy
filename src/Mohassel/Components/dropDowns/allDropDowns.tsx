@@ -3,8 +3,7 @@ import AsyncSelect from "react-select/async";
 import Select, { ValueType } from "react-select";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
-import { LoanOfficer } from "../../../Shared/Services/interfaces";
-import { Props, SelectComponentsProps } from "react-select/src/Select";
+import { Props } from "react-select/src/Select";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 
 export interface DropDownOption {
@@ -68,7 +67,7 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
 
 interface AsyncLoanOfficersDropDownProps extends Props<DropDownOption> {
   branchId?: string;
-  onSelectLoanOfficer: (officerOptionValue: ValueType<DropDownOption>) => void;
+  onSelectLoanOfficer: (officersOptions: ValueType<DropDownOption>[]) => void;
 }
 
 export const AsyncLoanOfficersDropDown = ({
@@ -89,7 +88,7 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     });
     if (res.status === "success") {
-      return res.body.data;
+      return res.body.data.filter((v) => !!v);
     } else {
       return [];
     }
@@ -104,9 +103,9 @@ export const AsyncLoanOfficersDropDown = ({
         data-qc="loanOfficers"
         placeholder={local.typeRepresentativeName}
         value={value}
-        onChange={(officer) => {
-          onSelectLoanOfficer(officer);
-          setValue(officer);
+        onChange={(options) => {
+          onSelectLoanOfficer(options as ValueType<DropDownOption>[]);
+          setValue(options);
         }}
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option._id}

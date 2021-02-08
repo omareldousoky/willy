@@ -37,7 +37,12 @@ interface Props {
 
 const ReportsModal = (props: Props) => {
   function handleSubmit(values) {
-    props.submit(values);
+    props.submit({
+      ...values,
+      loanOfficers: values.loanOfficers.length
+        ? values.loanOfficers.map((officer) => officer._id)
+        : [],
+    });
   }
   function getInitialValues() {
     const initValues: InitialFormikState = { branches: [] };
@@ -321,7 +326,9 @@ const ReportsModal = (props: Props) => {
                           onSelectLoanOfficer={(loanOfficers) => {
                             formikProps.setFieldValue(
                               "loanOfficers",
-                              loanOfficers
+                              Array.isArray(loanOfficers)
+                                ? loanOfficers
+                                : [loanOfficers]
                             );
                           }}
                           isDisabled={

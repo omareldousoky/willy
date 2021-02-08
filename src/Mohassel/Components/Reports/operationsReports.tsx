@@ -46,6 +46,7 @@ interface OperationsReportsState {
   loading: boolean;
   fromDate: string;
   toDate: string;
+  date: string;
 }
 
 enum Reports {
@@ -116,10 +117,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         },
       ],
       selectedPdf: { permission: "" },
-      data: {},
+      data: undefined,
       loading: false,
       fromDate: "",
       toDate: "",
+      date: "",
     };
   }
   handlePrint(selectedPdf: PDF) {
@@ -127,16 +129,17 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.setState({
       showModal: true,
       selectedPdf: selectedPdf,
-      data: {},
+      data: undefined,
       fromDate: "",
       toDate: "",
+      date: "",
     });
   }
   handleSubmit(values) {
     const branches = values.branches.map((branch) => branch._id);
     values.branches = branches.includes("") ? [] : branches;
-    const { fromDate, toDate } = values;
-    this.setState({ loading: true, showModal: false, fromDate, toDate });
+    const { fromDate, toDate, date } = values;
+    this.setState({ loading: true, showModal: false, fromDate, toDate, date });
     switch (this.state.selectedPdf.key) {
       case Reports.LoansBriefing2:
         return this.fetchLoansBriefing(values);
@@ -374,8 +377,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             toDate={this.state.toDate}
           />
         )}
-        {this.state.print === Reports.CustomersArrears && (
-          <CustomersArrears data={this.state.data} date={this.state.toDate} />
+        {this.state.print === Reports.CustomersArrears && this.state.data && (
+          <CustomersArrears data={this.state.data} date={this.state.date} />
         )}
       </>
     );

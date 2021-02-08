@@ -1,6 +1,7 @@
 import React from "react";
 import store from "../../../../Shared/redux/store";
 import {
+  beneficiaryType,
   getCurrentTime,
   groupBy,
   numbersToArabic,
@@ -17,9 +18,10 @@ interface CustomersArrearsProps {
   data: CustomersArrearsResponse;
 }
 export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
-  const dataGroupedByBranch = groupBy(
-    data as Record<string, unknown>[],
-    (data) => data.branchCode
+  const { response } = data;
+  const dataGroupedByBranch: Map<string, Record<string, string>[]> = groupBy(
+    response as Record<string, unknown>[],
+    (row) => row.branchName
   );
   return (
     <div className="customers-arrears">
@@ -42,12 +44,16 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
         <hr className="horizontal-line" />
       </div>
       {dataGroupedByBranch &&
-        dataGroupedByBranch.forEach(
-          (key: string, value: CustomersArrearsSingleResponse) => (
-            <React.Fragment key={key}>
+        Array.from(dataGroupedByBranch.keys()).length &&
+        Array.from(dataGroupedByBranch.keys()).map((key, i) => {
+          const rows = dataGroupedByBranch.get(key) || [];
+          const isLastItem =
+            i + 1 === Array.from(dataGroupedByBranch.keys()).length;
+          return (
+            <div className="branch-data-container" key={key}>
               <p className="branch-name">
-                {value.branchName} (كود الفرع:{" "}
-                {numbersToArabic(value.branchCode)})
+                {key} (كود الفرع:
+                {numbersToArabic(rows[0].branchCode)})
               </p>
               <table
                 className="report-container"
@@ -58,7 +64,7 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                   <tr>
                     <th colSpan={2}>تاريخ آخر حركة سداد</th>
                     <th></th>
-                    <th colSpan={2}></th>
+                    <th></th>
                     <th colSpan={2}>الرصيد</th>
                     <th></th>
                     <th></th>
@@ -68,12 +74,12 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th colSpan={8}>بيانات العميل</th>
+                    <th colSpan={6}>بيانات العميل</th>
                   </tr>
                   <tr>
                     <th colSpan={2}>القسط مسدد بالكامل</th>
                     <th>مرات الترحيل</th>
-                    <th colSpan={2}>مبلغ آخر سداد</th>
+                    <th>مبلغ آخر سداد</th>
                     <th>مبلغ</th>
                     <th>عدد</th>
                     <th>قيمة القسط</th>
@@ -86,81 +92,124 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                     <th>عدد أقساط</th>
                     <th>قيمة التمويل</th>
                     <th>ت التمويل</th>
-                    <th colSpan={3}>المندوب</th>
-                    <th colSpan={3}>اسم العميل</th>
+                    <th colSpan={2}>المندوب</th>
+                    <th colSpan={2}>اسم العميل</th>
                     <th>نوع العميل</th>
                     <th>كود العميل</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td colSpan={2}>
-                      {value.latestFullPaymentDate
-                        ? timeToArabicDate(
-                            new Date(value.latestFullPaymentDate).valueOf(),
-                            false
-                          )
-                        : ""}
-                    </td>
-                    <td>{numbersToArabic(value.tarheelatCount) || "۰"}</td>
-                    <td colSpan={2}>
-                      {numbersToArabic(value.lateAmount) || "۰"}
-                    </td>
-                    <td>{numbersToArabic(value.raseedAmount) || "۰"}</td>
-                    <td>{numbersToArabic(value.raseedCount) || "۰"}</td>
-                    <td>{numbersToArabic(value.installmentAmount) || "۰"}</td>
-                    <td>{numbersToArabic(value.lateDays) || "۰"}</td>
-                    <td>
-                      {value.latestPaymentDate
-                        ? timeToArabicDate(
-                            new Date(value.latestPaymentDate).valueOf(),
-                            false
-                          )
-                        : ""}
-                    </td>
-                    <td>{numbersToArabic(value.lastPaidAmount) || "۰"}</td>
-                    <td>٢٣/١٢/٢٠٢٠</td>
-                    <td>{numbersToArabic(6120)}</td>
-                    <td>{numbersToArabic(10)}</td>
-                    <td>{numbersToArabic(24)}</td>
-                    <td>{numbersToArabic(10000)}</td>
-                    <td>٢٣/١٢/٢٠٢٠</td>
-                    <td colSpan={3}>مصطفى عبدالقادر عبدالعظيم علم الدين</td>
-                    <td colSpan={3}>ايمان عبدالمنعم محمد مصطفي</td>
-                    <td>فردي</td>
-                    <td>{numbersToArabic(110700004847)}</td>
-                  </tr>
+                  {rows.length &&
+                    rows.map((row: CustomersArrearsSingleResponse, j) => {
+                      const isLastRow = isLastItem && j + 1 === rows.length;
+                      return (
+                        <>
+                          <tr
+                            key={`${row.customerCode}-${Math.random()
+                              .toString(36)
+                              .substr(7)}`}
+                          >
+                            <td colSpan={2}>
+                              {row.latestFullPaymentDate
+                                ? timeToArabicDate(
+                                    new Date(
+                                      row.latestFullPaymentDate
+                                    ).valueOf(),
+                                    false
+                                  )
+                                : ""}
+                            </td>
+                            <td>
+                              {numbersToArabic(row.tarheelatCount) || "۰"}
+                            </td>
+                            <td>
+                              {numbersToArabic(row.lastPaidAmount) || "۰"}
+                            </td>
+                            <td>{numbersToArabic(row.raseedAmount) || "۰"}</td>
+                            <td>{numbersToArabic(row.raseedCount) || "۰"}</td>
+                            <td>
+                              {numbersToArabic(row.installmentAmount) || "۰"}
+                            </td>
+                            <td>{numbersToArabic(row.lateDays) || "۰"}</td>
+                            <td>
+                              {row.latestPaymentDate
+                                ? timeToArabicDate(
+                                    new Date(row.latestPaymentDate).valueOf(),
+                                    false
+                                  )
+                                : ""}
+                            </td>
+                            <td>
+                              {numbersToArabic(row.longestLatePeriod) || "۰"}
+                            </td>
+                            <td>
+                              {row.firstLateDate
+                                ? timeToArabicDate(
+                                    new Date(row.firstLateDate).valueOf(),
+                                    false
+                                  )
+                                : ""}
+                            </td>
+                            <td>{numbersToArabic(row.lateAmount) || "۰"}</td>
+                            <td>{numbersToArabic(row.lateCount) || "۰"}</td>
+                            <td>
+                              {numbersToArabic(row.installmentsCount) || "۰"}
+                            </td>
+                            <td>{numbersToArabic(row.loanPrincipal) || "۰"}</td>
+                            <td>
+                              {row.issueDate
+                                ? timeToArabicDate(
+                                    new Date(row.issueDate).valueOf(),
+                                    false
+                                  )
+                                : ""}
+                            </td>
+                            <td colSpan={2}>{row.representativeName}</td>
+                            <td colSpan={2}>{row.customerName}</td>
+                            <td>
+                              {beneficiaryType(row.beneficiaryType || "")}
+                            </td>
+                            <td>{numbersToArabic(row.customerCode) || "۰"}</td>
+                          </tr>
+                          {isLastRow && (
+                            <tr className="baby-blue">
+                              <td colSpan={2}></td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                {numbersToArabic(data.raseedTotalAmount) || "۰"}
+                              </td>
+                              <td>
+                                {numbersToArabic(data.raseedTotalCount) || "۰"}
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                {numbersToArabic(data.lateTotalAmount) || "۰"}
+                              </td>
+                              <td>
+                                {numbersToArabic(data.lateTotalCount) || "۰"}
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td colSpan={2}></td>
+                              <td colSpan={2}></td>
+                              <td>{numbersToArabic(data.totalCount) || "۰"}</td>
+                              <td></td>
+                            </tr>
+                          )}
+                        </>
+                      );
+                    })}
                 </tbody>
               </table>
-            </React.Fragment>
-          )
-        )}
-      <table className="report-container" cellPadding="2" cellSpacing="2">
-        <tbody>
-          {/* total Data */}
-          <tr className="baby-blue">
-            <td colSpan={2}></td>
-            <td></td>
-            <td colSpan={2}></td>
-            <td>{numbersToArabic("12345,444")}</td>
-            <td>{numbersToArabic(24)}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{numbersToArabic("12345,444")}</td>
-            <td>{numbersToArabic(24)}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colSpan={3}></td>
-            <td colSpan={3}></td>
-            <td>{numbersToArabic(4)}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          );
+        })}
     </div>
   );
 };
