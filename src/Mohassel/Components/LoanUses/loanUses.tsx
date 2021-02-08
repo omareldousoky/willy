@@ -11,6 +11,7 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoanDetailsArray } from '../ManageLoanDetails/manageLoanDetailsInitials';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import CRUDList from '../CRUDList/crudList';
 
 interface LoanUse {
   name: string;
@@ -35,6 +36,10 @@ class LoanUses extends Component<{}, State> {
     }
   }
   async componentDidMount() {
+    await this.getUses();
+  }
+
+  async getUses() {
     this.setState({ loading: true });
     const res = await getLoanUsage();
     if (res.status === "success") {
@@ -48,64 +53,84 @@ class LoanUses extends Component<{}, State> {
       this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
     }
   }
-  addLoanUse() {
-    if (!this.state.loanUses.some(loanUse => loanUse.name === "")) {
+  // addLoanUse() {
+  //   if (!this.state.loanUses.some(loanUse => loanUse.name === "")) {
+  //     this.setState({
+  //       filterLoanUsage: '',
+  //       loanUses: [...this.state.loanUses, { name: "", disabledUi: false, id: "", activated: true }],
+  //       temp: [...this.state.temp, '']
+  //     })
+  //   }
+  // }
+  // handleChangeInput(event: React.ChangeEvent<HTMLInputElement>, index: number) {
+  //   this.setState({
+  //     loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: event.currentTarget.value } : loanUse)
+  //   })
+  // }
+  // handleKeyDown(event: React.KeyboardEvent, index: number) {
+  //   if (event.key === 'Enter') {
+  //     this.toggleClick(index, true)
+  //   }
+  // }
+  // async toggleClick(index: number, submit: boolean) {
+  //   if (this.state.loanUses[index].disabledUi === false && this.state.loanUses[index].name.trim() !== "") {
+  //     if (this.state.loanUses[index].id === "") {
+  //       //New 
+
+  //     } else {
+  //       //Edit 
+
+  //     }
+  //   } else if (!submit) {
+  //     this.setState({
+  //       loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse)
+  //     })
+  //   }
+  // }
+  async editLoanUse(id, name, active, index) {
+    this.setState({ loading: true })
+    const res = await updateLoanUsage(id, name, active);
+    if (res.status === "success") {
+      const options = this.state.loanUses;
+      options[index].disabledUi = !options[index].disabledUi;
       this.setState({
-        filterLoanUsage: '',
-        loanUses: [...this.state.loanUses, { name: "", disabledUi: false, id: "", activated: true }],
-        temp: [...this.state.temp, '']
-      })
-    }
+        loanUses: options,
+        loading: false,
+      }, () => this.getUses())
+    } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
   }
-  handleChangeInput(event: React.ChangeEvent<HTMLInputElement>, index: number) {
-    this.setState({
-      loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, name: event.currentTarget.value } : loanUse)
-    })
-  }
-  handleKeyDown(event: React.KeyboardEvent, index: number) {
-    if (event.key === 'Enter') {
-      this.toggleClick(index, true)
-    }
-  }
-  async toggleClick(index: number, submit: boolean) {
-    if (this.state.loanUses[index].disabledUi === false && this.state.loanUses[index].name.trim() !== "") {
-      if (this.state.loanUses[index].id === "") {
-        //New 
-        this.setState({ loading: true })
-        const res = await addLoanUsage({ name: this.state.loanUses[index].name, activated: this.state.loanUses[index].activated });
-        if (res.status === "success") {
-          this.setState({
-            loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse),
-            loading: false,
-          })
-        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
-      } else {
-        //Edit 
-        this.setState({ loading: true })
-        const res = await updateLoanUsage(this.state.loanUses[index].id, this.state.loanUses[index].name, this.state.loanUses[index].activated);
-        if (res.status === "success") {
-          this.setState({
-            loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse),
-            loading: false,
-          })
-        } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
-      }
-    } else if (!submit) {
+  async newLoanUse(name, activated, index) {
+    this.setState({ loading: true })
+    const res = await addLoanUsage({ name: name, activated: activated });
+    if (res.status === "success") {
+      const options = this.state.loanUses;
+      options[index].disabledUi = !options[index].disabledUi;
       this.setState({
-        loanUses: this.state.loanUses.map((loanUse, loanUseIndex) => loanUseIndex === index ? { ...loanUse, disabledUi: !loanUse.disabledUi } : loanUse)
-      })
-    }
+        loanUses: options,
+        loading: false,
+      }, () => this.getUses())
+    } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
   }
   render() {
     const array = manageLoanDetailsArray();
     return (
       <>
+        <Loader type="fullscreen" open={this.state.loading} />
         <HeaderWithCards
           header={local.loanUses}
           array={array}
           active={array.map(item => { return item.icon }).indexOf('loanUses')}
         />
-        <Container style={{ marginTop: 20 }}>
+        <CRUDList source={'loanUses'} options={this.state.loanUses}
+          addOption={() => {
+            console.log('addrow')
+            this.setState({
+              loanUses: [...this.state.loanUses, { name: "", disabledUi: false, id: "", activated: true }],
+            })
+          }}
+          newOption={(name, active, index) => { this.newLoanUse(name, active, index) }}
+          updateOption={(id, name, active, index) => { this.editLoanUse(id, name, active, index) }} />
+        {/* <Container style={{ marginTop: 20 }}>
           <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
             <Form.Control
               type="text"
@@ -115,7 +140,6 @@ class LoanUses extends Component<{}, State> {
               value={this.state.filterLoanUsage}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterLoanUsage: e.currentTarget.value })}
             />
-            {/* <h4 style={{ textAlign: 'right' }}>{local.loanUses}</h4> */}
             <span
               onClick={() => this.addLoanUse()}
               className="fa fa-plus fa-lg"
@@ -123,7 +147,6 @@ class LoanUses extends Component<{}, State> {
             />
           </div>
           <ListGroup style={{ textAlign: 'right', width: '30%', marginBottom: 30 }}>
-            <Loader type="fullsection" open={this.state.loading} />
             {this.state.loanUses
               .filter(loanUse => loanUse.name.toLocaleLowerCase().includes(this.state.filterLoanUsage.toLocaleLowerCase()))
               .map((loanUse, index) => {
@@ -175,7 +198,7 @@ class LoanUses extends Component<{}, State> {
                 )
               }).reverse()}
           </ListGroup>
-        </Container>
+        </Container> */}
       </>
     );
   }
