@@ -13,7 +13,7 @@ export interface OperationsReportRequest {
 export interface LoanApplicationReportRequest {
   startDate: string;
   endDate: string;
-  branch: string[];
+  branch: string;
   loanStatus: string[];
 }
 
