@@ -107,7 +107,7 @@ const ReportsModal = (props: Props) => {
                   if (input === 'branches') {
                     return (
                       <Col key={index} sm={12} style={{ marginTop: 20 }}>
-                        <BranchesDropDown multiselect={true} onSelectBranch={(branches) => { formikProps.setFieldValue('branches', branches) }} />
+                        <BranchesDropDown onlyValidBranches={true} multiselect={true} onSelectBranch={(branches) => { formikProps.setFieldValue('branches', branches) }} />
                         <span style={{ color: 'red' }}>
                           {formikProps.errors.branches}
                         </span>
