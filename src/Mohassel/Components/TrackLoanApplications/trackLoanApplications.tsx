@@ -232,15 +232,16 @@ class TrackLoanApplications extends Component<Props, State>{
   async getReviewedData() {
     const token = getCookie('token');
     const details = parseJwt(token)
-    if (details.branch.length > 0) {
+    const hasBranch = details.branch.length > 0
+    if (hasBranch) {
       this.getBranchData(details.branch)
     }
     const filters = this.props.searchFilters
     const obj: LoanApplicationReportRequest = {
       startDate: filters.fromDate,
       endDate: filters.toDate,
-      loanStatus: [filters.status || ''],
-      branch: filters.branchId || ''
+      loanStatus: filters.status ? [filters.status] : [],
+      branch: hasBranch ? details.branch : filters.branchId || ''
     }
     this.setState({ loading: true })
     const res = await getReviewedApplications(obj);
