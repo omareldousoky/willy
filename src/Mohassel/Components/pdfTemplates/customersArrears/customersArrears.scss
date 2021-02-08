@@ -16,7 +16,6 @@ print {
 		font-weight: bold;
 		text-align: center;
 		padding: 0.3rem;
-		page-break-after: always;
 		direction: rtl;
 		-webkit-print-color-adjust: exact;
 		font-size: 11px;
@@ -42,40 +41,40 @@ print {
 			margin: auto;
 		}
 
-		& tbody {
-			line-height: 1.5em;
-			margin: 0 10px;
-		}
-
-		& table {
+		& table.customers-arrears-table {
 			width: 100vw;
-			margin-bottom: 5px;
-			margin: auto;
+			margin: 10px auto;
 			border-collapse: collapse;
 
 			& tbody {
 				page-break-inside: avoid;
+				line-height: 1.5em;
 			}
-		}
 
-		small {
-			font-size: 0.75rem;
-			font-weight: 800;
-		}
+			& thead {
+				display: table-row-group;
+				margin: 10px auto;
+			}
 
-		& table tbody tr td {
-			font-size: 0.8rem;
-			border: 0.5px solid black;
-			page-break-inside: avoid;
-			text-align: center;
-			white-space: nowrap;
-		}
+			& thead,
+			& tbody tr {
+				page-break-inside: avoid;
+			}
 
-		& table thead tr th {
-			background-color: lightgrey;
-			-webkit-print-color-adjust: exact;
-			border: 0.5px solid black;
-			page-break-inside: avoid;
+			& tbody tr td {
+				font-size: 0.8rem;
+				border: 0.5px solid black;
+				page-break-inside: avoid;
+				text-align: center;
+				white-space: nowrap;
+			}
+
+			& thead tr th {
+				background-color: lightgrey;
+				-webkit-print-color-adjust: exact;
+				border: 0.5px solid black;
+				page-break-inside: avoid;
+			}
 		}
 
 		.baby-blue {
@@ -87,13 +86,6 @@ print {
 			border-bottom: 1px solid black;
 			margin: .5rem auto;
 			width: 50%;
-		}
-
-		.branch-name {
-			background: #e3e3e3;
-			margin: 10px auto 15px;
-			padding: 5px;
-			width: 30%;
 		}
 	}
 }
