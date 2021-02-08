@@ -1,7 +1,11 @@
+export interface Error {
+  details: string;
+  error: string;
+}
 export interface ApiResponse<T> {
   status: "success" | "error";
   body?: T;
-  error?: unknown;
+  error?: Error;
 }
 
 export interface OperationsReportRequest {

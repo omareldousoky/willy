@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import local from '../../../Shared/Assets/ar.json';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 import { getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
 
 type Props = {
@@ -12,6 +14,7 @@ const getCustomerCategorizationRating = async (id: string, setRating: (rating: n
     setRating(res.body?.customerScore)
   } else {
     console.log(res.error)
+    Swal.fire('Error !', getErrorMessage(res.error ? res.error.error : ""), 'error');
   }
 }
 
@@ -24,14 +27,14 @@ export const CustomerCategorization = (props: Props) => {
     getCustomerCategorizationRating(id, setRating)
   }, [])
 
-  useEffect(()=> {
-    if(rating >= 4 && rating <= 6) setColor("#7DC356")
-    if(rating >= 7 && rating <=9) setColor("#edb600")
-    if(rating >= 10 && rating <= 12) setColor("#ff0000")
+  useEffect(() => {
+    if (rating >= 4 && rating <= 6) setColor("#7DC356")
+    if (rating >= 7 && rating <= 9) setColor("#edb600")
+    if (rating >= 10 && rating <= 12) setColor("#ff0000")
   }, [rating])
-  
+
   return (
-    <div style={{background: color, padding: 10, color:"#fff", borderRadius: 20}}>
+    <div style={{ background: color, padding: 10, color: "#fff", borderRadius: 20 }}>
       {local.customerCategorization + " : " + rating}
     </div>
   )
