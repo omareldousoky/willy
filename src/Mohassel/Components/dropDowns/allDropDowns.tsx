@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 import Select, { ValueType } from "react-select";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
@@ -73,6 +73,7 @@ interface AsyncLoanOfficersDropDownProps extends Props<DropDownOption> {
 export const AsyncLoanOfficersDropDown = ({
   branchId,
   onSelectLoanOfficer,
+  isDisabled,
   ...restProps
 }: AsyncLoanOfficersDropDownProps) => {
   const [value, setValue] = useState<ValueType<DropDownOption> | null>();
@@ -80,11 +81,10 @@ export const AsyncLoanOfficersDropDown = ({
   const getLoanOfficers = (branchId?: string) => async (
     searchKeyWord: string
   ) => {
-    if (!searchKeyWord) return [];
     const res = await searchLoanOfficer({
       name: searchKeyWord,
       from: 0,
-      size: 20,
+      size: 10,
       branchId,
     });
     if (res.status === "success") {
@@ -94,9 +94,15 @@ export const AsyncLoanOfficersDropDown = ({
     }
   };
 
+  useEffect(() => {
+    if (isDisabled) setValue(null);
+  }, [isDisabled]);
+
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>
       <AsyncSelect<DropDownOption>
+        cacheOptions
+        defaultOptions
         styles={customStyles}
         className="full-width"
         name="loanOfficers"
@@ -110,8 +116,7 @@ export const AsyncLoanOfficersDropDown = ({
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option._id}
         loadOptions={getLoanOfficers(branchId)}
-        cacheOptions
-        defaultOptions
+        isDisabled={isDisabled}
         {...restProps}
       />
     </div>
