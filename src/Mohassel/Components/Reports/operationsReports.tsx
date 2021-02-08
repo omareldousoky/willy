@@ -16,6 +16,7 @@ import InstallmentsDuePerOfficerCustomerCard from "../pdfTemplates/installmentsD
 import {
   ApiResponse,
   CustomersArrearsRequest,
+  OfficersPercentPaymentRequest,
   OperationsReportRequest,
 } from "../../Services/interfaces";
 import {
@@ -94,7 +95,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.OfficersPercentPayment,
           local: "نسبة سداد المندوبين 1",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives", "gracePeriod"],
           permission: "officerPercentPayment",
         },
         {
@@ -225,9 +226,16 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchOfficersPercentPayment(values) {
-    const res = await fetchOfficersPercentPaymentReport(
-      this.reportRequest(values)
-    );
+    const { fromDate, toDate, branches, representatives, gracePeriod } = values;
+    const request: OfficersPercentPaymentRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+      gracePeriod,
+    };
+    console.log(request);
+    const res = await fetchOfficersPercentPaymentReport({ ...request });
     this.handleFetchReport(res, Reports.OfficersPercentPayment);
   }
 

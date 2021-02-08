@@ -158,3 +158,8 @@ export interface CustomersArrearsResponse {
   lateTotalCount?: number;
   totalCount?: number;
 }
+
+export interface OfficersPercentPaymentRequest extends OperationsReportRequest {
+  gracePeriod?: number;
+  representatives?: string[];
+}
