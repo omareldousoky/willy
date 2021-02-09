@@ -41,7 +41,6 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
         <thead>
           <tr>
             <th>غرامة مسددة</th>
-            <th>غرامات مستحقة على القسط</th>
             <th>أيام التأخير للقسط</th>
             <th>قيمة الحركة</th>
             <th>ت حركة السداد</th>
@@ -61,7 +60,6 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
             data.response.map((row) => (
               <tr key={row.transactionCode}>
                 <td>{numbersToArabic(row.paidPenalties) || "٠"}</td>
-                <td>{numbersToArabic(row.penalties) || "٠"}</td>
                 <td>{numbersToArabic(row.lateDays) || "٠"}</td>
                 <td>{numbersToArabic(row.transactionAmount) || "٠"}</td>
                 <td>
@@ -89,7 +87,6 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
           <tr>
             <td>{numbersToArabic(data.totalPaidPenalties) || "٠"}</td>
             <td></td>
-            <td></td>
             <td>{numbersToArabic(data.totalTransactionAmount) || "٠"}</td>
             <td></td>
             <td></td>
@@ -99,7 +96,7 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
             <td></td>
             <td></td>
             <td></td>
-            <td>Total</td>
+            <td>الإجمالي</td>
           </tr>
         </tbody>
       </table>
