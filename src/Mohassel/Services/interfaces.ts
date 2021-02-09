@@ -163,3 +163,13 @@ export interface OfficersPercentPaymentRequest extends OperationsReportRequest {
   gracePeriod?: number;
   representatives?: string[];
 }
+
+export interface InstallmentsDuePerOfficerCustomerCardRequest
+  extends OperationsReportRequest {
+  representatives?: string[];
+}
+
+export interface UnpaidInstallmentsByOfficerRequest
+  extends OperationsReportRequest {
+  representatives?: string[];
+}
