@@ -248,7 +248,7 @@ export interface PaidArrearsResponse {
 
 export interface PaidArrearsRequest extends OperationsReportRequest {
   loanOfficerIds?: string[];
-
+}
 export interface OfficersPercentPaymentRequest extends OperationsReportRequest {
   gracePeriod?: number;
   representatives?: string[];
