@@ -253,13 +253,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchDueInstallments(values) {
-    const { fromDate, toDate } = values;
     const res = await fetchDueInstallmentsReport(
-      this.reportRequest({
-        ...values,
-        fromDate: convertToTimestamp(fromDate),
-        toDate: convertToTimestamp(toDate),
-      })
+      this.reportRequest(values)
     );
     this.handleFetchReport(res, Reports.DueInstallments);
   }
