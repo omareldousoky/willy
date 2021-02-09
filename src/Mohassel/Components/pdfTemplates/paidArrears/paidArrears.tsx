@@ -2,16 +2,19 @@ import React from "react";
 import store from "../../../../Shared/redux/store";
 import {
   getCurrentTime,
+  numbersToArabic,
   timeToArabicDate,
   timeToArabicDateNow,
 } from "../../../../Shared/Services/utils";
+import { PaidArrearsResponse } from "../../../Services/interfaces";
 import "./paidArrears.scss";
 
 interface PaidArrearsProps {
   fromDate: string;
   toDate: string;
-  data: any; //TODO
+  data: PaidArrearsResponse;
 }
+
 export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
   return (
     <div className="paid-arrears" lang="ar">
@@ -28,7 +31,7 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
       </div>
       <div className="d-flex flex-column mx-3">
         <p className="report-title">
-          حركات سداد على المتأخرات : من &nbsp;
+          تقرير ما تم تحصيله من المتأخرات : من &nbsp;
           {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى : &nbsp;
           {timeToArabicDate(new Date(toDate).valueOf(), false)}
         </p>
@@ -36,32 +39,68 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
       </div>
       <table>
         <thead>
-          <th>غرامة مسددة</th>
-          <th>غرامات مستحقة على القسط</th>
-          <th>أيام التأخير للقسط</th>
-          <th>قيمة الحركة</th>
-          <th>ت حركة السداد</th>
-          <th>قيمة القسط</th>
-          <th>رقم القسط</th>
-          <th>اسم العميل</th>
-          <th>كود العميل</th>
-          <th>كود الحركة</th>
-          <th>الفرع</th>
-          <th>كود الفرع</th>
+          <tr>
+            <th>غرامة مسددة</th>
+            <th>غرامات مستحقة على القسط</th>
+            <th>أيام التأخير للقسط</th>
+            <th>قيمة الحركة</th>
+            <th>ت حركة السداد</th>
+            <th>قيمة القسط</th>
+            <th>ت الاستحقاق</th>
+            <th>رقم القسط</th>
+            <th>اسم العميل</th>
+            <th>كود العميل</th>
+            <th>كود الحركة</th>
+            <th>الفرع</th>
+            <th>كود الفرع</th>
+          </tr>
         </thead>
         <tbody>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
-          <td>0000.0000</td>
+          {data.response &&
+            data.response.length &&
+            data.response.map((row) => (
+              <tr key={row.transactionCode}>
+                <td>{numbersToArabic(row.paidPenalties) || "٠"}</td>
+                <td>{numbersToArabic(row.penalties) || "٠"}</td>
+                <td>{numbersToArabic(row.lateDays) || "٠"}</td>
+                <td>{numbersToArabic(row.transactionAmount) || "٠"}</td>
+                <td>
+                  {row.paymentDate
+                    ? timeToArabicDate(
+                        new Date(row.paymentDate).valueOf(),
+                        false
+                      )
+                    : "لا يوجد"}
+                </td>
+                <td>{numbersToArabic(row.installmentAmount) || "٠"}</td>
+                <td>
+                  {row.dueDate
+                    ? timeToArabicDate(new Date(row.dueDate).valueOf(), false)
+                    : "لا يوجد"}
+                </td>
+                <td>{numbersToArabic(row.installmentNumber) || "٠"}</td>
+                <td>{numbersToArabic(row.customerName) || "٠"}</td>
+                <td>{numbersToArabic(row.customerCode)}</td>
+                <td>{numbersToArabic(row.transactionCode)}</td>
+                <td>{numbersToArabic(row.branchName)}</td>
+                <td>{numbersToArabic(row.branchCode)}</td>
+              </tr>
+            ))}
+          <tr>
+            <td>{numbersToArabic(data.totalPaidPenalties) || "٠"}</td>
+            <td></td>
+            <td></td>
+            <td>{numbersToArabic(data.totalTransactionAmount) || "٠"}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+          </tr>
         </tbody>
       </table>
     </div>

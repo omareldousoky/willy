@@ -27,7 +27,12 @@ import LeakedCustomersPDF from "../pdfTemplates/LeakedCustomers/leakedCustomers"
 import { fetchLeakedCustomersReport } from "../../Services/APIs/Reports/leakedCustomers";
 import { fetchDueInstallmentsReport } from "../../Services/APIs/Reports/dueInstallments";
 import DueInstallments from "../pdfTemplates/dueInstallments/dueInstallments";
-import { convertToTimestamp } from "../../../Shared/Services/utils";
+import {
+  convertToTimestamp,
+  getErrorMessage,
+} from "../../../Shared/Services/utils";
+import { PaidArrears } from "../pdfTemplates/paidArrears/paidArrears";
+import { fetchPaidArrearsReport } from "../../Services/APIs/Reports/paidArrears";
 
 export interface PDF {
   key?: string;
@@ -55,7 +60,8 @@ enum Reports {
   InstallmentsDuePerOfficerCustomerCard = "installmentsDuePerOfficerCustomerCard",
   UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea",
   DueInstallments = "dueInstallments",
-  LeakedCustomers = "leakedCustomers"
+  LeakedCustomers = "leakedCustomers",
+  PaidArrears = "PaidArrears",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -109,10 +115,16 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         },
         {
           key: Reports.LeakedCustomers,
-          local:"تقرير العملاء المتسربون",
-          inputs:["dateFromTo", "branches"],
-          permission:"churnedCustomers"
-      }
+          local: "تقرير العملاء المتسربون",
+          inputs: ["dateFromTo", "branches"],
+          permission: "churnedCustomers",
+        },
+        {
+          key: Reports.PaidArrears,
+          local: "تقرير ما تم تحصيله من المتأخرات",
+          inputs: ["dateFromTo", "branches"],
+          permission: "paidArrears",
+        },
       ],
       selectedPdf: { permission: "" },
       data: {},
@@ -153,6 +165,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchDueInstallments(values);
       case Reports.LeakedCustomers:
         return this.fetchLeakedCustomers(values);
+      case Reports.PaidArrears:
+        return this.fetchPaidArrears(values);
       default:
         return null;
     }
@@ -176,7 +190,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       }
     } else {
       this.setState({ loading: false });
-      console.log(res);
+      Swal.fire(
+        "Error !",
+        getErrorMessage((res.error as Record<string, string>).error),
+        "error"
+      );
     }
   }
 
@@ -246,11 +264,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.DueInstallments);
   }
   async fetchLeakedCustomers(values) {
-    const res = await fetchLeakedCustomersReport(
-        this.reportRequest(values)
-    );
+    const res = await fetchLeakedCustomersReport(this.reportRequest(values));
     this.handleFetchReport(res, Reports.LeakedCustomers);
-}
+  }
+
+  async fetchPaidArrears(values) {
+    const res = await fetchPaidArrearsReport(this.reportRequest(values));
+    this.handleFetchReport(res, Reports.PaidArrears);
+  }
 
   render() {
     return (
@@ -370,6 +391,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         )}
         {this.state.print === Reports.LeakedCustomers && (
           <LeakedCustomersPDF
+            data={this.state.data}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+          />
+        )}
+        {this.state.print === Reports.PaidArrears && this.state.data && (
+          <PaidArrears
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
