@@ -324,8 +324,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
                           data-qc="download"
                           src={require(`../../Assets/green-download.svg`)}
                           onClick={() => this.handlePrint(pdf)}
-                          // TODO: Remove
-                          // onClick={() => window.print()}
                         />
                       </div>
                     </Card.Body>

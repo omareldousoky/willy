@@ -158,6 +158,7 @@ const ReportsModal = (props: Props) => {
                         <BranchesDropDown
                           onlyValidBranches={true}
                           multiselect={true}
+                          onlyValidBranches={true}
                           onSelectBranch={(branches) => {
                             formikProps.setFieldValue("branches", branches);
                             formikProps.setFieldValue("loanOfficers", []);
