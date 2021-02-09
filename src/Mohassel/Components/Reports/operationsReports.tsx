@@ -61,7 +61,7 @@ enum Reports {
   UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea",
   DueInstallments = "dueInstallments",
   LeakedCustomers = "leakedCustomers",
-  PaidArrears = "PaidArrears",
+  PaidArrears = "paidArrears",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
