@@ -122,7 +122,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.PaidArrears,
           local: "تقرير ما تم تحصيله من المتأخرات",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "loanOfficerIds"],
           permission: "paidArrears",
         },
       ],

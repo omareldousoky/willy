@@ -165,9 +165,14 @@ export interface PaidArrearsSingleResponse {
   lateDays?: number;
   penalties?: number;
   paidPenalties?: number;
+	representative?: string;
 }
 export interface PaidArrearsResponse {
   response?: PaidArrearsSingleResponse[];
   totalPaidPenalties?: number;
   totalTransactionAmount?: number;
+}
+
+export interface PaidArrearsRequest extends OperationsReportRequest {
+	loanOfficerIds?: string[];
 }
