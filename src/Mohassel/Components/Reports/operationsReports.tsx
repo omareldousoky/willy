@@ -16,8 +16,11 @@ import InstallmentsDuePerOfficerCustomerCard from "../pdfTemplates/installmentsD
 import {
   ApiResponse,
   CustomersArrearsRequest,
+  InstallmentsDuePerOfficerCustomerCardRequest,
+  OfficersPercentPaymentRequest,
   OperationsReportRequest,
   PaidArrearsRequest,
+  UnpaidInstallmentsByOfficerRequest,
 } from "../../Services/interfaces";
 import {
   fetchOfficersBranchPercentPaymentReport,
@@ -83,13 +86,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: "الاقساط المستحقة بالمندوب",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives"],
           permission: "unpaidInstallmentsByOfficer",
         },
         {
           key: Reports.InstallmentsDuePerOfficerCustomerCard,
           local: "الاقساط المستحقة للمندوب كارت العميل",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives"],
           permission: "installmentsDuePerOfficerCustomerCard",
         },
         {
@@ -101,7 +104,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.OfficersPercentPayment,
           local: "نسبة سداد المندوبين 1",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives", "gracePeriod"],
           permission: "officerPercentPayment",
         },
         {
@@ -223,9 +226,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.LoansBriefing2);
   }
   async fetchInstallmentsDuePerOfficerCustomerCard(values) {
-    const res = await installmentsDuePerOfficerCustomerCard(
-      this.reportRequest(values)
-    );
+    const { fromDate, toDate, branches, representatives } = values;
+    const request: InstallmentsDuePerOfficerCustomerCardRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+    };
+    const res = await installmentsDuePerOfficerCustomerCard(request);
     this.handleFetchReport(
       res as ApiResponse<any>,
       Reports.InstallmentsDuePerOfficerCustomerCard
@@ -233,7 +241,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchUnpaidInstallmentsByOfficer(values) {
-    const res = await unpaidInstallmentsByOfficer(this.reportRequest(values));
+    const { fromDate, toDate, branches, representatives } = values;
+    const request: UnpaidInstallmentsByOfficerRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+    };
+
+    const res = await unpaidInstallmentsByOfficer(request);
     this.handleFetchReport(
       res as ApiResponse<any>,
       Reports.UnpaidInstallmentsByOfficer
@@ -251,9 +267,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchOfficersPercentPayment(values) {
-    const res = await fetchOfficersPercentPaymentReport(
-      this.reportRequest(values)
-    );
+    const { fromDate, toDate, branches, representatives, gracePeriod } = values;
+    const request: OfficersPercentPaymentRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+      gracePeriod,
+    };
+    const res = await fetchOfficersPercentPaymentReport({ ...request });
     this.handleFetchReport(res, Reports.OfficersPercentPayment);
   }
 
@@ -360,49 +382,54 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             submit={(values) => this.handleSubmit(values)}
           />
         )}
-        {this.state.print === Reports.LoansBriefing2 && (
+        {this.state.print === Reports.LoansBriefing2 && this.state.data && (
           <LoansBriefing2
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
           />
         )}
-        {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard ? (
-          <InstallmentsDuePerOfficerCustomerCard
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        ) : null}
-        {this.state.print === Reports.UnpaidInstallmentsByOfficer ? (
-          <UnpaidInstallmentsByOfficer
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        ) : null}
-        {this.state.print === Reports.UnpaidInstallmentsPerArea && (
-          <UnpaidInst
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        )}
-        {this.state.print === Reports.OfficersPercentPayment && (
-          <OfficersPercentPayment
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        )}
-        {this.state.print === Reports.OfficersBranchPercentPayment && (
-          <OfficerBranchPercentPayment
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        )}
-        {this.state.print === Reports.DueInstallments && (
+        {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard &&
+          this.state.data && (
+            <InstallmentsDuePerOfficerCustomerCard
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.UnpaidInstallmentsByOfficer &&
+          this.state.data && (
+            <UnpaidInstallmentsByOfficer
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.UnpaidInstallmentsPerArea &&
+          this.state.data && (
+            <UnpaidInst
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.OfficersPercentPayment &&
+          this.state.data && (
+            <OfficersPercentPayment
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.OfficersBranchPercentPayment &&
+          this.state.data && (
+            <OfficerBranchPercentPayment
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.DueInstallments && this.state.data && (
           <DueInstallments
             data={this.state.data}
             fromDate={this.state.fromDate}

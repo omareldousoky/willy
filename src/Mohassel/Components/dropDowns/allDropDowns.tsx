@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useStore } from "react-redux";
 import Select, { ValueType } from "react-select";
@@ -7,6 +7,7 @@ import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
 import { Props } from "react-select/src/Select";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { getGeoAreasByBranch } from "../../Services/APIs/GeoAreas/getGeoAreas";
 
 export interface DropDownOption {
   name: string;
@@ -192,3 +193,4 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
     </div>
   );
 };
+
