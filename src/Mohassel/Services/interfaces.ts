@@ -158,3 +158,32 @@ export interface CustomersArrearsResponse {
   lateTotalCount?: number;
   totalCount?: number;
 }
+export interface LeakedCustomersReportRequest {
+  startDate: string;
+  endDate: string;
+  branches: string[];
+}
+export interface LeakedCustomersPerBranch {
+  branchName: string;
+  data: Array<LeakedCustomer>;
+}
+export interface LeakedCustomer {
+  customerCode: string;
+  customerName: string;
+  beneficiaryType: string;
+  homePhoneNumber: string;
+  mobilePhoneNumber: string;
+  businessPhoneNumber: string;
+  latestIssueDate: string;
+  latestPaymentDate: string;
+  latestIssuedPrincipal: number;
+  installmentsCount: number;
+  earlyDays: number;
+  workArea: string;
+  representative: string;
+  lateDays: number;
+  paidPenalties: number;
+}
+export interface LeakedCustomersReportResponse {
+  response: Array<LeakedCustomersPerBranch>;
+}
