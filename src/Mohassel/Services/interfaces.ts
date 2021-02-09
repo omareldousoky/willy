@@ -10,6 +10,13 @@ export interface OperationsReportRequest {
   branches: string[];
 }
 
+export interface LoanApplicationReportRequest {
+  startDate: string;
+  endDate: string;
+  branch: string;
+  loanStatus: string[];
+}
+
 interface LoansBriefRow {
   individualLoansCount?: number;
   individualLoansCredit?: number;
@@ -122,31 +129,137 @@ export interface DueInstallmentsResponse {
 }
 
 export interface LeakedCustomersReportRequest {
-    startDate: string;
-    endDate: string;
-    branches: string[];
+  startDate: string;
+  endDate: string;
+  branches: string[];
 }
 export interface LeakedCustomersPerBranch {
-    branchName: string;
-    data: Array<LeakedCustomer>;
+  branchName: string;
+  data: Array<LeakedCustomer>;
 }
 export interface LeakedCustomer {
-    customerCode: string;
-    customerName: string;
-    beneficiaryType: string;
-    homePhoneNumber: string;
-    mobilePhoneNumber: string;
-    businessPhoneNumber: string;
-    latestIssueDate: string;
-    latestPaymentDate: string;
-    latestIssuedPrincipal: number;
-    installmentsCount: number;
-    earlyDays: number;
-    workArea: string;
-    representative: string;
-    lateDays: number;
-    paidPenalties: number;
+  customerCode: string;
+  customerName: string;
+  beneficiaryType: string;
+  homePhoneNumber: string;
+  mobilePhoneNumber: string;
+  businessPhoneNumber: string;
+  latestIssueDate: string;
+  latestPaymentDate: string;
+  latestIssuedPrincipal: number;
+  installmentsCount: number;
+  earlyDays: number;
+  workArea: string;
+  representative: string;
+  lateDays: number;
+  paidPenalties: number;
 }
 export interface LeakedCustomersReportResponse {
-    response: Array<LeakedCustomersPerBranch>;
+  response: Array<LeakedCustomersPerBranch>;
+}
+export interface CustomersArrearsRequest {
+  date: string;
+  branches: string[];
+  loanOfficers: string[];
+}
+
+export interface CustomersArrearsSingleResponse {
+  issueDate?: string;
+  loanPrincipal?: number;
+  installmentsCount?: number;
+  lateCount?: number;
+  lateAmount?: number;
+  firstLateDate?: string;
+  longestLatePeriod?: number;
+  latestPaymentDate?: string;
+  lateDays?: number;
+  installmentAmount?: number;
+  raseedCount?: number;
+  raseedAmount?: number;
+  lastPaidAmount?: number;
+  tarheelatCount?: number;
+  latestFullPaymentDate?: string;
+  representativeName?: string;
+  customerName?: string;
+  customerCode?: string;
+  branchName?: string;
+  branchCode?: number;
+  beneficiaryType?: "group" | "individual";
+}
+export interface CustomersArrearsResponse {
+  response?: CustomersArrearsSingleResponse[];
+  raseedTotalAmount?: number;
+  raseedTotalCount?: number;
+  lateTotalAmount?: number;
+  lateTotalCount?: number;
+  totalCount?: number;
+}
+export interface LeakedCustomersReportRequest {
+  startDate: string;
+  endDate: string;
+  branches: string[];
+}
+export interface LeakedCustomersPerBranch {
+  branchName: string;
+  data: Array<LeakedCustomer>;
+}
+export interface LeakedCustomer {
+  customerCode: string;
+  customerName: string;
+  beneficiaryType: string;
+  homePhoneNumber: string;
+  mobilePhoneNumber: string;
+  businessPhoneNumber: string;
+  latestIssueDate: string;
+  latestPaymentDate: string;
+  latestIssuedPrincipal: number;
+  installmentsCount: number;
+  earlyDays: number;
+  workArea: string;
+  representative: string;
+  lateDays: number;
+  paidPenalties: number;
+}
+export interface LeakedCustomersReportResponse {
+  response: Array<LeakedCustomersPerBranch>;
+}
+
+export interface PaidArrearsSingleResponse {
+  branchCode?: string;
+  branchName?: string;
+  transactionCode?: string;
+  customerCode?: string;
+  customerName?: string;
+  installmentNumber?: number;
+  dueDate?: string;
+  installmentAmount?: number;
+  paymentDate?: string;
+  transactionAmount?: number;
+  lateDays?: number;
+  penalties?: number;
+  paidPenalties?: number;
+  representative?: string;
+}
+export interface PaidArrearsResponse {
+  response?: PaidArrearsSingleResponse[];
+  totalPaidPenalties?: number;
+  totalTransactionAmount?: number;
+}
+
+export interface PaidArrearsRequest extends OperationsReportRequest {
+  loanOfficerIds?: string[];
+}
+export interface OfficersPercentPaymentRequest extends OperationsReportRequest {
+  gracePeriod?: number;
+  representatives?: string[];
+}
+
+export interface InstallmentsDuePerOfficerCustomerCardRequest
+  extends OperationsReportRequest {
+  representatives?: string[];
+}
+
+export interface UnpaidInstallmentsByOfficerRequest
+  extends OperationsReportRequest {
+  representatives?: string[];
 }

@@ -1,0 +1,67 @@
+@media print {
+	.card {
+		margin: 0;
+		border: none;
+	}
+}
+
+@media screen,
+print {
+	.paid-arrears {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		direction: rtl;
+		margin: 5px;
+		font-weight: bold;
+		text-align: center;
+
+		& .header-wrapper {
+			display: flex;
+			margin: 10px;
+			justify-content: space-between;
+
+			p {
+				font-size: .9rem !important;
+			}
+		}
+
+		& .report-title {
+			font-size: 1.2rem !important;
+			margin: auto;
+		}
+
+		& tbody {
+			line-height: 1.5em;
+			page-break-inside: avoid;
+		}
+
+		& table {
+			width: 100%;
+			font-size: 15px;
+		}
+
+		& table td {
+			border: 0.5px solid black;
+			white-space: nowrap;
+			padding: 3px;
+		}
+
+		& thead th {
+			background-color: lightgrey;
+			-webkit-print-color-adjust: exact;
+			border: 0.5px solid black;
+		}
+
+		& .horizontal-line {
+			border-bottom: 1px solid black;
+			margin: .5rem auto;
+			width: 50%;
+		}
+	}
+}
+
+@media screen {
+	.paid-arrears {
+		display: none;
+	}
+}
