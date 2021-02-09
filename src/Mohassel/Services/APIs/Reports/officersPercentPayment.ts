@@ -1,9 +1,10 @@
 import { AxiosResponse } from "axios";
 import {
-    ApiResponse,
-    OfficerBranchPercentPaymentResponse,
-    OfficerPercentPaymentResponse,
-    OperationsReportRequest,
+  ApiResponse,
+  OfficerBranchPercentPaymentResponse,
+  OfficerPercentPaymentResponse,
+  OfficersPercentPaymentRequest,
+  OperationsReportRequest,
 } from "../../interfaces";
 import axios from "../axios-instance";
 
@@ -12,29 +13,29 @@ const fetchOfficerPercentPaymentUrl = `${REACT_APP_BASE_URL}/report/officer-perc
 const fetchOfficerBranchPercentPaymentUrl = `${REACT_APP_BASE_URL}/report/officer-branch-percent-payment`;
 
 export const fetchOfficersPercentPaymentReport = async (
-    request: OperationsReportRequest
+  request: OfficersPercentPaymentRequest
 ): Promise<ApiResponse<OfficerPercentPaymentResponse>> => {
-    try {
-        const res: AxiosResponse<OfficerPercentPaymentResponse> = await axios.post(
-            fetchOfficerPercentPaymentUrl,
-            request
-        );
-        return { status: "success", body: res.data };
-    } catch (error) {
-        return { status: "error", error: error.response.data };
-    }
+  try {
+    const res: AxiosResponse<OfficerPercentPaymentResponse> = await axios.post(
+      fetchOfficerPercentPaymentUrl,
+      request
+    );
+    return { status: "success", body: res.data };
+  } catch (error) {
+    return { status: "error", error: error.response.data };
+  }
 };
 
 export const fetchOfficersBranchPercentPaymentReport = async (
-    request: OperationsReportRequest
+  request: OperationsReportRequest
 ): Promise<ApiResponse<OfficerBranchPercentPaymentResponse>> => {
-    try {
-        const res: AxiosResponse<OfficerBranchPercentPaymentResponse> = await axios.post(
-            fetchOfficerBranchPercentPaymentUrl,
-            request
-        );
-        return { status: "success", body: res.data };
-    } catch (error) {
-        return { status: "error", error: error.response.data };
-    }
+  try {
+    const res: AxiosResponse<OfficerBranchPercentPaymentResponse> = await axios.post(
+      fetchOfficerBranchPercentPaymentUrl,
+      request
+    );
+    return { status: "success", body: res.data };
+  } catch (error) {
+    return { status: "error", error: error.response.data };
+  }
 };
