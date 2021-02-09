@@ -122,31 +122,52 @@ export interface DueInstallmentsResponse {
 }
 
 export interface LeakedCustomersReportRequest {
-    startDate: string;
-    endDate: string;
-    branches: string[];
+  startDate: string;
+  endDate: string;
+  branches: string[];
 }
 export interface LeakedCustomersPerBranch {
-    branchName: string;
-    data: Array<LeakedCustomer>;
+  branchName: string;
+  data: Array<LeakedCustomer>;
 }
 export interface LeakedCustomer {
-    customerCode: string;
-    customerName: string;
-    beneficiaryType: string;
-    homePhoneNumber: string;
-    mobilePhoneNumber: string;
-    businessPhoneNumber: string;
-    latestIssueDate: string;
-    latestPaymentDate: string;
-    latestIssuedPrincipal: number;
-    installmentsCount: number;
-    earlyDays: number;
-    workArea: string;
-    representative: string;
-    lateDays: number;
-    paidPenalties: number;
+  customerCode: string;
+  customerName: string;
+  beneficiaryType: string;
+  homePhoneNumber: string;
+  mobilePhoneNumber: string;
+  businessPhoneNumber: string;
+  latestIssueDate: string;
+  latestPaymentDate: string;
+  latestIssuedPrincipal: number;
+  installmentsCount: number;
+  earlyDays: number;
+  workArea: string;
+  representative: string;
+  lateDays: number;
+  paidPenalties: number;
 }
 export interface LeakedCustomersReportResponse {
-    response: Array<LeakedCustomersPerBranch>;
+  response: Array<LeakedCustomersPerBranch>;
+}
+
+export interface PaidArrearsSingleResponse {
+  branchCode?: string;
+  branchName?: string;
+  transactionCode?: string;
+  customerCode?: string;
+  customerName?: string;
+  installmentNumber?: number;
+  dueDate?: string;
+  installmentAmount?: number;
+  paymentDate?: string;
+  transactionAmount?: number;
+  lateDays?: number;
+  penalties?: number;
+  paidPenalties?: number;
+}
+export interface PaidArrearsResponse {
+  response?: PaidArrearsSingleResponse[];
+  totalPaidPenalties?: number;
+  totalTransactionAmount?: number;
 }
