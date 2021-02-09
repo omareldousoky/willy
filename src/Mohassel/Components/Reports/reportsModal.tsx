@@ -8,6 +8,7 @@ import { Field, Formik, FormikProps, yupToFormErrors } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
+	AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
   BranchesDropDown,
 } from "../dropDowns/allDropDowns";
@@ -15,7 +16,6 @@ import * as local from "../../../Shared/Assets/ar.json";
 import { Branch } from "../../../Shared/Services/interfaces";
 import { DateField } from "../Common/FormikFields/dateField";
 import { required } from "../../../Shared/validations";
-import { inputStyle } from "react-select/src/components/Input";
 
 interface InitialFormikState {
   fromDate?: string;
@@ -28,6 +28,7 @@ interface InitialFormikState {
   date?: string;
   representatives?: Array<string>;
   gracePeriod?: number;
+	geoAreas?: Array<string>;
 }
 
 interface Props {
@@ -39,15 +40,16 @@ interface Props {
 }
 
 const ReportsModal = (props: Props) => {
-  const formatRepresentatives = (
-    representatives: Record<string, string>[]
+  const getIds = (
+    list: Record<string, string>[]
   ): string[] =>
-    representatives.length ? representatives.map((officer) => officer._id) : [];
+    list.length ? list.map((item) => item._id) : [];
   function handleSubmit(values) {
     props.submit({
       ...values,
-      loanOfficers: formatRepresentatives(values.loanOfficers),
-      representatives: formatRepresentatives(values.representatives),
+      loanOfficers: getIds(values.loanOfficers),
+      representatives: getIds(values.representatives),
+      geoAreas: getIds(values.geoAreas),
     });
   }
   function getInitialValues() {
@@ -73,6 +75,8 @@ const ReportsModal = (props: Props) => {
           initValues.representatives = [];
         case "gracePeriod":
           initValues.gracePeriod = 0;
+				case "geoAreas":
+          initValues.geoAreas = [];
       }
     });
     return initValues;
@@ -363,6 +367,7 @@ const ReportsModal = (props: Props) => {
                                   : [loanOfficers]
                               );
                             }}
+														// branchId={formikProps.values.branches && formikProps.values.branches.length === 1 && formikProps.values.branches[0]._id || undefined}
                             isDisabled={
                               !formikProps.values.branches ||
                               (formikProps.values.branches &&
@@ -409,6 +414,34 @@ const ReportsModal = (props: Props) => {
                               {formikProps.errors.gracePeriod}
                             </span>
                           </Form.Group>
+                        </Col>
+                      );
+                    }
+										if (input === "geoAreas") {
+                      return (
+                        <Col key={input} sm={12} style={{ marginTop: 10 }}>
+                          <AsyncBranchGeoAreasDropDown
+                            isMulti
+                            onSelectGeoArea={(geoAreas) => {
+                              formikProps.setFieldValue(
+                                "geoAreas",
+                                Array.isArray(geoAreas)
+                                  ? geoAreas
+                                  : [geoAreas]
+                              );
+                            }}
+														branchId={formikProps.values.branches && formikProps.values.branches.length === 1 && formikProps.values.branches[0]._id || undefined}
+														// disable for non-selected branch, all branches, multi selected branches
+                            isDisabled={
+                              !formikProps.values.branches ||
+                              (formikProps.values.branches &&
+                                (!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1 || (!!formikProps.values.branches.length && !formikProps.values.branches[0]._id)))
+                            }
+                          />
+                          <span className="text-danger">
+                            {formikProps.errors.geoAreas}
+                          </span>
                         </Col>
                       );
                     }

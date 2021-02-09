@@ -19,4 +19,5 @@ export const reportsModalValidation: ObjectSchema<
   date: string(),
   loanOfficers: array().nullable(),
   representatives: array().nullable(),
+	geoAreas: array().nullable(),
 });

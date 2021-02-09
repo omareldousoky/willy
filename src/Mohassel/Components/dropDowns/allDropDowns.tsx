@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 import Select, { ValueType } from "react-select";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
 import { Props } from "react-select/src/Select";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
+import { getGeoAreasByBranch } from "../../Services/APIs/GeoAreas/getGeoAreas";
 
 export interface DropDownOption {
   name: string;
@@ -171,6 +172,67 @@ export const BranchesDropDown = (props) => {
         loadOptions={getBranches}
         cacheOptions
         defaultOptions
+      />
+    </div>
+  );
+};
+
+interface AsyncBranchGeoAreasDropDownProps extends Props<DropDownOption> {
+  branchId?: string;
+  onSelectGeoArea: (option: ValueType<DropDownOption>[]) => void;
+}
+
+
+export const AsyncBranchGeoAreasDropDown = ({
+  branchId,
+  onSelectGeoArea,
+  isDisabled,
+  ...restProps
+}: AsyncBranchGeoAreasDropDownProps) => {
+const getGeoAreas = (branchId?: string) => async () => {
+	if (!branchId) return [];
+	const res = await getGeoAreasByBranch(branchId);
+	if (res.status === "success") {
+	console.log(res.body.data)
+		return res.body.data;
+	} else {
+		return [];
+	}
+};
+
+  const [value, setValue] = useState<ValueType<DropDownOption> | null>();
+  const [loadOptions, setLoadOptions] = useState(() => getGeoAreas(branchId));
+
+  useEffect(() => {
+    if (isDisabled) setValue(null);
+  }, [isDisabled]);
+
+	useEffect(() => {
+    if (branchId) setLoadOptions(getGeoAreas(branchId));
+  }, [branchId]);
+
+
+	console.log(branchId)
+  return (
+    <div className="dropdown-container" style={{ flex: 2 }}>
+      <AsyncSelect<DropDownOption>
+        cacheOptions
+        // defaultOptions
+        styles={customStyles}
+        className="full-width"
+        name="geoAreas"
+        data-qc="geoAreas"
+        placeholder={local.chooseBranchGeoArea}
+        value={value}
+        onChange={(options) => {
+          onSelectGeoArea(options as ValueType<DropDownOption>[]);
+          setValue(options);
+        }}
+        getOptionLabel={(option) => option.name}
+        getOptionValue={(option) => option._id}
+        loadOptions={loadOptions}
+        isDisabled={isDisabled}
+        {...restProps}
       />
     </div>
   );

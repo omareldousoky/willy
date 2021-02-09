@@ -89,7 +89,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.UnpaidInstallmentsPerArea,
           local: "قائمة الاقساط الغير مسددة بمناطق العمل",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "geoAreas"],
           permission: "unpaidInstallmentsPerArea",
         },
         {
