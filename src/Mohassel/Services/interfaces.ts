@@ -194,3 +194,58 @@ export interface CustomersArrearsResponse {
   lateTotalCount?: number;
   totalCount?: number;
 }
+export interface LeakedCustomersReportRequest {
+  startDate: string;
+  endDate: string;
+  branches: string[];
+}
+export interface LeakedCustomersPerBranch {
+  branchName: string;
+  data: Array<LeakedCustomer>;
+}
+export interface LeakedCustomer {
+  customerCode: string;
+  customerName: string;
+  beneficiaryType: string;
+  homePhoneNumber: string;
+  mobilePhoneNumber: string;
+  businessPhoneNumber: string;
+  latestIssueDate: string;
+  latestPaymentDate: string;
+  latestIssuedPrincipal: number;
+  installmentsCount: number;
+  earlyDays: number;
+  workArea: string;
+  representative: string;
+  lateDays: number;
+  paidPenalties: number;
+}
+export interface LeakedCustomersReportResponse {
+  response: Array<LeakedCustomersPerBranch>;
+}
+
+export interface PaidArrearsSingleResponse {
+  branchCode?: string;
+  branchName?: string;
+  transactionCode?: string;
+  customerCode?: string;
+  customerName?: string;
+  installmentNumber?: number;
+  dueDate?: string;
+  installmentAmount?: number;
+  paymentDate?: string;
+  transactionAmount?: number;
+  lateDays?: number;
+  penalties?: number;
+  paidPenalties?: number;
+  representative?: string;
+}
+export interface PaidArrearsResponse {
+  response?: PaidArrearsSingleResponse[];
+  totalPaidPenalties?: number;
+  totalTransactionAmount?: number;
+}
+
+export interface PaidArrearsRequest extends OperationsReportRequest {
+  loanOfficerIds?: string[];
+}
