@@ -10,6 +10,13 @@ export interface OperationsReportRequest {
   branches: string[];
 }
 
+export interface LoanApplicationReportRequest {
+  startDate: string;
+  endDate: string;
+  branch: string;
+  loanStatus: string[];
+}
+
 interface LoansBriefRow {
   individualLoansCount?: number;
   individualLoansCredit?: number;
