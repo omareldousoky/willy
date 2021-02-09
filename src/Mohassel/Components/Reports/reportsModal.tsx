@@ -430,13 +430,13 @@ const ReportsModal = (props: Props) => {
                                   : [geoAreas]
                               );
                             }}
-														branchId={formikProps.values.branches && formikProps.values.branches.length === 1 && formikProps.values.branches[0]._id || undefined}
+														branchId={formikProps.values.branches && formikProps.values.branches.length === 1 && formikProps.values.branches[0]?._id || undefined}
 														// disable for non-selected branch, all branches, multi selected branches
                             isDisabled={
                               !formikProps.values.branches ||
                               (formikProps.values.branches &&
                                 (!formikProps.values.branches.length ||
-                                  formikProps.values.branches.length > 1 || (!!formikProps.values.branches.length && !formikProps.values.branches[0]._id)))
+                                  formikProps.values.branches.length > 1 || (!!formikProps.values.branches.length && !formikProps.values.branches[0]?._id)))
                             }
                           />
                           <span className="text-danger">

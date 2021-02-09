@@ -12,7 +12,7 @@ export interface Branch {
     bankAccount: string;
     costCenter: string;
     licenseNumber: string;
-		_id: string;
+		_id?: string;
 }
 
 export interface Customer {
