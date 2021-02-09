@@ -17,6 +17,7 @@ import {
   ApiResponse,
   CustomersArrearsRequest,
   OperationsReportRequest,
+  PaidArrearsRequest,
 } from "../../Services/interfaces";
 import {
   fetchOfficersBranchPercentPaymentReport,
@@ -130,7 +131,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.PaidArrears,
           local: "تقرير ما تم تحصيله من المتأخرات",
-          inputs: ["dateFromTo", "branches", "loanOfficerIds"],
+          inputs: ["dateFromTo", "branches", "loanOfficers"],
           permission: "paidArrears",
         },
       ],
@@ -274,7 +275,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchPaidArrears(values) {
-    const res = await fetchPaidArrearsReport(this.reportRequest(values));
+    const { fromDate, toDate, branches, loanOfficerIds } = values;
+    const res = await fetchPaidArrearsReport({
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      loanOfficerIds,
+    } as PaidArrearsRequest);
     this.handleFetchReport(res, Reports.PaidArrears);
   }
 

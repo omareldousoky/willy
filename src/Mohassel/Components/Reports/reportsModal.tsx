@@ -25,6 +25,7 @@ interface InitialFormikState {
   key?: string;
   loanOfficers?: Array<string>;
   date?: string;
+  loanOfficerIds?: Array<string>;
 }
 
 interface Props {
@@ -41,6 +42,9 @@ const ReportsModal = (props: Props) => {
       ...values,
       loanOfficers: values.loanOfficers.length
         ? values.loanOfficers.map((officer) => officer._id)
+        : [],
+      loanOfficerIds: values.loanOfficerIds.length
+        ? values.loanOfficerIds.map((officer) => officer._id)
         : [],
     });
   }
@@ -63,6 +67,7 @@ const ReportsModal = (props: Props) => {
           initValues.date = "";
         case "loanOfficers":
           initValues.loanOfficers = [];
+          initValues.loanOfficerIds = [];
       }
     });
     return initValues;
@@ -161,6 +166,7 @@ const ReportsModal = (props: Props) => {
                           onSelectBranch={(branches) => {
                             formikProps.setFieldValue("branches", branches);
                             formikProps.setFieldValue("loanOfficers", []);
+                            formikProps.setFieldValue("loanOfficerIds", []);
                           }}
                         />
                         <span style={{ color: "red" }}>
@@ -331,6 +337,12 @@ const ReportsModal = (props: Props) => {
                                 ? loanOfficers
                                 : [loanOfficers]
                             );
+                            formikProps.setFieldValue(
+                              "loanOfficerIds",
+                              Array.isArray(loanOfficers)
+                                ? loanOfficers
+                                : [loanOfficers]
+                            );
                           }}
                           isDisabled={
                             !formikProps.values.branches ||
@@ -340,7 +352,8 @@ const ReportsModal = (props: Props) => {
                           }
                         />
                         <span style={{ color: "red" }}>
-                          {formikProps.errors.loanOfficers}
+                          {formikProps.errors.loanOfficers ||
+                            formikProps.errors.loanOfficerIds}
                         </span>
                       </Col>
                     );

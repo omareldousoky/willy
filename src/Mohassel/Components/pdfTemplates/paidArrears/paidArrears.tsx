@@ -50,6 +50,7 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
             <th>اسم العميل</th>
             <th>كود العميل</th>
             <th>كود الحركة</th>
+            <th>المندوب</th>
             <th>الفرع</th>
             <th>كود الفرع</th>
           </tr>
@@ -80,6 +81,7 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
                 <td>{numbersToArabic(row.customerName) || "٠"}</td>
                 <td>{numbersToArabic(row.customerCode)}</td>
                 <td>{numbersToArabic(row.transactionCode)}</td>
+                <td>{row.representative}</td>
                 <td>{numbersToArabic(row.branchName)}</td>
                 <td>{numbersToArabic(row.branchCode)}</td>
               </tr>
@@ -88,6 +90,7 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
             <td>{numbersToArabic(data.totalPaidPenalties) || "٠"}</td>
             <td></td>
             <td>{numbersToArabic(data.totalTransactionAmount) || "٠"}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

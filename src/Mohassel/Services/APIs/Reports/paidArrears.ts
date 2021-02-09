@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import {
   ApiResponse,
-  OperationsReportRequest,
+  PaidArrearsRequest,
   PaidArrearsResponse,
 } from "../../interfaces";
 import axios from "../axios-instance";
@@ -10,7 +10,7 @@ const { REACT_APP_BASE_URL } = process.env;
 const fetchPaidArrears = `${REACT_APP_BASE_URL}/report/paid-arrears`;
 
 export const fetchPaidArrearsReport = async (
-  request: OperationsReportRequest
+  request: PaidArrearsRequest
 ): Promise<ApiResponse<PaidArrearsResponse>> => {
   try {
     const res: AxiosResponse<PaidArrearsResponse> = await axios.post(
