@@ -129,31 +129,68 @@ export interface DueInstallmentsResponse {
 }
 
 export interface LeakedCustomersReportRequest {
-    startDate: string;
-    endDate: string;
-    branches: string[];
+  startDate: string;
+  endDate: string;
+  branches: string[];
 }
 export interface LeakedCustomersPerBranch {
-    branchName: string;
-    data: Array<LeakedCustomer>;
+  branchName: string;
+  data: Array<LeakedCustomer>;
 }
 export interface LeakedCustomer {
-    customerCode: string;
-    customerName: string;
-    beneficiaryType: string;
-    homePhoneNumber: string;
-    mobilePhoneNumber: string;
-    businessPhoneNumber: string;
-    latestIssueDate: string;
-    latestPaymentDate: string;
-    latestIssuedPrincipal: number;
-    installmentsCount: number;
-    earlyDays: number;
-    workArea: string;
-    representative: string;
-    lateDays: number;
-    paidPenalties: number;
+  customerCode: string;
+  customerName: string;
+  beneficiaryType: string;
+  homePhoneNumber: string;
+  mobilePhoneNumber: string;
+  businessPhoneNumber: string;
+  latestIssueDate: string;
+  latestPaymentDate: string;
+  latestIssuedPrincipal: number;
+  installmentsCount: number;
+  earlyDays: number;
+  workArea: string;
+  representative: string;
+  lateDays: number;
+  paidPenalties: number;
 }
 export interface LeakedCustomersReportResponse {
-    response: Array<LeakedCustomersPerBranch>;
+  response: Array<LeakedCustomersPerBranch>;
+}
+export interface CustomersArrearsRequest {
+  date: string;
+  branches: string[];
+  loanOfficers: string[];
+}
+
+export interface CustomersArrearsSingleResponse {
+  issueDate?: string;
+  loanPrincipal?: number;
+  installmentsCount?: number;
+  lateCount?: number;
+  lateAmount?: number;
+  firstLateDate?: string;
+  longestLatePeriod?: number;
+  latestPaymentDate?: string;
+  lateDays?: number;
+  installmentAmount?: number;
+  raseedCount?: number;
+  raseedAmount?: number;
+  lastPaidAmount?: number;
+  tarheelatCount?: number;
+  latestFullPaymentDate?: string;
+  representativeName?: string;
+  customerName?: string;
+  customerCode?: string;
+  branchName?: string;
+  branchCode?: number;
+  beneficiaryType?: "group" | "individual";
+}
+export interface CustomersArrearsResponse {
+  response?: CustomersArrearsSingleResponse[];
+  raseedTotalAmount?: number;
+  raseedTotalCount?: number;
+  lateTotalAmount?: number;
+  lateTotalCount?: number;
+  totalCount?: number;
 }
