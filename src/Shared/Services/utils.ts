@@ -474,3 +474,19 @@ export const convertToTimestamp = (date?: string | number): number => {
 	return date ?  new Date(date).valueOf() || today : today;
 }
 
+export const groupBy = (
+  list: Record<string, unknown>[],
+  keyGetter: (item: Record<string, unknown>) => unknown
+) => {
+  const map = new Map();
+  list.forEach((item) => {
+    const key = keyGetter(item);
+    const collection = map.get(key);
+    if (!collection) {
+      map.set(key, [item]);
+    } else {
+      collection.push(item);
+    }
+  });
+  return map;
+};

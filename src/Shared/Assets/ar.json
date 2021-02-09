@@ -900,5 +900,6 @@
     "customerBalance": "رصيد العميل",
 		"confirmNewPassword": "تأكيد كلمة المرور",
 		"newPasswordAsCurrentPasswordError": "كلمة المرور الجديدة يجب أن تكون مختلفة عن الحالية",
-    "manageLoanDetails":"اعدادت القروض"
+    "manageLoanDetails":"اعدادت القروض",
+		"typeRepresentativeName": "اكتب اسم المندوب"
 }
