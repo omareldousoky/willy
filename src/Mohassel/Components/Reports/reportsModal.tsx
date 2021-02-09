@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { Field, Formik, FormikProps, yupToFormErrors } from "formik";
+import { Field, Formik, FormikProps } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
@@ -158,7 +158,6 @@ const ReportsModal = (props: Props) => {
                         <BranchesDropDown
                           onlyValidBranches={true}
                           multiselect={true}
-                          onlyValidBranches={true}
                           onSelectBranch={(branches) => {
                             formikProps.setFieldValue("branches", branches);
                             formikProps.setFieldValue("loanOfficers", []);
