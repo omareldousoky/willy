@@ -10,7 +10,7 @@ import Search from '../../../Shared/Components/Search/search';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { connect } from 'react-redux';
 import * as local from '../../../Shared/Assets/ar.json';
-import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, downloadFile, iscoreStatusColor, getFullCustomerKey } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, beneficiaryType, parseJwt, getErrorMessage, downloadFile, iscoreStatusColor, getFullCustomerKey, iscoreBank } from '../../../Shared/Services/utils';
 import { getBranch } from '../../Services/APIs/Branch/getBranch';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import Modal from 'react-bootstrap/Modal';
@@ -163,12 +163,13 @@ class TrackLoanApplications extends Component<Props, State>{
     const iScores = await getIscoreCached(obj);
     if (iScores.status === "success") {
       const customers: Score[] = [];
-      iScores.body.data.forEach(score => {
+      iScores.body.data.forEach((score: Score) => {
         const obj = {
           customerName: (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.filter(member => member.customer.nationalId === score.nationalId)[0].customer.customerName : application.customer.customerName,
           iscore: score.iscore,
           nationalId: score.nationalId,
           url: score.url,
+          bankCodes: score.bankCodes || []
         }
         customers.push(obj)
       })
@@ -341,16 +342,18 @@ class TrackLoanApplications extends Component<Props, State>{
                     <td>{local.customer}</td>
                     <td>{local.nationalId}</td>
                     <td>{local.value}</td>
+                    <td>{local.bankName}</td>
                     <td></td>
                     <td>{local.downloadPDF}</td>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.iScoreCustomers.map(customer =>
+                  {this.state.iScoreCustomers.map((customer: Score) =>
                     <tr key={customer.nationalId}>
                       <td>{customer.customerName}</td>
                       <td>{customer.nationalId}</td>
                       <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
+                      {customer.bankCodes && customer.bankCodes.length > 0 && customer.bankCodes.map(code => <td key={code}>{iscoreBank(code)}</td>)}
                       <td>{iscoreStatusColor(customer.iscore).status}</td>
                       <td>{customer.url && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download" onClick={() => { downloadFile(customer.url) }}></span>}</td>
                     </tr>
