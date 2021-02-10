@@ -11,7 +11,7 @@ import {
   CustomersArrearsResponse,
   CustomersArrearsSingleResponse,
 } from "../../../Services/interfaces";
-import { LandscapeOrientation } from "../../Common/LandscapeOrientation";
+import { LandscapeOrientation } from "../../Common/landscapeOrientation";
 import "./customersArrears.scss";
 
 interface CustomersArrearsProps {
