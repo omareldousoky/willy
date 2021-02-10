@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 import Select, { ValueType } from "react-select";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
@@ -66,17 +66,17 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
   );
 };
 
-interface AsyncLoanOfficersDropDownProps extends Props<DropDownOption> {
+interface DropDownPropsWithBranch extends Props<DropDownOption> {
   branchId?: string;
-  onSelectLoanOfficer: (officersOptions: ValueType<DropDownOption>[]) => void;
+  onSelectOption: (option: ValueType<DropDownOption>[]) => void;
 }
 
 export const AsyncLoanOfficersDropDown = ({
   branchId,
-  onSelectLoanOfficer,
+  onSelectOption,
   isDisabled,
   ...restProps
-}: AsyncLoanOfficersDropDownProps) => {
+}: DropDownPropsWithBranch) => {
   const [value, setValue] = useState<ValueType<DropDownOption> | null>();
 
   const getLoanOfficers = (branchId?: string) => async (
@@ -111,7 +111,7 @@ export const AsyncLoanOfficersDropDown = ({
         placeholder={local.typeRepresentativeName}
         value={value}
         onChange={(options) => {
-          onSelectLoanOfficer(options as ValueType<DropDownOption>[]);
+          onSelectOption(options as ValueType<DropDownOption>[]);
           setValue(options);
         }}
         getOptionLabel={(option) => option.name}
@@ -129,20 +129,10 @@ export const BranchesDropDown = (props) => {
   const [value, setValue] = useState(
     options.find((o) => o._id === props.value)
   );
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      border: "none",
-      boxShadow: "none",
-      "&:hover": {
-        border: "none",
-      },
-    }),
-  };
   const getBranches = async (searchKeyWord) => {
     const res = await searchBranches({
       from: 0,
-      size: 1000,
+      size: 10,
       name: searchKeyWord,
     });
     if (res.status === "success") {
@@ -177,3 +167,77 @@ export const BranchesDropDown = (props) => {
   );
 };
 
+export const AsyncBranchGeoAreasDropDown = ({
+  branchId,
+  onSelectOption,
+  isDisabled,
+  ...restProps
+}: DropDownPropsWithBranch) => {
+  const initialState: {
+    optionsLoaded: boolean;
+    options: DropDownOption[];
+    isLoading: boolean;
+  } = {
+    optionsLoaded: false,
+    options: [],
+    isLoading: false,
+  };
+  const [options, setOptions] = useState(initialState);
+  const [value, setValue] = useState<ValueType<DropDownOption> | null>();
+
+  const handleLoadOptions = async () => {
+    if (!branchId) return;
+    const options: DropDownOption[] = [];
+    const res = await getGeoAreasByBranch(branchId);
+
+    if (res.status === "success") {
+      const data = res.body.data;
+      Array.isArray(data) && data.length
+        ? res.body.data.map((area: DropDownOption) => {
+            options.push({
+              _id: area._id,
+              name: area.name,
+            });
+          })
+        : [];
+    } else {
+      return [];
+    }
+  };
+  const maybeLoadOptions = () => {
+    if (!options.optionsLoaded) {
+      setOptions({ ...options, isLoading: true });
+      handleLoadOptions();
+    }
+  };
+
+  useEffect(() => {
+    setOptions(initialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branchId]);
+  return (
+    <div className="dropdown-container" style={{ flex: 2 }}>
+      <Select<DropDownOption>
+        cacheOptions
+        defaultOptions
+        styles={customStyles}
+        className="full-width"
+        name="geoAreas"
+        data-qc="geoAreas"
+        placeholder={local.chooseBranchGeoArea}
+        value={value}
+        onChange={(options) => {
+          onSelectOption(options as ValueType<DropDownOption>[]);
+          setValue(options);
+        }}
+        isLoading={options.isLoading}
+        options={options.options}
+        getOptionLabel={(option) => option.name}
+        getOptionValue={(option) => option._id}
+        isDisabled={isDisabled}
+        onFocus={maybeLoadOptions}
+        {...restProps}
+      />
+    </div>
+  );
+};

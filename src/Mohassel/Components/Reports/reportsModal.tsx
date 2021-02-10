@@ -8,6 +8,7 @@ import { Field, Formik, FormikProps, yupToFormErrors } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
+  AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
   BranchesDropDown,
 } from "../dropDowns/allDropDowns";
@@ -27,6 +28,7 @@ interface InitialFormikState {
   date?: string;
   representatives?: Array<string>;
   gracePeriod?: number;
+  geoAreas?: Array<string>;
 }
 
 interface Props {
@@ -71,6 +73,8 @@ const ReportsModal = (props: Props) => {
           initValues.representatives = [];
         case "gracePeriod":
           initValues.gracePeriod = 0;
+        case "geoAreas":
+          initValues.geoAreas = [];
       }
     });
     return initValues;
@@ -351,7 +355,7 @@ const ReportsModal = (props: Props) => {
                         <Col key={input} sm={12} style={{ marginTop: 10 }}>
                           <AsyncLoanOfficersDropDown
                             isMulti
-                            onSelectLoanOfficer={(loanOfficers) => {
+                            onSelectOption={(loanOfficers) => {
                               formikProps.setFieldValue(
                                 hasLoanOfficers
                                   ? "loanOfficers"
@@ -408,6 +412,39 @@ const ReportsModal = (props: Props) => {
                               {formikProps.errors.gracePeriod}
                             </span>
                           </Form.Group>
+                        </Col>
+                      );
+                    }
+                    if (input === "geoAreas") {
+                      return (
+                        <Col key={input} sm={12} style={{ marginTop: 10 }}>
+                          <AsyncBranchGeoAreasDropDown
+                            isMulti
+                            onSelectOption={(geoAreas) => {
+                              formikProps.setFieldValue(
+                                "geoAreas",
+                                Array.isArray(geoAreas) ? geoAreas : [geoAreas]
+                              );
+                            }}
+                            branchId={
+                              (formikProps.values.branches &&
+                                formikProps.values.branches.length === 1 &&
+                                formikProps.values.branches[0]?._id) ||
+                              undefined
+                            }
+                            // disable for non-selected branch, all branches, multi selected branches
+                            isDisabled={
+                              !formikProps.values.branches ||
+                              (formikProps.values.branches &&
+                                (!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1 ||
+                                  (!!formikProps.values.branches.length &&
+                                    !formikProps.values.branches[0]?._id)))
+                            }
+                          />
+                          <span className="text-danger">
+                            {formikProps.errors.geoAreas}
+                          </span>
                         </Col>
                       );
                     }
