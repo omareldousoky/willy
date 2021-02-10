@@ -16,6 +16,7 @@ import "./styles.scss";
 import { Employee } from "./payment";
 import Swal from "sweetalert2";
 import { getErrorMessage } from "../../../Shared/Services/utils";
+import Can from "../../config/Can";
 
 interface FormValues {
   requiredAmount: number;
@@ -343,7 +344,9 @@ class PayInstallment extends Component<Props, State> {
                           <option value='employee' data-qc='employee'>{local.employee}</option>
                           <option value='family' data-qc='family'>{local.familyMember}</option>
                           <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
-                          <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                          <Can I="payByInsurance" an="application">
+                            <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
+                          </Can>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.payerType}
