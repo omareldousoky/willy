@@ -130,7 +130,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local: "متأخرات المندوب لم يستحق أو مسدد جزئي",
           inputs: ["date", "branches", "loanOfficers"],
           permission: "customersArrears",
-				},{
+        },
+        {
           key: Reports.PaidArrears,
           local: "تقرير ما تم تحصيله من المتأخرات",
           inputs: ["dateFromTo", "branches", "loanOfficers"],
@@ -436,7 +437,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             toDate={this.state.toDate}
           />
         )}
-        {this.state.print === Reports.LeakedCustomers && (
+        {this.state.print === Reports.LeakedCustomers && this.state.data && (
           <LeakedCustomersPDF
             data={this.state.data}
             fromDate={this.state.fromDate}
@@ -445,7 +446,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         )}
         {this.state.print === Reports.CustomersArrears && this.state.data && (
           <CustomersArrears data={this.state.data} date={this.state.date} />
-				)}
+        )}
         {this.state.print === Reports.PaidArrears && this.state.data && (
           <PaidArrears
             data={this.state.data}
