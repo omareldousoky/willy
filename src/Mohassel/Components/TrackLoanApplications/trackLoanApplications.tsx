@@ -21,6 +21,7 @@ import { Score } from '../CustomerCreation/customerProfile';
 import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApplications';
 import { manageApplicationsArray } from './manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import { LoanApplicationReportRequest } from '../../Services/interfaces';
 
 interface Product {
   productName: string;
@@ -174,13 +175,13 @@ class TrackLoanApplications extends Component<Props, State>{
       })
       this.setState({ iScoreCustomers: customers, loading: false })
     } else {
-      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error'))
+      this.setState({ loading: false }, () => Swal.fire('', getErrorMessage(iScores.error.error), 'error'))
     }
   }
   componentDidMount() {
     this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(() => {
       if (this.props.error)
-        Swal.fire("Error !", getErrorMessage(this.props.error), "error")
+        Swal.fire("", getErrorMessage(this.props.error), "error")
     }
     );
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
@@ -199,7 +200,7 @@ class TrackLoanApplications extends Component<Props, State>{
       url: "application",
       branchId,
     }).then(() => {
-      if (error) Swal.fire("Error !", getErrorMessage(error), "error");
+      if (error) Swal.fire("", getErrorMessage(error), "error");
     });
   }
   getStatus(status: string) {
@@ -232,15 +233,23 @@ class TrackLoanApplications extends Component<Props, State>{
   async getReviewedData() {
     const token = getCookie('token');
     const details = parseJwt(token)
-    if (details.branch.length > 0) {
+    const hasBranch = details.branch.length > 0
+    if (hasBranch) {
       this.getBranchData(details.branch)
     }
+    const filters = this.props.searchFilters
+    const obj: LoanApplicationReportRequest = {
+      startDate: filters.fromDate,
+      endDate: filters.toDate,
+      loanStatus: filters.status ? [filters.status] : [],
+      branch: hasBranch ? details.branch : filters.branchId || ''
+    }
     this.setState({ loading: true })
-    const res = await getReviewedApplications();
+    const res = await getReviewedApplications(obj);
     if (res.status === 'success') {
       if (Object.keys(res.body).length === 0) {
         this.setState({ loading: false });
-        Swal.fire("error", local.noResults)
+        Swal.fire("", local.noResults, 'error')
       } else {
         this.setState({ reviewedResults: res.body.result, loading: false }, () => { this.setState({ print: true }, () => window.print()) });
       }
@@ -252,7 +261,15 @@ class TrackLoanApplications extends Component<Props, State>{
   componentWillUnmount() {
     this.props.setSearchFilters({})
   }
-
+  checkFilters() {
+    if (this.props.searchFilters.fromDate && this.props.searchFilters.fromDate !== NaN && this.props.searchFilters.toDate && this.props.searchFilters.toDate !== NaN) {
+      if (this.props.searchFilters.status && ['created', 'rejected', 'canceled'].includes(this.props.searchFilters.status)) {
+        return true
+      }
+      return false
+    }
+    return true
+  }
   render() {
     return (
       <>
@@ -272,7 +289,7 @@ class TrackLoanApplications extends Component<Props, State>{
                 </div>
                 <div>
                   {<Can I='assignProductToCustomer' a='application'><Button onClick={() => this.props.history.push('/track-loan-applications/new-loan-application', { id: '', action: 'under_review' })}>{local.createLoanApplication}</Button></Can>}
-                  <Can I="loansReviewed" a="report"><Button style={{ marginRight: 10 }} onClick={() => { this.getReviewedData() }}>{local.downloadPDF}</Button></Can>
+                  <Can I="loansReviewed" a="report"><Button style={{ marginRight: 10 }} disabled={this.checkFilters()} onClick={() => { this.getReviewedData() }}>{local.downloadPDF}</Button></Can>
                 </div>
               </div>
               <hr className="dashed-line" />

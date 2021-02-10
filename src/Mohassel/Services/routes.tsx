@@ -40,7 +40,7 @@ import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
 import ReportsHome from '../Components/Reports/reportsHome';
-import MoveCustomers from '../Components/MoveCustomers/move-customers';
+import MoveCustomers from '../Components/MoveCustomers/moveCustomers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 import Leads from '../Components/HalanIntegration/leads';
