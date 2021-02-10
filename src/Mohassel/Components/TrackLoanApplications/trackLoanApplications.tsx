@@ -162,30 +162,31 @@ class TrackLoanApplications extends Component<Props, State>{
     const iScores = await getIscoreCached(obj);
     if (iScores.status === "success") {
       const customers: Score[] = [];
-      iScores.body.data.forEach(score => {
+      iScores.body.data.forEach((score: Score) => {
         const obj = {
           customerName: (application.product.beneficiaryType === 'group') ? application.group.individualsInGroup.filter(member => member.customer.nationalId === score.nationalId)[0].customer.customerName : application.customer.customerName,
           iscore: score.iscore,
           nationalId: score.nationalId,
           url: score.url,
+          bankCodes: score.bankCodes || []
         }
         customers.push(obj)
       })
       this.setState({ iScoreCustomers: customers, loading: false })
     } else {
-      this.setState({ loading: false }, () =>    Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error'))
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(iScores.error.error), 'error'))
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(()=>{
-      if(this.props.error)
-      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(() => {
+      if (this.props.error)
+        Swal.fire("Error !", getErrorMessage(this.props.error), "error")
     }
     );
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
   getApplications() {
-		const { searchFilters, search, error, branchId } = this.props;
+    const { searchFilters, search, error, branchId } = this.props;
     const { customerShortenedCode, customerKey } = searchFilters;
     const { size, from } = this.state;
     search({
@@ -248,7 +249,7 @@ class TrackLoanApplications extends Component<Props, State>{
       console.log('error getting branch details')
     }
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.setSearchFilters({})
   }
 
@@ -330,12 +331,12 @@ class TrackLoanApplications extends Component<Props, State>{
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.iScoreCustomers.map(customer =>
+                  {this.state.iScoreCustomers.map((customer: Score) =>
                     <tr key={customer.nationalId}>
                       <td>{customer.customerName}</td>
                       <td>{customer.nationalId}</td>
                       <td style={{ color: iscoreStatusColor(customer.iscore).color }}>{customer.iscore}</td>
-                      <td>{iscoreBank(customer.bankCode)}</td>
+                      {customer.bankCodes && customer.bankCodes.length > 0 && customer.bankCodes.map(code => <td key={code}>{iscoreBank(code)}</td>)}
                       <td>{iscoreStatusColor(customer.iscore).status}</td>
                       <td>{customer.url && <span style={{ cursor: 'pointer' }} title={"iScore"} className="fa fa-download" onClick={() => { downloadFile(customer.url) }}></span>}</td>
                     </tr>

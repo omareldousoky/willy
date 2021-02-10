@@ -68,7 +68,7 @@ class InfoBox extends Component<Props, State>{
                         <Row>
                             <Form.Label style={{ color: iscoreStatusColor(iscore.iscore).color }}>{iscore.iscore} </Form.Label>
                             <Form.Label>{iscoreStatusColor(iscore.iscore).status} </Form.Label>
-                            <Form.Label>{iscore.bankCode && iscoreBank(iscore.bankCode)}</Form.Label>
+                            {iscore.bankCodes && iscore.bankCodes.map(code => <Form.Label key={code}>{iscoreBank(code)}</Form.Label>)}
                             {iscore.url && <Col>
                                 <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iscore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
                             </Col>}

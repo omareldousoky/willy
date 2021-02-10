@@ -29,11 +29,12 @@ interface Props {
   };
 };
 export interface Score {
+  customerName?: string;
   activeLoans?: string;
   iscore: string;
   nationalId: string;
   url?: string;
-  bankCode?: string;
+  bankCodes?: string[];
 }
 const tabs: Array<Tab> = [
   {
@@ -177,7 +178,7 @@ const CustomerProfile = (props: Props) => {
                 <td style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}>
                   {iScoreDetails?.iscore}
                   <span style={{ margin: '0px 10px' }}>{iscoreStatusColor(iScoreDetails?.iscore).status}</span>
-                  {iScoreDetails?.bankCode && iscoreBank(iScoreDetails.bankCode)}
+                  {iScoreDetails?.bankCodes && iScoreDetails.bankCodes.map(code => `${iscoreBank(code)} `)}
                   {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
                 </td>
               </tr>}
