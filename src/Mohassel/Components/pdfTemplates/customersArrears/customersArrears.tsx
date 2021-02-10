@@ -11,7 +11,7 @@ import {
   CustomersArrearsResponse,
   CustomersArrearsSingleResponse,
 } from "../../../Services/interfaces";
-import { LandscapeOrientation } from "../../Common/landscapeOrientation";
+import Orientation from "../../Common/orientation";
 import "./customersArrears.scss";
 
 interface CustomersArrearsProps {
@@ -27,7 +27,7 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
   const dataGroupList = Array.from(dataGroupedByBranch.keys());
   return (
     <>
-      <LandscapeOrientation />
+      <Orientation size="landscape" />
       <div className="customers-arrears">
         <div className="header-wrapper">
           <span className="logo-print" role="img" />
@@ -59,7 +59,7 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
               const rows = dataGroupedByBranch.get(key) || [];
               const isLastItem = i + 1 === dataGroupList.length;
               return (
-                <React.Fragment key={key}>
+                <React.Fragment key={`${key}-{i}`}>
                   <thead>
                     <tr>
                       <th colSpan={100}>
@@ -108,11 +108,7 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                         const isLastRow = isLastItem && j + 1 === rows.length;
                         return (
                           <>
-                            <tr
-                              key={`${
-                                row.customerCode
-                              }-${Math.random().toString(36).substr(7)}`}
-                            >
+                            <tr key={`${row.customerCode}-${j}`}>
                               <td colSpan={2}>
                                 {row.latestFullPaymentDate
                                   ? timeToArabicDate(
