@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { Field, Formik, FormikProps, yupToFormErrors } from "formik";
+import { Field, Formik, FormikProps } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
@@ -26,6 +26,7 @@ interface InitialFormikState {
   key?: string;
   loanOfficers?: Array<string>;
   date?: string;
+  loanOfficerIds?: Array<string>;
   representatives?: Array<string>;
   gracePeriod?: number;
   geoAreas?: Array<string>;
@@ -48,6 +49,7 @@ const ReportsModal = (props: Props) => {
       loanOfficers: getIds(values.loanOfficers),
       representatives: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
+      loanOfficerIds: getIds(values.loanOfficerIds),
     });
   }
   function getInitialValues() {
@@ -69,6 +71,7 @@ const ReportsModal = (props: Props) => {
           initValues.date = "";
         case "loanOfficers":
           initValues.loanOfficers = [];
+          initValues.loanOfficerIds = [];
         case "representatives":
           initValues.representatives = [];
         case "gracePeriod":

@@ -1,58 +1,108 @@
 import React from "react";
-import { timeToArabicDateNow } from "../../../../Shared/Services/utils";
-import './paidArrears.scss'
+import store from "../../../../Shared/redux/store";
+import {
+  getCurrentTime,
+  numbersToArabic,
+  timeToArabicDate,
+  timeToArabicDateNow,
+} from "../../../../Shared/Services/utils";
+import { PaidArrearsResponse } from "../../../Services/interfaces";
+import "./paidArrears.scss";
 
-export const PaidArrears = (props) => {
-    return (
-        <div className="arrears-payed" lang="ar">
-            <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
-                <tr style={{ height: "10px" }}></tr>
-                <tr style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}><th colSpan={6}><div className={"logo-print"}></div></th><th colSpan={6} >ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
-                <tr style={{ height: "10px" }}></tr>
-                <tbody className="report-header">
-                    <tr className="headtitle">
-                        <th>شركة تساهيل للتمويل متناهي الصغر</th>
-                        <th>{timeToArabicDateNow(true)}</th>
-                    </tr>
-                    <tr className="headtitle">
-                        <th rowSpan={2}>حركات سداد على المتأخرات</th>
-                        <th rowSpan={2}>من 01-12-2020 الى 31-12-2020 </th>
-                    </tr>
-                </tbody>
-                <tr>
-                    <th colSpan={100} className="horizontal-line"></th>
-                </tr>
-             </table>
-                <table className="report-container">
-                <thead>
-                    <th>غرامه مسدده</th>
-                    <th>غرامات مستحقه على القسط</th>
-                    <th>ايام التأخير للقسط</th>
-                    <th>قيمة الحركه</th>
-                    <th>ت حركة السداد</th>
-                    <th>قيمة القسط</th>
-                    <th>رقم القسط</th>
-                    <th>اسم العميل</th>
-                    <th>كود العميل</th>
-                    <th>كود الحركه</th>
-                    <th>الفرع</th>
-                    <th>كود الفرع</th>
-                </thead>
-                <tbody>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                    <td>0000.0000</td>
-                </tbody>
-            </table>
-        </div>
-    )
+interface PaidArrearsProps {
+  fromDate: string;
+  toDate: string;
+  data: PaidArrearsResponse;
 }
+
+export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
+  return (
+    <div className="paid-arrears" lang="ar">
+      <div className="header-wrapper">
+        <span className="logo-print" role="img" />
+        <p className="m-0">
+          ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+        </p>
+      </div>
+      <div className="header-wrapper mb-0">
+        <p style={{ marginRight: "10px" }}>شركة تساهيل للتمويل متناهي الصغر</p>
+        <p>{store.getState().auth.name}</p>
+        <p>{getCurrentTime()}</p>
+      </div>
+      <div className="d-flex flex-column mx-3">
+        <p className="report-title">
+          تقرير ما تم تحصيله من المتأخرات : من &nbsp;
+          {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى : &nbsp;
+          {timeToArabicDate(new Date(toDate).valueOf(), false)}
+        </p>
+        <hr className="horizontal-line" />
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>غرامة مسددة</th>
+            <th>أيام التأخير للقسط</th>
+            <th>قيمة الحركة</th>
+            <th>ت حركة السداد</th>
+            <th>قيمة القسط</th>
+            <th>ت الاستحقاق</th>
+            <th>رقم القسط</th>
+            <th>اسم العميل</th>
+            <th>كود العميل</th>
+            <th>كود الحركة</th>
+            <th>المندوب</th>
+            <th>الفرع</th>
+            <th>كود الفرع</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.response &&
+            data.response.length &&
+            data.response.map((row) => (
+              <tr key={row.transactionCode}>
+                <td>{numbersToArabic(row.paidPenalties) || "٠"}</td>
+                <td>{numbersToArabic(row.lateDays) || "٠"}</td>
+                <td>{numbersToArabic(row.transactionAmount) || "٠"}</td>
+                <td>
+                  {row.paymentDate
+                    ? timeToArabicDate(
+                        new Date(row.paymentDate).valueOf(),
+                        false
+                      )
+                    : "لا يوجد"}
+                </td>
+                <td>{numbersToArabic(row.installmentAmount) || "٠"}</td>
+                <td>
+                  {row.dueDate
+                    ? timeToArabicDate(new Date(row.dueDate).valueOf(), false)
+                    : "لا يوجد"}
+                </td>
+                <td>{numbersToArabic(row.installmentNumber) || "٠"}</td>
+                <td>{numbersToArabic(row.customerName) || "٠"}</td>
+                <td>{numbersToArabic(row.customerCode)}</td>
+                <td>{numbersToArabic(row.transactionCode)}</td>
+                <td>{row.representative}</td>
+                <td>{numbersToArabic(row.branchName)}</td>
+                <td>{numbersToArabic(row.branchCode)}</td>
+              </tr>
+            ))}
+          <tr>
+            <td>{numbersToArabic(data.totalPaidPenalties) || "٠"}</td>
+            <td></td>
+            <td>{numbersToArabic(data.totalTransactionAmount) || "٠"}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>الإجمالي</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};

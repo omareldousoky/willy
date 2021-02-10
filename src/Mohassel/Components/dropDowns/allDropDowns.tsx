@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
+import { useStore } from "react-redux";
 import Select, { ValueType } from "react-select";
+import { Auth, Branch } from "../../../Shared/redux/auth/types";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
 import { Props } from "react-select/src/Select";
@@ -124,22 +126,37 @@ export const AsyncLoanOfficersDropDown = ({
   );
 };
 
-export const BranchesDropDown = (props) => {
+type BranchDropDownProps = {
+  onlyValidBranches?: boolean;
+  multiselect?: boolean;
+  value?: string;
+  onSelectBranch: (branch: Branch) => void;
+};
+export const BranchesDropDown = (props: BranchDropDownProps) => {
   const [options, setOptions] = useState<any>([]);
   const [value, setValue] = useState(
     options.find((o) => o._id === props.value)
   );
-  const getBranches = async (searchKeyWord) => {
-    const res = await searchBranches({
-      from: 0,
-      size: 10,
-      name: searchKeyWord,
-    });
-    if (res.status === "success") {
-      setOptions([{ name: local.allBranches, _id: "" }, ...res.body.data]);
-      return [{ name: local.allBranches, _id: "" }, ...res.body.data];
+  const store = useStore();
+  const getBranches = async (searchKeyWord: string) => {
+    const auth: Auth = store.getState().auth;
+    let branches: Array<Branch> = auth.validBranches;
+    if (props.onlyValidBranches && branches !== null) {
+      if (!auth.requireBranch)
+        branches = [{ name: local.allBranches, _id: "" }, ...branches];
+      return branches.filter((branch) => branch.name.includes(searchKeyWord));
     } else {
-      return [];
+      const res = await searchBranches({
+        from: 0,
+        size: 1000,
+        name: searchKeyWord,
+      });
+      if (res.status === "success") {
+        setOptions([{ name: local.allBranches, _id: "" }, ...res.body.data]);
+        return [{ name: local.allBranches, _id: "" }, ...res.body.data];
+      } else {
+        return [];
+      }
     }
   };
   return (
