@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { getDateString, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { currency, getDateString, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import { CustomerApplicationTransactionsResponse } from "../../../Services/interfaces";
 import Orientation from "../../Common/orientation";
 import "./customerTransactionReport.scss";
@@ -81,19 +81,19 @@ const CustomerTransactionReport = (
 							<td className="nowrap">
 								{el.date
 									? timeToArabicDate(
-										new Date(el.date).valueOf(),
+										new Date(Number(el.date)).valueOf(),
 										false
 									)
 									: ""}
 							</td>
-							<td className="nowrap">{installmentStatuses[el.installmentStatus]}</td>
+							<td className="nowrap">{el.action}</td>
 							<td>{numbersToArabic(el.transactionAmount)}</td>
-							<td className="nowrap">جم</td>
+							<td className="nowrap">{currency(el.currency)}</td>
 							<td className="nowrap">{el.branchName}</td>
 							<td className="nowrap">{el.status}</td>
 							<td className="nowrap">{el.manualPaymentReceipt || ''}</td>
 							<td className="nowrap">{el.username}</td>
-							<td className="nowrap">{getDateString(el.createdAt)}</td>
+							<td className="nowrap">{getDateString(Number(el.createdAt))}</td>
 							
 						</tr>
 					);
@@ -135,7 +135,7 @@ const CustomerTransactionReport = (
 				>
 					{renderHeader()}
 					{console.log(result,'here')}
-					{renderData(result)}
+					{renderTable(result.result)}
 				</div>
 			</>
 		);
