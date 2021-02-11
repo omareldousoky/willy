@@ -21,7 +21,6 @@ interface State {
 export function shareInGroup(array, customerId){
     if(array.length > 0){
         const amount = array.filter(el => el.individualInGroup.customer._id === customerId)[0].installmentsObject.output[0].installmentResponse;
-        // const biggestAmount = Math.max(...memberArray.map(function(inst) { return inst.installmentResponse; }))
         return Math.round(amount)
     }
     return 0
