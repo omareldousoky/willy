@@ -7,14 +7,16 @@ import { getStatus } from './customerCard';
 import { shareInGroup } from '../pdfTemplates/customerCard/customerCard';
 import { timeToArabicDate } from '../../../Shared/Services/utils';
 import { dateShift, shiftDaysBackAvoidingWeeekend, twoWeekGroupShift } from '../pdfTemplates/followUpStatment/followUpStatement';
+import { IndividualWithInstallments } from './loanProfile';
 
 interface FollowUpStatementProps {
     application: any;
     branch?: Branch;
     print: Function;
+    members: IndividualWithInstallments[];
 }
 
-export const FollowUpStatementView = ({ application, branch, print }: FollowUpStatementProps) => {
+export const FollowUpStatementView = ({ application, branch, print, members }: FollowUpStatementProps) => {
     const mappers = [
         {
             title: local.installmentNumber,
@@ -52,7 +54,7 @@ export const FollowUpStatementView = ({ application, branch, print }: FollowUpSt
         {
             title: local.installmentType,
             key: "amount",
-            render: data => shareInGroup(data.amount, application.principal, application.installmentsObject.installments[0].installmentResponse)
+            render: data => shareInGroup(members, data.customer._id)
         },
         {
             title: local.businessActivity,
