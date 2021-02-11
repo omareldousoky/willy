@@ -1,11 +1,9 @@
 import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
-import Can from '../../config/Can';
 import CIBReports from './cibReports';
 import MonthlyQuarterlyReports from './monthlyQuarterlyReports';
 import React, { Component } from "react";
 import * as local from "../../../Shared/Assets/ar.json";
 import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
-import Can from "../../config/Can";
 import Reports from "./reports";
 import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";

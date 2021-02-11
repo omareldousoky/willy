@@ -52,12 +52,9 @@ class CIBReports extends Component<{}, State>{
     }
   }
   async handleSubmit(values) {
-    const from = new Date(values.fromDate).setHours(0, 0, 0, 0).valueOf();
-    const to = new Date(values.toDate).setHours(23, 59, 59, 999).valueOf();
-    values.fromDate = from;
-    values.toDate = to;
+    const date = new Date(values.date).setHours(23, 59, 59, 999).valueOf();
     this.setState({ loading: true, showModal: false });
-    const res = await cibPaymentReport({ endDate: values.toDate });
+    const res = await cibPaymentReport({ endDate: date });
     if (res.status === "success") {
       this.setState({ loading: false });
       if (res.body.status && res.body.status === "processing") {
@@ -85,7 +82,7 @@ class CIBReports extends Component<{}, State>{
           <Loader type="fullscreen" open={this.state.loading} />
           <Card.Body style={{ padding: 15 }}>
             <div className="custom-card-header">
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.iScoreReports}</Card.Title>
+              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.cibReports}</Card.Title>
               <Can I="cibScreen" a="report"><Button type='button' variant='primary' onClick={() => this.setState({ showModal: true })}>{local.newRequest}</Button></Can>
             </div>
             {this.state.data.length > 0 ? this.state.data.map((pdf, index) => {
@@ -108,7 +105,7 @@ class CIBReports extends Component<{}, State>{
             }) : <div className="d-flex align-items-center justify-content-center">{local.noResults} </div>}
           </Card.Body>
         </Card>
-        {this.state.showModal && <ReportsModal pdf={{ key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen' }} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}
+        {this.state.showModal && <ReportsModal pdf={{ key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['date'], permission: 'cibScreen' }} show={this.state.showModal} hideModal={() => this.setState({ showModal: false })} submit={(values) => this.handleSubmit(values)} />}
       </>
     )
   }
