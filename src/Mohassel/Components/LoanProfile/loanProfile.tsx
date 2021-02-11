@@ -107,15 +107,17 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getManualOtherPayments(appId) {
-        this.setState({ loading: true })
-        const res = await getManualOtherPayments(appId);
-        if (res.status === "success") {
-            this.setState({
-                randomPendingActions: res.body.pendingActions ? res.body.pendingActions : [],
-                loading: false
-            })
-        } else {
-            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+        if(ability.can("pendingAction", "application")){
+            this.setState({ loading: true })
+            const res = await getManualOtherPayments(appId);
+            if (res.status === "success") {
+                this.setState({
+                    randomPendingActions: res.body.pendingActions ? res.body.pendingActions : [],
+                    loading: false
+                })
+            } else {
+                this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+            }
         }
     }
 
@@ -209,7 +211,7 @@ class LoanProfile extends Component<Props, State>{
         const paymentTab = {
             header: local.payments,
             stringKey: 'loanPayments',
-            permission: ['payInstallment', 'payEarly'],
+            permission: ['payInstallment', 'payEarly', 'payByInsurance'],
             permissionKey: 'application'
         };
         const reschedulingTab = {

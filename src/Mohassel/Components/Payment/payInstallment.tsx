@@ -340,10 +340,12 @@ class PayInstallment extends Component<Props, State> {
                           isInvalid={Boolean(formikBag.errors.payerType) && Boolean(formikBag.touched.payerType)}
                         >
                           <option value={''}></option>
-                          <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
-                          <option value='employee' data-qc='employee'>{local.employee}</option>
-                          <option value='family' data-qc='family'>{local.familyMember}</option>
-                          <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                          <Can I="payInstallment" an="application">
+                            <option value='beneficiary' data-qc='beneficiary'>{local.customer}</option>
+                            <option value='employee' data-qc='employee'>{local.employee}</option>
+                            <option value='family' data-qc='family'>{local.familyMember}</option>
+                            <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
+                          </Can>
                           <Can I="payByInsurance" an="application">
                             <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
                           </Can>
