@@ -51,6 +51,7 @@ import { numTo2Decimal } from '../CIB/textFiles';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { FollowUpStatementView } from './followupStatementView';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
+import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares';
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -131,6 +132,7 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
+            if(application.body.product.beneficiaryType === 'group') this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -560,6 +562,14 @@ class LoanProfile extends Component<Props, State>{
             sum = sum + transaction.transactionAmount
         })
         return numTo2Decimal(sum);
+    }
+    async getMembersShare(){
+        this.setState({ loading: true })
+        const res = await getGroupMemberShares(this.props.history.location.state.id);
+        if (res.status === "success") {
+            this.setState({ loading: false })
+        }
+        else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     render() {
         return (
