@@ -28,6 +28,7 @@ interface InitialFormikState {
   loanOfficerIds?: Array<string>;
   representatives?: Array<string>;
   gracePeriod?: number;
+  loanApplicationKey?: string;
 }
 
 interface Props {
@@ -74,6 +75,8 @@ const ReportsModal = (props: Props) => {
           initValues.representatives = [];
         case "gracePeriod":
           initValues.gracePeriod = 0;
+        case "applicationKey":
+          initValues.loanApplicationKey = "";
       }
     });
     return initValues;
@@ -135,7 +138,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.fromDate}
                                 isInvalid={Boolean(
                                   formikProps.errors.fromDate &&
-                                    formikProps.touched.fromDate
+                                  formikProps.touched.fromDate
                                 )}
                                 onChange={(e) => {
                                   formikProps.setFieldValue(
@@ -157,7 +160,7 @@ const ReportsModal = (props: Props) => {
                                 onChange={formikProps.handleChange}
                                 isInvalid={Boolean(
                                   formikProps.errors.toDate &&
-                                    formikProps.touched.toDate
+                                  formikProps.touched.toDate
                                 )}
                                 disabled={!Boolean(formikProps.values.fromDate)}
                               ></Form.Control>
@@ -210,7 +213,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.key}
                                 isInvalid={Boolean(
                                   formikProps.errors.key &&
-                                    formikProps.touched.key
+                                  formikProps.touched.key
                                 )}
                                 onChange={formikProps.handleChange}
                               />
@@ -218,7 +221,7 @@ const ReportsModal = (props: Props) => {
                             <span style={{ color: "red" }}>
                               {Boolean(
                                 formikProps.errors.key &&
-                                  formikProps.touched.key
+                                formikProps.touched.key
                               )
                                 ? formikProps.errors.key
                                 : ""}
@@ -255,7 +258,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.quarterYear}
                                 isInvalid={Boolean(
                                   formikProps.errors.quarterYear &&
-                                    formikProps.touched.quarterYear
+                                  formikProps.touched.quarterYear
                                 )}
                                 onBlur={formikProps.handleBlur}
                                 onChange={(e) => {
@@ -415,6 +418,41 @@ const ReportsModal = (props: Props) => {
                         </Col>
                       );
                     }
+                    if (input === "applicationKey") {
+                      return (
+                        <Col sm={12} key={input} style={{ marginTop: 10 }}>
+                          <Form.Group controlId="loanApplicationKey">
+                            <div className="dropdown-container">
+                              <p
+                                className="dropdown-label"
+                                style={{ width: 150 }}
+                              >
+                                {local.applicationCode}
+                              </p>
+                              <Form.Control
+                                className="dropdown-select"
+                                name="loanApplicationKey"
+                                data-qc="loanApplicationKey"
+                                value={formikProps.values.loanApplicationKey}
+                                isInvalid={Boolean(
+                                  formikProps.errors.loanApplicationKey &&
+                                  formikProps.touched.loanApplicationKey
+                                )}
+                                onChange={formikProps.handleChange}
+                              />
+                            </div>
+                            <span style={{ color: "red" }}>
+                              {Boolean(
+                                formikProps.errors.loanApplicationKey &&
+                                formikProps.touched.loanApplicationKey
+                              )
+                                ? formikProps.errors.loanApplicationKey
+                                : ""}
+                            </span>
+                          </Form.Group>
+                        </Col>
+                      );
+                    }
                   })}
                 </Row>
               </Modal.Body>
@@ -433,6 +471,7 @@ const ReportsModal = (props: Props) => {
                     "customerDetails",
                     "loanDetails",
                     "cibPaymentReport",
+                    "customerTransactionReport"
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
