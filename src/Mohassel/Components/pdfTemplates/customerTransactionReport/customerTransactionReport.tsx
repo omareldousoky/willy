@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { getDateString, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { CustomerApplicationTransactionsResponse } from "../../../Services/interfaces";
 import Orientation from "../../Common/orientation";
 import "./customerTransactionReport.scss";
 
@@ -17,8 +18,8 @@ const installmentStatuses = {
 	partiallyPaid: "مدفوع جزئيا",
 	pending: "قيد التحقيق",
 };
-interface InstallmentsDuePerOfficerCustomerCardProps {
-	data: any;
+interface CustomerTansactionsProps {
+	result: CustomerApplicationTransactionsResponse;
 }
 
 function setPageSize() {
@@ -29,7 +30,7 @@ function setPageSize() {
 }
 
 const CustomerTransactionReport = (
-	props: InstallmentsDuePerOfficerCustomerCardProps
+	props: CustomerTansactionsProps
 ) => {
 	setPageSize();
 	const renderHeader = () => {
@@ -122,7 +123,8 @@ const CustomerTransactionReport = (
 			</table>
 		);
 	};
-	const renderData = ({ data }) => {
+	const renderData = ({ result }) => {
+		console.log(result)
 		return (
 			<>
 				<Orientation size="landscape" />
@@ -132,9 +134,8 @@ const CustomerTransactionReport = (
 					lang="ar"
 				>
 					{renderHeader()}
-					{/* {data && data.branches
-            ? data.branches.map((branch) => renderBranchData(branch))
-            : null} */}
+					{console.log(result,'here')}
+					{renderData(result)}
 				</div>
 			</>
 		);
