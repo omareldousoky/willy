@@ -7,16 +7,17 @@ import { shareInGroup } from '../customerCard/customerCard';
 
 export function dateShift(creationDate, index) {
     const originalDate = new Date(creationDate);
+    const originalMonth = originalDate.getMonth();
     const dateInMonth = new Date(creationDate).getDate()
     if (1 <= dateInMonth && dateInMonth <= 10) {
+        originalDate.setMonth(originalMonth + index)
         originalDate.setDate(20)
-        originalDate.setMonth(originalDate.getMonth() + index)
     } else if (11 <= dateInMonth && dateInMonth <= 20) {
-        originalDate.setDate(30)
-        originalDate.setMonth(originalDate.getMonth() + index)
+        originalDate.setMonth(originalMonth + index)
+        originalMonth + index === 1 ? originalDate.setDate(28): originalDate.setDate(30)
     } else if (21 <= dateInMonth && dateInMonth <= 31) {
+        originalDate.setMonth(originalMonth + 1 + index)
         originalDate.setDate(10)
-        originalDate.setMonth(originalDate.getMonth() + 1 + index)
     }
     if (originalDate.getDay() === 5) {
         originalDate.setDate(originalDate.getDate() + 2)
