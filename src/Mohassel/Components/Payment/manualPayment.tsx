@@ -280,9 +280,9 @@ class ManualPayment extends Component<Props, State> {
                         <option value='employee' data-qc='employee'>{local.employee}</option>
                         <option value='family' data-qc='family'>{local.familyMember}</option>
                         <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
-                        <Can I="payByInsurance" an="application">
+                        {this.props.paymentType === "normal" && <Can I="payByInsurance" an="application">
                           <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
-                        </Can>
+                        </Can>}
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
                         {this.props.formikProps.errors.payerType}
