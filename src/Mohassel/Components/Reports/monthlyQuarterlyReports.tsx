@@ -136,7 +136,7 @@ class MonthlyQuarterlyReports extends Component<{}, State>{
             loading: false
           })
         } else {
-          setTimeout(() => this.getExcelPoll(func, id, pollStart), 5000);
+          setTimeout(() => this.getExcelPoll(func, id, pollStart), 10000);
         }
       } else {
         this.setState({ loading: false });

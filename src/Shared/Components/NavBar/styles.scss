@@ -63,7 +63,7 @@
         padding: 20px 30px;
         align-items: center;
         cursor: pointer;
-        &:hover:not(:last-child){
+        &:hover:not(:nth-last-child(-n+2)){
             background-color: #7dc356;  
             .pin-icon {
                 background-color: #fff;

@@ -36,6 +36,7 @@ import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } from '../../Services/APIs/Reports/manualPayments';
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 import { downloadFile } from '../../../Shared/Services/utils';
+import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 
 export interface PDF {
   key?: string;
@@ -138,6 +139,14 @@ class Reports extends Component<{}, State> {
       default: return null;
     }
   }
+  async getRemainingLoan(id: string) {
+   const  res = await remainingLoan(id)
+   if(res.status==="success") {
+     return res.body.remainingTotal;
+   } else {
+     return 0;
+   }
+  }
   async getCustomerDetails(values) {
     this.setState({ loading: true, showModal: false })
     const res = await getCustomerDetails(values.key);
@@ -146,8 +155,9 @@ class Reports extends Component<{}, State> {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
+       const remainingTotal = await this.getRemainingLoan(res.body.customerID);
         this.setState({
-          data: res.body, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
+          data: {...res.body, remainingTotal }, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
         }, () => window.print())
       }
     } else {

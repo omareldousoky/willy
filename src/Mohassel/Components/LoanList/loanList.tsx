@@ -7,7 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
-import { timeToDateyyymmdd, beneficiaryType, iscoreDate, getErrorMessage } from "../../../Shared/Services/utils";
+import { timeToDateyyymmdd, beneficiaryType, iscoreDate, getErrorMessage, getFullCustomerKey } from "../../../Shared/Services/utils";
 import { manageLoansArray } from './manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Swal from 'sweetalert2';
@@ -27,8 +27,6 @@ interface Props {
 interface State {
   size: number;
   from: number;
-  iScoreModal: boolean;
-  iScoreCustomers: any;
   loading: boolean;
   searchKeys: any;
   manageLoansTabs: any[];
@@ -41,8 +39,6 @@ class LoanList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      iScoreModal: false,
-      iScoreCustomers: [],
       loading: false,
       searchKeys: ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff'],
       manageLoansTabs: []
@@ -134,17 +130,34 @@ class LoanList extends Component<Props, State> {
     )
   }
   async getLoans() {
-    let query = {};
-    if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate" }
-    } else {
-      query = { ...this.props.searchFilters, ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }
-    }
-    this.props.search(query).then(()=>{
-      if(this.props.error)
-      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
-    }
-    );;
+    const {
+      searchFilters,
+      search,
+      error,
+      fromBranch,
+      branchId,
+      issuedLoansSearchFilters,
+    } = this.props;
+    const { customerShortenedCode, customerKey } = searchFilters;
+    const { size, from } = this.state;
+    const modifiedSearchFilters = {
+      ...searchFilters,
+      customerKey: !!customerShortenedCode
+        ? getFullCustomerKey(customerShortenedCode)
+        : customerKey || undefined,
+    };
+    const query = {
+      ...modifiedSearchFilters,
+      ...issuedLoansSearchFilters,
+      size,
+      from,
+			url: "loan",
+			branchId: fromBranch ? branchId : undefined,
+			sort: "issueDate",
+		};
+    search(query).then(() => {
+      if (error) Swal.fire("Error !", getErrorMessage(error), "error");
+    });
   }
   componentWillUnmount() {
     this.props.setSearchFilters({})
@@ -170,7 +183,14 @@ class LoanList extends Component<Props, State> {
             <hr className="dashed-line" />
             <Search
               searchKeys={this.state.searchKeys}
-              dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
+							dropDownKeys={[
+								"name",
+								"nationalId",
+								"key",
+								"customerKey",
+								"customerCode",
+								"customerShortenedCode",
+							]}
               searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
               setFrom={(from) => this.setState({ from: from })}
               datePlaceholder={local.issuanceDate}

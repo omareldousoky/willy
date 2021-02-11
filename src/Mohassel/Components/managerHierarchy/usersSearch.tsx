@@ -10,9 +10,9 @@ import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { LoanOfficer } from '../../../Shared/Services/interfaces';
 const dropDownKeys = [
+  'name',
   'hrCode',
   'nationalId',
-  'name',
 ]
 interface State {
   dropDownValue: string;
@@ -32,7 +32,7 @@ class UsersSearch extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      dropDownValue: 'hrCode',
+      dropDownValue: 'name',
       showError: false,
       users: [],
       updateKey: '',
@@ -131,9 +131,11 @@ class UsersSearch extends Component<Props, State> {
               loadOptions={this.getUsers}
               onChange={(user) => { this.selectUser(user) }
               }
-              value={this.props.item[this.props.objectKey].id ? this.state.users?.find(
+              value={this.state.users?.find(
+                (item) => item?._id === (this.props.item[this.props.objectKey]?.id)
+              ) ?  this.state.users?.find(
                 (item) => item._id === (this.props.item[this.props.objectKey].id)
-              ):{id:"", name:""}}
+              ):this.props.item[this.props.objectKey]}
               cacheOptions
               defaultOptions
             />

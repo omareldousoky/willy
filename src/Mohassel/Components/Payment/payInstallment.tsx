@@ -315,8 +315,9 @@ class PayInstallment extends Component<Props, State> {
                           value={formikBag.values.truthDate}
                           onBlur={formikBag.handleBlur}
                           onChange={formikBag.handleChange}
+                          min="2021-02-01"
                           isInvalid={Boolean(formikBag.errors.truthDate) && Boolean(formikBag.touched.truthDate)}
-                          disabled
+                          disabled={Boolean(this.props.paymentType === "normal")}
                         >
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
