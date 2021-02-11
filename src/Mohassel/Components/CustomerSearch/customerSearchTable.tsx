@@ -50,6 +50,7 @@ interface Props {
     removeCustomer?: Function;
     selectedCustomer: Customer;
     style?: object;
+    header?: string;
 };
 
 interface State {
@@ -116,7 +117,7 @@ class CustomerSearch extends Component<Props, State>{
 
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <p style={{ margin: 'auto 20px' }}>{local.search}</p>
+                        <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>
                         <InputGroup style={{ direction: 'ltr' }}>
                             <FormControl
                                 type="text"
@@ -158,7 +159,7 @@ class CustomerSearch extends Component<Props, State>{
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{ width: '50%' }}><h4>{local.noResults}</h4></div>}
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
-                        <h5>{local.guarantor + ` ` + this.props.source}</h5>
+                        <h5>{this.props.source}</h5>
                         <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
                     </div>
                     <div className="d-flex flex-row">

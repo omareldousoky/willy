@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Table from 'react-bootstrap/Table';
-import { downloadFile, getErrorMessage, iscoreStatusColor } from "../../../Shared/Services/utils";
+import { downloadFile, getErrorMessage, guarantorOrderLocal, iscoreStatusColor, iscoreBank } from "../../../Shared/Services/utils";
 import Can from '../../config/Can';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -243,12 +243,15 @@ export const GuarantorTableView = (props: Props) => {
                 {(props.guarantors.length > 0) ? <Table style={{ textAlign: 'right' }}>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{local.guarantorCode}</th>
                             <th>{local.name}</th>
+                            <th>{local.nationalId}</th>
                             <th>{local.area}</th>
                             <th>{local.customerHomeAddress}</th>
                             <th>{local.telephone}</th>
                             {props.iScores && props.iScores.length > 0 && <th>iScore</th>}
+                            {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
                             {props.iScores && props.iScores.length > 0 && <th></th>}
@@ -260,16 +263,19 @@ export const GuarantorTableView = (props: Props) => {
                             const iScore = props.iScores && props.iScores.length > 0 ? props.iScores.filter(score => score.nationalId === guar.nationalId)[0] : {};
                             const area = props.getGeoArea(guar.geoAreaId);
                             return (<tr key={i}>
+                                <td>{guarantorOrderLocal[i && i > 10 ? "default" : i]}</td>
                                 <td>{guar.key}</td>
                                 <td>{guar.customerName}</td>
+                                <td>{guar.nationalId}</td>
                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                 <td>{guar.customerHomeAddress}</td>
                                 <td>{guar.mobilePhoneNumber}</td>
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td style={{ color: iscoreStatusColor(iScore.iscore).color }}>{iScore.iscore}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iscoreStatusColor(iScore.iscore).status}</td>}
+                                {props.iScores && props.iScores.length > 0 && iScore.nationalId.length > 0 && <td>{iScore.bankCodes && iScore.bankCodes.map(code => `${iscoreBank(code)} `)}</td>}
                                 {props.iScores && props.iScores.length > 0 && iScore.url && <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScore.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>}
                                 {props.iScores && props.iScores.length > 0 && props.getIscore && props.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(props.status) && <Can I='getIscore' a='customer'>
-                                    <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span></td>
+                                    <td><span style={{ cursor: 'pointer', padding: 10 }} onClick={() => getIscore(guar)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span></td>
                                 </Can>}
                                 {(props.guarantors.length > props.application.product.noOfGuarantors) && ((pass && ability.can("editApplicationGuarantors", "application")) || (props.status && props.status == 'issued' && ability.can("editIssuedLoanGuarantors", "application"))) && <td style={{ cursor: 'pointer', padding: 10 }}><img src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => removeGuarantor(guar)} /></td>}
                             </tr>)
@@ -279,10 +285,10 @@ export const GuarantorTableView = (props: Props) => {
                 </Table>
                     : <p>{local.noGuarantors}</p>}
             </div>
-            {modalView && <Modal show={modalView} onHide={() => changeModal(false)}>
+            {modalView && <Modal size='lg' show={modalView} onHide={() => changeModal(false)}>
                 <Loader type='fullsection' open={loading} />
                 <Modal.Header>
-                    <Modal.Title>{local.addGuarantor}</Modal.Title>
+                    <Modal.Title>{local.add} {guarantorOrderLocal[props.guarantors.length > 10 ? "default" : props.guarantors.length]}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <CustomerSearch
@@ -292,6 +298,7 @@ export const GuarantorTableView = (props: Props) => {
                         searchResults={searchResults}
                         selectCustomer={(guarantor) => { selectGuarantor(guarantor) }}
                         selectedCustomer={selectedGuarantor}
+                        header={guarantorOrderLocal[props.guarantors.length > 10 ? "default" : props.guarantors.length ]}
                     />
                 </Modal.Body>
                 <ModalFooter>
