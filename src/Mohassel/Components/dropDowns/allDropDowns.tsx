@@ -42,7 +42,7 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
   } = props;
   let selectValue: ValueType<DropDownOption> | null = value || null;
   return (
-    <div className="dropdown-container" style={{ flex: 2 }}>
+    <div className="input-container" style={{ flex: 2 }}>
       <Select<DropDownOption>
         isClearable
         isSearchable
@@ -102,7 +102,7 @@ export const AsyncLoanOfficersDropDown = ({
   }, [isDisabled]);
 
   return (
-    <div className="dropdown-container" style={{ flex: 2 }}>
+    <div className="input-container" style={{ flex: 2 }}>
       <AsyncSelect<DropDownOption>
         cacheOptions
         defaultOptions
@@ -160,8 +160,8 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
     }
   };
   return (
-    <div className="dropdown-container" style={{ flex: 2, paddingLeft: 0 }}>
-      <p className="dropdown-label">{local.oneBranch}</p>
+    <div className="input-container" style={{ flex: 2, paddingLeft: 0 }}>
+      <p className="input-label">{local.oneBranch}</p>
       <AsyncSelect
         styles={customStyles}
         className="full-width"
@@ -233,7 +233,7 @@ export const AsyncBranchGeoAreasDropDown = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branchId]);
   return (
-    <div className="dropdown-container" style={{ flex: 2 }}>
+    <div className="input-container" style={{ flex: 2 }}>
       <Select<DropDownOption>
         cacheOptions
         defaultOptions

@@ -116,11 +116,11 @@ const ReportsModal = (props: Props) => {
                         <Col sm={12} key={input}>
                           <Form.Group controlId="fromToDate">
                             <div
-                              className="dropdown-container"
+                              className="input-container"
                               style={{ flex: 1, alignItems: "center" }}
                             >
                               <p
-                                className="dropdown-label"
+                                className="input-label"
                                 style={{
                                   alignSelf: "normal",
                                   marginLeft: 20,
@@ -175,40 +175,54 @@ const ReportsModal = (props: Props) => {
                     }
                     if (input === "branches") {
                       return (
-                        <Col key={input} sm={12}>
-                          <BranchesDropDown
-                            multiselect={true}
-                            onlyValidBranches={true}
-                            onSelectBranch={(branches) => {
-                              formikProps.setFieldValue("branches", branches);
-                              if (hasLoanOfficers)
-                                formikProps.setFieldValue("loanOfficers", []);
-                              if (hasRepresentatives)
-                                formikProps.setFieldValue(
-                                  "representatives",
-                                  []
-                                );
-                            }}
-                          />
-                          <span style={{ color: "red" }}>
-                            {formikProps.errors.branches}
-                          </span>
-                        </Col>
+                        // <Col key={input} sm={12}>
+                        //   <BranchesDropDown
+                        //     multiselect={true}
+                        //     onlyValidBranches={true}
+                        //     onSelectBranch={(branches) => {
+                        //       formikProps.setFieldValue("branches", branches);
+                        //       if (hasLoanOfficers)
+                        //         formikProps.setFieldValue("loanOfficers", []);
+                        //       if (hasRepresentatives)
+                        //         formikProps.setFieldValue(
+                        //           "representatives",
+                        //           []
+                        //         );
+                        //     }}
+                        //   />
+                        //   <span style={{ color: "red" }}>
+                        //     {formikProps.errors.branches}
+                        //   </span>
+                        // </Col>
+                        <Field
+                          // style={{ marginRight: 20 }}
+                          // type="date"
+                          name="branches"
+                          id="branches"
+                          value={formikProps.values.branches}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            !!(
+                              formikProps.errors.date &&
+                              formikProps.touched.date
+                            )
+                          }
+                          component={BranchesDropDown}
+                          key={input}
+                          validate={required}
+                        />
                       );
                     }
                     if (input === "customerKey") {
                       return (
                         <Col sm={12} key={input} style={{ marginTop: 10 }}>
                           <Form.Group controlId="key">
-                            <div className="dropdown-container">
-                              <p
-                                className="dropdown-label"
-                                style={{ width: 150 }}
-                              >
+                            <div className="input-container">
+                              <p className="input-label" style={{ width: 150 }}>
                                 {local.customerCode}
                               </p>
                               <Form.Control
-                                className="dropdown-select"
+                                className="input-control"
                                 name="key"
                                 data-qc="key"
                                 value={formikProps.values.key}
@@ -240,7 +254,7 @@ const ReportsModal = (props: Props) => {
                               style={{ flex: 1, alignItems: "center" }}
                             >
                               <p
-                                className="dropdown-label"
+                                className="input-label"
                                 style={{
                                   alignSelf: "normal",
                                   marginLeft: 20,
@@ -290,7 +304,7 @@ const ReportsModal = (props: Props) => {
                             style={{ flex: 1, alignItems: "center" }}
                           >
                             <p
-                              className="dropdown-label"
+                              className="input-label"
                               style={{
                                 alignSelf: "normal",
                                 marginLeft: 20,
@@ -302,7 +316,7 @@ const ReportsModal = (props: Props) => {
                             </p>
                             <Form.Control
                               as="select"
-                              className="dropdown-select"
+                              className="input-container"
                               data-qc="quarterNumber"
                               name="quarterNumber"
                               value={formikProps.values.quarterNumber}
@@ -390,14 +404,11 @@ const ReportsModal = (props: Props) => {
                         <Col sm={12} key={input} style={{ marginTop: 10 }}>
                           <Form.Group controlId="gracePeriod">
                             <div className="dropdown-container">
-                              <p
-                                className="dropdown-label"
-                                style={{ width: 150 }}
-                              >
+                              <p className="input-label" style={{ width: 150 }}>
                                 {local.gracePeriod}
                               </p>
                               <Form.Control
-                                className="dropdown-select"
+                                className="input-container"
                                 name="gracePeriod"
                                 data-qc="gracePeriod"
                                 type="number"
