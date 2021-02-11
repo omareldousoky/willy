@@ -3,7 +3,7 @@ import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import store from '../../../../Shared/redux/store';
-import { shareInGroup } from '../customerCard/customerCard';
+import { shareInGroup, shareInGroupFallBack } from '../customerCard/customerCard';
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile';
 interface Props {
     data: any;
@@ -140,12 +140,13 @@ const FollowUpStatementPDF = (props: Props) => {
                             <th>المنطقه</th>
                         </tr>
                         {props.data.group.individualsInGroup.map((individualInGroup, index) => {
+                            const share = shareInGroup(props.members, individualInGroup.customer._id);
                             return (
                                 <tr key={index}>
                                     <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                     <td>{individualInGroup.customer.customerName}</td>
                                     <td>{numbersToArabic(individualInGroup.amount)}</td>
-                                    <td>{numbersToArabic(shareInGroup(props.members, individualInGroup.customer._id))}</td>
+                                    <td>{numbersToArabic(share === 0 ? shareInGroupFallBack(individualInGroup.amount, props.data.principal, props.data.installmentsObject.installments[0].installmentResponse) : share)}</td>
                                     <td>{individualInGroup.customer.businessSector + "-" + individualInGroup.customer.businessActivity + "-" + individualInGroup.customer.businessSpeciality}</td>
                                     <td>{individualInGroup.customer.district}</td>
                                 </tr>

@@ -4,7 +4,7 @@ import local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { getStatus } from './customerCard';
-import { shareInGroup } from '../pdfTemplates/customerCard/customerCard';
+import { shareInGroup, shareInGroupFallBack } from '../pdfTemplates/customerCard/customerCard';
 import { timeToArabicDate } from '../../../Shared/Services/utils';
 import { dateShift, shiftDaysBackAvoidingWeeekend, twoWeekGroupShift } from '../pdfTemplates/followUpStatment/followUpStatement';
 import { IndividualWithInstallments } from './loanProfile';
@@ -35,6 +35,13 @@ export const FollowUpStatementView = ({ application, branch, print, members }: F
             render: data => data.installmentResponse
         }
     ]
+    function getShare(data) {
+        const share = shareInGroup(members, data.customer._id);
+        if (share === 0) {
+            return shareInGroupFallBack(data.amount, application.principal, application.installmentsObject.installments[0].installmentResponse)
+        }
+        return share
+    }
     const membersMappers = [
         {
             title: local.customerId,
@@ -54,7 +61,7 @@ export const FollowUpStatementView = ({ application, branch, print, members }: F
         {
             title: local.installmentType,
             key: "amount",
-            render: data => shareInGroup(members, data.customer._id)
+            render: data => getShare(data)
         },
         {
             title: local.businessActivity,
