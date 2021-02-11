@@ -4,17 +4,19 @@ import local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { getStatus } from './customerCard';
-import { shareInGroup } from '../pdfTemplates/customerCard/customerCard';
+import { shareInGroup, shareInGroupFallBack } from '../pdfTemplates/customerCard/customerCard';
 import { timeToArabicDate } from '../../../Shared/Services/utils';
 import { dateShift, shiftDaysBackAvoidingWeeekend, twoWeekGroupShift } from '../pdfTemplates/followUpStatment/followUpStatement';
+import { IndividualWithInstallments } from './loanProfile';
 
 interface FollowUpStatementProps {
     application: any;
     branch?: Branch;
     print: Function;
+    members: IndividualWithInstallments[];
 }
 
-export const FollowUpStatementView = ({ application, branch, print }: FollowUpStatementProps) => {
+export const FollowUpStatementView = ({ application, branch, print, members }: FollowUpStatementProps) => {
     const mappers = [
         {
             title: local.installmentNumber,
@@ -33,6 +35,13 @@ export const FollowUpStatementView = ({ application, branch, print }: FollowUpSt
             render: data => data.installmentResponse
         }
     ]
+    function getShare(data) {
+        const share = shareInGroup(members, data.customer._id);
+        if (share === 0) {
+            return shareInGroupFallBack(data.amount, application.principal, application.installmentsObject.installments[0].installmentResponse)
+        }
+        return share
+    }
     const membersMappers = [
         {
             title: local.customerId,
@@ -52,7 +61,7 @@ export const FollowUpStatementView = ({ application, branch, print }: FollowUpSt
         {
             title: local.installmentType,
             key: "amount",
-            render: data => shareInGroup(data.amount, application.principal, application.installmentsObject.installments[0].installmentResponse)
+            render: data => getShare(data)
         },
         {
             title: local.businessActivity,
