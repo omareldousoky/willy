@@ -13,7 +13,7 @@ interface Props {
   print: () => void;
   getGeoArea?: Function;
 }
-function getStatus(data) {
+export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
   const todaysDate = new Date().valueOf();
   switch (data.status) {
@@ -41,6 +41,13 @@ function getStatus(data) {
   }
 }
 export const CustomerCardView = (props: Props) => {
+  const renderPaidAt = (data) =>{
+    if(data.paidAt){
+      return (<div style={{width:'100px'}}>{getRenderDate(data.paidAt)}</div>)
+    } else {
+      return '';
+    }
+}
   const mappers = [
     {
       title: local.installmentNumber,
@@ -85,7 +92,7 @@ export const CustomerCardView = (props: Props) => {
     {
       title: local.statusDate,
       key: "paidAt",
-      render: data => data.paidAt ? getRenderDate(data.paidAt) : ''
+      render: data => renderPaidAt(data),
     },
   ]
   return (

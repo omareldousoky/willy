@@ -1,5 +1,4 @@
 import axios from '../axios-instance';
-
 interface ChangeFundObj {
     endDate: number;
 }

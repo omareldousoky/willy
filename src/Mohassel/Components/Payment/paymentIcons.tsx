@@ -29,14 +29,16 @@ class PaymentIcons extends Component<Props, {}> {
     const installments: Array<number> = [];
     this.props.installments.forEach(installment => {
       if (todaysDate >= installment.dateOfPayment) {
-        if (installment.status !== "paid")
+        if (installment.status !== "paid" && installment.status !== "rescheduled"){
           total = total + installment.installmentResponse - installment.totalPaid;
-        installments.push(installment.id);
+          installments.push(installment.id);
+        }
       } else return total;
     })
     return { total: total, installments: installments };
   }
   render() {
+    const installments = this.getRequiredAmount().installments.toString()
     return (
       <Card className="payment-menu">
         {this.props.paymentType === "normal" ? (
@@ -44,8 +46,8 @@ class PaymentIcons extends Component<Props, {}> {
             <h6>{local.requiredAmount}</h6>
             <h6>{this.getRequiredAmount().total}</h6>
             <h6>{local.forInstallments}</h6>
-            <h6>
-              {this.getRequiredAmount().installments.toString()}
+            <h6 title={installments}>
+              {installments}
             </h6>
             <h6>{local.dateOfPayment}</h6>
             <h6>{}</h6>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './reviewedApplications.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { ageCalculate, timeToArabicDate, beneficiaryType } from '../../../../Shared/Services/utils';
+import { beneficiaryType, getLoanStatus, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 import store from '../../../../Shared/redux/store';
 const ReviewedApplicationsPDF = (props) => {
     function getTotal() {
@@ -26,7 +26,7 @@ const ReviewedApplicationsPDF = (props) => {
                             <td className="title">{props.branchDetails.name}</td>
                         </tr>
                         <tr>
-                            <td>{timeToArabicDate(0, true)}</td>
+                            <td>{timeToArabicDateNow(true)}</td>
                             <td></td>
                             <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
                         </tr>
@@ -50,10 +50,13 @@ const ReviewedApplicationsPDF = (props) => {
                             <th>اسم العميل</th>
                             <th>السن</th>
                             <th>النشاط</th>
+                            <th>التخصص</th>
+                            <th>قطاع العمل</th>
                             <th>اسم الاخصائى</th>
                             <th>الرقم القومى</th>
                             <th>المبلغ الحالى</th>
                             <th>المده</th>
+                            <th>حالة طلب القرض</th>
                             {/* <th>المبلغ بالحروف</th> */}
                         </tr>
                         {props.data.map((application, i) => <tr key={application.id}>
@@ -62,11 +65,14 @@ const ReviewedApplicationsPDF = (props) => {
                             <td>{application.customerKey}</td>
                             <td>{application.customerName}</td>
                             <td>{application.customerAge}</td>
+                            <td>{application.businessActivity}</td>
+                            <td>{application.businessSpeciality}</td>
                             <td>{application.businessSector}</td>
                             <td>{application.representativeName}</td>
                             <td>{application.nationalId}</td>
                             <td>{application.principal}</td>
                             <td>{application.noOfInstallments}</td>
+                            <td>{getLoanStatus(application.loanStatus)}</td>
                             {/* <td>فقط عشرة آلاف جنيه لاغير</td> */}
                         </tr>)}
                     </tbody>

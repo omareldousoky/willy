@@ -8,6 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import InfoBox from '../userInfoBox';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
+import { guarantorOrderLocal } from '../../../Shared/Services/utils';
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -22,10 +23,11 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         <h5>{local.guarantorInfo}</h5>
                         <Col style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                             {values.guarantors.map((guarantor, i) => {
+                                const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
                                 return (
                                     <Row key={i} style={{ width: '100%' }}>
                                         <CustomerSearch
-                                            source={i + 1}
+                                            source={text}
                                             key={i}
                                             style={{ width: '98%' }}
                                             handleSearch={(key, query) => props.handleSearch(key, query, i)}
@@ -33,6 +35,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                             selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
                                             selectedCustomer={guarantor.guarantor}
                                             removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
+                                            header={text}
                                         />
                                         {(i > values.noOfGuarantors - 1) && <span style={{ width: '2%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => props.removeGuar(guarantor, i, values)}>-</span>}
                                     </Row>
@@ -82,12 +85,12 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                                     </Form.Control.Feedback>}
                                                 </Col>
                                             </Form.Group>
-                                            {index !== 0 && <button type="button" onClick={() => arrayHelpers.remove(index)}> - </button>}
+                                            {index !== 0 && <Button type="button" className="mb-2" onClick={() => arrayHelpers.remove(index)}> - </Button>}
                                         </div>
                                     ))}
-                                    {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <button
+                                    {values.viceCustomers.length < 3 && (values.state === 'edit' || values.state === 'under_review') && <Button
                                         type="button"
-                                        onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</button>}
+                                        onClick={() => arrayHelpers.push({ name: '', phoneNumber: '' })}>+</Button>}
                                 </div>
                             )}
                         />

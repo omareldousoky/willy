@@ -4,9 +4,10 @@ export interface Branch {
 }
 
 export interface Auth {
-    validBranches?: Array<Branch>;
+    validBranches: Array<Branch>;
     roles?: Array<string>;
     loading: boolean;
     clientPermissions?: any;
     name?: string;
+    requireBranch?: boolean;
 }

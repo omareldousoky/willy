@@ -1,0 +1,88 @@
+@media screen,
+print {
+	.due-installments {
+		font-family: Arial, Helvetica, sans-serif;
+		font-weight: bold;
+		text-align: center;
+		padding: 10px 5px;
+		page-break-after: always;
+		direction: rtl;
+
+		& .header-wrapper {
+			display: flex;
+			margin: 10px;
+			justify-content: space-between;
+
+			p {
+				font-size: .9rem !important;
+			}
+		}
+
+		& .report-title {
+			font-size: 1.2rem !important;
+			margin: auto;
+		}
+
+		& tbody {
+			page-break-inside: avoid;
+		}
+
+		& table {
+			border-collapse: separate;
+			border-spacing: 2px;
+			width: 100%;
+			text-align: center;
+		}
+
+		& table.body th {
+			background-color: #e3e3e3;
+
+			.bg-white {
+				background-color: #fff;
+			}
+		}
+
+		& table.body td.bg-grey {
+			background-color: #e3e3e3;
+		}
+
+		& table.body td {
+			direction: ltr;
+		}
+
+		& table.body td,
+		& table.body th {
+			-webkit-print-color-adjust: exact;
+			border: 1px solid black;
+
+			&.empty {
+				border: none !important;
+				background: #fff;
+				width: .5% !important;
+			}
+		}
+
+		& table.body tr.empty {
+			border: none;
+			background: #fff;
+			height: 4px !important;
+		}
+
+		& .horizontal-line {
+			border: 0;
+			border-bottom: 1px solid black;
+			width: 100%;
+
+			&.bold {
+				border-width: 2px;
+				border-radius: .3rem;
+			}
+		}
+	}
+}
+
+@media screen {
+	.due-installments {
+		display: none;
+	}
+}

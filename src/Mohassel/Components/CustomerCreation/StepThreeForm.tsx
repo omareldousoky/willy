@@ -10,8 +10,10 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import { getCookie } from '../../../Shared/Services/getCookie';
-import { parseJwt } from '../../../Shared/Services/utils';
+import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
+import Swal from 'sweetalert2';
+import ability from '../../config/ability';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -37,6 +39,7 @@ export const StepThreeForm = (props: any) => {
             return res.body.data;
         } else {
             setLoanOfficers([]);
+            Swal.fire('Error !', getErrorMessage(res.error.error),'error');
             return [];
         }
     }
@@ -46,7 +49,10 @@ export const StepThreeForm = (props: any) => {
         if (resGeo.status === "success") {
             setLoading(false);
             setgeoDivisions(resGeo.body.data ? resGeo.body.data.filter(area => area.active) : [])
-        } else setLoading(false);
+        } else{
+         setLoading(false);
+         Swal.fire('Error !', getErrorMessage(resGeo.error.error),'error');
+        }
     }
     useEffect(() => {
         const token = getCookie('token');
@@ -116,18 +122,15 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="applicationDate">
                         <Form.Label className="customer-form-label">{`${local.applicationDate}*`}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control
+                            <Form.Control
                                 type="date"
                                 name="applicationDate"
                                 data-qc=""
                                 value={values.applicationDate}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.applicationDate && touched.applicationDate}
-                            />}
-                        </Can>
+                            />
                         <Form.Control.Feedback type="invalid">
                             {errors.applicationDate}
                         </Form.Control.Feedback>
@@ -138,8 +141,7 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="permanentEmployeeCount">
                         <Form.Label className="customer-form-label">{local.permanentEmployeeCount}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control
+                        <Form.Control
                                 type="text"
                                 name="permanentEmployeeCount"
                                 data-qc="permanentEmployeeCount"
@@ -151,10 +153,8 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('permanentEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.permanentEmployeeCount && touched.permanentEmployeeCount}
-                            />}
-                        </Can>
+                            />
                         <Form.Control.Feedback type="invalid">
                             {errors.permanentEmployeeCount}
                         </Form.Control.Feedback>
@@ -163,8 +163,7 @@ export const StepThreeForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="partTimeEmployeeCount">
                         <Form.Label className="customer-form-label">{local.partTimeEmployeeCount}</Form.Label>
-                        <Can I="updateNationalId" a="customer" passThrough>
-                            {allowed => <Form.Control
+                            <Form.Control
                                 type="text"
                                 name="partTimeEmployeeCount"
                                 data-qc="partTimeEmployeeCount"
@@ -176,10 +175,8 @@ export const StepThreeForm = (props: any) => {
                                         setFieldValue('partTimeEmployeeCount', event.currentTarget.value)
                                     }
                                 }}
-                                disabled={(!allowed && props.edit)}
                                 isInvalid={errors.partTimeEmployeeCount && touched.partTimeEmployeeCount}
-                            />}
-                        </Can>
+                            />
                         <Form.Control.Feedback type="invalid">
                             {errors.partTimeEmployeeCount}
                         </Form.Control.Feedback>
@@ -188,7 +185,7 @@ export const StepThreeForm = (props: any) => {
             </Row>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
-                    props.edit && allowed &&
+                    ((props.edit && allowed && ability.can("updateCustomerHasLoan","customer")) || (props.edit && allowed && !props.hasLoan)) &&
                     <Row>
                         <Col sm={6}>
                             <Form.Group style={{ textAlign: 'right' }}>
@@ -209,10 +206,10 @@ export const StepThreeForm = (props: any) => {
             </Can>
             <Can I="updateNationalId" a="customer" passThrough>
                 {allowed =>
-                    props.edit && allowed &&
+                    props.edit && allowed && 
                     <>
                         <Row>
-                            <Col sm={6}>
+                            {(ability.can("updateCustomerHasLoan","customer") || !props.hasLoan) && <> <Col sm={6}>
                                 <Form.Group controlId="maxLoansAllowed">
                                     <Form.Label className="customer-form-label">{`${local.maxLoansAllowed}`}</Form.Label>
                                     <Form.Control
@@ -247,10 +244,10 @@ export const StepThreeForm = (props: any) => {
                                         {errors.guarantorMaxLoans}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                            </Col>
+                            </Col> </>}
                         </Row>
                         <Row>
-                            <Col sm={6}>
+                        {(ability.can("updateCustomerHasLoan","customer") || !props.hasLoan) && <Col sm={6}>
                                 <Form.Group controlId="maxPrincipal">
                                     <Form.Label className="customer-form-label">{`${local.maxCustomerPrincipal}`}</Form.Label>
                                     <Form.Control
@@ -267,7 +264,7 @@ export const StepThreeForm = (props: any) => {
                                         {errors.maxPrincipal}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                            </Col>
+                            </Col>}
                         </Row>
                     </>
                 }

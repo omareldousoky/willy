@@ -1,6 +1,6 @@
 import React from 'react';
 import './paymentsDone.scss';
-import { timeToArabicDate, getInstallmentStatus } from '../../../../Shared/Services/utils';
+import { timeToArabicDate, getInstallmentStatus, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 import * as local from '../../../../Shared/Assets/ar.json';
 const PaymentsDone = (props) => {
     const tempData = props.data.data;
@@ -23,7 +23,7 @@ const PaymentsDone = (props) => {
                             <th colSpan={6}>{`تاريخ الحركه ${reportDate}`}</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={4}>{timeToArabicDateNow(true)}</th>
                             <th colSpan={6}>جنيه مصري</th>
                         </tr>
                         <tr>

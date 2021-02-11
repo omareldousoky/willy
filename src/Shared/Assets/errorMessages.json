@@ -21,7 +21,7 @@
     "invalid_loan_id":{"en":"Invalid Loan ID","ar":"كود القرض غير موجود"},
     "not_found":{"en":"Not Found","ar":"غير موجود"},
     "branch_context":{"en":"Branch is incorrect, please choose the correct branch.","ar":"الفرع خاطيء، برجاء اختيار الفرع المناسب"},
-    "invalid_password":{"en":"Invalid Password","ar":"خطأ بكلمة السر"},
+    "invalid_password":{"en":"Password must be at least 8 characters, all english and contain at least 1 uppercase and 1 special character","ar":"كلمة المرور يجب أن تكون ٨ حروف علي الأقل، وأن تحتوي على حرف كبير ورمز خاص ورقم"},
     "invalid_customer":{"en":"Invalid Customer","ar":"هذا العميل غير صحيح"},
     "move_missing_customers":{"en":"All customers and grantors of the same loan should be assigned to the same loan officer.","ar":"سوف يتم نقل كل المستخدمين المرتبطين بهذا العميل لنفس القرض"},
     "invalid_payment_type":{"en":"Invalid Payment Type","ar":"نوع السداد خاطئ"},
@@ -102,5 +102,9 @@
     "missing_branch_manager_or_manager_visit_date":{"en":"Missing input of Branch Manager or visit date.","ar":"بيانات مدير الفرع أو تاريخ الزيارة غير مكتملة"},
     "invalid_branch_manager_id":{"en":"Invalid Branch Manager ID","ar":"خطأ بتعريف مدير الفرع"},
     "early_pay_partially_paid":{"en":"Can't early pay with an installlment partially paid","ar":"لا يمكن سداد معجل لقرض لديه قسط مدفوع جزئي"},
-    "application_locked":{"en":"This application is locked, you can't edit any of its details.","ar":"هذا الطلب مغلق مؤقتاً، لا يمكنك تغيير أي من بياناته الأن , حاول مره أخري"}
+    "application_locked":{"en":"This application is locked, you can't edit any of its details.","ar":"هذا الطلب مغلق مؤقتاً، لا يمكنك تغيير أي من بياناته الأن , حاول مره أخري"},
+    "quarter_snapshot_missing":{"en":"The quarter snapshot needed to produce the report is missing.","ar":"نسخة البيانات ربع السنوية غير موجودة"},
+    "group_leader_exists": {"en":"Group leader is already exists","ar":"قائد المجموعة موجود بالفعل "},
+    "group_officer_exists": {"en":"Group officer is already exists","ar":"مندوب موجود بالفعل "},
+		"wrong_password": {"en":"Current password is incorrect","ar":"كلمة المرور الحالية خطأ"}
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import './manualPayments.scss'
 import Row from 'react-bootstrap/Row'
-import { timeToArabicDate } from '../../../../Shared/Services/utils';
+import { timeToArabicDate, timeToArabicDateNow } from '../../../../Shared/Services/utils';
 interface Props {
     result: {
         days: {
@@ -53,7 +53,7 @@ const statusLocalization = (status: string) => {
         case 'partiallyPaid':
             return ('مدفوع جزئيا');
         case 'unpaid':
-            return ('لم يستحق');
+            return ('غير مسدد');
         case 'pending':
             return ('قيد التحقيق');
         case 'issued':
@@ -83,7 +83,7 @@ const ManualPayments = (props: Props) => {
                             <th colSpan={6}>تاريخ الحركه من {timeToArabicDate(props.fromDate, false)} الي {timeToArabicDate(props.toDate, false)}</th>
                         </tr>
                         <tr className="headtitle">
-                            <th colSpan={4}>{timeToArabicDate(0, true)}</th>
+                            <th colSpan={4}>{timeToArabicDateNow(true)}</th>
                             <th colSpan={6}>جنيه مصري</th>
                         </tr>
                     </thead>

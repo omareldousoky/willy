@@ -149,6 +149,7 @@ class DualBox extends Component<Props, State> {
             case 'nationalId': return local.nationalId;
             case 'key': return local.code;
             case 'code': return local.partialCode;
+						case 'customerShortenedCode': return local.customerShortenedCode;
             default: return '';
         }
     }

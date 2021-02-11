@@ -12,7 +12,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { search, searchFilters, issuedLoansSearchFilters } from '../../redux/search/actions';
 import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDropDowns';
-import { parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getFullCustomerKey, parseJwt, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { getCookie } from '../../Services/getCookie';
 import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/config';
 import { loading } from '../../redux/loading/actions';
@@ -31,6 +31,7 @@ interface InitialFormikState {
   branchId?: string;
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
+  printed?: boolean;
 }
 interface Props {
   size: number;
@@ -45,6 +46,7 @@ interface Props {
   searchKeys: Array<string>;
   dropDownKeys?: Array<string>;
   issuedLoansSearchFilters: any;
+  chosenStatus?: string;
   setFrom?: (from: number) => void;
   search: (data) => void;
   searchFilters: (data) => void;
@@ -98,6 +100,7 @@ class Search extends Component<Props, State> {
   submit = async (values) => {
     let obj = { ...values, ...{ from: this.props.from } , [this.state.dropDownValue]: values.keyword};
     delete obj.keyword;
+		const { url } = this.props
     if (obj.hasOwnProperty('fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
     if (obj.hasOwnProperty('toDate'))
@@ -109,15 +112,26 @@ class Search extends Component<Props, State> {
     if(obj.code) obj.code = isNaN(Number(obj.code)) ? 10 : Number(obj.code);
     if(obj.customerKey) obj.customerKey = Number(obj.customerKey);
     if(obj.customerCode) obj.customerCode = Number(obj.customerCode);
-    if(this.props.url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
+    if (obj.customerShortenedCode) {
+      if (url === "customer")
+        obj.key = Number(
+          getFullCustomerKey(obj.customerShortenedCode) || undefined
+        );
+      if (url === "application" || url === "loan")
+        obj.customerKey = Number(
+          getFullCustomerKey(obj.customerShortenedCode) || undefined
+        );
+    }
+    if(url === 'loan' && obj.sort !== 'issueDate') {obj.sort = 'issueDate'}
     if(this.props.status) obj.status = this.props.status;
     if(this.props.fundSource) obj.fundSource = this.props.fundSource
-    if(this.props.url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
-    if(this.props.url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
+    if(url === 'loan') this.props.setIssuedLoansSearchFilters(obj);
+    if(url === 'application' && !obj.status && this.props.searchKeys.includes('review-application')) {obj.status='reviewed'}
+    if(url==='supervisionsGroups') {obj.status = this.props.chosenStatus}
     obj = this.removeEmptyArg(obj)
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
-    this.props.search({ ...obj, from: 0, size: this.props.size, url: this.props.url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
+    this.props.search({ ...obj, from: 0, size: this.props.size, url, branchId: this.props.hqBranchIdRequest? this.props.hqBranchIdRequest : values.branchId })
   }
   removeEmptyArg(obj) {
     Object.keys(obj).forEach(el => {
@@ -149,7 +163,9 @@ class Search extends Component<Props, State> {
         case 'doubtful':
           initialState.isDoubtful = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isDoubtful : false;
         case 'writtenOff' :
-          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;;
+          initialState.isWrittenOff = this.props.url === "loan"? this.props.issuedLoansSearchFilters.isWrittenOff : false;
+        case 'printed':
+          initialState.printed = false;
       }
     })
     return initialState;
@@ -163,19 +179,22 @@ class Search extends Component<Props, State> {
       else return false;
     } else return true;
   }
+	
   getArValue(key: string){
-    switch(key) {
-      case 'name': return local.name;
-      case 'nationalId': return local.nationalId;
-      case 'key': return local.code;
-      case 'code': return local.partialCode;
-      case 'authorName': return local.employeeName;
-      case 'customerKey': return local.customerCode;
-      case 'customerCode': return local.customerPartialCode;
-      case 'userName': return local.username;
-      case 'hrCode': return local.hrCode;
-      default: return '';
-    }
+		const arDropDownValue = {
+			'name': local.name,
+			'nationalId': local.nationalId,
+			'key': local.code,
+			'code': local.partialCode,
+			'authorName': local.employeeName,
+			'customerKey': local.customerCode,
+			'customerCode': local.customerPartialCode,
+			'userName': local.username,
+			'hrCode': local.hrCode,
+			'customerShortenedCode': local.customerShortenedCode,
+			'default': ''
+		};
+		return arDropDownValue[key]
   }
   render() {
     return (
@@ -336,6 +355,21 @@ class Search extends Component<Props, State> {
                     </Col>
                   )
                 }
+                if(searchKey==='clearance-status'){
+                  return (
+                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
+                        <Form.Control as="select" className="dropdown-select" data-qc="status" value={formikProps.values.status} onChange={(e) => { formikProps.setFieldValue('status', e.currentTarget.value) }}>
+                          <option value="" data-qc="all">{local.all}</option>
+                          <option value='underReview' data-qc='underReview'>{local.underReview}</option>
+                          <option value='approved' data-qc='approved'>{local.approved}</option>
+                          <option value='rejected' data-qc='rejected'>{local.rejected}</option>
+                        </Form.Control>
+                      </div>
+                    </Col>
+                  )
+                }
                 if (searchKey === 'branch' && this.viewBranchDropdown()) {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
@@ -391,6 +425,22 @@ class Search extends Component<Props, State> {
                             onChange={(e) => formikProps.setFieldValue('isWrittenOff', e.currentTarget.checked)}
                             label={local.writtenOffLoans}
                             disabled={formikProps.values.isDoubtful}
+                        />
+                    </Form.Group>
+                    </Col>
+                  )
+                }
+                if (searchKey === 'printed') {
+                  return (
+                    <Col key={index} sm={3} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId='writtenOff'>
+                        <Form.Check
+                            type='checkbox'
+                            name='printed'
+                            data-qc='printedCheck'
+                            checked={formikProps.values.printed}
+                            onChange={(e) => formikProps.setFieldValue('printed', e.currentTarget.checked)}
+                            label={local.printed}
                         />
                     </Form.Group>
                     </Col>

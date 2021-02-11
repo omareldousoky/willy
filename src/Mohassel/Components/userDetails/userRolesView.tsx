@@ -7,6 +7,8 @@ import { Role, Section } from './userDetailsInterfaces';
 import { getPermissions } from '../../Services/APIs/Roles/roles';
 import { Loader } from '../../../Shared/Components/Loader';
 import RoleTable from '../Roles/roleTable';
+import Swal from 'sweetalert2';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Props {
     roles: Role[];
 }
@@ -40,7 +42,7 @@ export default class UserRolesView extends Component<Props, State> {
                 allSections: res.body.actions
             })
         } else {
-            this.setState({ loading: false })
+            this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
         }
     }
     handleClick = async (index: number) => {

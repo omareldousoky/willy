@@ -36,6 +36,7 @@ import ManualPayments from '../pdfTemplates/manualPayments/manualPayments';
 import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } from '../../Services/APIs/Reports/manualPayments';
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 import { downloadFile } from '../../../Shared/Services/utils';
+import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 
 export interface PDF {
   key?: string;
@@ -65,7 +66,7 @@ class Reports extends Component<{}, State> {
       pdfsArray: [
         { key: 'customerDetails', local: 'حالة العميل التفصيليه', inputs: ['customerKey'], permission: 'customerDetails' },
         { key: 'loanDetails', local: 'تفاصيل طلب القرض', inputs: ['customerKey'], permission: 'loanDetails' },
-        { key: 'branchLoanList', local: 'القروض المصدرة بالفرع', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
+        { key: 'branchLoanList', local: 'ملخص الحالات والقروض', inputs: ['dateFromTo', 'branches'], permission: 'branchIssuedLoans' },
         { key: 'CollectionStatement', local: 'كشف التحصيل', inputs: ['dateFromTo', 'branches'], permission: 'collectionReport' },
         { key: 'Penalties', local: 'الغرامات', inputs: ['dateFromTo', 'branches'], permission: 'penalties' },
         { key: 'CrossedOutLoans', local: 'قائمة حركات إعدام ديون القروض المنفذة', inputs: ['dateFromTo', 'branches'], permission: 'writeOffs' },
@@ -136,6 +137,14 @@ class Reports extends Component<{}, State> {
       default: return null;
     }
   }
+  async getRemainingLoan(id: string) {
+   const  res = await remainingLoan(id)
+   if(res.status==="success") {
+     return res.body.remainingTotal;
+   } else {
+     return 0;
+   }
+  }
   async getCustomerDetails(values) {
     this.setState({ loading: true, showModal: false })
     const res = await getCustomerDetails(values.key);
@@ -144,8 +153,9 @@ class Reports extends Component<{}, State> {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
+       const remainingTotal = await this.getRemainingLoan(res.body.customerID);
         this.setState({
-          data: res.body, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
+          data: {...res.body, remainingTotal }, showModal: false, print: 'customerDetails', loading: false, customerKey: values.key
         }, () => window.print())
       }
     } else {
