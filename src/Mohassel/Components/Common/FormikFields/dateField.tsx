@@ -6,14 +6,15 @@ import * as local from "../../../../Shared/Assets/ar.json";
 interface DateFieldProps {
   key: string;
   id: string;
+  smSize?: number;
 }
 
 export const DateField = (props: DateFieldProps & FieldProps<string>) => {
-  const { field, form, meta, key, id, ...restProps } = props;
+  const { field, form, meta, key, id, smSize, ...restProps } = props;
   const { touched, errors } = form;
 
   return (
-    <Col className="d-flex flex-column col-12">
+    <Col sm={smSize || 12} className="d-flex flex-column">
       <InputGroup key={key} className="mb-2">
         <InputGroup.Append>
           <InputGroup.Text id={id || field.name}>{local.date}</InputGroup.Text>
