@@ -81,7 +81,7 @@ class Reports extends Component<{}, State> {
         { key: 'loanApplicationFees', local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
         { key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen' },
         { key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo', 'branches'], permission: 'manualPayments' },
-        { key: 'customerTransactionReport', local: 'الحركة تبعا للعميل', inputs: ['applicationKey'], permission: 'manualPayments' },
+        { key: 'customerTransactionReport', local: 'الحركة تبعا للعميل', inputs: ['applicationKey'], permission: 'loanTransactionReport' },
       ],
       selectedPdf: { permission: '' },
       data: {},
