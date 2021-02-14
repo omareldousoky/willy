@@ -425,7 +425,7 @@ const ReportsModal = (props: Props) => {
                             <div className="dropdown-container">
                               <p
                                 className="dropdown-label"
-                                style={{ width: 150 }}
+                                style={{ width: 150, whiteSpace: 'nowrap' }}
                               >
                                 {local.applicationCode}
                               </p>
