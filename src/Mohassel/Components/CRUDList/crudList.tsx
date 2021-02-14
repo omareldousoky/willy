@@ -81,9 +81,10 @@ export const CRUDList = (props: Props) => {
                 />
                 <span
                     onClick={() => addOption()}
-                    className="fa fa-plus fa-lg"
-                    style={{ margin: '0px 20px', color: '#7dc356', cursor: 'pointer' }}
-                />
+                    style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
+                >
+                    <img alt="addOption" src={require('../../Assets/plus.svg')} />
+                </span>
             </div>
             <ListGroup style={{ textAlign: 'right', width: '30%', marginBottom: 30 }}>
                 {options
@@ -131,8 +132,9 @@ export const CRUDList = (props: Props) => {
                                 <span
                                     onClick={() => option.disabledUi ? toggleClick(index, false) : toggleClick(index, true)}
                                     style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
-                                    data-qc="editSaveIcon"
-                                    className={option.disabledUi ? "fa fa-edit fa-lg" : "fa fa-save fa-lg"} />
+                                    data-qc="editSaveIcon">
+                                    <img alt={option.disabledUi ? 'edit' : 'save'} src={option.disabledUi ? require('../../Assets/editIcon.svg') : require('../../Assets/save.svg')} />
+                                </span>
                             </ListGroup.Item>
                         )
                     })}
