@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { currency, getDateString, numbersToArabic, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { currency, numbersToArabic, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import { CustomerApplicationTransactionsResponse } from "../../../Services/interfaces";
 import Orientation from "../../Common/orientation";
 import "./customerTransactionReport.scss";
@@ -96,7 +96,7 @@ const CustomerTransactionReport = (
 							<td className="medium">{el.branchName}</td>
 							<td className="medium">{el.manualPaymentReceipt || ''}</td>
 							<td className="medium">{el.username}</td>
-							<td className="medium">{getDateString(Number(el.createdAt))}</td>
+							<td className="medium">{timeToArabicDate(Number(el.createdAt), true)}</td>
 						</tr>
 					);
 				})}
