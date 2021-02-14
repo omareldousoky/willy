@@ -1,38 +1,16 @@
 import React, { Component, Fragment } from "react";
-import { currency, getDateString, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
+import { currency, getDateString, numbersToArabic, timeToArabicDate, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import { CustomerApplicationTransactionsResponse } from "../../../Services/interfaces";
 import Orientation from "../../Common/orientation";
 import "./customerTransactionReport.scss";
 
-const numbersToArabic = (input) => {
-	if (input || input === 0) {
-		const id = ["۰", "۱", "۲", "۳", "٤", "۵", "٦", "۷", "۸", "۹"];
-		const inputStr = input.toString();
-		return inputStr.replace(/[0-9]/g, (number) => {
-			return id[number];
-		});
-	} else return "";
-};
-const installmentStatuses = {
-	unpaid: "غير مسدد",
-	partiallyPaid: "مدفوع جزئيا",
-	pending: "قيد التحقيق",
-};
 interface CustomerTansactionsProps {
 	result: CustomerApplicationTransactionsResponse;
-}
-
-function setPageSize() {
-	const style = document.createElement('style');
-	style.innerHTML = `@page {size: landscape}`;
-	style.id = 'page-orientation';
-	document.head.appendChild(style);
 }
 
 const CustomerTransactionReport = (
 	props: CustomerTansactionsProps
 ) => {
-	setPageSize();
 	const renderHeader = (result) => {
 		return (
 			<div style={{ display: "flex" }}>
