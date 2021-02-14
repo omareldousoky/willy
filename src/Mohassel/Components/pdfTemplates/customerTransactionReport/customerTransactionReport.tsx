@@ -81,7 +81,7 @@ const CustomerTransactionReport = (
 					return (
 						<tr key={idx}>
 							<td className="medium">{el.transactionCode}</td>
-							<td className="medium">{numbersToArabic(el.installmentNumber) || "٠"}</td>
+							<td className="medium">{numbersToArabic(el.installmentSerial) || "٠"}</td>
 							<td className="medium">
 								{el.date
 									? timeToArabicDate(
