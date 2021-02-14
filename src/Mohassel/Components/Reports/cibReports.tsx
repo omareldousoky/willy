@@ -41,7 +41,7 @@ class CIBReports extends Component<{}, State>{
   async getCibReports() {
     this.setState({ loading: true })
     const res = await getTpayFiles();
-    if (res.status === 'success' && Object.keys(res.body).length > 0) {
+    if (res.status === 'success' && res.body) {
       this.setState({
         data: res.body.cibFile ? res.body.cibFile : [],
         loading: false,
