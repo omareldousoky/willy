@@ -271,30 +271,13 @@ class Search extends Component<Props, State> {
                 if (searchKey === "keyword") {
                   return (
                     <Col key={index} sm={6}>
-                      <InputGroup style={{ direction: "ltr" }}>
-                        <FormControl
-                          type="text"
-                          name="keyword"
-                          data-qc="searchKeyword"
-                          onChange={formikProps.handleChange}
-                          style={{
-                            direction: "rtl",
-                            borderRight: 0,
-                            padding: 22,
-                          }}
-                          placeholder={this.props.searchPlaceholder}
-                          value={formikProps.values.keyword}
-                        />
-                        <InputGroup.Append>
-                          <InputGroup.Text style={{ background: "#fff" }}>
-                            <span className="fa fa-search fa-rotate-90"></span>
-                          </InputGroup.Text>
-                        </InputGroup.Append>
+                      <InputGroup>
                         {this.props.dropDownKeys &&
                         this.props.dropDownKeys.length ? (
                           <DropdownButton
                             as={InputGroup.Append}
                             variant="outline-secondary"
+                            color="black"
                             title={this.getArValue(this.state.dropDownValue)}
                             id="input-group-dropdown-2"
                             data-qc="search-dropdown"
@@ -313,6 +296,14 @@ class Search extends Component<Props, State> {
                             ))}
                           </DropdownButton>
                         ) : null}
+                        <FormControl
+                          type="text"
+                          name="keyword"
+                          data-qc="searchKeyword"
+                          onChange={formikProps.handleChange}
+                          placeholder={this.props.searchPlaceholder}
+                          value={formikProps.values.keyword}
+                        />
                       </InputGroup>
                     </Col>
                   );
@@ -321,11 +312,11 @@ class Search extends Component<Props, State> {
                   return (
                     <Col key={index} sm={6}>
                       <div
-                        className="input-container"
+                        className="dropdown-container"
                         style={{ flex: 1, alignItems: "center" }}
                       >
                         <p
-                          className="input-label"
+                          className="dropdown-label"
                           style={{
                             alignSelf: "normal",
                             marginLeft: 20,
@@ -371,14 +362,14 @@ class Search extends Component<Props, State> {
                   return (
                     <Col key={index} sm={6}>
                       <div
-                        className="input-container"
+                        className="dropdown-container"
                         style={{ marginTop: 20 }}
                       >
-                        <p className="input-label">{local.governorate}</p>
+                        <p className="dropdown-label">{local.governorate}</p>
                         <Form.Control
                           as="select"
                           name="governorate"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="governorate"
                           onChange={formikProps.handleChange}
                         >
@@ -404,11 +395,11 @@ class Search extends Component<Props, State> {
                 if (searchKey === "employment") {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="input-container">
-                        <p className="input-label">{local.employment}</p>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.employment}</p>
                         <Form.Control
                           as="select"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="employment"
                           onChange={formikProps.handleChange}
                         >
@@ -426,11 +417,11 @@ class Search extends Component<Props, State> {
                 if (searchKey === "status") {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="input-container">
-                        <p className="input-label">{local.status}</p>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
                         <Form.Control
                           as="select"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="status"
                           value={formikProps.values.status}
                           onChange={(e) => {
@@ -460,11 +451,11 @@ class Search extends Component<Props, State> {
                 if (searchKey === "status-application") {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="input-container">
-                        <p className="input-label">{local.status}</p>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
                         <Form.Control
                           as="select"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="status"
                           value={formikProps.values.status}
                           onChange={(e) => {
@@ -509,11 +500,11 @@ class Search extends Component<Props, State> {
                 if (searchKey === "review-application") {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="input-container">
-                        <p className="input-label">{local.status}</p>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
                         <Form.Control
                           as="select"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="status"
                           value={
                             formikProps.values.status
@@ -546,11 +537,11 @@ class Search extends Component<Props, State> {
                 if (searchKey === "clearance-status") {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="input-container">
-                        <p className="input-label">{local.status}</p>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.status}</p>
                         <Form.Control
                           as="select"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="status"
                           value={formikProps.values.status}
                           onChange={(e) => {
@@ -592,11 +583,11 @@ class Search extends Component<Props, State> {
                 if (searchKey === "actions") {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="input-container">
-                        <p className="input-label">{local.transaction}</p>
+                      <div className="dropdown-container">
+                        <p className="dropdown-label">{local.transaction}</p>
                         <Form.Control
                           as="select"
-                          className="input-control"
+                          className="dropdown-select"
                           data-qc="actions"
                           value={formikProps.values.action}
                           onChange={(e) => {
@@ -691,9 +682,10 @@ class Search extends Component<Props, State> {
                 }
               })}
 
-              <Col>
+              <Col className="d-flex">
                 <Button
                   type="submit"
+                  className="ml-auto"
                   style={{ width: 180, height: 50, marginTop: 20 }}
                   disabled={
                     formikProps.values.fromDate

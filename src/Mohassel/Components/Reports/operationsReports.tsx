@@ -17,6 +17,7 @@ import {
   ApiResponse,
   CustomersArrearsRequest,
   InstallmentsDuePerOfficerCustomerCardRequest,
+  OfficersBranchPercentPaymentRequest,
   OfficersPercentPaymentRequest,
   OperationsReportRequest,
   PaidArrearsRequest,
@@ -86,13 +87,23 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: "الاقساط المستحقة بالمندوب",
-          inputs: ["dateFromTo", "branches", "representatives"],
+          inputs: [
+            "dateFromTo",
+            "creationDateFromTo",
+            "branches",
+            "representatives",
+          ],
           permission: "unpaidInstallmentsByOfficer",
         },
         {
           key: Reports.InstallmentsDuePerOfficerCustomerCard,
           local: "الاقساط المستحقة للمندوب كارت العميل",
-          inputs: ["dateFromTo", "branches", "representatives"],
+          inputs: [
+            "dateFromTo",
+            "creationDateFromTo",
+            "branches",
+            "representatives",
+          ],
           permission: "installmentsDuePerOfficerCustomerCard",
         },
         {
@@ -110,7 +121,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.OfficersBranchPercentPayment,
           local: "نسبة سداد المندوبين 3",
-          inputs: ["dateFromTo", "branches"],
+          inputs: [
+            "dateFromTo",
+            "creationDateFromTo",
+            "branches",
+            "gracePeriod",
+          ],
           permission: "officerBranchPercentPayment",
         },
         {
@@ -128,13 +144,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.CustomersArrears,
           local: "متأخرات المندوب لم يستحق أو مسدد جزئي",
-          inputs: ["date", "branches", "loanOfficers"],
+          inputs: ["date", "branches", "representatives"],
           permission: "customersArrears",
         },
         {
           key: Reports.PaidArrears,
           local: "تقرير ما تم تحصيله من المتأخرات",
-          inputs: ["dateFromTo", "branches", "loanOfficers"],
+          inputs: ["dateFromTo", "branches", "representatives"],
           permission: "paidArrears",
         },
       ],
@@ -227,12 +243,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.LoansBriefing2);
   }
   async fetchInstallmentsDuePerOfficerCustomerCard(values) {
-    const { fromDate, toDate, branches, representatives } = values;
     const request: InstallmentsDuePerOfficerCustomerCardRequest = {
-      startDate: fromDate,
-      endDate: toDate,
-      branches,
-      representatives,
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: values.branches,
+      representatives: values.representatives,
+      creationDateFrom: values.creationDateFrom,
+      creationDateTo: values.creationDateTo,
     };
     const res = await installmentsDuePerOfficerCustomerCard(request);
     this.handleFetchReport(
@@ -242,12 +259,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchUnpaidInstallmentsByOfficer(values) {
-    const { fromDate, toDate, branches, representatives } = values;
     const request: UnpaidInstallmentsByOfficerRequest = {
-      startDate: fromDate,
-      endDate: toDate,
-      branches,
-      representatives,
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: values.branches,
+      representatives: values.representatives,
+      creationDateFrom: values.creationDateFrom,
+      creationDateTo: values.creationDateTo,
     };
 
     const res = await unpaidInstallmentsByOfficer(request);
@@ -281,9 +299,17 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchOfficersBranchPercentPayment(values) {
-    const res = await fetchOfficersBranchPercentPaymentReport(
-      this.reportRequest(values)
-    );
+    const request: OfficersBranchPercentPaymentRequest = {
+      startDate: values.fromDate,
+      endDate: values.toDate,
+      branches: values.branches,
+      representatives: values.representatives,
+      gracePeriod: values.gracePeriod,
+      creationDateFrom: values.creationDateFrom,
+      creationDateTo: values.creationDateTo,
+    };
+
+    const res = await fetchOfficersBranchPercentPaymentReport(request);
     this.handleFetchReport(res, Reports.OfficersBranchPercentPayment);
   }
 

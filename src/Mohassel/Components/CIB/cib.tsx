@@ -332,11 +332,11 @@ class CIB extends Component<Props, State> {
                     </Col>
                     <Col sm={6}>
                       <div
-                        className="input-container"
+                        className="dropdown-container"
                         style={{ flex: 1, alignItems: "center" }}
                       >
                         <p
-                          className="input-label"
+                          className="dropdown-label"
                           style={{
                             alignSelf: "normal",
                             marginLeft: 20,
@@ -455,11 +455,11 @@ class CIB extends Component<Props, State> {
                 className="footer-container"
                 style={{ marginBottom: 20, marginRight: 30 }}
               >
-                <div className="input-container">
-                  <p className="input-label">{local.show}</p>
+                <div className="dropdown-container">
+                  <p className="dropdown-label">{local.show}</p>
                   <Form.Control
                     as="select"
-                    className="input-control"
+                    className="dropdown-select"
                     onChange={(event) => {
                       this.setState({
                         size: Number(event.currentTarget.value),

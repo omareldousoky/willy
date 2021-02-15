@@ -64,7 +64,10 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     );
   };
-  const renderCommissaryDetailsDiv = (CommissaryName = "", representativeCode = '') => (
+  const renderCommissaryDetailsDiv = (
+    CommissaryName = "",
+    representativeCode = ""
+  ) => (
     <div style={{ display: "flex", margin: "5px 0" }}>
       <div style={{ width: "70%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -251,7 +254,7 @@ const UnpaidInstallmentsByOfficer = (
   };
   const calculateTotal = (data, key) => {
     let total = 0;
-    if(data){
+    if (data) {
       data.forEach((el) => {
         if (el.unpaidInstallmentsByOfficerTotal[key]) {
           total += el.unpaidInstallmentsByOfficerTotal[key];

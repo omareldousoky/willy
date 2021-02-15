@@ -28,11 +28,11 @@ const Pagination = (props) => {
         className="footer-container"
         style={{ marginBottom: 20, marginRight: 30 }}
       >
-        <div className="input-container">
-          <p className="input-label">{local.show}</p>
+        <div className="dropdown-container">
+          <p className="dropdown-label">{local.show}</p>
           <Form.Control
             as="select"
-            className="input-control"
+            className="dropdown-select"
             onChange={(event) => {
               changeRowsPerPage(Number(event.currentTarget.value));
               props.changeNumber &&

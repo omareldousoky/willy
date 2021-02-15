@@ -24,6 +24,7 @@ screen {
 					th {
 						border-top: 1px solid black;
 						border-bottom: 1px solid black;
+						text-align: center;
 					}
 
 					& tr td,
@@ -43,7 +44,6 @@ screen {
 						& .area {
 							width: 1.2cm;
 							max-width: 1.5cm;
-
 						}
 
 						&.short {
@@ -64,6 +64,6 @@ screen {
 
 @media screen {
 	.installmentsDuePerOfficerCustomerCard {
-		display: none;
+		// display: none;
 	}
 }

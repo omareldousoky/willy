@@ -257,9 +257,19 @@ export interface OfficersPercentPaymentRequest extends OperationsReportRequest {
 export interface InstallmentsDuePerOfficerCustomerCardRequest
   extends OperationsReportRequest {
   representatives?: string[];
+  creationDateFrom?: string;
+  creationDateTo?: string;
 }
 
 export interface UnpaidInstallmentsByOfficerRequest
   extends OperationsReportRequest {
   representatives?: string[];
+  creationDateFrom?: string;
+  creationDateTo?: string;
+}
+
+export interface OfficersBranchPercentPaymentRequest
+  extends OfficersPercentPaymentRequest {
+  creationDateFrom?: string;
+  creationDateTo?: string;
 }
