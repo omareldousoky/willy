@@ -78,6 +78,22 @@ const ReportsModal = (props: Props) => {
     });
     return initValues;
   }
+
+  const getMaxToMonthComparison = (from?: string): string => {
+    if (!from) return "0";
+    const fromDate = new Date(from);
+    // last day of month extracted from `fromDate`
+    const lastDayOfMonth = new Date(
+      fromDate.getFullYear(),
+      fromDate.getMonth() + 1,
+      0
+    ).getDate();
+    const month =
+      fromDate.getMonth() > 8
+        ? fromDate.getMonth() + 1
+        : `0${fromDate.getMonth() + 1}`;
+    return `${fromDate.getFullYear()}-${month}-${lastDayOfMonth}`;
+  };
   return (
     <Modal
       size="lg"
@@ -410,6 +426,75 @@ const ReportsModal = (props: Props) => {
                             </div>
                             <span className="text-danger">
                               {formikProps.errors.gracePeriod}
+                            </span>
+                          </Form.Group>
+                        </Col>
+                      );
+                    }
+                    if (input === "monthComparisonDateFromTo") {
+                      return (
+                        <Col sm={12} key={input}>
+                          <Form.Group controlId="monthComparisonFromToDate">
+                            <div
+                              className="dropdown-container"
+                              style={{ flex: 1, alignItems: "center" }}
+                            >
+                              <p
+                                className="dropdown-label"
+                                style={{
+                                  alignSelf: "normal",
+                                  marginLeft: 20,
+                                  width: 300,
+                                  textAlign: "center",
+                                }}
+                              >
+                                {local.date}
+                              </p>
+                              <span>{local.from}</span>
+                              <Form.Control
+                                style={{ marginLeft: 20, border: "none" }}
+                                type="date"
+                                name="fromDate"
+                                data-qc="fromDate"
+                                value={formikProps.values.fromDate}
+                                isInvalid={Boolean(
+                                  formikProps.errors.fromDate &&
+                                    formikProps.touched.fromDate
+                                )}
+                                onChange={(e) => {
+                                  formikProps.setFieldValue(
+                                    "fromDate",
+                                    e.currentTarget.value
+                                  );
+                                  if (e.currentTarget.value === "")
+                                    formikProps.setFieldValue("toDate", "");
+                                }}
+                                min="2021-02-01"
+                                required
+                              />
+                              <span>{local.to}</span>
+                              <Form.Control
+                                style={{ marginRight: 20, border: "none" }}
+                                type="date"
+                                name="toDate"
+                                data-qc="toDate"
+                                value={formikProps.values.toDate}
+                                min={formikProps.values.fromDate}
+                                max={getMaxToMonthComparison(
+                                  formikProps.values.fromDate
+                                )}
+                                onChange={formikProps.handleChange}
+                                isInvalid={Boolean(
+                                  formikProps.errors.toDate &&
+                                    formikProps.touched.toDate
+                                )}
+                                disabled={!Boolean(formikProps.values.fromDate)}
+                                required
+                              />
+                            </div>
+                            <span className="text-danger">
+                              {formikProps.errors.fromDate ||
+                                formikProps.errors.toDate}
                             </span>
                           </Form.Group>
                         </Col>
