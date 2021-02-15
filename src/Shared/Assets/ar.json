@@ -895,5 +895,7 @@
 		"customerShortenedCode": "كود العميل المختصر",
     "followUpStatement":"بيان متابعه",
     "customerBalance": "رصيد العميل",
-    "manageLoanDetails":"اعدادت القروض"
+    "manageLoanDetails":"اعدادت القروض",
+    "businessActivities":"أنواع نشاط العمل",
+    "businessSpecialities":"تخصصات العمل"
 }

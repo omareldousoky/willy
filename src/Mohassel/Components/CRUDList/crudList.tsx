@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 
-interface Option {
+export interface CrudOption {
     name: string;
     disabledUi: boolean;
     id: string;
@@ -13,25 +13,28 @@ interface Option {
 }
 interface Props {
     source: string;
-    options: Array<Option>;
+    options: Array<CrudOption>;
     newOption: Function;
     updateOption: Function;
+    disableNameEdit?: boolean;
 }
 interface State {
-    options: Array<Option>;
+    options: Array<CrudOption>;
     loading: boolean;
     filterOptions: string;
     temp: Array<string>;
     source: string;
 }
 export const CRUDList = (props: Props) => {
-    const [options, setOptions] = useState<Array<Option>>(props.options);
+    const [options, setOptions] = useState<Array<CrudOption>>(props.options);
     const [filterOptions, setFilterOptions] = useState('');
-    const [temp, setTemp] = useState<Array<Option>>(props.options);
+    const [temp, setTemp] = useState<Array<CrudOption>>(props.options);
+
     useEffect(() => {
         setOptions(props.options);
         setTemp(props.options)
     }, [props.options]);
+
     function addOption() {
         if (!options.some(option => option.name === "")) {
             setOptions([{ name: "", disabledUi: false, id: "", activated: true }, ...options]);
@@ -39,36 +42,37 @@ export const CRUDList = (props: Props) => {
             setTemp([{ name: "", disabledUi: false, id: "", activated: true }, ...temp])
         }
     }
+
     function handleChangeInput(event: React.ChangeEvent<HTMLInputElement>, index: number) {
         setOptions(options.map((option, optionIndex) => optionIndex === index ? { ...option, name: event.currentTarget.value } : option))
     }
-    function toggleClick(index: number, submit: boolean) {
-        if (options[index].disabledUi === false && options[index].name.trim() !== "" && submit) {
-            if (options[index].id === "") {
+
+    function toggleClick(option, submit: boolean) {
+        if (option.disabledUi === false && option.name.trim() !== "" && submit) {
+            if (option.id === "") {
                 //New 
-                props.newOption(options[index].name, options[index].activated, index);
+                props.newOption(option.name, option.activated);
             } else {
                 //Edit 
-                props.updateOption(options[index].id, options[index].name, options[index].activated, index);
+                props.updateOption(option.id, option.name, option.activated);
             }
         } else if (!submit) {
-            const optionsTemp = [...options];
-            optionsTemp[index].disabledUi = !options[index].disabledUi;
+            setOptions(options.map(optiontmp => (optiontmp.id === option.id) ? { ...optiontmp, disabledUi: !optiontmp.disabledUi } : optiontmp))
+        }
+    }
+
+    function reset(option: CrudOption) {
+        if (option.id === "") {
+            const optionsTemp = options.filter(option => option.id !== "")
+            setOptions(optionsTemp)
+        } else {
+            const resetTo = temp.filter(tmp => tmp.id === option.id)[0]
+            const optionsTemp = options.map(optionTmp => optionTmp.id === option.id ? resetTo : optionTmp)
             setOptions(optionsTemp)
         }
     }
-    function handleKeyDown(event: React.KeyboardEvent, index: number) {
-        if (event.key === 'Enter') {
-            toggleClick(index, true)
-        }
-    }
-    function reset(index) {
-        const optionsTemp = [...options];
-        optionsTemp[index] = { ...temp[index], disabledUi: true };
-        setOptions(optionsTemp)
-    }
-    return (
 
+    return (
         <Container style={{ marginTop: 20 }}>
             <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
                 <Form.Control
@@ -100,10 +104,9 @@ export const CRUDList = (props: Props) => {
                                         title={option.name}
                                         value={option.name}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeInput(e, index)}
-                                        onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e, index)}
-                                        disabled={option.disabledUi}
+                                        disabled={option.disabledUi || (props.disableNameEdit && option.id !== "")}
                                         style={option.disabledUi ? { background: 'none', border: 'none' } : {}}
-                                        isInvalid={options[index].name.trim() === ""}
+                                        isInvalid={option.name.trim() === ""}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {local.required}
@@ -117,20 +120,20 @@ export const CRUDList = (props: Props) => {
                                     <>
                                         <Form.Check
                                             type="checkbox"
-                                            data-qc={`activate${index}`}
+                                            data-qc={`activate${option.id}`}
                                             label={local.active}
                                             className="checkbox-label"
-                                            checked={options[index].activated}
-                                            onChange={() => setOptions(options.map((option, optionIndex) => optionIndex === index ? { ...option, activated: !options[index].activated } : option))}
+                                            checked={option.activated}
+                                            onChange={() => setOptions(options.map((optiontmp) => optiontmp.id === option.id ? { ...optiontmp, activated: !option.activated } : optiontmp))}
                                         />
                                         <span className="fa fa-undo fa-lg"
                                             style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
-                                            onClick={() => temp[index].name !== '' ? reset(index) : setOptions(options.filter(loanItem => loanItem.id !== ""))}
+                                            onClick={() => { reset(option) }}
                                         />
                                     </>
                                 }
                                 <span
-                                    onClick={() => option.disabledUi ? toggleClick(index, false) : toggleClick(index, true)}
+                                    onClick={() => option.disabledUi ? toggleClick(option, false) : toggleClick(option, true)}
                                     style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
                                     data-qc="editSaveIcon">
                                     <img alt={option.disabledUi ? 'edit' : 'save'} src={option.disabledUi ? require('../../Assets/editIcon.svg') : require('../../Assets/save.svg')} />

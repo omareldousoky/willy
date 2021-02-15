@@ -19,17 +19,13 @@ interface LoanUse {
 interface State {
   loanUses: Array<LoanUse>;
   loading: boolean;
-  filterLoanUsage: string;
-  temp: Array<string>;
 }
 class LoanUses extends Component<{}, State> {
   constructor(props) {
     super(props);
     this.state = {
       loanUses: [],
-      loading: false,
-      filterLoanUsage: '',
-      temp: []
+      loading: false
     }
   }
   async componentDidMount() {
@@ -44,7 +40,6 @@ class LoanUses extends Component<{}, State> {
       this.setState({
         loading: false,
         loanUses: responseLoanUsages.reverse(),
-        temp: res.body.usages.map(usage => usage.name)
       });
     } else {
       this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
