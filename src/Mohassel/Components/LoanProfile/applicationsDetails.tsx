@@ -375,7 +375,7 @@ export const CustomerLoanDetailsBoxView = ({ application, getGeoArea }: Props) =
        }
     }
     useEffect(() => {
-        getOfficerName(application.customer.representative);
+        application.customer.representative && getOfficerName(application.customer.representative);
         const id = application.product.beneficiaryType === 'group' ? application?.group?.individualsInGroup[0]?.customer?._id : application.customer._id;
         getRemainingLoan(id, application.status)
     }, [])

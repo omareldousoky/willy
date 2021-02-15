@@ -175,8 +175,8 @@ const CustomerProfile = (props: Props) => {
               </tr>
               {ability.can('viewIscore', 'customer') && <tr>
                 <td>iScore</td>
-                <td style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}>
-                  {iScoreDetails?.iscore}
+                <td>
+                  <span style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}>{iScoreDetails?.iscore}</span>
                   <span style={{ margin: '0px 10px' }}>{iscoreStatusColor(iScoreDetails?.iscore).status}</span>
                   {iScoreDetails?.bankCodes && iScoreDetails.bankCodes.map(code => `${iscoreBank(code)} `)}
                   {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
