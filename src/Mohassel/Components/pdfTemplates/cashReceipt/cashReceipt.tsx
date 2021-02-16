@@ -54,9 +54,9 @@ const CashReceipt = (props) => {
             :
             props.data.group.individualsInGroup.map((individualInGroup, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>
-                    <div className="bottomborder" key={index} style={index === 4 ? { pageBreakAfter: "always" } : {}}>
+                    <div className="bottomborder"style={index === 4 ? { pageBreakAfter: "always" } : {}}>
                       <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                       <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
                       <div style={{ margin: '20px 0px', textAlign: "right" }}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
