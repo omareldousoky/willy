@@ -37,6 +37,8 @@ import { getManualPayments, postManualPaymentsExcel, getManualPaymentsExcel } fr
 import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport';
 import { downloadFile } from '../../../Shared/Services/utils';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
+import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport';
+import { getCustomerTransactions } from '../../Services/APIs/Reports/customerTransactions';
 
 export interface PDF {
   key?: string;
@@ -77,8 +79,8 @@ class Reports extends Component<{}, State> {
         { key: 'paymentsDoneList', local: 'حركات الاقساط', inputs: ['dateFromTo', 'branches'], permission: 'installments' },
         { key: 'randomPayments', local: 'الحركات المالية', inputs: ['dateFromTo', 'branches'], permission: 'randomPayments' },
         { key: 'loanApplicationFees', local: 'حركات رسوم طلب القرض', inputs: ['dateFromTo', 'branches'], permission: 'loanFees' },
-        { key: 'cibPaymentReport', local: 'سداد اقساط CIB', inputs: ['dateFromTo'], permission: 'cibScreen' },
         { key: 'manualPayments', local: 'مراجعه حركات السداد اليدوي', inputs: ['dateFromTo', 'branches'], permission: 'manualPayments' },
+        { key: 'customerTransactionReport', local: 'الحركة تبعا للعميل', inputs: ['applicationKey'], permission: 'loanTransactionReport' },
       ],
       selectedPdf: { permission: '' },
       data: {},
@@ -110,8 +112,8 @@ class Reports extends Component<{}, State> {
       case 'paymentsDoneList': return this.getInstallments(values);
       case 'randomPayments': return this.getRandomPayments(values);
       case 'loanApplicationFees': return this.getLoanApplicationFees(values);
-      case 'cibPaymentReport': return this.getCibPaymentReport(values);
       case 'manualPayments': return this.getManualPayments(values);
+      case 'customerTransactionReport': return this.getCustomerTransactions(values);
       default: return null;
     }
   }
@@ -151,7 +153,7 @@ class Reports extends Component<{}, State> {
     this.setState({ loading: true, showModal: false })
     const res = await getCustomerDetails(values.key);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -170,7 +172,7 @@ class Reports extends Component<{}, State> {
     this.setState({ loading: true, showModal: false })
     const res = await getLoanDetails(values.key);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -190,7 +192,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getBranchLoanList(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -217,7 +219,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await installments(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -244,7 +246,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getRandomPayments(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -270,7 +272,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getIssuedLoanList(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -296,7 +298,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getCreatedLoanList(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -322,7 +324,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getRescheduledLoanList(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -347,7 +349,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getLoanApplicationFees(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -373,7 +375,7 @@ class Reports extends Component<{}, State> {
       branchList: values.branches.some(branch => branch._id === "") ? [] : values.branches.map((branch) => branch._id)
     });
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -402,7 +404,7 @@ class Reports extends Component<{}, State> {
       branchList: branches.includes("") ? [""] : branches,
     });
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -432,7 +434,7 @@ class Reports extends Component<{}, State> {
       branchList: values.branches.filter((branch) => branch._id !== "").map((branch) => branch._id),
     });
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -459,7 +461,7 @@ class Reports extends Component<{}, State> {
       branchList: values.branches.filter((branch) => branch._id !== "").map((branch) => branch._id),
     });
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -503,7 +505,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await getManualPayments(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -521,6 +523,26 @@ class Reports extends Component<{}, State> {
       console.log(res)
     }
   }
+  async getCustomerTransactions(values) {
+    this.setState({ loading: true, showModal: false })
+    const res = await getCustomerTransactions({loanApplicationKey: values.loanApplicationKey});
+    if (res.status === 'success') {
+      if (!res.body || !Object.keys(res.body).length) {
+        this.setState({ loading: false });
+        Swal.fire("error", local.noResults)
+      } else {
+        this.setState({
+          data: res.body,
+          showModal: false,
+          print: 'customerTransactionReport',
+          loading: false,
+        }, () => window.print())
+      }
+    } else {
+      this.setState({ loading: false });
+      console.log(res)
+    }
+  }
   async getExcelFile(func, pollFunc, values) {
     this.setState({ loading: true, showModal: false, fromDate: values.fromDate, toDate: values.toDate })
     const obj = {
@@ -530,7 +552,7 @@ class Reports extends Component<{}, State> {
     }
     const res = await func(obj);
     if (res.status === 'success') {
-      if (Object.keys(res.body).length === 0) {
+      if (!res.body) {
         this.setState({ loading: false });
         Swal.fire("error", local.noResults)
       } else {
@@ -612,6 +634,7 @@ class Reports extends Component<{}, State> {
         {this.state.print === "randomPayments" && <RandomPayment branches={this.state.data.branches} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "loanApplicationFees" && <LoanApplicationFees result={this.state.data.result} total={this.state.data.total} trx={this.state.data.trx} canceled={this.state.data.canceled} net={this.state.data.net} startDate={this.state.fromDate} endDate={this.state.toDate} />}
         {this.state.print === "manualPayments" && <ManualPayments result={this.state.data.result} fromDate={this.state.fromDate} toDate={this.state.toDate} />}
+        {this.state.print === "customerTransactionReport" && <CustomerTransactionReport result={this.state.data} />}
       </>
     )
   }

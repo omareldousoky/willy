@@ -1,4 +1,5 @@
 FROM node:12.16.1-alpine as builder
+RUN echo -e "https://dl-cdn.alpinelinux.org/alpine/v3.11/main\nhttps://dl-cdn.alpinelinux.org/alpine/v3.11/community" > /etc/apk/repositories
 RUN apk add --no-cache git
 COPY package*.json  ./
 RUN npm i
