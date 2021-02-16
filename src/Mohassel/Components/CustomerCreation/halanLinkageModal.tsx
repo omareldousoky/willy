@@ -1,34 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Modal, Row } from "react-bootstrap";
+import React, {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  InputGroup,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import Swal from "sweetalert2";
 import * as local from "../../../Shared/Assets/ar.json";
 import { Loader } from "../../../Shared/Components/Loader";
+import { Customer } from "../../../Shared/Services/interfaces";
 import { getErrorMessage } from "../../../Shared/Services/utils";
-import { checkLinkage } from "../../Services/APIs/Leads/halanLinkage";
+import {
+  checkLinkage,
+  confirmLinkage,
+} from "../../Services/APIs/Leads/halanLinkage";
 import {
   CheckLinkageResponse,
   LinkageStatusEnum,
 } from "../../Services/interfaces";
 
-const HalanLinkageModal = (props: any) => {
+interface HalanLinkageModalProps {
+  show: boolean;
+  hideModal: Function;
+  customer?: Customer;
+}
+const HalanLinkageModal = (props: HalanLinkageModalProps) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [checkResponse, setCheckResponse] = useState<CheckLinkageResponse>();
+  // confirmation code
+  const [confirmationCode, setConfirmationCode] = useState<number>();
+  const [phoneNumber, setPhoneNumber] = useState<string>();
 
-  const checkHalanLinkage = async () => {
-    if (!props.customer._id) {
-      props.hideModal();
+  const [phoneNumberError, setPhoneNumberError] = useState<string>();
+  const [submissionError, setSubmissionError] = useState<string>();
+
+  const { customer, hideModal, show } = props;
+
+  const checkHalanLinkage = useCallback(async () => {
+    if (!customer?._id) {
+      hideModal();
       Swal.fire("Error !", getErrorMessage(""));
       return;
     }
-    const res = await checkLinkage(props.customer._id);
+    const res = await checkLinkage(customer._id);
     if (res.status === "success") {
       setIsLoading(false);
       const response = res.body as CheckLinkageResponse;
-      if (response.status === LinkageStatusEnum.Pending) {
-        setShowForm(true);
-      }
+      setCheckResponse(response);
     } else {
-      props.hideModal();
+      hideModal();
       Swal.fire(
         "Error !",
         getErrorMessage((res.error as Record<string, string>).error),
@@ -36,44 +65,155 @@ const HalanLinkageModal = (props: any) => {
       );
       return;
     }
+  }, [customer, hideModal]);
+
+  const handleChange = (
+    key: "phoneNumber" | "confirmationCode",
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const trimmedValue = e.target.value.trim();
+    if (key === "confirmationCode")
+      setConfirmationCode(Number(trimmedValue) || undefined);
+    else {
+      setPhoneNumber(trimmedValue);
+      if (trimmedValue !== checkResponse?.phoneNumber)
+        !phoneNumberError
+          ? setPhoneNumberError(local.invalidMobilePhoneNumber)
+          : null;
+      else {
+        if (phoneNumberError) setPhoneNumberError(undefined);
+      }
+    }
+  };
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (submissionError) setSubmissionError(undefined);
+    const res = await confirmLinkage({
+      customerId: customer?._id || "",
+      phoneNumber: checkResponse?.phoneNumber || "",
+      customerKey: confirmationCode || 0,
+    });
+    if (res.status === "success") {
+      hideModal();
+      Swal.fire("success", local.userLinkedSuccessfully);
+    } else {
+      setSubmissionError(
+        getErrorMessage((res.error as Record<string, string>).error)
+      );
+      return;
+    }
   };
   useEffect(() => {
-    console.log(props.customer);
     checkHalanLinkage();
-  });
+  }, [checkHalanLinkage]);
 
   return (
-    <Modal size="lg" show={props.show} onHide={props.hideModal}>
+    <Modal size="lg" show={show} onHide={hideModal}>
       <Loader type="fullsection" open={isLoading} />
       <Modal.Header closeButton>
         <Modal.Title className="m-auto">{local.linkUserWithHalan}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {showForm && (
-          <>
-            <Card className="info-box">
-              <Row>
-                <div className="item">
-                  <p className="label">{local.customerName}</p>
-                  <p>{props.customer.customerName}</p>
-                </div>
-                <div className="item">
-                  <p className="label">{local.oneBranch}</p>
-                  <p>Branch Name</p>
-                </div>
-                <div className="item">
-                  <p className="label">{local.customerCode}</p>
-                  <p>{props.customer.key}</p>
-                </div>
-              </Row>
-            </Card>
-            <Col>
-              <Button className="w-100" disabled={false} variant="primary">
-                {local.submit}
-              </Button>
-            </Col>
-          </>
-        )}
+        <>
+          <Card className="info-box">
+            <Row>
+              <div className="item">
+                <p className="label">{local.customerName}</p>
+                <p>{customer?.customerName}</p>
+              </div>
+              <div className="item">
+                <p className="label">{local.nationalId}</p>
+                <p>{customer?.nationalId}</p>
+              </div>
+              <div className="item">
+                <p className="label">{local.customerCode}</p>
+                <p>{customer?.key}</p>
+              </div>
+            </Row>
+          </Card>
+          <Col>
+            {checkResponse?.status === LinkageStatusEnum.Pending && (
+              <Form onSubmit={handleSubmit} className="d-flex flex-column">
+                <Row>
+                  <Col sm={6}>
+                    <Form.Group controlId="phoneNumber" className="text-right">
+                      <Form.Label
+                        column
+                        sm={6}
+                        className="mr-0 pr-0 font-weight-bolder"
+                      >
+                        {local.mobilePhoneNumber}
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        type="number"
+                        name="phoneNumber"
+                        data-qc="phoneNumber"
+                        value={phoneNumber}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          handleChange("phoneNumber", e)
+                        }
+                        isInvalid={!!phoneNumberError}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {phoneNumberError}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                  <Col sm={6}>
+                    <Form.Group
+                      controlId="confirmationCode"
+                      className="text-right"
+                    >
+                      <Form.Label
+                        column
+                        sm={6}
+                        className="mr-0 pr-0 font-weight-bolder"
+                      >
+                        {local.code}
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        type="number"
+                        name="confirmationCode"
+                        data-qc="confirmationCode"
+                        value={confirmationCode}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          handleChange("confirmationCode", e)
+                        }
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Button
+                  className="w-25 mx-auto my-3 py-3"
+                  disabled={
+                    !confirmationCode || !phoneNumber || !!phoneNumberError
+                  }
+                  type="submit"
+                  variant="primary"
+                >
+                  {local.linkUser}
+                </Button>
+                <span className="text-danger mx-auto">{submissionError}</span>
+              </Form>
+            )}
+            {checkResponse?.status === LinkageStatusEnum.Linked && (
+              <div className="d-flex flex-column text-center">
+                <p className="font-weight-bolder mx-auto mb-2">
+                  العميل مربوط على تطبيق حالاً على رقم
+                </p>
+                <p className="font-weight-bolder mx-auto">
+                  {checkResponse?.phoneNumber}
+                </p>
+                <Button variant="dark" className="w-25 mx-auto my-3 py-3">
+                  {local.unlinkUser}
+                </Button>
+              </div>
+            )}
+          </Col>
+        </>
       </Modal.Body>
     </Modal>
   );
