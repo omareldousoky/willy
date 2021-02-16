@@ -5,7 +5,7 @@ import Tafgeet from 'tafgeetjs';
 
 const CashReceipt = (props) => {
   return (
-    <div className="cash-receipt" lang="ar">
+    <div className="cash-receipt-pdf" lang="ar">
       <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
         <thead>
           <tr style={{ height: "10px" }}></tr>

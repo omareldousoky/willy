@@ -88,7 +88,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 <td style={{ fontSize: "8px" }}>{store.getState().auth.name}</td>
                             </tr>
                             <tr>
-                                <td>{timeToArabicDateNow(true)}</td>
+                                <td>{timeToArabicDate(this.props.data.creationDate,true)}</td>
                                 <td className="title2 bold"><u>كارت العميل</u></td>
                                 <td></td>
                             </tr>
