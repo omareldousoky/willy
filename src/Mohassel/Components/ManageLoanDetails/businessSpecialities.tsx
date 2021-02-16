@@ -61,15 +61,14 @@ class BusinessSpecialities extends Component<{}, State> {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
         }
     }
-    prepareActivites() {
-        const sector = this.state.businessSectors.filter(sctr => sctr.id === this.state.sector.id)[0]
+    prepareActivites(id) {
+        const sector = this.state.businessSectors.filter(sctr => sctr.id === id)[0]
         // const activities = sector.activities.map(activity => { return { name: activity.i18n.ar, id: activity.id ? (activity.id).toString() : '0', activated: activity.active ? true : false, disabledUi: true } })
         this.setState({ businessActivities: sector.activities })
     }
-    prepareSpecialties(){
-        const activity = this.state.businessActivities.filter(act => act.id === this.state.activity.id)[0]
+    prepareSpecialties(id) {
+        const activity = this.state.businessActivities.filter(act => act.id === id)[0]
         const specialties = activity.specialties ? activity.specialties.map(specialty => { return { name: specialty.businessSpecialtyName.ar, id: specialty.id ? (specialty.id).toString() : '0', activated: specialty.active ? true : false, disabledUi: true } }) : []
-        console.log(activity, specialties)
         this.setState({ businessSpecialities: specialties })
     }
     async editBusinessSpeciality(id, active) {
@@ -77,10 +76,8 @@ class BusinessSpecialities extends Component<{}, State> {
         const res = await editBusinessSpeciality({ businessSpecialtyId: Number(id), BusinessActivityId: this.state.activity.id, BusinessSectorId: this.state.sector.id, active: active });
         if (res.status === "success") {
             this.setState({
-                loading: false,
-                activity: {id: '', i18n: {ar: ''}, specialties: [], active: false },
-                sector: {id: '', i18n: {ar: ''}, activities: []}
-            }, () => { this.getBusinessSectors() })
+                loading: false
+            }, async () => { await this.getBusinessSectors(); await this.prepareActivites(this.state.sector.id); await this.prepareSpecialties(this.state.activity.id) })
         } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     async newBusinessSpeciality(name) {
@@ -88,10 +85,8 @@ class BusinessSpecialities extends Component<{}, State> {
         const res = await createBusinessSpeciality({ businessSpecialtyName: name, businessSectorId: this.state.sector.id, businessActivityId: this.state.activity.id });
         if (res.status === "success") {
             this.setState({
-                loading: false,
-                activity: {id: '', i18n: {ar: ''}, specialties: [], active: false },
-                sector: {id: '', i18n: {ar: ''}, activities: []}
-            }, () => { this.getBusinessSectors() })
+                loading: false
+            }, async () => { await this.getBusinessSectors(); await this.prepareActivites(this.state.sector.id); await this.prepareSpecialties(this.state.activity.id) })
         } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     render() {
@@ -104,43 +99,45 @@ class BusinessSpecialities extends Component<{}, State> {
                     array={array}
                     active={array.map(item => { return item.icon }).indexOf('businessSpecialities')}
                 />
-                <Form.Group as={Row} controlId="businessSector" style={{ width: '100%', marginTop: '1rem' }}>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.businessSector}</Form.Label>
-                    <Col sm={6}>
-                        <Select
-                            name="businessSector"
-                            data-qc="businessSector"
-                            value={this.state.sector}
-                            enableReinitialize={false}
-                            onChange={(event: any) => { this.setState({ sector: event }, () => this.prepareActivites()) }}
-                            type='text'
-                            getOptionLabel={(option) => option.i18n.ar}
-                            getOptionValue={(option) => option.id}
-                            options={this.state.businessSectors}
-                        />
-                    </Col>
-                </Form.Group>
-                {this.state.sector.id.length > 0 &&
-                    <Form.Group as={Row} controlId="businessActivity" style={{ width: '100%', marginTop: '1rem' }}>
-                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.businessActivity}</Form.Label>
+                <div className="d-flex flex-column align-items-center">
+                    <Form.Group as={Row} controlId="businessSector" style={{ width: '60%', marginTop: '1rem' }}>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.businessSector}</Form.Label>
                         <Col sm={6}>
                             <Select
-                                name="businessActivity"
-                                data-qc="businessActivity"
-                                value={this.state.activity}
+                                name="businessSector"
+                                data-qc="businessSector"
+                                value={this.state.sector}
                                 enableReinitialize={false}
-                                onChange={(event: any) => { this.setState({ activity: event }, () => this.prepareSpecialties()) }}
+                                onChange={(event: any) => { this.setState({ sector: event }, () => this.prepareActivites(event.id)) }}
                                 type='text'
                                 getOptionLabel={(option) => option.i18n.ar}
                                 getOptionValue={(option) => option.id}
-                                options={this.state.businessActivities}
+                                options={this.state.businessSectors}
                             />
                         </Col>
-                    </Form.Group>}
+                    </Form.Group>
+                    {this.state.sector.id.length > 0 &&
+                        <Form.Group as={Row} controlId="businessActivity" style={{ width: '60%', marginTop: '1rem' }}>
+                            <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.businessActivity}</Form.Label>
+                            <Col sm={6}>
+                                <Select
+                                    name="businessActivity"
+                                    data-qc="businessActivity"
+                                    value={this.state.activity}
+                                    enableReinitialize={false}
+                                    onChange={(event: any) => { this.setState({ activity: event }, () => this.prepareSpecialties(event.id)) }}
+                                    type='text'
+                                    getOptionLabel={(option) => option.i18n.ar}
+                                    getOptionValue={(option) => option.id}
+                                    options={this.state.businessActivities}
+                                />
+                            </Col>
+                        </Form.Group>}
+                </div>
                 {(this.state.activity.id).toString().length > 0 && <CRUDList source={'businessSpecialities'} options={this.state.businessSpecialities}
-          newOption={(name, active, index) => { this.newBusinessSpeciality(name) }}
-          updateOption={(id, name, active, index) => { this.editBusinessSpeciality(id, active) }} 
-          disableNameEdit />}
+                    newOption={(name, active, index) => { this.newBusinessSpeciality(name) }}
+                    updateOption={(id, name, active, index) => { this.editBusinessSpeciality(id, active) }}
+                    disableNameEdit />}
             </>
         );
     }

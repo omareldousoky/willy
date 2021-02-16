@@ -46,20 +46,18 @@ class BusinessActivities extends Component<{}, State> {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
         }
     }
-    prepareActivites() {
-        const sector = this.state.businessSectors.filter(sctr => sctr.id === this.state.sector.id)[0]
+    prepareActivites(id) {
+        const sector = this.state.businessSectors.filter(sctr => sctr.id === id)[0]
         const activities = sector.activities.map(activity => { return { name: activity.i18n.ar, id: activity.id ? (activity.id).toString() : '0', activated: activity.active ? true : false, disabledUi: true } })
         this.setState({ businessActivities: activities.reverse() })
     }
     async editBusinessActivity(id, active) {
-        console.log(active)
         this.setState({ loading: true })
         const res = await editBusinessActivity({ BusinessActivityId: Number(id), BusinessSectorId: this.state.sector.id, active: active });
         if (res.status === "success") {
             this.setState({
                 loading: false,
-                sector: {id: '', i18n: {ar: ''}, activities: []}
-            }, () => { this.getBusinessSectors() })
+            }, async () => { await this.getBusinessSectors(); await this.prepareActivites(this.state.sector.id) })
         } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     async newBusinessActivity(name) {
@@ -68,8 +66,7 @@ class BusinessActivities extends Component<{}, State> {
         if (res.status === "success") {
             this.setState({
                 loading: false,
-                sector: {id: '', i18n: {ar: ''}, activities: []}
-            }, () => { this.getBusinessSectors() })
+            }, async () => { await this.getBusinessSectors(); await this.prepareActivites(this.state.sector.id) })
         } else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     render() {
@@ -82,22 +79,24 @@ class BusinessActivities extends Component<{}, State> {
                     array={array}
                     active={array.map(item => { return item.icon }).indexOf('businessActivities')}
                 />
-                <Form.Group as={Row} controlId="businessSector" style={{ width: '100%', marginTop: '1rem' }}>
-                    <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.businessSector}</Form.Label>
-                    <Col sm={6}>
-                        <Select
-                            name="businessSector"
-                            data-qc="businessSector"
-                            value={this.state.sector}
-                            enableReinitialize={false}
-                            onChange={(event: any) => { this.setState({ sector: event }, () => this.prepareActivites()) }}
-                            type='text'
-                            getOptionLabel={(option) => option.i18n.ar}
-                            getOptionValue={(option) => option.id}
-                            options={this.state.businessSectors}
-                        />
-                    </Col>
-                </Form.Group>
+                <div className="d-flex flex-column align-items-center">
+                    <Form.Group as={Row} controlId="businessSector" style={{ width: '60%', marginTop: '1rem' }}>
+                        <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.businessSector}</Form.Label>
+                        <Col sm={6}>
+                            <Select
+                                name="businessSector"
+                                data-qc="businessSector"
+                                value={this.state.sector}
+                                enableReinitialize={false}
+                                onChange={(event: any) => { this.setState({ sector: event }, () => this.prepareActivites(event.id)) }}
+                                type='text'
+                                getOptionLabel={(option) => option.i18n.ar}
+                                getOptionValue={(option) => option.id}
+                                options={this.state.businessSectors}
+                            />
+                        </Col>
+                    </Form.Group>
+                </div>
                 {this.state.sector.id.length > 0 && <CRUDList source={'businessActivities'} options={this.state.businessActivities}
                     newOption={(name, active) => { this.newBusinessActivity(name) }}
                     updateOption={(id, name, active) => { this.editBusinessActivity(id, active) }}

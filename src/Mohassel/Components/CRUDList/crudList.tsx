@@ -90,7 +90,7 @@ export const CRUDList = (props: Props) => {
                     <img alt="addOption" src={require('../../Assets/plus.svg')} />
                 </span>
             </div>
-            <ListGroup style={{ textAlign: 'right', width: '30%', marginBottom: 30 }}>
+            <ListGroup style={{ textAlign: 'right', width: '30%', marginBottom: 30, maxHeight: 500, overflow: 'scroll' }}>
                 {options
                     .filter(option => option.name.toLocaleLowerCase().includes(filterOptions.toLocaleLowerCase()))
                     .map((option, index) => {
@@ -125,6 +125,7 @@ export const CRUDList = (props: Props) => {
                                             className="checkbox-label"
                                             checked={option.activated}
                                             onChange={() => setOptions(options.map((optiontmp) => optiontmp.id === option.id ? { ...optiontmp, activated: !option.activated } : optiontmp))}
+                                            disabled={props.disableNameEdit && option.id === ""}
                                         />
                                         <span className="fa fa-undo fa-lg"
                                             style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
