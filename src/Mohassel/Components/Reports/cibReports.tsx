@@ -9,6 +9,7 @@ import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../../
 import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import ReportsModal from './reportsModal';
+import { cibTpayURL } from '../../Services/APIs/Reports/cibURL';
 
 interface TPAYFile {
   created: {
@@ -74,8 +75,18 @@ class CIBReports extends Component<{}, State>{
     }
   }
   getFile(fileRequest) {
-    if (!fileRequest.url) Swal.fire("", errorMessages["doc_read_failed"].ar, "error")
+    if (!fileRequest.url) this.getFileUrl(fileRequest.key)
     else downloadFile(fileRequest.url)
+  }
+  async getFileUrl(fileKey: string) {
+    this.setState({ loading: true });
+    const res = await cibTpayURL(fileKey)
+    if (res.status === "success") {
+      this.setState({ loading: false });
+      downloadFile(res.body.url)
+    } else {
+      this.setState({ loading: false }, () => Swal.fire("", errorMessages["doc_read_failed"].ar, "error"));
+    }
   }
   render() {
     return (
