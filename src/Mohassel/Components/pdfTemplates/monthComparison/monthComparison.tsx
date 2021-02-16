@@ -35,7 +35,8 @@ const MonthComparison = ({ toDate, fromDate, data }: PaidArrearsProps) => {
         </div>
         <div className="d-flex flex-column mx-3">
           <p className="report-title">
-            مقارنة في تقرير مسلسل 35 بالشهر السابق : من &nbsp;
+            مقارنه تقرير ملخص الاقساط المستحقه (تقرير السداد الجزئي ) بالشهر
+            السابق : من &nbsp;
             {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى : &nbsp;
             {timeToArabicDate(new Date(toDate).valueOf(), false)}
           </p>

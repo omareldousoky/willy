@@ -142,8 +142,9 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         },
         {
           key: Reports.MonthComparison,
-          local: "مقارنة في تقرير مسلسل 35 بالشهر السابق",
-          inputs: ["monthComparisonDateFromTo"],
+          local:
+            "مقارنه تقرير ملخص الاقساط المستحقه (تقرير السداد الجزئي ) بالشهر السابق",
+          inputs: ["monthComparisonDateFromTo", "branches"],
           permission: "monthComparison",
         },
       ],
@@ -335,7 +336,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: new Date(new Date(values.toDate).toUTCString())
         .setUTCHours(23, 59, 59, 999)
         .valueOf(),
-    } as Omit<OperationsReportRequest, "branches">);
+      branches: values.branches,
+    });
     this.handleFetchReport(res, Reports.MonthComparison);
   }
 
