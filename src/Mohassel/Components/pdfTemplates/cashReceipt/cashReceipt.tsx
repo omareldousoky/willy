@@ -30,7 +30,7 @@ const CashReceipt = (props) => {
                 <div className="bottomborder">
                   <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                   <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
-                  <div>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
+                  <div style={{ textAlign: "right" }}>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
                   <table style={{ margin: '50px 0px' }}>
                     <tbody>
@@ -56,29 +56,29 @@ const CashReceipt = (props) => {
               return (
                 <tr>
                   <td>
-                  <div className="bottomborder" key={index} style={index === 4 ? { pageBreakAfter: "always" } : {}}>
-                  <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
-                  <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
-                  <div style={{ margin: '20px 0px' }}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
+                    <div className="bottomborder" key={index} style={index === 4 ? { pageBreakAfter: "always" } : {}}>
+                      <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
+                      <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
+                      <div style={{ margin: '20px 0px', textAlign: "right" }}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
                                  تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)
                   </div>
-                  <table style={{ margin: '70px 0px' }}>
-                    <tbody>
-                      <tr>
-                        <td className="sign">
-                          <div>توقيع المستلم</div>
-                          <div>الاسم/ {individualInGroup.customer.customerName}</div>
+                      <table style={{ margin: '60px 0px' }}>
+                        <tbody>
+                          <tr>
+                            <td className="sign">
+                              <div>توقيع المستلم</div>
+                              <div>الاسم/ {individualInGroup.customer.customerName}</div>
 
-                        </td>
-                        <td className="sign">
-                          <div>التوقيع :
+                            </td>
+                            <td className="sign">
+                              <div>التوقيع :
                             <div style={{ display: "inline-block" }}>---------------------</div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </td>
                 </tr>
               )
