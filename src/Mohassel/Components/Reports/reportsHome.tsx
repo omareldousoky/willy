@@ -1,8 +1,9 @@
+import { timeToDateyyymmdd } from "../../../Shared/Services/utils";
+import CIBReports from './cibReports';
 import MonthlyQuarterlyReports from './monthlyQuarterlyReports';
 import React, { Component } from "react";
 import * as local from "../../../Shared/Assets/ar.json";
 import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
-import Can from "../../config/Can";
 import Reports from "./reports";
 import IscoreReports from "./iscoreReports";
 import Card from "react-bootstrap/Card";
@@ -31,6 +32,12 @@ class ReportsHome extends Component<{}, State> {
                     permissionKey: "report",
                 },
                 {
+                    header: local.cib,
+                    stringKey: 'cibTPAYReport',
+                    permission: 'cibScreen',
+                    permissionKey: 'report'
+                },
+                {
                     header: local.operationsReports,
                     stringKey: "operationsReports",
                 }, 
@@ -56,7 +63,9 @@ class ReportsHome extends Component<{}, State> {
             case "financialReports":
                 return <Reports />;
             case "iScoreReports":
-                return <IscoreReports />;
+                return <IscoreReports />
+            case "cibTPAYReport":
+                return <CIBReports />
             case "oracleIntegration":
                 return <OracleIntegration />;
             case "operationsReports":
