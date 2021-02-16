@@ -263,3 +263,19 @@ export interface UnpaidInstallmentsByOfficerRequest
   extends OperationsReportRequest {
   representatives?: string[];
 }
+
+export enum LinkageStatusEnum {
+  Pending = "pending",
+  Linked = "linked",
+}
+
+export interface CheckLinkageResponse {
+  status: LinkageStatusEnum;
+  phoneNumber: string;
+}
+
+export interface ConfirmLinkageRequest {
+  customerId: string;
+  phoneNumber: string;
+  customerKey: number;
+}

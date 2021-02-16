@@ -337,10 +337,29 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 .btn-reject {
   color: #fff;
   border-color: #7dc356;
- background-color: #d51b1b;
-
+ 	background-color: #d51b1b;
 }
 
+.info-box {
+	background-color: #f7fff2;
+	border-radius: 0;
+	border: 1px solid lightgrey;
+	& .row {
+		justify-content: space-around;
+		padding: 1.2rem 0 .2rem;
+	}
+	& .item {
+		display: flex;
+		flex-direction: column;
+		text-align: right;
+		& .label {
+			font-size: .82rem;
+			color: #6e6e6e;
+			margin-bottom: .35rem;
+		}
+	}
+
+}
 @media print {
     * {
       font-size: 14px;
