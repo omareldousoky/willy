@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Loader } from '../../../Shared/Components/Loader';
 import local from '../../../Shared/Assets/ar.json';
+import errorMessages from '../../../Shared/Assets/errorMessages.json';
 import Button from 'react-bootstrap/Button';
 import { cibPaymentReport, getTpayFiles } from '../../Services/APIs/Reports/cibPaymentReport';
 import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../../Shared/Services/utils';
@@ -73,7 +74,8 @@ class CIBReports extends Component<{}, State>{
     }
   }
   getFile(fileRequest) {
-    downloadFile(fileRequest.url)
+    if (!fileRequest.url) Swal.fire("", errorMessages["doc_read_failed"].ar, "error")
+    else downloadFile(fileRequest.url)
   }
   render() {
     return (
