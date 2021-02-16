@@ -17,32 +17,40 @@ const CashReceipt = (props) => {
               <div>Tasaheel Microfinance S.A.E</div>
             </td>
           </tr>
-        <div className="bottomborder"></div>
+          <tr>
+            <td>
+              <div className="bottomborder"></div>
+            </td>
+          </tr>
         </thead>
         <tbody>
           {props.data.product.beneficiaryType === "individual" ?
-            <div className="bottomborder">
-              <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
-              <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
-              <div>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
+            <tr>
+              <td>
+                <div className="bottomborder">
+                  <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
+                  <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
+                  <div>استلمت انا / {props.data.customer.customerName}، مبلغ {`${numbersToArabic(props.data.principal)} جنيه = (${new Tafgeet(props.data.principal, 'EGP').parse()})`} من شركة
 			تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)</div>
-              <table style={{ margin: '50px 0px' }}>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div>توقيع المستلم</div>
-                      <div>الاسم/ {props.data.customer.customerName}</div>
+                  <table style={{ margin: '50px 0px' }}>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div>توقيع المستلم</div>
+                          <div>الاسم/ {props.data.customer.customerName}</div>
 
-                    </td>
-                    <td>
-                      <div>التوقيع :
+                        </td>
+                        <td>
+                          <div>التوقيع :
 							          <div style={{ display: "inline-block" }}>---------------------</div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
             :
             props.data.group.individualsInGroup.map((individualInGroup, index) => {
               return (
@@ -52,7 +60,7 @@ const CashReceipt = (props) => {
                   <div style={{ margin: '20px 0px' }}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
                                  تساهيل للتمويل متناهي الصغر قيمة مبلغ التمويل (القرض)
                   </div>
-                  <table style={{ margin: '50px 0px' }}>
+                  <table style={{ margin: '70px 0px' }}>
                     <tbody>
                       <tr>
                         <td className="sign">
@@ -74,34 +82,38 @@ const CashReceipt = (props) => {
           }
         </tbody>
         <tfoot>
-        <div className="divFooter">
-          <div className="headtitle textcenter"> <u>إقرار</u></div>
-          <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
+          <tr>
+            <td>
+              <div className="divFooter">
+                <div className="headtitle textcenter"> <u>إقرار</u></div>
+                <div>تم توقيع العملاء امامنا وتم اخذ البصمه بمعرفتنا بعد التأكد من شخصية العملاء والاطلاع علي اصل تحقيق الشخصيه
 			وتسليم كل عميل مبلغ التمويل الخاص به.</div>
 
-          <table style={{ marginTop: 50 }}>
-            <tbody>
-              <tr>
-                <td>
-                  <div>توقيع اعضاء لجنة التسليم</div>
-                </td>
-                <td>
-                  <div>---------------------</div>
-                </td>
-                <td>
-                  <div>---------------------</div>
-                </td>
-                <td>
-                  <div>توقيع مدير الفرع :
+                <table style={{ marginTop: 50 }}>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div>توقيع اعضاء لجنة التسليم</div>
+                      </td>
+                      <td>
+                        <div>---------------------</div>
+                      </td>
+                      <td>
+                        <div>---------------------</div>
+                      </td>
+                      <td>
+                        <div>توقيع مدير الفرع :
 							<div style={{ display: "inline-block" }}>---------------------</div>
-                  </div>
-                </td>
-                <td>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                        </div>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
         </tfoot>
       </table>
     </div>
