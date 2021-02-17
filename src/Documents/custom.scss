@@ -4,3 +4,7 @@ $theme-colors: (
 );
 
 @import "~bootstrap-v4-rtl/scss/bootstrap-rtl";
+
+.rtl th, [dir="rtl"] th {
+	text-align: center;
+}
