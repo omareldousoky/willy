@@ -132,6 +132,7 @@ export interface LeakedCustomersReportRequest {
   startDate: string;
   endDate: string;
   branches: string[];
+	loanOfficerIds?: string[];
 }
 export interface LeakedCustomersPerBranch {
   branchName: string;

@@ -48,7 +48,7 @@ const ReportsModal = (props: Props) => {
       loanOfficers: getIds(values.loanOfficers),
       representatives: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
-      loanOfficerIds: getIds(values.loanOfficerIds),
+      loanOfficerIds: getIds(values.loanOfficers),
     });
   }
   function getInitialValues() {
@@ -180,7 +180,7 @@ const ReportsModal = (props: Props) => {
                             onlyValidBranches={true}
                             onSelectBranch={(branches) => {
                               formikProps.setFieldValue("branches", branches);
-                              if (hasLoanOfficers)
+                              if (hasLoanOfficers) 
                                 formikProps.setFieldValue("loanOfficers", []);
                               if (hasRepresentatives)
                                 formikProps.setFieldValue(
