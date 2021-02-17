@@ -17,16 +17,18 @@ interface State {
     totalDaysLate: number;
     totalDaysEarly: number;
 }
-
+export function roundTo2(value: number) {
+    return Math.round((value) * 100) / 100
+}
 export function shareInGroup(array, customerId){
     if(array.length > 0){
         const amount = array.filter(el => el.individualInGroup.customer._id === customerId)[0].installmentsObject.output[0].installmentResponse;
-        return Math.round(amount)
+        return roundTo2(amount)
     }
     return 0
 }
 export function shareInGroupFallBack(value: number, total: number, installment: number) {
-    const share = Math.round((value/total)*installment);
+    const share = roundTo2((value/total)*installment);
     return share
 }
 class CustomerCardPDF extends Component<Props, State> {

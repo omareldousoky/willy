@@ -4,7 +4,7 @@ import local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { getStatus } from './customerCard';
-import { shareInGroup, shareInGroupFallBack } from '../pdfTemplates/customerCard/customerCard';
+import { roundTo2, shareInGroup, shareInGroupFallBack } from '../pdfTemplates/customerCard/customerCard';
 import { timeToArabicDate } from '../../../Shared/Services/utils';
 import { dateShift, shiftDaysBackAvoidingWeeekend, twoWeekGroupShift } from '../pdfTemplates/followUpStatment/followUpStatement';
 import { IndividualWithInstallments } from './loanProfile';
@@ -14,6 +14,25 @@ interface FollowUpStatementProps {
     branch?: Branch;
     print: Function;
     members: IndividualWithInstallments[];
+}
+
+export function getOriginalTableData(groupMembers, type) {
+    let installments: Array<{ dateOfPayment: number; id: number; installmentResponse: number }> = [];
+    if (type !== "individual") {
+        const arrays = groupMembers.map(member => member.installmentsObject.output);
+        const additionResult = arrays.map(arr => arr.map(row => row.installmentResponse)).reduce(function (result, array) {
+            array.forEach(function (value, i) {
+                result[i] = (result[i] || 0) + value;
+            });
+            return result;
+        }, []);
+        installments = additionResult.map((row, i) => {
+            return { installmentResponse: row, id: arrays[0][i].id, dateOfPayment: arrays[0][i].dateOfPayment }
+        })
+    } else {
+        installments = groupMembers[0].installmentsObject.output;
+    }
+    return installments
 }
 
 export const FollowUpStatementView = ({ application, branch, print, members }: FollowUpStatementProps) => {
@@ -32,7 +51,7 @@ export const FollowUpStatementView = ({ application, branch, print, members }: F
         {
             title: local.installmentResponse,
             key: "installmentResponse",
-            render: data => data.installmentResponse
+            render: data => roundTo2(data.installmentResponse)
         }
     ]
     function getShare(data) {
@@ -79,7 +98,7 @@ export const FollowUpStatementView = ({ application, branch, print, members }: F
             <div style={{ margin: '10px 0px' }}>
                 <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
                     onClick={() => print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
-                <DynamicTable totalCount={0} pagination={false} data={application.installmentsObject.installments} mappers={mappers} />
+                <DynamicTable totalCount={0} pagination={false} data={getOriginalTableData(members, application.product.beneficiaryType)} mappers={mappers} />
             </div>
             {application.product.beneficiaryType !== "individual" ?
                 <DynamicTable totalCount={0} pagination={false} data={application.group.individualsInGroup} mappers={membersMappers} />
