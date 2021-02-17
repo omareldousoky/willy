@@ -21,7 +21,7 @@ export interface ApiResponse<T> {
   error?: unknown;
 }
 
-export const fetchActiveWalletIndividual = async (
+export const fetchActiveWalletIndividualReport = async (
   request: ActiveWalletRequest
 ): Promise<ApiResponse<ActiveWalletIndividualResponse>> => {
   try {

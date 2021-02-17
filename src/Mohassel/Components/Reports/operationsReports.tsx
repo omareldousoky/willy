@@ -37,6 +37,8 @@ import { fetchCustomersArrearsReport } from "../../Services/APIs/Reports/custome
 import { CustomersArrears } from "../pdfTemplates/customersArrears/customersArrears";
 import { fetchPaidArrearsReport } from "../../Services/APIs/Reports/paidArrears";
 import { PaidArrears } from "../pdfTemplates/paidArrears/paidArrears";
+import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
+import { ActiveWalletRequest, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 
 export interface PDF {
   key?: string;
@@ -68,6 +70,7 @@ enum Reports {
   LeakedCustomers = "leakedCustomers",
   PaidArrears = "paidArrears",
   CustomersArrears = "customersArrears",
+  activeWalletIndividual = "activeWalletIndividual",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -137,6 +140,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           inputs: ["dateFromTo", "branches", "loanOfficers"],
           permission: "paidArrears",
         },
+        {
+            key: Reports.activeWalletIndividual,
+            local: "المحفظة النشطه للمندوبين - فردى",
+            inputs: ["date", "branches", "loanOfficers"],
+            permission: "individualActiveWallet",
+        },
       ],
       selectedPdf: { permission: "" },
       data: undefined,
@@ -183,6 +192,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchCustomersArrears(values);
       case Reports.PaidArrears:
         return this.fetchPaidArrears(values);
+      case Reports.activeWalletIndividual:
+        return this.fetchActiveWalletIndividual(values)   
       default:
         return null;
     }
@@ -315,6 +326,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       loanOfficers,
     } as CustomersArrearsRequest);
     this.handleFetchReport(res, Reports.CustomersArrears);
+  }
+  async fetchActiveWalletIndividual(values) {
+    const {date, branches, loanOfficers} = values;
+    const res = await fetchActiveWalletIndividualReport({
+      date,
+      branches,
+      loanOfficerIds: loanOfficers
+    }as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.activeWalletIndividual)
   }
   render() {
     return (
@@ -454,6 +474,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             toDate={this.state.toDate}
           />
         )}
+        {
+          this.state.print === Reports.activeWalletIndividual && this.state.data && (
+            <ActiveWalletIndividual 
+            date = {this.state.date}
+            data = {this.state.data}
+            />
+          )
+        }
       </>
     );
   }

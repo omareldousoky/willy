@@ -50,9 +50,8 @@
       page-break-inside: avoid;
     }
 
-    & tbody tr td {
-      font-size: 0.8rem;
-      border: 0.5px solid black;
+    & td {
+      font-weight: bold;
       page-break-inside: avoid;
       text-align: center;
       white-space: nowrap;
