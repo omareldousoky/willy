@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -15,6 +15,8 @@ import * as local from "../../../Shared/Assets/ar.json";
 import { Branch } from "../../../Shared/Services/interfaces";
 import { DateField } from "../Common/FormikFields/dateField";
 import { required } from "../../../Shared/validations";
+import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
+import { getFullCustomerKey } from "../../../Shared/Services/utils";
 
 interface InitialFormikState {
   fromDate?: string;
@@ -22,7 +24,7 @@ interface InitialFormikState {
   quarterYear?: string;
   branches: Array<Branch>;
   quarterNumber?: string;
-  key?: string;
+  customerKeyword?: string;
   loanOfficers?: Array<string>;
   date?: string;
   loanOfficerIds?: Array<string>;
@@ -40,8 +42,18 @@ interface Props {
 }
 
 const ReportsModal = (props: Props) => {
+  const [customerDropDownValue, setCustomerDropDownValue] = useState(
+    props.pdf.inputs?.includes("customerKey") ? "customerKey" : undefined
+  );
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id) : [];
+  const getCustomerKey = (key?: string): string | undefined => {
+    console.log(key);
+    if (!customerDropDownValue || key === undefined) return undefined;
+    return customerDropDownValue === "customerKey"
+      ? key
+      : getFullCustomerKey(key)?.toString();
+  };
   function handleSubmit(values) {
     props.submit({
       ...values,
@@ -49,6 +61,7 @@ const ReportsModal = (props: Props) => {
       representatives: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
       loanOfficerIds: getIds(values.loanOfficers),
+      key: getCustomerKey(values.customerKeyword),
     });
   }
   function getInitialValues() {
@@ -61,7 +74,7 @@ const ReportsModal = (props: Props) => {
         case "branches":
           initValues.branches = [];
         case "customerKey":
-          initValues.key = "";
+          initValues.customerKeyword = "";
         case "quarterYear":
           initValues.quarterYear = "";
         case "quarterNumber":
@@ -81,6 +94,14 @@ const ReportsModal = (props: Props) => {
     });
     return initValues;
   }
+
+  // TODO: refactor out
+  const arDropDownValue = {
+    customerKey: local.customerCode,
+    customerShortenedCode: local.customerShortenedCode,
+    default: "",
+  };
+
   return (
     <Modal
       size="lg"
@@ -138,7 +159,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.fromDate}
                                 isInvalid={Boolean(
                                   formikProps.errors.fromDate &&
-                                  formikProps.touched.fromDate
+                                    formikProps.touched.fromDate
                                 )}
                                 onChange={(e) => {
                                   formikProps.setFieldValue(
@@ -160,7 +181,7 @@ const ReportsModal = (props: Props) => {
                                 onChange={formikProps.handleChange}
                                 isInvalid={Boolean(
                                   formikProps.errors.toDate &&
-                                  formikProps.touched.toDate
+                                    formikProps.touched.toDate
                                 )}
                                 disabled={!Boolean(formikProps.values.fromDate)}
                               ></Form.Control>
@@ -180,7 +201,7 @@ const ReportsModal = (props: Props) => {
                             onlyValidBranches={true}
                             onSelectBranch={(branches) => {
                               formikProps.setFieldValue("branches", branches);
-                              if (hasLoanOfficers) 
+                              if (hasLoanOfficers)
                                 formikProps.setFieldValue("loanOfficers", []);
                               if (hasRepresentatives)
                                 formikProps.setFieldValue(
@@ -198,35 +219,44 @@ const ReportsModal = (props: Props) => {
                     if (input === "customerKey") {
                       return (
                         <Col sm={12} key={input} style={{ marginTop: 10 }}>
-                          <Form.Group controlId="key">
-                            <div className="dropdown-container">
-                              <p
-                                className="dropdown-label"
-                                style={{ width: 150 }}
-                              >
-                                {local.customerCode}
-                              </p>
-                              <Form.Control
-                                className="dropdown-select"
-                                name="key"
-                                data-qc="key"
-                                value={formikProps.values.key}
-                                isInvalid={Boolean(
-                                  formikProps.errors.key &&
-                                  formikProps.touched.key
-                                )}
-                                onChange={formikProps.handleChange}
-                              />
-                            </div>
-                            <span style={{ color: "red" }}>
-                              {Boolean(
-                                formikProps.errors.key &&
-                                formikProps.touched.key
-                              )
-                                ? formikProps.errors.key
-                                : ""}
-                            </span>
-                          </Form.Group>
+                          <InputGroup style={{ direction: "ltr" }}>
+                            <Form.Control
+                              type="text"
+                              name="customerKeyword"
+                              data-qc="customerKeyword"
+                              onChange={formikProps.handleChange}
+                              style={{
+                                direction: "rtl",
+                                borderRight: 0,
+                                padding: 22,
+                              }}
+                              value={formikProps.values.customerKeyword}
+                            />
+                            <DropdownButton
+                              as={InputGroup.Append}
+                              variant="outline-secondary"
+                              title={
+                                arDropDownValue[customerDropDownValue || ""]
+                              }
+                              id="input-group-dropdown-2"
+                              data-qc="input-group-dropdown-customer"
+                            >
+                              {["customerKey", "customerShortenedCode"].map(
+                                (key) => (
+                                  <Dropdown.Item
+                                    key={key}
+                                    data-qc={key}
+                                    onClick={() => {
+                                      setCustomerDropDownValue(key);
+                                      formikProps.setFieldValue(key, "");
+                                    }}
+                                  >
+                                    {arDropDownValue[key]}
+                                  </Dropdown.Item>
+                                )
+                              )}
+                            </DropdownButton>
+                          </InputGroup>
                         </Col>
                       );
                     }
@@ -258,7 +288,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.quarterYear}
                                 isInvalid={Boolean(
                                   formikProps.errors.quarterYear &&
-                                  formikProps.touched.quarterYear
+                                    formikProps.touched.quarterYear
                                 )}
                                 onBlur={formikProps.handleBlur}
                                 onChange={(e) => {
@@ -425,7 +455,7 @@ const ReportsModal = (props: Props) => {
                             <div className="dropdown-container">
                               <p
                                 className="dropdown-label"
-                                style={{ width: 150, whiteSpace: 'nowrap' }}
+                                style={{ width: 150, whiteSpace: "nowrap" }}
                               >
                                 {local.applicationCode}
                               </p>
@@ -436,7 +466,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.loanApplicationKey}
                                 isInvalid={Boolean(
                                   formikProps.errors.loanApplicationKey &&
-                                  formikProps.touched.loanApplicationKey
+                                    formikProps.touched.loanApplicationKey
                                 )}
                                 onChange={formikProps.handleChange}
                               />
@@ -444,7 +474,7 @@ const ReportsModal = (props: Props) => {
                             <span style={{ color: "red" }}>
                               {Boolean(
                                 formikProps.errors.loanApplicationKey &&
-                                formikProps.touched.loanApplicationKey
+                                  formikProps.touched.loanApplicationKey
                               )
                                 ? formikProps.errors.loanApplicationKey
                                 : ""}
@@ -471,7 +501,7 @@ const ReportsModal = (props: Props) => {
                     "customerDetails",
                     "loanDetails",
                     "cibPaymentReport",
-                    "customerTransactionReport"
+                    "customerTransactionReport",
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
