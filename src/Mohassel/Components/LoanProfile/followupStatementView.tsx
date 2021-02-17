@@ -1,11 +1,9 @@
 import React from 'react';
 import { Branch } from '../../../Shared/Services/interfaces';
 import local from '../../../Shared/Assets/ar.json';
-import { getRenderDate } from '../../Services/getRenderDate';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
-import { getStatus } from './customerCard';
 import { roundTo2, shareInGroup, shareInGroupFallBack } from '../pdfTemplates/customerCard/customerCard';
-import { timeToArabicDate } from '../../../Shared/Services/utils';
+import { numbersToArabic, timeToArabicDate } from '../../../Shared/Services/utils';
 import { dateShift, shiftDaysBackAvoidingWeeekend, twoWeekGroupShift } from '../pdfTemplates/followUpStatment/followUpStatement';
 import { IndividualWithInstallments } from './loanProfile';
 
@@ -51,7 +49,7 @@ export const FollowUpStatementView = ({ application, branch, print, members }: F
         {
             title: local.installmentResponse,
             key: "installmentResponse",
-            render: data => roundTo2(data.installmentResponse)
+            render: data => numbersToArabic(roundTo2(data.installmentResponse))
         }
     ]
     function getShare(data) {
@@ -75,12 +73,12 @@ export const FollowUpStatementView = ({ application, branch, print, members }: F
         {
             title: local.individualLoanPrinciple,
             key: "amount",
-            render: data => data.amount
+            render: data => numbersToArabic(data.amount)
         },
         {
             title: local.installmentType,
             key: "amount",
-            render: data => getShare(data)
+            render: data => numbersToArabic(getShare(data))
         },
         {
             title: local.businessActivity,
