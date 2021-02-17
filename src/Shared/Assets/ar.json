@@ -10,7 +10,7 @@
     "nationalId": "الرقم القومي",
     "nationalIdIssueDate": "تاريخ اصدار البطاقة",
     "birthDate": "تاريخ الميلاد",
-    "customerHomeAddress": "عنوان المنزل",
+    "customerHomeAddress": "عنوان المنزل بالبطاقة",
     "homePostalCode": "الرقم البريدي للمنزل",
     "homePhoneNumber": "تليفون المنزل",
     "phoneNumber": "تليفون",
@@ -904,5 +904,6 @@
     "manageLoanDetails":"اعدادت القروض",
 		"typeRepresentativeName": "اكتب اسم المندوب",
     "chooseBranchGeoArea": "اختر التقسيم الجغرافي للفرع",
-    "cibReports": "تقارير الCIB"
+    "cibReports": "تقارير الCIB",
+    "detailedAddress": "العنوان المفصل"
 }
