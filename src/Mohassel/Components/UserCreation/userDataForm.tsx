@@ -360,7 +360,7 @@ export const UserDataForm = (props: Props) => {
             </Form.Group>
             <Form.Group
                 as={Row}
-                className={['user-data-group']}
+                className="user-data-group"
             >
                 <Col >
                     <Button

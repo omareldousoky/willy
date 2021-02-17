@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -14,7 +13,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import { theme } from '../../../theme';
-import { CardBody } from 'react-bootstrap/Card';
 import Card from 'react-bootstrap/Card';
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';

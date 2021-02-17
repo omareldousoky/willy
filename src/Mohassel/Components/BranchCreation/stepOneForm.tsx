@@ -252,7 +252,7 @@ const StepOneForm = (props: Props) => {
             </Row>
             <Form.Group
                 as={Row}
-                className={['branch-data-group']}
+                className="branch-data-group"
             >
                 <Col >
                     <Button

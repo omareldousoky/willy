@@ -1190,7 +1190,7 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Group>
             <Form.Group
                 as={Row}
-                className={['branch-data-group']}
+                className="branch-data-group"
             >
                 <Col >
                     <Button
