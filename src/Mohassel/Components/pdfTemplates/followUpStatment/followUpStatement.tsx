@@ -5,6 +5,7 @@ import { timeToArabicDate, numbersToArabic, dayToArabic, timeToArabicDateNow } f
 import store from '../../../../Shared/redux/store';
 import { shareInGroup, shareInGroupFallBack } from '../customerCard/customerCard';
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile';
+
 interface Props {
     data: any;
     branchDetails: any;
