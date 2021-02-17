@@ -1,0 +1,66 @@
+@media screen,
+print {
+	.month-comparison {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		direction: rtl;
+		margin: 2px;
+		font-weight: bold;
+		text-align: center;
+		-webkit-print-color-adjust: exact;
+
+		& .header-wrapper {
+			display: flex;
+			margin: 10px;
+			justify-content: space-between;
+
+			p {
+				font-size: .9rem !important;
+			}
+		}
+
+		& .report-title {
+			font-size: 1.2rem !important;
+			margin: auto;
+		}
+
+		& tbody {
+			line-height: 1.5em;
+			page-break-inside: avoid;
+		}
+
+		& table {
+			width: 100%;
+			max-width: 100%;
+			font-size: 15px;
+			border-collapse: collapse;
+
+			& tr.bg-grey td {
+				background-color: lightgrey;
+			}
+		}
+
+		& table td {
+			border: 0.5px solid black;
+			white-space: nowrap;
+			padding: 3px;
+			direction: ltr;
+		}
+
+		& thead th {
+			border: 0.5px solid black;
+		}
+
+		& .horizontal-line {
+			border-bottom: 1px solid black;
+			margin: .5rem auto;
+			width: 50%;
+		}
+	}
+}
+
+@media screen {
+	.month-comparison {
+		display: none;
+	}
+}

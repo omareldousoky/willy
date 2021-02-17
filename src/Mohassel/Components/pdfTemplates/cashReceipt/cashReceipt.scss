@@ -1,6 +1,6 @@
 @media screen,
 print {
-    .cash-receipt {
+    .cash-receipt-pdf {
         font-size: 10px;
         font-weight: bold;
         line-height: 1.5em;
@@ -23,8 +23,6 @@ print {
             }
         }
         & .divFooter {
-            position: absolute;
-            bottom: 0;
             margin-bottom: 100px;
         }
         & .bottomborder {

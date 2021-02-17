@@ -1,14 +1,9 @@
 import { AxiosResponse } from "axios";
+import { OperationsReportRequest } from "../../interfaces";
 import axios from "../axios-instance";
 
 const { REACT_APP_BASE_URL } = process.env;
 const fetchUnpaidInstallmentsPerAreaUrl = `${REACT_APP_BASE_URL}/report/unpaid-installments-per-area`;
-
-export interface UnpaidInstallmentsPerAreaRequest {
-  startDate: string;
-  endDate: string;
-  branches?: Array<string>;
-}
 
 interface CustomersResponse {
   address: string;
@@ -49,7 +44,7 @@ export interface ApiResponse<T> {
 }
 
 export const fetchUnpaidInstallmentsPerAreaReport = async (
-  request: UnpaidInstallmentsPerAreaRequest
+  request: OperationsReportRequest
 ): Promise<ApiResponse<UnpaidInstallmentsPerAreaResponse>> => {
   try {
     const res: AxiosResponse<UnpaidInstallmentsPerAreaResponse> = await axios.post(

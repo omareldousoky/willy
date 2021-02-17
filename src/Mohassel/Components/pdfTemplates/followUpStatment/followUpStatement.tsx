@@ -83,9 +83,9 @@ const FollowUpStatementPDF = (props: Props) => {
                         <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
-                        <td>{timeToArabicDateNow(true)}</td>
+                        <td>{timeToArabicDate(props.data.creationDate,false)}</td>
                         <td></td>
-                        <td>{dayToArabic(new Date().getDay())}</td>
+                        <td>{dayToArabic(new Date(props.data.creationDate).getDay())}</td>
                     </tr>
                     <tr>
                         <td></td>
