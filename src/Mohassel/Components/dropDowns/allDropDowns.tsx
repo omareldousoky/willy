@@ -64,7 +64,7 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
         className="full-width"
         name="representative"
         data-qc="representative"
-        placeholder={local.chooseRepresentative}
+        placeholder={local.typeRepresentativeName}
         isLoading={loanOfficerSelectLoader}
         options={loanOfficerSelectOptions}
         getOptionLabel={(option) => option.name}
