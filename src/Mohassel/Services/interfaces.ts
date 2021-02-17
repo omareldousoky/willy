@@ -273,3 +273,31 @@ export interface OfficersBranchPercentPaymentRequest
   creationDateFrom?: string;
   creationDateTo?: string;
 }
+export interface CustomerApplicationTransactionsRequest {
+  loanApplicationKey: string;
+}
+
+export interface CustomerApplicationTransactionRow {
+  transactionCode: string;
+  installmentSerial: string;
+  date: string;
+  action: string;
+  loanSerial: string;
+  transactionAmount: string;
+  currency: string;
+  branchName: string;
+  status: string;
+  username: string;
+  createdAt: string;
+}
+export interface CustomerApplicationTransactionsResponse {
+  result?: CustomerApplicationTransactionRow[];
+  customer?: {
+    name: string;
+    key: string;
+  };
+  branch?: {
+    name: string;
+    code: string;
+  };
+}

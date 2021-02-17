@@ -34,6 +34,7 @@ interface InitialFormikState {
   geoAreas?: Array<string>;
   creationDateFrom?: string;
   creationDateTo?: string;
+  loanApplicationKey?: string;
 }
 
 interface Props {
@@ -84,6 +85,8 @@ const ReportsModal = (props: Props) => {
         case "creationDateFromTo":
           initValues.creationDateFrom = "";
           initValues.creationDateTo = "";
+        case "applicationKey":
+          initValues.loanApplicationKey = "";
       }
     });
     return initValues;
@@ -212,7 +215,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.quarterYear}
                                 isInvalid={Boolean(
                                   formikProps.errors.quarterYear &&
-                                    formikProps.touched.quarterYear
+                                  formikProps.touched.quarterYear
                                 )}
                                 onBlur={formikProps.handleBlur}
                                 onChange={(e) => {
@@ -445,6 +448,7 @@ const ReportsModal = (props: Props) => {
                     "customerDetails",
                     "loanDetails",
                     "cibPaymentReport",
+                    "customerTransactionReport"
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
