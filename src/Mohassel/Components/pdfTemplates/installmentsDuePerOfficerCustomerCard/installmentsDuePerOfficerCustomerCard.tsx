@@ -1,17 +1,11 @@
-import React, { Component, Fragment } from "react";
-import { timeToArabicDate } from "../../../../Shared/Services/utils";
+import React, { Fragment } from "react";
+import {
+  numbersToArabic,
+  timeToArabicDate,
+} from "../../../../Shared/Services/utils";
 import Orientation from "../../Common/orientation";
 import "./installmentsDuePerOfficerCustomerCard.scss";
 
-const numbersToArabic = (input) => {
-  if (input || input === 0) {
-    const id = ["۰", "۱", "۲", "۳", "٤", "۵", "٦", "۷", "۸", "۹"];
-    const inputStr = input.toString();
-    return inputStr.replace(/[0-9]/g, (number) => {
-      return id[number];
-    });
-  } else return "";
-};
 const installmentStatuses = {
   unpaid: "غير مسدد",
   partiallyPaid: "مدفوع جزئيا",
@@ -200,7 +194,9 @@ const InstallmentsDuePerOfficerCustomerCard = (
             <tr key={idx}>
               <td className="short">ف&nbsp;&nbsp;{idx + 1}</td>
               <td className="long">{el.customerName}</td>
-              <td className="nowrap">{numbersToArabic(el.installmentNumber) || "٠"}</td>
+              <td className="nowrap" dir="ltr">
+                {numbersToArabic(el.installmentNumber) || "٠"}
+              </td>
               <td className="nowrap">
                 {el.dateOfPayment
                   ? timeToArabicDate(
@@ -225,7 +221,9 @@ const InstallmentsDuePerOfficerCustomerCard = (
                     )
                   : "لا يوجد"}
               </td>
-              <td className="nowrap">{installmentStatuses[el.installmentStatus]}</td>
+              <td className="nowrap">
+                {installmentStatuses[el.installmentStatus]}
+              </td>
               <td>{numbersToArabic(el.installmentAmount)}</td>
               <td>{el.amountDue}</td>
               <td>{numbersToArabic(el.mobilePhone) || "لا يوجد"}</td>

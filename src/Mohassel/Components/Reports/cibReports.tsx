@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Loader } from '../../../Shared/Components/Loader';
 import local from '../../../Shared/Assets/ar.json';
+import errorMessages from '../../../Shared/Assets/errorMessages.json';
 import Button from 'react-bootstrap/Button';
 import { cibPaymentReport, getTpayFiles } from '../../Services/APIs/Reports/cibPaymentReport';
 import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../../Shared/Services/utils';
 import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import ReportsModal from './reportsModal';
+import { cibTpayURL } from '../../Services/APIs/Reports/cibURL';
 
 interface TPAYFile {
   created: {
@@ -73,7 +75,18 @@ class CIBReports extends Component<{}, State>{
     }
   }
   getFile(fileRequest) {
-    downloadFile(fileRequest.url)
+    if (!fileRequest.url) this.getFileUrl(fileRequest.key)
+    else downloadFile(fileRequest.url)
+  }
+  async getFileUrl(fileKey: string) {
+    this.setState({ loading: true });
+    const res = await cibTpayURL(fileKey)
+    if (res.status === "success") {
+      this.setState({ loading: false });
+      downloadFile(res.body.url)
+    } else {
+      this.setState({ loading: false }, () => Swal.fire("", errorMessages["doc_read_failed"].ar, "error"));
+    }
   }
   render() {
     return (
