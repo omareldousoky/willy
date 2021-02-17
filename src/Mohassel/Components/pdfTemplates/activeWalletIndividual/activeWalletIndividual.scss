@@ -8,6 +8,7 @@
       width: 100%;
       & tbody {
         page-break-inside: avoid;
+        width: 100%;
       }
       ​ & .tbody-border {
         box-shadow: 0 0 0 1px black;
@@ -51,6 +52,7 @@
     }
 
     & td {
+      font-size: 10px;
       font-weight: bold;
       page-break-inside: avoid;
       text-align: center;
@@ -77,6 +79,11 @@
         width: 100px;
         list-style-position: inside;
     }
+    & .horizontal-line {
+      border: 0;
+      border-bottom: 1px solid black;
+width: 80%;
+  }
     }
   }
   @media screen {
