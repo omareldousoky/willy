@@ -131,20 +131,6 @@ export const GuarantorTableView = (props: Props) => {
                                 validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
                             }
                         }
-                        // if (customer.applicationIds && customer.applicationIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan) {
-                        //     if (Object.keys(validationObject).includes(customer._id)) {
-                        //         validationObject[customer._id] = { ...validationObject[customer._id], ...{ applicationIds: customer.applicationIds } }
-                        //     } else {
-                        //         validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
-                        //     }
-                        // }
-                        // if (customer.loanIds && customer.loanIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan) {
-                        //     if (Object.keys(validationObject).includes(customer._id)) {
-                        //         validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
-                        //     } else {
-                        //         validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
-                        //     }
-                        // }
                         if (customer.guarantorIds && customer.guarantorIds.length >= customer.guarantorMaxLoans) {
                             if (Object.keys(validationObject).includes(customer._id)) {
                                 validationObject[customer._id] = { ...validationObject[customer._id], ...{ guarantorIds: customer.guarantorIds } }

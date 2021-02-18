@@ -125,7 +125,6 @@ export const LoanApplicationValidation = Yup.object().shape({
             function (this: any, value: any) {
                 const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
                 if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= customerMaxPrincipal) {
-                    // - customerTotalPrincipals
                     return true
                 } else if (customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal)) {
                     return true
@@ -166,7 +165,6 @@ export const LoanApplicationValidation = Yup.object().shape({
                             // - (customer.totalPrincipals ? customer.totalPrincipals : 0)
                         return true
                     } else if (!customer.maxPrincipal && value <= ((customer.paidLoans && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal))) {
-                        // - (customer.totalPrincipals ? customer.totalPrincipals : 0)
                         return true
                     } else {
                         return false
