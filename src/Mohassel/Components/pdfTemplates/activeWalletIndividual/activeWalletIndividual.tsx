@@ -87,22 +87,22 @@ const ActiveWalletIndividual = (props: Props) => {
                         return (
 
                             <React.Fragment key={branchIndex}>
-                                <div className="row-nowrap mt-1"><p>الفرع:</p><p className="box">{branch.branchName || '--'}</p></div>
+                                <div className="row-nowrap mt-1 mb-1"><p>الفرع:</p><p className="box">{branch.branchName || '--'}</p></div>
 
                                 { branch?.officers?.map((officer, officerIndex) => {
                                     return (
                                         <React.Fragment key={officerIndex} >
-                                            <div className="row-nowrap"><p>المندوب:</p><p className="box">{officer.officerName || '--'}</p></div>
+                                            <div className="row-nowrap  mt-1 mb-1"><p>المندوب:</p><p className="box">{officer.officerName || '--'}</p></div>
                                             {
                                                 officer?.areas?.map((area, areaIndex) => {
 
                                                     return (
                                                         <React.Fragment key={areaIndex}>
-                                                            <div className="row-nowrap"><p>منطقة العمل:</p><p className="box">{area.areaName || '--'}</p></div>
+                                                            <div className="row-nowrap  mt-1 mb-1" ><p>منطقة العمل:</p><p className="box">{area.areaName || '--'}</p></div>
                                                             <table
                                                                 className="report-container"
-                                                                cellPadding="2"
-                                                                cellSpacing="2"
+                                                                cellPadding="1"
+                                                                cellSpacing="1"
                                                             >
                                                                 <thead>
                                                                     <tr>
@@ -155,23 +155,44 @@ const ActiveWalletIndividual = (props: Props) => {
                                                                             ) // row return
                                                                         }) // end of data map
                                                                     }
-                                                                    <hr className="horizontal-line"></hr>
-                                                                    <div className = "row-nowrap">
-                                                                    <div className="row-nowrap"><p>إجمالي المنطقة :</p><p className="box">{area.areaName || '--'}</p></div>
+                                                                    <tr style={{ margin: "0 10px" }}>
+                                                                        <th colSpan={100} className="horizontal-line"></th>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <div className="row-nowrap mt-1 mb-1"><p>إجمالي المنطقة :</p><p className="box">{area.areaName || '--'}</p></div>
+                                                            <table
+                                                                className="report-container"
+                                                                cellPadding="1"
+                                                                cellSpacing="1"
+                                                            >
+                                                                <thead>
                                                                     <tr>
-                                                                        <th></th>
-                                                                        <th>عدد التمويلات</th>
-                                                                        <th>التمويل</th>
-                                                                        <th>عدد الاعضاء</th>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td></td>
-                                                                       <td></td>
-                                                                       <td></td>
-                                                                       <td></td>
-                                                                   </tr>
-                                                                    </div>
-                                
+                                                                        <th colSpan={6}>التمويل القائم</th>
+                                                                        <th colSpan={4}>الرصيد</th>
+                                                                        <th colSpan={4}>المتأخرات</th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th colSpan={2}>عدد التمويلات</th>
+                                                                        <th colSpan={2}>التمويل</th>
+                                                                        <th colSpan={2}>عدد الاعضاء</th>
+                                                                        <th colSpan={2}>عدد الاقساط</th>
+                                                                        <th colSpan={2}>المبلغ</th>
+                                                                        <th colSpan={2}>عدد الاقساط</th>
+                                                                        <th colSpan={2}>المبلغ</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <td colSpan={2}>{area.totalLoanCount}</td>
+                                                                    <td colSpan={2}>{area.totalPrincipal}</td>
+                                                                    <td colSpan={2}>{area.customersCount}</td>
+                                                                    <td colSpan={2}>{area.totalLateInstallmentCount}</td>
+                                                                    <td colSpan={2}>{area.totalLateInstallmentAmount}</td>
+                                                                    <td colSpan={2}>{area.totalCreditInstallmentCount}</td>
+                                                                    <td colSpan={2}>{area.totalCreditInstallmentAmount}</td>
+                                                                    <tr style={{ margin: "0 10px" }}>
+                                                                        <th colSpan={100} className="horizontal-line"></th>
+                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                         </React.Fragment>
@@ -179,11 +200,84 @@ const ActiveWalletIndividual = (props: Props) => {
                                                 }) // end of areas map
 
                                             }
+                                            <tr style={{ margin: "0 10px" }}>
+                                                <th colSpan={100} className="horizontal-line"></th>
+                                            </tr>
+                                            <div className="row-nowrap"><p>إجمالي المندوب :</p><p className="box">{officer.officerName || '--'}</p></div>
+                                            <table
+                                                className="report-container"
+                                                cellPadding="1"
+                                                cellSpacing="1"
+                                            >
+                                                <thead>
+                                                    <tr>
+                                                        <th colSpan={6}>التمويل القائم</th>
+                                                        <th colSpan={4}>الرصيد</th>
+                                                        <th colSpan={4}>المتأخرات</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colSpan={2}>عدد التمويلات</th>
+                                                        <th colSpan={2}>التمويل</th>
+                                                        <th colSpan={2}>عدد الاعضاء</th>
+                                                        <th colSpan={2}>عدد الاقساط</th>
+                                                        <th colSpan={2}>المبلغ</th>
+                                                        <th colSpan={2}>عدد الاقساط</th>
+                                                        <th colSpan={2}>المبلغ</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <td colSpan={2}>{officer.totalLoanCount}</td>
+                                                    <td colSpan={2}>{officer.totalPrincipal}</td>
+                                                    <td colSpan={2}>{officer.customersCount}</td>
+                                                    <td colSpan={2}>{officer.totalLateInstallmentCount}</td>
+                                                    <td colSpan={2}>{officer.totalLateInstallmentAmount}</td>
+                                                    <td colSpan={2}>{officer.totalCreditInstallmentCount}</td>
+                                                    <td colSpan={2}>{officer.totalCreditInstallmentAmount}</td>
+                                                    <tr style={{ margin: "0 10px" }}>
+                                                        <th colSpan={100} className="horizontal-line"></th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </React.Fragment>
 
                                     ) // officer return 
                                 }) // end of officers map
                                 }
+                                <div className="row-nowrap mt-1 mb-1"><p>إجمالي المندوبين</p></div>
+                                <table
+                                    className="report-container"
+                                    cellPadding="1"
+                                    cellSpacing="1"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th colSpan={6}>التمويل القائم</th>
+                                            <th colSpan={4}>الرصيد</th>
+                                            <th colSpan={4}>المتأخرات</th>
+                                        </tr>
+                                        <tr>
+                                            <th colSpan={2}>عدد التمويلات</th>
+                                            <th colSpan={2}>التمويل</th>
+                                            <th colSpan={2}>عدد الاعضاء</th>
+                                            <th colSpan={2}>عدد الاقساط</th>
+                                            <th colSpan={2}>المبلغ</th>
+                                            <th colSpan={2}>عدد الاقساط</th>
+                                            <th colSpan={2}>المبلغ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td colSpan={2}>{branch.totalLoanCount}</td>
+                                        <td colSpan={2}>{branch.totalPrincipal}</td>
+                                        <td colSpan={2}>{branch.customersCount}</td>
+                                        <td colSpan={2}>{branch.totalLateInstallmentCount}</td>
+                                        <td colSpan={2}>{branch.totalLateInstallmentAmount}</td>
+                                        <td colSpan={2}>{branch.totalCreditInstallmentCount}</td>
+                                        <td colSpan={2}>{branch.totalCreditInstallmentAmount}</td>
+                                        <tr style={{ margin: "0 10px" }}>
+                                            <th colSpan={100} className="horizontal-line"></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </React.Fragment>
                         ) // branch return
                     }) // end of response map

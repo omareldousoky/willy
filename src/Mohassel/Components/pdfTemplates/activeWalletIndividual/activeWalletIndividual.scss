@@ -19,6 +19,8 @@
         min-width: 200px;
         height: 40px;
         margin-right: 10px;
+        page-break-inside: avoid;
+        page-break-after: avoid;
         -webkit-print-color-adjust: exact;
         padding: 5px;
       }
@@ -49,10 +51,11 @@
     & thead,
     & tbody tr {
       page-break-inside: avoid;
+      margin: 10px;
     }
 
     & td {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: bold;
       page-break-inside: avoid;
       text-align: center;
@@ -80,10 +83,9 @@
         list-style-position: inside;
     }
     & .horizontal-line {
-      border: 0;
-      border-bottom: 1px solid black;
-width: 80%;
-  }
+      border-bottom: 1px solid black; 
+      width: 100%;
+    }
     }
   }
   @media screen {
