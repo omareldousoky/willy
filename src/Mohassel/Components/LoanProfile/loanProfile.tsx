@@ -690,7 +690,7 @@ class LoanProfile extends Component<Props, State>{
                 }
                 {this.state.print === 'all' &&
                     <>
-                        <CashReceiptPDF data={this.state.application} />
+                        <CashReceiptPDF data={this.state.application}  remainingTotal = {this.state.remainingTotal}/>
                         <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />
