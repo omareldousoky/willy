@@ -17,6 +17,7 @@ import {
   ApiResponse,
   CustomersArrearsRequest,
   InstallmentsDuePerOfficerCustomerCardRequest,
+  LeakedCustomersReportRequest,
   OfficersPercentPaymentRequest,
   OperationsReportRequest,
   PaidArrearsRequest,
@@ -308,7 +309,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     const res = await fetchLeakedCustomersReport({
       ...this.reportRequest(values),
       loanOfficerIds,
-    });
+    } as LeakedCustomersReportRequest);
     this.handleFetchReport(res, Reports.LeakedCustomers);
   }
 

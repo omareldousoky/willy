@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 import {
   ApiResponse,
+  LeakedCustomersReportRequest,
   LeakedCustomersReportResponse,
-  OperationsReportRequest,
 } from "../../interfaces";
 import axios from "../axios-instance";
 
@@ -10,7 +10,7 @@ const { REACT_APP_BASE_URL } = process.env;
 const fetchLeakedCustomersURL = `${REACT_APP_BASE_URL}/report/churned-customers`;
 
 export const fetchLeakedCustomersReport = async (
-  request: OperationsReportRequest
+  request: LeakedCustomersReportRequest
 ): Promise<ApiResponse<LeakedCustomersReportResponse>> => {
   try {
     const res: AxiosResponse<LeakedCustomersReportResponse> = await axios.post(
