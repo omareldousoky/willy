@@ -74,10 +74,6 @@ class CIBReports extends Component<{}, State>{
       Swal.fire("", local.fileQueuedError, "error");
     }
   }
-  getFile(fileRequest) {
-    if (!fileRequest.url) this.getFileUrl(fileRequest.key)
-    else downloadFile(fileRequest.url)
-  }
   async getFileUrl(fileKey: string) {
     this.setState({ loading: true });
     const res = await cibTpayURL(fileKey)
@@ -110,7 +106,7 @@ class CIBReports extends Component<{}, State>{
                         <span style={{ marginLeft: 40 }}>{getIscoreReportStatus(pdf.status)}</span>
                         {pdf.status === 'created' && <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.creationDate}</span>{timeToArabicDate(pdf.created?.at, true)}</span>}
                       </div>
-                      {pdf.status === 'created' && <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile(pdf)} />}
+                      {pdf.status === 'created' && <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFileUrl(pdf.key)} />}
                     </div>
                   </Card.Body>
                 </Card>
