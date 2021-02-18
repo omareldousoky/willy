@@ -237,7 +237,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
             {checkResponse?.status === LinkageStatusEnum.Removed && (
               <div className="d-flex flex-column text-center">
                 <p className="font-weight-bolder mx-auto mb-2">
-                  تم إلغاء ربط العميل بتطبيق حالاً سابقاً
+                  تم إلغاء ربط العميل بتطبيق حالاً سابقاً على رقم
                 </p>
                 <p className="font-weight-bolder mx-auto">
                   {checkResponse?.phoneNumber}
