@@ -191,7 +191,7 @@ const LoanContract = (props) => {
 								متناهي الصغر ..</div>
                     <div>
                       وقد تقدم الطرف الثاني صاحب نشاط {props.data.customer.businessSector} - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
-                    {props.branchDetails.name} - {props.data.customer.governorate} الكائن
+                    {props.branchDetails.name} الكائن
                     {props.branchDetails.address} لحاجته للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال
