@@ -267,6 +267,7 @@ export interface UnpaidInstallmentsByOfficerRequest
 export enum LinkageStatusEnum {
   Pending = "pending",
   Linked = "linked",
+  Removed = "removed",
 }
 
 export interface CheckLinkageResponse {

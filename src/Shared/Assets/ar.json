@@ -908,5 +908,7 @@
 		"linkUser": "ربط العميل",
 		"userLinkedSuccessfully": "تم ربط العميل بتطبيق حالاً بنجاح",
 		"invalidMobilePhoneNumber": "رقم المحمول غير صحيح",
-		"unlinkUser": "إلغاء الربط"
+		"unlinkUser": "إلغاء الربط",
+		"userUnlinkedSuccessfully": "تم إلغاء ربط العميل بتطبيق حالاً بنجاح"
+
 }

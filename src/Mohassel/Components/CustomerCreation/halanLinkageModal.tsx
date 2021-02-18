@@ -22,6 +22,7 @@ import { getErrorMessage } from "../../../Shared/Services/utils";
 import {
   checkLinkage,
   confirmLinkage,
+  removeLinkage,
 } from "../../Services/APIs/Leads/halanLinkage";
 import {
   CheckLinkageResponse,
@@ -41,7 +42,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
   const [phoneNumber, setPhoneNumber] = useState<string>();
 
   const [phoneNumberError, setPhoneNumberError] = useState<string>();
-  const [submissionError, setSubmissionError] = useState<string>();
+  const [generalError, setGeneralError] = useState<string>();
 
   const { customer, hideModal, show } = props;
 
@@ -86,9 +87,9 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
     }
   };
 
-  const handleSubmit = async (e: SyntheticEvent) => {
+  const handleConfirmLinkageSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    if (submissionError) setSubmissionError(undefined);
+    if (generalError) setGeneralError(undefined);
     const res = await confirmLinkage({
       customerId: customer?._id || "",
       phoneNumber: checkResponse?.phoneNumber || "",
@@ -98,7 +99,20 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
       hideModal();
       Swal.fire("success", local.userLinkedSuccessfully);
     } else {
-      setSubmissionError(
+      setGeneralError(
+        getErrorMessage((res.error as Record<string, string>).error)
+      );
+      return;
+    }
+  };
+
+  const removeHalanUserLinkage = async () => {
+    const res = await removeLinkage(customer?._id || "");
+    if (res.status === "success") {
+      hideModal();
+      Swal.fire("success", local.userUnlinkedSuccessfully);
+    } else {
+      setGeneralError(
         getErrorMessage((res.error as Record<string, string>).error)
       );
       return;
@@ -134,7 +148,10 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
           </Card>
           <Col>
             {checkResponse?.status === LinkageStatusEnum.Pending && (
-              <Form onSubmit={handleSubmit} className="d-flex flex-column">
+              <Form
+                onSubmit={handleConfirmLinkageSubmit}
+                className="d-flex flex-column"
+              >
                 <Row>
                   <Col sm={6}>
                     <Form.Group controlId="phoneNumber" className="text-right">
@@ -196,7 +213,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
                 >
                   {local.linkUser}
                 </Button>
-                <span className="text-danger mx-auto">{submissionError}</span>
+                <span className="text-danger mx-auto">{generalError}</span>
               </Form>
             )}
             {checkResponse?.status === LinkageStatusEnum.Linked && (
@@ -207,9 +224,24 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
                 <p className="font-weight-bolder mx-auto">
                   {checkResponse?.phoneNumber}
                 </p>
-                <Button variant="dark" className="w-25 mx-auto my-3 py-3">
+                <Button
+                  variant="dark"
+                  className="w-25 mx-auto my-3 py-3"
+                  onClick={removeHalanUserLinkage}
+                >
                   {local.unlinkUser}
                 </Button>
+                <span className="text-danger mx-auto">{generalError}</span>
+              </div>
+            )}
+            {checkResponse?.status === LinkageStatusEnum.Removed && (
+              <div className="d-flex flex-column text-center">
+                <p className="font-weight-bolder mx-auto mb-2">
+                  تم إلغاء ربط العميل بتطبيق حالاً سابقاً
+                </p>
+                <p className="font-weight-bolder mx-auto">
+                  {checkResponse?.phoneNumber}
+                </p>
               </div>
             )}
           </Col>
