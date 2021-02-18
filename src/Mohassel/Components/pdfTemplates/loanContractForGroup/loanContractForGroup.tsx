@@ -132,7 +132,7 @@ const LoanContractForGroup = (props) => {
 								متناهي الصغر ..</div>
                     <div>
                       وقد تقدم افراد الطرف الثاني بطلب للحصول علي قرض من فرع
-                    {props.branchDetails.name} - {props.data.group.individualsInGroup[0].customer.governorate} الكائن
+                    {props.branchDetails.name} الكائن
                     {props.branchDetails.address} لحاجتهم للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال
