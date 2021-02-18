@@ -17,6 +17,7 @@ import {
   ApiResponse,
   CustomersArrearsRequest,
   InstallmentsDuePerOfficerCustomerCardRequest,
+  LeakedCustomersReportRequest,
   OfficersPercentPaymentRequest,
   OperationsReportRequest,
   PaidArrearsRequest,
@@ -125,7 +126,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.LeakedCustomers,
           local: "تقرير العملاء المتسربون",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "loanOfficers"],
           permission: "churnedCustomers",
         },
         {
@@ -304,7 +305,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.DueInstallments);
   }
   async fetchLeakedCustomers(values) {
-    const res = await fetchLeakedCustomersReport(this.reportRequest(values));
+    const { loanOfficerIds } = values;
+    const res = await fetchLeakedCustomersReport({
+      ...this.reportRequest(values),
+      loanOfficerIds,
+    } as LeakedCustomersReportRequest);
     this.handleFetchReport(res, Reports.LeakedCustomers);
   }
 
