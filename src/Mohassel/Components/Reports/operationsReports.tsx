@@ -17,6 +17,7 @@ import {
   ApiResponse,
   CustomersArrearsRequest,
   InstallmentsDuePerOfficerCustomerCardRequest,
+  LeakedCustomersReportRequest,
   OfficersPercentPaymentRequest,
   OperationsReportRequest,
   PaidArrearsRequest,
@@ -37,6 +38,8 @@ import { fetchCustomersArrearsReport } from "../../Services/APIs/Reports/custome
 import { CustomersArrears } from "../pdfTemplates/customersArrears/customersArrears";
 import { fetchPaidArrearsReport } from "../../Services/APIs/Reports/paidArrears";
 import { PaidArrears } from "../pdfTemplates/paidArrears/paidArrears";
+import { fetchMonthComparisonReport } from "../../Services/APIs/Reports/monthComparison";
+import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
 import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
@@ -71,6 +74,7 @@ enum Reports {
   LeakedCustomers = "leakedCustomers",
   PaidArrears = "paidArrears",
   CustomersArrears = "customersArrears",
+  MonthComparison = "monthComparison",
   ActiveWalletIndividual = "activeWalletIndividual",
   ActiveWalletGroup = "activeWalletGroup",
 }
@@ -127,7 +131,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.LeakedCustomers,
           local: "تقرير العملاء المتسربون",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "loanOfficers"],
           permission: "churnedCustomers",
         },
         {
@@ -141,6 +145,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local: "تقرير ما تم تحصيله من المتأخرات",
           inputs: ["dateFromTo", "branches", "loanOfficers"],
           permission: "paidArrears",
+        },
+        {
+          key: Reports.MonthComparison,
+          local:
+            "مقارنه تقرير ملخص الاقساط المستحقه (تقرير السداد الجزئي ) بالشهر السابق",
+          inputs: ["monthComparisonDateFromTo", "branches"],
+          permission: "monthComparison",
         },
         {
           key: Reports.ActiveWalletIndividual,
@@ -200,6 +211,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchCustomersArrears(values);
       case Reports.PaidArrears:
         return this.fetchPaidArrears(values);
+      case Reports.MonthComparison:
+        return this.fetchMonthComparison(values);
       case Reports.ActiveWalletIndividual:
         return this.fetchActiveWalletIndividual(values)
       default:
@@ -311,7 +324,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.DueInstallments);
   }
   async fetchLeakedCustomers(values) {
-    const res = await fetchLeakedCustomersReport(this.reportRequest(values));
+    const { loanOfficerIds } = values;
+    const res = await fetchLeakedCustomersReport({
+      ...this.reportRequest(values),
+      loanOfficerIds,
+    } as LeakedCustomersReportRequest);
     this.handleFetchReport(res, Reports.LeakedCustomers);
   }
 
@@ -335,6 +352,19 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     } as CustomersArrearsRequest);
     this.handleFetchReport(res, Reports.CustomersArrears);
   }
+
+  async fetchMonthComparison(values) {
+    // get timestamp in UTC
+    const res = await fetchMonthComparisonReport({
+      startDate: new Date(new Date(values.fromDate).toUTCString()).valueOf(),
+      endDate: new Date(new Date(values.toDate).toUTCString())
+        .setUTCHours(23, 59, 59, 999)
+        .valueOf(),
+      branches: values.branches,
+    });
+    this.handleFetchReport(res, Reports.MonthComparison);
+  }
+
   async fetchActiveWalletIndividual(values) {
     const { date, branches, loanOfficers } = values;
     const res = await fetchActiveWalletIndividualReport({
@@ -486,6 +516,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         )}
         {this.state.print === Reports.PaidArrears && this.state.data && (
           <PaidArrears
+            data={this.state.data}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+          />
+        )}
+        {this.state.print === Reports.MonthComparison && this.state.data && (
+          <MonthComparison
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
