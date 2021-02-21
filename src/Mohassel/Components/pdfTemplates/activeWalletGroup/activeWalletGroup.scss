@@ -1,5 +1,5 @@
 @media screen, print {
-    .activeWalletIndividual {
+    .activeWalletGroup {
       font-size: 10px;
       font-weight: bold;
       text-align: right;
@@ -79,7 +79,7 @@
     }
   }
   @media screen {
-    .activeWalletIndividual {
+    .activeWalletGroup {
         max-width: 700px;
         display: none;
       }

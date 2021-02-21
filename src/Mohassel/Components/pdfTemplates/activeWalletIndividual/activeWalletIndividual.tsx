@@ -2,11 +2,7 @@ import React from 'react'
 import './activeWalletIndividual.scss';
 import Orientation from '../../Common/orientation';
 import store from "../../../../Shared/redux/store";
-import {
-    numbersToArabic,
-    timeToArabicDate,
-    timeToDate,
-} from "../../../../Shared/Services/utils";
+
 interface ActiveWalletIndividualResponse {
     response: {
         branchName: string;
@@ -37,6 +33,7 @@ interface ActiveWalletIndividualResponse {
                 totalPrincipal: number;
                 data: {
                     phoneNumber: string;
+                    homePhoneNumber: string;
                     workArea: string;
                     address: string;
                     activity: string;
@@ -110,10 +107,10 @@ const ActiveWalletIndividual = (props: Props) => {
                                                                         <th colSpan={3}>الرصيد</th>
                                                                         <th colSpan={2}></th>
                                                                         <th colSpan={5}>متأخرات</th>
-                                                                        <th colSpan={7}>بيانات رئيسة المجموعه</th>
+                                                                        <th colSpan={7}>بيانات العميل</th>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th colSpan={5}>المجموعه</th>
+                                                                        <th colSpan={5}>العميل</th>
                                                                         <th colSpan={2}> ت التمويل</th>
                                                                         <th colSpan={2}>قيمة التمويل</th>
                                                                         <th>عدد</th>
@@ -122,8 +119,8 @@ const ActiveWalletIndividual = (props: Props) => {
                                                                         <th>عدد</th>
                                                                         <th colSpan={2}>مبلغ</th>
                                                                         <th colSpan={2}>بداية تاخير</th>
-                                                                        <th>نشاط ر. مجموعه</th>
-                                                                        <th colSpan={3}>عنوان ر. مجموعه</th>
+                                                                        <th>نشاط العميل</th>
+                                                                        <th colSpan={3}>عنوان  عميل</th>
                                                                         <th>منطقة العمل</th>
                                                                         <th colSpan={2}>التليفون</th>
                                                                     </tr>

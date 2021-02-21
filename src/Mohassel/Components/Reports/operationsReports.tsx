@@ -38,7 +38,8 @@ import { CustomersArrears } from "../pdfTemplates/customersArrears/customersArre
 import { fetchPaidArrearsReport } from "../../Services/APIs/Reports/paidArrears";
 import { PaidArrears } from "../pdfTemplates/paidArrears/paidArrears";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
-import { ActiveWalletRequest, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
+import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
+import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
 
 export interface PDF {
   key?: string;
@@ -70,7 +71,8 @@ enum Reports {
   LeakedCustomers = "leakedCustomers",
   PaidArrears = "paidArrears",
   CustomersArrears = "customersArrears",
-  activeWalletIndividual = "activeWalletIndividual",
+  ActiveWalletIndividual = "activeWalletIndividual",
+  ActiveWalletGroup = "activeWalletGroup",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -141,10 +143,16 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           permission: "paidArrears",
         },
         {
-            key: Reports.activeWalletIndividual,
-            local: "المحفظة النشطه للمندوبين - فردى",
-            inputs: ["date", "branches", "loanOfficers"],
-            permission: "individualActiveWallet",
+          key: Reports.ActiveWalletIndividual,
+          local: "المحفظة النشطه للمندوبين - فردى",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "individualActiveWallet",
+        },
+        {
+          key: Reports.ActiveWalletGroup,
+          local: "المحفظة النشطه للمندوبين - جماعى",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "individualActiveWallet",
         },
       ],
       selectedPdf: { permission: "" },
@@ -192,8 +200,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchCustomersArrears(values);
       case Reports.PaidArrears:
         return this.fetchPaidArrears(values);
-      case Reports.activeWalletIndividual:
-        return this.fetchActiveWalletIndividual(values)   
+      case Reports.ActiveWalletIndividual:
+        return this.fetchActiveWalletIndividual(values)
       default:
         return null;
     }
@@ -328,13 +336,22 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.CustomersArrears);
   }
   async fetchActiveWalletIndividual(values) {
-    const {date, branches, loanOfficers} = values;
+    const { date, branches, loanOfficers } = values;
     const res = await fetchActiveWalletIndividualReport({
       date,
       branches,
       loanOfficerIds: loanOfficers
-    }as ActiveWalletRequest)
-    this.handleFetchReport(res, Reports.activeWalletIndividual)
+    } as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.ActiveWalletIndividual)
+  }
+  async fetchActiveWalletGroup(values) {
+    const { date, branches, loanOfficers } = values;
+    const res = await fetchActiveWalletGroupReport({
+      date,
+      branches,
+      loanOfficerIds: loanOfficers
+    } as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
   render() {
     return (
@@ -475,10 +492,18 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           />
         )}
         {
-          this.state.print === Reports.activeWalletIndividual && this.state.data && (
-            <ActiveWalletIndividual 
-            date = {this.state.date}
-            data = {this.state.data}
+          this.state.print === Reports.ActiveWalletIndividual && this.state.data && (
+            <ActiveWalletIndividual
+              date={this.state.date}
+              data={this.state.data}
+            />
+          )
+        }
+        {
+          this.state.print === Reports.ActiveWalletGroup && this.state.data && (
+            <ActiveWalletGroup
+              date={this.state.date}
+              data={this.state.data}
             />
           )
         }
