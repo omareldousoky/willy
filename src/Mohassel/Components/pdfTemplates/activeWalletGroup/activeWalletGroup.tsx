@@ -93,8 +93,8 @@ const ActiveWalletGroup = (props: Props) => {
 
                                 <table
                                     className="report-container"
-                                    cellPadding="1"
-                                    cellSpacing="1"
+                                    cellPadding="2"
+                                    cellSpacing="2"
                                 >
                                     {branch.officers.map((officer, officerIndex) => {
                                         return (
@@ -109,12 +109,12 @@ const ActiveWalletGroup = (props: Props) => {
                                                                         <React.Fragment key={groupIndex}>
                                                                             <table
                                                                                 className="report-container"
-                                                                                cellPadding="1"
-                                                                                cellSpacing="1"
+                                                                                cellPadding="2"
+                                                                                cellSpacing="2"
                                                                             >
                                                                                 <thead>
-                                                                                    <tr>
-                                                                                        <th colSpan={5}>المجموعة</th>
+                                                                                    <tr style={{margin: "0 10px"}}>
+                                                                                        <th colSpan={3}>المجموعة</th>
                                                                                         <th colSpan={2}>ت التمويل</th>
                                                                                         <th colSpan={3}>قيمة التمويل</th>
                                                                                         <th colSpan={3}>الرصيد</th>
@@ -123,43 +123,54 @@ const ActiveWalletGroup = (props: Props) => {
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    <td colSpan={5}>{group.leaderName}</td>
-                                                                                    <td colSpan={2}>{group.issueDate}</td>
-                                                                                    <td>{group.installmentsCount}</td>
-                                                                                    <td colSpan={2}>{group.principal}</td>
-                                                                                    <td>{group.creditCount}</td>
-                                                                                    <td>{group.creditAmount}</td>
-                                                                                    <td>{group.latestPaymentDate}</td>
-                                                                                    <td>{group.lateCount}</td>
-                                                                                    <td>{group.lateAmount}</td>
-                                                                                    <td>{group.lateDate}</td>
+                                                                                    <tr style={{margin: "0 10px"}}>
+                                                                                    <td className={'group-data'} colSpan={3}>{group.leaderName || "--"}</td>
+                                                                                    <td className={'group-data'} colSpan={2}>{group.issueDate || "--"}</td>
+                                                                                    <td className={'group-data'}>{group.installmentsCount || "--"}</td>
+                                                                                    <td className={'group-data'} colSpan={2}>{group.principal || "--"}</td>
+                                                                                    <td className={'group-data'}>{group.creditCount || "--"}</td>
+                                                                                    <td className={'group-data'} colSpan={2}>{group.creditAmount || "--"}</td>
+                                                                                    <td className={'group-data'} colSpan={2}>{group.latestPaymentDate || "--"}</td>
+                                                                                    <td className={'group-data'}>{group.lateCount || "--"}</td>
+                                                                                    <td className={'group-data'} colSpan={2}>{group.lateAmount || "--"}</td>
+                                                                                    <td className={'group-data'} colSpan={2}>{group.lateDate || "--"}</td>
+                                                                                    </tr>
                                                                                 </tbody>
-                                                                            </table>
-                                                                            <tbody>
-                                                                                {
-                                                                                    group.members.map((member, memberIndex) => {
-                                                                                        return (
-                                                                                            <React.Fragment key={memberIndex}>
-                                                                                                <tr>
-                                                                                                    <td><input type={'checkbox'} checked = {( member.type === 'الرئيس') as boolean} /></td>
-                                                                                                    <td colSpan={1}>{member.customerCode}</td>
-                                                                                                    <td colSpan={3}>{member.customerName}</td>
-                                                                                                    <td colSpan={2}>{member.businessActivity}</td>
-                                                                                                    <td colSpan={2}>{member.principal}</td>
-                                                                                                    <td colSpan={3}>{member.address}</td>
-                                                                                                    <td>{member.businessSector}</td>
-                                                                                                    <td colSpan={3}>{`${member.phoneNumber} - ${member.homePhoneNumber}`}</td>
-                                                                                                </tr>
-                                                                                                <tr><th>تعديل:</th></tr>
-
-                                                                                            </React.Fragment>
-                                                                                        )
-                                                                                    }) // end of memberMap
-                                                                                }
                                                                                 <tr style={{ margin: "0 10px" }}>
                                                                                     <th colSpan={100} className="horizontal-line"></th>
                                                                                 </tr>
-                                                                            </tbody>
+                                                                            </table>
+                                                                            <table
+                                                                                className="report-container"
+                                                                                cellPadding="2"
+                                                                                cellSpacing="2"
+                                                                            >
+                                                                                <tbody>
+                                                                                    {
+                                                                                        group.members.map((member, memberIndex) => {
+                                                                                            return (
+                                                                                                <React.Fragment key={memberIndex}>
+                                                                                                    <tr style={{margin: "0 10px"}}>
+                                                                                                        <td><input type={'checkbox'} checked={(member.type === 'الرئيس') as boolean} /></td>
+                                                                                                        <td colSpan={1}>{member?.customerCode || "--"}</td>
+                                                                                                        <td colSpan={2}>{member?.customerName || "--"}</td>
+                                                                                                        <td colSpan={2}>{member?.businessActivity || "--"}</td>
+                                                                                                        <td colSpan={2}>{member?.principal || "--"}</td>
+                                                                                                        <td colSpan={3}>{member?.address || "--"}</td>
+                                                                                                        <td>{member.businessSector || "--"}</td>
+                                                                                                        <td colSpan={3}>{`${member.phoneNumber || ""} - ${member.homePhoneNumber || ""}`}</td>
+                                                                                                    </tr>
+                                                                                                    <tr style={{margin: "0 10px"}}><th>تعديل:</th></tr>
+
+                                                                                                </React.Fragment>
+                                                                                            )
+                                                                                        }) // end of memberMap
+                                                                                    }
+                                                                                </tbody>
+                                                                                <tr style={{ margin: "0 10px" }}>
+                                                                                    <th colSpan={100} className="horizontal-line"></th>
+                                                                                </tr>
+                                                                            </table>
                                                                         </React.Fragment>
 
                                                                     ) // group return 
@@ -167,16 +178,16 @@ const ActiveWalletGroup = (props: Props) => {
                                                                 }
                                                                 <table
                                                                     className="report-container"
-                                                                    cellPadding="1"
-                                                                    cellSpacing="1"
+                                                                    cellPadding="2"
+                                                                    cellSpacing="2"
                                                                 >
                                                                     <thead>
-                                                                        <tr>
+                                                                        <tr style={{margin: "0 10px"}}>
                                                                             <th colSpan={6}>التمويل القائم</th>
                                                                             <th colSpan={4}>الرصيد</th>
                                                                             <th colSpan={4}>المتأخرات</th>
                                                                         </tr>
-                                                                        <tr>
+                                                                        <tr style={{margin: "0 10px"}}>
                                                                             <th colSpan={2}>عدد المجموعات</th>
                                                                             <th colSpan={2}>التمويل</th>
                                                                             <th colSpan={2}>عدد الاعضاء</th>
@@ -187,20 +198,17 @@ const ActiveWalletGroup = (props: Props) => {
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <td colSpan={2}>{area.totalGroups}</td>
-                                                                        <td colSpan={2}>{area.totalPrincipal}</td>
-                                                                        <td colSpan={2}>{area.membersCount}</td>
-                                                                        <td colSpan={2}>{area.creditLoanCount}</td>
-                                                                        <td colSpan={2}>{area.creditLoanPrincipal}</td>
-                                                                        <td colSpan={2}>{area.latePaymentsCount}</td>
-                                                                        <td colSpan={2}>{area.latePaymentsAmount}</td>
-                                                                        <tr style={{ margin: "0 10px" }}>
-                                                                            <th colSpan={100} className="horizontal-line"></th>
-                                                                        </tr>
-                                                                        <tr style={{ margin: "0 10px" }}>
+                                                                        <td colSpan={2}>{area.totalGroups || "--"}</td>
+                                                                        <td colSpan={2}>{area.totalPrincipal || "--"}</td>
+                                                                        <td colSpan={2}>{area.membersCount || "--"}</td>
+                                                                        <td colSpan={2}>{area.creditLoanCount || "--"}</td>
+                                                                        <td colSpan={2}>{area.creditLoanPrincipal || "--"}</td>
+                                                                        <td colSpan={2}>{area.latePaymentsCount || "--"}</td>
+                                                                        <td colSpan={2}>{area.latePaymentsAmount || "--"}</td>
+                                                                    </tbody>
+                                                                    <tr style={{ margin: "0 10px" }}>
                                                                         <th colSpan={100} className="horizontal-line"></th>
                                                                     </tr>
-                                                                    </tbody>
                                                                 </table>
                                                             </React.Fragment>
                                                         )
@@ -209,16 +217,16 @@ const ActiveWalletGroup = (props: Props) => {
                                                 <div className="row-nowrap mt-1 mb-1"><p>إجمالي المندوب</p></div>
                                                 <table
                                                     className="report-container"
-                                                    cellPadding="1"
-                                                    cellSpacing="1"
+                                                    cellPadding="2"
+                                                    cellSpacing="2"
                                                 >
                                                     <thead>
-                                                        <tr>
+                                                        <tr style={{margin: "0 10px"}}>
                                                             <th colSpan={6}>التمويل القائم</th>
                                                             <th colSpan={4}>الرصيد</th>
                                                             <th colSpan={4}>المتأخرات</th>
                                                         </tr>
-                                                        <tr>
+                                                        <tr style={{margin: "0 10px"}}>
                                                             <th colSpan={2}>عدد المجموعات</th>
                                                             <th colSpan={2}>التمويل</th>
                                                             <th colSpan={2}>عدد الاعضاء</th>
@@ -229,17 +237,17 @@ const ActiveWalletGroup = (props: Props) => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <td colSpan={2}>{officer.totalGroups}</td>
-                                                        <td colSpan={2}>{officer.totalPrincipal}</td>
-                                                        <td colSpan={2}>{officer.membersCount}</td>
-                                                        <td colSpan={2}>{officer.creditLoanCount}</td>
-                                                        <td colSpan={2}>{officer.creditLoanPrincipal}</td>
-                                                        <td colSpan={2}>{officer.latePaymentsCount}</td>
-                                                        <td colSpan={2}>{officer.latePaymentsAmount}</td>
-                                                        <tr style={{ margin: "0 10px" }}>
-                                                            <th colSpan={100} className="horizontal-line"></th>
-                                                        </tr>
+                                                        <td colSpan={2}>{officer.totalGroups || "--"}</td>
+                                                        <td colSpan={2}>{officer.totalPrincipal || "--"}</td>
+                                                        <td colSpan={2}>{officer.membersCount || "--"}</td>
+                                                        <td colSpan={2}>{officer.creditLoanCount || "--"}</td>
+                                                        <td colSpan={2}>{officer.creditLoanPrincipal || "--"}</td>
+                                                        <td colSpan={2}>{officer.latePaymentsCount || "--"}</td>
+                                                        <td colSpan={2}>{officer.latePaymentsAmount || "--"}</td>
                                                     </tbody>
+                                                    <tr style={{ margin: "0 10px" }}>
+                                                        <th colSpan={100} className="horizontal-line"></th>
+                                                    </tr>
                                                 </table>
                                             </React.Fragment>
                                         ) // end of officer return
@@ -251,16 +259,16 @@ const ActiveWalletGroup = (props: Props) => {
                                 <div className="row-nowrap mt-1 mb-1"><p>إجمالي المندوبين</p></div>
                                 <table
                                     className="report-container"
-                                    cellPadding="1"
-                                    cellSpacing="1"
+                                    cellPadding="2"
+                                    cellSpacing="2"
                                 >
                                     <thead>
-                                        <tr>
+                                        <tr style={{margin: "0 10px"}}>
                                             <th colSpan={6}>التمويل القائم</th>
                                             <th colSpan={4}>الرصيد</th>
                                             <th colSpan={4}>المتأخرات</th>
                                         </tr>
-                                        <tr>
+                                        <tr style={{margin: "0 10px"}}>
                                             <th colSpan={2}>عدد المجموعات</th>
                                             <th colSpan={2}>التمويل</th>
                                             <th colSpan={2}>عدد الاعضاء</th>
@@ -271,17 +279,17 @@ const ActiveWalletGroup = (props: Props) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <td colSpan={2}>{branch.totalGroups}</td>
-                                        <td colSpan={2}>{branch.totalPrincipal}</td>
-                                        <td colSpan={2}>{branch.membersCount}</td>
-                                        <td colSpan={2}>{branch.creditLoanCount}</td>
-                                        <td colSpan={2}>{branch.creditLoanPrincipal}</td>
-                                        <td colSpan={2}>{branch.latePaymentsCount}</td>
-                                        <td colSpan={2}>{branch.latePaymentsAmount}</td>
-                                        <tr style={{ margin: "0 10px" }}>
-                                            <th colSpan={100} className="horizontal-line"></th>
-                                        </tr>
+                                        <td colSpan={2}>{branch.totalGroups || "--"}</td>
+                                        <td colSpan={2}>{branch.totalPrincipal || "--"}</td>
+                                        <td colSpan={2}>{branch.membersCount || "--"}</td>
+                                        <td colSpan={2}>{branch.creditLoanCount || "--"}</td>
+                                        <td colSpan={2}>{branch.creditLoanPrincipal || "--"}</td>
+                                        <td colSpan={2}>{branch.latePaymentsCount || "--"}</td>
+                                        <td colSpan={2}>{branch.latePaymentsAmount || "--"}</td>
                                     </tbody>
+                                    <tr style={{ margin: "0 10px" }}>
+                                        <th colSpan={100} className="horizontal-line"></th>
+                                    </tr>
                                 </table>
                             </React.Fragment>
                         ) // end of branch return

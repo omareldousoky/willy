@@ -163,7 +163,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           key: Reports.ActiveWalletGroup,
           local: "المحفظة النشطه للمندوبين - جماعى",
           inputs: ["date", "branches", "loanOfficers"],
-          permission: "individualActiveWallet",
+          permission: "groupActiveLoans",
         },
       ],
       selectedPdf: { permission: "" },
@@ -215,6 +215,8 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchMonthComparison(values);
       case Reports.ActiveWalletIndividual:
         return this.fetchActiveWalletIndividual(values)
+      case Reports.ActiveWalletGroup:
+        return this.fetchActiveWalletGroup(values);  
       default:
         return null;
     }

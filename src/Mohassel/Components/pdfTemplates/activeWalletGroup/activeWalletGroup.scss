@@ -59,6 +59,8 @@
       font-weight: bold;
       page-break-inside: avoid;
       text-align: center;
+      line-height: 1.5em;
+      margin: 0 10px;
       white-space: nowrap;
     }
 
@@ -66,11 +68,24 @@
       background-color: #f1ecec;
       -webkit-print-color-adjust: exact;
       border: 0.5px solid black;
+      line-height: 1.5em;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+    & .group-data {
+      background-color: #f1ecec;
+      -webkit-print-color-adjust: exact;
+      border: 0.5px solid black;
+      line-height: 1.5em;
       page-break-inside: avoid;
       text-align: center;
     }
       & .report-container{
         width: 100%;
+      }
+      & input:checked::after {
+        content: '\f14a';
+        color: white;
       }
     & .horizontal-line {
       border-bottom: 1px solid black; 
