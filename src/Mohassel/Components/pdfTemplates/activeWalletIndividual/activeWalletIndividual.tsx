@@ -144,7 +144,7 @@ const ActiveWalletIndividual = (props: Props) => {
                                                                                         <td>{row.activity || '--'}</td>
                                                                                         <td colSpan={3}>{row.address || '--'}</td>
                                                                                         <td>{row.workArea || '--'}</td>
-                                                                                        <td colSpan={2}>{row.phoneNumber || '--'}</td>
+                                                                                        <td colSpan={2}>{`${row.phoneNumber || ''} - ${row.homePhoneNumber || ''}`}</td>
                                                                                     </tr>
                                                                                     <tr><th>تعديل:</th></tr>
                                                                                 </React.Fragment>
