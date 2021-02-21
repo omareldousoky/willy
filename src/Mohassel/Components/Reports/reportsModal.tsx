@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -18,6 +18,8 @@ import DateField from "../Common/FormikFields/dateField";
 import { required } from "../../../Shared/validations";
 import { DateFromToField } from "./Fields/dateFromTo";
 import TextField from "../Common/FormikFields/textField";
+import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
+import { getFullCustomerKey } from "../../../Shared/Services/utils";
 
 interface InitialFormikState {
   fromDate?: string;
@@ -25,7 +27,7 @@ interface InitialFormikState {
   quarterYear?: string;
   branches: Array<Branch>;
   quarterNumber?: string;
-  key?: string;
+  customerKeyword?: string;
   loanOfficers?: Array<string>;
   date?: string;
   loanOfficerIds?: Array<string>;
@@ -46,8 +48,18 @@ interface Props {
 }
 
 const ReportsModal = (props: Props) => {
+  const [customerDropDownValue, setCustomerDropDownValue] = useState(
+    props.pdf.inputs?.includes("customerKey") ? "customerKey" : undefined
+  );
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id) : [];
+  const getCustomerKey = (key?: string): string | undefined => {
+    console.log(key);
+    if (!customerDropDownValue || key === undefined) return undefined;
+    return customerDropDownValue === "customerKey"
+      ? key
+      : getFullCustomerKey(key)?.toString();
+  };
   function handleSubmit(values) {
     props.submit({
       ...values,
@@ -55,6 +67,7 @@ const ReportsModal = (props: Props) => {
       loanOfficers: getIds(values.representatives),
       loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
+      key: getCustomerKey(values.customerKeyword),
     });
   }
   function getInitialValues() {
@@ -67,7 +80,7 @@ const ReportsModal = (props: Props) => {
         case "branches":
           initValues.branches = [];
         case "customerKey":
-          initValues.key = "";
+          initValues.customerKeyword = "";
         case "quarterYear":
           initValues.quarterYear = "";
         case "quarterNumber":
@@ -91,6 +104,29 @@ const ReportsModal = (props: Props) => {
     });
     return initValues;
   }
+
+  const getMaxToMonthComparison = (from?: string): string => {
+    if (!from) return "0";
+    const fromDate = new Date(from);
+    // last day of month extracted from `fromDate`
+    const lastDayOfMonth = new Date(
+      fromDate.getFullYear(),
+      fromDate.getMonth() + 1,
+      0
+    ).getDate();
+    const month =
+      fromDate.getMonth() > 8
+        ? fromDate.getMonth() + 1
+        : `0${fromDate.getMonth() + 1}`;
+    return `${fromDate.getFullYear()}-${month}-${lastDayOfMonth}`;
+  };
+  // TODO: refactor out
+  const arDropDownValue = {
+    customerKey: local.customerCode,
+    customerShortenedCode: local.customerShortenedCode,
+    default: "",
+  };
+
   return (
     <Modal
       size="lg"
@@ -170,21 +206,46 @@ const ReportsModal = (props: Props) => {
                     }
                     if (input === "customerKey") {
                       return (
-                        <Field
-                          name="key"
-                          id="key"
-                          displayName={local.customerCode}
-                          value={formikProps.values.key}
-                          onChange={formikProps.handleChange}
-                          isInvalid={
-                            !!(
-                              formikProps.errors.key && formikProps.touched.key
-                            )
-                          }
-                          component={TextField}
-                          key={input}
-                          validate={required}
-                        />
+                        <Col sm={12} key={input} style={{ marginTop: 10 }}>
+                          <InputGroup style={{ direction: "ltr" }}>
+                            <Form.Control
+                              type="text"
+                              name="customerKeyword"
+                              data-qc="customerKeyword"
+                              onChange={formikProps.handleChange}
+                              style={{
+                                direction: "rtl",
+                                borderRight: 0,
+                                padding: 22,
+                              }}
+                              value={formikProps.values.customerKeyword}
+                            />
+                            <DropdownButton
+                              as={InputGroup.Append}
+                              variant="outline-secondary"
+                              title={
+                                arDropDownValue[customerDropDownValue || ""]
+                              }
+                              id="input-group-dropdown-2"
+                              data-qc="input-group-dropdown-customer"
+                            >
+                              {["customerKey", "customerShortenedCode"].map(
+                                (key) => (
+                                  <Dropdown.Item
+                                    key={key}
+                                    data-qc={key}
+                                    onClick={() => {
+                                      setCustomerDropDownValue(key);
+                                      formikProps.setFieldValue(key, "");
+                                    }}
+                                  >
+                                    {arDropDownValue[key]}
+                                  </Dropdown.Item>
+                                )
+                              )}
+                            </DropdownButton>
+                          </InputGroup>
+                        </Col>
                       );
                     }
                     if (input === "quarterYear") {
@@ -215,7 +276,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.quarterYear}
                                 isInvalid={Boolean(
                                   formikProps.errors.quarterYear &&
-                                  formikProps.touched.quarterYear
+                                    formikProps.touched.quarterYear
                                 )}
                                 onBlur={formikProps.handleBlur}
                                 onChange={(e) => {
@@ -428,6 +489,110 @@ const ReportsModal = (props: Props) => {
                             disabled: !formikProps.values.creationDateFrom,
                           }}
                         />
+											);
+                    }
+                    if (input === "applicationKey") {
+                      return (
+                        <Col sm={12} key={input} style={{ marginTop: 10 }}>
+                          <Form.Group controlId="loanApplicationKey">
+                            <div className="dropdown-container">
+                              <p
+                                className="dropdown-label"
+                                style={{ width: 150, whiteSpace: "nowrap" }}
+                              >
+                                {local.applicationCode}
+                              </p>
+                              <Form.Control
+                                className="dropdown-select"
+                                name="loanApplicationKey"
+                                data-qc="loanApplicationKey"
+                                value={formikProps.values.loanApplicationKey}
+                                isInvalid={Boolean(
+                                  formikProps.errors.loanApplicationKey &&
+                                    formikProps.touched.loanApplicationKey
+                                )}
+                                onChange={formikProps.handleChange}
+                              />
+                            </div>
+                            <span style={{ color: "red" }}>
+                              {Boolean(
+                                formikProps.errors.loanApplicationKey &&
+                                  formikProps.touched.loanApplicationKey
+                              )
+                                ? formikProps.errors.loanApplicationKey
+                                : ""}
+                            </span>
+                          </Form.Group>
+                        </Col>
+                      );
+                    }
+                    if (input === "monthComparisonDateFromTo") {
+                      return (
+                        <Col sm={12} key={input}>
+                          <Form.Group controlId="monthComparisonFromToDate">
+                            <div
+                              className="dropdown-container"
+                              style={{ flex: 1, alignItems: "center" }}
+                            >
+                              <p
+                                className="dropdown-label"
+                                style={{
+                                  alignSelf: "normal",
+                                  marginLeft: 20,
+                                  width: 300,
+                                  textAlign: "center",
+                                }}
+                              >
+                                {local.date}
+                              </p>
+                              <span>{local.from}</span>
+                              <Form.Control
+                                style={{ marginLeft: 20, border: "none" }}
+                                type="date"
+                                name="fromDate"
+                                data-qc="fromDate"
+                                value={formikProps.values.fromDate}
+                                isInvalid={Boolean(
+                                  formikProps.errors.fromDate &&
+                                    formikProps.touched.fromDate
+                                )}
+                                onChange={(e) => {
+                                  formikProps.setFieldValue(
+                                    "fromDate",
+                                    e.currentTarget.value
+                                  );
+                                  if (e.currentTarget.value === "")
+                                    formikProps.setFieldValue("toDate", "");
+                                }}
+                                min="2021-02-01"
+                                required
+                              />
+                              <span>{local.to}</span>
+                              <Form.Control
+                                style={{ marginRight: 20, border: "none" }}
+                                type="date"
+                                name="toDate"
+                                data-qc="toDate"
+                                value={formikProps.values.toDate}
+                                min={formikProps.values.fromDate}
+                                max={getMaxToMonthComparison(
+                                  formikProps.values.fromDate
+                                )}
+                                onChange={formikProps.handleChange}
+                                isInvalid={Boolean(
+                                  formikProps.errors.toDate &&
+                                    formikProps.touched.toDate
+                                )}
+                                disabled={!Boolean(formikProps.values.fromDate)}
+                                required
+                              />
+                            </div>
+                            <span className="text-danger">
+                              {formikProps.errors.fromDate ||
+                                formikProps.errors.toDate}
+                            </span>
+                          </Form.Group>
+                        </Col>
                       );
                     }
                   })}
@@ -448,7 +613,7 @@ const ReportsModal = (props: Props) => {
                     "customerDetails",
                     "loanDetails",
                     "cibPaymentReport",
-                    "customerTransactionReport"
+                    "customerTransactionReport",
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button

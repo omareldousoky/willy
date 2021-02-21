@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Loader } from '../../../Shared/Components/Loader';
 import local from '../../../Shared/Assets/ar.json';
+import errorMessages from '../../../Shared/Assets/errorMessages.json';
 import Button from 'react-bootstrap/Button';
 import { cibPaymentReport, getTpayFiles } from '../../Services/APIs/Reports/cibPaymentReport';
 import { downloadFile, getIscoreReportStatus, timeToArabicDate } from '../../../Shared/Services/utils';
 import Swal from 'sweetalert2';
 import Can from '../../config/Can';
 import ReportsModal from './reportsModal';
+import { cibTpayURL } from '../../Services/APIs/Reports/cibURL';
 
 interface TPAYFile {
   created: {
@@ -72,8 +74,15 @@ class CIBReports extends Component<{}, State>{
       Swal.fire("", local.fileQueuedError, "error");
     }
   }
-  getFile(fileRequest) {
-    downloadFile(fileRequest.url)
+  async getFileUrl(fileKey: string) {
+    this.setState({ loading: true });
+    const res = await cibTpayURL(fileKey)
+    if (res.status === "success") {
+      this.setState({ loading: false });
+      downloadFile(res.body.url)
+    } else {
+      this.setState({ loading: false }, () => Swal.fire("", errorMessages["doc_read_failed"].ar, "error"));
+    }
   }
   render() {
     return (
@@ -97,7 +106,7 @@ class CIBReports extends Component<{}, State>{
                         <span style={{ marginLeft: 40 }}>{getIscoreReportStatus(pdf.status)}</span>
                         {pdf.status === 'created' && <span style={{ marginLeft: 40, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{local.creationDate}</span>{timeToArabicDate(pdf.created?.at, true)}</span>}
                       </div>
-                      {pdf.status === 'created' && <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFile(pdf)} />}
+                      {pdf.status === 'created' && <img style={{ cursor: 'pointer' }} alt="download" data-qc="download" src={require(`../../Assets/green-download.svg`)} onClick={() => this.getFileUrl(pdf.key)} />}
                     </div>
                   </Card.Body>
                 </Card>

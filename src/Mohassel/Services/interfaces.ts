@@ -5,8 +5,8 @@ export interface ApiResponse<T> {
 }
 
 export interface OperationsReportRequest {
-  startDate: string;
-  endDate: string;
+  startDate: string | number;
+  endDate: string | number;
   branches: string[];
 }
 
@@ -128,11 +128,6 @@ export interface DueInstallmentsResponse {
   totalGheerMosadadValue?: number;
 }
 
-export interface LeakedCustomersReportRequest {
-  startDate: string;
-  endDate: string;
-  branches: string[];
-}
 export interface LeakedCustomersPerBranch {
   branchName: string;
   data: Array<LeakedCustomer>;
@@ -198,6 +193,7 @@ export interface LeakedCustomersReportRequest {
   startDate: string;
   endDate: string;
   branches: string[];
+  loanOfficerIds?: string[];
 }
 export interface LeakedCustomersPerBranch {
   branchName: string;
@@ -300,4 +296,31 @@ export interface CustomerApplicationTransactionsResponse {
     name: string;
     code: string;
   };
+}
+
+interface MonthComparisonReportCommon {
+  currentDueLoanCount?: number;
+  currentDueLoanAmount?: number;
+  currentPaidLoanCount?: number;
+  currentPaidLoanAmount?: number;
+  currentPaymentPercentage?: number;
+  previousDueLoanCount?: number;
+  previousDueLoanAmount?: number;
+  previousPaidLoanCount?: number;
+  previousPaidLoanAmount?: number;
+  previousPaymentPercentage?: number;
+  diffDueLoanCount?: number;
+  diffDueLoanAmount?: number;
+  diffPaidLoanCount?: number;
+  diffPaidLoanAmount?: number;
+  diffPaymentPercentage?: number;
+}
+
+interface MonthComparisonReportSingleResponse
+  extends MonthComparisonReportCommon {
+  branchName?: string;
+}
+export interface MonthComparisonReportResponse
+  extends MonthComparisonReportCommon {
+  response?: MonthComparisonReportSingleResponse[];
 }
