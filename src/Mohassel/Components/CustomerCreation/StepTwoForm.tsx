@@ -206,27 +206,27 @@ export const StepTwoForm = (props: any) => {
                 <Col sm={6}>
                     <Form.Group controlId="ruralUrban">
                         <Form.Label className="customer-form-label">{local.ruralUrban}</Form.Label>
-                        <div style={{ textAlign: 'right' }}>
+                        <div>
                                 <Form.Check
-                                    style={{ display: 'inline-block' }}
+																		className="d-inline-block pr-3"
                                     type="radio"
                                     data-qc="rural"
                                     checked={values.ruralUrban === "rural"}
                                     value="rural"
                                     label={local.rural}
                                     name="ruralUrban"
-                                    id="ruralUrban"
+                                    id="rural"
                                     onClick={(e) => setFieldValue("ruralUrban", e.currentTarget.value)}
                                 />
                                 <Form.Check
-                                    style={{ display: 'inline-block' }}
+																		className="d-inline-block"
                                     type="radio"
                                     data-qc="urban"
                                     checked={values.ruralUrban === "urban"}
                                     value="urban"
                                     label={local.urban}
                                     name="ruralUrban"
-                                    id="ruralUrban"
+                                    id="urban"
                                     onClick={(e) => setFieldValue("ruralUrban", e.currentTarget.value)}
                                 />
                         </div>
@@ -495,8 +495,10 @@ export const StepTwoForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Button style={{ float: 'right' }} onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
-            <Button type="submit" data-qc="next">{local.next}</Button>
+						<div className="d-flex justify-content-end">
+							<Button className="mr-3" onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
+							<Button type="submit" data-qc="next">{local.next}</Button>
+						</div>
         </Form >
     )
 }

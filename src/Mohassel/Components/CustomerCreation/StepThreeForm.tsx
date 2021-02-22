@@ -289,8 +289,10 @@ export const StepThreeForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Button style={{ float: 'right' }} onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
-            <Button type="submit" data-qc="submit">{local.submit}</Button>
+						<div className="d-flex justify-content-end">
+							<Button className="mr-3" onClick={() => previousStep(values)} data-qc="previous">{local.previous}</Button>
+							<Button type="submit" data-qc="submit">{local.submit}</Button>
+						</div>
         </Form>
     )
 }

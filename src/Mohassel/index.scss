@@ -120,7 +120,10 @@ code {
 	color: #fff !important;
 }
 
-.checkbox-label,
+.form-check-label {
+	margin: 0;
+}
+
 label {
 	margin-right: 20px;
 }
@@ -400,28 +403,47 @@ label {
 
 .form-check>.form-check-input {
 	appearance: none;
-	vertical-align: sub;
-	font-size: 1.1rem;
+	vertical-align: text-top;
+	font-size: 1rem;
 	cursor: pointer;
-	line-height: 1.1rem;
 	outline: none !important;
+	padding: 0;
+	margin: 0;
 
-	&::after {
+	&[type=checkbox]::after {
 		font-family: 'Font Awesome 5 Free' !important;
 		content: '\f0c8';
 		color: #495057;
 	}
 
-	&:checked::after {
+	&[type=checkbox]:checked::after {
 		content: '\f14a';
 		font-weight: 900;
 		color: #7dc356;
 	}
 
-	&:disabled::after {
+	&[type=checkbox]:disabled::after {
 		cursor: default;
 		color: #ced4da;
 	}
+
+	&[type=radio]::after {
+		font-family: 'Font Awesome 5 Free' !important;
+		content: '\f111';
+		color: #495057;
+	}
+
+	&[type=radio]:checked::after {
+		content: '\f192';
+		font-weight: 900;
+		color: #7dc356;
+	}
+
+	&[type=radio]:disabled::after {
+		cursor: default;
+		color: #ced4da;
+	}
+
 
 }
 
