@@ -837,14 +837,21 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             if (res.body.data && res.body.data.length > 0) {
                 merged.forEach(customer => {
                     if (!guarantor) {
-                        if (customer.applicationIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
+                        if (customer.applicationIds && !customer.loanIds && customer.applicationIds.length >= customer.maxLoansAllowed) {
                             validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
                         }
-                        if (customer.loanIds && customer.loanIds.length >= customer.maxLoansAllowed) {
+                        if (customer.loanIds && !customer.applicationIds && customer.loanIds.length >= customer.maxLoansAllowed) {
                             if (Object.keys(validationObject).includes(customer._id)) {
                                 validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
                             } else {
                                 validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
+                            }
+                        }
+                        if (customer.loanIds && customer.applicationIds && (customer.loanIds.length +  customer.applicationIds.length) >= customer.maxLoansAllowed) {
+                            if (Object.keys(validationObject).includes(customer._id)) {
+                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds, applicationIds: customer.applicationIds } }
+                            } else {
+                                validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds , applicationIds: customer.applicationIds  }
                             }
                         }
                         if (customer.guarantorIds && customer.guarantorIds.length >= 0 && !customer.allowGuarantorLoan) {
@@ -854,33 +861,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                 validationObject[customer._id] = { customerName: customer.customerName, guarantorIds: customer.guarantorIds };
                             }
                         }
-                        if ((customer.totalPrincipals && customer.maxPrincipal && customer.totalPrincipals >= customer.maxPrincipal) || (customer.totalPrincipals && !customer.maxPrincipal && ((this.state.application.beneficiaryType === "individual" && customer.totalPrincipals >= this.state.application.principals.maxIndividualPrincipal) || (this.state.application.beneficiaryType === "group" && customer.totalPrincipals >= ( customer.paidLoans && customer.paidLoans.length > 0 ? this.state.application.principals.maxGroupReturningIndividualPrincipal : this.state.application.principals.maxGroupIndividualPrincipal))))) {
-                            if (Object.keys(validationObject).includes(customer._id)) {
-                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } } }
-                            } else {
-                                validationObject[customer._id] = { customerName: customer.customerName, totalPrincipals: { totalPrincipals: customer.totalPrincipals, maxPrincipal: customer.maxPrincipal } };
-                            }
-                        }
                     }
                     else {
                         if (customer.applicationIds && customer.applicationIds.length > 0 && !customer.allowGuarantorLoan) {
                             validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
                         }
                         if (customer.loanIds && customer.loanIds.length > 0 && !customer.allowGuarantorLoan) {
-                            if (Object.keys(validationObject).includes(customer._id)) {
-                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
-                            } else {
-                                validationObject[customer._id] = { customerName: customer.customerName, loanIds: customer.loanIds }
-                            }
-                        }
-                        if (customer.applicationIds && customer.applicationIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan) {
-                            if (Object.keys(validationObject).includes(customer._id)) {
-                                validationObject[customer._id] = { ...validationObject[customer._id], ...{ applicationIds: customer.applicationIds } }
-                            } else {
-                                validationObject[customer._id] = { customerName: customer.customerName, applicationIds: customer.applicationIds }
-                            }
-                        }
-                        if (customer.loanIds && customer.loanIds.length >= customer.guarantorMaxLoans && customer.allowGuarantorLoan) {
                             if (Object.keys(validationObject).includes(customer._id)) {
                                 validationObject[customer._id] = { ...validationObject[customer._id], ...{ loanIds: customer.loanIds } }
                             } else {
