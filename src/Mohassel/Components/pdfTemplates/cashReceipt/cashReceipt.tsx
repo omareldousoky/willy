@@ -56,7 +56,7 @@ const CashReceipt = (props) => {
               return (
                 <tr key={index}>
                   <td>
-                    <div className="bottomborder"style={index === 4 ? { pageBreakAfter: "always" } : {}}>
+                    <div className="bottomborder" style={index === 4 ? { pageBreakAfter: "always" } : {}}>
                       <div className="headtitle textcenter">ايصال استلام مبلغ نقدى</div>
                       <div>  تحريرا في<span>{' ' + timeToArabicDate(props.data.creationDate, false) + ' '}</span></div>
                       <div style={{ margin: '20px 0px', textAlign: "right" }}>استلمت انا / {individualInGroup.customer.customerName}، مبلغ {`${numbersToArabic(individualInGroup.amount)} جنيه' (${new Tafgeet(individualInGroup.amount, 'EGP').parse()})`} من شركة
@@ -120,6 +120,10 @@ const CashReceipt = (props) => {
           </tr>
         </tfoot>
       </table>
+      {props.remainingTotal > 0 &&
+        <div className={'check-balance-container'}>
+          <h3 className="check-balance">{`توجد مديونية على العميل  يجب تحصيلها أولا بقيمة  ${props.remainingTotal}  جنيه`}</h3></div>
+      }
     </div>
   )
 }
