@@ -223,6 +223,7 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
             {!this.props.hide && <Can I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             {!this.props.hide && <Can I='getOfficersGroups' a ='branch'><Nav.Link onClick={()=>this.props.history.push('/supervisions-levels')}>{local.levelsOfSupervision}</Nav.Link></Can>}
+            {!this.props.hide && <Nav.Link onClick={()=>this.props.history.push('/financial-closing')}>{local.financialClosing}</Nav.Link>}
             </Nav>
           </Navbar.Collapse>
         </Navbar>}
