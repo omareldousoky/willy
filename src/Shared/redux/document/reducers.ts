@@ -4,7 +4,6 @@ import {
     DELETE_DOCUMENT,
     ADD_TO_DOCUMENTS,
     REMOVE_FROM_DOCUMENTS,
-    DocumentsState,
     DocumentState,
     GET_DOCUMENTS,
     INVALID_DOCUMENT,
