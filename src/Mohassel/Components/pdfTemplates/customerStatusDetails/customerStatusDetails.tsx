@@ -274,10 +274,10 @@ const CustomerStatusDetails = (props) => {
                                                             <tr key={index}>
                                                                 <td>{installment.idx}</td>
                                                                 <td>{installment.dateOfPayment? timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false): ''}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.instTotal)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.feesInstallment)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.totalPaid)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.feesPaid)}</td>
+                                                                <td>{numbersToArabic(installment.instTotal)}</td>
+                                                                <td>{numbersToArabic(installment.feesInstallment)}</td>
+                                                                <td>{numbersToArabic(installment.totalPaid)}</td>
+                                                                <td>{numbersToArabic(installment.feesPaid)}</td>
                                                                 <td>{getStatus(installment)}</td>
                                                                 <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>
                                                                 <td>{numbersToArabic(installment.delay)}</td>
