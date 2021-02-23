@@ -90,12 +90,12 @@ export const CRUDList = (props: Props) => {
                     <img alt="addOption" src={require('../../Assets/plus.svg')} />
                 </span>
             </div>
-            <ListGroup style={{ textAlign: 'right', width: '30%', marginBottom: 30, maxHeight: 500, overflow: 'scroll' }}>
+            <ListGroup style={{ textAlign: 'right', width: '40%', marginBottom: 30, maxHeight: 500, overflow: 'scroll' }}>
                 {options
                     .filter(option => option.name.toLocaleLowerCase().includes(filterOptions.toLocaleLowerCase()))
                     .map((option, index) => {
                         return (
-                            <ListGroup.Item key={index} style={{ display: 'flex', alignItems: 'center' }}>
+                            <ListGroup.Item key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
                                 <Form.Group style={{ margin: '0px 0px 0px 20px' }}>
                                     <Form.Control
                                         type="text"
