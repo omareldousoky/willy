@@ -187,7 +187,6 @@ class EarlyPayment extends Component<Props, State> {
                 <option value='employee' data-qc='employee'>{local.employee}</option>
                 <option value='family' data-qc='family'>{local.familyMember}</option>
                 <option value='nonFamily' data-qc='nonFamily'>{local.nonFamilyMember}</option>
-                <option value='insurance' data-qc='insurance'>{local.byInsurance}</option>
               </Form.Control>
               <Form.Control.Feedback type="invalid">
                 {this.props.formikProps.errors.payerType}

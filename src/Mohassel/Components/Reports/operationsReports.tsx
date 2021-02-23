@@ -15,7 +15,13 @@ import UnpaidInstallmentsByOfficer from "../pdfTemplates/unpaidInstallmentsByOff
 import InstallmentsDuePerOfficerCustomerCard from "../pdfTemplates/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard";
 import {
   ApiResponse,
+  CustomersArrearsRequest,
+  InstallmentsDuePerOfficerCustomerCardRequest,
+  LeakedCustomersReportRequest,
+  OfficersPercentPaymentRequest,
   OperationsReportRequest,
+  PaidArrearsRequest,
+  UnpaidInstallmentsByOfficerRequest,
 } from "../../Services/interfaces";
 import {
   fetchOfficersBranchPercentPaymentReport,
@@ -23,9 +29,20 @@ import {
 } from "../../Services/APIs/Reports/officersPercentPayment";
 import OfficersPercentPayment from "../pdfTemplates/officersPercentPayment/officersPercentPayment";
 import OfficerBranchPercentPayment from "../pdfTemplates/officersPercentPayment/officersBranchPercentPayment";
+import LeakedCustomersPDF from "../pdfTemplates/LeakedCustomers/leakedCustomers";
+import { fetchLeakedCustomersReport } from "../../Services/APIs/Reports/leakedCustomers";
 import { fetchDueInstallmentsReport } from "../../Services/APIs/Reports/dueInstallments";
 import DueInstallments from "../pdfTemplates/dueInstallments/dueInstallments";
-import { convertToTimestamp } from "../../../Shared/Services/utils";
+import { getErrorMessage } from "../../../Shared/Services/utils";
+import { fetchCustomersArrearsReport } from "../../Services/APIs/Reports/customersArrears";
+import { CustomersArrears } from "../pdfTemplates/customersArrears/customersArrears";
+import { fetchPaidArrearsReport } from "../../Services/APIs/Reports/paidArrears";
+import { PaidArrears } from "../pdfTemplates/paidArrears/paidArrears";
+import { fetchMonthComparisonReport } from "../../Services/APIs/Reports/monthComparison";
+import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
+import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
+import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
+import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
 
 export interface PDF {
   key?: string;
@@ -43,6 +60,7 @@ interface OperationsReportsState {
   loading: boolean;
   fromDate: string;
   toDate: string;
+  date: string;
 }
 
 enum Reports {
@@ -53,6 +71,12 @@ enum Reports {
   InstallmentsDuePerOfficerCustomerCard = "installmentsDuePerOfficerCustomerCard",
   UnpaidInstallmentsPerArea = "unpaidInstallmentsPerArea",
   DueInstallments = "dueInstallments",
+  LeakedCustomers = "leakedCustomers",
+  PaidArrears = "paidArrears",
+  CustomersArrears = "customersArrears",
+  MonthComparison = "monthComparison",
+  ActiveWalletIndividual = "activeWalletIndividual",
+  ActiveWalletGroup = "activeWalletGroup",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -71,13 +95,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.UnpaidInstallmentsByOfficer,
           local: "الاقساط المستحقة بالمندوب",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives"],
           permission: "unpaidInstallmentsByOfficer",
         },
         {
           key: Reports.InstallmentsDuePerOfficerCustomerCard,
           local: "الاقساط المستحقة للمندوب كارت العميل",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives"],
           permission: "installmentsDuePerOfficerCustomerCard",
         },
         {
@@ -89,7 +113,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         {
           key: Reports.OfficersPercentPayment,
           local: "نسبة سداد المندوبين 1",
-          inputs: ["dateFromTo", "branches"],
+          inputs: ["dateFromTo", "branches", "representatives", "gracePeriod"],
           permission: "officerPercentPayment",
         },
         {
@@ -100,16 +124,54 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         },
         {
           key: Reports.DueInstallments,
-          local: "ملخص الأقساط المستحقة (تقرير السداد الجزئي) ",
+          local: "ملخص الأقساط المستحقة (تقرير السداد الجزئي)",
           inputs: ["dateFromTo", "branches"],
           permission: "dueInstallments",
         },
+        {
+          key: Reports.LeakedCustomers,
+          local: "تقرير العملاء المتسربون",
+          inputs: ["dateFromTo", "branches", "loanOfficers"],
+          permission: "churnedCustomers",
+        },
+        {
+          key: Reports.CustomersArrears,
+          local: "متأخرات المندوب لم يستحق أو مسدد جزئي",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "customersArrears",
+        },
+        {
+          key: Reports.PaidArrears,
+          local: "تقرير ما تم تحصيله من المتأخرات",
+          inputs: ["dateFromTo", "branches", "loanOfficers"],
+          permission: "paidArrears",
+        },
+        {
+          key: Reports.MonthComparison,
+          local:
+            "مقارنه تقرير ملخص الاقساط المستحقه (تقرير السداد الجزئي ) بالشهر السابق",
+          inputs: ["monthComparisonDateFromTo", "branches"],
+          permission: "monthComparison",
+        },
+        {
+          key: Reports.ActiveWalletIndividual,
+          local: "المحفظة النشطه للمندوبين - فردى",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "individualActiveWallet",
+        },
+        {
+          key: Reports.ActiveWalletGroup,
+          local: "المحفظة النشطه للمندوبين - جماعى",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "groupActiveLoans",
+        },
       ],
       selectedPdf: { permission: "" },
-      data: {},
+      data: undefined,
       loading: false,
       fromDate: "",
       toDate: "",
+      date: "",
     };
   }
   handlePrint(selectedPdf: PDF) {
@@ -117,16 +179,17 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.setState({
       showModal: true,
       selectedPdf: selectedPdf,
-      data: {},
+      data: undefined,
       fromDate: "",
       toDate: "",
+      date: "",
     });
   }
   handleSubmit(values) {
     const branches = values.branches.map((branch) => branch._id);
     values.branches = branches.includes("") ? [] : branches;
-    const { fromDate, toDate } = values;
-    this.setState({ loading: true, showModal: false, fromDate, toDate });
+    const { fromDate, toDate, date } = values;
+    this.setState({ loading: true, showModal: false, fromDate, toDate, date });
     switch (this.state.selectedPdf.key) {
       case Reports.LoansBriefing2:
         return this.fetchLoansBriefing(values);
@@ -142,6 +205,18 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchOfficersBranchPercentPayment(values);
       case Reports.DueInstallments:
         return this.fetchDueInstallments(values);
+      case Reports.LeakedCustomers:
+        return this.fetchLeakedCustomers(values);
+      case Reports.CustomersArrears:
+        return this.fetchCustomersArrears(values);
+      case Reports.PaidArrears:
+        return this.fetchPaidArrears(values);
+      case Reports.MonthComparison:
+        return this.fetchMonthComparison(values);
+      case Reports.ActiveWalletIndividual:
+        return this.fetchActiveWalletIndividual(values)
+      case Reports.ActiveWalletGroup:
+        return this.fetchActiveWalletGroup(values);  
       default:
         return null;
     }
@@ -165,7 +240,11 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       }
     } else {
       this.setState({ loading: false });
-      console.log(res);
+      Swal.fire(
+        "Error !",
+        getErrorMessage((res.error as Record<string, string>).error),
+        "error"
+      );
     }
   }
 
@@ -182,9 +261,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.LoansBriefing2);
   }
   async fetchInstallmentsDuePerOfficerCustomerCard(values) {
-    const res = await installmentsDuePerOfficerCustomerCard(
-      this.reportRequest(values)
-    );
+    const { fromDate, toDate, branches, representatives } = values;
+    const request: InstallmentsDuePerOfficerCustomerCardRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+    };
+    const res = await installmentsDuePerOfficerCustomerCard(request);
     this.handleFetchReport(
       res as ApiResponse<any>,
       Reports.InstallmentsDuePerOfficerCustomerCard
@@ -192,7 +276,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchUnpaidInstallmentsByOfficer(values) {
-    const res = await unpaidInstallmentsByOfficer(this.reportRequest(values));
+    const { fromDate, toDate, branches, representatives } = values;
+    const request: UnpaidInstallmentsByOfficerRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+    };
+
+    const res = await unpaidInstallmentsByOfficer(request);
     this.handleFetchReport(
       res as ApiResponse<any>,
       Reports.UnpaidInstallmentsByOfficer
@@ -210,9 +302,15 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchOfficersPercentPayment(values) {
-    const res = await fetchOfficersPercentPaymentReport(
-      this.reportRequest(values)
-    );
+    const { fromDate, toDate, branches, representatives, gracePeriod } = values;
+    const request: OfficersPercentPaymentRequest = {
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      representatives,
+      gracePeriod,
+    };
+    const res = await fetchOfficersPercentPaymentReport({ ...request });
     this.handleFetchReport(res, Reports.OfficersPercentPayment);
   }
 
@@ -224,17 +322,69 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   }
 
   async fetchDueInstallments(values) {
-    const { fromDate, toDate } = values;
-    const res = await fetchDueInstallmentsReport(
-      this.reportRequest({
-        ...values,
-        fromDate: convertToTimestamp(fromDate),
-        toDate: convertToTimestamp(toDate),
-      })
-    );
+    const res = await fetchDueInstallmentsReport(this.reportRequest(values));
     this.handleFetchReport(res, Reports.DueInstallments);
   }
+  async fetchLeakedCustomers(values) {
+    const { loanOfficerIds } = values;
+    const res = await fetchLeakedCustomersReport({
+      ...this.reportRequest(values),
+      loanOfficerIds,
+    } as LeakedCustomersReportRequest);
+    this.handleFetchReport(res, Reports.LeakedCustomers);
+  }
 
+  async fetchPaidArrears(values) {
+    const { fromDate, toDate, branches, loanOfficerIds } = values;
+    const res = await fetchPaidArrearsReport({
+      startDate: fromDate,
+      endDate: toDate,
+      branches,
+      loanOfficerIds,
+    } as PaidArrearsRequest);
+    this.handleFetchReport(res, Reports.PaidArrears);
+  }
+
+  async fetchCustomersArrears(values) {
+    const { date, branches, loanOfficers } = values;
+    const res = await fetchCustomersArrearsReport({
+      date,
+      branches,
+      loanOfficers,
+    } as CustomersArrearsRequest);
+    this.handleFetchReport(res, Reports.CustomersArrears);
+  }
+
+  async fetchMonthComparison(values) {
+    // get timestamp in UTC
+    const res = await fetchMonthComparisonReport({
+      startDate: new Date(new Date(values.fromDate).toUTCString()).valueOf(),
+      endDate: new Date(new Date(values.toDate).toUTCString())
+        .setUTCHours(23, 59, 59, 999)
+        .valueOf(),
+      branches: values.branches,
+    });
+    this.handleFetchReport(res, Reports.MonthComparison);
+  }
+
+  async fetchActiveWalletIndividual(values) {
+    const { date, branches, loanOfficers } = values;
+    const res = await fetchActiveWalletIndividualReport({
+      date,
+      branches,
+      loanOfficerIds: loanOfficers
+    } as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.ActiveWalletIndividual)
+  }
+  async fetchActiveWalletGroup(values) {
+    const { date, branches, loanOfficers } = values;
+    const res = await fetchActiveWalletGroupReport({
+      date,
+      branches,
+      loanOfficerIds: loanOfficers
+    } as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.ActiveWalletGroup)
+  }
   render() {
     return (
       <>
@@ -302,55 +452,100 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             submit={(values) => this.handleSubmit(values)}
           />
         )}
-        {this.state.print === Reports.LoansBriefing2 && (
+        {this.state.print === Reports.LoansBriefing2 && this.state.data && (
           <LoansBriefing2
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
           />
         )}
-        {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard ? (
-          <InstallmentsDuePerOfficerCustomerCard
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        ) : null}
-        {this.state.print === Reports.UnpaidInstallmentsByOfficer ? (
-          <UnpaidInstallmentsByOfficer
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        ) : null}
-        {this.state.print === Reports.UnpaidInstallmentsPerArea && (
-          <UnpaidInst
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        )}
-        {this.state.print === Reports.OfficersPercentPayment && (
-          <OfficersPercentPayment
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        )}
-        {this.state.print === Reports.OfficersBranchPercentPayment && (
-          <OfficerBranchPercentPayment
-            data={this.state.data}
-            fromDate={this.state.fromDate}
-            toDate={this.state.toDate}
-          />
-        )}
-        {this.state.print === Reports.DueInstallments && (
+        {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard &&
+          this.state.data && (
+            <InstallmentsDuePerOfficerCustomerCard
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.UnpaidInstallmentsByOfficer &&
+          this.state.data && (
+            <UnpaidInstallmentsByOfficer
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.UnpaidInstallmentsPerArea &&
+          this.state.data && (
+            <UnpaidInst
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.OfficersPercentPayment &&
+          this.state.data && (
+            <OfficersPercentPayment
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.OfficersBranchPercentPayment &&
+          this.state.data && (
+            <OfficerBranchPercentPayment
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
+        {this.state.print === Reports.DueInstallments && this.state.data && (
           <DueInstallments
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
           />
         )}
+        {this.state.print === Reports.LeakedCustomers && this.state.data && (
+          <LeakedCustomersPDF
+            data={this.state.data}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+          />
+        )}
+        {this.state.print === Reports.CustomersArrears && this.state.data && (
+          <CustomersArrears data={this.state.data} date={this.state.date} />
+        )}
+        {this.state.print === Reports.PaidArrears && this.state.data && (
+          <PaidArrears
+            data={this.state.data}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+          />
+        )}
+        {this.state.print === Reports.MonthComparison && this.state.data && (
+          <MonthComparison
+            data={this.state.data}
+            fromDate={this.state.fromDate}
+            toDate={this.state.toDate}
+          />
+        )}
+        {
+          this.state.print === Reports.ActiveWalletIndividual && this.state.data && (
+            <ActiveWalletIndividual
+              date={this.state.date}
+              data={this.state.data}
+            />
+          )
+        }
+        {
+          this.state.print === Reports.ActiveWalletGroup && this.state.data && (
+            <ActiveWalletGroup
+              date={this.state.date}
+              data={this.state.data}
+            />
+          )
+        }
       </>
     );
   }

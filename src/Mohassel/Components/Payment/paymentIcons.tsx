@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Installment } from './payInstallment';
 import { payment } from '../../../Shared/redux/payment/actions';
 import * as local from '../../../Shared/Assets/ar.json';
+import ability from '../../config/ability';
 
 interface Props {
   paymentType: string;
@@ -61,7 +62,7 @@ class PaymentIcons extends Component<Props, {}> {
         ) : null}
         <div className="verticalLine"></div>
         <div className="payment-icons-container">
-          <Can I="payInstallment" a="application">
+          {(ability.can("payInstallment", "application") || ability.can("payByInsurance", "application")) &&
             <div className="payment-icon">
               <img
                 alt={this.props.paymentType === "penalties" ? "pay-penalty" : "pay-installment"}
@@ -79,8 +80,7 @@ class PaymentIcons extends Component<Props, {}> {
               >
                 {this.props.paymentType === "penalties" ? local.payPenalty : local.payInstallment}
               </Button>
-            </div>
-          </Can>
+            </div>}
           {this.props.paymentType === "penalties" ? (
             <>
               <Can I="cancelPenalty" a="application">
@@ -119,20 +119,18 @@ class PaymentIcons extends Component<Props, {}> {
               </div>
             </Can>
           ) : null}
-          {this.props.paymentType === "normal" ? (
-            <Can I="payInstallment" a="application">
-              <div className="payment-icon">
-                <img alt="pay-installment" src={require("../../Assets/payInstallment.svg")} />
-                <Button
-                  disabled={this.props.application.status === "pending"}
-                  onClick={() => this.props.changePaymentState(3)}
-                  variant="primary"
-                >
-                  {local.manualPayment}
-                </Button>
-              </div>
-            </Can>
-          ) : null}
+          {this.props.paymentType === "normal" && (ability.can("payInstallment", "application") || ability.can("payByInsurance", "application")) &&
+            <div className="payment-icon">
+              <img alt="pay-installment" src={require("../../Assets/payInstallment.svg")} />
+              <Button
+                disabled={this.props.application.status === "pending"}
+                onClick={() => this.props.changePaymentState(3)}
+                variant="primary"
+              >
+                {local.manualPayment}
+              </Button>
+            </div>
+          }
           {this.props.paymentType === "random" ? (
             <Can I="payInstallment" a="application">
               <div className="payment-icon">

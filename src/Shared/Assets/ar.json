@@ -838,6 +838,7 @@
     "thirdReviewDate":"تاريخ مراجعة مدير المركز",
     "secondReviewSuccess":"تمت مراجعة القروض من مدير الفرع",
     "thirdReviewSuccess":"تمت مراجعة القروض من المركز",
+    "newRequest":"طلب تقرير",
     "deathCertificate":"شهاده الوفاه",
     "createClearance": "تسجيل نموذج المخالصة",
     "financeCode": "كود التمويل",
@@ -901,5 +902,8 @@
 		"confirmNewPassword": "تأكيد كلمة المرور",
 		"newPasswordAsCurrentPasswordError": "كلمة المرور الجديدة يجب أن تكون مختلفة عن الحالية",
     "manageLoanDetails":"اعدادت القروض",
-    "customerCategorization": "مستوي المخاطر"
+    "customerCategorization": "مستوي المخاطر",
+		"typeRepresentativeName": "اكتب اسم المندوب",
+    "chooseBranchGeoArea": "اختر التقسيم الجغرافي للفرع",
+    "cibReports": "تقارير الCIB"
 }
