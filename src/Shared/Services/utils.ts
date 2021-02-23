@@ -237,7 +237,7 @@ export const pathTo = (route) => {
 	so we won't change direction of the arabic word
 	e.g. ٣ أشهر
 */
-export const numbersToArabic = (input?: number | string, withLTRControlChar: boolean = true) => {
+export const numbersToArabic = (input?: number | string, withLTRControlChar = true) => {
 	const toArabic = input === undefined
     ? "٠"
     : input.toString().replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
