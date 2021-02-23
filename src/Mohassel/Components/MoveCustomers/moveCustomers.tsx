@@ -235,10 +235,10 @@ export class MoveCustomers extends Component<{}, State> {
             })
             .indexOf("changeOfficer")}
         />
-        <Card style={{ textAlign: "right" }}>
+        <Card>
           <Card.Body>
             <>
-              <Form.Group className="data-group" id="currentLoanOfficer">
+              <Form.Group className="data-group p-0" id="currentLoanOfficer">
                 <Form.Label className="data-label">
                   {local.chooseCurrentLoanOfficer}
                 </Form.Label>
@@ -259,23 +259,17 @@ export class MoveCustomers extends Component<{}, State> {
               </Form.Group>
               {this.state.selectedLO?._id && (
                 <>
-                  <div className="custom-card-header">
+                  <div className="d-flex mb-3">
                     <Loader open={this.state.loading} type="fullsection" />
-                    <Row
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                    <Col className="p-0 d-flex align-items-center">
+                      <Card.Title className="mb-0">
                         {local.customers}
                       </Card.Title>
-                      <span className="text-muted">
+                      <span className="text-muted pl-4">
                         {local.noOfCustomers +
                           ` (${this.state.totalCustomers})`}
                       </span>
-                    </Row>
+                    </Col>
                     <div>
                       <Can I="changeOfficer" a="customer">
                         <Button
@@ -285,8 +279,7 @@ export class MoveCustomers extends Component<{}, State> {
                           disabled={
                             !Boolean(this.state.selectedCustomers.length)
                           }
-                          className="big-button"
-                          style={{ marginLeft: 20 }}
+                          className="big-btn"
                         >
                           {local.changeRepresentative}{" "}
                           <span className="fa fa-exchange-alt"></span>
@@ -294,10 +287,14 @@ export class MoveCustomers extends Component<{}, State> {
                       </Can>
                     </div>
                   </div>
-                  <InputGroup style={{ direction: "ltr", margin: "20px 0" }}>
+                  <InputGroup className="mb-3">
+										<InputGroup.Append>
+                      <InputGroup.Text className="bg-white">
+                        <span className="fa fa-search fa-rotate-90" />
+                      </InputGroup.Text>
+                    </InputGroup.Append>
                     <Form.Control
                       value={this.state.filterCustomers}
-                      style={{ direction: "rtl", borderRight: 0, padding: 22 }}
                       placeholder={local.searchByName}
                       onChange={(e) => {
                         this.setState({
@@ -310,21 +307,19 @@ export class MoveCustomers extends Component<{}, State> {
                         }
                       }}
                     />
-                    <InputGroup.Append>
-                      <InputGroup.Text style={{ background: "#fff" }}>
-                        <span className="fa fa-search fa-rotate-90"></span>
-                      </InputGroup.Text>
-                    </InputGroup.Append>
                   </InputGroup>
                   {this.state.totalCustomers > 0 ? (
-                    <Table striped hover style={{ textAlign: "right" }}>
+                    <Table striped hover>
                       <thead>
                         <tr>
                           <th>
                             <FormCheck
                               type="checkbox"
-                              onClick={(e) => this.checkAll(e)}
-                            ></FormCheck>
+                              onChange={(e) => this.checkAll(e)}
+															checked={this.state.selectedCustomers.length === this.state.customers.filter(
+																(customer) => !customer.blocked?.isBlocked 
+															).length}
+                            />
                           </th>
                           <th>{local.customerCode}</th>
                           <th>{local.customerName}</th>
@@ -371,17 +366,19 @@ export class MoveCustomers extends Component<{}, State> {
                       this.setState({ openModal: false, moveMissing: false })
                     }
                   >
-                    <Modal.Header closeButton>
-                      <Modal.Title style={{ margin: " 0 auto" }}>
+                    <Modal.Header>
+                      <Modal.Title className="m-auto">
                         {local.chooseRepresentative}
                       </Modal.Title>
+											<button type="button" className="mr-0 pr-0 close" onClick={() =>
+                      this.setState({ openModal: false, moveMissing: false })}><span aria-hidden="true">×</span><span className="sr-only">Close</span></button>
                     </Modal.Header>
                     <Modal.Body>
-                      <Row style={{ padding: "10px 40px" }}>
+                      <Col>
                         <Form.Label className="data-label">
                           {local.chooseLoanOfficer}
                         </Form.Label>
-                        <Col sm={12}>
+                        <Col sm={12} className="px-0">
                           <LoanOfficersDropDown
                             id="newLoanOfficerSelect"
                             onSelectLoanOfficer={(LO) => {
@@ -405,24 +402,15 @@ export class MoveCustomers extends Component<{}, State> {
                             )}
                           />
                         </Col>
-                      </Row>
-                      <Row
-                        style={{
-                          padding: "10px 40px",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Col>
-                          <Button
-                            style={{ width: "100%", height: "100%" }}
+												<Button
+														className="mt-4 w-100"
                             onClick={() => this.submit()}
                             disabled={false}
                             variant="primary"
                           >
                             {local.submit}
                           </Button>
-                        </Col>
-                      </Row>
+                      </Col>
                     </Modal.Body>
                   </Modal>
                   <Pagination
