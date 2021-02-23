@@ -5,8 +5,12 @@ import axios from "../axios-instance";
 interface CustomerCategorizationRequest {
   customerId: string;
 }
-interface CustomerCategorizationResponse {
+export interface CustomerScore {
+  loanApplicationKey: number;
   customerScore: number;
+}
+export interface CustomerCategorizationResponse {
+  customerScores: Array<CustomerScore>;
 }
 const { REACT_APP_BASE_URL } = process.env;
 const customerCategorizationURL = `${REACT_APP_BASE_URL}/customer/categorization/`;

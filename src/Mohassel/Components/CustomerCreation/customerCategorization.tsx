@@ -1,41 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
+import React from 'react';
+import Table from 'react-bootstrap/Table';
 import local from '../../../Shared/Assets/ar.json';
-import { getErrorMessage } from '../../../Shared/Services/utils';
-import { getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
+import { CustomerScore } from '../../Services/APIs/Customer-Creation/customerCategorization';
 
 type Props = {
-  id: string;
+  ratings: Array<CustomerScore>;
 }
-
-const getCustomerCategorizationRating = async (id: string, setRating: (rating: number) => void) => {
-  const res = await getCustomerCategorization({ customerId: id })
-  if (res.status === "success" && res.body?.customerScore !== undefined) {
-    setRating(res.body?.customerScore)
-  } else {
-    console.log(res.error)
-    Swal.fire('Error !', getErrorMessage(res.error ? res.error.error : ""), 'error');
-  }
-}
-
 export const CustomerCategorization = (props: Props) => {
-  const [rating, setRating] = useState(0);
-  const [color, setColor] = useState("");
-  const { id } = props;
+  const { ratings } = props;
 
-  useEffect(() => {
-    getCustomerCategorizationRating(id, setRating)
-  }, [])
-
-  useEffect(() => {
-    if (rating >= 4 && rating <= 6) setColor("#7DC356")
-    if (rating >= 7 && rating <= 9) setColor("#edb600")
-    if (rating >= 10 && rating <= 12) setColor("#ff0000")
-  }, [rating])
+  const getColor = (score: number) => {
+    if (score >= 4 && score <= 6) return ("#7DC356")
+    if (score >= 7 && score <= 9) return ("#edb600")
+    if (score >= 10 && score <= 12) return ("#ff0000")
+  }
 
   return (
-    <div style={{ background: color, padding: 10, color: "#fff", borderRadius: 20 }}>
-      {local.customerCategorization + " : " + rating}
-    </div>
+    <Table striped bordered style={{ textAlign: 'right' }} className="horizontal-table">
+      <thead>
+        <tr>
+          <th>{local.loanCode}</th>
+          <th>{local.customerCategorization}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ratings.map((rating, index) => {
+          return (
+            <tr key={index}>
+              <td>{rating.loanApplicationKey}</td>
+              <td><span style={{ background: getColor(rating.customerScore), padding: "0px 20px", color: "#fff", borderRadius: 20 }}>{rating.customerScore}</span></td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </Table>
   )
 }

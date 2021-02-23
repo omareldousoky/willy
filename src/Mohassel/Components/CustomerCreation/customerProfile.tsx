@@ -20,6 +20,7 @@ import DeathCertificate from './deathCertificate';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
 import { CustomerCategorization } from './customerCategorization';
+import { CustomerScore, getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -49,15 +50,30 @@ const tabs: Array<Tab> = [
     stringKey: 'differentInfo'
   },
   {
+    header: local.customerCategorization,
+    stringKey: 'customerScore'
+  },
+  {
     header: local.documents,
     stringKey: 'documents'
   },
 ]
+
+const getCustomerCategorizationRating = async (id: string, setRating: (rating: Array<CustomerScore>) => void) => {
+  const res = await getCustomerCategorization({ customerId: id })
+  if (res.status === "success" && res.body?.customerScores !== undefined) {
+    setRating(res.body?.customerScores)
+  } else {
+    Swal.fire('Error !', getErrorMessage(res.error ? res.error.error : ""), 'error');
+  }
+}
+
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [iScoreDetails, changeiScoreDetails] = useState<Score>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([]);
 
   async function getCachediScores(id) {
     changeLoading(true);
@@ -134,7 +150,7 @@ const CustomerProfile = (props: Props) => {
         })
       }
     }
-
+    getCustomerCategorizationRating(props.location.state.id, setRatings);
   }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
@@ -149,9 +165,6 @@ const CustomerProfile = (props: Props) => {
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
         <BackButton title={local.viewCustomer} className="print-none" />
-        {customerDetails?.hasLoan && <Can I="customerCategorization" a="customer">
-          <CustomerCategorization id={props.location.state.id} />
-        </Can>}
         {(ability.can('updateCustomer', 'customer') || ability.can('updateNationalId', 'customer')) && <div className="print-none" style={{ cursor: 'pointer' }} onClick={() => { props.history.push("/customers/edit-customer", { id: props.location.state.id }) }}>
           <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />
           {local.edit}
@@ -353,6 +366,9 @@ const CustomerProfile = (props: Props) => {
             )}
             </tbody>
           </Table>}
+          {activeTab === 'customerScore' && customerDetails?.hasLoan && <Can I="customerCategorization" a="customer">
+            <CustomerCategorization ratings={ratings} />
+          </Can>}
           {activeTab === 'documents' &&
             <DocumentsUpload
               customerId={props.location.state.id}
