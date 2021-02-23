@@ -40,6 +40,9 @@ import { fetchPaidArrearsReport } from "../../Services/APIs/Reports/paidArrears"
 import { PaidArrears } from "../pdfTemplates/paidArrears/paidArrears";
 import { fetchMonthComparisonReport } from "../../Services/APIs/Reports/monthComparison";
 import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
+import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
+import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
+import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
 
 export interface PDF {
   key?: string;
@@ -72,6 +75,8 @@ enum Reports {
   PaidArrears = "paidArrears",
   CustomersArrears = "customersArrears",
   MonthComparison = "monthComparison",
+  ActiveWalletIndividual = "activeWalletIndividual",
+  ActiveWalletGroup = "activeWalletGroup",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -148,6 +153,18 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           inputs: ["monthComparisonDateFromTo", "branches"],
           permission: "monthComparison",
         },
+        {
+          key: Reports.ActiveWalletIndividual,
+          local: "المحفظة النشطه للمندوبين - فردى",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "individualActiveWallet",
+        },
+        {
+          key: Reports.ActiveWalletGroup,
+          local: "المحفظة النشطه للمندوبين - جماعى",
+          inputs: ["date", "branches", "loanOfficers"],
+          permission: "groupActiveLoans",
+        },
       ],
       selectedPdf: { permission: "" },
       data: undefined,
@@ -196,6 +213,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         return this.fetchPaidArrears(values);
       case Reports.MonthComparison:
         return this.fetchMonthComparison(values);
+      case Reports.ActiveWalletIndividual:
+        return this.fetchActiveWalletIndividual(values)
+      case Reports.ActiveWalletGroup:
+        return this.fetchActiveWalletGroup(values);  
       default:
         return null;
     }
@@ -346,6 +367,24 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.MonthComparison);
   }
 
+  async fetchActiveWalletIndividual(values) {
+    const { date, branches, loanOfficers } = values;
+    const res = await fetchActiveWalletIndividualReport({
+      date,
+      branches,
+      loanOfficerIds: loanOfficers
+    } as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.ActiveWalletIndividual)
+  }
+  async fetchActiveWalletGroup(values) {
+    const { date, branches, loanOfficers } = values;
+    const res = await fetchActiveWalletGroupReport({
+      date,
+      branches,
+      loanOfficerIds: loanOfficers
+    } as ActiveWalletRequest)
+    this.handleFetchReport(res, Reports.ActiveWalletGroup)
+  }
   render() {
     return (
       <>
@@ -491,6 +530,22 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             toDate={this.state.toDate}
           />
         )}
+        {
+          this.state.print === Reports.ActiveWalletIndividual && this.state.data && (
+            <ActiveWalletIndividual
+              date={this.state.date}
+              data={this.state.data}
+            />
+          )
+        }
+        {
+          this.state.print === Reports.ActiveWalletGroup && this.state.data && (
+            <ActiveWalletGroup
+              date={this.state.date}
+              data={this.state.data}
+            />
+          )
+        }
       </>
     );
   }
