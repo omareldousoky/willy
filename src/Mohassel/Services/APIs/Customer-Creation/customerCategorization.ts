@@ -1,5 +1,3 @@
-import { AxiosResponse } from "axios";
-import { ApiResponse } from "../../interfaces";
 import axios from "../axios-instance";
 
 interface CustomerCategorizationRequest {
@@ -17,9 +15,9 @@ const customerCategorizationURL = `${REACT_APP_BASE_URL}/customer/categorization
 
 export const getCustomerCategorization = async (
   request: CustomerCategorizationRequest
-): Promise<ApiResponse<CustomerCategorizationResponse>> => {
+) => {
   try {
-    const res: AxiosResponse<CustomerCategorizationResponse> = await axios.get(
+    const res = await axios.get(
       customerCategorizationURL + request.customerId
     );
     return { status: "success", body: res.data };
