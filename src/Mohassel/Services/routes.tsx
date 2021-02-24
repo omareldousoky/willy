@@ -204,12 +204,12 @@ const appRoutes = [
           {
             path: "/business-activities",
             label: local.businessActivities,
-            render: (props) => <Can I='loanUsage' a='config'><BusinessActivities /></Can>
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessActivities /></Can>
           },
           {
             path: "/business-specialities",
             label: local.businessSpecialities,
-            render: (props) => <Can I='loanUsage' a='config'><BusinessSpecialities /></Can>
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessSpecialities /></Can>
           },
         ]
       },

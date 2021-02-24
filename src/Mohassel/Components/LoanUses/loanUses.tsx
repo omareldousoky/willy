@@ -75,7 +75,9 @@ class LoanUses extends Component<{}, State> {
         />
         <CRUDList source={'loanUses'} options={this.state.loanUses}
           newOption={(name, active, index) => { this.newLoanUse(name, active, index) }}
-          updateOption={(id, name, active, index) => { this.editLoanUse(id, name, active, index) }} />
+          updateOption={(id, name, active, index) => { this.editLoanUse(id, name, active, index) }}
+          canCreate
+          canEdit />
       </>
     );
   }

@@ -38,16 +38,13 @@ if(ability.can('loanUsage','config')){
     path: '/manage-loan-details/loan-uses',
   })
 }
-if(ability.can('loanUsage','config')){
+if(ability.can('viewBusinessSectorConfig','config')){
   mangeLoanDetailsArr.push({
     icon: 'businessActivities',
     header: local.businessActivities,
     desc: local.businessActivities,
     path: '/manage-loan-details/business-activities',
-  })
-}
-if(ability.can('loanUsage','config')){
-  mangeLoanDetailsArr.push({
+  },{
     icon: 'businessSpecialities',
     header: local.businessSpecialities,
     desc: local.businessSpecialities,

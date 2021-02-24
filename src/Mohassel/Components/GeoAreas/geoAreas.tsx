@@ -130,7 +130,9 @@ class GeoAreas extends Component<{}, State> {
                         {this.state.branch._id.length > 0 &&
                             <CRUDList source={'geoAreas'} options={this.state.branchAreas}
                                 newOption={(name, active, index) => { this.newGeoArea(name, active) }}
-                                updateOption={(id, name, active, index) => { this.editGeoArea(id, name, active) }} />
+                                updateOption={(id, name, active, index) => { this.editGeoArea(id, name, active) }} 
+                                canCreate
+                                canEdit/>
                         }
                     </div>
                 </Card>

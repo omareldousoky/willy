@@ -17,6 +17,8 @@ interface Props {
     newOption: Function;
     updateOption: Function;
     disableNameEdit?: boolean;
+    canCreate?: boolean;
+    canEdit?: boolean;
 }
 interface State {
     options: Array<CrudOption>;
@@ -83,12 +85,12 @@ export const CRUDList = (props: Props) => {
                     value={filterOptions}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterOptions(e.currentTarget.value)}
                 />
-                <span
+                {props.canCreate && <span
                     onClick={() => addOption()}
                     style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
                 >
                     <img alt="addOption" src={require('../../Assets/plus.svg')} />
-                </span>
+                </span>}
             </div>
             <ListGroup style={{ textAlign: 'right', width: '40%', marginBottom: 30, maxHeight: 500, overflow: 'scroll' }}>
                 {options
@@ -133,12 +135,12 @@ export const CRUDList = (props: Props) => {
                                         />
                                     </>
                                 }
-                                <span
+                                {props.canEdit && <span
                                     onClick={() => option.disabledUi ? toggleClick(option, false) : toggleClick(option, true)}
                                     style={{ color: '#7dc356', cursor: 'pointer', marginLeft: 20 }}
                                     data-qc="editSaveIcon">
                                     <img alt={option.disabledUi ? 'edit' : 'save'} src={option.disabledUi ? require('../../Assets/editIcon.svg') : require('../../Assets/save.svg')} />
-                                </span>
+                                </span>}
                             </ListGroup.Item>
                         )
                     })}

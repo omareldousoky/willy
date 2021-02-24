@@ -9,6 +9,7 @@ import { CRUDList, CrudOption } from '../CRUDList/crudList';
 import { createBusinessActivity, editBusinessActivity, getBusinessSectors } from '../../Services/APIs/configApis/config';
 import { Col, Form, Row } from 'react-bootstrap';
 import Select from 'react-select';
+import ability from '../../config/ability';
 
 interface State {
     sector: BusinessSector;
@@ -100,7 +101,9 @@ class BusinessActivities extends Component<{}, State> {
                 {this.state.sector.id.length > 0 && <CRUDList source={'businessActivities'} options={this.state.businessActivities}
                     newOption={(name, active) => { this.newBusinessActivity(name) }}
                     updateOption={(id, name, active) => { this.editBusinessActivity(id, active) }}
-                    disableNameEdit />}
+                    disableNameEdit
+                    canCreate={ability.can('createBusinessActivity','config')}
+                    canEdit={ability.can('updateBusinessActivity','config')} />}
             </>
         );
     }

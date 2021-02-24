@@ -207,7 +207,8 @@ class NavBar extends Component<Props, State> {
               {ability.can('getLoanApplication', 'application') ? <Nav.Link onClick={() => this.props.history.push('/track-loan-applications')}>{local.loanApplications}</Nav.Link> 
                : !this.props.hide && ability.can('approveLoanApplication', 'application') ? <Nav.Link onClick={() => this.props.history.push('/track-loan-applications/bulk-approvals')}>{local.loanApplications}</Nav.Link> 
                 : !this.props.hide && ability.can('createLoan', 'application') ? <Nav.Link onClick={() => this.props.history.push('/track-loan-applications/bulk-creation')}>{local.loanApplications}</Nav.Link> : null}
-              {!this.props.hide && ability.can('loanUsage', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-loan-details/loan-uses')}>{local.manageLoanDetails}</Nav.Link> : null}
+              {!this.props.hide && ability.can('loanUsage', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-loan-details/loan-uses')}>{local.manageLoanDetails}</Nav.Link> 
+               : !this.props.hide && ability.can('viewBusinessSectorConfig', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-loan-details/business-activities')}>{local.manageLoanDetails}</Nav.Link> : null}
               {!this.props.hide && ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
                 : !this.props.hide && ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
                   : !this.props.hide && ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
