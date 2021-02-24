@@ -906,5 +906,7 @@
     "chooseBranchGeoArea": "اختر التقسيم الجغرافي للفرع",
     "cibReports": "تقارير الCIB",
     "financialClosing":"الإغلاق المالي",
-    "monthlyClosing": "الإغلاق الشهري"
+    "monthlyClosing": "الإغلاق الشهري",
+    "closeDate": "تاريخ الإغلاق",
+    "dateCantBeInFuture":"التاريخ لايمكن أن يكون في المستقبل"
 }
