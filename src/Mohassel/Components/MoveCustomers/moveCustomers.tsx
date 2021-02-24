@@ -236,7 +236,7 @@ export class MoveCustomers extends Component<{}, State> {
             })
             .indexOf("changeOfficer")}
         />
-        <Card>
+        <Card className="main-card">
           <Card.Body>
             <>
               <Form.Group className="data-group p-0" id="currentLoanOfficer">

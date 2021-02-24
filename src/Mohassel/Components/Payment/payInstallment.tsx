@@ -85,6 +85,7 @@ interface State {
   payerId: string;
   installmentNumber: number;
   employees: Array<Employee>;
+	sidePaymentInfo: Record<string, string>;
 }
 class PayInstallment extends Component<Props, State> {
   constructor(props: Props) {
@@ -110,8 +111,17 @@ class PayInstallment extends Component<Props, State> {
       payerId: '',
       installmentNumber: -1,
       employees: [],
+			sidePaymentInfo: { image: "payInstallment", local: local.payInstallment }
     };
   }
+
+	componentDidMount() {
+		if (this.props.paymentType === "penalties" && this.props.penaltyAction) {
+		this.props.penaltyAction !== "cancel" 
+			? this.setState({ sidePaymentInfo: { image: "payPenalty", local: local.payPenalty }}) 
+			: this.setState({ sidePaymentInfo: { image: "cancelPenalty", local: local.cancelPenalty }})
+		}
+	}
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.penaltyAction !== this.props.penaltyAction)
       this.setState({ penaltyAction: prevProps.penaltyAction });
@@ -140,23 +150,21 @@ class PayInstallment extends Component<Props, State> {
     });
     return installment? installment.installmentResponse - installment.totalPaid : 0;
   }
+
   render() {
     return (
       <Card className="payment-menu">
         <div className="payment-info" style={{ textAlign: "center" }}>
           <img
-            alt="early-payment"
-            src={require("../../Assets/payInstallment.svg")}
+            alt={this.state.sidePaymentInfo.image}
+            src={require(`../../Assets/${this.state.sidePaymentInfo.image}.svg`)}
           />
           <h6
             style={{ cursor: "pointer" }}
             onClick={() => this.props.changePaymentState(0)}
           >
-            {" "}
-            <span className="fa fa-long-arrow-alt-right">
-              {" "}
-              {local.payInstallment}
-            </span>
+            <span className="fa fa-long-arrow-alt-right" />              
+            <span className="font-weight-bolder text-nowrap">&nbsp;{this.state.sidePaymentInfo.local}</span>
           </h6>
         </div>
         <div className="verticalLine"></div>
@@ -187,7 +195,7 @@ class PayInstallment extends Component<Props, State> {
                           controlId="installmentNumber"
                         >
                           <Form.Label
-                            style={{ textAlign: "right", paddingRight: 0 }}
+                            style={{ paddingRight: 0 }}
                             column
                           >{`${local.installmentToBePaid}`}</Form.Label>
                           <Col>
@@ -231,7 +239,7 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Group>
                         <Form.Group as={Col} md={6} controlId="requiredAmount">
                           <Form.Label
-                            style={{ textAlign: "right", paddingRight: 0 }}
+                            style={{ paddingRight: 0 }}
                             column
                           >{`${local.requiredAmount}`}</Form.Label>
                           <Col>
@@ -251,10 +259,9 @@ class PayInstallment extends Component<Props, State> {
                     {this.props.paymentType === "random" ? (
                       <Form.Group as={Col} md={6} controlId="randomPaymentType">
                         <Form.Label
-                          style={{ textAlign: "right", paddingRight: 0 }}
+                          style={{ paddingRight: 0 }}
                           column
                         >{`${local.randomPaymentToBePaid}`}</Form.Label>
-                        <Col>
                           <Form.Control
                             as="select"
                             name="randomPaymentType"
@@ -280,15 +287,13 @@ class PayInstallment extends Component<Props, State> {
                               }
                             )}
                           </Form.Control>
-                        </Col>
                       </Form.Group>
                     ) : null}
                     <Form.Group as={Col} md={6} controlId="payAmount">
                       <Form.Label
-                        style={{ textAlign: "right", paddingRight: 0 }}
+                        style={{ paddingRight: 0 }}
                         column
                       >{`${local.amountCollectedFromCustomer}`}</Form.Label>
-                      <Col>
                         <Form.Control
                           type="number"
                           name="payAmount"
@@ -304,11 +309,9 @@ class PayInstallment extends Component<Props, State> {
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.payAmount}
                         </Form.Control.Feedback>
-                      </Col>
                     </Form.Group>
                     <Form.Group as={Col} controlId="truthDate">
                       <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
-                      <Col>
                         <Form.Control
                           type="date"
                           name="truthDate"
@@ -324,12 +327,10 @@ class PayInstallment extends Component<Props, State> {
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.truthDate}
                         </Form.Control.Feedback>
-                      </Col>
                     </Form.Group>
                     {this.props.penaltyAction !== "cancel" &&
                     <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
-                      <Col>
+                      <Form.Label style={{ paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
                         <Form.Control
                           as="select"
                           name="payerType"
@@ -353,11 +354,9 @@ class PayInstallment extends Component<Props, State> {
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.payerType}
                         </Form.Control.Feedback>
-                      </Col>
                     </Form.Group>}
                     {formikBag.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
-                      <Col>
+                      <Form.Label style={{ paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
                         <Form.Control
                           as="select"
                           name="payerId"
@@ -374,11 +373,9 @@ class PayInstallment extends Component<Props, State> {
                         <Form.Control.Feedback type="invalid">
                           {formikBag.errors.payerId}
                         </Form.Control.Feedback>
-                      </Col>
                     </Form.Group>}
                     {formikBag.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
-                      <Col>
+                      <Form.Label style={{ paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
                         <AsyncSelect
                           className={formikBag.errors.payerId ? "error" : ""}
                           name="payerId"
@@ -394,13 +391,11 @@ class PayInstallment extends Component<Props, State> {
                         {formikBag.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
                           {formikBag.errors.payerId}
                         </div>}
-                      </Col>
                     </Form.Group>}
                     {(formikBag.values.payerType === 'family' || formikBag.values.payerType === 'nonFamily') &&
                       <>
                         <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
-                          <Col>
+                          <Form.Label style={{ paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
                             <Form.Control
                               name="payerName"
                               data-qc="payerName"
@@ -411,11 +406,9 @@ class PayInstallment extends Component<Props, State> {
                             <Form.Control.Feedback type="invalid">
                               {formikBag.errors.payerName}
                             </Form.Control.Feedback>
-                          </Col>
                         </Form.Group>
                         <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
-                          <Col>
+                          <Form.Label style={{ paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
                             <Form.Control
                               type="text"
                               name="payerNationalId"
@@ -432,7 +425,6 @@ class PayInstallment extends Component<Props, State> {
                             <Form.Control.Feedback type="invalid">
                               {formikBag.errors.payerNationalId}
                             </Form.Control.Feedback>
-                          </Col>
                         </Form.Group>
                       </>
                     }
@@ -440,7 +432,7 @@ class PayInstallment extends Component<Props, State> {
                 </Container>
                 <div className="payments-buttons-container">
                   <Button
-                    variant="outline-primary"
+                    variant="secondary"
                     data-qc="cancel"
                     onClick={() => this.props.changePaymentState(0)}
                   >

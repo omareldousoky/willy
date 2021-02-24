@@ -171,8 +171,8 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         disabled={!values.allowInterestAdjustment}
                                     >
                                         <option value="" disabled></option>
-                                        <option value='yearly'>{local.yearlyInnterestPeriod}</option>
-                                        <option value='monthly'>{local.monthlyInnterestPeriod}</option>
+                                        <option value='yearly'>{local.yearlyInterestPeriod}</option>
+                                        <option value='monthly'>{local.monthlyInterestPeriod}</option>
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.interestPeriod}

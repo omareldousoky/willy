@@ -80,8 +80,8 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
 
   render() {
     return (
-      <Container className="user-role-form">
-        <Form.Group className={"user-role-group"} controlId="roles">
+      <Container>
+        <Form.Group controlId="roles">
           <Form.Label className={"user-role-label"}>
             {local.selectUserPermission}
           </Form.Label>
@@ -132,13 +132,13 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
           )}
         </Form.Group>
         {this.state.hasBranch && (
-          <Form.Group className={"user-role-group"} controlId={"branches"}>
+          <Form.Group  controlId={"branches"}>
             <Form.Label className={"user-role-label"}>
               {local.branch}
             </Form.Label>
             {this.state.showBranchesError && (
               <div style={{ color: "red", fontSize: "15px", margin: "10px" }}>
-                {local.branchIsRquired}
+                {local.branchIsRequired}
               </div>
             )}
             <DualBox
@@ -151,40 +151,32 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
               rightHeader={local.allBranches}
               leftHeader={local.selectedBranches}
               options={this.props.userBranchesOptions}
+							className="p-0"
             />
           </Form.Group>
         )}
-        <Form.Group as={Row}>
-          <Col>
-            <Button
-              className={"btn-cancel-prev"}
-              style={{ width: "60%" }}
-              data-qc="previous"
-              onClick={() => {
-                this.props.previousStep(this.props.values);
-              }}
-            >
-              {local.previous}
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              disabled={
-                this.state.showRolesError ||
-                this.state.showBranchesError ||
-                (this.state.hasBranch &&
-                  this.props.values.branches?.length === 0)
-              }
-              className={"btn-submit-next"}
-              style={{ float: "left", width: "60%" }}
-              type="button"
+				<div className="d-flex justify-content-between">
+					<Button 
+						className="btn-cancel-prev w-25"
+						data-qc="previous"
+						onClick={() => {
+							this.props.previousStep(this.props.values);
+						}}
+						>{local.previous}</Button>
+						<Button
+							variant="primary"
+							className="w-25" 
               onClick={this.props.handleSubmit}
-              data-qc="submit"
-            >
-              {local.next}
-            </Button>
-          </Col>
-        </Form.Group>
+							disabled={
+								this.state.showRolesError ||
+								this.state.showBranchesError ||
+								(this.state.hasBranch &&
+									this.props.values.branches?.length === 0)
+							}
+							type="button"
+              data-qc="next"
+						>{local.next}</Button>
+				</div>
       </Container>
     );
   }

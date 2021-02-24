@@ -189,7 +189,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                     array={this.state.manageLoansTabs}
                     active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('assignProductToBranch')}
                 />
-                <Card>
+                <Card className="main-card">
                     <Loader open={this.state.loading} type="fullscreen" />
                     <Card.Body className="w-100">
                         <Form  className= "data-form"> 

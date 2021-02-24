@@ -7,6 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Swal from 'sweetalert2';
+import { Container } from 'react-bootstrap';
 
 interface Props {
     options: any;
@@ -23,6 +24,7 @@ interface Props {
     disabled?: Function;
     disabledMessage?: Function;
     oneWay?: boolean;
+		className?: string;
 }
 
 interface State {
@@ -155,7 +157,7 @@ class DualBox extends Component<Props, State> {
     }
     render() {
         return (
-            <div className="container" style={{ marginTop: 20 }}>
+            <Container className={this.props.className || ""} style={{ marginTop: 20 }}>
                 <div className={!this.props.vertical ? "row-nowrap" : "d-flex flex-column justify-content-center"}>
                     <div className={!this.props.vertical ? 'dual-list list-left col-md-5' : 'dual-list list-left'}>
                         <div className="well">
@@ -278,7 +280,7 @@ class DualBox extends Component<Props, State> {
                         </div>
                     </div>}
                 </div>
-            </div>
+            </Container>
         )
     }
 }

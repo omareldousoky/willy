@@ -202,7 +202,7 @@ class BulkApplicationApproval extends Component<Props, State>{
           array={this.state.manageApplicationsTabs}
           active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkLoanApplicationsApproval')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -214,7 +214,7 @@ class BulkApplicationApproval extends Component<Props, State>{
               <Button onClick={() => { this.setState({ showModal: true }) }}
                 disabled={!Boolean(this.state.selectedReviewedLoans.length)}
                 className="big-button"
-                style={{ marginLeft: 20, height: 70 }}
+                style={{ height: 70 }}
               > {local.bulkLoanApplicationsApproval}
               </Button>
             </div>

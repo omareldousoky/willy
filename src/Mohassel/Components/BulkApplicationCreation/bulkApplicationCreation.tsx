@@ -224,7 +224,7 @@ class BulkApplicationCreation extends Component<Props, State>{
           array={this.state.manageApplicationsTabs}
           active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkApplicationCreation')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -236,7 +236,6 @@ class BulkApplicationCreation extends Component<Props, State>{
               <Button onClick={() => { this.setState({ showModal: true }) }}
                 disabled={!Boolean(this.state.selectedApplications.length)}
                 className="big-button"
-                style={{ marginLeft: 20 }}
               > {local.bulkApplicationCreation}
               </Button>
             </div>

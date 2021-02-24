@@ -17,6 +17,7 @@ import { manageToolsArray } from '../Tools/manageToolsInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Card from 'react-bootstrap/Card';
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import { theme } from '../../../theme';
 
 interface GeoArea {
     name: string;
@@ -147,16 +148,18 @@ class GeoAreas extends Component<{}, State> {
                     array={this.state.manageToolsTabs}
                     active={this.state.manageToolsTabs.map(item => { return item.icon }).indexOf('branchAreas')}
                 />
-                <Card>
+                <Card className="main-card">
                     <div style={{ display: 'flex', textAlign: 'center', flexDirection: 'column' }}>
                         <Form.Group as={Row} controlId="branch" style={{ width: '100%', marginTop: '1rem' }}>
-                            <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.branch}</Form.Label>
+                            <Form.Label column sm={4}>{local.branch}</Form.Label>
                             <Col sm={6}>
                                 <Select
                                     name="branch"
                                     data-qc="branch"
                                     value={this.state.branch}
                                     enableReinitialize={false}
+																		styles={theme.selectStyleWithBorder}
+																		theme={theme.selectTheme}
                                     onChange={(event: any) => { this.setState({ branch: event }, () => this.getBranchAreas()) }}
                                     type='text'
                                     getOptionLabel={(option) => option.name}
@@ -166,23 +169,24 @@ class GeoAreas extends Component<{}, State> {
                             </Col>
                         </Form.Group>
                         {this.state.branch._id.length > 0 && <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span
-                                onClick={() => this.addBranchArea()}
-                                style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
-                            >
-                                <img alt="addArea" src={require('../../Assets/plus.svg')} />
-                            </span>
                             {this.state.branchAreas.length > 0 && <Form.Control
                                 type="text"
                                 data-qc="filterGeoAreas"
+																className="ml-4"
                                 placeholder={local.search}
                                 maxLength={100}
                                 value={this.state.filterGeoAreas}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ filterGeoAreas: e.currentTarget.value })}
                             />}
+														<span
+                                onClick={() => this.addBranchArea()}
+                                style={{ margin: 'auto 20px', color: '#7dc356', cursor: 'pointer' }}
+                            >
+                                <img alt="addArea" src={require('../../Assets/plus.svg')} />
+                            </span>
                         </div>}
                     </div>
-                    <ListGroup style={{ textAlign: 'right', width: '30%', margin: '30px 0' }}>
+                    <ListGroup style={{ width: '30%' }} className="border-0 m-4">
                         <Loader type="fullscreen" open={this.state.loading} />
                         {this.state.branchAreas
                             .filter(branchArea => branchArea.name.toLocaleLowerCase().includes(this.state.filterGeoAreas.toLocaleLowerCase()))

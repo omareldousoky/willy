@@ -99,7 +99,6 @@ export const LoanProductCreationForm = (props: any) => {
                 <Col>
                     <Form.Group controlId="currency">
                         <Form.Label className="data-label">{local.currency}</Form.Label>
-
                         <Form.Control as="select"
                             name="currency"
                             data-qc="currency"
@@ -117,7 +116,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group controlId="periodLength">
+                    <Form.Group>
                         <Form.Label className="data-label">{local.periodLengthEvery}</Form.Label>
                         <Row className={"row-nowrap"}>
                             <Col>
@@ -125,6 +124,7 @@ export const LoanProductCreationForm = (props: any) => {
                                     type="number"
                                     name="periodLength"
                                     data-qc="periodLength"
+																		id="periodLength"
                                     value={values.periodLength}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -139,6 +139,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 <Form.Control as="select"
                                     name="periodType"
                                     data-qc="periodType"
+																		id="periodType"
                                     value={values.periodType}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
@@ -196,7 +197,6 @@ export const LoanProductCreationForm = (props: any) => {
             </Row>
             <Form.Group controlId="gracePeriod">
                 <Form.Label className="data-label">{local.gracePeriod}</Form.Label>
-
                 <Form.Control
                     type="number"
                     name="gracePeriod"
@@ -215,7 +215,6 @@ export const LoanProductCreationForm = (props: any) => {
                 <Col>
                     <Form.Group controlId="interest">
                         <Form.Label className="data-label">{local.interest}</Form.Label>
-
                         <Form.Control
                             type="number"
                             name="interest"
@@ -232,7 +231,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group controlId="interest">
+                    <Form.Group controlId="interestPeriod">
                         <Form.Control as="select"
                             style={{ marginTop: "2.6rem" }}
                             name="interestPeriod"
@@ -243,8 +242,8 @@ export const LoanProductCreationForm = (props: any) => {
                             isInvalid={errors.interestPeriod && touched.interestPeriod}
                             disabled = {edit}
                         >
-                            <option value='yearly'>{local.yearlyInnterestPeriod}</option>
-                            <option value='monthly'>{local.monthlyInnterestPeriod}</option>
+                            <option value='yearly'>{local.yearlyInterestPeriod}</option>
+                            <option value='monthly'>{local.monthlyInterestPeriod}</option>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             {errors.interestPeriod}
@@ -271,7 +270,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Form.Group controlId="inAdvanceFees">
+            <Form.Group>
                 <Form.Label className="data-label" >{local.inAdvanceFees}</Form.Label>
                 <Row className="row-nowrap">
                     <Col sm={6}>
@@ -279,6 +278,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="inAdvanceFees"
                             data-qc="inAdvanceFees"
+														id="inAdvanceFees"
                             value={values.inAdvanceFees}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -292,7 +292,8 @@ export const LoanProductCreationForm = (props: any) => {
                     <Col sm={6}>
                         <Form.Control as="select"
                             name="inAdvanceFrom"
-                            data-qc="v"
+                            data-qc="inAdvanceFrom"
+														id="inAdvanceFrom"
                             value={values.inAdvanceFrom}
                             onBlur={handleBlur}
                             onChange={handleChange}
@@ -327,7 +328,7 @@ export const LoanProductCreationForm = (props: any) => {
                     {errors.inAdvanceType}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="stamps">
+            <Form.Group>
                 <Form.Label className="data-label">{local.stamps}</Form.Label>
                 <Row className='row-nowrap'>
                     <Col>
@@ -336,6 +337,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 type="number"
                                 name="stamps"
                                 data-qc="stamps"
+																id="stamps"
                                 value={values.stamps}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -356,6 +358,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 type="checkbox"
                                 name="allowStampsAdjustment"
                                 data-qc="allowStampsAdjustment"
+																id="allowStampsAdjustment"
                                 value={values.allowStampsAdjustment}
                                 checked={values.allowStampsAdjustment}
                                 onBlur={handleBlur}
@@ -372,7 +375,7 @@ export const LoanProductCreationForm = (props: any) => {
                 </Row>
             </Form.Group>
 
-            <Form.Group controlId="representativeFees">
+            <Form.Group>
                 <Form.Label className="data-label">{local.representativeFees}</Form.Label>
                 <Row className='row-nowrap'>
                     <Col>
@@ -380,6 +383,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="representativeFees"
                             data-qc="representativeFees"
+														id="representativeFees"
                             value={values.representativeFees}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -397,6 +401,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 type="checkbox"
                                 name="allowRepresentativeFeesAdjustment"
                                 data-qc="allowRepresentativeFeesAdjustment"
+																id="allowRepresentativeFeesAdjustment"
                                 value={values.allowRepresentativeFeesAdjustment}
                                 checked={values.allowRepresentativeFeesAdjustment}
                                 onBlur={handleBlur}
@@ -412,7 +417,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>
             </Form.Group>
-            <Form.Group controlId="adminFees">
+            <Form.Group>
                 <Form.Label className="data-label">{local.adminFees}</Form.Label>
                 <Row className="row-nowrap">
                     <Col>
@@ -420,6 +425,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="adminFees"
                             data-qc="adminFees"
+														id="adminFees"
                             value={values.adminFees}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -437,6 +443,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 type="checkbox"
                                 name="allowAdminFeesAdjustment"
                                 data-qc="allowAdminFeesAdjustment"
+																id="allowAdminFeesAdjustment"
                                 value={values.allowAdminFeesAdjustment}
                                 checked={values.allowAdminFeesAdjustment}
                                 onBlur={handleBlur}
@@ -454,12 +461,13 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Group>
             <Row>
                 <Col>
-                    <Form.Group controlId="earlyPaymentFees">
+                    <Form.Group>
                         <Form.Label className="data-label">{local.earlyPaymentFees}</Form.Label>
                         <Form.Control
                             type="number"
                             name="earlyPaymentFees"
                             data-qc="earlyPaymentFees"
+														id="earlyPaymentFees"
                             value={values.earlyPaymentFees}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -474,7 +482,6 @@ export const LoanProductCreationForm = (props: any) => {
                 <Col>
                     <Form.Group controlId="maxNoOfRestructuring">
                         <Form.Label className="data-label" >{local.maxNoOfRestructuring}</Form.Label>
-
                         <Form.Control
                             type="number"
                             name="maxNoOfRestructuring"
@@ -491,7 +498,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Form.Group controlId="minPrincipal">
+            <Form.Group>
                 <Form.Label className="data-label">{local.minPrincipal}</Form.Label>
                 <Row className={'row-nowrap'}>
                     <Col >
@@ -499,6 +506,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="minPrincipal"
                             data-qc="minPrincipal"
+														id="minPrincipal"
                             value={values.minPrincipal}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -514,6 +522,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="maxPrincipal"
                             data-qc="maxPrincipal"
+														id="maxPrincipal"
                             value={values.maxPrincipal}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -525,7 +534,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col>
                 </Row>
             </Form.Group>
-            <Form.Group controlId="minInstallment" >
+            <Form.Group>
                 <Form.Label className="data-label">{local.minInstallment}</Form.Label>
                 <Row className="row-nowrap">
                     <Col >
@@ -533,6 +542,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="minInstallment"
                             data-qc="minInstallment"
+														id="minInstallment"
                             value={values.minInstallment}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -549,6 +559,7 @@ export const LoanProductCreationForm = (props: any) => {
                             type="number"
                             name="maxInstallment"
                             data-qc="maxInstallment"
+														id="maxInstallment"
                             value={values.maxInstallment}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -564,13 +575,13 @@ export const LoanProductCreationForm = (props: any) => {
             <>
                 <Row>
                     {values.beneficiaryType === 'individual' && <Col>
-                        <Form.Group controlId="applicationFee">
+                        <Form.Group>
                             <Form.Label className="data-label">{local.applicationFee}</Form.Label>
-
                             <Form.Control
                                 type="number"
                                 name="applicationFee"
                                 data-qc="applicationFee"
+																id="applicationFee"
                                 value={values.applicationFee}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -641,7 +652,7 @@ export const LoanProductCreationForm = (props: any) => {
                     </Col> */}
                 </Row>
 
-                {values.beneficiaryType === 'individual' && <Form.Group controlId="applicationFeePercent">
+                {values.beneficiaryType === 'individual' && <Form.Group>
                     <Form.Label className="data-label" >{local.applicationFeePercent}</Form.Label>
                     <Row className="row-nowrap" >
                         <Col>
@@ -649,6 +660,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 type="number"
                                 name="applicationFeePercent"
                                 data-qc="applicationFeePercent"
+																id="applicationFeePercent"
                                 value={values.applicationFeePercent}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -663,6 +675,7 @@ export const LoanProductCreationForm = (props: any) => {
                             <Form.Control as="select"
                                 name="applicationFeeType"
                                 data-qc="applicationFeeType"
+																id="applicationFeeType"
                                 value={values.applicationFeeType}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
@@ -679,7 +692,7 @@ export const LoanProductCreationForm = (props: any) => {
                         </Col>
                     </Row>
                 </Form.Group>}
-                {values.beneficiaryType === 'group' && <Form.Group controlId="applicationFeePercentPerPerson">
+                {values.beneficiaryType === 'group' && <Form.Group>
                     <Form.Label className="data-label">{local.applicationFeePercentPerPerson}</Form.Label>
                     <Row className="row-nowrap">
                         <Col>
@@ -687,6 +700,7 @@ export const LoanProductCreationForm = (props: any) => {
                                 type="number"
                                 name="applicationFeePercentPerPerson"
                                 data-qc="applicationFeePercentPerPerson"
+																id="applicationFeePercentPerPerson"
                                 value={values.applicationFeePercentPerPerson}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -701,6 +715,7 @@ export const LoanProductCreationForm = (props: any) => {
                             <Form.Control as="select"
                                 name="applicationFeePercentPerPersonType"
                                 data-qc="applicationFeePercentPerPersonType"
+																id="applicationFeePercentPerPersonType"
                                 value={values.applicationFeePercentPerPersonType}
                                 onBlur={handleBlur}
                                 onChange={handleChange}
@@ -751,7 +766,6 @@ export const LoanProductCreationForm = (props: any) => {
                     <Row>
                         <Col>
                             <Form.Group className="row-nowrap" controlId='mustEnterGuarantor'>
-
                                 <Form.Check
                                     type='checkbox'
                                     name='mustEnterGuarantor'
@@ -992,7 +1006,7 @@ export const LoanProductCreationForm = (props: any) => {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group className="row-nowrap mt-2" controlId='mergeDoubtedLoans'>
+                        <Form.Group className="row-nowrap mt-2" controlId='mergeDoubtedLoans2'>
                             <Form.Check
                                 type='radio'
                                 name='mergeDoubtedLoans'

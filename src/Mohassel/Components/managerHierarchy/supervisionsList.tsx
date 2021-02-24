@@ -235,7 +235,7 @@ async unApproveOfficers(branchesGroupIds) {
     return (
       <>
         <div className="print-none">
-          <Card style={{ margin: '20px 50px' }}>
+          <Card className="main-card">
             <Loader type="fullsection" open={this.props.loading} />
             <Card.Body style={{ padding: 0 }}>
               <div className="custom-card-header">

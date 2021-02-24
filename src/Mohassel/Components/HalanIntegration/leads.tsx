@@ -308,7 +308,7 @@ class Leads extends Component<Props, State>{
           array={this.state.tabs}
           active={this.state.tabs.map(item => { return item.icon }).indexOf('users')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
