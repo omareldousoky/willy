@@ -248,6 +248,7 @@ class BulkApplicationCreation extends Component<Props, State>{
               from={this.state.from}
               size={this.state.size}
               status="approved"
+							submitClassName="mt-0"
               hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               from={this.state.from}
@@ -274,11 +275,11 @@ class BulkApplicationCreation extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>{local.bulkApplicationCreation}</Modal.Title>
+                  <Modal.Title className="m-auto">{local.bulkApplicationCreation}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <Form.Group as={Row} controlId="creationDate">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.creationDate}*`}</Form.Label>
+                  <Form.Group as={Row} controlId="creationDate" className="mb-0">
+                    <Form.Label column sm={3}>{`${local.creationDate}*`}</Form.Label>
                     <Col sm={6}>
                       <Form.Control
                         type="date"

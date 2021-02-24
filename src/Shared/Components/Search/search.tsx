@@ -60,6 +60,7 @@ interface Props {
   searchFilters: (data) => void;
   setIssuedLoansSearchFilters: (data) => void;
   setLoading: (data) => void;
+	submitClassName?: string;
 }
 interface State {
   governorates: Array<any>;
@@ -310,26 +311,19 @@ class Search extends Component<Props, State> {
                 }
                 if (searchKey === "dateFromTo") {
                   return (
-                    <Col key={index} sm={6}>
+                    <Col key={index} sm={6} className="d-flex align-items-center">
                       <div
                         className="dropdown-container"
                         style={{ flex: 1, alignItems: "center" }}
                       >
-                        <p
-                          className="dropdown-label"
-                          style={{
-                            alignSelf: "normal",
-                            marginLeft: 20,
-                            width: 400,
-                          }}
-                        >
+                        <p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2">
                           {this.props.datePlaceholder
                             ? this.props.datePlaceholder
                             : local.creationDate}
                         </p>
                         <span>{local.from}</span>
                         <Form.Control
-                          style={{ marginLeft: 20, border: "none" }}
+                          className="border-0"
                           type="date"
                           name="fromDate"
                           data-qc="fromDate"
@@ -343,9 +337,9 @@ class Search extends Component<Props, State> {
                               formikProps.setFieldValue("toDate", "");
                           }}
                         ></Form.Control>
-                        <span>{local.to}</span>
+                        <span className="mr-1">{local.to}</span>
                         <Form.Control
-                          style={{ marginRight: 20, border: "none" }}
+                          className="border-0"
                           type="date"
                           name="toDate"
                           data-qc="toDate"
@@ -685,7 +679,7 @@ class Search extends Component<Props, State> {
               <Col className="d-flex">
                 <Button
                   type="submit"
-                  className="ml-auto"
+                  className={`ml-auto ${this.props.submitClassName || ""}`}
                   style={{ width: 180, height: 50, marginTop: 20 }}
                   disabled={
                     formikProps.values.fromDate

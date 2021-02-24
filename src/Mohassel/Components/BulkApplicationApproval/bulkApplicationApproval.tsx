@@ -251,11 +251,11 @@ class BulkApplicationApproval extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>{local.bulkLoanApplicationsApproval}</Modal.Title>
+                  <Modal.Title className="m-auto">{local.bulkLoanApplicationsApproval}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <Form.Group as={Row} controlId="approvalDate">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
+                    <Form.Label column sm={3}>{`${local.entryDate}*`}</Form.Label>
                     <Col sm={7}>
                       <Form.Control
                         type="date"
@@ -272,7 +272,7 @@ class BulkApplicationApproval extends Component<Props, State>{
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} controlId="fundSource">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.fundSource}*`}</Form.Label>
+                    <Form.Label column sm={3} className="text-nowrap">{`${local.fundSource}*`}</Form.Label>
                     <Col sm={7}>
                       <Form.Control as="select"
                         name="fundSource"

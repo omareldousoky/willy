@@ -359,11 +359,11 @@ class BulkApplicationReview extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>{local.bulkLoanApplicationReviews}</Modal.Title>
+                  <Modal.Title className="m-auto">{local.bulkLoanApplicationReviews}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <Form.Group as={Row} controlId="date">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
+                    <Form.Label column sm={3}>{`${local.entryDate}*`}</Form.Label>
                     <Col sm={7}>
                       <Form.Control
                         type="date"

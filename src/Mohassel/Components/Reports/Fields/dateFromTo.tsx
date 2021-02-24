@@ -30,15 +30,7 @@ export const DateFromToField = (props: DateFromToFieldProps) => {
           className="dropdown-container"
           style={{ flex: 1, alignItems: "center" }}
         >
-          <p
-            className="dropdown-label"
-            style={{
-              alignSelf: "normal",
-              marginLeft: 20,
-              width: 300,
-              textAlign: "center",
-            }}
-          >
+					<p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2">
             {name}
           </p>
           <span>{local.from}</span>
