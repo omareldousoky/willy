@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useStore } from "react-redux";
-import Select, { ValueType, Props, Theme } from "react-select";
+import Select, { ValueType, Props } from "react-select";
 import { Auth, Branch } from "../../../Shared/redux/auth/types";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 import { getGeoAreasByBranch } from "../../Services/APIs/GeoAreas/getGeoAreas";
-import { ApiResponse } from "../../Services/APIs/Reports/unpaidInstallmentsPerArea";
+import { theme } from "../../../theme";
 
 export interface DropDownOption {
   name: string;
@@ -18,30 +18,6 @@ interface LoanOfficersDropDownProps extends Props<DropDownOption> {
   loanOfficerSelectOptions?: DropDownOption[];
   onSelectLoanOfficer?: (loanOfficer: ValueType<DropDownOption>) => void;
 }
-
-// TODO: make common component with theme
-export const ReactSelectTheme = (theme: Theme) => ({
-  ...theme,
-  colors: {
-    ...theme.colors,
-    primary: "#7dc356",
-    primary25: "#7dc25661",
-    primary50: "#7dc356",
-    neutral5: "#e9ecef",
-    neutral10: "#e9ecef",
-  },
-});
-
-export const customStyles = {
-  control: (provided) => ({
-    ...provided,
-    border: "none",
-    boxShadow: "none",
-    "&:hover": {
-      border: "none",
-    },
-  }),
-};
 
 export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
   const {
@@ -59,8 +35,8 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
       <Select<DropDownOption>
         isClearable
         isSearchable
-        styles={customStyles}
-        theme={ReactSelectTheme}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="representative"
         data-qc="representative"
@@ -155,8 +131,8 @@ export const AsyncLoanOfficersDropDown = ({
       <Select<DropDownOption>
         cacheOptions
         defaultOptions
-        styles={customStyles}
-        theme={ReactSelectTheme}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="loanOfficers"
         data-qc="loanOfficers"
@@ -220,8 +196,8 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
     <div className="dropdown-container">
       <p className="dropdown-label">{local.oneBranch}</p>
       <AsyncSelect
-        styles={customStyles}
-        theme={ReactSelectTheme}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="branches"
         data-qc="branches"
@@ -299,8 +275,8 @@ export const AsyncBranchGeoAreasDropDown = ({
       <Select<DropDownOption>
         cacheOptions
         defaultOptions
-        styles={customStyles}
-        theme={ReactSelectTheme}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="geoAreas"
         data-qc="geoAreas"

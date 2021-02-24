@@ -25,6 +25,7 @@ import { moveCustomerToOfficer } from "../../Services/APIs/Customer-Creation/mov
 import { manageCustomersArray } from "../CustomerCreation/manageCustomersInitial";
 import HeaderWithCards from "../HeaderWithCards/headerWithCards";
 import { ValueType } from "react-select";
+
 interface Customer {
   customerName?: string;
   key?: number;

@@ -86,7 +86,8 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             {local.selectUserPermission}
           </Form.Label>
           <Select
-            styles={theme.selectStyle}
+						styles={theme.selectStyleWithBorder}
+						theme={theme.selectTheme}
             isMulti
             isSearchable={true}
             filterOption={customFilterOption}

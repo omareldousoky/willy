@@ -191,16 +191,17 @@ class AssignProductsToBranches extends Component<Props, State>{
                 />
                 <Card>
                     <Loader open={this.state.loading} type="fullscreen" />
-                    <Card.Body style={{ width: '100%'}}>
+                    <Card.Body className="w-100">
                         <Form  className= "data-form"> 
-                            <Form.Group controlId="products" className="data-group" style={{ width: '100%' }}>
+                            <Form.Group controlId="products" className="data-group w-100">
                                 <Form.Label className="data-label">{local.productName}</Form.Label>
                                 <Row>
                                     <Col sm={10}>
                                         <Select
                                             name="products"
                                             data-qc="products"
-                                            styles={theme.selectStyle}
+                                            styles={theme.selectStyleWithBorder}
+																						theme={theme.selectTheme}
                                             value={this.state.selectedProducts}
                                             isMulti
                                             isSearchable={true}

@@ -229,7 +229,8 @@ class RoleCreation extends Component<Props, State> {
                   {local.selectManagerRole}
                 </Form.Label>
                 <Select
-                  styles={theme.selectStyle}
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   isSearchable={true}
                   filterOption={customFilterOption}
                   isDisabled={this.props.edit}

@@ -44,7 +44,8 @@ export const CreateClearanceForm = (props: Props) => {
                         <Select
                             name="application"
                             data-qc="application"
-                            styles={theme.selectStyle}
+                            styles={theme.selectStyleWithBorder}
+														theme={theme.selectTheme}
                             value={selectedApplication}
                             onChange={(event) => {
                                 props.setFieldValue('loanId', event.id)

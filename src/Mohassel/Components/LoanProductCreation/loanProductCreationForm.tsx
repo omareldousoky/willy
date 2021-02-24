@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { dayToArabic } from "../../../Shared/Services/utils";
 
 export const LoanProductCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue,edit } = props;
     return (
-        <Form onSubmit={handleSubmit} className="data-form">
+        <Form onSubmit={handleSubmit} style={{ padding: "1rem 2rem" }}>
             <Row>
                 <Col>
                     <Form.Group controlId="productName">
@@ -1188,19 +1187,14 @@ export const LoanProductCreationForm = (props: any) => {
                 </Form.Control.Feedback>
                 <Form.Label className="data-check-label">{local.branchManagerAndDate}</Form.Label>
             </Form.Group>
-            <Form.Group
-                as={Row}
-                className="branch-data-group"
-            >
-                <Col className="d-flex justify-content-between">
-                    <Button
-												variant="secondary"
-                        style={{ width: '30%' }}
-                        onClick={() => { props.cancel() }}
-                    >{local.cancel}</Button>
-                    <Button variant="primary" style={{ width: '30%' }} type="submit" data-qc="submit">{local.submit}</Button>
-                </Col>
-            </Form.Group>
+						<div className="d-flex justify-content-between py-4">
+							<Button
+									variant="secondary"
+									style={{ width: '30%' }}
+									onClick={() => { props.cancel() }}
+							>{local.cancel}</Button>
+							<Button variant="primary" style={{ width: '30%' }} type="submit" data-qc="submit">{local.submit}</Button>
+						</div>
         </Form>
     )
 }

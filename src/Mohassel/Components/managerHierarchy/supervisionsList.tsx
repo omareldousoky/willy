@@ -256,7 +256,8 @@ async unApproveOfficers(branchesGroupIds) {
               <Col sm={6}>
                 <Form.Label as={Row} style={{fontWeight:'bolder', textAlign:"right",margin:'9px'}}>{local.chooseOperationType}</Form.Label>
                 <Select
-                    styles={theme.selectStyle}
+                    styles={theme.selectStyleWithBorder}
+										theme={theme.selectTheme}
                     placeholder={local.chooseOperationType}
                     onChange={(event)=>{
                      this.selectState(event);

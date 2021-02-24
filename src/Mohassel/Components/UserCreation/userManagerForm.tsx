@@ -113,7 +113,8 @@ class UserManagerForm extends Component<Props, State> {
             {`${local.chooseMainRole} *`}
           </Form.Label>
           <Select
-            styles={theme.selectStyle}
+						styles={theme.selectStyleWithBorder}
+						theme={theme.selectTheme}
             isSearchable={true}
             filterOption={customFilterOption}
             placeholder={
@@ -167,7 +168,8 @@ class UserManagerForm extends Component<Props, State> {
               {`${local.chooseMainBranch} *`}
             </Form.Label>
             <Select
-              styles={theme.selectStyle}
+							styles={theme.selectStyleWithBorder}
+							theme={theme.selectTheme}
               isSearchable={true}
               filterOption={customFilterOption}
               placeholder={
@@ -222,7 +224,8 @@ class UserManagerForm extends Component<Props, State> {
                 {local.chooseManager}
               </Form.Label>
               <Select
-                styles={theme.selectStyle}
+								styles={theme.selectStyleWithBorder}
+								theme={theme.selectTheme}
                 isSearchable={true}
                 filterOption={customFilterOption}
                 placeholder={

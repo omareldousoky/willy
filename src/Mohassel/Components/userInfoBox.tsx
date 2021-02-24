@@ -42,24 +42,16 @@ class InfoBox extends Component<Props, State>{
             iscore = this.props.iScores.filter(score => score.nationalId === values.nationalId)[0];
         }
         return (
-            <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width: '100%' }}>
+            <div style={{ backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width: '100%' }}>
                 {!this.props.noHeader && <h5>{local.mainInfo}</h5>}
                 <Form.Row>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{(this.props.leader) ? local.groupLeaderName : local.name}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{values.customerName} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{(this.props.leader) ? local.groupLeaderName : local.name}</Form.Label>
+											<Form.Label>{values.customerName} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.customerCode}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.customerCode}</Form.Label>
+											<Form.Label>{(values.key) ? values.key : 'N/A'} </Form.Label>
                     </Form.Group>
                     {this.props.iScores && this.props.iScores.length > 0 && iscore.nationalId.length > 0 && <Form.Group as={Col} md="4">
                         <Row>
@@ -82,81 +74,45 @@ class InfoBox extends Component<Props, State>{
 
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.nationalId}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{values.nationalId} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.nationalId}</Form.Label>
+											<Form.Label>{values.nationalId} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.birthDate}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{timeToArabicDate(values.birthDate, false)} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.birthDate}</Form.Label>
+											<Form.Label>{timeToArabicDate(values.birthDate, false)} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.gender}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{arabicGender(values.gender)} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.gender}</Form.Label>
+											<Form.Label>{arabicGender(values.gender)} </Form.Label>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.nationalIdIssueDate}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{timeToArabicDate(values.nationalIdIssueDate, false)} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.nationalIdIssueDate}</Form.Label>
+											<Form.Label>{timeToArabicDate(values.nationalIdIssueDate, false)} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.businessSector}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{values.businessSector} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.businessSector}</Form.Label>
+											<Form.Label>{values.businessSector} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.businessActivity}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{values.businessActivity} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.businessActivity}</Form.Label>
+											<Form.Label>{values.businessActivity} </Form.Label>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.businessSpeciality}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{values.businessSpeciality} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.businessSpeciality}</Form.Label>
+											<Form.Label>{values.businessSpeciality} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.permanentEmployeeCount}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{(values.permanentEmployeeCount) ? values.permanentEmployeeCount : 0} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.permanentEmployeeCount}</Form.Label>
+											<Form.Label>{(values.permanentEmployeeCount) ? values.permanentEmployeeCount : 0} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="4">
-                        <Row>
-                            <Form.Label style={{ color: '#6e6e6e' }}>{local.partTimeEmployeeCount}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{(values.partTimeEmployeeCount) ? values.partTimeEmployeeCount : 0} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="4" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.partTimeEmployeeCount}</Form.Label>
+											<Form.Label>{(values.partTimeEmployeeCount) ? values.partTimeEmployeeCount : 0} </Form.Label>
                     </Form.Group>
                 </Form.Row>
             </div>
