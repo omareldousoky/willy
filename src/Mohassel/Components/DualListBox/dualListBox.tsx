@@ -162,6 +162,19 @@ class DualBox extends Component<Props, State> {
                             <h6>{this.props.rightHeader}</h6>
                             <ul className="list-group">
                                 <InputGroup>
+																		{this.props.dropDownKeys && this.props.dropDownKeys.length ?
+																			<DropdownButton
+																					as={InputGroup.Append}
+																					variant="outline-secondary"
+																					title={this.getArValue(this.state.dropDownValue)}
+																					id="input-group-dropdown-2"
+																					data-qc="search-dropdown"
+																			>
+																					{this.props.dropDownKeys.map((key, index) =>
+																							<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key }, () => this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
+																					)}
+																			</DropdownButton>
+																			: null}
 																	<InputGroup.Append>
 																		<InputGroup.Text className="bg-white rounded-0 border-bottom-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
 																	</InputGroup.Append>
@@ -174,19 +187,6 @@ class DualBox extends Component<Props, State> {
 																				className="border-bottom-0 rounded-0"
                                         placeholder={local.search}
                                     />
-                                    {this.props.dropDownKeys && this.props.dropDownKeys.length ?
-                                        <DropdownButton
-                                            as={InputGroup.Append}
-                                            variant="outline-secondary"
-                                            title={this.getArValue(this.state.dropDownValue)}
-                                            id="input-group-dropdown-2"
-                                            data-qc="search-dropdown"
-                                        >
-                                            {this.props.dropDownKeys.map((key, index) =>
-                                                <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key }, () => this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
-                                            )}
-                                        </DropdownButton>
-                                        : null}
                                 </InputGroup>
                                 {(this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <>
                                     <div className="list-group-item" style={{ background: '#FAFAFA' }} onClick={() => this.selectAllOptions()} >
