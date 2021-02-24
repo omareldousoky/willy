@@ -122,7 +122,7 @@ const CustomerStatusDetails = (props) => {
                                                         <th>عدد الأقساط</th>
                                                         <td>{numbersToArabic(loan.numInst)}</td>
                                                         <th>فترة السداد</th>
-                                                        <td>{numbersToArabic(loan.periodLength) + " " +numbersToArabic( periodType(loan.periodType))}</td>
+                                                        <td>{`${numbersToArabic(loan.periodLength, false)}  ${periodType(loan.periodType)}`}</td>
                                                         <th>فترة السماح</th>
                                                         <td>{numbersToArabic(loan.gracePeriod)}</td>
                                                         <th>عمولة المندوب</th>
@@ -132,7 +132,7 @@ const CustomerStatusDetails = (props) => {
                                                         <th>تكلفه التمويل القسط</th>
                                                         <td>{numbersToArabic(loan.feesInstallment)}</td>
                                                         <th>تكلفه التمويل الموزعه</th>
-                                                        <td>{numbersToArabic(loan.interest)} % سنويا</td>
+                                                        <td>{numbersToArabic(loan.interest, false)} % سنويا</td>
                                                         <th>تكلفه التمويل المقدمه</th>
                                                         <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                                     </tr>

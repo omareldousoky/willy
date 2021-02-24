@@ -78,11 +78,11 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
                     : "لا يوجد"}
                 </td>
                 <td>{numbersToArabic(row.installmentNumber) || "٠"}</td>
-                <td>{numbersToArabic(row.customerName) || "٠"}</td>
+                <td>{row.customerName}</td>
                 <td>{numbersToArabic(row.customerCode)}</td>
                 <td>{numbersToArabic(row.transactionCode)}</td>
                 <td>{row.representative}</td>
-                <td>{numbersToArabic(row.branchName)}</td>
+                <td>{row.branchName}</td>
                 <td>{numbersToArabic(row.branchCode)}</td>
               </tr>
             ))}
