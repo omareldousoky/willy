@@ -109,7 +109,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           local: "الاقساط المستحقة للمندوب كارت العميل",
           inputs: [
             "dateFromTo",
-            "creationDateFromTo",
             "branches",
             "representatives",
           ],
@@ -282,8 +281,6 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       endDate: values.toDate,
       branches: values.branches,
       representatives: values.representatives,
-      creationDateFrom: values.creationDateFrom,
-      creationDateTo: values.creationDateTo,
     };
     const res = await installmentsDuePerOfficerCustomerCard(request);
     this.handleFetchReport(

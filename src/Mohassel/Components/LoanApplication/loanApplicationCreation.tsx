@@ -35,6 +35,7 @@ import { BusinessSector } from '../CustomerCreation/StepTwoForm';
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
 import Select from 'react-select';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
+import { theme } from '../../../theme';
 
 interface Props {
     history: any;
@@ -1025,6 +1026,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     name="loanOfficer"
                                     data-qc="loanOfficer"
                                     value={this.state.selectedLoanOfficer}
+																		styles={theme.selectStyleWithBorder}
+																		theme={theme.selectTheme}
                                     enableReinitialize={false}
                                     onChange={(event) => {
                                         this.selectLO(event)

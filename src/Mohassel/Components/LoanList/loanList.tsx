@@ -197,6 +197,7 @@ class LoanList extends Component<Props, State> {
               url="loan"
               from={this.state.from}
               size={this.state.size}
+							submitClassName="mt-0"
               hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               from={this.state.from}

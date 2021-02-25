@@ -223,7 +223,7 @@ class ManualPayment extends Component<Props, State> {
                       </Form.Control.Feedback>
                   </Form.Group>
                   {this.props.paymentType === "normal"  && <Form.Group as={Col} md={6} controlId="installmentNumber">
-                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column >{`${local.installmentToBePaid}`}</Form.Label>
+                    <Form.Label column className="pr-0">{`${local.installmentToBePaid}`}</Form.Label>
                       <Form.Control
                         as="select"
                         name="installmentNumber"
@@ -253,7 +253,7 @@ class ManualPayment extends Component<Props, State> {
                       </Form.Control>
                   </Form.Group>}
                   <Form.Group as={Col} md={6} controlId="whoPaid">
-                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                    <Form.Label style={{ paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
                       <Form.Control
                         as="select"
                         name="payerType"
@@ -279,7 +279,7 @@ class ManualPayment extends Component<Props, State> {
                       </Form.Control.Feedback>
                   </Form.Group>
                   {this.props.formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
-                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
+                    <Form.Label style={{ paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
                       <Form.Control
                         as="select"
                         name="payerId"
@@ -299,7 +299,7 @@ class ManualPayment extends Component<Props, State> {
                       </Form.Control.Feedback>
                   </Form.Group>}
                   {this.props.formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
-                    <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
+                    <Form.Label style={{ paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
                       <AsyncSelect
                         className={this.props.formikProps.errors.payerId ? "error" : ""}
                         name="payerId"
@@ -322,7 +322,7 @@ class ManualPayment extends Component<Props, State> {
                   {(this.props.formikProps.values.payerType === 'family' || this.props.formikProps.values.payerType === 'nonFamily') &&
                     <>
                       <Form.Group as={Col} md={6} controlId="whoPaid">
-                        <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
+                        <Form.Label style={{ paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
                           <Form.Control
                             name="payerName"
                             data-qc="payerName"
@@ -335,7 +335,7 @@ class ManualPayment extends Component<Props, State> {
                           </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group as={Col} md={6} controlId="whoPaid">
-                        <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
+                        <Form.Label style={{ paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
                           <Form.Control
                             type="text"
                             name="payerNationalId"

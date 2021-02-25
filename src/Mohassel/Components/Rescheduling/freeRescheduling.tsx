@@ -201,7 +201,7 @@ class FreeRescheduling extends Component<Props, State>{
     }
     render() {
         return (
-            <div className="d-flex flex-column" style={{ textAlign: 'right' }} >
+            <div className="d-flex flex-column">
                 <Loader type="fullscreen" open={this.state.loading} />
                 {/* <Col> */}
                 <LoanDetailsBoxView application={this.props.application} />

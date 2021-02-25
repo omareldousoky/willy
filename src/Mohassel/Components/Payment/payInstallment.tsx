@@ -196,10 +196,10 @@ class PayInstallment extends Component<Props, State> {
                           controlId="installmentNumber"
                         >
                           <Form.Label
-                            style={{ paddingRight: 0 }}
+                            className="pr-0"
                             column
                           >{`${local.installmentToBePaid}`}</Form.Label>
-                          <Col>
+                          <Col className="pr-0">
                             <Form.Control
                               as="select"
                               name="installmentNumber"
@@ -240,10 +240,10 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Group>
                         <Form.Group as={Col} md={6} controlId="requiredAmount">
                           <Form.Label
-                            style={{ paddingRight: 0 }}
+                            className="pr-0"
                             column
                           >{`${local.requiredAmount}`}</Form.Label>
-                          <Col>
+                          <Col className="pr-0">
                             <Form.Control
                               type="number"
                               name="requiredAmount"
@@ -260,7 +260,7 @@ class PayInstallment extends Component<Props, State> {
                     {this.props.paymentType === "random" ? (
                       <Form.Group as={Col} md={6} controlId="randomPaymentType">
                         <Form.Label
-                          style={{ paddingRight: 0 }}
+                          className="pr-0"
                           column
                         >{`${local.randomPaymentToBePaid}`}</Form.Label>
                           <Form.Control
@@ -292,7 +292,7 @@ class PayInstallment extends Component<Props, State> {
                     ) : null}
                     <Form.Group as={Col} md={6} controlId="payAmount">
                       <Form.Label
-                        style={{ paddingRight: 0 }}
+                        className="pr-0"
                         column
                       >{`${local.amountCollectedFromCustomer}`}</Form.Label>
                         <Form.Control
@@ -331,7 +331,7 @@ class PayInstallment extends Component<Props, State> {
                     </Form.Group>
                     {this.props.penaltyAction !== "cancel" &&
                     <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
+                      <Form.Label className="pr-0" column>{`${local.whoMadeThePayment}`}</Form.Label>
                         <Form.Control
                           as="select"
                           name="payerType"
@@ -357,7 +357,7 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Control.Feedback>
                     </Form.Group>}
                     {formikBag.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
-                      <Form.Label style={{ paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
+                      <Form.Label className="pr-0" column>{`${local.customer}`}</Form.Label>
                         <Form.Control
                           as="select"
                           name="payerId"
@@ -376,7 +376,7 @@ class PayInstallment extends Component<Props, State> {
                         </Form.Control.Feedback>
                     </Form.Group>}
                     {formikBag.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
-                      <Form.Label style={{ paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
+                      <Form.Label className="pr-0" column>{`${local.employee}`}</Form.Label>
                         <AsyncSelect
                           className={formikBag.errors.payerId ? "error" : ""}
                           name="payerId"
@@ -398,7 +398,7 @@ class PayInstallment extends Component<Props, State> {
                     {(formikBag.values.payerType === 'family' || formikBag.values.payerType === 'nonFamily') &&
                       <>
                         <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
+                          <Form.Label className="pr-0" column>{`${local.name}`}</Form.Label>
                             <Form.Control
                               name="payerName"
                               data-qc="payerName"
@@ -411,7 +411,7 @@ class PayInstallment extends Component<Props, State> {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} md={6} controlId="whoPaid">
-                          <Form.Label style={{ paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
+                          <Form.Label className="pr-0" column>{`${local.nationalId}`}</Form.Label>
                             <Form.Control
                               type="text"
                               name="payerNationalId"
