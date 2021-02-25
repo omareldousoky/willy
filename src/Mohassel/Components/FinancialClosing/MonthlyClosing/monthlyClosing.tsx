@@ -5,8 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../../Shared/Components/Loader';
 import { financialClosing } from '../../../Services/APIs/loanApplication/financialClosing';
 import Swal from 'sweetalert2';
-import { Col, Form, } from 'react-bootstrap';
-import BackButton from '../../BackButton/back-button';
+import { Col, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { getErrorMessage } from '../../../../Shared/Services/utils';
@@ -129,8 +128,9 @@ class MonthlyClosing extends Component<Props, State>{
                                         </div>
                                     </Form.Group>
                                 </Col>
+                                <div className="d-flex justify-content-between py-4">
                                 <Button
-                                    style={{ float: 'right' }}
+                                    className="w-30"            
                                     variant="secondary"
                                     onClick={() => {
                                         window.location.reload();
@@ -138,9 +138,10 @@ class MonthlyClosing extends Component<Props, State>{
                                 >
                                     {local.cancel}
                                 </Button>
-                                <Can I="financialClosing" a="application"><Button type="submit" variant="primary">
+                                <Can I="financialClosing" a="application"><Button  className="w-30"  type="submit" variant="primary">
                                     {local.submit}
                                 </Button></Can>
+                                </div>
                             </Form>
                         }
                     </Formik>
