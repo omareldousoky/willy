@@ -124,7 +124,7 @@ class TraditionalLoanRescheduling extends Component<Props, State>{
     }
     render() {
         return (
-            <div className="d-flex flex-column" style={{ textAlign: 'right' }} >
+            <div className="d-flex flex-column">
                 <Loader type="fullscreen" open={this.state.loading} />
                 <LoanDetailsBoxView application={this.props.application} />
 

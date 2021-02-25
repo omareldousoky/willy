@@ -118,12 +118,12 @@ class BranchesList extends Component<Props, State> {
   render() {
     return (
       <div>
-        (<HeaderWithCards
+        <HeaderWithCards
           header={local.manageAccounts}
           array={this.state.manageAccountTabs}
           active={this.state.manageAccountTabs.map(item => { return item.icon }).indexOf('branches')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -132,7 +132,7 @@ class BranchesList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfBranches + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
               </div>
               <div>
-                <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button" style={{ marginLeft: 20 }}>{local.createNewBranch}</Button></Can>
+                <Can I='createBranch' a='branch'><Button onClick={() => { this.props.history.push("/manage-accounts/branches/new-branch") }} className="big-button">{local.createNewBranch}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

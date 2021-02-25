@@ -96,7 +96,7 @@ class FormulaList extends Component<Props, State> {
                     array={this.state.manageLoansTabs}
                     active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('calculationForumlas')}
                 />
-                <Card style={{ margin: '20px 50px' }}>
+                <Card className="main-card">
                     <Loader type="fullsection" open={this.state.loading} />
                     <Card.Body style={{ padding: 0 }}>
                         <div className="custom-card-header">

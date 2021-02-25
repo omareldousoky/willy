@@ -206,9 +206,9 @@ interface State {
         const _id = this.props.history.location.state.details;
         return(
             <div className={'rowContainer'}>
-            <span className={'fa icon'}>
+            <span className={'icon'}>
             <div
-                className={'iconConatiner fa icon'}
+                className={'iconContainer icon'}
                 onClick={() => { this.props.history.push({pathname:"/manage-accounts/branches/edit-branch",state: { details: _id }}) }}
             >
                 <img className={'iconImage'} alt={"edit"} src={require('../../Assets/editIcon.svg')} />

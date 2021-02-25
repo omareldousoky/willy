@@ -82,7 +82,8 @@ render(){
        <>
      <Loader type="fullsection" open={this.state.loading} />
      <Select 
-     styles = {theme.selectStyle}
+     styles = {theme.selectStyleWithBorder}
+		 theme = {theme.selectTheme}
      options = {this.state.governoratesOptions}
      value = {this.state.governorate}
      onChange = {(event)=> {

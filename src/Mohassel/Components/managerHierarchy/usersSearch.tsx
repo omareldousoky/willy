@@ -125,7 +125,8 @@ class UsersSearch extends Component<Props, State> {
               }}
               name="users"
               data-qc="users"
-              styles={theme.selectStyle}
+							styles={theme.selectStyleWithBorder}
+							theme={theme.selectTheme}
               getOptionValue={(option) => option[this.state.dropDownValue]}
               getOptionLabel={(option) => option.name}
               loadOptions={this.getUsers}

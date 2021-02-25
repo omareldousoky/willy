@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Swal from 'sweetalert2';
-import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Card from 'react-bootstrap/Card';
@@ -12,7 +11,6 @@ import RoleTable from './roleTable';
 import { getPermissions } from '../../Services/APIs/Roles/roles';
 import { Section } from "./roleCreation";
 import RoleUsers from './roleUsers';
-import Button from 'react-bootstrap/Button';
 import BackButton from '../BackButton/back-button';
 import { withRouter } from 'react-router-dom';
 import { getErrorMessage } from '../../../Shared/Services/utils';
@@ -86,21 +84,13 @@ class RoleProfile extends Component<Props, State>{
                     <Form style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5' }}>
                         <h5>{local.role}</h5>
                         <Form.Row>
-                            <Form.Group as={Col} md="4">
-                                <Row>
-                                    <Form.Label style={{ color: '#6e6e6e' }}>{local.roleName}</Form.Label>
-                                </Row>
-                                <Row>
-                                    <Form.Label>{this.state.role.roleName} </Form.Label>
-                                </Row>
+                            <Form.Group as={Col} md="4" className="d-flex flex-column">
+															<Form.Label style={{ color: '#6e6e6e' }}>{local.roleName}</Form.Label>
+															<Form.Label>{this.state.role.roleName} </Form.Label>
                             </Form.Group>
-                            <Form.Group as={Col} md="4">
-                                <Row>
-                                    <Form.Label style={{ color: '#6e6e6e' }}>{local.permissions}</Form.Label>
-                                </Row>
-                                <Row>
-                                    <Form.Label>{this.state.role.hasBranch ? local.branchPermissions : local.allPermissions}</Form.Label>
-                                </Row>
+                            <Form.Group as={Col} md="4" className="d-flex flex-column">
+															<Form.Label style={{ color: '#6e6e6e' }}>{local.permissions}</Form.Label>
+															<Form.Label>{this.state.role.hasBranch ? local.branchPermissions : local.allPermissions}</Form.Label>
                             </Form.Group>
                         </Form.Row>
                     </Form>

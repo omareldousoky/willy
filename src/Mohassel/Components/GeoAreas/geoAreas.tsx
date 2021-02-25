@@ -16,6 +16,7 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Card from 'react-bootstrap/Card';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { CRUDList } from '../CRUDList/crudList';
+import { theme } from '../../../theme';
 
 interface GeoArea {
     name: string;
@@ -109,16 +110,18 @@ class GeoAreas extends Component<{}, State> {
                     array={this.state.manageToolsTabs}
                     active={this.state.manageToolsTabs.map(item => { return item.icon }).indexOf('branchAreas')}
                 />
-                <Card>
+                <Card className="main-card">
                     <div style={{ display: 'flex', textAlign: 'center', flexDirection: 'column' }}>
                         <Form.Group as={Row} controlId="branch" style={{ width: '100%', marginTop: '1rem' }}>
-                            <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.branch}</Form.Label>
+                            <Form.Label column sm={4}>{local.branch}</Form.Label>
                             <Col sm={6}>
                                 <Select
                                     name="branch"
                                     data-qc="branch"
                                     value={this.state.branch}
                                     enableReinitialize={false}
+																		styles={theme.selectStyleWithBorder}
+																		theme={theme.selectTheme}
                                     onChange={(event: any) => { this.setState({ branch: event }, () => this.getBranchAreas()) }}
                                     type='text'
                                     getOptionLabel={(option) => option.name}
