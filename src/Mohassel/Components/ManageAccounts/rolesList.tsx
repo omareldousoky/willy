@@ -70,7 +70,7 @@ class RolesList extends Component<Props, State> {
       array = {this.state.manageAccountTabs}
       active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('roles')}
       />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -97,7 +97,7 @@ class RolesList extends Component<Props, State> {
               .map((el, index) => {
                 const role = el;
                 return (
-                  <Card style={{ margin: '20px 50px', cursor: 'pointer' }} key={index} onClick={() => this.props.history.push(`/manage-accounts/roles/role-profile`, role)}>
+                  <Card style={{ margin: '2rem', cursor: 'pointer' }} key={index} onClick={() => this.props.history.push(`/manage-accounts/roles/role-profile`, role)}>
                     <Card.Body>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>

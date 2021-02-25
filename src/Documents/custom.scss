@@ -1,6 +1,13 @@
-$theme-colors: (
-  "primary": #7dc356,
-  "danger": #d51b1b
-);
+$theme-colors: ("primary": #7dc356,
+	"danger": #d51b1b);
 
-@import "~bootstrap/scss/bootstrap";
+$green: #7dc356;
+
+@import "~bootstrap-v4-rtl/scss/bootstrap-rtl";
+
+@media print {
+	.rtl th,
+	[dir="rtl"] th {
+		text-align: center;
+	}
+}

@@ -113,7 +113,8 @@ class UserManagerForm extends Component<Props, State> {
             {`${local.chooseMainRole} *`}
           </Form.Label>
           <Select
-            styles={theme.selectStyle}
+						styles={theme.selectStyleWithBorder}
+						theme={theme.selectTheme}
             isSearchable={true}
             filterOption={customFilterOption}
             placeholder={
@@ -167,7 +168,8 @@ class UserManagerForm extends Component<Props, State> {
               {`${local.chooseMainBranch} *`}
             </Form.Label>
             <Select
-              styles={theme.selectStyle}
+							styles={theme.selectStyleWithBorder}
+							theme={theme.selectTheme}
               isSearchable={true}
               filterOption={customFilterOption}
               placeholder={
@@ -222,7 +224,8 @@ class UserManagerForm extends Component<Props, State> {
                 {local.chooseManager}
               </Form.Label>
               <Select
-                styles={theme.selectStyle}
+								styles={theme.selectStyleWithBorder}
+								theme={theme.selectTheme}
                 isSearchable={true}
                 filterOption={customFilterOption}
                 placeholder={
@@ -251,35 +254,26 @@ class UserManagerForm extends Component<Props, State> {
             </Form.Group>
           </>
         )}
-        <Form.Group as={Row}>
-          <Col>
-            <Button
-              className={"btn-cancel-prev"}
-              style={{ width: "60%" }}
-              data-qc="previous"
-              onClick={() => {
-                this.props.previousStep(this.props.values);
-              }}
-            >
-              {local.previous}
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              className={"btn-submit-next"}
+				<div className="d-flex justify-content-between">
+					<Button 
+						className="btn-cancel-prev w-25"
+						data-qc="previous"
+						onClick={() => {
+							this.props.previousStep(this.props.values);
+						}}
+						>{local.previous}</Button>
+						<Button
+							variant="primary"
+							className="w-25" 
+              onClick={this.props.handleSubmit}
               disabled={
                 !this.state.mainRoleId ||
                 (!this.state.mainBranchId && this.state.hasBranch)
               }
-              style={{ float: "left", width: "60%" }}
-              type="button"
-              onClick={this.props.handleSubmit}
+							type="button"
               data-qc="submit"
-            >
-              {local.submit}
-            </Button>
-          </Col>
-        </Form.Group>
+						>{local.submit}</Button>
+				</div>
       </Container>
     );
   }

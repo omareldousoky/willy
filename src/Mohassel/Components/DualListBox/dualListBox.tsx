@@ -7,6 +7,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Swal from 'sweetalert2';
+import { Container } from 'react-bootstrap';
 
 interface Props {
     options: any;
@@ -23,6 +24,7 @@ interface Props {
     disabled?: Function;
     disabledMessage?: Function;
     oneWay?: boolean;
+		className?: string;
 }
 
 interface State {
@@ -155,37 +157,38 @@ class DualBox extends Component<Props, State> {
     }
     render() {
         return (
-            <div className="container" style={{ marginTop: 20, textAlign: 'right' }}>
+            <Container className={this.props.className || ""} style={{ marginTop: 20 }}>
                 <div className={!this.props.vertical ? "row-nowrap" : "d-flex flex-column justify-content-center"}>
                     <div className={!this.props.vertical ? 'dual-list list-left col-md-5' : 'dual-list list-left'}>
-                        <div className="well text-right">
+                        <div className="well">
                             <h6>{this.props.rightHeader}</h6>
                             <ul className="list-group">
-                                <InputGroup style={{ direction: 'ltr' }}>
+                                <InputGroup>
+																		{this.props.dropDownKeys && this.props.dropDownKeys.length ?
+																			<DropdownButton
+																					as={InputGroup.Append}
+																					variant="outline-secondary"
+																					title={this.getArValue(this.state.dropDownValue)}
+																					id="input-group-dropdown-2"
+																					data-qc="search-dropdown"
+																			>
+																					{this.props.dropDownKeys.map((key, index) =>
+																							<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key }, () => this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
+																					)}
+																			</DropdownButton>
+																			: null}
+																	<InputGroup.Append>
+																		<InputGroup.Text className="bg-white rounded-0 border-bottom-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
+																	</InputGroup.Append>
                                     <Form.Control
                                         type="text"
                                         name="searchKeyWord"
                                         data-qc="searchKeyWord"
                                         onChange={(e) => this.handleSearch(e.currentTarget.value)}
-                                        style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+                                        style={{ padding: 22 }}
+																				className="border-bottom-0 rounded-0"
                                         placeholder={local.search}
                                     />
-                                    <InputGroup.Append>
-                                        <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                                    </InputGroup.Append>
-                                    {this.props.dropDownKeys && this.props.dropDownKeys.length ?
-                                        <DropdownButton
-                                            as={InputGroup.Append}
-                                            variant="outline-secondary"
-                                            title={this.getArValue(this.state.dropDownValue)}
-                                            id="input-group-dropdown-2"
-                                            data-qc="search-dropdown"
-                                        >
-                                            {this.props.dropDownKeys.map((key, index) =>
-                                                <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key }, () => this.handleSearch(this.state.searchKeyword))}>{this.getArValue(key)}</Dropdown.Item>
-                                            )}
-                                        </DropdownButton>
-                                        : null}
                                 </InputGroup>
                                 {(this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <>
                                     <div className="list-group-item" style={{ background: '#FAFAFA' }} onClick={() => this.selectAllOptions()} >
@@ -243,21 +246,22 @@ class DualBox extends Component<Props, State> {
                         </Button>
                     </div>}
                     {(this.state.options.length > 0 || this.state.selectedOptions.length > 0) && <div className={!this.props.vertical ? 'dual-list list-right col-md-5' : 'dual-list list-right'}>
-                        <div className="well text-right">
+                        <div className="well">
                             <h6 className="text-muted">{this.props.leftHeader}</h6>
                             <ul className="list-group">
-                                <InputGroup style={{ direction: 'ltr' }}>
+                                <InputGroup>
+																	<InputGroup.Append>
+																		<InputGroup.Text className="bg-white rounded-0 border-bottom-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
+																	</InputGroup.Append>
                                     <Form.Control
                                         type="text"
                                         name="searchSelectedKeyWord"
                                         data-qc="searchSelectedKeyWord"
                                         onChange={(e) => this.setState({ searchSelectedKeyWord: e.currentTarget.value })}
-                                        style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+                                        style={{ padding: 22 }}
+																				className="border-bottom-0 rounded-0"
                                         placeholder={local.search}
                                     />
-                                    <InputGroup.Append>
-                                        <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                                    </InputGroup.Append>
                                 </InputGroup>
                                 <div className="list-group-item delete-all-row" style={{ background: '#FAFAFA' }}>
                                     <span className="text-muted">{local.count}({this.state.selectedOptions.length})</span>
@@ -276,7 +280,7 @@ class DualBox extends Component<Props, State> {
                         </div>
                     </div>}
                 </div>
-            </div>
+            </Container>
         )
     }
 }

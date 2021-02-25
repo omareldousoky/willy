@@ -93,7 +93,7 @@ class LoanProducts extends Component<Props, State> {
                     array={this.state.manageLoansTabs}
                     active={this.state.manageLoansTabs.map(item => {return item.icon}).indexOf('loanProducts')}
                 />
-                <Card style={{ margin: '20px 50px' }}>
+                <Card className="main-card">
                     <Loader type="fullsection" open={this.state.loading} />
                     <Card.Body style={{ padding: 0 }}>
                         <div className="custom-card-header">
@@ -102,7 +102,7 @@ class LoanProducts extends Component<Props, State> {
                                 <span className="text-muted">{local.noOfLoanProducts + ` (${this.state.products.length})`}</span>
                             </div>
                             <div>
-                                <Can I='createLoanProduct' a='product'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/manage-loans/loan-products/new-loan-product')}>{local.createLoanProduct}</Button></Can>
+                                <Can I='createLoanProduct' a='product'><Button className="big-button" onClick={() => this.props.history.push('/manage-loans/loan-products/new-loan-product')}>{local.createLoanProduct}</Button></Can>
                                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
                             </div>
                         </div>

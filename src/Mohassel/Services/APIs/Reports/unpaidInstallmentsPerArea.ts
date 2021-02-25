@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { OperationsReportRequest } from "../../interfaces";
+import { UnpaidInstallmentsPerAreaRequest } from "../../interfaces";
 import axios from "../axios-instance";
 
 const { REACT_APP_BASE_URL } = process.env;
@@ -36,6 +36,7 @@ export interface UnpaidInstallmentsPerAreaResponse {
   count: number;
 }
 
+
 // TODO: move out to common file
 export interface ApiResponse<T> {
   status: "success" | "error";
@@ -44,7 +45,7 @@ export interface ApiResponse<T> {
 }
 
 export const fetchUnpaidInstallmentsPerAreaReport = async (
-  request: OperationsReportRequest
+  request: UnpaidInstallmentsPerAreaRequest
 ): Promise<ApiResponse<UnpaidInstallmentsPerAreaResponse>> => {
   try {
     const res: AxiosResponse<UnpaidInstallmentsPerAreaResponse> = await axios.post(

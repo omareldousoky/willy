@@ -106,7 +106,11 @@
     "quarter_snapshot_missing":{"en":"The quarter snapshot needed to produce the report is missing.","ar":"نسخة البيانات ربع السنوية غير موجودة"},
     "group_leader_exists": {"en":"Group leader is already exists","ar":"قائد المجموعة موجود بالفعل "},
     "group_officer_exists": {"en":"Group officer is already exists","ar":"مندوب موجود بالفعل "},
-		"wrong_password": {"en":"Current password is incorrect","ar":"كلمة المرور الحالية خطأ"},
+    "wrong_password": {"en":"Current password is incorrect","ar":"كلمة المرور الحالية خطأ"},
+    "customer_not_over_65": {"en": "Customer is younger than 65 years old", "ar": "سن العميل أقل من ٦٥ سنة"},
+    "customer_not_deceased": {"en":"Customer must be deceased","ar":"العميل غير متوفي"},
+    "sector_not_found" : {"en": "sector not found","ar": "قطاع الأعمال غير موجود"},
+    "activity_not_found":{"en": "activity not found ","ar": "نوع النشاط غير موجود"},
     "invalid_close_date_in_future":{"en":"the financial closing date is in the future","ar":"تاريخ الإقفال المالي في المستقبل"},
     "invalid_close_date_pending_actions":{"en":"the financial closing date is invalid, there pending actions before that date","ar":"تاريخ الإقفال المالي خطأ، يوجد حركات معلقة"},
     "invalid_system_is_financially_closed":{"en":"the system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"}

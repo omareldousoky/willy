@@ -229,14 +229,20 @@ export const pathTo = (route) => {
 /* 
 	inputs sometimes include "-" which is considered as English text. it used to flip the number
 	e.g. 2333-456 => ٢٣٣٣-٤٥٦ 
-	When we mix that with the arabic number, which you want to appear right-to-left
+	When we mix that with the arabic number, which you want to appear left-to-right
 	so we append Left-to-Right Marker character "\u200E" which indicates how text will be rendered
 	https://stackoverflow.com/a/34903965
+
+	pass withLTRControlChar = false in case we want to use number with arabic word
+	so we won't change direction of the arabic word
+	e.g. ٣ أشهر
 */
-export const numbersToArabic = (input?: number | string) =>
-  input === undefined
+export const numbersToArabic = (input?: number | string, withLTRControlChar = true) => {
+	const toArabic = input === undefined
     ? "٠"
-    : input.toString().replace(/\d/g, (d) => "\u200E" + "٠١٢٣٤٥٦٧٨٩"[d]);
+    : input.toString().replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
+	return withLTRControlChar ? toArabic.replace(/./g, "\u200E$&") : toArabic
+}
 
 export const timeToArabicDateNow = (fullDate: boolean): string => {
   return fullDate

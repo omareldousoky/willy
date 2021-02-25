@@ -195,7 +195,7 @@ class CIB extends Component<Props, State> {
           array={this.state.manageLoansTabs}
           active={this.state.manageLoansTabs.map(item => { return item.icon }).indexOf('cib')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullsection" open={this.state.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -207,7 +207,6 @@ class CIB extends Component<Props, State> {
               <Button onClick={() => this.submit()}
                 disabled={!Boolean(this.state.selectedCustomers.length)}
                 className="big-button"
-                style={{ marginLeft: 20 }}
               > {local.changeFund}
                 <span className="fa fa-exchange-alt" style={{ verticalAlign: 'middle', marginRight: 10 }}></span>
               </Button>
@@ -224,11 +223,15 @@ class CIB extends Component<Props, State> {
                 <Form onSubmit={formikProps.handleSubmit} style={{ padding: '10px 30px 26px 30px' }}>
                   <Row>
                     <Col sm={6}>
-                      <InputGroup style={{ direction: 'ltr' }}>
+                      <InputGroup>
+												<InputGroup.Append>
+                          <InputGroup.Text className="bg-white border-left-0"><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+                        </InputGroup.Append>
                         <FormControl
                           type="text"
                           name="keyword"
                           data-qc="searchKeyword"
+													className="border-right-0"
                           onChange={(e) => {
                             this.setState({
                               keyword: e.currentTarget.value,
@@ -236,13 +239,9 @@ class CIB extends Component<Props, State> {
                             });
                             formikProps.setFieldValue("keyword", e.currentTarget.value)
                           }}
-                          style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
                           placeholder={local.name}
                           value={formikProps.values.keyword}
                         />
-                        <InputGroup.Append>
-                          <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                        </InputGroup.Append>
                       </InputGroup>
                     </Col>
                     <Col sm={6}>
@@ -250,6 +249,7 @@ class CIB extends Component<Props, State> {
                         <p className="dropdown-label" style={{ alignSelf: 'normal', marginLeft: 20, width: 400 }}>{local.issuanceDate}</p>
                         <span>{local.from}</span>
                         <Form.Control
+													required
                           style={{ marginLeft: 20, border: 'none' }}
                           type="date"
                           name="fromDate"
@@ -263,6 +263,7 @@ class CIB extends Component<Props, State> {
                         </Form.Control>
                         <span>{local.to}</span>
                         <Form.Control
+													required
                           style={{ marginRight: 20, border: 'none' }}
                           type="date"
                           name="toDate"
@@ -282,8 +283,8 @@ class CIB extends Component<Props, State> {
                       }} />
                     </Col>
 
-                    <Col>
-                      <Button type="submit" style={{ width: 180, height: 50, marginTop: 20 }}>{local.search}</Button>
+                    <Col className="d-flex">
+                      <Button className="ml-auto" type="submit" style={{ width: 180, height: 50, marginTop: 20 }}>{local.search}</Button>
                     </Col>
                   </Row>
                 </Form>

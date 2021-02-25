@@ -1,0 +1,101 @@
+@media screen, print {
+    .activeWalletGroup {
+      font-size: 10px;
+      font-weight: bold;
+      text-align: right;
+      direction: rtl;
+      page-break-after: always;
+      width: 100%;
+      & tbody {
+        page-break-inside: avoid;
+        width: 100%;
+      }
+      ​ & .tbody-border {
+        box-shadow: 0 0 0 1px black;
+      }
+      & .box {
+        border:  1px solid lightgray ; 
+        background-color: #f1ecec;
+        min-width: 200px;
+        height: 40px;
+        margin-right: 10px;
+        page-break-inside: avoid;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        padding: 5px;
+      }
+      & .small-box {
+        min-width: 100px;
+      }
+      & .header-wrapper {
+        display: flex;
+        margin: 10px;
+        justify-content: space-between;
+        font-weight: bold;
+
+        p {
+            font-size: .9rem !important;
+        }
+       }
+      ​ & table {
+        width: 100%;
+      }
+      & thead.report-header {
+        display: table-header-group;
+    }
+    & thead {
+      display: table-row-group;
+      margin: 10px auto;
+    }
+
+    & thead,
+    & tbody tr {
+      page-break-inside: avoid;
+      margin: 10px;
+    }
+
+    & td {
+      font-size: 12px;
+      font-weight: bold;
+      page-break-inside: avoid;
+      text-align: center;
+      line-height: 1.5em;
+      margin: 0 10px;
+      white-space: nowrap;
+    }
+
+    & thead tr th {
+      background-color: #f1ecec;
+      -webkit-print-color-adjust: exact;
+      border: 0.5px solid black;
+      line-height: 1.5em;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+    & .group-data {
+      background-color: #f1ecec;
+      -webkit-print-color-adjust: exact;
+      border: 0.5px solid black;
+      line-height: 1.5em;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+      & .report-container{
+        width: 100%;
+      }
+      & input:checked::after {
+        content: '\f14a';
+        color: white;
+      }
+    & .horizontal-line {
+      border-bottom: 1px solid black; 
+      width: 100%;
+    }
+    }
+  }
+  @media screen {
+    .activeWalletGroup {
+        max-width: 700px;
+        display: none;
+      }
+    }

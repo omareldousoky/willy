@@ -144,7 +144,7 @@ class CustomersList extends Component<Props, State> {
             </Can>
             <Can I="blockAndUnblockCustomer" a="customer">
               <span
-                className="fa icon row-nowrap"
+                className="icon row-nowrap"
                 style={{ width: "120px", fontSize: "13px" }}
                 onClick={() => this.handleActivationClick(data)}
               >
@@ -271,7 +271,7 @@ class CustomersList extends Component<Props, State> {
             })
             .indexOf("customers")}
         />
-        <Card style={{ margin: "20px 50px" }}>
+        <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -291,7 +291,6 @@ class CustomersList extends Component<Props, State> {
                       this.props.history.push("/customers/new-customer");
                     }}
                     className="big-button"
-                    style={{ marginLeft: 20 }}
                   >
                     {local.newCustomer}
                   </Button>
