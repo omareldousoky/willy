@@ -11,6 +11,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { getErrorMessage } from '../../../../Shared/Services/utils';
 import { withRouter } from 'react-router-dom';
+import Can from '../../../config/Can';
+
 
 interface Props {
     history: Array<string>;
@@ -35,20 +37,18 @@ class MonthlyClosing extends Component<Props, State>{
     }
     async Close(closeDate: number) {
         this.setState({ loading: true })
-        console.log(closeDate)
         const res = await financialClosing({ closeDate })
         if (res.status == "success") {
             this.setState({ loading: false })
-            Swal.fire('Success', '', 'success');
+            Swal.fire('Success', '', 'success').then(()=> this.props.history.push('/'));
         } else {
             this.setState({ loading: false })
             Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
         }
     }
-     handleSubmit = async(values) =>{
+    handleSubmit = async (values) => {
         const closeDate = values.closeDate;
         const endOfCloseDate = new Date(closeDate).setHours(23, 59, 59).valueOf();
-        console.log(endOfCloseDate);
         Swal.fire({
             title: local.areYouSure,
             text: `${local.monthlyClosing}`,
@@ -59,98 +59,98 @@ class MonthlyClosing extends Component<Props, State>{
             confirmButtonText: local.monthlyClosing,
             cancelButtonText: local.cancel
         }).then(async (isConfirm) => {
-                if (isConfirm.value) {
-                    await this.Close(endOfCloseDate);
-                }
-            });
+            if (isConfirm.value) {
+                await this.Close(endOfCloseDate);
+            }
+        });
     }
     render() {
         return (
-            <>
-                <div className={'rowContainer'}>
-                    <BackButton title={local.monthlyClosing} />
+            <Card className="main-card">
+                <Loader type="fullscreen" open={this.state.loading} />
+                <div className="custom-card-header">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.monthlyClosing}</Card.Title>
+                    </div>
                 </div>
-                <Card className="main-card">
-                    <Loader type="fullscreen" open={this.state.loading} />
-                    <Card.Body className=" d-flex justify-content-center">
-                        <Formik
-                            initialValues={{ closeDate: 0 }}
-                            onSubmit={this.handleSubmit}
-                            validationSchema={monthClosingValidation}
-                            validateOnBlur
-                            validateOnChange
-                        >
-                            {(formikProps) =>
-                                <Form onSubmit={formikProps.handleSubmit} className="w-50">
-                                    <Col sm={12} key={"colseDate"}>
-                                        <Form.Group controlId="closeDate">
-                                            <div
-                                                className="dropdown-container"
-                                                style={{ flex: 1, alignItems: "center" }}
+                <Card.Body className="w-100 d-flex justify-content-center">
+                    <Formik
+                        initialValues={{ closeDate: 0 }}
+                        onSubmit={this.handleSubmit}
+                        validationSchema={monthClosingValidation}
+                        validateOnBlur
+                        validateOnChange
+                    >
+                        {(formikProps) =>
+                            <Form onSubmit={formikProps.handleSubmit} className="w-50 p-3">
+                                <Col sm={12} key={"colseDate"}>
+                                    <Form.Group controlId="closeDate">
+                                        <div
+                                            className="dropdown-container"
+                                            style={{ flex: 1, alignItems: "center" }}
+                                        >
+                                            <p
+                                                className="dropdown-label"
+                                                style={{
+                                                    alignSelf: "normal",
+                                                    marginLeft: 20,
+                                                    width: 300,
+                                                    textAlign: "center",
+                                                }}
                                             >
-                                                <p
-                                                    className="dropdown-label"
-                                                    style={{
-                                                        alignSelf: "normal",
-                                                        marginLeft: 20,
-                                                        width: 300,
-                                                        textAlign: "center",
-                                                    }}
-                                                >
-                                                    {local.closeDate}
-                                                </p>
-                                                <Form.Control
-                                                    style={{ marginLeft: 20, border: "none" }}
-                                                    type="date"
-                                                    name="closeDate"
-                                                    data-qc="closeDate"
-                                                    value={formikProps.values.closeDate}
-                                                    isInvalid={Boolean(
-                                                        formikProps.errors.closeDate &&
-                                                        formikProps.touched.closeDate
-                                                    )}
-                                                    onBlur={formikProps.handleBlur}
-                                                    onChange={(e) => {
+                                                {local.closeDate}
+                                            </p>
+                                            <Form.Control
+                                                style={{ marginLeft: 20, border: "none" }}
+                                                type="date"
+                                                name="closeDate"
+                                                data-qc="closeDate"
+                                                value={formikProps.values.closeDate}
+                                                isInvalid={Boolean(
+                                                    formikProps.errors.closeDate &&
+                                                    formikProps.touched.closeDate
+                                                )}
+                                                onBlur={formikProps.handleBlur}
+                                                onChange={(e) => {
+                                                    formikProps.setFieldValue(
+                                                        "closeDate",
+                                                        e.currentTarget.value
+                                                    );
+                                                    if (e.currentTarget.value === "")
                                                         formikProps.setFieldValue(
                                                             "closeDate",
-                                                            e.currentTarget.value
+                                                            ""
                                                         );
-                                                        if (e.currentTarget.value === "")
-                                                            formikProps.setFieldValue(
-                                                                "closeDate",
-                                                                ""
-                                                            );
-                                                    }}
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {formikProps.errors.closeDate}
-                                                </Form.Control.Feedback>
-                                            </div>
-                                        </Form.Group>
-                                    </Col>
-                                    <Button
-                                        style={{ float: 'right' }}
-                                        variant="secondary"
-                                        onClick={() => {
-                                            window.location.reload();
-                                        }}
-                                    >
-                                        {local.cancel}
-                                    </Button>
-                                    <Button type="submit" variant="primary">
-                                        {local.submit}
-                                    </Button>
-                                </Form>
-                            }
-                        </Formik>
-                    </Card.Body>
-                    <Card.Footer>
-                        <div className="d-flex">
-                            <p className="clickable-action" onClick={() => this.props.history.push('/reports')}>{local.reviewFinancialState}</p>
-                        </div>
-                    </Card.Footer>
-                </Card>
-            </>
+                                                }}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {formikProps.errors.closeDate}
+                                            </Form.Control.Feedback>
+                                        </div>
+                                    </Form.Group>
+                                </Col>
+                                <Button
+                                    style={{ float: 'right' }}
+                                    variant="secondary"
+                                    onClick={() => {
+                                        window.location.reload();
+                                    }}
+                                >
+                                    {local.cancel}
+                                </Button>
+                                <Can I="financialClosing" a="application"><Button type="submit" variant="primary">
+                                    {local.submit}
+                                </Button></Can>
+                            </Form>
+                        }
+                    </Formik>
+                </Card.Body>
+                <Card.Footer>
+                    <div className="d-flex">
+                        <p className="clickable-action" onClick={() => this.props.history.push('/reports')}>{local.reviewFinancialState}</p>
+                    </div>
+                </Card.Footer>
+            </Card>
         )
     }
 }

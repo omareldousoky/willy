@@ -442,7 +442,7 @@ const appRoutes = [
       },{
         path: '/financial-closing',
         label: local.financialClosing,
-        render: (props) => <FinancialClosing {...props} />
+        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
       }
     ]
   },
