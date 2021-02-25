@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { OperationsReportRequest, UnpaidInstallmentsPerAreaRequest } from "../../interfaces";
+import { UnpaidInstallmentsPerAreaRequest } from "../../interfaces";
 import axios from "../axios-instance";
 
 const { REACT_APP_BASE_URL } = process.env;
