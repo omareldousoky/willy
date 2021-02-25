@@ -158,7 +158,7 @@ class DocumentPhoto extends Component<Props, State> {
     return (
       <Card.Body key={key} className="photo-upload-container" >
         {!this.props.view && <Row data-qc="photo-actions" className="photo-actions" >
-          <span className="fa icon" onClick={(e) => this.deleteDocument(e)}><img alt="delete" src={require('../../../Shared/Assets/deleteIcon.svg')} /></span>
+          <span className="icon" onClick={(e) => this.deleteDocument(e)}><img alt="delete" src={require('../../../Shared/Assets/deleteIcon.svg')} /></span>
         </Row>}
         <Row style={{ height: "" }}>
           <div>

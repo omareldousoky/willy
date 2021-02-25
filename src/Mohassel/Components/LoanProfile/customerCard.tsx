@@ -103,30 +103,18 @@ export const CustomerCardView = (props: Props) => {
       {props.penalty && <div>
         <h6>{local.penalties}</h6>
         <Form style={{ margin: '20px 0' }}>
-          <Form.Row>
-            <Form.Group as={Col} md="3">
-              <Row>
+          <Form.Row className="col">
+            <Form.Group as={Col} md="3" className="d-flex flex-column">
                 <Form.Label style={{ color: '#6e6e6e' }}>غرامات مسددة</Form.Label>
-              </Row>
-              <Row>
                 <Form.Label>{numbersToArabic(props.application.penaltiesPaid)}</Form.Label>
-              </Row>
             </Form.Group>
-            <Form.Group as={Col} md="3">
-              <Row>
+            <Form.Group as={Col} md="3" className="d-flex flex-column">
                 <Form.Label style={{ color: '#6e6e6e' }}>غرامات مطلوبة</Form.Label>
-              </Row>
-              <Row>
                 <Form.Label>{numbersToArabic(props.penalty)}</Form.Label>
-              </Row>
             </Form.Group>
-            <Form.Group as={Col} md="3">
-              <Row>
+            <Form.Group as={Col} md="3" className="d-flex flex-column">
                 <Form.Label style={{ color: '#6e6e6e' }}>غرامات معفاة</Form.Label>
-              </Row>
-              <Row>
                 <Form.Label>{numbersToArabic(props.application.penaltiesCanceled)}</Form.Label>
-              </Row>
             </Form.Group>
           </Form.Row>
         </Form>

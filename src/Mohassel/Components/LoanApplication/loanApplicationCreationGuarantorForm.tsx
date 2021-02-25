@@ -14,7 +14,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     return (
         <>
-            <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
+            <Form style={{ width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
                 {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox values={props.customer} /> :
                     <GroupInfoBox group={{individualsInGroup: values.individualDetails}} />
@@ -25,11 +25,11 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                             {values.guarantors.map((guarantor, i) => {
                                 const text = guarantorOrderLocal[i && i > 10 ? "default" : i]
                                 return (
-                                    <Row key={i} style={{ width: '100%' }}>
+                                    <Row key={i} className="col-12 text-nowrap">
                                         <CustomerSearch
                                             source={text}
                                             key={i}
-                                            style={{ width: '98%' }}
+                                            className="col-11 p-0"
                                             handleSearch={(key, query) => props.handleSearch(key, query, i)}
                                             searchResults={guarantor.searchResults}
                                             selectCustomer={(guarantor) => { props.selectGuarantor(guarantor, i, values) }}
@@ -37,7 +37,11 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                             removeCustomer={(guarantor) => { props.removeGuarantor(guarantor, i, values) }}
                                             header={text}
                                         />
-                                        {(i > values.noOfGuarantors - 1) && <span style={{ width: '2%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => props.removeGuar(guarantor, i, values)}>-</span>}
+                                        {(i > values.noOfGuarantors - 1) && (
+																				<div className="d-flex col-1 p-0">
+																					<Button variant="primary" className="m-auto" onClick={() => props.removeGuar(guarantor, i, values)}>-</Button>
+																				</div>
+																				)}
                                     </Row>
                                 )
                             }
@@ -96,9 +100,13 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         />
                     </div>
                 </fieldset>
-                <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '10px 0px' }}>
-                    <Button type='button' className='btn-cancel-prev' style={{ width: '20%' }} onClick={() => { props.step('backward') }}>{local.previous}</Button>
-                    {(values.state === 'edit' || values.state === 'under_review') && <Button type="button" className='btn-submit-next' style={{ float: 'left', width: '20%' }} onClick={handleSubmit}>{(values.state === 'under_review') ? local.submit : local.edit}</Button>}
+								<div className="d-flex justify-content-between py-4">
+                    <Button
+                        className="btn-cancel-prev w-25"
+                        onClick={() => { props.step('backward') }}
+                    >{local.previous}</Button>
+									{(values.state === 'edit' || values.state === 'under_review') && 
+										<Button variant="primary" type="button" className='w-25' onClick={handleSubmit}>{(values.state === 'under_review') ? local.submit : local.edit}</Button>}
                 </div>
             </Form >
         </>

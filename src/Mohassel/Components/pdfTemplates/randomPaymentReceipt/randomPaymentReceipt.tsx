@@ -16,8 +16,7 @@ const randomPaymentReceipt = (props) => {
         }
     }
     const getValueFromLocalizationFileByKey = (key) => {
-        if (key === 'collectionCommission') return local.collectionCommission
-        else if (key === 'reissuingFees') return local.reissuingFees
+        if (key === 'reissuingFees') return local.reissuingFees
         else if (key === 'legalFees') return local.legalFees
         else if (key === 'clearanceFees') return local.clearanceFees
         else if (key === 'toktokStamp') return local.toktokStamp

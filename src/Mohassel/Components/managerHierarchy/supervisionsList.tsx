@@ -235,7 +235,7 @@ async unApproveOfficers(branchesGroupIds) {
     return (
       <>
         <div className="print-none">
-          <Card style={{ margin: '20px 50px' }}>
+          <Card className="main-card">
             <Loader type="fullsection" open={this.props.loading} />
             <Card.Body style={{ padding: 0 }}>
               <div className="custom-card-header">
@@ -256,7 +256,8 @@ async unApproveOfficers(branchesGroupIds) {
               <Col sm={6}>
                 <Form.Label as={Row} style={{fontWeight:'bolder', textAlign:"right",margin:'9px'}}>{local.chooseOperationType}</Form.Label>
                 <Select
-                    styles={theme.selectStyle}
+                    styles={theme.selectStyleWithBorder}
+										theme={theme.selectTheme}
                     placeholder={local.chooseOperationType}
                     onChange={(event)=>{
                      this.selectState(event);
