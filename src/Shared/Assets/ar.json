@@ -904,5 +904,7 @@
     "manageLoanDetails":"اعدادت القروض",
 		"typeRepresentativeName": "اكتب اسم المندوب",
     "chooseBranchGeoArea": "اختر التقسيم الجغرافي للفرع",
-    "cibReports": "تقارير الCIB"
+    "cibReports": "تقارير الCIB",
+    "businessActivities":"أنواع نشاط العمل",
+    "businessSpecialities":"تخصصات العمل"
 }

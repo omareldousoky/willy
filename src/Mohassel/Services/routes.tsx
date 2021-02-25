@@ -54,6 +54,8 @@ import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
 import ClearanceProfile from '../Components/Clearance/clearanceProfile';
 import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
+import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
+import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 
 const appRoutes = [
   {
@@ -198,7 +200,17 @@ const appRoutes = [
             path: "/loan-uses",
             label: local.loanUses,
             render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
-          }
+          },
+          {
+            path: "/business-activities",
+            label: local.businessActivities,
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessActivities /></Can>
+          },
+          {
+            path: "/business-specialities",
+            label: local.businessSpecialities,
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessSpecialities /></Can>
+          },
         ]
       },
       {

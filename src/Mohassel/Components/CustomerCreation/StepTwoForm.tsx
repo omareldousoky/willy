@@ -28,11 +28,13 @@ export interface Governorate {
 interface Specialty {
     businessSpecialtyName: { ar: string };
     legacyCode: number;
+    active?: boolean;
 }
 interface Activities {
     i18n: { ar: string };
     legacyCode: number;
     specialties: Array<Specialty>;
+    active?: boolean;
 }
 export interface BusinessSector {
     i18n: { ar: string };
@@ -330,6 +332,7 @@ export const StepTwoForm = (props: any) => {
                             >
                                 <option value=""></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
+                                .filter(activity => activity.active)
                                     .map((activity, index) => {
                                         return <option key={index} value={activity.i18n.ar} >{activity.i18n.ar}</option>
                                     })}
@@ -354,7 +357,7 @@ export const StepTwoForm = (props: any) => {
                             >
                                 <option value=""></option>
                                 {businessSectors.find(businessSector => businessSector.i18n.ar === values.businessSector)?.activities
-                                    .find(activity => activity.i18n.ar === values.businessActivity)?.specialties?.map((speciality, index) => {
+                                    .find(activity => activity.i18n.ar === values.businessActivity)?.specialties?.filter(speciality => speciality.active).map((speciality, index) => {
                                         return <option key={index} value={speciality.businessSpecialtyName.ar} >{speciality.businessSpecialtyName.ar}</option>
                                     })}
                             </Form.Control>}
