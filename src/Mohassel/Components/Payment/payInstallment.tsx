@@ -98,7 +98,6 @@ class PayInstallment extends Component<Props, State> {
       requiredAmount: 0,
       paymentType: this.props.paymentType,
       randomPaymentTypes: [
-        { label: local.collectionCommission, value: "collectionCommission" },
         { label: local.reissuingFees, value: "reissuingFees" },
         { label: local.legalFees, value: "legalFees" },
         { label: local.clearanceFees, value: "clearanceFees" },

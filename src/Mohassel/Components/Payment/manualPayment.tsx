@@ -100,7 +100,6 @@ class ManualPayment extends Component<Props, State> {
       payerId: '',
       employees: [],
       randomPaymentTypes: [
-        { label: local.collectionCommission, value: "collectionCommission" },
         { label: local.reissuingFees, value: "reissuingFees" },
         { label: local.legalFees, value: "legalFees" },
         { label: local.clearanceFees, value: "clearanceFees" },
