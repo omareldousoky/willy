@@ -1,73 +1,89 @@
 @media screen,
 print {
-    .officers-payment {
-        font-weight: bold;
-        text-align: center;
-        padding: 10px 5px;
-        page-break-after: always;
-        direction: rtl;
+	.officers-payment {
+		font-weight: bold;
+		text-align: center;
+		padding: 10px 5px;
+		page-break-after: always;
+		direction: rtl;
 		-webkit-print-color-adjust: exact;
 		background-color: #fff;
 		font-size: 11px;
-        & tbody {
-            page-break-inside: avoid;
-        }
+
+		& tbody {
+			page-break-inside: avoid;
+		}
+
 		& table {
 			min-width: 100%;
-            text-align: center;
+			text-align: center;
 		}
+
 		.text-sm {
 			font-size: 10px;
 		}
+
 		& table.body thead {
 			border-top: 1px solid black;
 			border-bottom: 1px solid black;
 		}
-        & table.body th, & table.body td {
+
+		& table.body th,
+		& table.body td {
 			font-size: 11px !important;
-        }
+			text-align: center;
+		}
+
 		& table.body td {
 			padding: 3px 0 !important;
 		}
+
 		& table.body td.bg-grey {
-            background-color: #e3e3e3;
+			background-color: #e3e3e3;
 		}
+
 		&.wrapper {
 			margin: 10px 0;
 			display: flex;
 			justify-content: space-between;
 			width: 98%;
 		}
+
 		.branch-name {
 			background: #e3e3e3;
 			margin: 5px auto;
 			padding: 5px;
 			width: 30%;
 		}
+
 		.footer {
 			display: flex;
 			justify-content: space-evenly;
 			margin-top: 15px;
+
 			& div {
 				display: flex;
 				flex-direction: column;
 			}
-			p, span {
+
+			p,
+			span {
 				margin: 0 0 2px;
 				text-align: right;
 				font-size: 10px;
 			}
 		}
 	}
+
 	.officers-branch-payment {
-		table.body > tbody tr:last-of-type {
+		table.body>tbody tr:last-of-type {
 			border-top: 1px solid black;
 		}
 	}
 }
 
 @media screen {
-    .officers-payment {
-        display: none;
-    }
+	.officers-payment {
+		display: none;
+	}
 }

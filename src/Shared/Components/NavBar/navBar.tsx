@@ -85,18 +85,19 @@ class NavBar extends Component<Props, State> {
   renderBranchList() {
     return (
       <div className="navbar-branch-list">
-        <InputGroup style={{ direction: 'ltr', marginLeft: 20 }}>
+        <InputGroup style={{ marginLeft: 20 }}>
+					<InputGroup.Append>
+            <InputGroup.Text className="bg-white rounded-0 p-3"><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
+          </InputGroup.Append>
           <Form.Control
             type="text"
             name="searchKeyWord"
             data-qc="searchKeyWord"
+						className="border-right-0 rounded-0 p-4"
             onChange={(e) => this.setState({ searchKeyWord: e.currentTarget.value })}
-            style={{ direction: 'rtl', borderRight: 0, padding: 22 }}
+            style={{ padding: 22 }}
             placeholder={local.searchForBranch}
           />
-          <InputGroup.Append>
-            <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-          </InputGroup.Append>
         </InputGroup>
         <div className={this.state.branches?.length > 5 ? "scrollable" : ""}>
           {this.state.branches?.filter(branch => branch.name.includes(this.state.searchKeyWord))

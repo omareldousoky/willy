@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react';
-import CustomerCreation from '../Components/CustomerCreation/customer-creation';
-import UserCreation from '../Components/UserCreation/user-creation';
+import CustomerCreation from '../Components/CustomerCreation/customerCreation';
+import UserCreation from '../Components/UserCreation/userCreation';
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation';
 import FormulaTest from '../Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from '../Components/LoanProductCreation/loanProductCreation';
@@ -22,7 +22,7 @@ import RolesList from '../Components/ManageAccounts/rolesList';
 import { Landing } from '../Components/Landing/landing';
 import Can from '../config/Can';
 import UserDetails from '../Components/userDetails/user-details';
-import CreateBranch from '../Components/BranchCreation/create-branch';
+import CreateBranch from '../Components/BranchCreation/createBranch';
 import CustomersList from '../Components/CustomerCreation/customersList';
 import LoanProducts from '../Components/ManageLoans/productsList';
 import FormulaList from '../Components/ManageLoans/calculationFormulaList';

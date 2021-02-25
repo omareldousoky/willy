@@ -35,6 +35,7 @@ import { BusinessSector } from '../CustomerCreation/StepTwoForm';
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans';
 import Select from 'react-select';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
+import { theme } from '../../../theme';
 
 interface Props {
     history: any;
@@ -1025,6 +1026,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                                     name="loanOfficer"
                                     data-qc="loanOfficer"
                                     value={this.state.selectedLoanOfficer}
+																		styles={theme.selectStyleWithBorder}
+																		theme={theme.selectTheme}
                                     enableReinitialize={false}
                                     onChange={(event) => {
                                         this.selectLO(event)
@@ -1074,14 +1077,25 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         }
                     </div>
                 }
-                <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '100px 0px' }}>
-                    <Button
-                        className={'btn-cancel-prev'} style={{ width: '20%' }}
-                        onClick={() => { this.props.history.push("/track-loan-applications"); }}
-                    >{local.cancel}</Button>
-                    <Button className={'btn-submit-next'} disabled={(this.state.customerType === 'group' && (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) || (this.state.customerType === 'individual' && (Object.keys(this.state.selectedCustomer).length === 0))} style={{ float: 'left', width: '20%' }} onClick={() => this.step('forward')} data-qc="next">{local.next}</Button>
-
-                </div>
+							<div className="d-flex justify-content-between py-4">
+								<Button
+									variant="secondary"
+									className="w-25"
+									onClick={() => { this.props.history.push("/track-loan-applications"); }}
+								>{local.cancel}</Button>
+								<Button 
+									variant="primary" 
+									data-qc="next"
+									className="w-25"
+									disabled={(this.state.customerType === 'group' 
+											&& (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) 
+											|| (this.state.customerType === 'individual' && (Object.keys(this.state.selectedCustomer).length === 0)
+										)}
+									onClick={() => this.step('forward')}
+									>
+										{local.next}
+									</Button>
+							</div>
             </div>
         )
     }

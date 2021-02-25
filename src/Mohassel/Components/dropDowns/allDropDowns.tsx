@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useStore } from "react-redux";
-import Select, { ValueType } from "react-select";
+import Select, { ValueType, Props } from "react-select";
 import { Auth, Branch } from "../../../Shared/redux/auth/types";
 import { searchBranches } from "../../Services/APIs/Branch/searchBranches";
 import * as local from "../../../Shared/Assets/ar.json";
-import { Props } from "react-select/src/Select";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 import { getGeoAreasByBranch } from "../../Services/APIs/GeoAreas/getGeoAreas";
+import { theme } from "../../../theme";
 
 export interface DropDownOption {
   name: string;
@@ -18,17 +18,6 @@ interface LoanOfficersDropDownProps extends Props<DropDownOption> {
   loanOfficerSelectOptions?: DropDownOption[];
   onSelectLoanOfficer?: (loanOfficer: ValueType<DropDownOption>) => void;
 }
-
-const customStyles = {
-  control: (provided) => ({
-    ...provided,
-    border: "none",
-    boxShadow: "none",
-    "&:hover": {
-      border: "none",
-    },
-  }),
-};
 
 export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
   const {
@@ -46,11 +35,12 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
       <Select<DropDownOption>
         isClearable
         isSearchable
-        styles={customStyles}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="representative"
         data-qc="representative"
-        placeholder={local.chooseRepresentative}
+        placeholder={local.typeRepresentativeName}
         isLoading={loanOfficerSelectLoader}
         options={loanOfficerSelectOptions}
         getOptionLabel={(option) => option.name}
@@ -68,34 +58,78 @@ export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
   );
 };
 
-interface AsyncLoanOfficersDropDownProps extends Props<DropDownOption> {
+interface DropDownPropsWithBranch extends Props<DropDownOption> {
   branchId?: string;
-  onSelectLoanOfficer: (officersOptions: ValueType<DropDownOption>[]) => void;
+  onSelectOption: (option: ValueType<DropDownOption>[]) => void;
 }
 
 export const AsyncLoanOfficersDropDown = ({
   branchId,
-  onSelectLoanOfficer,
+  onSelectOption,
   isDisabled,
   ...restProps
-}: AsyncLoanOfficersDropDownProps) => {
+}: DropDownPropsWithBranch) => {
+  const initialState: {
+    optionsLoaded: boolean;
+    options: DropDownOption[];
+    isLoading: boolean;
+  } = {
+    optionsLoaded: false,
+    options: [],
+    isLoading: false,
+  };
+  const [options, setOptions] = useState(initialState);
   const [value, setValue] = useState<ValueType<DropDownOption> | null>();
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-  const getLoanOfficers = (branchId?: string) => async (
-    searchKeyWord: string
-  ) => {
+	// to avoid memory leak for in progress api call
+	let stillMounted = true
+	useEffect(() => {
+		return () => {
+			stillMounted = false;
+		}
+	},[])
+
+  const handleLoadOptions = async () => {
+		if(!stillMounted) return
+    const newOptions: DropDownOption[] = [];
     const res = await searchLoanOfficer({
-      name: searchKeyWord,
+      name: searchKeyword,
       from: 0,
       size: 10,
       branchId,
     });
-    if (res.status === "success") {
-      return res.body.data.filter((v) => !!v);
+
+    if (stillMounted && res.status === "success") {
+      const data = res.body.data;
+      Array.isArray(data) && data.length && stillMounted
+        ? res.body.data.map((loanOfficer: DropDownOption) => {
+            newOptions.push({
+              _id: loanOfficer._id,
+              name: loanOfficer.name,
+            });
+          })
+        : [];
+				setOptions({
+        options: newOptions,
+        isLoading: false,
+        optionsLoaded: true,
+      });
     } else {
-      return [];
+      setOptions({ options: [], isLoading: false, optionsLoaded: true });
     }
   };
+  const maybeLoadOptions = () => {
+    if (!options.optionsLoaded) {
+      setOptions({ ...options, isLoading: true });
+      handleLoadOptions();
+    }
+  };
+
+  useEffect(() => {
+    setOptions(initialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branchId]);
 
   useEffect(() => {
     if (isDisabled) setValue(null);
@@ -103,51 +137,49 @@ export const AsyncLoanOfficersDropDown = ({
 
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>
-      <AsyncSelect<DropDownOption>
+      <Select<DropDownOption>
         cacheOptions
         defaultOptions
-        styles={customStyles}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="loanOfficers"
         data-qc="loanOfficers"
-        placeholder={local.typeRepresentativeName}
+        placeholder={local.chooseRepresentative}
         value={value}
         onChange={(options) => {
-          onSelectLoanOfficer(options as ValueType<DropDownOption>[]);
+          onSelectOption(options as ValueType<DropDownOption>[]);
           setValue(options);
         }}
+        isLoading={options.isLoading}
+        options={options.options}
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option._id}
-        loadOptions={getLoanOfficers(branchId)}
         isDisabled={isDisabled}
+        onFocus={maybeLoadOptions}
+        onInputChange={(keyword) => {
+          setSearchKeyword(keyword);
+          setOptions({ ...options, isLoading: true, optionsLoaded: false });
+          maybeLoadOptions();
+        }}
         {...restProps}
       />
     </div>
   );
 };
 
-type BranchDropDownProps = {
+// TODO: update type & usages
+interface BranchDropDownProps extends Props<any> {
   onlyValidBranches?: boolean;
-  multiselect?: boolean;
-  value?: string;
   onSelectBranch: (branch: Branch) => void;
-};
+}
+
 export const BranchesDropDown = (props: BranchDropDownProps) => {
   const [options, setOptions] = useState<any>([]);
   const [value, setValue] = useState(
     options.find((o) => o._id === props.value)
   );
   const store = useStore();
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      border: "none",
-      boxShadow: "none",
-      "&:hover": {
-        border: "none",
-      },
-    }),
-  };
   const getBranches = async (searchKeyWord: string) => {
     const auth: Auth = store.getState().auth;
     let branches: Array<Branch> = auth.validBranches;
@@ -170,16 +202,17 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
     }
   };
   return (
-    <div className="dropdown-container" style={{ flex: 2, paddingLeft: 0 }}>
+    <div className="dropdown-container">
       <p className="dropdown-label">{local.oneBranch}</p>
       <AsyncSelect
-        styles={customStyles}
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
         className="full-width"
         name="branches"
         data-qc="branches"
         placeholder={local.chooseBranch}
         value={value || options.find((option) => option._id === props.value)}
-        isMulti={props.multiselect}
+        isMulti={props.isMulti}
         onChange={(branch) => {
           props.onSelectBranch(branch);
           setValue(branch);
@@ -194,3 +227,82 @@ export const BranchesDropDown = (props: BranchDropDownProps) => {
   );
 };
 
+export const AsyncBranchGeoAreasDropDown = ({
+  branchId,
+  onSelectOption,
+  isDisabled,
+  ...restProps
+}: DropDownPropsWithBranch) => {
+  const initialState: {
+    optionsLoaded: boolean;
+    options: DropDownOption[];
+    isLoading: boolean;
+  } = {
+    optionsLoaded: false,
+    options: [],
+    isLoading: false,
+  };
+  const [options, setOptions] = useState(initialState);
+  const [value, setValue] = useState<ValueType<DropDownOption> | null>();
+
+  const handleLoadOptions = async () => {
+    if (!branchId) return;
+    const res = await getGeoAreasByBranch(branchId);
+    const newOptions: DropDownOption[] = [];
+    if (res.status === "success") {
+      const data = res.body.data;
+      Array.isArray(data) && data.length
+        ? res.body.data.map((area: DropDownOption) => {
+            newOptions.push({
+              _id: area._id,
+              name: area.name,
+            });
+          })
+        : [];
+      setOptions({
+        options: newOptions,
+        isLoading: false,
+        optionsLoaded: true,
+      });
+    } else {
+      setOptions({ options: [], isLoading: false, optionsLoaded: true });
+    }
+  };
+  const maybeLoadOptions = () => {
+    if (!options.optionsLoaded) {
+      setOptions({ ...options, isLoading: true });
+      handleLoadOptions();
+    }
+  };
+
+  useEffect(() => {
+    setOptions(initialState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branchId]);
+  return (
+    <div className="dropdown-container" style={{ flex: 2 }}>
+      <Select<DropDownOption>
+        cacheOptions
+        defaultOptions
+        styles={theme.selectStyleWithoutBorder}
+        theme={theme.selectTheme}
+        className="full-width"
+        name="geoAreas"
+        data-qc="geoAreas"
+        placeholder={local.chooseBranchGeoArea}
+        value={value}
+        onChange={(options) => {
+          onSelectOption(options as ValueType<DropDownOption>[]);
+          setValue(options);
+        }}
+        isLoading={options.isLoading}
+        options={options.options}
+        getOptionLabel={(option) => option.name}
+        getOptionValue={(option) => option._id}
+        isDisabled={isDisabled}
+        onFocus={maybeLoadOptions}
+        {...restProps}
+      />
+    </div>
+  );
+};
