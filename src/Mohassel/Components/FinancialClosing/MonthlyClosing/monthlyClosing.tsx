@@ -130,7 +130,7 @@ class MonthlyClosing extends Component<Props, State>{
                                 </Col>
                                 <div className="d-flex justify-content-between py-4">
                                 <Button
-                                    className="w-30"            
+                                    className="w-25"            
                                     variant="secondary"
                                     onClick={() => {
                                         window.location.reload();
@@ -138,7 +138,7 @@ class MonthlyClosing extends Component<Props, State>{
                                 >
                                     {local.cancel}
                                 </Button>
-                                <Can I="financialClosing" a="application"><Button  className="w-30"  type="submit" variant="primary">
+                                <Can I="financialClosing" a="application"><Button  className="w-25"  type="submit" variant="primary">
                                     {local.submit}
                                 </Button></Can>
                                 </div>
