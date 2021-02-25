@@ -159,12 +159,12 @@ export const LoanApplicationValidation = Yup.object().shape({
                 function (this: any, value: any) {
                     const { customer } = this.parent
                     if (customer.maxPrincipal && customer.maxPrincipal > 0 && value <= ((customer.maxPrincipal > 
-                        (customer.paidLoans && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal) 
-                        ? (customer.paidLoans  && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal)
+                        (((customer.paidLoans && customer.paidLoans.length > 0 ) || (customer.loanIds && customer.loanIds.length > 0)) ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal) 
+                        ? (((customer.paidLoans && customer.paidLoans.length > 0 ) || (customer.loanIds && customer.loanIds.length > 0)) ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal)
                          : customer.maxPrincipal))) {
                             // - (customer.totalPrincipals ? customer.totalPrincipals : 0)
                         return true
-                    } else if (!customer.maxPrincipal && value <= ((customer.paidLoans && customer.paidLoans.length > 0 ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal))) {
+                    } else if (!customer.maxPrincipal && value <= ((((customer.paidLoans && customer.paidLoans.length > 0 ) || (customer.loanIds && customer.loanIds.length > 0)) ? customer.maxGroupReturningIndividualPrincipal : customer.maxGroupIndividualPrincipal))) {
                         return true
                     } else {
                         return false
