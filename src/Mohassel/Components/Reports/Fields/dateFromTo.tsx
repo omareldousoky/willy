@@ -10,6 +10,7 @@ interface DateFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   validate?: FieldValidator;
   isInvalid?: boolean;
+	touched?: number;
 }
 
 interface DateFromToFieldProps {
@@ -18,19 +19,19 @@ interface DateFromToFieldProps {
   from: DateFieldProps;
   to: DateFieldProps;
   className?: string;
+	labelWidth?: string;
 }
 
 export const DateFromToField = (props: DateFromToFieldProps) => {
-  const { id, className, name, from, to } = props;
-
+  const { id, className, name, from, to, labelWidth } = props;
   return (
     <Col sm={12} className={className || ""}>
-      <InputGroup className="mb-0" id={id}>
+      <InputGroup className="mb-0 flex-column" id={id}>
         <div
           className="dropdown-container"
           style={{ flex: 1, alignItems: "center" }}
         >
-					<p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2">
+					<p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2" style={{ width: "15rem" || labelWidth }}>
             {name}
           </p>
           <span>{local.from}</span>
@@ -65,7 +66,7 @@ export const DateFromToField = (props: DateFromToFieldProps) => {
             min={from.value}
           />
         </div>
-        <span className="text-danger ml-auto">{from.error || to.error}</span>
+        <span className="text-danger ml-auto mt-2">{(from.touched ? from.error : "") || (to.touched ? to.error : "")}</span>
       </InputGroup>
     </Col>
   );

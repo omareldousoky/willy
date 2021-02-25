@@ -18,6 +18,7 @@ import { PendingActions } from "../../../Shared/Services/interfaces";
 import { Installment } from "./payInstallment";
 import Swal from "sweetalert2";
 import Can from "../../config/Can";
+import { theme } from "../../../theme";
 
 interface SelectObject {
   label: string;
@@ -303,6 +304,8 @@ class ManualPayment extends Component<Props, State> {
                         className={this.props.formikProps.errors.payerId ? "error" : ""}
                         name="payerId"
                         data-qc="payerId"
+												styles={theme.selectStyleWithBorder}
+												theme={theme.selectTheme}
                         value={this.state.employees.find(employee => employee._id === this.props.formikProps.values.payerId)}
                         onFocus={this.props.formikProps.handleBlur}
                         onChange={(employee: any) => this.props.formikProps.setFieldValue("payerId", employee._id)}

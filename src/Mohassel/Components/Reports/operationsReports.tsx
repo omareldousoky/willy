@@ -311,7 +311,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
 
   async fetchUnpaidInstallments(values) {
     const res = await fetchUnpaidInstallmentsPerAreaReport(
-      this.reportRequest(values)
+      { ...this.reportRequest(values), geoAreas: values.geoAreas as string[]}
     );
     this.handleFetchReport(
       res as ApiResponse<any>,

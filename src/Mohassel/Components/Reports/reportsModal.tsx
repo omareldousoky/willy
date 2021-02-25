@@ -167,10 +167,13 @@ const ReportsModal = (props: Props) => {
                             },
                             value: formikProps.values.fromDate,
                             error: formikProps.errors.fromDate,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.fromDate ? 1 : 0,
                             isInvalid: !!(
                               formikProps.errors.fromDate &&
                               formikProps.touched.fromDate
                             ),
+													validate: required
                           }}
                           to={{
                             name: "toDate",
@@ -178,11 +181,13 @@ const ReportsModal = (props: Props) => {
                             onChange: formikProps.handleChange,
                             value: formikProps.values.toDate,
                             error: formikProps.errors.toDate,
+														touched: formikProps.touched.toDate ? 1 : 0,
                             isInvalid: !!(
                               formikProps.errors.toDate &&
                               formikProps.touched.toDate
                             ),
                             disabled: !formikProps.values.fromDate,
+														validate: required
                           }}
                         />
                       );
@@ -207,20 +212,8 @@ const ReportsModal = (props: Props) => {
                     if (input === "customerKey") {
                       return (
                         <Col sm={12} key={input} style={{ marginTop: 10 }}>
-                          <InputGroup style={{ direction: "ltr" }}>
-                            <Form.Control
-                              type="text"
-                              name="customerKeyword"
-                              data-qc="customerKeyword"
-                              onChange={formikProps.handleChange}
-                              style={{
-                                direction: "rtl",
-                                borderRight: 0,
-                                padding: 22,
-                              }}
-                              value={formikProps.values.customerKeyword}
-                            />
-                            <DropdownButton
+                          <InputGroup>
+														<DropdownButton
                               as={InputGroup.Append}
                               variant="outline-secondary"
                               title={
@@ -244,6 +237,17 @@ const ReportsModal = (props: Props) => {
                                 )
                               )}
                             </DropdownButton>
+                            <Form.Control
+                              type="text"
+                              name="customerKeyword"
+                              data-qc="customerKeyword"
+                              onChange={formikProps.handleChange}
+                              style={{
+                                borderRight: 0,
+                                padding: 22,
+                              }}
+                              value={formikProps.values.customerKeyword}
+                            />
                           </InputGroup>
                         </Col>
                       );
@@ -389,8 +393,8 @@ const ReportsModal = (props: Props) => {
                             isDisabled={
                               !formikProps.values.branches ||
                               (formikProps.values.branches &&
-                                (!formikProps.values.branches.length ||
-                                  formikProps.values.branches.length > 1))
+                                ((!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1)))
                             }
                           />
                           <span className="text-danger">
@@ -471,10 +475,13 @@ const ReportsModal = (props: Props) => {
                             },
                             value: formikProps.values.creationDateFrom,
                             error: formikProps.errors.creationDateFrom,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.creationDateFrom ? 1 : 0,
                             isInvalid: !!(
                               formikProps.errors.creationDateFrom &&
                               formikProps.touched.creationDateFrom
                             ),
+														validate: required
                           }}
                           to={{
                             name: "creationDateTo",
@@ -482,11 +489,13 @@ const ReportsModal = (props: Props) => {
                             onChange: formikProps.handleChange,
                             value: formikProps.values.creationDateTo,
                             error: formikProps.errors.creationDateTo,
+														touched: formikProps.touched.creationDateTo ? 1 : 0,
                             isInvalid: !!(
                               formikProps.errors.creationDateTo &&
                               formikProps.touched.creationDateTo
                             ),
                             disabled: !formikProps.values.creationDateFrom,
+														validate: required
                           }}
                         />
 											);

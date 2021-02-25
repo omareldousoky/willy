@@ -189,7 +189,7 @@ class ClearancesList extends Component<Props, State> {
                   <Button onClick={() => { this.print() }}
                   disabled={(this.state.selectedClearances.length > 0 ? false: true) as boolean}
                   className="big-button"
-                  style={{ marginLeft: 20, height: 70 }}
+                  style={{ height: 70 }}
                 > {local.downloadPDF}
                 </Button>
               </div>

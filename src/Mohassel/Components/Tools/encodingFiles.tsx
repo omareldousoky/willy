@@ -71,7 +71,7 @@ class EncodingFiles extends Component<Props, State> {
                 <Card className="main-card">
                     <Card.Body>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
-                            <h4 style={{ textAlign: "right" }}>{local.encodingFilesHQ}</h4>
+                            <h4 style={{ marginRight: "20px" }}>{local.encodingFilesHQ}</h4>
                             <small style={{ color: '#6e6e6e', margin: "12px" }}>{`${local.numOfFiles} (${this.state.documentTypes.length})`}</small>
 													<Can I='documentTypes' a='config'>
 														<Button onClick={() => { this.props.history.push("/tools/encoding-files/create-encoding-files") }} className="big-button" style={{ marginLeft: 20, marginRight: "auto", width: "100px" }}>{local.create}</Button>

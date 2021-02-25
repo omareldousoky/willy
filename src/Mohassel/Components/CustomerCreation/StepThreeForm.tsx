@@ -14,6 +14,7 @@ import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
+import { theme } from '../../../theme';
 
 interface GeoDivision {
     majorGeoDivisionName: { ar: string };
@@ -99,6 +100,8 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
+																styles={theme.selectStyleWithoutBorder}
+																theme={theme.selectTheme}
                                 value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string' ? values.representative : values.representative ? values.representative._id : ""))}
                                 onBlur={handleBlur}
                                 onChange={(representative) => {

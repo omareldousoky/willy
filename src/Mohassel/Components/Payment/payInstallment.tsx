@@ -17,6 +17,7 @@ import { Employee } from "./payment";
 import Swal from "sweetalert2";
 import { getErrorMessage } from "../../../Shared/Services/utils";
 import Can from "../../config/Can";
+import { theme } from "../../../theme";
 
 interface FormValues {
   requiredAmount: number;
@@ -380,6 +381,8 @@ class PayInstallment extends Component<Props, State> {
                           className={formikBag.errors.payerId ? "error" : ""}
                           name="payerId"
                           data-qc="payerId"
+													styles={theme.selectStyleWithBorder}
+													theme={theme.selectTheme}
                           value={this.state.employees.find(employee => employee._id === formikBag.values.payerId)}
                           onBlur={formikBag.handleBlur}
                           onChange={(employee: any) => formikBag.setFieldValue("payerId", employee._id)}

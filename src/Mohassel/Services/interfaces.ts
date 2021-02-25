@@ -269,6 +269,12 @@ export interface OfficersBranchPercentPaymentRequest
   creationDateFrom?: string;
   creationDateTo?: string;
 }
+
+export interface UnpaidInstallmentsPerAreaRequest
+  extends OperationsReportRequest {
+  geoAreas?: string[];
+}
+
 export interface CustomerApplicationTransactionsRequest {
   loanApplicationKey: string;
 }

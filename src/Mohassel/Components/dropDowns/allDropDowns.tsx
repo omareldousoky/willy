@@ -82,7 +82,16 @@ export const AsyncLoanOfficersDropDown = ({
   const [value, setValue] = useState<ValueType<DropDownOption> | null>();
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
+	// to avoid memory leak for in progress api call
+	let stillMounted = true
+	useEffect(() => {
+		return () => {
+			stillMounted = false;
+		}
+	},[])
+
   const handleLoadOptions = async () => {
+		if(!stillMounted) return
     const newOptions: DropDownOption[] = [];
     const res = await searchLoanOfficer({
       name: searchKeyword,
@@ -91,9 +100,9 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     });
 
-    if (res.status === "success") {
+    if (stillMounted && res.status === "success") {
       const data = res.body.data;
-      Array.isArray(data) && data.length
+      Array.isArray(data) && data.length && stillMounted
         ? res.body.data.map((loanOfficer: DropDownOption) => {
             newOptions.push({
               _id: loanOfficer._id,
@@ -101,7 +110,7 @@ export const AsyncLoanOfficersDropDown = ({
             });
           })
         : [];
-      setOptions({
+				setOptions({
         options: newOptions,
         isLoading: false,
         optionsLoaded: true,
