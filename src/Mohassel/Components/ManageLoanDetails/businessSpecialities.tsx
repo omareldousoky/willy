@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Loader } from '../../../Shared/Components/Loader';
-import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
-import { addLoanUsage } from '../../Services/APIs/LoanUsage/addLoanUsage';
-import { updateLoanUsage } from '../../Services/APIs/LoanUsage/updateLoanUsage';
 import * as local from '../../../Shared/Assets/ar.json';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Activities, BusinessSector, manageLoanDetailsArray } from '../ManageLoanDetails/manageLoanDetailsInitials';
@@ -52,8 +49,6 @@ class BusinessSpecialities extends Component<{}, State> {
         this.setState({ loading: true });
         const res = await getBusinessSectors();
         if (res.status === "success") {
-            console.log(res.body)
-            //   const responseLoanUsages = res.body.usages.map(usage => ({ ...usage, disabledUi: true }));
             this.setState({
                 loading: false,
                 businessSectors: res.body.sectors,
@@ -64,7 +59,6 @@ class BusinessSpecialities extends Component<{}, State> {
     }
     prepareActivites(id) {
         const sector = this.state.businessSectors.filter(sctr => sctr.id === id)[0]
-        // const activities = sector.activities.map(activity => { return { name: activity.i18n.ar, id: activity.id ? (activity.id).toString() : '0', activated: activity.active ? true : false, disabledUi: true } })
         this.setState({ businessActivities: sector.activities })
     }
     prepareSpecialties(id) {
