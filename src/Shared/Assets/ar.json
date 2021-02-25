@@ -902,6 +902,7 @@
 		"confirmNewPassword": "تأكيد كلمة المرور",
 		"newPasswordAsCurrentPasswordError": "كلمة المرور الجديدة يجب أن تكون مختلفة عن الحالية",
     "manageLoanDetails":"اعدادت القروض",
+    "customerCategorization": "مستوي المخاطر",
 		"typeRepresentativeName": "اكتب اسم المندوب",
     "chooseBranchGeoArea": "اختر التقسيم الجغرافي للفرع",
     "cibReports": "تقارير الCIB",
