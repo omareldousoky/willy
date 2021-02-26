@@ -13,7 +13,7 @@ interface Props {
   print: () => void;
   getGeoArea?: Function;
 }
-function getStatus(data) {
+export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
   const todaysDate = new Date().valueOf();
   switch (data.status) {
@@ -41,6 +41,13 @@ function getStatus(data) {
   }
 }
 export const CustomerCardView = (props: Props) => {
+  const renderPaidAt = (data) =>{
+    if(data.paidAt){
+      return (<div style={{width:'100px'}}>{getRenderDate(data.paidAt)}</div>)
+    } else {
+      return '';
+    }
+}
   const mappers = [
     {
       title: local.installmentNumber,
@@ -85,7 +92,7 @@ export const CustomerCardView = (props: Props) => {
     {
       title: local.statusDate,
       key: "paidAt",
-      render: data => data.paidAt ? getRenderDate(data.paidAt) : ''
+      render: data => renderPaidAt(data),
     },
   ]
   return (
@@ -96,30 +103,18 @@ export const CustomerCardView = (props: Props) => {
       {props.penalty && <div>
         <h6>{local.penalties}</h6>
         <Form style={{ margin: '20px 0' }}>
-          <Form.Row>
-            <Form.Group as={Col} md="3">
-              <Row>
+          <Form.Row className="col">
+            <Form.Group as={Col} md="3" className="d-flex flex-column">
                 <Form.Label style={{ color: '#6e6e6e' }}>غرامات مسددة</Form.Label>
-              </Row>
-              <Row>
                 <Form.Label>{numbersToArabic(props.application.penaltiesPaid)}</Form.Label>
-              </Row>
             </Form.Group>
-            <Form.Group as={Col} md="3">
-              <Row>
+            <Form.Group as={Col} md="3" className="d-flex flex-column">
                 <Form.Label style={{ color: '#6e6e6e' }}>غرامات مطلوبة</Form.Label>
-              </Row>
-              <Row>
                 <Form.Label>{numbersToArabic(props.penalty)}</Form.Label>
-              </Row>
             </Form.Group>
-            <Form.Group as={Col} md="3">
-              <Row>
+            <Form.Group as={Col} md="3" className="d-flex flex-column">
                 <Form.Label style={{ color: '#6e6e6e' }}>غرامات معفاة</Form.Label>
-              </Row>
-              <Row>
                 <Form.Label>{numbersToArabic(props.application.penaltiesCanceled)}</Form.Label>
-              </Row>
             </Form.Group>
           </Form.Row>
         </Form>

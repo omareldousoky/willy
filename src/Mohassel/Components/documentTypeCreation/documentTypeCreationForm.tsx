@@ -48,9 +48,9 @@ class DocumentTypeCreationForm extends Component<Props, State> {
     render() {
         return (
             <Form style={{ padding: "10px 50px", textAlign: "right" }} onSubmit={this.props.handleSubmit}>
-                <Row style={{ marginTop: '2rem' }}>
+                <Row>
                     <Col>
-                        <Form.Group className="data-group" controlId="name" >
+                        <Form.Group controlId="name" >
                             <Form.Label className="data-label">{`${local.documentName} *`}</Form.Label>
                             <Form.Control
                                 type="text"
@@ -68,7 +68,7 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group className="data-group" controlId="type">
+                        <Form.Group controlId="type">
                             <Form.Label className="data-label">{`${local.documentFor} *`}</Form.Label>
                             <Form.Control as="select"
                                 name="type"
@@ -90,9 +90,9 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Row style={{ marginTop: '2rem' }}>
+                <Row>
                     <Col >
-                        <Form.Group className="data-group" controlId="pages">
+                        <Form.Group controlId="pages">
                             <Form.Label className="data-label">{`${local.numOfDocuments} *`}</Form.Label>
                             <Form.Control
                                 type="number"
@@ -111,7 +111,6 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                     <Col>
                         <Form.Group
                             controlId="updatable"
-                            className={'data-group'}
                         >
                             <Form.Label
                                 className={'data-label'}
@@ -148,7 +147,6 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                     <Col>
                         <Form.Group
                             controlId="status"
-                            className={'data-group'}
                         >
                             <Form.Label
                                 className={'data-label'}
@@ -182,21 +180,14 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Form.Group
-                    as={Row}
-                    className="data-group"
-                    style={{ marginTop: "4rem" }}
-                >
-                    <Col>
-                        <Button
-                            className={'btn-cancel-prev'} style={{ width: '60%' }}
-                            onClick={() => { this.props.cancel() }}
-                        >{local.cancel}</Button>
-                    </Col>
-                    <Col>
-                        <Button className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="submit">{local.submit}</Button>
-                    </Col>
-                </Form.Group>
+								<div className="d-flex justify-content-between py-4">
+									<Button
+											variant="secondary"
+											style={{ width: '30%' }}
+											onClick={() => { this.props.cancel() }}
+									>{local.cancel}</Button>
+									<Button variant="primary" style={{ width: '30%' }} type="submit" data-qc="submit">{local.submit}</Button>
+								</div>
             </Form>
         )
     }

@@ -67,7 +67,7 @@ export default class UserRolesView extends Component<Props, State> {
                         className={'roleContainer'}
                     >
                         <span
-                            className={'iconConatiner'}
+                            className={'iconContainer'}
                         ><img
                                 className={"iconImage"}
                                 alt={'role'} src={require('../../Assets/roleIcon.svg')} />{local.role}</span>

@@ -1,14 +1,9 @@
 import { AxiosResponse } from "axios";
+import { UnpaidInstallmentsPerAreaRequest } from "../../interfaces";
 import axios from "../axios-instance";
 
 const { REACT_APP_BASE_URL } = process.env;
 const fetchUnpaidInstallmentsPerAreaUrl = `${REACT_APP_BASE_URL}/report/unpaid-installments-per-area`;
-
-export interface UnpaidInstallmentsPerAreaRequest {
-  startDate: string;
-  endDate: string;
-  branches?: Array<string>;
-}
 
 interface CustomersResponse {
   address: string;
@@ -40,6 +35,7 @@ export interface UnpaidInstallmentsPerAreaResponse {
   amount: number;
   count: number;
 }
+
 
 // TODO: move out to common file
 export interface ApiResponse<T> {

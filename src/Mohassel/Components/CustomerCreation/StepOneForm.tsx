@@ -11,6 +11,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation/checkNationalIdDup';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
+import ability from '../../config/ability';
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -37,7 +38,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={12}>
           <Form.Group controlId="customerName">
             <Form.Label className="customer-form-label" column>{`${local.name}*`}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
                 type="text"
                 name="customerName"
@@ -46,7 +47,7 @@ export const StepOneForm = (props: any) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isInvalid={errors.customerName && touched.customerName}
-                disabled={(!allowed && props.edit)}
+                disabled={(!allowed && props.edit && props.hasLoan) || (props.edit && !ability.can("updateNationalId", "customer") && !props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -59,7 +60,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={5}>
           <Form.Group controlId="nationalId">
             <Form.Label className="customer-form-label">{`${local.nationalId}*`}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
                 type="text"
                 name="nationalId"
@@ -91,7 +92,7 @@ export const StepOneForm = (props: any) => {
                 }}
                 isInvalid={errors.nationalId && touched.nationalId}
                 maxLength={14}
-                disabled={(!allowed && props.edit)}
+                disabled={(!allowed && props.edit && props.hasLoan) || (props.edit && !ability.can("updateNationalId", "customer") && !props.hasLoan)}
               />}
             </Can>
             <Form.Control.Feedback type="invalid">
@@ -138,7 +139,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={5}>
           <Form.Group controlId="nationalIdIssueDate">
             <Form.Label className="customer-form-label">{`${local.nationalIdIssueDate}*`}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
+            <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
               type="date"
               name="nationalIdIssueDate"
@@ -147,8 +148,8 @@ export const StepOneForm = (props: any) => {
               onBlur={handleBlur}
               onChange={handleChange}
               isInvalid={errors.nationalIdIssueDate && touched.nationalIdIssueDate}
-              disabled={(!allowed && props.edit)}
-            />}
+              disabled={(!allowed && props.edit && props.hasLoan)}
+              />}
             </Can>
             <Form.Control.Feedback type="invalid" style={checkIssueDate(values.nationalIdIssueDate) !== "" ? { display: 'block' } : {}}>
               {errors.nationalIdIssueDate || checkIssueDate(values.nationalIdIssueDate)}
@@ -242,8 +243,7 @@ export const StepOneForm = (props: any) => {
         <Col sm={6}>
           <Form.Group controlId="faxNumber">
             <Form.Label className="customer-form-label">{local.faxNumber}</Form.Label>
-            <Can I="updateNationalId" a="customer" passThrough>
-              {allowed =><Form.Control
+              <Form.Control
               type="text"
               name="faxNumber"
               data-qc="faxNumber"
@@ -258,9 +258,7 @@ export const StepOneForm = (props: any) => {
               maxLength={11}
               minLength={10}
               isInvalid={errors.faxNumber && touched.faxNumber}
-              disabled={(!allowed && props.edit)}
-            />}
-            </Can>
+            />
             <Form.Control.Feedback type="invalid">
               {errors.faxNumber}
             </Form.Control.Feedback>
@@ -292,8 +290,7 @@ export const StepOneForm = (props: any) => {
 
       <Form.Group controlId="emailAddress">
         <Form.Label className="customer-form-label">{local.emailAddress}</Form.Label>
-        <Can I="updateNationalId" a="customer" passThrough>
-          {allowed =><Form.Control
+          <Form.Control
           type="text"
           name="emailAddress"
           data-qc="emailAddress"
@@ -301,17 +298,14 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.emailAddress && touched.emailAddress}
-          disabled={(!allowed && props.edit)}
-          />}
-        </Can>
+          />
         <Form.Control.Feedback type="invalid">
           {errors.emailAddress}
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group controlId="customerWebsite">
         <Form.Label className="customer-form-label">{local.customerWebsite}</Form.Label>
-        <Can I="updateNationalId" a="customer" passThrough>
-          {allowed => <Form.Control
+          <Form.Control
           type="text"
           name="customerWebsite"
           data-qc="customerWebsite"
@@ -319,15 +313,15 @@ export const StepOneForm = (props: any) => {
           onChange={handleChange}
           onBlur={handleBlur}
           isInvalid={errors.customerWebsite && touched.customerWebsite}
-          disabled={(!allowed && props.edit)}
-        />}
-        </Can>
+        />
         <Form.Control.Feedback type="invalid">
           {errors.customerWebsite}
         </Form.Control.Feedback>
       </Form.Group>
-      <Button style={{ float: 'right' }} disabled>{local.previous}</Button>
-      <Button type="submit" data-qc="next">{local.next}</Button>
+			<div className="d-flex justify-content-end">
+				<Button disabled className="mr-3">{local.previous}</Button>
+      	<Button type="submit" data-qc="next">{local.next}</Button>
+			</div>
     </Form>
   )
 }

@@ -1,8 +1,8 @@
 .payment-menu {
     flex-direction: row;
     & .payment-info {
-        text-align: right;
-        padding: 40px 20px 25px 50px;
+				margin: auto;
+        padding: 2rem;
         & h6:nth-child(odd){
             color: #2a3390;
             font-weight: 500;

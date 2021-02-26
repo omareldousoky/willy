@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { getFullCustomerKey } from '../../../Shared/Services/utils';
 interface Customer {
     birthDate?: any;
     customerName?: string;
@@ -49,6 +50,8 @@ interface Props {
     removeCustomer?: Function;
     selectedCustomer: Customer;
     style?: object;
+    header?: string;
+		className?: string;
 };
 
 interface State {
@@ -61,7 +64,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownArray: ['name', 'key', 'nationalId', 'code'],
+            dropDownArray: ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'],
             dropDownValue: 'name'
         }
     }
@@ -82,25 +85,55 @@ class CustomerSearch extends Component<Props, State>{
             case 'nationalId': return local.nationalId;
             case 'key': return local.code;
             case 'code': return local.partialCode;
+            case 'customerShortenedCode': return local.customerShortenedCode;
             default: return '';
         }
     }
-    handleSubmit = (e) => {
-        e.preventDefault();
-        if ((this.state.dropDownValue === 'nationalId' || this.state.dropDownValue === 'key' || this.state.dropDownValue === 'code') && isNaN(Number(this.state.searchKey))) {
-            Swal.fire("", local.SearchOnlyNumbers, "error");
-        } else {
-            this.props.handleSearch(this.state.dropDownValue, (this.state.dropDownValue === 'code') ? Number(this.state.searchKey) : this.state.searchKey)
-        }
-    };
+	handleSubmit = (e) => {
+    e.preventDefault();
+		const { handleSearch } = this.props;
+		const { dropDownValue, searchKey } = this.state;
+		const isKey = dropDownValue === "key";
+		const isCode = dropDownValue === "code";
+
+    if (
+      (dropDownValue === "nationalId" || isKey || isCode) &&
+      isNaN(Number(searchKey))
+    ) {
+      Swal.fire("", local.SearchOnlyNumbers, "error");
+    } else {
+      const isCustomerShortenedCode = dropDownValue === "customerShortenedCode";
+      const modifiedSearchKey = isCustomerShortenedCode
+        ? getFullCustomerKey(searchKey)
+        : searchKey;
+      handleSearch(
+        isCustomerShortenedCode ? "key" : dropDownValue,
+        isCode || isKey ? Number(modifiedSearchKey) : modifiedSearchKey
+      );
+    }
+  };
     render() {
         return (
-            <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column', ...this.props.style }}>
+            <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
 
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <p style={{ margin: 'auto 20px' }}>{local.search}</p>
-                        <InputGroup style={{ direction: 'ltr' }}>
+                        <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>
+                        <InputGroup>
+														<DropdownButton
+                                as={InputGroup.Append}
+                                variant="outline-secondary"
+                                title={this.getArValue(this.state.dropDownValue)}
+                                id="input-group-dropdown-2"
+                                data-qc="search-dropdown"
+                            >
+															{this.state.dropDownArray.map((key, index) =>
+																	<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
+															)}
+                            </DropdownButton>
+														<InputGroup.Append>
+                                <InputGroup.Text className="bg-white rounded-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
+                            </InputGroup.Append>
                             <FormControl
                                 type="text"
                                 name="searchKey"
@@ -109,22 +142,8 @@ class CustomerSearch extends Component<Props, State>{
                                 placeholder={local.search}
                                 onChange={(e) => this.handleSearchChange(e)}
                                 onKeyDown={this._handleKeyDown}
-                                style={{ width: '50%', direction: 'rtl' }}
+                                style={{ width: '50%' }}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                            </InputGroup.Append>
-                            <DropdownButton
-                                as={InputGroup.Append}
-                                variant="outline-secondary"
-                                title={this.getArValue(this.state.dropDownValue)}
-                                id="input-group-dropdown-2"
-                                data-qc="search-dropdown"
-                            >
-                                {this.state.dropDownArray.map((key, index) =>
-                                    <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
-                                )}
-                            </DropdownButton>
                         </InputGroup>
                         <Button type="button" disabled={this.state.searchKey.trim().length === 0} onClick={this.handleSubmit} style={{ margin: 10 }}>{local.search}</Button>
                     </div>
@@ -141,8 +160,8 @@ class CustomerSearch extends Component<Props, State>{
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && this.props.searchResults.results.length === 0 && this.props.searchResults.empty && <div className="d-flex flex-row justify-content-center align-items-center" style={{ width: '50%' }}><h4>{local.noResults}</h4></div>}
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
-                        <h5>{local.guarantor + ` ` + this.props.source}</h5>
-                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
+                        <h5>{this.props.source}</h5>
+                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.name}</p>

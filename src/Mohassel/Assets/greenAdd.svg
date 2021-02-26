@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="add_icon" width="20" height="20" viewBox="0 0 20 20">
+    <defs>
+        <style>
+            .cls-3{fill:#fff}
+        </style>
+    </defs>
+    <rect id="Rectangle_1822" width="20" height="20" fill="#7dc356" rx="10"/>
+    <path id="Boundary" fill="none" d="M0 0H20V20H0z" transform="rotate(-90 10 10)"/>
+    <rect id="Rectangle_1621" width="10" height="2" class="cls-3" rx="1" transform="translate(5 9)"/>
+    <rect id="Rectangle_1622" width="10" height="2" class="cls-3" rx="1" transform="rotate(90 3 8)"/>
+</svg>

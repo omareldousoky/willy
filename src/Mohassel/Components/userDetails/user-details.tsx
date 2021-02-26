@@ -122,9 +122,9 @@ class UserDetails extends Component<Props, State> {
     return (
       <div className={"rowContainer"}>
         <Can I="updateUser" a="user">
-          <span className={"fa icon"}>
+          <span className={"icon"}>
             <div
-              className={"iconConatiner fa icon"}
+              className={"iconContainer icon"}
               onClick={() => {
                 this.props.history.push({
                   pathname: "/manage-accounts/users/edit-user",
@@ -142,10 +142,10 @@ class UserDetails extends Component<Props, State> {
           </span>
         </Can>
         <Can I="userActivation" a="user">
-          <span className={"fa icon"}>
+          <span className={"icon"}>
             <div
               onClick={async () => this.handleActivationClick()}
-              className={"iconConatiner "}
+              className={"iconContainer "}
             >
               {this.state.data.status === "active" && (
                 <img

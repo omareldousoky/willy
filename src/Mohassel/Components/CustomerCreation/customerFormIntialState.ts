@@ -72,7 +72,7 @@ const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);
 
 export const customerCreationValidationStepOne = Yup.object().shape({
-    customerName: Yup.string().trim().max(100, local.maxLength100).required(local.required),
+    customerName: Yup.string().trim().max(100, local.maxLength100).required(local.required).matches(/^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,local.onlyArabicLetters),
     nationalId: Yup.number()
         .when('nationalIdChecker', {
             is: true,

@@ -5,7 +5,7 @@ import { Formik, FormikProps } from 'formik';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import { earlyPaymentValidation, manualPaymentValidation } from './paymentValidation';
-import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import { getDateString, getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { PendingActions } from '../../../Shared/Services/interfaces';
 import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
@@ -135,7 +135,7 @@ class Payment extends Component<Props, State>{
       {
         title: local.dateOfPayment,
         key: "dateOfPayment",
-        render: data => timeToDateyyymmdd(data.dateOfPayment)
+        render: data => getDateString(data.dateOfPayment)
       },
       {
         title: local.installmentStatus,
@@ -498,8 +498,11 @@ class Payment extends Component<Props, State>{
         <Card className="payment-menu">
           <Loader type="fullsection" open={this.state.loading} />
           <div className="payment-info" style={{ textAlign: 'center' }}>
-            <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
-            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.earlyPayment}</span></h6>
+            <img height="90" alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}>
+							<span className="fa fa-long-arrow-alt-right" />              
+            	<span className="font-weight-bolder">&nbsp;{local.earlyPayment}</span>
+						</h6>
           </div>
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>
@@ -533,8 +536,11 @@ class Payment extends Component<Props, State>{
       case 3: return (
         <Card className="payment-menu">
           <div className="payment-info" style={{ textAlign: 'center' }}>
-            <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
-            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.manualPayment}</span></h6>
+            <img height="90" alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}>
+							<span className="fa fa-long-arrow-alt-right" />              
+            	<span className="font-weight-bolder">&nbsp;{local.manualPayment}</span>
+						</h6>
           </div>
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>

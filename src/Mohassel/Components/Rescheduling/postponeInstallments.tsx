@@ -142,7 +142,7 @@ class PostponeInstallments extends Component<Props, State>{
     }
     render() {
         return (
-            <div className="d-flex flex-column" style={{ textAlign: 'right' }} >
+            <div className="d-flex flex-column" >
                 <Loader type="fullscreen" open={this.state.loading} />
                 <LoanDetailsBoxView application={this.props.application} />
 
@@ -182,7 +182,7 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="withInterest">
-                                    <Form.Label style={{ textAlign: 'right' }} column md={3}>{local.withInterest}</Form.Label>
+                                    <Form.Label column md={3}>{local.withInterest}</Form.Label>
                                     <div className="d-flex align-items-center">
                                         <Form.Check
                                             type="checkbox"
@@ -221,7 +221,7 @@ class PostponeInstallments extends Component<Props, State>{
                                 </Form.Group>
 
                                 <Form.Group controlId="payWhere">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{local.payWhere}</Form.Label>
+                                    <Form.Label column sm={6}>{local.payWhere}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control as="select"
                                             name="payWhere"
@@ -243,7 +243,7 @@ class PostponeInstallments extends Component<Props, State>{
                                     </Col>
                                 </Form.Group>
                                 <Form.Group controlId="installmentNumber">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{local.installmentNumber}</Form.Label>
+                                    <Form.Label column sm={6}>{local.installmentNumber}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control as="select"
                                             name="installmentNumber"

@@ -14,6 +14,8 @@ import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/uti
 import { getCookie } from '../../../Shared/Services/getCookie';
 import ClearancePaper from './clearancePaper';
 import { FormCheck } from 'react-bootstrap';
+import { changeClearancePrintStatus, ChangeClearancePrintStatusRequest } from '../../Services/APIs/clearance/changeClearancePrintStatus';
+import { loading } from '../../../Shared/redux/loading/actions';
 
 interface State {
   size: number;
@@ -33,6 +35,7 @@ interface Props {
   error: string;
   search: (data) => Promise<void>;
   setSearchFilters: (data) => void;
+  setLoading: (data) => void;
 }
 class ClearancesList extends Component<Props, State> {
   mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
@@ -42,7 +45,7 @@ class ClearancesList extends Component<Props, State> {
       size: 10,
       from: 0,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
-      searchKey: ['keyword', 'dateFromTo', 'clearance-status'],
+      searchKey: ['keyword', 'dateFromTo', 'clearance-status', 'printed'],
       print: false,
       selectedClearances: [],
       checkAll: false,
@@ -77,6 +80,11 @@ class ClearancesList extends Component<Props, State> {
         title: local.customerName,
         key: "name",
         render: data => data.customerName
+      },
+      {
+        title: local.printed,
+        key: "printed",
+        render: data => data.printed ? <img alt="printed" src={require('../../Assets/check-circle.svg')} /> : <img alt="printed" src={require('../../Assets/times-circle.svg')} />
       },
       {
         title: local.customerType,
@@ -127,7 +135,7 @@ class ClearancesList extends Component<Props, State> {
         Swal.fire("error", getErrorMessage(this.props.error), "error")
       }
       if (this.state.branchId === 'hq') {
-        this.setState({ searchKey: ['keyword', 'dateFromTo', 'branch', 'clearance-status'] });
+        this.setState({ searchKey: ['keyword', 'dateFromTo', 'branch', 'clearance-status', 'printed'] });
       }
     })
   }
@@ -152,11 +160,25 @@ class ClearancesList extends Component<Props, State> {
   componentWillUnmount(){
     this.props.setSearchFilters({});
   }
+  async print() {
+    this.props.setLoading(true)
+    const selectedCLearances = this.state.selectedClearances.map(el => el._id)
+    const req: ChangeClearancePrintStatusRequest = {ids: selectedCLearances}
+    const res = await changeClearancePrintStatus(req)
+    if(res.status === "success") {
+      this.props.setLoading(false);
+      this.setState({ print: true }, () => window.print())
+      this.getClearances()
+      this.setState({selectedClearances: []})
+    } else {
+      this.props.setLoading(false);
+    }
+  }
   render() {
     return (
       <>
         <div className="print-none">
-          <Card style={{ margin: '20px 50px' }}>
+          <Card className="main-card">
             <Loader type="fullsection" open={this.props.loading} />
             <Card.Body style={{ padding: 0 }}>
               <div className="custom-card-header">
@@ -164,16 +186,12 @@ class ClearancesList extends Component<Props, State> {
                   <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.clearances}</Card.Title>
                   <span className="text-muted">{local.noOfClearances + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                 </div>
-                <Can I = 'reviewClearance' a= 'application'>
-                <Button onClick={() => {
-                  this.setState({ print: true }, () => window.print())
-                }}
+                  <Button onClick={() => { this.print() }}
                   disabled={(this.state.selectedClearances.length > 0 ? false: true) as boolean}
                   className="big-button"
-                  style={{ marginLeft: 20, height: 70 }}
+                  style={{ height: 70 }}
                 > {local.downloadPDF}
                 </Button>
-                </Can>
               </div>
               <hr className="dashed-line" />
               {this.state.branchId == 'hq' ?
@@ -224,6 +242,7 @@ const addSearchToProps = dispatch => {
   return {
     search: data => dispatch(search(data)),
     setSearchFilters: data => dispatch(searchFilters(data)),
+    setLoading: data => dispatch(loading(data))
   };
 };
 const mapStateToProps = state => {

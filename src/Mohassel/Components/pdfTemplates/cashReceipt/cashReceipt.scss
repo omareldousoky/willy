@@ -1,6 +1,6 @@
 @media screen,
 print {
-    .cash-receipt {
+    .cash-receipt-pdf {
         font-size: 10px;
         font-weight: bold;
         line-height: 1.5em;
@@ -23,8 +23,6 @@ print {
             }
         }
         & .divFooter {
-            position: absolute;
-            bottom: 0;
             margin-bottom: 100px;
         }
         & .bottomborder {
@@ -43,6 +41,17 @@ print {
             height: 35px;   
             width: 100px;
             list-style-position: inside;
+        }
+        & .check-balance-container{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        & .check-balance {
+            font-size: 16px;	
+            font-weight: bold;           
+            padding: 2rem;
         }
     }
 }

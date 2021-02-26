@@ -6,7 +6,8 @@ print {
         text-align: center;
         page-break-after: always;
         direction: rtl;
-        
+        font-family: Arial, Helvetica, sans-serif;
+				
         & tbody {
             page-break-inside: avoid;
         }

@@ -1,20 +1,11 @@
 .stepper-container-vertical {
-  border: 1px solid #e5e5e5;
-  border-radius: 3px;
+  border-left: 1px solid #e5e5e5;
   padding: 30px 0;
   width: 20%;
   height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-.user-data-form{
-    width: 70%;
-    text-align: right;
-    margin: 20px;
-}
-.user-data-group{
-  padding-bottom: 20px;
 }
 .user-data-label{
   font-weight: bold; 
@@ -43,13 +34,6 @@
   position: fixed;
   bottom: 0;
   width: 60%;
-}
-.formsContainer {
-  height: 100%;
-  width: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .border-bottom{
