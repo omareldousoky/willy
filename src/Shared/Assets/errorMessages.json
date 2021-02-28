@@ -111,7 +111,7 @@
     "customer_not_deceased": {"en":"Customer must be deceased","ar":"العميل غير متوفي"},
     "sector_not_found" : {"en": "sector not found","ar": "قطاع الأعمال غير موجود"},
     "activity_not_found":{"en": "activity not found ","ar": "نوع النشاط غير موجود"},
-    "invalid_close_date_in_future":{"en":"the financial closing date is in the future","ar":"تاريخ الإقفال المالي في المستقبل"},
-    "invalid_close_date_pending_actions":{"en":"the financial closing date is invalid, there pending actions before that date","ar":"تاريخ الإقفال المالي خطأ، يوجد حركات معلقة"},
-    "invalid_system_is_financially_closed":{"en":"the system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"}
+    "invalid_close_date_in_future":{"en":"The financial closing date is in the future","ar":"تاريخ الإقفال المالي في المستقبل"},
+    "invalid_close_date_pending_actions":{"en":"There are pending actions before that date, please close them first","ar":"يوجد حركات معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"},
+    "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"}
 }
