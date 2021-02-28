@@ -314,7 +314,7 @@ class Payment extends Component<Props, State>{
             this.props.print({print: 'randomPayment'});
             this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
-            this.setState({ loadingFullScreen: false }), () => Swal.fire("Error !",getErrorMessage(res.error.error),'error');
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("",getErrorMessage(res.error.error),'error'));
           }
       }
       else if(this.props.paymentType === "penalties") {
@@ -417,7 +417,7 @@ class Payment extends Component<Props, State>{
           this.setState({ loadingFullScreen: false });
           Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
-          this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+          this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
         }
       }
       } else {
