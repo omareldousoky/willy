@@ -362,6 +362,7 @@ class Payment extends Component<Props, State>{
         payerId: values.payerId,
         payerName: values.payerName,
         payerNationalId: values.payerNationalId.toString(),
+        truthDate: new Date(values.truthDate).valueOf(),
       }
       const res = await earlyPayment(obj);
       this.setState({ payAmount: values.payAmount });
@@ -438,7 +439,7 @@ class Payment extends Component<Props, State>{
             this.setState({ loadingFullScreen: false });
             Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("",getErrorMessage(res.error.error),'error'));
           }
         } else {
           const res = await editManualOtherPayment(obj);
