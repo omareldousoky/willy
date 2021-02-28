@@ -24,7 +24,7 @@ import { Location } from '../LoanCreation/loanCreation';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
-import { parseJwt, beneficiaryType, getAge, getFullCustomerKey } from "../../../Shared/Services/utils";
+import { parseJwt, beneficiaryType, getAge, getFullCustomerKey, getErrorMessage } from "../../../Shared/Services/utils";
 import { getBusinessSectors } from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm';
 import DualBox from '../DualListBox/dualListBox';
@@ -343,7 +343,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error!',getErrorMessage(application.error.error) , 'error');
             this.setState({ loading: false });
         }
     }
@@ -356,7 +356,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -369,7 +369,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error !', getErrorMessage(usage.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -382,7 +382,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error !', getErrorMessage(sectors.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -395,7 +395,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 loading: false
             });
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error !',getErrorMessage(res.error.error), 'error');
             this.setState({ loading: false });
         }
     }
@@ -409,7 +409,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     loading: false
                 })
             } else {
-                Swal.fire('', local.searchError, 'error');
+                Swal.fire('Error !', getErrorMessage(products.error.error), 'error');
                 this.setState({ loading: false });
             }
         } else {
@@ -442,7 +442,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("Error !", getErrorMessage(results.error.error), 'error')
             this.setState({ loading: false });
         }
     }
@@ -456,7 +456,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: true } });
             }
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("Error !",getErrorMessage(results.error.error), 'error')
             this.setState({ loading: false });
         }
     }
@@ -483,7 +483,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 application: defaultApp
             }, () => { this.setState({ loading: false }) });
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("Error !",getErrorMessage(results.error.error), 'error')
             this.setState({ loading: false });
         }
     }
@@ -562,7 +562,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             if(errorMessage1 || errorMessage2)
             Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : ""} ${errorMessage2}</span>`, 'error');
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("Error !", getErrorMessage(selectedCustomer.error.error), 'error')
         }
 
         this.setState({ loading: false });
@@ -592,7 +592,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             if(errorMessage1 || errorMessage2)
             Swal.fire("error", `<span>${errorMessage1}  ${errorMessage1 ? `<br/>` : null} ${errorMessage2}</span>`, 'error');
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error !', getErrorMessage(selectedGuarantor.error.error), 'error');
         }
         this.setState({ loading: false });
     }
@@ -676,7 +676,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             defaultApplication.guarantorIds = [];
             this.setState({ loading: false, application: defaultApplication });
         } else {
-            Swal.fire("error", local.searchError, 'error')
+            Swal.fire("error", getErrorMessage(selectedProduct.error.error), 'error')
             this.setState({ loading: false });
         }
     }
@@ -764,7 +764,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         this.setState({ loading: false });
                         Swal.fire("success", local.loanApplicationCreated + ` ${local.withCode} ` + res.body.applicationKey).then(() => { this.props.history.push("/track-loan-applications") })
                     } else {
-                        Swal.fire("error", res.error.details, 'error')
+                        Swal.fire("error",getErrorMessage(res.error.error), 'error')
                         this.setState({ loading: false });
                     }
                 } else if (this.props.edit) {
@@ -774,7 +774,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         this.setState({ loading: false });
                         Swal.fire("success", local.loanApplicationEdited).then(() => { this.props.history.push("/track-loan-applications") })
                     } else {
-                        Swal.fire("error", res.error.details, 'error')
+                        Swal.fire("error",getErrorMessage(res.error.error), 'error')
                         this.setState({ loading: false });
                     }
                 }
@@ -812,7 +812,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             return merged
         } else {
-            Swal.fire("error", res.error.details, 'error')
+            Swal.fire("error", getErrorMessage(res.error.error), 'error')
             this.setState({ loading: false });
             return []
         }
@@ -889,7 +889,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             }
             else return { flag: true, customers: merged }
         } else {
-            Swal.fire("error", res.error.details, 'error')
+            Swal.fire("error", getErrorMessage(res.error.error), 'error')
             this.setState({ loading: false });
             return { flag: false }
         }
@@ -911,7 +911,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 application
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
+            Swal.fire('Error!', getErrorMessage(princples.error.error), 'error');
             this.setState({ loading: false });
         }
     }
