@@ -442,7 +442,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         if (results.status === 'success') {
             this.setState({ loading: false, branchCustomers: results.body.data });
         } else {
-            Swal.fire("Error !", local.searchError, 'error')
+            Swal.fire("Error !", getErrorMessage(results.error.error), 'error')
             this.setState({ loading: false });
         }
     }
