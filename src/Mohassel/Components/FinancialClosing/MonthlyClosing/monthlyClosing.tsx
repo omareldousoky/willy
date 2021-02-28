@@ -47,7 +47,7 @@ class MonthlyClosing extends Component<Props, State>{
     }
     handleSubmit = async (values) => {
         const closeDate = values.closeDate;
-        const endOfCloseDate = new Date(closeDate).setHours(23, 59, 59).valueOf();
+        const endOfCloseDate = new Date(closeDate).setHours(23, 59, 59,999).valueOf();
         Swal.fire({
             title: local.areYouSure,
             text: `${local.monthlyClosing}`,
