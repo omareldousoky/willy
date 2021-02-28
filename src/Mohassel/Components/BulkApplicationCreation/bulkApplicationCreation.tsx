@@ -224,7 +224,7 @@ class BulkApplicationCreation extends Component<Props, State>{
           array={this.state.manageApplicationsTabs}
           active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkApplicationCreation')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -236,7 +236,6 @@ class BulkApplicationCreation extends Component<Props, State>{
               <Button onClick={() => { this.setState({ showModal: true }) }}
                 disabled={!Boolean(this.state.selectedApplications.length)}
                 className="big-button"
-                style={{ marginLeft: 20 }}
               > {local.bulkApplicationCreation}
               </Button>
             </div>
@@ -248,6 +247,7 @@ class BulkApplicationCreation extends Component<Props, State>{
               from={this.state.from}
               size={this.state.size}
               status="approved"
+							submitClassName="mt-0"
               hqBranchIdRequest={this.props.branchId} />
             <DynamicTable
               from={this.state.from}
@@ -274,11 +274,11 @@ class BulkApplicationCreation extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>{local.bulkApplicationCreation}</Modal.Title>
+                  <Modal.Title className="m-auto">{local.bulkApplicationCreation}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <Form.Group as={Row} controlId="creationDate">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.creationDate}*`}</Form.Label>
+                  <Form.Group as={Row} controlId="creationDate" className="mb-0">
+                    <Form.Label column sm={3}>{`${local.creationDate}*`}</Form.Label>
                     <Col sm={6}>
                       <Form.Control
                         type="date"

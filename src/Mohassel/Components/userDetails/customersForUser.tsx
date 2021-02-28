@@ -22,6 +22,7 @@ import { UserDateValues } from "./userDetailsInterfaces";
 import { searchLoanOfficer } from "../../Services/APIs/LoanOfficers/searchLoanOfficer";
 import { LoanOfficer } from "../../../Shared/Services/interfaces";
 import { getErrorMessage } from "../../../Shared/Services/utils";
+import { theme } from "../../../theme";
 
 interface Props {
   id: string;
@@ -311,6 +312,8 @@ class CustomersForUser extends Component<Props, State> {
               placeholder={local.chooseBranch}
               name="currentOfficerBranch"
               data-qc="currentOfficerBranch"
+							styles={theme.selectStyleWithBorder}
+							theme={theme.selectTheme}
               value={this.state.currentOfficerBranch}
               enableReinitialize={false}
               onChange={(event) => {
@@ -413,6 +416,8 @@ class CustomersForUser extends Component<Props, State> {
                   name="moveToBranch"
                   data-qc="moveToBranch"
                   value={this.state.moveToBranch}
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   enableReinitialize={false}
                   onChange={(event) => {
                     if (!event)

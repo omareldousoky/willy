@@ -36,12 +36,8 @@ export const UserDataForm = (props: Props) => {
     const [duplicateUserNameHR, setDuplicateUserNameHR] = useState('');
     const [nationalIdLoading, setNationalIdLoading] = useState(false);
     return (
-        <Form
-            onSubmit={handleSubmit}
-            className=" user-data-form"
-        >
+        <Form onSubmit={handleSubmit}>
             <Form.Group
-                className={'user-data-group'}
                 controlId={'name'}
             >
                 <Form.Label
@@ -67,7 +63,6 @@ export const UserDataForm = (props: Props) => {
                 <Col sm={5}>
                     <Form.Group
                         controlId={'nationalId'}
-                        className={'user-data-group'}
                     >
                         <Form.Label
                             className={'user-data-label'}
@@ -180,7 +175,6 @@ export const UserDataForm = (props: Props) => {
             <Row>
                 <Col>
                     <Form.Group
-                        className={'user-data-group'}
                         controlId={'hrCode'}
                     >
                         <Form.Label
@@ -220,7 +214,6 @@ export const UserDataForm = (props: Props) => {
                 <Col>
                     <Form.Group
                         controlId={'hiringDate'}
-                        className={'user-data-group'}
                     >
                         <Form.Label
                             className={'user-data-label'}
@@ -246,7 +239,6 @@ export const UserDataForm = (props: Props) => {
 
             <Form.Group
                 controlId={'mobilePhoneNumber'}
-                className={'user-data-group'}
             >
                 <Form.Label
                     className={'user-data-label'}
@@ -271,7 +263,6 @@ export const UserDataForm = (props: Props) => {
 
             <Form.Group
                 controlId={'username'}
-                className={'user-data-group'}
             >
                 <Form.Label
                     className={'user-data-label'}
@@ -313,7 +304,6 @@ export const UserDataForm = (props: Props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row}
-                className={'user-data-group'}
             >
                 <Col>
                     <Form.Label
@@ -358,20 +348,10 @@ export const UserDataForm = (props: Props) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group
-                as={Row}
-                className={['user-data-group']}
-            >
-                <Col >
-                    <Button
-                        className={'btn-cancel-prev'} style={{ width: '60%' }}
-                        onClick={() => { props.cancel() }}
-                    >{local.cancel}</Button>
-                </Col>
-                <Col>
-                    <Button className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="next">{local.next}</Button>
-                </Col>
-            </Form.Group>
+						<div className="d-flex justify-content-between">
+							<Button variant="secondary" className="w-25" onClick={() => { props.cancel() }}>{local.cancel}</Button>
+							<Button type="submit" data-qc="next" className="w-25">{local.next}</Button>
+						</div>
         </Form>
     );
 

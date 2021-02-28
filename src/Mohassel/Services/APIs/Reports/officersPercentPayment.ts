@@ -3,6 +3,7 @@ import {
   ApiResponse,
   OfficerBranchPercentPaymentResponse,
   OfficerPercentPaymentResponse,
+	OfficersBranchPercentPaymentRequest,
   OfficersPercentPaymentRequest,
   OperationsReportRequest,
 } from "../../interfaces";
@@ -27,7 +28,7 @@ export const fetchOfficersPercentPaymentReport = async (
 };
 
 export const fetchOfficersBranchPercentPaymentReport = async (
-  request: OperationsReportRequest
+  request: OfficersBranchPercentPaymentRequest
 ): Promise<ApiResponse<OfficerBranchPercentPaymentResponse>> => {
   try {
     const res: AxiosResponse<OfficerBranchPercentPaymentResponse> = await axios.post(

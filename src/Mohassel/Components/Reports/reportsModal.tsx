@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -8,13 +8,16 @@ import { Field, Formik, FormikProps } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
+  AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
   BranchesDropDown,
 } from "../dropDowns/allDropDowns";
 import * as local from "../../../Shared/Assets/ar.json";
 import { Branch } from "../../../Shared/Services/interfaces";
-import { DateField } from "../Common/FormikFields/dateField";
+import DateField from "../Common/FormikFields/dateField";
 import { required } from "../../../Shared/validations";
+import { DateFromToField } from "./Fields/dateFromTo";
+import TextField from "../Common/FormikFields/textField";
 import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
 import { getFullCustomerKey } from "../../../Shared/Services/utils";
 
@@ -30,6 +33,9 @@ interface InitialFormikState {
   loanOfficerIds?: Array<string>;
   representatives?: Array<string>;
   gracePeriod?: number;
+  geoAreas?: Array<string>;
+  creationDateFrom?: string;
+  creationDateTo?: string;
   loanApplicationKey?: string;
 }
 
@@ -57,10 +63,10 @@ const ReportsModal = (props: Props) => {
   function handleSubmit(values) {
     props.submit({
       ...values,
-      loanOfficers: getIds(values.loanOfficers),
       representatives: getIds(values.representatives),
+      loanOfficers: getIds(values.representatives),
+      loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
-      loanOfficerIds: getIds(values.loanOfficers),
       key: getCustomerKey(values.customerKeyword),
     });
   }
@@ -81,13 +87,17 @@ const ReportsModal = (props: Props) => {
           initValues.quarterNumber = "01";
         case "date":
           initValues.date = "";
-        case "loanOfficers":
-          initValues.loanOfficers = [];
-          initValues.loanOfficerIds = [];
         case "representatives":
           initValues.representatives = [];
+          initValues.loanOfficers = [];
+          initValues.loanOfficerIds = [];
         case "gracePeriod":
           initValues.gracePeriod = 0;
+        case "geoAreas":
+          initValues.geoAreas = [];
+        case "creationDateFromTo":
+          initValues.creationDateFrom = "";
+          initValues.creationDateTo = "";
         case "applicationKey":
           initValues.loanApplicationKey = "";
       }
@@ -129,103 +139,71 @@ const ReportsModal = (props: Props) => {
         initialValues={getInitialValues()}
         onSubmit={handleSubmit}
         validationSchema={reportsModalValidation}
-        validateOnBlur
-        validateOnChange
       >
         {(formikProps: FormikProps<InitialFormikState>) => {
-          const hasLoanOfficers = props.pdf.inputs?.includes("loanOfficers");
-          const hasRepresentatives = props.pdf.inputs?.includes(
-            "representatives"
-          );
-
           return (
             <Form onSubmit={formikProps.handleSubmit}>
               <Modal.Header>
                 <Modal.Title>{props.pdf.local}</Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+              <Modal.Body className="report-modal">
                 <Row>
                   {props.pdf.inputs?.map((input) => {
                     if (input === "dateFromTo") {
                       return (
-                        <Col sm={12} key={input}>
-                          <Form.Group controlId="fromToDate">
-                            <div
-                              className="dropdown-container"
-                              style={{ flex: 1, alignItems: "center" }}
-                            >
-                              <p
-                                className="dropdown-label"
-                                style={{
-                                  alignSelf: "normal",
-                                  marginLeft: 20,
-                                  width: 300,
-                                  textAlign: "center",
-                                }}
-                              >
-                                {local.date}
-                              </p>
-                              <span>{local.from}</span>
-                              <Form.Control
-                                style={{ marginLeft: 20, border: "none" }}
-                                type="date"
-                                name="fromDate"
-                                data-qc="fromDate"
-                                value={formikProps.values.fromDate}
-                                isInvalid={Boolean(
-                                  formikProps.errors.fromDate &&
-                                    formikProps.touched.fromDate
-                                )}
-                                onChange={(e) => {
-                                  formikProps.setFieldValue(
-                                    "fromDate",
-                                    e.currentTarget.value
-                                  );
-                                  if (e.currentTarget.value === "")
-                                    formikProps.setFieldValue("toDate", "");
-                                }}
-                              ></Form.Control>
-                              <span>{local.to}</span>
-                              <Form.Control
-                                style={{ marginRight: 20, border: "none" }}
-                                type="date"
-                                name="toDate"
-                                data-qc="toDate"
-                                value={formikProps.values.toDate}
-                                min={formikProps.values.fromDate}
-                                onChange={formikProps.handleChange}
-                                isInvalid={Boolean(
-                                  formikProps.errors.toDate &&
-                                    formikProps.touched.toDate
-                                )}
-                                disabled={!Boolean(formikProps.values.fromDate)}
-                              ></Form.Control>
-                            </div>
-                            <span style={{ color: "red" }}>
-                              {formikProps.errors.toDate}
-                            </span>
-                          </Form.Group>
-                        </Col>
+                        <DateFromToField
+                          key={input}
+                          id={input}
+                          name={local.date}
+                          from={{
+                            name: "fromDate",
+                            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                              formikProps.setFieldValue(
+                                "fromDate",
+                                e.currentTarget.value
+                              );
+                              if (e.currentTarget.value === "")
+                                formikProps.setFieldValue("toDate", "");
+                            },
+                            value: formikProps.values.fromDate,
+                            error: formikProps.errors.fromDate,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.fromDate ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.fromDate &&
+                              formikProps.touched.fromDate
+                            ),
+													validate: required
+                          }}
+                          to={{
+                            name: "toDate",
+                            min: formikProps.values.fromDate,
+                            onChange: formikProps.handleChange,
+                            value: formikProps.values.toDate,
+                            error: formikProps.errors.toDate,
+														touched: formikProps.touched.toDate ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.toDate &&
+                              formikProps.touched.toDate
+                            ),
+                            disabled: !formikProps.values.fromDate,
+														validate: required
+                          }}
+                        />
                       );
                     }
                     if (input === "branches") {
                       return (
                         <Col key={input} sm={12}>
                           <BranchesDropDown
-                            multiselect={true}
-                            onlyValidBranches={true}
+                            isMulti
+                            onlyValidBranches
                             onSelectBranch={(branches) => {
                               formikProps.setFieldValue("branches", branches);
-                              if (hasLoanOfficers)
-                                formikProps.setFieldValue("loanOfficers", []);
-                              if (hasRepresentatives)
-                                formikProps.setFieldValue(
-                                  "representatives",
-                                  []
-                                );
+                              formikProps.setFieldValue("representatives", []);
                             }}
                           />
-                          <span style={{ color: "red" }}>
+                          <span className="text-danger">
                             {formikProps.errors.branches}
                           </span>
                         </Col>
@@ -234,20 +212,8 @@ const ReportsModal = (props: Props) => {
                     if (input === "customerKey") {
                       return (
                         <Col sm={12} key={input} style={{ marginTop: 10 }}>
-                          <InputGroup style={{ direction: "ltr" }}>
-                            <Form.Control
-                              type="text"
-                              name="customerKeyword"
-                              data-qc="customerKeyword"
-                              onChange={formikProps.handleChange}
-                              style={{
-                                direction: "rtl",
-                                borderRight: 0,
-                                padding: 22,
-                              }}
-                              value={formikProps.values.customerKeyword}
-                            />
-                            <DropdownButton
+                          <InputGroup>
+														<DropdownButton
                               as={InputGroup.Append}
                               variant="outline-secondary"
                               title={
@@ -271,6 +237,17 @@ const ReportsModal = (props: Props) => {
                                 )
                               )}
                             </DropdownButton>
+                            <Form.Control
+                              type="text"
+                              name="customerKeyword"
+                              data-qc="customerKeyword"
+                              onChange={formikProps.handleChange}
+                              style={{
+                                borderRight: 0,
+                                padding: 22,
+                              }}
+                              value={formikProps.values.customerKeyword}
+                            />
                           </InputGroup>
                         </Col>
                       );
@@ -328,7 +305,7 @@ const ReportsModal = (props: Props) => {
                     }
                     if (input === "quarterNumber") {
                       return (
-                        <Col key={input} sm={6} style={{ marginTop: 10 }}>
+                        <Col key={input} sm={6}>
                           <div
                             className="dropdown-container"
                             style={{ flex: 1, alignItems: "center" }}
@@ -377,7 +354,6 @@ const ReportsModal = (props: Props) => {
                     if (input === "date") {
                       return (
                         <Field
-                          style={{ marginRight: 20 }}
                           type="date"
                           name="date"
                           id="date"
@@ -395,73 +371,132 @@ const ReportsModal = (props: Props) => {
                         />
                       );
                     }
-                    if (
-                      input === "loanOfficers" ||
-                      input === "representatives"
-                    ) {
+                    if (input === "representatives") {
                       return (
-                        <Col key={input} sm={12} style={{ marginTop: 10 }}>
+                        <Col key={input} sm={12}>
                           <AsyncLoanOfficersDropDown
                             isMulti
-                            onSelectLoanOfficer={(loanOfficers) => {
+                            onSelectOption={(loanOfficers) => {
                               formikProps.setFieldValue(
-                                hasLoanOfficers
-                                  ? "loanOfficers"
-                                  : "representatives",
+                                "representatives",
                                 Array.isArray(loanOfficers)
                                   ? loanOfficers
                                   : [loanOfficers]
                               );
                             }}
-                            // branchId={formikProps.values.branches && formikProps.values.branches.length === 1 && formikProps.values.branches[0]._id || undefined}
+                            branchId={
+                              (formikProps.values.branches &&
+                                formikProps.values.branches.length === 1 &&
+                                formikProps.values.branches[0]._id) ||
+                              undefined
+                            }
                             isDisabled={
                               !formikProps.values.branches ||
                               (formikProps.values.branches &&
-                                (!formikProps.values.branches.length ||
-                                  formikProps.values.branches.length > 1))
+                                ((!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1)))
                             }
                           />
-                          <span style={{ color: "red" }}>
-                            {hasLoanOfficers
-                              ? formikProps.errors.loanOfficers
-                              : formikProps.errors.representatives}
+                          <span className="text-danger">
+                            {formikProps.errors.representatives}
                           </span>
                         </Col>
                       );
                     }
                     if (input === "gracePeriod") {
                       return (
-                        <Col sm={12} key={input} style={{ marginTop: 10 }}>
-                          <Form.Group controlId="gracePeriod">
-                            <div className="dropdown-container">
-                              <p
-                                className="dropdown-label"
-                                style={{ width: 150 }}
-                              >
-                                {local.gracePeriod}
-                              </p>
-                              <Form.Control
-                                className="dropdown-select"
-                                name="gracePeriod"
-                                data-qc="gracePeriod"
-                                type="number"
-                                value={formikProps.values.gracePeriod}
-                                min="0"
-                                isInvalid={
-                                  !!(
-                                    formikProps.errors.gracePeriod &&
-                                    formikProps.touched.gracePeriod
-                                  )
-                                }
-                                onChange={formikProps.handleChange}
-                              />
-                            </div>
-                            <span className="text-danger">
-                              {formikProps.errors.gracePeriod}
-                            </span>
-                          </Form.Group>
+                        <Field
+                          name="gracePeriod"
+                          id="gracePeriod"
+                          type="number"
+                          min={0}
+                          displayName={local.gracePeriod}
+                          value={formikProps.values.gracePeriod}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            !!(
+                              formikProps.errors.gracePeriod &&
+                              formikProps.touched.gracePeriod
+                            )
+                          }
+                          component={TextField}
+                          key={input}
+                        />
+                      );
+                    }
+                    if (input === "geoAreas") {
+                      return (
+                        <Col key={input} sm={12}>
+                          <AsyncBranchGeoAreasDropDown
+                            isMulti
+                            onSelectOption={(geoAreas) => {
+                              formikProps.setFieldValue(
+                                "geoAreas",
+                                Array.isArray(geoAreas) ? geoAreas : [geoAreas]
+                              );
+                            }}
+                            branchId={
+                              (formikProps.values.branches &&
+                                formikProps.values.branches.length === 1 &&
+                                formikProps.values.branches[0]?._id) ||
+                              undefined
+                            }
+                            // disable for non-selected branch, all branches, multi selected branches
+                            isDisabled={
+                              !formikProps.values.branches ||
+                              (formikProps.values.branches &&
+                                (!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1 ||
+                                  (!!formikProps.values.branches.length &&
+                                    !formikProps.values.branches[0]?._id)))
+                            }
+                          />
+                          <span className="text-danger">
+                            {formikProps.errors.geoAreas}
+                          </span>
                         </Col>
                       );
+                    }
+                    if (input === "creationDateFromTo") {
+                      return (
+                        <DateFromToField
+                          key={input}
+                          id={input}
+                          name={local.creationDate}
+                          from={{
+                            name: "creationDateFrom",
+                            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                              formikProps.setFieldValue(
+                                "creationDateFrom",
+                                e.currentTarget.value
+                              );
+                              if (e.currentTarget.value === "")
+                                formikProps.setFieldValue("creationDateTo", "");
+                            },
+                            value: formikProps.values.creationDateFrom,
+                            error: formikProps.errors.creationDateFrom,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.creationDateFrom ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.creationDateFrom &&
+                              formikProps.touched.creationDateFrom
+                            ),
+                          }}
+                          to={{
+                            name: "creationDateTo",
+                            min: formikProps.values.creationDateFrom,
+                            onChange: formikProps.handleChange,
+                            value: formikProps.values.creationDateTo,
+                            error: formikProps.errors.creationDateTo,
+														touched: formikProps.touched.creationDateTo ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.creationDateTo &&
+                              formikProps.touched.creationDateTo
+                            ),
+                            disabled: !formikProps.values.creationDateFrom,
+                          }}
+                        />
+											);
                     }
                     if (input === "applicationKey") {
                       return (

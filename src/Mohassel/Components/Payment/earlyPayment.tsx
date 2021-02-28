@@ -12,6 +12,7 @@ import { Employee } from './payment';
 import * as local from '../../../Shared/Assets/ar.json';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import { theme } from '../../../theme';
 
 interface Member {
   customer: {
@@ -85,43 +86,36 @@ class EarlyPayment extends Component<Props, State> {
       <Form onSubmit={this.props.formikProps.handleSubmit}>
         <Form.Group as={Row} style={{ marginTop: 45 }}>
           <Form.Group as={Col} controlId="installmentsRemaining">
-            <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.installmentsRemaining}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.installmentsRemaining}`}</Form.Label>
               <Form.Control
                 name="installmentsRemaining"
                 value={this.getInstallmentsRemaining()}
                 disabled
               >
               </Form.Control>
-            </Col>
           </Form.Group>
           <Form.Group as={Col} controlId="installmentsRemaining">
-            <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.remainingPrincipal}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.remainingPrincipal}`}</Form.Label>
               <Form.Control
                 name="installmentsRemaining"
                 value={this.props.remainingPrincipal}
                 disabled
               >
               </Form.Control>
-            </Col>
           </Form.Group>
         </Form.Group>
         <Form.Group as={Row}>
           <Form.Group as={Col} controlId="earlyPaymentFees">
-            <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.earlyPaymentFees}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.earlyPaymentFees}`}</Form.Label>
               <Form.Control
                 name="earlyPaymentFees"
                 value={this.props.earlyPaymentFees}
                 disabled
               >
               </Form.Control>
-            </Col>
           </Form.Group>
           <Form.Group as={Col} controlId="requiredAmount">
-            <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.requiredAmount}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.requiredAmount}`}</Form.Label>
               <Form.Control
                 type="number"
                 name="requiredAmount"
@@ -129,13 +123,11 @@ class EarlyPayment extends Component<Props, State> {
                 disabled
               >
               </Form.Control>
-            </Col>
           </Form.Group>
         </Form.Group>
         <Form.Group as={Row}>
           <Form.Group as={Col} md={6} controlId="payAmount">
-            <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.amountCollectedFromCustomer}`}</Form.Label>
               <Form.Control
                 type="number"
                 name="payAmount"
@@ -149,11 +141,9 @@ class EarlyPayment extends Component<Props, State> {
               <Form.Control.Feedback type="invalid">
                 {this.props.formikProps.errors.payAmount}
               </Form.Control.Feedback>
-            </Col>
           </Form.Group>
           <Form.Group as={Col} md={6} controlId="truthDate">
-            <Form.Label style={{ textAlign: 'right', paddingRight: 0 }} column>{`${local.truthDate}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.truthDate}`}</Form.Label>
               <Form.Control
                 type="date"
                 name="truthDate"
@@ -168,11 +158,9 @@ class EarlyPayment extends Component<Props, State> {
               <Form.Control.Feedback type="invalid">
                 {this.props.formikProps.errors.truthDate}
               </Form.Control.Feedback>
-            </Col>
           </Form.Group>
           <Form.Group as={Col} md={6} controlId="whoPaid">
-            <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.whoMadeThePayment}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.whoMadeThePayment}`}</Form.Label>
               <Form.Control
                 as="select"
                 name="payerType"
@@ -191,11 +179,9 @@ class EarlyPayment extends Component<Props, State> {
               <Form.Control.Feedback type="invalid">
                 {this.props.formikProps.errors.payerType}
               </Form.Control.Feedback>
-            </Col>
           </Form.Group>
           {this.props.formikProps.values.payerType === 'beneficiary' && this.props.application.product.beneficiaryType === "group" && <Form.Group as={Col} md={6} controlId="customer">
-            <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.customer}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.customer}`}</Form.Label>
               <Form.Control
                 as="select"
                 name="payerId"
@@ -212,15 +198,15 @@ class EarlyPayment extends Component<Props, State> {
               <Form.Control.Feedback type="invalid">
                 {this.props.formikProps.errors.payerId}
               </Form.Control.Feedback>
-            </Col>
           </Form.Group>}
           {this.props.formikProps.values.payerType === 'employee' && <Form.Group as={Col} md={6} controlId="whoPaid">
-            <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.employee}`}</Form.Label>
-            <Col>
+            <Form.Label className="pr-0" column>{`${local.employee}`}</Form.Label>
               <AsyncSelect
                 className={this.props.formikProps.errors.payerId ? "error" : ""}
                 name="payerId"
                 data-qc="payerId"
+								styles={theme.selectStyleWithBorder}
+								theme={theme.selectTheme}
                 value={this.state.employees.find(employee => employee._id === this.props.formikProps.values.payerId)}
                 onBlur={this.props.formikProps.handleBlur}
                 onChange={(employee: any) => this.props.formikProps.setFieldValue("payerId", employee._id)}
@@ -232,13 +218,11 @@ class EarlyPayment extends Component<Props, State> {
               {this.props.formikProps.touched.payerId && <div style={{ width: '100%', marginTop: '0.25rem', fontSize: '80%', color: '#d51b1b' }}>
                 {this.props.formikProps.errors.payerId}
               </div>}
-            </Col>
           </Form.Group>}
           {(this.props.formikProps.values.payerType === 'family' || this.props.formikProps.values.payerType === 'nonFamily') &&
             <>
               <Form.Group as={Col} md={6} controlId="whoPaid">
-                <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.name}`}</Form.Label>
-                <Col>
+                <Form.Label className="pr-0" column>{`${local.name}`}</Form.Label>
                   <Form.Control
                     name="payerName"
                     data-qc="payerName"
@@ -249,11 +233,9 @@ class EarlyPayment extends Component<Props, State> {
                   <Form.Control.Feedback type="invalid">
                     {this.props.formikProps.errors.payerName}
                   </Form.Control.Feedback>
-                </Col>
               </Form.Group>
               <Form.Group as={Col} md={6} controlId="whoPaid">
-                <Form.Label style={{ textAlign: "right", paddingRight: 0 }} column>{`${local.nationalId}`}</Form.Label>
-                <Col>
+                <Form.Label className="pr-0" column>{`${local.nationalId}`}</Form.Label>
                   <Form.Control
                     type="text"
                     name="payerNationalId"
@@ -271,13 +253,12 @@ class EarlyPayment extends Component<Props, State> {
                   <Form.Control.Feedback type="invalid">
                     {this.props.formikProps.errors.payerNationalId}
                   </Form.Control.Feedback>
-                </Col>
               </Form.Group>
             </>
           }
         </Form.Group>
         <div className="payments-buttons-container">
-          <Button variant="outline-primary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
+          <Button variant="secondary" data-qc="cancel" onClick={() => this.props.changePaymentState(0)}>{local.cancel}</Button>
           <Button variant="primary" data-qc="submit" type="submit">{local.submit}</Button>
         </div>
       </Form>

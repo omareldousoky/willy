@@ -174,7 +174,7 @@ class RoleCreation extends Component<Props, State> {
           // <UserDataForm {...formikProps} cancle={() => this.cancel()} />
           <Form onSubmit={formikProps.handleSubmit} className="data-form">
             <Col>
-              <Form.Group className="data-group" controlId="roleName">
+              <Form.Group controlId="roleName">
                 <Form.Label className="data-label">{local.roleName}</Form.Label>
                 <Form.Control
                   type="text"
@@ -196,7 +196,7 @@ class RoleCreation extends Component<Props, State> {
               <Form.Group
                 as={Row}
                 controlId="hQpermission"
-                className="data-group row-nowrap"
+                className="row-nowrap"
               >
                 <Form.Check
                   type="checkbox"
@@ -221,15 +221,15 @@ class RoleCreation extends Component<Props, State> {
                 </Form.Label>
               </Form.Group>
               <Form.Group
-                className={"data-group"}
                 controlId="managerRole"
-                style={{ minHeight: "20rem" }}
+                className="mb-4"
               >
                 <Form.Label className={"data-label"}>
                   {local.selectManagerRole}
                 </Form.Label>
                 <Select
-                  styles={theme.selectStyle}
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   isSearchable={true}
                   filterOption={customFilterOption}
                   isDisabled={this.props.edit}
@@ -256,9 +256,10 @@ class RoleCreation extends Component<Props, State> {
                   options={this.state.managerRolesList}
                 />
               </Form.Group>
-              <Form.Group as={Row} className="justify-content-around">
+							<div className="d-flex justify-content-between py-4">
                 <Button
-                  style={{ width: "20%" }}
+									variant="secondary"
+									className="w-25"
                   onClick={() => {
                     this.cancel();
                   }}
@@ -266,13 +267,14 @@ class RoleCreation extends Component<Props, State> {
                   {local.cancel}
                 </Button>
                 <Button
-                  style={{ float: "left", width: "20%" }}
+									variant="primary"
+									className="w-25"
                   type="submit"
                   data-qc="next"
                 >
                   {local.next}
                 </Button>
-              </Form.Group>
+              </div>
             </Col>
           </Form>
         )}
