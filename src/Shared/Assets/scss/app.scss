@@ -25,7 +25,6 @@ input[type=radio] {
 	&[type=checkbox]:checked::after,
 	input[type=checkbox]:checked::after {
 		content: "\e900";
-		font-weight: 900;
 		color: $green;
 	}
 
@@ -45,7 +44,6 @@ input[type=radio] {
 	&[type=radio]:checked::after,
 	input[type=radio]:checked::after {
 		content: "\e902";
-		font-weight: 900;
 		color: $green;
 	}
 
