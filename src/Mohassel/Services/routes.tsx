@@ -56,6 +56,7 @@ import ClearanceProfile from '../Components/Clearance/clearanceProfile';
 import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
+import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 
 const appRoutes = [
   {
@@ -450,6 +451,10 @@ const appRoutes = [
         path: '/supervisions-levels',
         label: local.levelsOfSupervision,
         render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
+      },{
+        path: '/financial-closing',
+        label: local.financialClosing,
+        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
       }
     ]
   },
