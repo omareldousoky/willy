@@ -11,6 +11,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const {
 	CleanWebpackPlugin
 } = require('clean-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 const LOGIN_APP_DIR = resolve(__dirname, '../src/Login/')
 const SHARED_DIR = resolve(__dirname, '../Shared/Login/')
@@ -69,6 +70,11 @@ module.exports = (env) => {
 			]
 		},
 		optimization: {
+			minimize: true,
+			minimizer: [new TerserPlugin({
+				parallel: true,
+				extractComments: true
+			})],
 			splitChunks: {
 				cacheGroups: {
 					vendor: {
@@ -78,6 +84,12 @@ module.exports = (env) => {
 					},
 				},
 			},
+		},
+		// to get lines in code exactly
+		devtool: !isProd ? 'inline-source-map' : '',
+		devServer: {
+			port: 8080,
+			clientLogLevel: 'info',
 		},
 		plugins: [
 			new HtmlWebpackPlugin({
