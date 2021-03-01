@@ -100,7 +100,7 @@ export const StepThreeForm = (props: any) => {
                                 className={errors.representative ? "error" : ""}
                                 name="representative"
                                 data-qc="representative"
-																styles={theme.selectStyleWithoutBorder}
+																styles={theme.selectStyleWithBorder}
 																theme={theme.selectTheme}
                                 value={loanOfficers?.find(loanOfficer => loanOfficer._id === (typeof values.representative === 'string' ? values.representative : values.representative ? values.representative._id : ""))}
                                 onBlur={handleBlur}

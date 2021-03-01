@@ -481,7 +481,6 @@ const ReportsModal = (props: Props) => {
                               formikProps.errors.creationDateFrom &&
                               formikProps.touched.creationDateFrom
                             ),
-														validate: required
                           }}
                           to={{
                             name: "creationDateTo",
@@ -495,7 +494,6 @@ const ReportsModal = (props: Props) => {
                               formikProps.touched.creationDateTo
                             ),
                             disabled: !formikProps.values.creationDateFrom,
-														validate: required
                           }}
                         />
 											);
