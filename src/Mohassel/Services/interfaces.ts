@@ -273,6 +273,13 @@ export interface UnpaidInstallmentsPerAreaRequest
   geoAreas?: string[];
 }
 
+export interface OfficersProductivityRequest {
+  startDate: number;
+  endDate: number;
+	managers: string[];
+  gracePeriod?: number;
+}
+
 export interface CustomerApplicationTransactionsRequest {
   loanApplicationKey: string;
 }
@@ -327,4 +334,69 @@ interface MonthComparisonReportSingleResponse
 export interface MonthComparisonReportResponse
   extends MonthComparisonReportCommon {
   response?: MonthComparisonReportSingleResponse[];
+}
+
+interface CommonOfficersProductivity {
+	totalBranches?: number;
+	totalIssuedCount?: number;
+	totalIssuedAmount?: number;
+	expectedPaymentsThisDuration?: number;
+	paidByEndOfDuration?: number;
+	paymentPercentage?: number;
+	currentWalletAmount?: number;
+	reciepts?: number;
+	totalCount?: number;
+}
+
+interface OfficersProductivityBranches
+	extends CommonOfficersProductivity {
+	branchManager?: string;
+	branch?: string
+}
+
+interface OfficersProductivityCenterManagers
+	extends CommonOfficersProductivity {
+	branches?: OfficersProductivityBranches[];
+	centerManager?: string;
+}
+
+interface OfficersProductivityAreaSupervisors 
+	extends CommonOfficersProductivity {
+	centerManagers?: OfficersProductivityCenterManagers[];
+	areaSupervisor?: string;
+}
+
+interface OfficersProductivityAreaManagers 
+	extends CommonOfficersProductivity {
+	areaSupervisors?: OfficersProductivityAreaSupervisors[];
+	areaManager?: string;
+}
+
+interface OfficersProductivityOperationManager
+	extends CommonOfficersProductivity {
+	areaManagers?: OfficersProductivityAreaManagers[];
+	operationsManager?: string;
+}
+
+export interface OfficersProductivityResponse
+	extends CommonOfficersProductivity {
+	response: OfficersProductivityOperationManager[]
+}
+
+export interface CurrentHierarchiesSingleResponse {
+	id: string;
+	name?: string;
+}
+
+export interface CurrentHierarchiesResponse {
+	response: CurrentHierarchiesSingleResponse[]
+}
+
+interface UserBranchesSingleResponse {
+	_id: string;
+	name?: string;
+}
+
+export interface UserBranchesResponse {
+	data: UserBranchesSingleResponse[]
 }

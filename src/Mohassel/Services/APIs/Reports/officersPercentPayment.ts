@@ -1,17 +1,24 @@
 import { AxiosResponse } from "axios";
 import {
   ApiResponse,
+	CurrentHierarchiesResponse,
   OfficerBranchPercentPaymentResponse,
   OfficerPercentPaymentResponse,
 	OfficersBranchPercentPaymentRequest,
   OfficersPercentPaymentRequest,
-  OperationsReportRequest,
+	OfficersProductivityRequest,
+	OfficersProductivityResponse,
+	UserBranchesResponse,
 } from "../../interfaces";
 import axios from "../axios-instance";
 
 const { REACT_APP_BASE_URL } = process.env;
 const fetchOfficerPercentPaymentUrl = `${REACT_APP_BASE_URL}/report/officer-percent-payment`;
 const fetchOfficerBranchPercentPaymentUrl = `${REACT_APP_BASE_URL}/report/officer-branch-percent-payment`;
+const fetchOfficersProductivityUrl = `${REACT_APP_BASE_URL}/report/officer-productivity`;
+// for officers productivity input preparation
+const fetchCurrentHierarchiesUrl = `${REACT_APP_BASE_URL}/branch/current-hierarchies`;
+const fetchUserBranchesUrl = `${REACT_APP_BASE_URL}/user/user-branches`;
 
 export const fetchOfficersPercentPaymentReport = async (
   request: OfficersPercentPaymentRequest
@@ -34,6 +41,46 @@ export const fetchOfficersBranchPercentPaymentReport = async (
     const res: AxiosResponse<OfficerBranchPercentPaymentResponse> = await axios.post(
       fetchOfficerBranchPercentPaymentUrl,
       request
+    );
+    return { status: "success", body: res.data };
+  } catch (error) {
+    return { status: "error", error: error.response.data };
+  }
+};
+
+export const fetchOfficersProductivityReport = async (
+  request: OfficersProductivityRequest
+): Promise<ApiResponse<OfficersProductivityResponse>> => {
+  try {
+    const res: AxiosResponse<OfficersProductivityResponse> = await axios.post(
+      fetchOfficersProductivityUrl,
+      request
+    );
+    return { status: "success", body: res.data };
+  } catch (error) {
+    return { status: "error", error: error.response.data };
+  }
+};
+
+export const fetchCurrentHierarchies = async (): 
+	Promise<ApiResponse<CurrentHierarchiesResponse>> => {
+  try {
+    const res: AxiosResponse<CurrentHierarchiesResponse> = await axios.post(
+      fetchCurrentHierarchiesUrl
+    );
+    return { status: "success", body: res.data };
+  } catch (error) {
+    return { status: "error", error: error.response.data };
+  }
+};
+
+export const fetchUserBranches = async (
+  userId: string
+): Promise<ApiResponse<UserBranchesResponse>> => {
+  try {
+    const res: AxiosResponse<UserBranchesResponse> = await axios.post(
+      fetchUserBranchesUrl,
+      { userId }
     );
     return { status: "success", body: res.data };
   } catch (error) {

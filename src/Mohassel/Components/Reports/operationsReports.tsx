@@ -23,10 +23,12 @@ import {
   OperationsReportRequest,
   PaidArrearsRequest,
   UnpaidInstallmentsByOfficerRequest,
+	OfficersProductivityRequest,
 } from "../../Services/interfaces";
 import {
   fetchOfficersBranchPercentPaymentReport,
   fetchOfficersPercentPaymentReport,
+	fetchOfficersProductivityReport,
 } from "../../Services/APIs/Reports/officersPercentPayment";
 import OfficersPercentPayment from "../pdfTemplates/officersPercentPayment/officersPercentPayment";
 import OfficerBranchPercentPayment from "../pdfTemplates/officersPercentPayment/officersBranchPercentPayment";
@@ -78,6 +80,7 @@ enum Reports {
   MonthComparison = "monthComparison",
   ActiveWalletIndividual = "activeWalletIndividual",
   ActiveWalletGroup = "activeWalletGroup",
+  OfficersProductivity = "officersProductivity",
 }
 
 class OperationsReports extends Component<{}, OperationsReportsState> {
@@ -180,6 +183,12 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           inputs: ["date", "branches", "loanOfficers"],
           permission: "groupActiveLoans",
         },
+				{
+          key: Reports.OfficersProductivity,
+          local: "نسبة سداد المندوبين 2",
+          inputs: ["dateFromTo", "managers", "userBranches", "gracePeriod"],
+          permission: "officersProductivityReport",
+        },
       ],
       selectedPdf: { permission: "" },
       data: undefined,
@@ -231,7 +240,9 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
       case Reports.ActiveWalletIndividual:
         return this.fetchActiveWalletIndividual(values)
       case Reports.ActiveWalletGroup:
-        return this.fetchActiveWalletGroup(values);  
+        return this.fetchActiveWalletGroup(values);
+			case Reports.OfficersProductivity:
+        return this.fetchOfficersProductivity(values);
       default:
         return null;
     }
@@ -381,10 +392,10 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
   async fetchMonthComparison(values) {
     // get timestamp in UTC
     const res = await fetchMonthComparisonReport({
-      startDate: new Date(new Date(values.fromDate).toUTCString()).valueOf(),
+      startDate: new Date(new Date(values.fromDate).toUTCString())
+				.setUTCHours(0,0,0,0),
       endDate: new Date(new Date(values.toDate).toUTCString())
-        .setUTCHours(23, 59, 59, 999)
-        .valueOf(),
+        .setUTCHours(23, 59, 59, 999),
       branches: values.branches,
     });
     this.handleFetchReport(res, Reports.MonthComparison);
@@ -400,14 +411,28 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
     this.handleFetchReport(res, Reports.ActiveWalletIndividual)
   }
   async fetchActiveWalletGroup(values) {
-    const { date, branches, loanOfficers } = values;
+    const { date, branches, loanOfficerIds } = values;
     const res = await fetchActiveWalletGroupReport({
       date,
       branches,
-      loanOfficerIds: loanOfficers
+      loanOfficerIds
     } as ActiveWalletRequest)
     this.handleFetchReport(res, Reports.ActiveWalletGroup)
   }
+
+	async fetchOfficersProductivity(values) {
+    const { managers, gracePeriod, fromDate, toDate } = values;
+    const res = await fetchOfficersProductivityReport({
+			startDate: new Date(new Date(fromDate).toUTCString())
+				.setUTCHours(0,0,0,0),
+      endDate: new Date(new Date(toDate).toUTCString())
+        .setUTCHours(23, 59, 59, 999),
+      managers,
+			gracePeriod
+    } as OfficersProductivityRequest)
+    this.handleFetchReport(res, Reports.OfficersProductivity)
+  }
+
   render() {
     return (
       <>

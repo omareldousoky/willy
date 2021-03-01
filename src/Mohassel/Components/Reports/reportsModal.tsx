@@ -10,6 +10,7 @@ import { PDF } from "./reports";
 import {
   AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
+	AsyncManagersDropDown,
   BranchesDropDown,
 } from "../dropDowns/allDropDowns";
 import * as local from "../../../Shared/Assets/ar.json";
@@ -20,6 +21,7 @@ import { DateFromToField } from "./Fields/dateFromTo";
 import TextField from "../Common/FormikFields/textField";
 import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
 import { getFullCustomerKey } from "../../../Shared/Services/utils";
+import { CurrentHierarchiesSingleResponse } from "../../Services/interfaces";
 
 interface InitialFormikState {
   fromDate?: string;
@@ -37,6 +39,7 @@ interface InitialFormikState {
   creationDateFrom?: string;
   creationDateTo?: string;
   loanApplicationKey?: string;
+	managers?: Array<CurrentHierarchiesSingleResponse>;
 }
 
 interface Props {
@@ -52,7 +55,7 @@ const ReportsModal = (props: Props) => {
     props.pdf.inputs?.includes("customerKey") ? "customerKey" : undefined
   );
   const getIds = (list: Record<string, string>[]): string[] =>
-    list?.length ? list.map((item) => item._id) : [];
+    list?.length ? list.map((item) => item._id || item.id) : [];
   const getCustomerKey = (key?: string): string | undefined => {
     console.log(key);
     if (!customerDropDownValue || key === undefined) return undefined;
@@ -68,6 +71,7 @@ const ReportsModal = (props: Props) => {
       loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
       key: getCustomerKey(values.customerKeyword),
+      managers: getIds(values.managers),
     });
   }
   function getInitialValues() {
@@ -78,6 +82,7 @@ const ReportsModal = (props: Props) => {
           initValues.fromDate = "";
           initValues.toDate = "";
         case "branches":
+				case "userBranches":
           initValues.branches = [];
         case "customerKey":
           initValues.customerKeyword = "";
@@ -100,6 +105,8 @@ const ReportsModal = (props: Props) => {
           initValues.creationDateTo = "";
         case "applicationKey":
           initValues.loanApplicationKey = "";
+				case "managers":
+          initValues.managers = [];
       }
     });
     return initValues;
@@ -580,6 +587,22 @@ const ReportsModal = (props: Props) => {
                         />
                       );
                     }
+										if (input === "managers") {
+                      return (
+                        <Col key={input} sm={12}>
+                          <AsyncManagersDropDown
+                            isMulti
+                            onSelectOption={(managers) => {
+                              formikProps.setFieldValue("managers", managers);
+                            }}
+                          />
+                          <span className="text-danger">
+                            {formikProps.errors.managers}
+                          </span>
+                        </Col>
+                      );
+                    }
+
                   })}
                 </Row>
               </Modal.Body>
