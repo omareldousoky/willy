@@ -1,0 +1,15 @@
+{
+	"plugins": [
+		"stylelint-scss"
+	],
+	"extends": "stylelint-config-sass-guidelines",
+	"rules": {
+		"at-rule-no-unknown": null,
+		"scss/at-rule-no-unknown": true,
+
+		"string-quotes": "single",
+		"color-named": null,
+		"order/properties-alphabetical-order": null,
+		"font-family-no-missing-generic-family-keyword": null
+	}
+}
