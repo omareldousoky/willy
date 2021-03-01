@@ -56,7 +56,6 @@ module.exports = (env) => {
 						},
 					],
 				},
-
 				{
 					test: /\.(png|svg|jpg)$/,
 					use: [{
@@ -87,10 +86,6 @@ module.exports = (env) => {
 		},
 		// to get lines in code exactly
 		devtool: !isProd ? 'inline-source-map' : '',
-		devServer: {
-			port: 8080,
-			clientLogLevel: 'info',
-		},
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: './src/Login/index.html',
