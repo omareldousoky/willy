@@ -25,6 +25,9 @@ module.exports = {
 	rules: {
 		'global-require': 'off',
 		'prefer-template': 'off',
+		'no-underscore-dangle': 'off',
+		'class-methods-use-this': 'off',
+		'no-nested-ternary': 'off',
 		'no-unused-expressions': [
 			'warn',
 			{
@@ -46,15 +49,20 @@ module.exports = {
 		'react/jsx-props-no-spreading': 'off',
 		'react/destructuring-assignment': 'off',
 		'react/jsx-one-expression-per-line': 'off',
+		'react/no-array-index-key': 'off',
 		'react-hooks/rules-of-hooks': 'error',
 		'react-hooks/exhaustive-deps': 'warn',
 		'import/extensions': 'off',
 		'import/no-unused-imports': 'off', // no-unused-vars rule is sufficient
 		'import/prefer-default-export': 'off',
-		'import/no-named-as-default-member': 'off',
-		'import/no-unused-modules': [1, {
-			'unusedExports': true
-		}],
+		'import/no-named-as-default': 'off',
+		// 'import/no-named-as-default-member': 'off',
+		// 'import/no-unused-modules': ['error', {
+		// 	'unusedExports': true
+		// }],
+		'jsx-a11y/control-has-associated-label': 'off',
+		'jsx-a11y/click-events-have-key-events': 'off',
+		'jsx-a11y/no-static-element-interactions': 'off',
 		'prettier/prettier': [
 			'error',
 			{
