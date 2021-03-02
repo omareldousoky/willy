@@ -9,7 +9,7 @@
     "typescriptreact"
   ],
   "eslint.options": {
-    "extensions": [".tsx", ".js"]
+    "extensions": [".tsx", ".ts", ".js"]
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
