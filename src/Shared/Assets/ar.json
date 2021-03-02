@@ -912,5 +912,8 @@
     "monthlyClosing": "الإغلاق الشهري",
     "closeDate": "تاريخ الإغلاق",
     "dateCantBeInFuture":"التاريخ لايمكن أن يكون في المستقبل",
-    "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا"
+    "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا",
+    "legalAffairs":"الشئون القانونية",
+    "lateList":"قائمة التأخيرات",
+    "lateCustomers":"المتأخرون في السداد"
 }
