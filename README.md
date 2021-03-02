@@ -36,7 +36,9 @@ and for forms validation [yup](https://formik.org/docs/guides/validation)
 
 we are using [Redux](https://react-redux.js.org/)
 
-## lts-icons
+### Icons:
+
+#### lts-icons
 
 - We use `icomoon` to generate our icon font
 - Just go to [iconmoon projects](https://icomoon.io/app/#/projects)
