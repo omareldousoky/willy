@@ -3,14 +3,13 @@ import Table from 'react-bootstrap/Table'
 import Modal from 'react-bootstrap/Modal'
 import FormCheck from 'react-bootstrap/FormCheck'
 import InputGroup from 'react-bootstrap/InputGroup'
-import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import { ValueType } from 'react-select'
-import { getCookie } from "../../../Shared/Services/getCookie";
+import { getCookie } from '../../../Shared/Services/getCookie'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -51,7 +50,7 @@ interface State {
   manageCustomersTabs: any[]
 }
 
-export class MoveCustomers extends Component<{}, State> {
+class MoveCustomers extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -75,34 +74,6 @@ export class MoveCustomers extends Component<{}, State> {
     this.setState({ LoanOfficerSelectLoader: true })
     this.getLoanOfficers('')
     this.setState({ manageCustomersTabs: manageCustomersArray() })
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({
-        selectedCustomers: this.state.customers.filter(
-          (customer) => customer.blocked?.isBlocked !== true
-        ),
-      })
-    } else this.setState({ selectedCustomers: [] })
-  }
-
-  addRemoveItemFromChecked(customer: Customer) {
-    if (
-      this.state.selectedCustomers.findIndex(
-        (selectedCustomer) => selectedCustomer._id == customer._id
-      ) > -1
-    ) {
-      this.setState({
-        selectedCustomers: this.state.selectedCustomers.filter(
-          (el) => el._id !== customer._id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, customer],
-      })
-    }
   }
 
   async getLoanOfficers(searchKeyWord: string) {
@@ -150,6 +121,54 @@ export class MoveCustomers extends Component<{}, State> {
     }
   }
 
+  async getCustomersForUser(name?: string) {
+    this.setState({ loading: true })
+    const res = await searchCustomer({
+      name,
+      size: this.state.size,
+      from: this.state.from,
+      representativeId: this.state.selectedLO?._id,
+    })
+    if (res.status === 'success') {
+      this.setState({
+        totalCustomers: res.body.totalCount ? res.body.totalCount : 0,
+        customers: res.body.data,
+        loading: false,
+      })
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+  }
+
+  addRemoveItemFromChecked(customer: Customer) {
+    if (
+      this.state.selectedCustomers.findIndex(
+        (selectedCustomer) => selectedCustomer._id == customer._id
+      ) > -1
+    ) {
+      this.setState({
+        selectedCustomers: this.state.selectedCustomers.filter(
+          (el) => el._id !== customer._id
+        ),
+      })
+    } else {
+      this.setState({
+        selectedCustomers: [...this.state.selectedCustomers, customer],
+      })
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({
+        selectedCustomers: this.state.customers.filter(
+          (customer) => customer.blocked?.isBlocked !== true
+        ),
+      })
+    } else this.setState({ selectedCustomers: [] })
+  }
+
   async submit() {
     this.setState({ loading: true, openModal: false })
     const res = await this.moveCustomers()
@@ -177,7 +196,7 @@ export class MoveCustomers extends Component<{}, State> {
       this.setState({ loading: false }, () => {
         Swal.fire({
           title: '',
-          text: local.thisUserIsAsiggnedToOtherCustomers,
+          text: local.thisUserIsAssignedToOtherCustomers,
           icon: 'warning',
           showCancelButton: true,
           focusConfirm: false,
@@ -205,27 +224,7 @@ export class MoveCustomers extends Component<{}, State> {
       customers: this.state.selectedCustomers.map((customer) => customer._id),
       moveMissing: this.state.moveMissing,
     }
-    return await moveCustomerToOfficer(data)
-  }
-
-  async getCustomersForUser(name?: string) {
-    this.setState({ loading: true })
-    const res = await searchCustomer({
-      name,
-      size: this.state.size,
-      from: this.state.from,
-      representativeId: this.state.selectedLO?._id,
-    })
-    if (res.status === 'success') {
-      this.setState({
-        totalCustomers: res.body.totalCount ? res.body.totalCount : 0,
-        customers: res.body.data,
-        loading: false,
-      })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+    return moveCustomerToOfficer(data)
   }
 
   render() {

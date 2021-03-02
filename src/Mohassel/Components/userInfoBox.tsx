@@ -22,18 +22,7 @@ interface Props {
   status?: string
 }
 
-interface State {
-  loading: boolean
-}
-class InfoBox extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      // eslint-disable-next-line react/no-unused-state
-      loading: false,
-    }
-  }
-
+class InfoBox extends Component<Props> {
   getIscore(data) {
     if (this.props.getIscore) {
       this.props.getIscore(data)
@@ -41,17 +30,16 @@ class InfoBox extends Component<Props, State> {
   }
 
   render() {
-    const { values } = this.props
+    const { values, iScores } = this.props
     let iscore: Score = {
       iscore: '',
       nationalId: '',
     }
-    if (this.props.iScores) {
-      // eslint-disable-next-line prefer-destructuring
-      iscore = this.props.iScores.filter(
+    if (iScores)
+      [iscore] = iScores.filter(
         (score) => score.nationalId === values.nationalId
-      )[0]
-    }
+      )
+
     return (
       <div
         style={{

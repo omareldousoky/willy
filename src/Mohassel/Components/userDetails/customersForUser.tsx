@@ -139,6 +139,34 @@ class CustomersForUser extends Component<Props, State> {
       )
   }
 
+  getLoanOfficers = async (searchKeyWord) => {
+    this.setState({
+      loanOfficerSelectLoader: true,
+      loanOfficerSelectOptions: [],
+      selectedLO: undefined,
+    })
+    if (this.state.moveToBranch && this.state.moveToBranch._id) {
+      const res = await searchLoanOfficer({
+        from: 0,
+        size: 1000,
+        name: searchKeyWord,
+        status: 'active',
+        branchId: this.state.moveToBranch._id,
+      })
+      if (res.status === 'success') {
+        this.setState({
+          loanOfficerSelectLoader: false,
+          loanOfficerSelectOptions: res.body.data,
+        })
+      } else {
+        this.setState(
+          { loanOfficerSelectLoader: false, loanOfficerSelectOptions: [] },
+          () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        )
+      }
+    }
+  }
+
   async submit() {
     this.setState({ loading: true, openModal: false })
     const moveToBranchId = this.state.moveToBranch?._id || ''
@@ -184,7 +212,7 @@ class CustomersForUser extends Component<Props, State> {
       this.setState({ loading: false }, () => {
         Swal.fire({
           title: '',
-          text: local.thisUserIsAsiggnedToOtherCustomers,
+          text: local.thisUserIsAssignedToOtherCustomers,
           icon: 'warning',
           showCancelButton: true,
           focusConfirm: false,
@@ -205,34 +233,6 @@ class CustomersForUser extends Component<Props, State> {
         checkAll: false,
       })
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-
-  getLoanOfficers = async (searchKeyWord) => {
-    this.setState({
-      loanOfficerSelectLoader: true,
-      loanOfficerSelectOptions: [],
-      selectedLO: undefined,
-    })
-    if (this.state.moveToBranch && this.state.moveToBranch._id) {
-      const res = await searchLoanOfficer({
-        from: 0,
-        size: 1000,
-        name: searchKeyWord,
-        status: 'active',
-        branchId: this.state.moveToBranch._id,
-      })
-      if (res.status === 'success') {
-        this.setState({
-          loanOfficerSelectLoader: false,
-          loanOfficerSelectOptions: res.body.data,
-        })
-      } else {
-        this.setState(
-          { loanOfficerSelectLoader: false, loanOfficerSelectOptions: [] },
-          () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-      }
     }
   }
 

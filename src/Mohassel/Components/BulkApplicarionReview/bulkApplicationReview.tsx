@@ -285,6 +285,10 @@ class BulkApplicationReview extends Component<Props, State> {
     }
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getApplications() {
     this.props
       .search({
@@ -322,37 +326,6 @@ class BulkApplicationReview extends Component<Props, State> {
       this.props.setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
-  }
-
-	addRemoveItemFromChecked(loan: LoanItem) {
-    if (
-      this.state.selectedReviewedLoans.findIndex(
-        (loanItem) => loanItem.id == loan.id
-      ) > -1
-    ) {
-      this.setState({
-        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(
-          (el) => el.id !== loan.id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
-    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
-  }
-
-  dateSlice(date) {
-    if (!date) {
-      return timeToDateyyymmdd(-1)
-    }
-    return timeToDateyyymmdd(date)
   }
 
   getStatus(status: string) {
@@ -400,6 +373,31 @@ class BulkApplicationReview extends Component<Props, State> {
     }
   }
 
+  dateSlice(date) {
+    if (!date) {
+      return timeToDateyyymmdd(-1)
+    }
+    return timeToDateyyymmdd(date)
+  }
+
+  addRemoveItemFromChecked(loan: LoanItem) {
+    if (
+      this.state.selectedReviewedLoans.findIndex(
+        (loanItem) => loanItem.id == loan.id
+      ) > -1
+    ) {
+      this.setState({
+        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(
+          (el) => el.id !== loan.id
+        ),
+      })
+    } else {
+      this.setState({
+        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
+      })
+    }
+  }
+
   calculateAge(dateOfBirth: number) {
     if (dateOfBirth) {
       const diff = Date.now().valueOf() - dateOfBirth
@@ -409,8 +407,10 @@ class BulkApplicationReview extends Component<Props, State> {
     return 0
   }
 
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
+    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
   }
 
   render() {

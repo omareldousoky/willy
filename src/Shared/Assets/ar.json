@@ -5,7 +5,7 @@
     "customerType": "نوع العميل",
     "name": "الإسم",
     "gender": "النوع",
-    "thisUserIsAsiggnedToOtherCustomers": "هذا العميل مربوط بعملاء اخرين سيتم نقلهم ايضا",
+    "thisUserIsAssignedToOtherCustomers": "هذا العميل مربوط بعملاء اخرين سيتم نقلهم ايضا",
     "nameSecondLang": "الاسم باللغة الثانية",
     "nationalId": "الرقم القومي",
     "nationalIdIssueDate": "تاريخ اصدار البطاقة",
