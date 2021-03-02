@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
@@ -169,30 +171,23 @@ class TrackLoanApplications extends Component<Props, State> {
     ]
   }
 
-  renderIcons(data) {
-    return (
-      <>
-        <img
-          style={{ cursor: 'pointer', marginLeft: 20 }}
-          alt="view"
-          src={require('../../Assets/view.svg')}
-          onClick={() =>
-            this.props.history.push('/track-loan-applications/loan-profile', {
-              id: data.application._id,
-            })
-          }
-        />
-        <Can I="viewIscore" a="customer">
-          <span
-            style={{ cursor: 'pointer' }}
-            title="iScore"
-            onClick={() => this.getCachediScores(data.application)}
-          >
-            iScore
-          </span>
-        </Can>
-      </>
-    )
+  componentDidMount() {
+    this.props
+      .search({
+        size: this.state.size,
+        from: this.state.from,
+        url: 'application',
+        branchId: this.props.branchId,
+      })
+      .then(() => {
+        if (this.props.error)
+          Swal.fire('', getErrorMessage(this.props.error), 'error')
+      })
+    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
 
   async getCachediScores(application) {
@@ -260,22 +255,8 @@ class TrackLoanApplications extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    this.props
-      .search({
-        size: this.state.size,
-        from: this.state.from,
-        url: 'application',
-        branchId: this.props.branchId,
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('', getErrorMessage(this.props.error), 'error')
-      })
-    this.setState({ manageApplicationsTabs: manageApplicationsArray() })
-  }
-
   getApplications() {
+    // eslint-disable-next-line no-shadow
     const { searchFilters, search, error, branchId } = this.props
     const { customerShortenedCode, customerKey } = searchFilters
     const { size, from } = this.state
@@ -379,10 +360,6 @@ class TrackLoanApplications extends Component<Props, State> {
     }
   }
 
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-  }
-
   checkFilters() {
     if (
       this.props.searchFilters.fromDate &&
@@ -401,6 +378,32 @@ class TrackLoanApplications extends Component<Props, State> {
       return false
     }
     return true
+  }
+
+  renderIcons(data) {
+    return (
+      <>
+        <img
+          style={{ cursor: 'pointer', marginLeft: 20 }}
+          alt="view"
+          src={require('../../Assets/view.svg')}
+          onClick={() =>
+            this.props.history.push('/track-loan-applications/loan-profile', {
+              id: data.application._id,
+            })
+          }
+        />
+        <Can I="viewIscore" a="customer">
+          <span
+            style={{ cursor: 'pointer' }}
+            title="iScore"
+            onClick={() => this.getCachediScores(data.application)}
+          >
+            iScore
+          </span>
+        </Can>
+      </>
+    )
   }
 
   render() {

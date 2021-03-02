@@ -1,7 +1,7 @@
 import React from 'react'
 import './loanList.scss'
 
-const LoanList = (props) => {
+const LoanList = () => {
   return (
     <div className="issued-loan-list" lang="ar">
       <table

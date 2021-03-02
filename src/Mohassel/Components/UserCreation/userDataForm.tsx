@@ -81,11 +81,8 @@ export const UserDataForm = (props: Props) => {
                     event: React.ChangeEvent<HTMLInputElement>
                   ) => {
                     const re = /^\d*$/
-                    const { name, value } = event.currentTarget
-                    if (
-                      (!props.edit && event.currentTarget.value === '') ||
-                      re.test(event.currentTarget.value)
-                    ) {
+                    const { value } = event.currentTarget
+                    if ((!props.edit && value === '') || re.test(value)) {
                       props.setFieldValue('nationalId', value)
                     }
                     if (value.length === 14) {
@@ -203,7 +200,7 @@ export const UserDataForm = (props: Props) => {
         <Form.Control.Feedback
           type="invalid"
           style={
-            !props.edit && props.values.nationalIdIssueDate == 0
+            !props.edit && props.values.nationalIdIssueDate === 0
               ? checkIssueDate(props.values.nationalIdIssueDate) !== ''
                 ? { display: 'block' }
                 : {}

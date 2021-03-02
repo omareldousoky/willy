@@ -19,7 +19,6 @@ import { bulkReview } from '../../Services/APIs/loanApplication/bulkReview'
 import { bulkApplicationReviewValidation } from './bulkApplicationReviewValidation'
 import {
   timeToDateyyymmdd,
-  beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'
@@ -112,7 +111,7 @@ class BulkApplicationReview extends Component<Props, State> {
             type="checkbox"
             onChange={(e) => this.checkAll(e)}
             checked={this.state.checkAll}
-          ></FormCheck>
+          />
         ),
         key: 'selected',
         render: (data) => (
@@ -124,7 +123,8 @@ class BulkApplicationReview extends Component<Props, State> {
               )
             )}
             onChange={() => this.addRemoveItemFromChecked(data)}
-         />
+          />
+        ),
       },
       {
         title: local.applicationCode,
@@ -270,17 +270,19 @@ class BulkApplicationReview extends Component<Props, State> {
             timeToDateyyymmdd(data.application.secondReviewDate),
         })
       }
-    } else if (!this.mappers.find(item => item.key === 'reviewDate')) {
-        const index = this.mappers.findIndex(item => item.key === 'secondReviewDate')
-        if (index > -1) {
-          this.mappers.splice(index, 1);
-          this.mappers.push({
-            title: local.reviewDate,
-            key: "reviewDate",
-            render: data => timeToDateyyymmdd(data.application.reviewedDate)
-          })
-        }
+    } else if (!this.mappers.find((item) => item.key === 'reviewDate')) {
+      const index = this.mappers.findIndex(
+        (item) => item.key === 'secondReviewDate'
+      )
+      if (index > -1) {
+        this.mappers.splice(index, 1)
+        this.mappers.push({
+          title: local.reviewDate,
+          key: 'reviewDate',
+          render: (data) => timeToDateyyymmdd(data.application.reviewedDate),
+        })
       }
+    }
   }
 
   getApplications() {
@@ -295,30 +297,6 @@ class BulkApplicationReview extends Component<Props, State> {
         if (this.props.error)
           Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
       })
-  }
-
-  addRemoveItemFromChecked(loan: LoanItem) {
-    if (
-      this.state.selectedReviewedLoans.findIndex(
-        (loanItem) => loanItem.id == loan.id
-      ) > -1
-    ) {
-      this.setState({
-        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(
-          (el) => el.id !== loan.id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
-    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
   }
 
   handleSubmit = async (values) => {
@@ -346,13 +324,37 @@ class BulkApplicationReview extends Component<Props, State> {
     }
   }
 
+	addRemoveItemFromChecked(loan: LoanItem) {
+    if (
+      this.state.selectedReviewedLoans.findIndex(
+        (loanItem) => loanItem.id == loan.id
+      ) > -1
+    ) {
+      this.setState({
+        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(
+          (el) => el.id !== loan.id
+        ),
+      })
+    } else {
+      this.setState({
+        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
+      })
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
+    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
+  }
+
   dateSlice(date) {
     if (!date) {
       return timeToDateyyymmdd(-1)
-    } 
-      return timeToDateyyymmdd(date)
-    
+    }
+    return timeToDateyyymmdd(date)
   }
+
   getStatus(status: string) {
     switch (status) {
       case 'underReview':
@@ -611,6 +613,7 @@ class BulkApplicationReview extends Component<Props, State> {
     )
   }
 }
+
 const addSearchToProps = (dispatch) => {
   return {
     search: (data) => dispatch(search(data)),
@@ -618,6 +621,7 @@ const addSearchToProps = (dispatch) => {
     setLoading: (data) => dispatch(loading(data)),
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     data: state.search.applications,

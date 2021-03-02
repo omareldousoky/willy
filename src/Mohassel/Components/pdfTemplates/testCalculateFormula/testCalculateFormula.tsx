@@ -1,6 +1,5 @@
 import React from 'react'
 import './testCalculateFormula.scss'
-import * as local from '../../../../Shared/Assets/ar.json'
 import {
   timeToArabicDate,
   numbersToArabic,

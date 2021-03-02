@@ -148,35 +148,6 @@ class SupervisionGroupsList extends Component<Props, State> {
     ]
   }
 
-  addRemoveItemFromChecked(group) {
-    if (
-      this.state.selectedGroups.findIndex(
-        (groupItem) => groupItem.id == group.id
-      ) > -1
-    ) {
-      this.setState({
-        selectedGroups: this.state.selectedGroups.filter(
-          (el) => el.id !== group.id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedGroups: [...this.state.selectedGroups, group],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({
-        checkAll: true,
-        selectedGroups: this.props.data.filter(
-          (group) => group.status === this.state.chosenStatus
-        ),
-      })
-    } else this.setState({ checkAll: false, selectedGroups: [] })
-  }
-
   componentDidMount() {
     const selectOptions = [{ label: local.getSupervisionGroups, value: '' }]
     if (ability.can('approveOfficersGroup', 'branch'))
@@ -208,21 +179,8 @@ class SupervisionGroupsList extends Component<Props, State> {
       })
   }
 
-  getSupervisionsGroups() {
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'supervisionsGroups',
-        status: this.state.chosenStatus,
-        branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
-      })
-      .then(() => {
-        if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
-        }
-      })
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
 
   getStatus(status: string) {
@@ -250,37 +208,28 @@ class SupervisionGroupsList extends Component<Props, State> {
     }
   }
 
-  prepareSubmit() {
-    const selectedGroupsMap: Map<string, string[]> = new Map()
-    this.state.selectedGroups.map((group) => {
-      if (selectedGroupsMap.has(group.branchId)) {
-        selectedGroupsMap.get(group.branchId)?.push(group.id)
-      } else {
-        selectedGroupsMap.set(group.branchId, [group.id])
-      }
-    })
-    const branchesGroupIds: {
-      branchId: string
-      groupIds: string[]
-    }[] = []
-    selectedGroupsMap.forEach((value, key) => {
-      branchesGroupIds.push({
-        branchId: key,
-        groupIds: value,
+  getSupervisionsGroups() {
+    this.props
+      .search({
+        ...this.props.searchFilters,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'supervisionsGroups',
+        status: this.state.chosenStatus,
+        branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
       })
-    })
-    return branchesGroupIds
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
+      .then(() => {
+        if (this.props.error) {
+          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+        }
+      })
   }
 
   selectState = (event) => {
     this.setState({
       chosenStatus: event.value,
     })
-    const branch = this.state.branchId !== 'hq' ? this.state.branchId : ''
+    // const branch = this.state.branchId !== 'hq' ? this.state.branchId : ''
     if (this.state.branchId !== 'hq')
       this.props.search({
         ...this.props.searchFilters,
@@ -308,6 +257,57 @@ class SupervisionGroupsList extends Component<Props, State> {
     } else if (this.state.chosenStatus === 'approved') {
       this.unApproveOfficers(branchesGroupIds)
     }
+  }
+
+  prepareSubmit() {
+    const selectedGroupsMap: Map<string, string[]> = new Map()
+    this.state.selectedGroups.map((group) => {
+      if (selectedGroupsMap.has(group.branchId)) {
+        selectedGroupsMap.get(group.branchId)?.push(group.id)
+      } else {
+        selectedGroupsMap.set(group.branchId, [group.id])
+      }
+    })
+    const branchesGroupIds: {
+      branchId: string
+      groupIds: string[]
+    }[] = []
+    selectedGroupsMap.forEach((value, key) => {
+      branchesGroupIds.push({
+        branchId: key,
+        groupIds: value,
+      })
+    })
+    return branchesGroupIds
+  }
+
+  addRemoveItemFromChecked(group) {
+    if (
+      this.state.selectedGroups.findIndex(
+        (groupItem) => groupItem.id == group.id
+      ) > -1
+    ) {
+      this.setState({
+        selectedGroups: this.state.selectedGroups.filter(
+          (el) => el.id !== group.id
+        ),
+      })
+    } else {
+      this.setState({
+        selectedGroups: [...this.state.selectedGroups, group],
+      })
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({
+        checkAll: true,
+        selectedGroups: this.props.data.filter(
+          (group) => group.status === this.state.chosenStatus
+        ),
+      })
+    } else this.setState({ checkAll: false, selectedGroups: [] })
   }
 
   async approveOfficers(branchesGroupIds) {

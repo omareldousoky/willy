@@ -12,7 +12,7 @@ import {
 import { timeToArabicDate } from '../../../Shared/Services/utils'
 import {
   dateShift,
-  shiftDaysBackAvoidingWeeekend,
+  shiftDaysBackAvoidingWeekend,
   twoWeekGroupShift,
 } from '../pdfTemplates/followUpStatment/followUpStatement'
 import { IndividualWithInstallments } from './loanProfile'
@@ -83,7 +83,7 @@ export const FollowUpStatementView = ({
             : application.product.periodLength === 1 &&
               application.product.periodType === 'months'
             ? dateShift(application.creationDate, data.id - 1)
-            : shiftDaysBackAvoidingWeeekend(
+            : shiftDaysBackAvoidingWeekend(
                 data.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)
               ),
           false

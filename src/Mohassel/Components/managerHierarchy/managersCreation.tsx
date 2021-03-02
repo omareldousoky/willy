@@ -53,7 +53,7 @@ class ManagersCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const query = { from: 0, size: 100, status: 'active' }
     const res = await searchUsers(query)
-    if (res.status == 'success' && res.body.data) {
+    if (res.status === 'success' && res.body.data) {
       this.setState({ users: res.body.data })
     }
     this.setState({ loading: false })
@@ -79,7 +79,7 @@ class ManagersCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const obj = this.prepareManagers()
     const res = await updateManagerHierarchy(obj, this.props.branchId)
-    if (res.status == 'success') {
+    if (res.status === 'success') {
       Swal.fire('Success !', local.updateSuccess, 'success')
     } else {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')

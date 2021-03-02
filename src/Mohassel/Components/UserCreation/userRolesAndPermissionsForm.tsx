@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import './userCreation.scss'
 import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Select from 'react-select'
 import Container from 'react-bootstrap/Container'
@@ -35,6 +33,7 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
       showBranchesError: false,
       showRolesError: false,
       roles: [],
+      // eslint-disable-next-line react/no-unused-state
       branches: [],
       key: '',
     }
@@ -43,7 +42,8 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
   static getDerivedStateFromProps(props, state) {
     if (props.values.roles !== state.roles && state.key !== 'updated') {
       let rolesState = false
-      props.values.roles?.map((role, index) => {
+      // eslint-disable-next-line no-unused-expressions
+      props.values.roles?.map((role) => {
         if (role.hasBranch === true) {
           rolesState = true
         }
@@ -58,24 +58,26 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
     return null
   }
 
-  isHasBranch(roles): boolean {
-    let rolesState = false
-    roles?.map((role, index) => {
-      if (role.hasBranch === true) {
-        rolesState = true
-      }
-    })
-    return rolesState
-  }
-
   handleChange(list) {
     this.props.values.branches = list
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ branches: list })
     if (this.state.hasBranch && list.length === 0) {
       this.setState({ showBranchesError: true })
     } else {
       this.setState({ showBranchesError: false })
     }
+  }
+
+  hasBranch(roles): boolean {
+    let rolesState = false
+    // eslint-disable-next-line no-unused-expressions
+    roles?.map((role) => {
+      if (role.hasBranch === true) {
+        rolesState = true
+      }
+    })
+    return rolesState
   }
 
   render() {
@@ -105,7 +107,7 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             data-qc="roles"
             onChange={(event: any) => {
               this.props.values.roles = event
-              const check = this.isHasBranch(event)
+              const check = this.hasBranch(event)
               this.setState({
                 hasBranch: check,
                 showRolesError: !event,
@@ -115,6 +117,7 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
 
               if (!this.state.hasBranch || !event) {
                 this.props.values.branches = []
+                // eslint-disable-next-line react/no-unused-state
                 this.setState({ branches: [] })
               }
 

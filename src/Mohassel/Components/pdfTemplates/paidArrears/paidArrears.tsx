@@ -4,7 +4,6 @@ import {
   getCurrentTime,
   numbersToArabic,
   timeToArabicDate,
-  timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import { PaidArrearsResponse } from '../../../Services/interfaces'
 import './paidArrears.scss'

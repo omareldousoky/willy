@@ -13,9 +13,14 @@ function getCentury(birthCentury: string): string {
   }
 }
 function isValidDate(year: number, month: number, day: number) {
+  // eslint-disable-next-line no-param-reassign
   month -= 1
   const d = new Date(year, month, day)
-  if (d.getFullYear() == year && d.getMonth() == month && d.getDate() == day) {
+  if (
+    d.getFullYear() === year &&
+    d.getMonth() === month &&
+    d.getDate() === day
+  ) {
     return true
   }
   return false
@@ -31,7 +36,7 @@ export const getBirthdateFromNationalId = (
   const birthDate = `${year}-${month}-${day}`
   const dateValid = isValidDate(Number(year), Number(month), Number(day))
   if (
-    isNaN(new Date(birthDate).valueOf()) ||
+    Number.isNaN(new Date(birthDate).valueOf()) ||
     firstDigitsYear === '' ||
     !dateValid
   ) {

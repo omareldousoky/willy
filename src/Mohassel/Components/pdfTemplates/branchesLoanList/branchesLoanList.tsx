@@ -2,7 +2,6 @@ import React from 'react'
 import store from '../../../../Shared/redux/store'
 import './branchesLoanList.scss'
 import { timeToArabicDate } from '../../../../Shared/Services/utils'
-import { theme } from '../../../../theme'
 
 const BranchesLoanList = (props) => {
   return (

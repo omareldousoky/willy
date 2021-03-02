@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useStore } from 'react-redux'
 import Select, { ValueType, Props } from 'react-select'
-import { Auth, Branch } from '../../../Shared/redux/auth/types'
+import { Branch } from '../../../Shared/redux/auth/types'
 import { searchBranches } from '../../Services/APIs/Branch/searchBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
@@ -21,11 +21,9 @@ interface LoanOfficersDropDownProps extends Props<DropDownOption> {
 
 export const LoanOfficersDropDown = (props: LoanOfficersDropDownProps) => {
   const {
-    isAsync,
     loanOfficerSelectLoader,
     loanOfficerSelectOptions,
     onSelectLoanOfficer,
-    disabled,
     value,
     ...restProps
   } = props
@@ -102,14 +100,13 @@ export const AsyncLoanOfficersDropDown = ({
 
     if (stillMounted && res.status === 'success') {
       const { data } = res.body
-      Array.isArray(data) && data.length && stillMounted
-        ? res.body.data.map((loanOfficer: DropDownOption) => {
-            newOptions.push({
-              _id: loanOfficer._id,
-              name: loanOfficer.name,
-            })
+      if (Array.isArray(data) && data.length && stillMounted)
+        res.body.data.map((loanOfficer: DropDownOption) =>
+          newOptions.push({
+            _id: loanOfficer._id,
+            name: loanOfficer.name,
           })
-        : []
+        )
       setOptions({
         options: newOptions,
         isLoading: false,
@@ -147,9 +144,9 @@ export const AsyncLoanOfficersDropDown = ({
         data-qc="loanOfficers"
         placeholder={local.chooseRepresentative}
         value={value}
-        onChange={(options) => {
-          onSelectOption(options as ValueType<DropDownOption>[])
-          setValue(options)
+        onChange={(changedOptions) => {
+          onSelectOption(changedOptions as ValueType<DropDownOption>[])
+          setValue(changedOptions)
         }}
         isLoading={options.isLoading}
         options={options.options}
@@ -247,14 +244,14 @@ export const AsyncBranchGeoAreasDropDown = ({
     const newOptions: DropDownOption[] = []
     if (res.status === 'success') {
       const { data } = res.body
-      Array.isArray(data) && data.length
-        ? res.body.data.map((area: DropDownOption) => {
-            newOptions.push({
-              _id: area._id,
-              name: area.name,
-            })
+      if (Array.isArray(data) && data.length)
+        res.body.data.map((area: DropDownOption) =>
+          newOptions.push({
+            _id: area._id,
+            name: area.name,
           })
-        : []
+        )
+
       setOptions({
         options: newOptions,
         isLoading: false,
@@ -287,9 +284,9 @@ export const AsyncBranchGeoAreasDropDown = ({
         data-qc="geoAreas"
         placeholder={local.chooseBranchGeoArea}
         value={value}
-        onChange={(options) => {
-          onSelectOption(options as ValueType<DropDownOption>[])
-          setValue(options)
+        onChange={(changedOptions) => {
+          onSelectOption(changedOptions as ValueType<DropDownOption>[])
+          setValue(changedOptions)
         }}
         isLoading={options.isLoading}
         options={options.options}

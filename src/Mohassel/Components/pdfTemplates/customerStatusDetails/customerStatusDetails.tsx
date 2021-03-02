@@ -402,50 +402,54 @@ const CustomerStatusDetails = (props) => {
                             <th>تاريخ الحاله</th>
                             <th>عدد أيام التأخير / التبكير</th>
                           </tr>
-                          {loan.installments.map((installment, index) => {
-                            if (installment.instTotal)
-                              return (
-                                <tr key={index}>
-                                  <td>{numbersToArabic(installment.idx)} </td>
-                                  <td>
-                                    {installment.dateOfPayment
-                                      ? timeToArabicDate(
-                                          new Date(
-                                            installment.dateOfPayment
-                                          ).valueOf(),
-                                          false
-                                        )
-                                      : ''}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(installment.instTotal)}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(
-                                      installment.feesInstallment
-                                    )}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(installment.totalPaid)}
-                                  </td>
-                                  <td>
-                                    {numbersToArabic(installment.feesPaid)}
-                                  </td>
-                                  <td>{getStatus(installment)}</td>
-                                  <td>
-                                    {installment.paidAt
-                                      ? timeToArabicDate(
-                                          new Date(
-                                            installment.paidAt
-                                          ).valueOf(),
-                                          false
-                                        )
-                                      : ''}
-                                  </td>
-                                  <td>{numbersToArabic(installment.delay)}</td>
-                                </tr>
-                              )
-                          })}
+                          {loan.installments.map(
+                            (installment, installmentIndex) => {
+                              if (installment.instTotal)
+                                return (
+                                  <tr key={installmentIndex}>
+                                    <td>{numbersToArabic(installment.idx)} </td>
+                                    <td>
+                                      {installment.dateOfPayment
+                                        ? timeToArabicDate(
+                                            new Date(
+                                              installment.dateOfPayment
+                                            ).valueOf(),
+                                            false
+                                          )
+                                        : ''}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.instTotal)}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(
+                                        installment.feesInstallment
+                                      )}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.totalPaid)}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.feesPaid)}
+                                    </td>
+                                    <td>{getStatus(installment)}</td>
+                                    <td>
+                                      {installment.paidAt
+                                        ? timeToArabicDate(
+                                            new Date(
+                                              installment.paidAt
+                                            ).valueOf(),
+                                            false
+                                          )
+                                        : ''}
+                                    </td>
+                                    <td>
+                                      {numbersToArabic(installment.delay)}
+                                    </td>
+                                  </tr>
+                                )
+                            }
+                          )}
                           <tr>
                             <td className="borderless" colSpan={2} />
                             <td>{numbersToArabic(loan.instTotalDue)}</td>

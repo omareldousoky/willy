@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import './userCreation.scss'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
@@ -96,6 +94,7 @@ class UserManagerForm extends Component<Props, State> {
       const res = await searchUsers(obj)
       const users: any[] = []
       if (res.status === 'success') {
+        // eslint-disable-next-line array-callback-return
         res.body.data.map((user: any) => {
           users.push({
             label: user.name,

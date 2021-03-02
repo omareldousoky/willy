@@ -12,21 +12,22 @@ import {
 
 const LoanContract = (props) => {
   function getNumbersOfGuarantor(str: string) {
-    if (str === 'and') str = 'و'
-    else str = 'او'
+    let modifiedStr = str
+    if (modifiedStr === 'and') modifiedStr = 'و'
+    else modifiedStr = 'او'
     switch (props.data.guarantors.length) {
       case 1:
         return ` الثالث`
       case 2:
-        return ` الثالث ${str} الرابع`
+        return ` الثالث ${modifiedStr} الرابع`
       case 3:
-        return ` الثالث ${str} الرابع ${str} الخامس`
+        return ` الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس`
       case 4:
-        return `الثالث ${str} الرابع ${str} الخامس ${str} السادس `
+        return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس `
       case 5:
-        return `الثالث ${str} الرابع ${str} الخامس ${str} السادس ${str} السابع `
+        return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس ${modifiedStr} السابع `
       case 6:
-        return `الثالث ${str} الرابع ${str} الخامس ${str} السادس ${str} السابع ${str} الثامن `
+        return `الثالث ${modifiedStr} الرابع ${modifiedStr} الخامس ${modifiedStr} السادس ${modifiedStr} السابع ${modifiedStr} الثامن `
       default:
         return ''
     }

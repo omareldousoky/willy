@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -27,7 +27,7 @@ export default function BranchBasicsCard(props: Props) {
     <div className="branch-basics-card">
       <div className="row-nowrap">
         <span className="basic-info">
-          <img src={require('../../Assets/basicInfo.svg')} />
+          <img alt="basic-info" src={require('../../Assets/basicInfo.svg')} />
           <Form.Label>{local.basicInfo}</Form.Label>
         </span>
       </div>

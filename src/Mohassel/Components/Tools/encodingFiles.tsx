@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
-import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -45,6 +44,11 @@ class EncodingFiles extends Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    this.getDocumentsTypes()
+    this.setState({ manageToolsTabs: manageToolsArray() })
+  }
+
   async getDocumentsTypes() {
     this.setState({ loading: true })
     const res = await getDocumentsTypes()
@@ -57,11 +61,6 @@ class EncodingFiles extends Component<Props, State> {
       this.setState({ loading: false })
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
-  }
-
-  componentDidMount() {
-    this.getDocumentsTypes()
-    this.setState({ manageToolsTabs: manageToolsArray() })
   }
 
   render() {

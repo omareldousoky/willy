@@ -11,14 +11,14 @@ const Pagination = (props) => {
   for (
     let index = 1;
     index <= Math.ceil(props.totalCount / rowsPerPage);
-    index++
+    index += 1
   ) {
     totalPages.push(index)
   }
   function getArrayOfNumbers() {
     const length = page + 5 >= totalPages.length ? totalPages.length : page + 5
     const output: Array<number> = []
-    for (let index = page + 1; index <= length; index++) {
+    for (let index = page + 1; index <= length; index += 1) {
       output.push(index)
     }
     return output

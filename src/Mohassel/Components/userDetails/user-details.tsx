@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
+import Swal from 'sweetalert2'
 import BackButton from '../BackButton/back-button'
 import * as local from '../../../Shared/Assets/ar.json'
 import './userDetails.scss'
 import UserDetailsView from './userDetailsView'
 import { getUserDetails } from '../../Services/APIs/Users/userDetails'
 import { UserDateValues } from './userDetailsInterfaces'
-import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import { theme } from '../../../theme'
 import UserRolesView from './userRolesView'
 import { setUserActivation } from '../../Services/APIs/Users/userActivation'
 import CustomersForUser from './customersForUser'
@@ -56,6 +55,32 @@ class UserDetails extends Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    const tabsToRender = [
+      {
+        header: local.userBasicData,
+        stringKey: 'userDetails',
+      },
+      {
+        header: local.userRoles,
+        stringKey: 'userRoles',
+      },
+    ]
+    if (ability.can('moveOfficerCustomers', 'user')) {
+      tabsToRender.push({
+        header: local.customers,
+        stringKey: 'customersForUser',
+      })
+    }
+    this.setState(
+      {
+        isLoading: true,
+        tabsArray: tabsToRender,
+      },
+      () => this.getUserDetails()
+    )
+  }
+
   async handleActivationClick() {
     const id = this.props.history.location.state.details
     const req = {
@@ -99,32 +124,6 @@ class UserDetails extends Component<Props, State> {
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
     }
-  }
-
-  componentDidMount() {
-    const tabsToRender = [
-      {
-        header: local.userBasicData,
-        stringKey: 'userDetails',
-      },
-      {
-        header: local.userRoles,
-        stringKey: 'userRoles',
-      },
-    ]
-    if (ability.can('moveOfficerCustomers', 'user')) {
-      tabsToRender.push({
-        header: local.customers,
-        stringKey: 'customersForUser',
-      })
-    }
-    this.setState(
-      {
-        isLoading: true,
-        tabsArray: tabsToRender,
-      },
-      () => this.getUserDetails()
-    )
   }
 
   renderICons() {

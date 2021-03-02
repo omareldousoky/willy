@@ -3,9 +3,9 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import './documentsUploadedPercentage.scss'
 
-const DocumentsUploadedPercentage = (props) => {
+const DocumentsUploadedPercentage = () => {
   const bigArr: any = []
-  for (let index = 0; index < 200; index++) {
+  for (let index = 0; index < 200; index += 1) {
     bigArr.push({
       name: 'cairo-shobra',
       number1: 25,

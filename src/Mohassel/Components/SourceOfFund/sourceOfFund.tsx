@@ -14,11 +14,8 @@ import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
-  beneficiaryType,
-  iscoreDate,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import Can from '../../config/Can'
 import { loading } from '../../../Shared/redux/loading/actions'
 import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund'
 import { cibExtractions } from '../../Services/APIs/loanApplication/cibExtractions'
@@ -163,8 +160,12 @@ class SourceOfFund extends Component<Props, State> {
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
-  getSourceOfFund(SourceOfFund: string) {
-    switch (SourceOfFund) {
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
+  getSourceOfFund(sourceOfFund: string) {
+    switch (sourceOfFund) {
       case 'tasaheel':
         return local.tasaheel
       case 'cib':
@@ -232,10 +233,6 @@ class SourceOfFund extends Component<Props, State> {
       }
     }
     this.props.search(query)
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
   }
 
   async submit() {

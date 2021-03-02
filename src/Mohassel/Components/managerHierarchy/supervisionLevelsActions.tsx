@@ -79,6 +79,29 @@ class SupervisionLevelsActions extends Component<Props, State> {
     await this.getGroups()
   }
 
+  async getGroups() {
+    const res = await getOfficersGroups(this.props.branchId)
+    if (res.body?.data && res.body.data?.groups.length) {
+      const resData = res.body.data
+      resData.groups = res.body.data.groups.filter(
+        (group) => group.status === this.state.chosenStatus
+      )
+      if (res.status === 'success') {
+        if (res.body.data) {
+          this.setState({
+            data: res.body.data,
+            loading: false,
+          })
+        } else {
+          this.setState({ loading: false })
+        }
+      } else {
+        this.setState({ loading: false })
+        Swal.fire('Error!', getErrorMessage(res.error.error), 'error')
+      }
+    }
+  }
+
   submit = async () => {
     const obj = {
       branchId: this.props.branchId,
@@ -102,6 +125,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async approveOfficers(obj) {
     const res = await approveOfficersGroups({ branchesGroupIds: [obj] })
     if (res.status === 'success') {
@@ -111,35 +135,13 @@ class SupervisionLevelsActions extends Component<Props, State> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async unApproveOfficers(obj) {
     const res = await unApproveOfficersGroups({ branchesGroupIds: [obj] })
     if (res.status === 'success') {
       Swal.fire('Success', '', 'success').then(() => window.location.reload())
     } else {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-
-  async getGroups() {
-    const res = await getOfficersGroups(this.props.branchId)
-    if (res.body?.data && res.body.data?.groups.length) {
-      const resData = res.body.data
-      resData.groups = res.body.data.groups.filter(
-        (group) => group.status === this.state.chosenStatus
-      )
-      if (res.status === 'success') {
-        if (res.body.data) {
-          this.setState({
-            data: res.body.data,
-            loading: false,
-          })
-        } else {
-          this.setState({ loading: false })
-        }
-      } else {
-        this.setState({ loading: false })
-        Swal.fire('Error!', getErrorMessage(res.error.error), 'error')
-      }
     }
   }
 

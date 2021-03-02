@@ -1,7 +1,7 @@
 import React from 'react'
 import './manualPaymentsReviewList.scss'
 
-const ManualPaymentsReviewList = (props) => {
+const ManualPaymentsReviewList = () => {
   return (
     <div className="manual-payments-review-list" dir="rtl" lang="ar">
       <table

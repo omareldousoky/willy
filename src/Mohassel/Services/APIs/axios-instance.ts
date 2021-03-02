@@ -17,10 +17,10 @@ function errorResponseHandler(error: any) {
       window.location.href = process.env.REACT_APP_LOGIN_URL || ''
       break
     case 402:
-    // localStorage.clear();
-    // window.location.reload()
-    default:
+      // localStorage.clear();
+      // window.location.reload()
       break
+    default:
   }
   throw error
 }

@@ -1,4 +1,3 @@
-import { object } from 'yup'
 import axios from '../axios-instance'
 
 export const updateClearance = async (id: string, data: FormData) => {

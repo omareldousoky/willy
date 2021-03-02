@@ -1,6 +1,5 @@
 import React from 'react'
 import './reviewedApplications.scss'
-import * as local from '../../../../Shared/Assets/ar.json'
 import {
   beneficiaryType,
   getLoanStatus,
@@ -12,6 +11,7 @@ const ReviewedApplicationsPDF = (props) => {
   function getTotal() {
     let sum = 0
     props.data.forEach(
+      // eslint-disable-next-line no-return-assign
       (application) =>
         (sum += application.principal ? application.principal : 0)
     )

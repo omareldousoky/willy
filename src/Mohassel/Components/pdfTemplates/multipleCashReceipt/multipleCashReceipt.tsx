@@ -1,7 +1,7 @@
 import React from 'react'
 import './multipleCashReceipt.scss'
 
-const MultipleCashReceipt = (props) => {
+const MultipleCashReceipt = () => {
   return (
     <div className="multiple-cash-receipt frame" dir="rtl" lang="ar">
       <table

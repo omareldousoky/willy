@@ -49,10 +49,10 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
               </tr>
             </thead>
             <tbody>
-              {branchCustomers.data.map((customer, index) => {
+              {branchCustomers.data.map((customer, customerIndex) => {
                 return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
+                  <tr key={customerIndex}>
+                    <td>{customerIndex + 1}</td>
                     <td>{customer.customerCode}</td>
                     <td>{customer.customerName}</td>
                     <td>{customer.beneficiaryType}</td>

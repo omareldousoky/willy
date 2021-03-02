@@ -1,19 +1,20 @@
 import React from 'react'
 import './followUpStatment.scss'
-import * as local from '../../../../Shared/Assets/ar.json'
 import {
   timeToArabicDate,
   numbersToArabic,
   dayToArabic,
-  timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import store from '../../../../Shared/redux/store'
+// eslint-disable-next-line import/no-cycle
 import {
   roundTo2,
   shareInGroup,
   shareInGroupFallBack,
 } from '../customerCard/customerCard'
+// eslint-disable-next-line import/no-cycle
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile'
+// eslint-disable-next-line import/no-cycle
 import { getOriginalTableData } from '../../LoanProfile/followupStatementView'
 
 interface Props {
@@ -47,6 +48,7 @@ export function dateShift(creationDate, index) {
 
   return originalDate.valueOf()
 }
+
 export function twoWeekGroupShift(day) {
   const originalDate = new Date(day)
   switch (originalDate.getDay()) {
@@ -69,7 +71,7 @@ export function twoWeekGroupShift(day) {
       return originalDate.valueOf()
   }
 }
-export function shiftDaysBackAvoidingWeeekend(day) {
+export function shiftDaysBackAvoidingWeekend(day) {
   const originalDate = new Date(day)
   if (originalDate.getDay() === 5) {
     originalDate.setDate(originalDate.getDate() - 1)
@@ -160,7 +162,7 @@ const FollowUpStatementPDF = (props: Props) => {
                       : props.data.product.periodLength === 1 &&
                         props.data.product.periodType === 'months'
                       ? dateShift(props.data.creationDate, index)
-                      : shiftDaysBackAvoidingWeeekend(
+                      : shiftDaysBackAvoidingWeekend(
                           installment.dateOfPayment -
                             3 * (5 * 24 * 60 * 60 * 1000)
                         ),

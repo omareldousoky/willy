@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
+import { Card } from 'react-bootstrap'
+import Swal from 'sweetalert2'
 import Labels from '../Labels/labels'
 import './userDetails.scss'
-import Card from 'react-bootstrap/Card'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Role, Section } from './userDetailsInterfaces'
 import { getPermissions } from '../../Services/APIs/Roles/roles'
 import { Loader } from '../../../Shared/Components/Loader'
 import RoleTable from '../Roles/roleTable'
-import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 
 interface Props {
@@ -34,6 +34,10 @@ export default class UserRolesView extends Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    this.getAllPermissions()
+  }
+
   async getAllPermissions() {
     this.setState({ loading: true })
     const id = this.state.selectedRole?.hasBranch ? 'branch' : 'hq'
@@ -54,10 +58,6 @@ export default class UserRolesView extends Component<Props, State> {
     this.setState({ selectedRole: this.props.roles[index] }, () =>
       this.getAllPermissions()
     )
-  }
-
-  componentDidMount() {
-    this.getAllPermissions()
   }
 
   roleCard() {

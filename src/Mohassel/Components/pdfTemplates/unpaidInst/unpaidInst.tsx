@@ -55,9 +55,9 @@ const UnpaidInst = (props) => {
                 {branch.name}{' '}
               </span>
             </div>
-            {branch.areas.map((area, index) => {
+            {branch.areas.map((area, areaIndex) => {
               return (
-                <div key={index}>
+                <div key={areaIndex}>
                   <div style={{ marginTop: 20 }}>
                     <span>منطقة العمل : </span>
                     <span
@@ -83,9 +83,9 @@ const UnpaidInst = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {area.customers.map((customer, index) => {
+                      {area.customers.map((customer, customerIndex) => {
                         return (
-                          <tr key={index}>
+                          <tr key={customerIndex}>
                             <td>{customer.customerName}</td>
                             <td>{customer.installmentSerial}</td>
                             <td>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from 'react'
+import React, { Component } from 'react'
 import './earlyPayment.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {

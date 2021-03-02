@@ -1,7 +1,5 @@
 import React from 'react'
 import './randomPaymentReceipt.scss'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
 import Tafgeet from 'tafgeetjs'
 import {
   timeToArabicDate,
@@ -10,24 +8,25 @@ import {
 import * as local from '../../../../Shared/Assets/ar.json'
 
 const randomPaymentReceipt = (props) => {
-  function getPurpose(installmentSerial: number) {
-    switch (installmentSerial) {
-      case 0:
-        return local.stamps
-      case 1:
-        return local.representativeFees
-      case 2:
-        return local.applicationFee
-      default:
-        return ''
-    }
-  }
+  // function getPurpose(installmentSerial: number) {
+  //   switch (installmentSerial) {
+  //     case 0:
+  //       return local.stamps
+  //     case 1:
+  //       return local.representativeFees
+  //     case 2:
+  //       return local.applicationFee
+  //     default:
+  //       return ''
+  //   }
+  // }
   const getValueFromLocalizationFileByKey = (key) => {
     if (key === 'reissuingFees') return local.reissuingFees
     if (key === 'legalFees') return local.legalFees
     if (key === 'clearanceFees') return local.clearanceFees
     if (key === 'toktokStamp') return local.toktokStamp
     if (key === 'tricycleStamp') return local.tricycleStamp
+    return ''
   }
   return (
     <div className="random-payment-receipt">

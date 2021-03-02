@@ -5,7 +5,6 @@ import {
   OfficerPercentPaymentResponse,
   OfficersBranchPercentPaymentRequest,
   OfficersPercentPaymentRequest,
-  OperationsReportRequest,
 } from '../../interfaces'
 import axios from '../axios-instance'
 

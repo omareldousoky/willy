@@ -2,13 +2,11 @@ import React from 'react'
 import './loanApplicationDetails.scss'
 import * as local from '../../../../Shared/Assets/ar.json'
 import {
-  timeToArabicDate,
   beneficiaryType,
   arabicGender,
   currency,
   interestPeriod,
   periodType,
-  timeToDateyyymmdd,
   timeToArabicDateNow,
   guarantorOrderLocal,
 } from '../../../../Shared/Services/utils'
@@ -384,16 +382,18 @@ const LoanApplicationDetails = (props) => {
                       loan.guarantors &&
                       loan.guarantors.length > 0 &&
                       Object.keys(loan.guarantors[0]).length > 0 &&
-                      loan.guarantors.map((guarantor, index) => {
+                      loan.guarantors.map((guarantor, guarantorIndex) => {
                         return (
-                          <td key={index}>
+                          <td key={guarantorIndex}>
                             <table>
                               <thead>
                                 <tr>
                                   <th className="frame gray" colSpan={100}>
                                     {
                                       guarantorOrderLocal[
-                                        index > 10 ? 'default' : index
+                                        guarantorIndex > 10
+                                          ? 'default'
+                                          : guarantorIndex
                                       ]
                                     }
                                   </th>
@@ -441,9 +441,9 @@ const LoanApplicationDetails = (props) => {
                       })}
                     {loan.beneficiaryType === 'group' &&
                       loan.members &&
-                      loan.members.map((member, index) => {
+                      loan.members.map((member, memberIndex) => {
                         return (
-                          <td key={index}>
+                          <td key={memberIndex}>
                             <table>
                               <thead>
                                 <tr>

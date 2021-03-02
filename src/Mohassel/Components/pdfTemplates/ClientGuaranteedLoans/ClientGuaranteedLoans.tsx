@@ -104,7 +104,7 @@ const ClientGuaranteedLoans = (props) => {
                     <Col>{record.customerKey}</Col>{' '}
                     <Col>
                       <small>
-                        {record.guarantorOrder == 0 ? 'ضامن أول' : 'ضامن ثاني'}
+                        {record.guarantorOrder === 0 ? 'ضامن أول' : 'ضامن ثاني'}
                       </small>
                     </Col>
                   </td>

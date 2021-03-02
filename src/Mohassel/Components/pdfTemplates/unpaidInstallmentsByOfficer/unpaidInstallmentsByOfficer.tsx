@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import './unpaidInstallmentsByOfficer.scss'
 
 const numbersToArabic = (input) => {
@@ -65,10 +65,7 @@ const UnpaidInstallmentsByOfficer = (
       </div>
     )
   }
-  const renderCommissaryDetailsDiv = (
-    CommissaryName = '',
-    representativeCode = ''
-  ) => (
+  const renderCommissaryDetailsDiv = (CommissaryName = '') => (
     <div style={{ display: 'flex', margin: '5px 0' }}>
       <div style={{ width: '70%' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>

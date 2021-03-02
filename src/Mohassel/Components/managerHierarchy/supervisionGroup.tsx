@@ -44,7 +44,10 @@ export class SupervisionGroup extends Component<Props, State> {
           </Col>
           {this.props.mode === 'create' && (
             <div onClick={this.props.deleteGroup}>
-              <img src={require('../../../Shared/Assets/deleteIcon.svg')} />
+              <img
+                alt="delete"
+                src={require('../../../Shared/Assets/deleteIcon.svg')}
+              />
             </div>
           )}
         </div>

@@ -22,21 +22,13 @@ interface Props {
 }
 interface State {
   documentType: DocumentType
-  loading: boolean
 }
 class DocumentTypeCreation extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
       documentType,
-      loading: false,
     }
-  }
-
-  getDocumentType() {
-    const documentTypeFromH: DocumentType = this.props.history.location.state
-      .documentType
-    this.setState({ documentType: documentTypeFromH })
   }
 
   componentDidMount() {
@@ -45,26 +37,10 @@ class DocumentTypeCreation extends Component<Props, State> {
     }
   }
 
-  async updateDocument(values) {
-    const res = await editDocumentsType(values)
-    this.setState({ loading: false })
-    if (res.status === 'success') {
-      Swal.fire('success', local.documentTypeEditSuccessMessage)
-      this.props.history.goBack()
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-
-  async createDocument(values) {
-    const res = await createDocumentsType(values)
-    this.setState({ loading: false })
-    if (res.status === 'success') {
-      Swal.fire('success', local.documentTypeCreationSuccessMessage)
-      this.props.history.goBack()
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
+  getDocumentType() {
+    const documentTypeFromH: DocumentType = this.props.history.location.state
+      .documentType
+    this.setState({ documentType: documentTypeFromH })
   }
 
   submit = (values) => {
@@ -76,6 +52,26 @@ class DocumentTypeCreation extends Component<Props, State> {
       this.updateDocument(values)
     } else {
       this.createDocument(values)
+    }
+  }
+
+  async createDocument(values) {
+    const res = await createDocumentsType(values)
+    if (res.status === 'success') {
+      Swal.fire('success', local.documentTypeCreationSuccessMessage)
+      this.props.history.goBack()
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+  }
+
+  async updateDocument(values) {
+    const res = await editDocumentsType(values)
+    if (res.status === 'success') {
+      Swal.fire('success', local.documentTypeEditSuccessMessage)
+      this.props.history.goBack()
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
 

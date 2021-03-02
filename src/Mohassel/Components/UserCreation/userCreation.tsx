@@ -32,7 +32,6 @@ import {
   timeToDateyyymmdd,
 } from '../../../Shared/Services/utils'
 import UserManagerForm from './userManagerForm'
-import { step2 } from '../CustomerCreation/customerFormIntialState'
 
 interface Props {
   edit: boolean
@@ -65,6 +64,21 @@ class UserCreation extends Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    if (this.props.edit) {
+      this.setState({ loading: true }, () => this.getUser())
+    }
+    this.setState({ loading: true }, () => this.getUserRolePermissions())
+  }
+
+  componentWillUnmount() {
+    initialStep2.roles = []
+    initialStep2.branches = []
+    initialStep3.mainRoleId = ''
+    initialStep3.mainRoleId = ''
+    initialStep3.manager = ''
+  }
+
   async getUser() {
     const _id = this.props.history.location.state.details
     const res = await getUserDetails(_id)
@@ -89,6 +103,7 @@ class UserCreation extends Component<Props, State> {
         username: res.body.user.username,
       })
       const step2data: RolesBranchesValues = { roles: [], branches: [] }
+      // eslint-disable-next-line no-unused-expressions
       res.body.roles?.forEach((role) => {
         step2data.roles.push({
           label: role.roleName,
@@ -96,8 +111,10 @@ class UserCreation extends Component<Props, State> {
           managerRole: role.managerRole,
           hasBranch: role.hasBranch,
         })
+        // eslint-disable-next-line no-sequences
       }),
         res.body.branches?.forEach((branch) => {
+          // eslint-disable-next-line no-unused-expressions
           step2data.branches?.push({
             branchName: branch.name ? branch.name : 'invalid',
             _id: branch._id,
@@ -160,11 +177,42 @@ class UserCreation extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    if (this.props.edit) {
-      this.setState({ loading: true }, () => this.getUser())
+  getUserInfo(): UserInfo {
+    const user = this.state.step1
+    return {
+      name: user.name.trim(),
+      username: user.username.trim(),
+      nationalId: user.nationalId,
+      gender: user.gender,
+      birthDate: user.birthDate,
+      nationalIdIssueDate: user.nationalIdIssueDate,
+      hrCode: user.hrCode,
+      mobilePhoneNumber: user.mobilePhoneNumber,
+      hiringDate: user.hiringDate,
+      password: user.password,
+      faxNumber: '',
+      emailAddress: '',
     }
-    this.setState({ loading: true }, () => this.getUserRolePermissions())
+  }
+
+  submit = async (values: any) => {
+    if (this.state.step === 1) {
+      this.setState({
+        [`step${this.state.step}`]: values,
+        step: this.state.step + 1,
+      } as any)
+    } else if (this.state.step === 3) {
+      const user = this.prepareUser(values)
+      if (this.props.edit) {
+        await this.editUser(user)
+      } else {
+        await this.createUser(user)
+      }
+    } else {
+      this.setState({
+        step: 3,
+      })
+    }
   }
 
   cancel(): void {
@@ -245,52 +293,6 @@ class UserCreation extends Component<Props, State> {
     }
   }
 
-  submit = async (values: any) => {
-    if (this.state.step === 1) {
-      this.setState({
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any)
-    } else if (this.state.step === 3) {
-      const user = this.prepareUser(values)
-      if (this.props.edit) {
-        await this.editUser(user)
-      } else {
-        await this.createUser(user)
-      }
-    } else {
-      this.setState({
-        step: 3,
-      })
-    }
-  }
-
-  getUserInfo(): UserInfo {
-    const user = this.state.step1
-    return {
-      name: user.name.trim(),
-      username: user.username.trim(),
-      nationalId: user.nationalId,
-      gender: user.gender,
-      birthDate: user.birthDate,
-      nationalIdIssueDate: user.nationalIdIssueDate,
-      hrCode: user.hrCode,
-      mobilePhoneNumber: user.mobilePhoneNumber,
-      hiringDate: user.hiringDate,
-      password: user.password,
-      faxNumber: '',
-      emailAddress: '',
-    }
-  }
-
-  componentWillUnmount() {
-    initialStep2.roles = []
-    initialStep2.branches = []
-    initialStep3.mainRoleId = ''
-    initialStep3.mainRoleId = ''
-    initialStep3.manager = ''
-  }
-
   renderStepOne(): any {
     return (
       <Formik
@@ -334,9 +336,10 @@ class UserCreation extends Component<Props, State> {
   }
 
   renderStepThree(): any {
-    const w = this.state.step2.roles
-    const l = this.state.step2.branches
+    // const w = this.state.step2.roles
+    // const l = this.state.step2.branches
     const labeldBranches: Array<{ label: string; value: string }> = []
+    // eslint-disable-next-line no-unused-expressions
     this.state.step2.branches?.forEach((item) => {
       return labeldBranches.push({
         label: item.branchName,

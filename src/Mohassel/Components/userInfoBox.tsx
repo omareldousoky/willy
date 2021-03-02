@@ -3,7 +3,6 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import * as local from '../../Shared/Assets/ar.json'
-import { getRenderDate } from '../Services/getRenderDate'
 import {
   arabicGender,
   timeToArabicDate,
@@ -30,6 +29,7 @@ class InfoBox extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
+      // eslint-disable-next-line react/no-unused-state
       loading: false,
     }
   }
@@ -47,6 +47,7 @@ class InfoBox extends Component<Props, State> {
       nationalId: '',
     }
     if (this.props.iScores) {
+      // eslint-disable-next-line prefer-destructuring
       iscore = this.props.iScores.filter(
         (score) => score.nationalId === values.nationalId
       )[0]

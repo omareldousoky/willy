@@ -15,8 +15,7 @@ export const authMe = async () => {
             : '') +
           ';path=/;'
       } else {
-        document.cookie =
-          `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN}` + ';path=/;'
+        document.cookie = `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN};path=/;`
       }
     } else {
       const currentBranch = JSON.parse(getCookie('ltsbranch'))._id
@@ -34,8 +33,7 @@ export const authMe = async () => {
             ';path=/;'
         }
       } else {
-        document.cookie =
-          `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN}` + ';path=/;'
+        document.cookie = `ltsbranch=;domain=${process.env.REACT_APP_DOMAIN};path=/;`
       }
     }
     return { status: 'success', body: res.data }

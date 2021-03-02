@@ -137,9 +137,9 @@ const RandomPayment = (props: Props) => {
                 <td colSpan={10} className="border" />
               </tr>
             </thead>
-            {branch.rows.map((row, index) => {
+            {branch.rows.map((row, rowIndex) => {
               return (
-                <tbody key={index}>
+                <tbody key={rowIndex}>
                   <tr>
                     <td />
                     <td>{row.customerKey}</td>

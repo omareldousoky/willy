@@ -1,7 +1,7 @@
 import React from 'react'
 import './executedPaymentsList.scss'
 
-const ExecutedPaymentsList = (props) => {
+const ExecutedPaymentsList = () => {
   return (
     <div
       className="executed-payments-list"

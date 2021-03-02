@@ -1,7 +1,7 @@
 import React from 'react'
 import './fundingSourceChangeList.scss'
 
-const FundingSourceChangeList = (props) => {
+const FundingSourceChangeList = () => {
   return (
     <div className="funding-source-change-list" lang="ar">
       <table

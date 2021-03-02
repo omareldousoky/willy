@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import { ValueType } from 'react-select'
 import { getCookie } from "../../../Shared/Services/getCookie";
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
@@ -21,7 +22,6 @@ import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCust
 import { moveCustomerToOfficer } from '../../Services/APIs/Customer-Creation/moveCustomerToOfficer'
 import { manageCustomersArray } from '../CustomerCreation/manageCustomersInitial'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import { ValueType } from 'react-select'
 
 interface Customer {
   customerName?: string

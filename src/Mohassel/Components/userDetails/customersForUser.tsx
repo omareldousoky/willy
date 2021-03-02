@@ -9,7 +9,7 @@ import FormCheck from 'react-bootstrap/FormCheck'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Swal from 'sweetalert2'
-import Select, { ValueType } from 'react-select'
+import Select from 'react-select'
 import { Loader } from '../../../Shared/Components/Loader'
 import { LoanOfficersDropDown } from '../dropDowns/allDropDowns'
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer'
@@ -89,6 +89,10 @@ class CustomersForUser extends Component<Props, State> {
     this.getBranches()
   }
 
+  componentDidMount() {
+    this.getCustomersForUser()
+  }
+
   async getBranches() {
     const branches = await getBranches()
     if (branches.status === 'success') {
@@ -106,10 +110,7 @@ class CustomersForUser extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    this.getCustomersForUser()
-  }
-
+  // eslint-disable-next-line consistent-return
   async getCustomersForUser(name?: string) {
     this.setState({ loading: true })
     if (
@@ -136,35 +137,6 @@ class CustomersForUser extends Component<Props, State> {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({
-        checkAll: true,
-        selectedCustomers: this.state.customers.filter(
-          (customer) => customer.blocked?.isBlocked !== true
-        ),
-      })
-    } else this.setState({ checkAll: false, selectedCustomers: [] })
-  }
-
-  addRemoveItemFromChecked(customer: Customer) {
-    if (
-      this.state.selectedCustomers.findIndex(
-        (selectedCustomer) => selectedCustomer._id == customer._id
-      ) > -1
-    ) {
-      this.setState({
-        selectedCustomers: this.state.selectedCustomers.filter(
-          (el) => el._id !== customer._id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, customer],
-      })
-    }
   }
 
   async submit() {
@@ -261,6 +233,35 @@ class CustomersForUser extends Component<Props, State> {
           () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
         )
       }
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({
+        checkAll: true,
+        selectedCustomers: this.state.customers.filter(
+          (customer) => customer.blocked?.isBlocked !== true
+        ),
+      })
+    } else this.setState({ checkAll: false, selectedCustomers: [] })
+  }
+
+  addRemoveItemFromChecked(customer: Customer) {
+    if (
+      this.state.selectedCustomers.findIndex(
+        (selectedCustomer) => selectedCustomer._id === customer._id
+      ) > -1
+    ) {
+      this.setState({
+        selectedCustomers: this.state.selectedCustomers.filter(
+          (el) => el._id !== customer._id
+        ),
+      })
+    } else {
+      this.setState({
+        selectedCustomers: [...this.state.selectedCustomers, customer],
+      })
     }
   }
 

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
-import { connect } from 'react-redux';
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
+import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
+import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json'
 import BranchDetailsView from './branchDetailsView'
 import BackButton from '../BackButton/back-button'
@@ -16,13 +17,13 @@ import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches'
 import { Loader } from '../../../Shared/Components/Loader'
 import Can from '../../config/Can'
 import ability from '../../config/ability'
-import Swal from 'sweetalert2'
 import {
   getErrorMessage,
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import ManagerProfile from '../managerHierarchy/managersView'
 import SupervisionsProfile from '../managerHierarchy/supervisionsProfile'
+
 interface Props {
   history: any
   getBranchById: typeof getBranchById
@@ -31,28 +32,28 @@ interface Props {
   branch: any
 }
 
-const tabs = [
-  {
-    eventKey: 1,
-    title: local.basicInfo,
-  },
-  {
-    eventKey: 2,
-    title: local.users,
-  },
-  {
-    eventKey: 3,
-    title: local.customers,
-  },
-  {
-    eventKey: 4,
-    title: local.loanApplications,
-  },
-  {
-    eventKey: 5,
-    title: local.issuedLoans,
-  },
-]
+// const tabs = [
+//   {
+//     eventKey: 1,
+//     title: local.basicInfo,
+//   },
+//   {
+//     eventKey: 2,
+//     title: local.users,
+//   },
+//   {
+//     eventKey: 3,
+//     title: local.customers,
+//   },
+//   {
+//     eventKey: 4,
+//     title: local.loanApplications,
+//   },
+//   {
+//     eventKey: 5,
+//     title: local.issuedLoans,
+//   },
+// ]
 
 interface State {
   data: BranchBasicsView
@@ -91,24 +92,6 @@ class BranchDetails extends Component<Props, State> {
         costCenter: '',
       },
       productsLoading: false,
-    }
-  }
-
-  async getBranch() {
-    const _id = this.props.history.location.state.details
-    const products = await this.getProductsByBranch(_id)
-    await this.props.getBranchById(_id)
-    if (this.props.branch.status === 'success') {
-      this.setState({
-        data: { ...this.props.branch.body.data, products },
-        _id,
-      })
-    } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
     }
   }
 
@@ -164,23 +147,46 @@ class BranchDetails extends Component<Props, State> {
     )
   }
 
-  async getProductsByBranch(_id: string) {
-        this.setState({productsLoading: true})
-        const branchsProducts = await getProductsByBranch(_id);
-         if (branchsProducts.status === 'success') {
-
-                const products = branchsProducts.body.data.productIds ? branchsProducts.body.data.productIds.map((product => product.productName)) : [];
-                this.setState({productsLoading: false});
-                return products;
-               
-        }
-         
-            this.setState({productsLoading: false},()=>  Swal.fire("Error !",getErrorMessage(this.props.branch.error.error),'error'));
-             return [];
-         
-       
+  async getBranch() {
+    const _id = this.props.history.location.state.details
+    const products = await this.getProductsByBranch(_id)
+    await this.props.getBranchById(_id)
+    if (this.props.branch.status === 'success') {
+      this.setState({
+        data: { ...this.props.branch.body.data, products },
+        _id,
+      })
+    } else {
+      Swal.fire(
+        'Error !',
+        getErrorMessage(this.props.branch.error.error),
+        'error'
+      )
     }
   }
+
+  async getProductsByBranch(_id: string) {
+    this.setState({ productsLoading: true })
+    const branchsProducts = await getProductsByBranch(_id)
+    if (branchsProducts.status === 'success') {
+      const products = branchsProducts.body.data.productIds
+        ? branchsProducts.body.data.productIds.map(
+            (product) => product.productName
+          )
+        : []
+      this.setState({ productsLoading: false })
+      return products
+    }
+    this.setState({ productsLoading: false }, () =>
+      Swal.fire(
+        'Error !',
+        getErrorMessage(this.props.branch.error.error),
+        'error'
+      )
+    )
+    return []
+  }
+
   renderTabs() {
     switch (this.state.activeTab) {
       case 'branchDetails':
@@ -263,8 +269,8 @@ class BranchDetails extends Component<Props, State> {
             }}
           >
             <img
-              className={'iconImage'}
-              alt={'edit'}
+              className="iconImage"
+              alt="edit"
               src={require('../../Assets/editIcon.svg')}
             />
             {local.edit}
@@ -289,7 +295,7 @@ class BranchDetails extends Component<Props, State> {
             open={this.props.loading || this.state.productsLoading}
           />
           <CardNavBar
-            header={'here'}
+            header="here"
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(index: string) => this.setState({ activeTab: index })}

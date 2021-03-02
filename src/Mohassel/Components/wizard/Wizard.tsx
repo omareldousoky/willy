@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import './Wizard.scss'
 
 interface Step {
@@ -31,12 +30,6 @@ export default class Wizard extends Component<Props, State> {
     })
   }
 
-  handleClick(index) {
-    if (this.props.edit) {
-      this.props.onClick(index)
-    }
-  }
-
   componentDidMount() {
     const { stepsDescription } = this.props
 
@@ -53,6 +46,12 @@ export default class Wizard extends Component<Props, State> {
     this.setState({
       steps: stepsState,
     })
+  }
+
+  handleClick(index) {
+    if (this.props.edit) {
+      this.props.onClick(index)
+    }
   }
 
   componentDidUpdate(previousProps) {

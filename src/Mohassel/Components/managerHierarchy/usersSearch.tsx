@@ -49,14 +49,6 @@ class UsersSearch extends Component<Props, State> {
     }
   }
 
-  checkError() {
-    if (this.props.item[this.props.objectKey] == '') {
-      this.setState({ showError: true })
-    } else {
-      this.setState({ showError: false })
-    }
-  }
-
   getUsers = async (input: string) => {
     const query = {
       from: 0,
@@ -87,17 +79,6 @@ class UsersSearch extends Component<Props, State> {
     return []
   }
 
-  selectUser(event) {
-    this.props.item[this.props.objectKey] = { id: event._id, name: event.name }
-    const index = this.state.users.findIndex((user) => user._id === event._id)
-    const newUsers = this.state.users
-    newUsers.splice(index, 1)
-    this.setState({
-      users: newUsers,
-    })
-    this.checkError()
-  }
-
   static getDerivedStateFromProps(props, state) {
     if (
       state.updateKey !== 'updated' &&
@@ -110,6 +91,25 @@ class UsersSearch extends Component<Props, State> {
       }
     }
     return null
+  }
+
+  checkError() {
+    if (this.props.item[this.props.objectKey] === '') {
+      this.setState({ showError: true })
+    } else {
+      this.setState({ showError: false })
+    }
+  }
+
+  selectUser(event) {
+    this.props.item[this.props.objectKey] = { id: event._id, name: event.name }
+    const index = this.state.users.findIndex((user) => user._id === event._id)
+    const newUsers = this.state.users
+    newUsers.splice(index, 1)
+    this.setState({
+      users: newUsers,
+    })
+    this.checkError()
   }
 
   render() {

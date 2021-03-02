@@ -8,6 +8,7 @@ import {
   timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
 import store from '../../../../Shared/redux/store'
+// eslint-disable-next-line import/no-cycle
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile'
 
 interface Props {

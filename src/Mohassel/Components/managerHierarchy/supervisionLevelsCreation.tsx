@@ -81,16 +81,22 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     const query = { from: 0, size: 500 }
     const officerQuery = { ...query, branchId: this.props.branchId }
     const res = await searchLoanOfficer(officerQuery)
-    if (res.status == 'success' && res.body.data) {
+    if (res.status === 'success' && res.body.data) {
       this.setState({ loanOfficers: res.body.data })
     }
     this.setState({ loading: false })
   }
 
+  componentDidUpdate(pervProps) {
+    if (this.props.mode !== pervProps.mode) {
+      this.initialState()
+    }
+  }
+
   async getGroups() {
     this.setState({ loading: true })
     const res = await getOfficersGroups(this.props.branchId)
-    if ((res.status = 'success')) {
+    if (res.status === 'success') {
       if (res.body.data && this.props.mode === 'edit') {
         const data = res.body.data.groups?.filter(
           (group) => group.status === 'pending'
@@ -166,12 +172,6 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     return groups
   }
 
-  componentDidUpdate(pervProps) {
-    if (this.props.mode !== pervProps.mode) {
-      this.initialState()
-    }
-  }
-
   render() {
     return (
       <div>
@@ -209,6 +209,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                   >
                     <img
                       className="green-add-icon"
+                      alt="add"
                       src={require('../../Assets/greenAdd.svg')}
                     />
                     {local.addGroupManager}

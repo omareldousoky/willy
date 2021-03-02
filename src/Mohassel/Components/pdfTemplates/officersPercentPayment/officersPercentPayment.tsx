@@ -18,10 +18,12 @@ const getPrevious3Months = (fromDate: string): Record<string, string> => {
   const date = new Date(fromDate)
   const m = date.getMonth()
   const y = date.getFullYear()
-  const prevMonth = (m: number, y: number): string => {
-    if (m < 0) return ''
-    const isJan = !m
-    return isJan ? `12-${y - 1}` : `${m < 10 ? `0${m}-${y}` : `${m}-${y}`}`
+  const prevMonth = (month: number, year: number): string => {
+    if (month < 0) return ''
+    const isJan = !month
+    return isJan
+      ? `12-${year - 1}`
+      : `${month < 10 ? `0${month}-${year}` : `${month}-${year}`}`
   }
   return {
     firstMonth: prevMonth(m < 0 ? m + 12 : m, m < 0 ? y - 1 : y),
@@ -54,22 +56,22 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
   const previous3Months = getPrevious3Months(fromDate)
 
   const populateTotalRow = (
-    data?: OfficerPercentPaymentTotalRow,
+    rowData?: OfficerPercentPaymentTotalRow,
     totalName?: string
   ): JSX.Element => (
     <tr className="border-top border-bottom border-dark">
       <td colSpan={5}>{totalName ? `إجمالى ${totalName}` : ''}</td>
-      <td>{data?.issuedCount || '0'}</td>
-      <td>{data?.issuedAmount || '0.00'}</td>
-      <td>{data?.firstMonth || '0.00'}</td>
-      <td>{data?.secondMonth || '0.00'}</td>
-      <td>{data?.thirdMonth || '0.00'}</td>
-      <td colSpan={2}>{data?.expectedPayments || '0'}</td>
-      <td colSpan={2}>{data?.paid || '0.00'}</td>
-      <td>{formatPercent(data?.paidPercent) || '%00.00'}</td>
-      <td>{data?.walletCount || '0'}</td>
-      <td>{data?.walletAmount || '0.00'}</td>
-      <td colSpan={2}>{data?.collections || '0.00'}</td>
+      <td>{rowData?.issuedCount || '0'}</td>
+      <td>{rowData?.issuedAmount || '0.00'}</td>
+      <td>{rowData?.firstMonth || '0.00'}</td>
+      <td>{rowData?.secondMonth || '0.00'}</td>
+      <td>{rowData?.thirdMonth || '0.00'}</td>
+      <td colSpan={2}>{rowData?.expectedPayments || '0'}</td>
+      <td colSpan={2}>{rowData?.paid || '0.00'}</td>
+      <td>{formatPercent(rowData?.paidPercent) || '%00.00'}</td>
+      <td>{rowData?.walletCount || '0'}</td>
+      <td>{rowData?.walletAmount || '0.00'}</td>
+      <td colSpan={2}>{rowData?.collections || '0.00'}</td>
     </tr>
   )
   const populateTableBody = (
@@ -168,7 +170,7 @@ const OfficerPercentPayment = (props: OfficerPercentPaymentProps) => {
                     </>
                   )}
                   {populateTotalRow(branchData.total, branchData.branchName)}
-                  {data.response.length - 1 == i &&
+                  {data.response.length - 1 === i &&
                     populateTotalRow(data.total)}
                 </tbody>
               </table>
