@@ -1,20 +1,20 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react'
 import {
   numbersToArabic,
   timeToArabicDate,
-} from "../../../../Shared/Services/utils";
-import Orientation from "../../Common/orientation";
-import "./installmentsDuePerOfficerCustomerCard.scss";
+} from '../../../../Shared/Services/utils'
+import Orientation from '../../Common/orientation'
+import './installmentsDuePerOfficerCustomerCard.scss'
 
 const installmentStatuses = {
-  unpaid: "غير مسدد",
-  partiallyPaid: "مدفوع جزئيا",
-  pending: "قيد التحقيق",
-};
+  unpaid: 'غير مسدد',
+  partiallyPaid: 'مدفوع جزئيا',
+  pending: 'قيد التحقيق',
+}
 interface InstallmentsDuePerOfficerCustomerCardProps {
-  fromDate: string;
-  toDate: string;
-  data: any;
+  fromDate: string
+  toDate: string
+  data: any
 }
 
 const InstallmentsDuePerOfficerCustomerCard = (
@@ -22,60 +22,60 @@ const InstallmentsDuePerOfficerCustomerCard = (
 ) => {
   const renderHeader = (fromDate, toDate) => {
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <div
           style={{
             flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <div
             style={{
-              backgroundColor: "lightgrey",
-              border: "1px solid black",
-              width: "50%",
-              textAlign: "center",
+              backgroundColor: 'lightgrey',
+              border: '1px solid black',
+              width: '50%',
+              textAlign: 'center',
               marginBottom: 5,
             }}
           >
-            {"شركة تساهيل"}
+            شركة تساهيل
           </div>
         </div>
         <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>{"الاقساط المستحقة للمندوب كارت العميل"}</p>
+          <p style={{ margin: 0 }}>الاقساط المستحقة للمندوب كارت العميل</p>
           <p style={{ margin: 0 }}>
-            <span>{"من "}</span>
+            <span>{'من '}</span>
             <span>{fromDate}</span>
-            <span>{"إلى "}</span>
+            <span>{'إلى '}</span>
             <span>{toDate}</span>
           </p>
         </div>
         <div style={{ flex: 1 }}>
-          <p style={{ margin: 0 }}>{"1/1"}</p>
+          <p style={{ margin: 0 }}>1/1</p>
           <p style={{ margin: 0 }}>{new Date().toDateString()}</p>
         </div>
       </div>
-    );
-  };
-  const renderBranchNameDiv = (branchName = "") => (
-    <div style={{ display: "flex" }}>
+    )
+  }
+  const renderBranchNameDiv = (branchName = '') => (
+    <div style={{ display: 'flex' }}>
       <div style={{ flex: 1 }}>
         <div
           style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
           }}
         >
-          <p style={{ margin: 0 }}>{"الفرع :"}</p>
+          <p style={{ margin: 0 }}>الفرع :</p>
           <div
             style={{
-              backgroundColor: "lightgrey",
-              border: "1px solid black",
+              backgroundColor: 'lightgrey',
+              border: '1px solid black',
               minWidth: 240,
-              textAlign: "right",
+              textAlign: 'right',
               paddingRight: 5,
               marginRight: 2,
             }}
@@ -86,23 +86,23 @@ const InstallmentsDuePerOfficerCustomerCard = (
       </div>
       <div style={{ flex: 1 }} />
     </div>
-  );
+  )
   const renderCommissaryDetailsDiv = (
-    CommissaryName = "",
+    CommissaryName = '',
     CommissaryID = null
   ) => (
-    <div style={{ display: "flex", margin: "5px 0" }}>
-      <div style={{ width: "60%" }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <p style={{ margin: 0, marginRight: "15%", minWidth: 90 }}>
-            {"اسم المندوب :"}
+    <div style={{ display: 'flex', margin: '5px 0' }}>
+      <div style={{ width: '60%' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <p style={{ margin: 0, marginRight: '15%', minWidth: 90 }}>
+            اسم المندوب :
           </p>
           <div
             style={{
-              backgroundColor: "lightgrey",
-              border: "1px solid black",
+              backgroundColor: 'lightgrey',
+              border: '1px solid black',
               minWidth: 320,
-              textAlign: "right",
+              textAlign: 'right',
               paddingRight: 5,
               marginRight: 2,
             }}
@@ -112,9 +112,9 @@ const InstallmentsDuePerOfficerCustomerCard = (
           {CommissaryID ? (
             <div
               style={{
-                border: "1px solid black",
+                border: '1px solid black',
                 minWidth: 160,
-                textAlign: "left",
+                textAlign: 'left',
                 paddingRight: 5,
                 marginRight: 2,
               }}
@@ -124,36 +124,36 @@ const InstallmentsDuePerOfficerCustomerCard = (
           ) : null}
         </div>
       </div>
-      <div style={{ width: "40%" }} />
+      <div style={{ width: '40%' }} />
     </div>
-  );
+  )
   const renderSummary = (type, name = null, count, amount) => {
     return (
-      <div style={{ margin: "2px 0" }}>
+      <div style={{ margin: '2px 0' }}>
         <div className="lineStroke" />
-        <div style={{ display: "flex", margin: "4px 0" }}>
-          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
-            {type === "Total" ? (
+        <div style={{ display: 'flex', margin: '4px 0' }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            {type === 'Total' ? (
               <span style={{ marginLeft: 4, minWidth: 130 }}>
-                {"الإجمالي العام : "}
+                {'الإجمالي العام : '}
               </span>
             ) : (
-              <Fragment>
+              <>
                 <span style={{ marginLeft: 4, minWidth: 60 }}>
-                  {"إجمالي : "}
+                  {'إجمالي : '}
                 </span>
                 <span style={{ marginLeft: 4, minWidth: 90 }}>
-                  {type === "Commissary" ? "اسم المندوب : " : "الفرع : "}
+                  {type === 'Commissary' ? 'اسم المندوب : ' : 'الفرع : '}
                 </span>
-              </Fragment>
+              </>
             )}
 
             <div
               style={{
-                backgroundColor: "lightgrey",
-                border: "1px solid black",
+                backgroundColor: 'lightgrey',
+                border: '1px solid black',
                 minWidth: 320,
-                textAlign: "right",
+                textAlign: 'right',
                 paddingRight: 2,
                 marginLeft: 4,
               }}
@@ -162,8 +162,8 @@ const InstallmentsDuePerOfficerCustomerCard = (
             </div>
             <div
               style={{
-                border: "1px solid black",
-                textAlign: "center",
+                border: '1px solid black',
+                textAlign: 'center',
                 minWidth: 80,
                 marginLeft: 4,
               }}
@@ -172,8 +172,8 @@ const InstallmentsDuePerOfficerCustomerCard = (
             </div>
             <div
               style={{
-                border: "1px solid black",
-                textAlign: "center",
+                border: '1px solid black',
+                textAlign: 'center',
                 minWidth: 80,
               }}
             >
@@ -184,8 +184,8 @@ const InstallmentsDuePerOfficerCustomerCard = (
         </div>
         <div className="lineStroke" />
       </div>
-    );
-  };
+    )
+  }
   const renderTableBody = (array) => {
     return (
       <tbody>
@@ -195,7 +195,7 @@ const InstallmentsDuePerOfficerCustomerCard = (
               <td className="short">ف&nbsp;&nbsp;{idx + 1}</td>
               <td className="long">{el.customerName}</td>
               <td className="nowrap" dir="ltr">
-                {numbersToArabic(el.installmentNumber) || "٠"}
+                {numbersToArabic(el.installmentNumber) || '٠'}
               </td>
               <td className="nowrap">
                 {el.dateOfPayment
@@ -203,7 +203,7 @@ const InstallmentsDuePerOfficerCustomerCard = (
                       new Date(el.dateOfPayment).valueOf(),
                       false
                     )
-                  : "لا يوجد"}
+                  : 'لا يوجد'}
               </td>
               <td className="nowrap">
                 {el.lastPaymentDate
@@ -211,7 +211,7 @@ const InstallmentsDuePerOfficerCustomerCard = (
                       new Date(el.lastPaymentDate).valueOf(),
                       false
                     )
-                  : "لا يوجد"}
+                  : 'لا يوجد'}
               </td>
               <td className="nowrap">
                 {el.lastInstallmentDate
@@ -219,31 +219,31 @@ const InstallmentsDuePerOfficerCustomerCard = (
                       new Date(el.lastInstallmentDate).valueOf(),
                       false
                     )
-                  : "لا يوجد"}
+                  : 'لا يوجد'}
               </td>
               <td className="nowrap">
                 {installmentStatuses[el.installmentStatus]}
               </td>
               <td>{numbersToArabic(el.installmentAmount)}</td>
               <td>{el.amountDue}</td>
-              <td>{numbersToArabic(el.mobilePhone) || "لا يوجد"}</td>
-              <td>{numbersToArabic(el.homePhone) || "لا يوجد"}</td>
-              <td>{numbersToArabic(el.businessPhone) || "لا يوجد"}</td>
+              <td>{numbersToArabic(el.mobilePhone) || 'لا يوجد'}</td>
+              <td>{numbersToArabic(el.homePhone) || 'لا يوجد'}</td>
+              <td>{numbersToArabic(el.businessPhone) || 'لا يوجد'}</td>
               <td>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: 'flex' }}>
                   <div style={{ flex: 1 }}>
                     <span>{el.credit}</span>
                   </div>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
+                      display: 'flex',
+                      justifyContent: 'space-evenly',
                       flex: 1,
                     }}
                   >
                     <span
                       style={{
-                        backgroundColor: "lightgrey",
+                        backgroundColor: 'lightgrey',
                         minWidth: 30,
                         marginLeft: 4,
                       }}
@@ -251,7 +251,7 @@ const InstallmentsDuePerOfficerCustomerCard = (
                       {el.sum}
                     </span>
                     <span
-                      style={{ backgroundColor: "lightgrey", minWidth: 30 }}
+                      style={{ backgroundColor: 'lightgrey', minWidth: 30 }}
                     >
                       {el.amount}
                     </span>
@@ -261,71 +261,71 @@ const InstallmentsDuePerOfficerCustomerCard = (
               <td className="long">{el.address}</td>
               <td className="area">{el.area}</td>
             </tr>
-          );
+          )
         })}
       </tbody>
-    );
-  };
+    )
+  }
   const renderTable = (_data) => {
     return (
       <table className="table">
         <thead>
           <tr>
-            <th></th>
-            <th>{"اسم العميل"}</th>
-            <th>{"رقم القسط"}</th>
-            <th>{"ت الإستحقاق"}</th>
-            <th>{"ت أخر سداد"}</th>
-            <th>{"ت أخر قسط"}</th>
-            <th>{"حالة القسط"}</th>
-            <th>{"قيمة القسط"}</th>
-            <th>{"المستحق"}</th>
-            <th>{"الموبيل"}</th>
-            <th>{"ت المنزل"}</th>
-            <th>{"ت العمل"}</th>
-            <th>{"رصيد مبلغ/عدد"}</th>
-            <th>{"العنوان"}</th>
-            <th>{"منطقة العمل"}</th>
+            <th />
+            <th>اسم العميل</th>
+            <th>رقم القسط</th>
+            <th>ت الإستحقاق</th>
+            <th>ت أخر سداد</th>
+            <th>ت أخر قسط</th>
+            <th>حالة القسط</th>
+            <th>قيمة القسط</th>
+            <th>المستحق</th>
+            <th>الموبيل</th>
+            <th>ت المنزل</th>
+            <th>ت العمل</th>
+            <th>رصيد مبلغ/عدد</th>
+            <th>العنوان</th>
+            <th>منطقة العمل</th>
           </tr>
         </thead>
         {renderTableBody(_data)}
       </table>
-    );
-  };
+    )
+  }
   const renderCommissaryData = (representative) => {
     return (
       <div className="CommissaryDiv">
         {renderCommissaryDetailsDiv(
-          representative.name ? representative.name : "--",
+          representative.name ? representative.name : '--',
           representative.id
         )}
         {renderTable(representative.customers)}
         {renderSummary(
-          "Commissary",
-          representative.name ? representative.name : "",
+          'Commissary',
+          representative.name ? representative.name : '',
           representative.count,
           representative.amount
         )}
       </div>
-    );
-  };
+    )
+  }
 
   const renderBranchData = (branch) => {
     return (
       <div className="branchDiv">
-        {renderBranchNameDiv(branch.name ? branch.name : "--")}
+        {renderBranchNameDiv(branch.name ? branch.name : '--')}
         {branch.representatives.map((representative) =>
           renderCommissaryData(representative)
         )}
         {renderSummary(
-          "Branch",
-          branch.name ? branch.name : "",
+          'Branch',
+          branch.name ? branch.name : '',
           branch.count,
           branch.amount
         )}
       </div>
-    );
-  };
+    )
+  }
   const renderData = ({ data, fromDate, toDate }) => {
     return (
       <>
@@ -339,12 +339,12 @@ const InstallmentsDuePerOfficerCustomerCard = (
           {data && data.branches
             ? data.branches.map((branch) => renderBranchData(branch))
             : null}
-          {renderSummary("Total", null, data.count, data.amount)}
+          {renderSummary('Total', null, data.count, data.amount)}
         </div>
       </>
-    );
-  };
-  return renderData(props);
-};
+    )
+  }
+  return renderData(props)
+}
 
-export default InstallmentsDuePerOfficerCustomerCard;
+export default InstallmentsDuePerOfficerCustomerCard

@@ -1,18 +1,18 @@
-import React from "react";
-import store from "../../../../Shared/redux/store";
+import React from 'react'
+import store from '../../../../Shared/redux/store'
 import {
   getCurrentTime,
   numbersToArabic,
   timeToArabicDate,
   timeToArabicDateNow,
-} from "../../../../Shared/Services/utils";
-import { PaidArrearsResponse } from "../../../Services/interfaces";
-import "./paidArrears.scss";
+} from '../../../../Shared/Services/utils'
+import { PaidArrearsResponse } from '../../../Services/interfaces'
+import './paidArrears.scss'
 
 interface PaidArrearsProps {
-  fromDate: string;
-  toDate: string;
-  data: PaidArrearsResponse;
+  fromDate: string
+  toDate: string
+  data: PaidArrearsResponse
 }
 
 export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
@@ -25,7 +25,7 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
         </p>
       </div>
       <div className="header-wrapper mb-0">
-        <p style={{ marginRight: "10px" }}>شركة تساهيل للتمويل متناهي الصغر</p>
+        <p style={{ marginRight: '10px' }}>شركة تساهيل للتمويل متناهي الصغر</p>
         <p>{store.getState().auth.name}</p>
         <p>{getCurrentTime()}</p>
       </div>
@@ -60,24 +60,24 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
             data.response.length &&
             data.response.map((row) => (
               <tr key={row.transactionCode}>
-                <td>{numbersToArabic(row.paidPenalties) || "٠"}</td>
-                <td>{numbersToArabic(row.lateDays) || "٠"}</td>
-                <td>{numbersToArabic(row.transactionAmount) || "٠"}</td>
+                <td>{numbersToArabic(row.paidPenalties) || '٠'}</td>
+                <td>{numbersToArabic(row.lateDays) || '٠'}</td>
+                <td>{numbersToArabic(row.transactionAmount) || '٠'}</td>
                 <td>
                   {row.paymentDate
                     ? timeToArabicDate(
                         new Date(row.paymentDate).valueOf(),
                         false
                       )
-                    : "لا يوجد"}
+                    : 'لا يوجد'}
                 </td>
-                <td>{numbersToArabic(row.installmentAmount) || "٠"}</td>
+                <td>{numbersToArabic(row.installmentAmount) || '٠'}</td>
                 <td>
                   {row.dueDate
                     ? timeToArabicDate(new Date(row.dueDate).valueOf(), false)
-                    : "لا يوجد"}
+                    : 'لا يوجد'}
                 </td>
-                <td>{numbersToArabic(row.installmentNumber) || "٠"}</td>
+                <td>{numbersToArabic(row.installmentNumber) || '٠'}</td>
                 <td>{row.customerName}</td>
                 <td>{numbersToArabic(row.customerCode)}</td>
                 <td>{numbersToArabic(row.transactionCode)}</td>
@@ -87,22 +87,22 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
               </tr>
             ))}
           <tr>
-            <td>{numbersToArabic(data.totalPaidPenalties) || "٠"}</td>
-            <td></td>
-            <td>{numbersToArabic(data.totalTransactionAmount) || "٠"}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{numbersToArabic(data.totalPaidPenalties) || '٠'}</td>
+            <td />
+            <td>{numbersToArabic(data.totalTransactionAmount) || '٠'}</td>
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
             <td>الإجمالي</td>
           </tr>
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}

@@ -1,30 +1,30 @@
-import React from "react";
-import store from "../../../../Shared/redux/store";
+import React from 'react'
+import store from '../../../../Shared/redux/store'
 import {
   beneficiaryType,
   getCurrentTime,
   groupBy,
   numbersToArabic,
   timeToArabicDate,
-} from "../../../../Shared/Services/utils";
+} from '../../../../Shared/Services/utils'
 import {
   CustomersArrearsResponse,
   CustomersArrearsSingleResponse,
-} from "../../../Services/interfaces";
-import Orientation from "../../Common/orientation";
-import "./customersArrears.scss";
+} from '../../../Services/interfaces'
+import Orientation from '../../Common/orientation'
+import './customersArrears.scss'
 
 interface CustomersArrearsProps {
-  date: string;
-  data: CustomersArrearsResponse;
+  date: string
+  data: CustomersArrearsResponse
 }
 export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
-  const { response } = data;
+  const { response } = data
   const dataGroupedByBranch: Map<string, Record<string, string>[]> = groupBy(
     response as Record<string, unknown>[],
     (row) => row.branchName
-  );
-  const dataGroupList = Array.from(dataGroupedByBranch.keys());
+  )
+  const dataGroupList = Array.from(dataGroupedByBranch.keys())
   return (
     <>
       <Orientation size="landscape" />
@@ -36,7 +36,7 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
           </p>
         </div>
         <div className="header-wrapper mb-0">
-          <p style={{ marginRight: "10px" }}>
+          <p style={{ marginRight: '10px' }}>
             شركة تساهيل للتمويل متناهي الصغر
           </p>
           <p>{store.getState().auth.name}</p>
@@ -56,8 +56,8 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
             cellSpacing="2"
           >
             {dataGroupList.map((key, i) => {
-              const rows = dataGroupedByBranch.get(key) || [];
-              const isLastItem = i + 1 === dataGroupList.length;
+              const rows = dataGroupedByBranch.get(key) || []
+              const isLastItem = i + 1 === dataGroupList.length
               return (
                 <React.Fragment key={`${key}-{i}`}>
                   <thead>
@@ -69,16 +69,16 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                     </tr>
                     <tr>
                       <th colSpan={2}>تاريخ آخر حركة سداد</th>
-                      <th></th>
+                      <th />
                       <th colSpan={2}>الرصيد</th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
+                      <th />
+                      <th />
+                      <th />
+                      <th />
                       <th colSpan={3}>المتأخرات</th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
+                      <th />
+                      <th />
+                      <th />
                       <th colSpan={6}>بيانات العميل</th>
                     </tr>
                     <tr>
@@ -105,7 +105,7 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                   <tbody>
                     {rows.length &&
                       rows.map((row: CustomersArrearsSingleResponse, j) => {
-                        const isLastRow = isLastItem && j + 1 === rows.length;
+                        const isLastRow = isLastItem && j + 1 === rows.length
                         return (
                           <>
                             <tr key={`${row.customerCode}-${j}`}>
@@ -117,29 +117,29 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                                       ).valueOf(),
                                       false
                                     )
-                                  : "لا يوجد"}
+                                  : 'لا يوجد'}
                               </td>
                               <td>
-                                {numbersToArabic(row.tarheelatCount) || "۰"}
+                                {numbersToArabic(row.tarheelatCount) || '۰'}
                               </td>
                               <td>
-                                {numbersToArabic(row.raseedAmount) || "۰"}
+                                {numbersToArabic(row.raseedAmount) || '۰'}
                               </td>
-                              <td>{numbersToArabic(row.raseedCount) || "۰"}</td>
+                              <td>{numbersToArabic(row.raseedCount) || '۰'}</td>
                               <td>
-                                {numbersToArabic(row.installmentAmount) || "۰"}
+                                {numbersToArabic(row.installmentAmount) || '۰'}
                               </td>
-                              <td>{numbersToArabic(row.lateDays) || "۰"}</td>
+                              <td>{numbersToArabic(row.lateDays) || '۰'}</td>
                               <td>
                                 {row.latestPaymentDate
                                   ? timeToArabicDate(
                                       new Date(row.latestPaymentDate).valueOf(),
                                       false
                                     )
-                                  : "لا يوجد"}
+                                  : 'لا يوجد'}
                               </td>
                               <td>
-                                {numbersToArabic(row.longestLatePeriod) || "۰"}
+                                {numbersToArabic(row.longestLatePeriod) || '۰'}
                               </td>
                               <td>
                                 {row.firstLateDate
@@ -147,15 +147,15 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                                       new Date(row.firstLateDate).valueOf(),
                                       false
                                     )
-                                  : "لا يوجد"}
+                                  : 'لا يوجد'}
                               </td>
-                              <td>{numbersToArabic(row.lateAmount) || "۰"}</td>
-                              <td>{numbersToArabic(row.lateCount) || "۰"}</td>
+                              <td>{numbersToArabic(row.lateAmount) || '۰'}</td>
+                              <td>{numbersToArabic(row.lateCount) || '۰'}</td>
                               <td>
-                                {numbersToArabic(row.installmentsCount) || "۰"}
+                                {numbersToArabic(row.installmentsCount) || '۰'}
                               </td>
                               <td>
-                                {numbersToArabic(row.loanPrincipal) || "۰"}
+                                {numbersToArabic(row.loanPrincipal) || '۰'}
                               </td>
                               <td>
                                 {row.issueDate
@@ -163,61 +163,61 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
                                       new Date(row.issueDate).valueOf(),
                                       false
                                     )
-                                  : ""}
+                                  : ''}
                               </td>
                               <td colSpan={2}>{row.representativeName}</td>
                               <td colSpan={2}>{row.customerName}</td>
                               <td>
-                                {beneficiaryType(row.beneficiaryType || "")}
+                                {beneficiaryType(row.beneficiaryType || '')}
                               </td>
                               <td>
-                                {numbersToArabic(row.customerCode) || "۰"}
+                                {numbersToArabic(row.customerCode) || '۰'}
                               </td>
                             </tr>
                             {isLastRow && (
                               <tr className="baby-blue">
-                                <td colSpan={2}></td>
-                                <td></td>
+                                <td colSpan={2} />
+                                <td />
                                 <td>
                                   {numbersToArabic(data.raseedTotalAmount) ||
-                                    "۰"}
+                                    '۰'}
                                 </td>
                                 <td>
                                   {numbersToArabic(data.raseedTotalCount) ||
-                                    "۰"}
+                                    '۰'}
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td />
+                                <td />
+                                <td />
+                                <td />
+                                <td />
                                 <td>
-                                  {numbersToArabic(data.lateTotalAmount) || "۰"}
+                                  {numbersToArabic(data.lateTotalAmount) || '۰'}
                                 </td>
                                 <td>
-                                  {numbersToArabic(data.lateTotalCount) || "۰"}
+                                  {numbersToArabic(data.lateTotalCount) || '۰'}
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td colSpan={2}></td>
-                                <td colSpan={2}></td>
+                                <td />
+                                <td />
+                                <td />
+                                <td colSpan={2} />
+                                <td colSpan={2} />
                                 <td>
-                                  {numbersToArabic(data.totalCount) || "۰"}
+                                  {numbersToArabic(data.totalCount) || '۰'}
                                 </td>
-                                <td></td>
+                                <td />
                               </tr>
                             )}
                           </>
-                        );
+                        )
                       })}
                   </tbody>
                 </React.Fragment>
-              );
+              )
             })}
           </table>
         )}
       </div>
     </>
-  );
-};
+  )
+}

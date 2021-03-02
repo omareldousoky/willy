@@ -1,15 +1,15 @@
-import React from "react";
-import { FieldProps } from "formik";
-import { Col, FormControl, InputGroup } from "react-bootstrap";
-import * as local from "../../../../Shared/Assets/ar.json";
+import React from 'react'
+import { FieldProps } from 'formik'
+import { Col, FormControl, InputGroup } from 'react-bootstrap'
+import * as local from '../../../../Shared/Assets/ar.json'
 
 interface DateFieldProps {
-  key: string;
-  id: string;
-  smSize?: number;
-  className?: string;
-  onlyField?: boolean;
-  fieldClassName?: string;
+  key: string
+  id: string
+  smSize?: number
+  className?: string
+  onlyField?: boolean
+  fieldClassName?: string
 }
 
 const DateField = (props: DateFieldProps & FieldProps<string>) => {
@@ -24,15 +24,15 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
     fieldClassName,
     onlyField = false,
     ...restProps
-  } = props;
-  const { touched, errors } = form;
+  } = props
+  const { touched, errors } = form
 
   return (
     <>
       {!onlyField && (
         <Col
           sm={smSize || 12}
-          className={`d-flex flex-column ${className || ""}`}
+          className={`d-flex flex-column ${className || ''}`}
         >
           <InputGroup key={key}>
             <InputGroup.Append>
@@ -61,11 +61,11 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
           {...field}
           {...restProps}
           id={id || field.name}
-          className={`mr-0 ${fieldClassName || ""}`}
+          className={`mr-0 ${fieldClassName || ''}`}
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default DateField;
+export default DateField

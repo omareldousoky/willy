@@ -1,23 +1,22 @@
-import React from "react";
-import "./CollectionStatement.scss";
-import { timeToArabicDate } from "../../../../Shared/Services/utils";
-import Table from "react-bootstrap/Table";
+import React from 'react'
+import './CollectionStatement.scss'
+import Table from 'react-bootstrap/Table'
+import { timeToArabicDate } from '../../../../Shared/Services/utils'
 
 const CollectionStatement = (props) => {
-  const branches = props.data.data.branches;
-  const total = props.data.data.total;
-  const startDate = timeToArabicDate(props.data.startDate, false);
-  const endDate = timeToArabicDate(props.data.endDate, false);
+  const { branches } = props.data.data
+  const { total } = props.data.data
+  const startDate = timeToArabicDate(props.data.startDate, false)
+  const endDate = timeToArabicDate(props.data.endDate, false)
 
   const trimmedValue = (value: string) => {
-    if (value.includes(".")) {
-      const splitted = value.split(".", 2);
-      splitted[1] = splitted[1].substring(0, 2);
-      return splitted.join(".");
-    } else {
-      return value;
+    if (value.includes('.')) {
+      const splitted = value.split('.', 2)
+      splitted[1] = splitted[1].substring(0, 2)
+      return splitted.join('.')
     }
-  };
+    return value
+  }
 
   const BranchComponent = ({ branch }) => {
     return (
@@ -59,17 +58,38 @@ const CollectionStatement = (props) => {
           <td>{trimmedValue(branch.totalCollected)}</td>
         </tr>
       </>
-    );
-  };
+    )
+  }
 
   return (
     <div className="CollectionStatement">
-      <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
-        <tr style={{ height: "10px" }}></tr>
-        <tr style={{width:'100%',display:'flex',flexDirection:'row' , justifyContent:'space-between'}}><th colSpan={6} style = {{backgroundColor:'white'}}><div className={"logo-print"}></div></th><th colSpan={6} style = {{backgroundColor:'white'}}>ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015</th></tr>
-        <tr style={{ height: "10px" }}></tr>
+      <table
+        style={{
+          fontSize: '12px',
+          margin: '10px 0px',
+          textAlign: 'center',
+          width: '100%',
+        }}
+      >
+        <tr style={{ height: '10px' }} />
+        <tr
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <th colSpan={6} style={{ backgroundColor: 'white' }}>
+            <div className="logo-print" />
+          </th>
+          <th colSpan={6} style={{ backgroundColor: 'white' }}>
+            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+          </th>
+        </tr>
+        <tr style={{ height: '10px' }} />
       </table>
-      <table style={{ width: "100%" }}>
+      <table style={{ width: '100%' }}>
         <thead className="report-header">
           <tr className="headtitle">
             <th colSpan={2}>شركة تساهيل للتمويل متناهي الصغر</th>
@@ -79,13 +99,13 @@ const CollectionStatement = (props) => {
           </tr>
         </thead>
       </table>
-      <Table style={{ width: "100%" }} striped bordered hover>
+      <Table style={{ width: '100%' }} striped bordered hover>
         <tbody>
           {branches.map((branch, idx) => (
             <BranchComponent key={idx} branch={branch} />
           ))}
           <tr style={{ fontSize: 16 }}>
-            <td>{"إجمالى عام"}</td>
+            <td>إجمالى عام</td>
             <td>{trimmedValue(total.fees)}</td>
             <td>{trimmedValue(total.installmentsPrincipal)}</td>
             <td>{trimmedValue(total.installmentsInterest)}</td>
@@ -97,7 +117,7 @@ const CollectionStatement = (props) => {
         </tbody>
       </Table>
     </div>
-  );
-};
+  )
+}
 
-export default CollectionStatement;
+export default CollectionStatement

@@ -1,7 +1,7 @@
-import { array, object, ObjectSchema, Shape, string } from "yup";
-import * as local from "../../../Shared/Assets/ar.json";
+import { array, object, ObjectSchema, Shape, string } from 'yup'
+import * as local from '../../../Shared/Assets/ar.json'
 
-const minYear = new Date(2021, 0, 1);
+const minYear = new Date(2021, 0, 1)
 export const reportsModalValidation: ObjectSchema<
   Shape<object, object>
 > = object().shape({
@@ -10,15 +10,15 @@ export const reportsModalValidation: ObjectSchema<
   branches: array().nullable(),
   key: string(),
   quarterYear: string().test(
-    "Min Date",
+    'Min Date',
     local.dateCantBeBefore2021,
     (value: string) => {
-      return value ? new Date(value).valueOf() >= minYear.valueOf() : true;
+      return value ? new Date(value).valueOf() >= minYear.valueOf() : true
     }
   ),
   date: string(),
   loanOfficers: array().nullable(),
   representatives: array().nullable(),
   geoAreas: array().nullable(),
-  loanApplicationKey: string()
-});
+  loanApplicationKey: string(),
+})
