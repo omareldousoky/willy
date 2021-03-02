@@ -56,10 +56,9 @@ module.exports = {
 		'import/no-unused-imports': 'off', // no-unused-vars rule is sufficient
 		'import/prefer-default-export': 'off',
 		'import/no-named-as-default': 'off',
-		// 'import/no-named-as-default-member': 'off',
-		// 'import/no-unused-modules': ['error', {
-		// 	'unusedExports': true
-		// }],
+		'import/no-unused-modules': ['error', {
+			'unusedExports': true
+		}],
 		'jsx-a11y/control-has-associated-label': 'off',
 		'jsx-a11y/click-events-have-key-events': 'off',
 		'jsx-a11y/no-static-element-interactions': 'off',
