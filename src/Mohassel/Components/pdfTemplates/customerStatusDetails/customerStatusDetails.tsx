@@ -1,8 +1,11 @@
 import React from 'react';
 import './customerStatusDetails.scss';
 import { timeToArabicDate, currency, periodType, getStatus, getLoanStatus, beneficiaryType, numbersToArabic, arabicGender, timeToArabicDateNow, guarantorOrderLocal } from "../../../../Shared/Services/utils";
+import { CustomerIsBlocked } from './types'
 
 const CustomerStatusDetails = (props) => {
+    const {customerLegalStatus, isDoubtful ,isWrittenOff} = props.data
+
     function getCustomerStatus(status: string) {
         switch (status) {
             case 'no commitment': return 'ليس عليه إلتزامات';
@@ -11,6 +14,9 @@ const CustomerStatusDetails = (props) => {
             default: return '';
         }
     }
+    const checkLoanLegalStatus = () =>
+      isWrittenOff ? "معدوم" : isDoubtful ? "مشكوك فيه" : " ";
+    
     return (
             <div className="customer-status-details" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
@@ -40,7 +46,9 @@ const CustomerStatusDetails = (props) => {
                             <td className="frame">{numbersToArabic(props.customerKey)}</td>
                             <th className="gray frame">الحاله</th>
                             <td className="frame">{getCustomerStatus(props.data.customerStatus)}</td>
+                            <td className="frame">{checkLoanLegalStatus()}</td>
                             <th className="gray frame">حالة التعامل مع العميل</th>
+                            <td className="frame">{CustomerIsBlocked[customerLegalStatus] || CustomerIsBlocked['false']}</td>
                             <td className="frame"></td>
                         </tr>
                         <tr>
