@@ -4,6 +4,7 @@ module.exports = {
   env: {
     browser: true,
     jest: true,
+		es2020: true,
   },
   extends: [
     'airbnb',
@@ -30,6 +31,9 @@ module.exports = {
         allowTernary: true,
       },
     ],
+		'consistent-return': 'warn',
+		'array-callback-return': 'warn',
+		'no-bitwise': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
