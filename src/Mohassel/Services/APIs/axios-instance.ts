@@ -1,28 +1,22 @@
-import axiosLib from 'axios'
+import axiosLib, { AxiosError } from 'axios'
 import { getCookie } from '../../../Shared/Services/getCookie'
 
-function errorResponseHandler(error: any) {
-  // check for errorHandle config
-  if (
-    error.config.hasOwnProperty('errorHandle') ||
-    error.config.errorHandle === false
-  ) {
-    return Promise.reject(error)
+function errorResponseHandler(error: AxiosError) {
+  if (error.response) {
+    switch (error.response.status) {
+      // case 400:
+      case 401:
+        document.cookie = 'token=; expires = Thu, 01 Jan 1970 00:00:00 GMT'
+        window.location.href = process.env.REACT_APP_LOGIN_URL || ''
+        break
+      case 402:
+        // localStorage.clear();
+        // window.location.reload()
+        break
+      default:
+    }
   }
-  // if has response show the error
-  switch (error.response.status) {
-    // case 400:
-    case 401:
-      document.cookie = 'token=; expires = Thu, 01 Jan 1970 00:00:00 GMT'
-      window.location.href = process.env.REACT_APP_LOGIN_URL || ''
-      break
-    case 402:
-      // localStorage.clear();
-      // window.location.reload()
-      break
-    default:
-  }
-  throw error
+  return Promise.reject(error)
 }
 
 const instance = axiosLib.create({
@@ -33,12 +27,12 @@ instance.interceptors.response.use((response) => response, errorResponseHandler)
 const isEmptyResponse = (value: unknown) => {
   const isObject = typeof value === 'object'
   const isArray = Array.isArray(value)
-  if (!isObject && !isArray) return false
   if (isObject) {
     const valueObj = value as Record<string, unknown>
     return !Object.keys(valueObj).length
   }
   if (isArray) return !(value as unknown[]).length
+  return false
 }
 instance.interceptors.response.use(
   (res) => {

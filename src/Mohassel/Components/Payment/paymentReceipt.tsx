@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -11,6 +11,7 @@ import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 
 const PaymentReceipt = (props: any) => {
   function download() {
+    // eslint-disable-next-line new-cap
     const pdf = new jsPDF('p', 'mm', 'letter')
     domtoimage
       .toPng(document.querySelector('#nodeToRenderAsPDF'))

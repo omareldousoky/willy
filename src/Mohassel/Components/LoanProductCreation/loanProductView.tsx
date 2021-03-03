@@ -4,7 +4,6 @@ import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
 import Table from 'react-bootstrap/Table'
 import { Loader } from '../../../Shared/Components/Loader'
-import { getFormula } from '../../Services/APIs/LoanFormula/getFormula'
 import * as local from '../../../Shared/Assets/ar.json'
 import BackButton from '../BackButton/back-button'
 import {
