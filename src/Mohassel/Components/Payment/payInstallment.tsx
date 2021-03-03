@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
 import AsyncSelect from 'react-select/async'
 import { Formik, FormikProps } from 'formik'
+import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
 import * as local from '../../../Shared/Assets/ar.json'
 import { paymentValidation } from './paymentValidation'
@@ -14,7 +15,6 @@ import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserB
 import { payment } from '../../../Shared/redux/payment/actions'
 import './styles.scss'
 import { Employee } from './payment'
-import Swal from 'sweetalert2'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
 import { theme } from '../../../theme'
@@ -130,7 +130,7 @@ class PayInstallment extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.penaltyAction !== this.props.penaltyAction)
       this.setState({ penaltyAction: prevProps.penaltyAction })
   }
@@ -159,11 +159,11 @@ class PayInstallment extends Component<Props, State> {
   }
 
   getRequiredAmount() {
-    const installment = this.props.installments.find((installment) => {
+    const installment = this.props.installments.find((inst) => {
       return (
-        installment.status !== 'paid' &&
-        installment.status !== 'rescheduled' &&
-        installment.status !== 'pending'
+        inst.status !== 'paid' &&
+        inst.status !== 'rescheduled' &&
+        inst.status !== 'pending'
       )
     })
     return installment

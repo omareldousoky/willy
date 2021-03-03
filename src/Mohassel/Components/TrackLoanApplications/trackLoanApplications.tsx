@@ -233,7 +233,7 @@ class TrackLoanApplications extends Component<Props, State> {
     if (iScores.status === 'success') {
       const customers: Score[] = []
       iScores.body.data.forEach((score: Score) => {
-        const obj = {
+        const customer = {
           customerName:
             application.product.beneficiaryType === 'group'
               ? application.group.individualsInGroup.filter(
@@ -245,7 +245,7 @@ class TrackLoanApplications extends Component<Props, State> {
           url: score.url,
           bankCodes: score.bankCodes || [],
         }
-        customers.push(obj)
+        customers.push(customer)
       })
       this.setState({ iScoreCustomers: customers, loading: false })
     } else {
@@ -363,9 +363,9 @@ class TrackLoanApplications extends Component<Props, State> {
   checkFilters() {
     if (
       this.props.searchFilters.fromDate &&
-      this.props.searchFilters.fromDate !== NaN &&
+      Number.isNaN(this.props.searchFilters.fromDate) &&
       this.props.searchFilters.toDate &&
-      this.props.searchFilters.toDate !== NaN
+      Number.isNaN(this.props.searchFilters.toDate)
     ) {
       if (
         this.props.searchFilters.status &&

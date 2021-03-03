@@ -9,10 +9,10 @@ import { fetchLoansBriefingReport } from '../../Services/APIs/Reports/loansBrief
 import { installmentsDuePerOfficerCustomerCard } from '../../Services/APIs/Reports/installmentsDuePerOfficerCustomerCard'
 import { unpaidInstallmentsByOfficer } from '../../Services/APIs/Reports/unpaidInstallmentsByOfficer'
 import { fetchUnpaidInstallmentsPerAreaReport } from '../../Services/APIs/Reports/unpaidInstallmentsPerArea'
-import LoansBriefing2 from '../pdfTemplates/loansBriefing/loansBriefing2'
+import LoansBriefing2Pdf from '../pdfTemplates/loansBriefing/loansBriefing2'
 import UnpaidInst from '../pdfTemplates/unpaidInst/unpaidInst'
-import UnpaidInstallmentsByOfficer from '../pdfTemplates/unpaidInstallmentsByOfficer/unpaidInstallmentsByOfficer'
-import InstallmentsDuePerOfficerCustomerCard from '../pdfTemplates/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard'
+import UnpaidInstallmentsByOfficerPdf from '../pdfTemplates/unpaidInstallmentsByOfficer/unpaidInstallmentsByOfficer'
+import InstallmentsDuePerOfficerCustomerCardPdf from '../pdfTemplates/installmentsDuePerOfficerCustomerCard/installmentsDuePerOfficerCustomerCard'
 import {
   ApiResponse,
   CustomersArrearsRequest,
@@ -28,26 +28,26 @@ import {
   fetchOfficersBranchPercentPaymentReport,
   fetchOfficersPercentPaymentReport,
 } from '../../Services/APIs/Reports/officersPercentPayment'
-import OfficersPercentPayment from '../pdfTemplates/officersPercentPayment/officersPercentPayment'
+import OfficersPercentPaymentPdf from '../pdfTemplates/officersPercentPayment/officersPercentPayment'
 import OfficerBranchPercentPayment from '../pdfTemplates/officersPercentPayment/officersBranchPercentPayment'
 import LeakedCustomersPDF from '../pdfTemplates/LeakedCustomers/leakedCustomers'
 import { fetchLeakedCustomersReport } from '../../Services/APIs/Reports/leakedCustomers'
 import { fetchDueInstallmentsReport } from '../../Services/APIs/Reports/dueInstallments'
-import DueInstallments from '../pdfTemplates/dueInstallments/dueInstallments'
+import DueInstallmentsPdf from '../pdfTemplates/dueInstallments/dueInstallments'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { fetchCustomersArrearsReport } from '../../Services/APIs/Reports/customersArrears'
-import { CustomersArrears } from '../pdfTemplates/customersArrears/customersArrears'
+import CustomersArrearsPdf from '../pdfTemplates/customersArrears/customersArrears'
 import { fetchPaidArrearsReport } from '../../Services/APIs/Reports/paidArrears'
-import { PaidArrears } from '../pdfTemplates/paidArrears/paidArrears'
+import PaidArrearsPdf from '../pdfTemplates/paidArrears/paidArrears'
 import { fetchMonthComparisonReport } from '../../Services/APIs/Reports/monthComparison'
-import MonthComparison from '../pdfTemplates/monthComparison/monthComparison'
-import ActiveWalletIndividual from '../pdfTemplates/activeWalletIndividual/activeWalletIndividual'
+import MonthComparisonPdf from '../pdfTemplates/monthComparison/monthComparison'
+import ActiveWalletIndividualPdf from '../pdfTemplates/activeWalletIndividual/activeWalletIndividual'
 import {
   ActiveWalletRequest,
   fetchActiveWalletGroupReport,
   fetchActiveWalletIndividualReport,
 } from '../../Services/APIs/Reports/activeWallet'
-import ActiveWalletGroup from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
+import ActiveWalletGroupPdf from '../pdfTemplates/activeWalletGroup/activeWalletGroup'
 
 export interface PDF {
   key?: string
@@ -484,7 +484,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           />
         )}
         {this.state.print === Reports.LoansBriefing2 && this.state.data && (
-          <LoansBriefing2
+          <LoansBriefing2Pdf
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
@@ -492,7 +492,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         )}
         {this.state.print === Reports.InstallmentsDuePerOfficerCustomerCard &&
           this.state.data && (
-            <InstallmentsDuePerOfficerCustomerCard
+            <InstallmentsDuePerOfficerCustomerCardPdf
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
@@ -500,7 +500,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           )}
         {this.state.print === Reports.UnpaidInstallmentsByOfficer &&
           this.state.data && (
-            <UnpaidInstallmentsByOfficer
+            <UnpaidInstallmentsByOfficerPdf
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
@@ -516,7 +516,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           )}
         {this.state.print === Reports.OfficersPercentPayment &&
           this.state.data && (
-            <OfficersPercentPayment
+            <OfficersPercentPaymentPdf
               data={this.state.data}
               fromDate={this.state.fromDate}
               toDate={this.state.toDate}
@@ -531,7 +531,7 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             />
           )}
         {this.state.print === Reports.DueInstallments && this.state.data && (
-          <DueInstallments
+          <DueInstallmentsPdf
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
@@ -545,17 +545,17 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
           />
         )}
         {this.state.print === Reports.CustomersArrears && this.state.data && (
-          <CustomersArrears data={this.state.data} date={this.state.date} />
+          <CustomersArrearsPdf data={this.state.data} date={this.state.date} />
         )}
         {this.state.print === Reports.PaidArrears && this.state.data && (
-          <PaidArrears
+          <PaidArrearsPdf
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
           />
         )}
         {this.state.print === Reports.MonthComparison && this.state.data && (
-          <MonthComparison
+          <MonthComparisonPdf
             data={this.state.data}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
@@ -563,13 +563,13 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
         )}
         {this.state.print === Reports.ActiveWalletIndividual &&
           this.state.data && (
-            <ActiveWalletIndividual
+            <ActiveWalletIndividualPdf
               date={this.state.date}
               data={this.state.data}
             />
           )}
         {this.state.print === Reports.ActiveWalletGroup && this.state.data && (
-          <ActiveWalletGroup date={this.state.date} data={this.state.data} />
+          <ActiveWalletGroupPdf date={this.state.date} data={this.state.data} />
         )}
       </>
     )

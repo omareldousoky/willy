@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -24,8 +25,6 @@ interface State {
   lng: number
   mapCenterLat: number
   mapCenterLng: number
-  address: string
-  query: string
 }
 
 export class MapContainer extends Component<Props, State> {
@@ -34,8 +33,6 @@ export class MapContainer extends Component<Props, State> {
     this.state = {
       lat: 0,
       lng: 0,
-      address: '',
-      query: '',
       mapCenterLat: 30.048764,
       mapCenterLng: 31.247705,
       // autocomplete: '',
@@ -51,7 +48,6 @@ export class MapContainer extends Component<Props, State> {
       options
     )
     if (this.props.location.lat !== 0 && this.props.location.lng !== 0) {
-      const input = document.getElementById('autocomplete') as HTMLInputElement
       const geocoder = new google.maps.Geocoder()
       this.setState({
         lat: this.props.location.lat,
@@ -61,7 +57,7 @@ export class MapContainer extends Component<Props, State> {
       })
       geocoder.geocode(
         { location: this.props.location },
-        function (results: any, status: string) {
+        (results: any, status: string) => {
           if (status === 'OK') {
             if (results[0]) {
               input.value = results[0].formatted_address
@@ -93,16 +89,13 @@ export class MapContainer extends Component<Props, State> {
     const lng = latLng.lng()
     const geocoder = new google.maps.Geocoder()
     const input = document.getElementById('autocomplete') as HTMLInputElement
-    geocoder.geocode(
-      { location: latLng },
-      function (results: any, status: string) {
-        if (status === 'OK') {
-          if (results[0]) {
-            input.value = results[0].formatted_address
-          }
+    geocoder.geocode({ location: latLng }, (results: any, status: string) => {
+      if (status === 'OK') {
+        if (results[0]) {
+          input.value = results[0].formatted_address
         }
       }
-    )
+    })
     this.setState({
       lat,
       lng,

@@ -153,7 +153,7 @@ const appRoutes = [
           {
             path: '/geo-areas',
             label: local.branchAreas,
-            render: (props) => (
+            render: () => (
               <Can I="geoArea" a="config">
                 <GeoAreas />
               </Can>
@@ -173,7 +173,7 @@ const appRoutes = [
       {
         path: '/track-loan-applications',
         label: local.loanApplications,
-        render: (props) => (
+        render: () => (
           <Can I="getLoanApplication" a="application">
             <TrackLoanApplications />
           </Can>
@@ -232,7 +232,7 @@ const appRoutes = [
           {
             path: '/bulk-approvals',
             label: local.bulkLoanApplicationsApproval,
-            render: (props) => (
+            render: () => (
               <Can I="approveLoanApplication" a="application">
                 {' '}
                 <BulkApplicationApproval />
@@ -242,14 +242,14 @@ const appRoutes = [
           {
             path: '/bulk-reviews',
             label: local.bulkLoanApplicationReviews,
-            render: (props) => <BulkApplicationReview />,
+            render: () => <BulkApplicationReview />,
           },
         ],
       },
       {
         path: '/manage-loan-details',
         label: local.manageLoanDetails,
-        render: (props) => (
+        render: () => (
           <Can I="loanUsage" a="config">
             <LoanUses />
           </Can>
@@ -258,7 +258,7 @@ const appRoutes = [
           {
             path: '/loan-uses',
             label: local.loanUses,
-            render: (props) => (
+            render: () => (
               <Can I="loanUsage" a="config">
                 <LoanUses />
               </Can>
@@ -267,7 +267,7 @@ const appRoutes = [
           {
             path: '/business-activities',
             label: local.businessActivities,
-            render: (props) => (
+            render: () => (
               <Can I="viewBusinessSectorConfig" a="config">
                 <BusinessActivities />
               </Can>
@@ -276,7 +276,7 @@ const appRoutes = [
           {
             path: '/business-specialities',
             label: local.businessSpecialities,
-            render: (props) => (
+            render: () => (
               <Can I="viewBusinessSectorConfig" a="config">
                 <BusinessSpecialities />
               </Can>

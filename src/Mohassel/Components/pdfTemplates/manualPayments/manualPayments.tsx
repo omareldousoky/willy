@@ -1,6 +1,5 @@
 import React from 'react'
 import './manualPayments.scss'
-import Row from 'react-bootstrap/Row'
 import {
   timeToArabicDate,
   timeToArabicDateNow,

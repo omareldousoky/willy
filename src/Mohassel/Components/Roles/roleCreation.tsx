@@ -138,7 +138,7 @@ class RoleCreation extends Component<Props, State> {
           (section) => section.key === roleSection
         )
         sectionObject &&
-          sectionObject.actions.map((action, i) => {
+          sectionObject.actions.map((action) => {
             const keyArray = Object.keys(action)
             const i18nI = keyArray.indexOf('i18n')
             keyArray.splice(i18nI, 1)
@@ -269,9 +269,6 @@ class RoleCreation extends Component<Props, State> {
                   )}
                   name="mangerRole"
                   data-qc="managerRole"
-                  onChange={(e) => {
-                    formikProps.values.managerRole = e.value
-                  }}
                   options={this.state.managerRolesList}
                 />
               </Form.Group>

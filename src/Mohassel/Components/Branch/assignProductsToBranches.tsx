@@ -161,7 +161,7 @@ class AssignProductsToBranches extends Component<Props, State> {
       branches: _ids,
       productIds: this.state.selectedProducts.map((product) => product._id),
     })
-    if (res.status == 'success') {
+    if (res.status === 'success') {
       this.setState({
         loading: false,
       })
@@ -181,7 +181,7 @@ class AssignProductsToBranches extends Component<Props, State> {
       branches: _ids,
       productIds: this.state.selectedProducts.map((product) => product._id),
     })
-    if (res.status == 'success') {
+    if (res.status === 'success') {
       this.setState({ loading: false })
       Swal.fire('success', local.unassignProductsToBranchesSuccess)
     } else {

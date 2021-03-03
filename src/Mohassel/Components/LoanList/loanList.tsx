@@ -11,7 +11,6 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import {
   timeToDateyyymmdd,
   beneficiaryType,
-  iscoreDate,
   getErrorMessage,
   getFullCustomerKey,
 } from '../../../Shared/Services/utils'
@@ -34,9 +33,7 @@ interface Props {
 interface State {
   size: number
   from: number
-  loading: boolean
   searchKeys: any
-  manageLoansTabs: any[]
 }
 
 class LoanList extends Component<Props, State> {
@@ -52,7 +49,6 @@ class LoanList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      loading: false,
       searchKeys: [
         'keyword',
         'dateFromTo',
@@ -61,7 +57,6 @@ class LoanList extends Component<Props, State> {
         'doubtful',
         'writtenOff',
       ],
-      manageLoansTabs: [],
     }
     this.mappers = [
       {
@@ -173,7 +168,6 @@ class LoanList extends Component<Props, State> {
         if (this.props.error)
           Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
       })
-    this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
   getStatus(status: string) {

@@ -8,7 +8,6 @@ import { Formik } from 'formik'
 import Table from 'react-bootstrap/Table'
 import * as local from '../../../Shared/Assets/ar.json'
 import {
-  Application,
   ReviewLoanValidation,
   UnReviewLoanValidation,
   RejectLoanValidation,
@@ -75,7 +74,6 @@ class StatusHelper extends Component<Props, State> {
         },
       ],
       rejectionReasonValues: [],
-      loading: false,
       reviewState: {
         reviewStatus: 'reviewRequired',
         reviewDate: today,

@@ -66,7 +66,7 @@ class MonthlyQuarterlyReports extends Component<{}, State> {
     this.setState({ showModal: true, selectedPdf })
   }
 
-  async handleSubmit(values) {
+  handleSubmit = async (values) => {
     switch (this.state.selectedPdf.key) {
       case 'monthlyReport':
         return this.monthlyReport()

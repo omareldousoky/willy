@@ -70,7 +70,7 @@ class SupervisionLevelsCreation extends Component<Props, State> {
       branchId: this.props.branchId,
     }
     const res = await searchUsers(query)
-    if (res.status == 'success' && res.body.data) {
+    if (res.status === 'success' && res.body.data) {
       this.setState({ users: res.body.data })
     }
     this.setState({ loading: false })

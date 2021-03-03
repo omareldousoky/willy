@@ -79,7 +79,7 @@ class PostponeInstallments extends Component<Props, State> {
     ]
   }
 
-  componentDidUpdate(prevProps: Props, _prevState: State) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.test !== this.props.test) {
       this.setState({
         installmentsAfterRescheduling: [],

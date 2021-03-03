@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import {
   currency,
   numbersToArabic,
@@ -9,11 +9,11 @@ import { CustomerApplicationTransactionsResponse } from '../../../Services/inter
 import Orientation from '../../Common/orientation'
 import './customerTransactionReport.scss'
 
-interface CustomerTansactionsProps {
+interface CustomerTransactionsProps {
   result: CustomerApplicationTransactionsResponse
 }
 
-const CustomerTransactionReport = (props: CustomerTansactionsProps) => {
+const CustomerTransactionReport = (props: CustomerTransactionsProps) => {
   const renderHeader = (result) => {
     return (
       <div style={{ display: 'flex' }}>

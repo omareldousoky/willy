@@ -71,13 +71,13 @@ class TraditionalLoanRescheduling extends Component<Props, State> {
     ]
   }
 
-  componentDidUpdate(prevProps: Props, _prevState: State) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.test !== this.props.test) {
       this.setState({ installmentsAfterRescheduling: [], noOfInstallments: 0 })
     }
   }
 
-  async handleSubmit(values) {
+  handleSubmit = async (values) => {
     if (
       !this.props.application.installmentsObject.installments.find(
         (installment) => installment.status === 'partiallyPaid'
@@ -160,7 +160,7 @@ class TraditionalLoanRescheduling extends Component<Props, State> {
           initialValues={{
             noOfInstallments: this.state.noOfInstallments,
           }}
-          onSubmit={this.handleSubmit.bind(this)}
+          onSubmit={this.handleSubmit}
           validationSchema={traditionalReschedulingValidation}
           validateOnBlur
           validateOnChange

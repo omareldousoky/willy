@@ -144,7 +144,7 @@ class MoveCustomers extends Component<{}, State> {
   addRemoveItemFromChecked(customer: Customer) {
     if (
       this.state.selectedCustomers.findIndex(
-        (selectedCustomer) => selectedCustomer._id == customer._id
+        (selectedCustomer) => selectedCustomer._id === customer._id
       ) > -1
     ) {
       this.setState({

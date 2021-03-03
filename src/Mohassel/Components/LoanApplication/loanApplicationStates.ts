@@ -146,7 +146,6 @@ export const LoanApplicationValidation = Yup.object().shape({
       local.customerMaxPrincipalError,
       function (this: any, value: any) {
         const {
-          customerTotalPrincipals,
           customerMaxPrincipal,
           principals,
           beneficiaryType,

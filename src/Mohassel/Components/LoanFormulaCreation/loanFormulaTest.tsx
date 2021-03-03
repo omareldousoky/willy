@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import { Formik } from 'formik'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
@@ -102,10 +102,9 @@ class FormulaTest extends Component<Props, State> {
   submit = async (values: FormulaTestClass) => {
     this.setState({ loading: true })
     const obj = { ...values }
-    const date = new Date(obj.loanStartDate).valueOf()
-    obj.loanStartDate = date
+    obj.loanStartDate = new Date(obj.loanStartDate).valueOf()
     const formula = this.state.formulas.find(
-      (formula) => formula._id === values.calculationFormulaId
+      (item) => item._id === values.calculationFormulaId
     )
     const formulaName = formula ? formula.name : ''
     const res = await testFormula(obj)

@@ -86,7 +86,7 @@ class FreeRescheduling extends Component<Props, State> {
       {
         title: '',
         key: 'action',
-        render: (data) => '',
+        render: () => '',
       },
     ]
   }

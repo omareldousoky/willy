@@ -27,7 +27,6 @@ class LoanStatusChange extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      prevId: '',
       application: {},
       loading: false,
       geoAreas: [],

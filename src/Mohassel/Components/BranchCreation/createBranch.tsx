@@ -26,7 +26,6 @@ import {
 } from '../../../Shared/Services/utils'
 
 interface State {
-  step: number
   step1: BasicValues
 }
 interface Props {
@@ -42,7 +41,6 @@ class CreateBranch extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      step: 1,
       step1,
     }
   }
@@ -66,7 +64,6 @@ class CreateBranch extends Component<Props, State> {
 
   cancel() {
     this.setState({
-      step: 1,
       step1,
     })
     this.props.history.goBack()

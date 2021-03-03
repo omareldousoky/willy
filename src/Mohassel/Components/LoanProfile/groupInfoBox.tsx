@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import Form from 'react-bootstrap/Form'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getRenderDate } from '../../Services/getRenderDate'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import { Customer } from '../LoanApplication/loanApplicationCreation'
 import InfoBox from '../userInfoBox'
@@ -19,7 +15,6 @@ interface Member {
   type: string
 }
 interface State {
-  loading: boolean
   tabsArray: Array<Tab>
   activeTab: string
   activeCustomer: Member
@@ -29,7 +24,6 @@ class GroupInfoBox extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      loading: false,
       tabsArray: [],
       activeTab: '0',
       activeCustomer: {

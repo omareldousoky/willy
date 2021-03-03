@@ -93,7 +93,7 @@ const ReviewedApplicationsPDF = (props) => {
             <th>حالة طلب القرض</th>
             {/* <th>المبلغ بالحروف</th> */}
           </tr>
-          {props.data.map((application, i) => (
+          {props.data.map((application) => (
             <tr key={application.id}>
               <td>{application.serialNumber}</td>
               <td>{beneficiaryType(application.beneficiaryType)}</td>

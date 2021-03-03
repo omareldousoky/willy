@@ -79,7 +79,7 @@ class PostponeHalfInstallment extends Component<Props, State> {
     ]
   }
 
-  componentDidUpdate(prevProps: Props, _prevState: State) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.test !== this.props.test) {
       this.setState({
         installmentsAfterRescheduling: [],
@@ -89,7 +89,7 @@ class PostponeHalfInstallment extends Component<Props, State> {
     }
   }
 
-  async handleSubmit(values) {
+  handleSubmit = async (values) => {
     this.setState({ loading: true })
     const obj = {
       noOfInstallments: values.noOfInstallments,
@@ -178,7 +178,7 @@ class PostponeHalfInstallment extends Component<Props, State> {
             payWhere: this.state.payWhere,
             installmentNumber: this.state.installmentNumber,
           }}
-          onSubmit={this.handleSubmit.bind(this)}
+          onSubmit={this.handleSubmit}
           validationSchema={reschedulingValidation}
           validateOnBlur
           validateOnChange

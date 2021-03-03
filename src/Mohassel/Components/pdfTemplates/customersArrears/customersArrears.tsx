@@ -18,7 +18,7 @@ interface CustomersArrearsProps {
   date: string
   data: CustomersArrearsResponse
 }
-export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
+const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
   const { response } = data
   const dataGroupedByBranch: Map<string, Record<string, string>[]> = groupBy(
     response as Record<string, unknown>[],
@@ -221,3 +221,5 @@ export const CustomersArrears = ({ data, date }: CustomersArrearsProps) => {
     </>
   )
 }
+
+export default CustomersArrears

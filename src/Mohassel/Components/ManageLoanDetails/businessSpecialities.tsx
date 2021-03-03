@@ -215,10 +215,10 @@ class BusinessSpecialities extends Component<{}, State> {
           <CRUDList
             source="businessSpecialities"
             options={this.state.businessSpecialities}
-            newOption={(name, active, index) => {
+            newOption={(name) => {
               this.newBusinessSpeciality(name)
             }}
-            updateOption={(id, name, active, index) => {
+            updateOption={(id, name, active) => {
               this.editBusinessSpeciality(id, active)
             }}
             disableNameEdit

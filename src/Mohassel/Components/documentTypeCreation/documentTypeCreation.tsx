@@ -46,7 +46,6 @@ class DocumentTypeCreation extends Component<Props, State> {
   submit = (values) => {
     this.setState({
       documentType: values,
-      loading: true,
     })
     if (this.props.edit) {
       this.updateDocument(values)

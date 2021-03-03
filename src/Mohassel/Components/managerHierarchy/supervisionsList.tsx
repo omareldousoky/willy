@@ -30,7 +30,6 @@ interface State {
     label: string
     value: string
   }[]
-  print: boolean
   selectedGroups: GroupsByBranch[]
   checkAll: boolean
   chosenStatus: string
@@ -44,12 +43,6 @@ interface Props {
   search: (data) => Promise<void>
   setSearchFilters: (data) => void
   setLoading: (data) => void
-}
-interface BranchId {
-  branchId: string
-}
-interface GroupIds {
-  groupIds: string[]
 }
 class SupervisionGroupsList extends Component<Props, State> {
   mappers: {
@@ -66,7 +59,6 @@ class SupervisionGroupsList extends Component<Props, State> {
       from: 0,
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
       searchKey: [''],
-      print: false,
       selectedGroups: [],
       checkAll: false,
       options: [{ label: local.getSupervisionGroups, value: '' }],
@@ -284,7 +276,7 @@ class SupervisionGroupsList extends Component<Props, State> {
   addRemoveItemFromChecked(group) {
     if (
       this.state.selectedGroups.findIndex(
-        (groupItem) => groupItem.id == group.id
+        (groupItem) => groupItem.id === group.id
       ) > -1
     ) {
       this.setState({
@@ -359,7 +351,7 @@ class SupervisionGroupsList extends Component<Props, State> {
                     style={{ marginLeft: 20, height: 70 }}
                   >
                     {' '}
-                    {this.state.chosenStatus == 'pending'
+                    {this.state.chosenStatus === 'pending'
                       ? local.approveSuperVisionGroups
                       : local.unApproveSuperVisionGroups}
                   </Button>
@@ -388,7 +380,7 @@ class SupervisionGroupsList extends Component<Props, State> {
                     options={this.state.options}
                   />
                 </Col>
-                {this.state.branchId == 'hq' ? (
+                {this.state.branchId === 'hq' ? (
                   <Search
                     searchKeys={this.state.searchKey}
                     url="supervisionsGroups"

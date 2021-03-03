@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { withRouter } from 'react-router-dom'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
@@ -22,7 +21,6 @@ interface Role {
   _id: string
 }
 interface State {
-  prevId: string
   role: Role
   activeTab: string
   allSections: Array<Section>
@@ -38,7 +36,6 @@ class RoleProfile extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      prevId: '',
       role: {
         _id: '',
         hasBranch: false,

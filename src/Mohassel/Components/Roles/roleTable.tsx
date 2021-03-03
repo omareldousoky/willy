@@ -35,7 +35,7 @@ class RoleTable extends Component<Props, State> {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     return { sections: props.sections, permissions: props.permissions }
   }
 
@@ -50,7 +50,7 @@ class RoleTable extends Component<Props, State> {
 
   checkAll(e, parent, action) {
     const { sections } = this.state
-    const section = sections.find((section) => section.key === parent)
+    const section = sections.find((sec) => sec.key === parent)
     const actionsInRelation = section?.actions.filter((obj) =>
       Object.keys(obj).includes(action)
     )
@@ -88,7 +88,7 @@ class RoleTable extends Component<Props, State> {
   isChecked(objectKey, actionVal, fieldKey, action) {
     const section = this.state.sections.find((obj) => obj.key === objectKey)
     const actionValue: SectionAction = section?.actions.find(
-      (action) => action.i18n.en === fieldKey
+      (act) => act.i18n.en === fieldKey
     )
     // Manual Select
     if (

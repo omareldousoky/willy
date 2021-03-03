@@ -21,10 +21,6 @@ interface Props {
   handleChangePenaltyAction: (key: string) => void
 }
 class PaymentIcons extends Component<Props, {}> {
-  constructor(props: Props) {
-    super(props)
-  }
-
   getRequiredAmount() {
     const todaysDate = new Date().valueOf()
     let total = 0
@@ -131,7 +127,6 @@ class PaymentIcons extends Component<Props, {}> {
                   <Button
                     onClick={() => {
                       this.props.changePaymentState(3)
-                      this.setState({ randomType: 'manual' })
                     }}
                     variant="primary"
                   >
@@ -194,7 +189,6 @@ class PaymentIcons extends Component<Props, {}> {
                 <Button
                   onClick={() => {
                     this.props.changePaymentState(3)
-                    this.setState({ randomType: 'manual' })
                   }}
                   variant="primary"
                 >

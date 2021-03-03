@@ -40,8 +40,6 @@ class FormulaList extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      size: 5,
-      from: 0,
       loading: false,
       formulas: [],
       filterFormulas: '',

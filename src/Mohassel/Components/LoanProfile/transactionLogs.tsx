@@ -14,7 +14,6 @@ interface Props {
 interface State {
   loading: boolean
   data: any
-  from: number
   size: number
   totalCount: number
   pageToken: string
@@ -68,7 +67,6 @@ class TransactionLogs extends Component<Props, State> {
       loading: false,
       data: [],
       size: 10,
-      from: 0,
       totalCount: 0,
       pageToken: '',
     }

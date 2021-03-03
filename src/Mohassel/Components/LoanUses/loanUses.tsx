@@ -52,7 +52,7 @@ class LoanUses extends Component<{}, State> {
     }
   }
 
-  async editLoanUse(id, name, active, index) {
+  async editLoanUse(id, name, active) {
     this.setState({ loading: true })
     const res = await updateLoanUsage(id, name, active)
     if (res.status === 'success') {
@@ -68,7 +68,7 @@ class LoanUses extends Component<{}, State> {
       )
   }
 
-  async newLoanUse(name, activated, index) {
+  async newLoanUse(name, activated) {
     this.setState({ loading: true })
     const res = await addLoanUsage({ name, activated })
     if (res.status === 'success') {
@@ -101,11 +101,11 @@ class LoanUses extends Component<{}, State> {
         <CRUDList
           source="loanUses"
           options={this.state.loanUses}
-          newOption={(name, active, index) => {
-            this.newLoanUse(name, active, index)
+          newOption={(name, active) => {
+            this.newLoanUse(name, active)
           }}
-          updateOption={(id, name, active, index) => {
-            this.editLoanUse(id, name, active, index)
+          updateOption={(id, name, active) => {
+            this.editLoanUse(id, name, active)
           }}
           canCreate
           canEdit

@@ -63,7 +63,7 @@ class UsersSearch extends Component<Props, State> {
     if (this.props.isLoanOfficer) {
       const officerQuery = { ...query, branchId: this.props.branchId }
       const res = await searchLoanOfficer(officerQuery)
-      if (res.status == 'success' && res.body.data) {
+      if (res.status === 'success' && res.body.data) {
         this.setState({ users: res.body.data })
         return res.body.data
       }
@@ -71,7 +71,7 @@ class UsersSearch extends Component<Props, State> {
       return []
     }
     const res = await searchUsers({ ...query, status: 'active' })
-    if (res.status == 'success' && res.body.data) {
+    if (res.status === 'success' && res.body.data) {
       this.setState({ users: res.body.data })
       return res.body.data
     }

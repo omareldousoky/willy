@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactPDF, { PDFDownloadLink } from '@react-pdf/renderer'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 import { MyDocument } from './document'
 import { ReviewedApplicationsDocument } from './reviewedExport'
 
@@ -16,9 +16,7 @@ export const DownloadPdf = (props: any) => {
         border: '1px solid #4a4a4a',
       }}
     >
-      {({ blob, url, loading, error }) =>
-        loading ? 'Loading document...' : 'Download Pdf'
-      }
+      {({ loading }) => (loading ? 'Loading document...' : 'Download Pdf')}
     </PDFDownloadLink>
   )
 }
@@ -35,7 +33,7 @@ export const DownloadReviewedPdf = (props: any) => {
         border: '1px solid #4a4a4a',
       }}
     >
-      {({ blob, url, loading, error }) =>
+      {({ loading }) =>
         loading ? 'Loading document...' : 'Download Reviewed Applications Pdf'
       }
     </PDFDownloadLink>

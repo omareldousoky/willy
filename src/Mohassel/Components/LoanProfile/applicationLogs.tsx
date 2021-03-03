@@ -9,7 +9,6 @@ interface Props {
   id: string
 }
 interface State {
-  id: string
   activeTab: string
   tabsArray: Array<Tab>
 }
@@ -17,7 +16,6 @@ class Logs extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      id: '',
       activeTab: 'actionLogs',
       tabsArray: [
         {

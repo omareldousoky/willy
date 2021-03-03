@@ -3,10 +3,8 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux'
 import AsyncSelect from 'react-select/async'
-import { Formik, FormikProps } from 'formik'
 import Swal from 'sweetalert2'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
 import {
@@ -15,7 +13,6 @@ import {
 } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { Employee } from './payment'
-import { manualPaymentValidation } from './paymentValidation'
 import * as local from '../../../Shared/Assets/ar.json'
 import './styles.scss'
 import { PendingActions } from '../../../Shared/Services/interfaces'
@@ -28,15 +25,6 @@ interface SelectObject {
   value: string
 }
 interface State {
-  payAmount: number
-  truthDate: string
-  randomPaymentType: string
-  dueDate: string
-  receiptNumber: string
-  payerType: string
-  payerNationalId: string
-  payerName: string
-  payerId: string
   employees: Array<Employee>
   randomPaymentTypes: Array<SelectObject>
 }
@@ -92,15 +80,6 @@ class ManualPayment extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      payAmount: this.props.payAmount,
-      truthDate: this.props.truthDate,
-      randomPaymentType: '',
-      dueDate: timeToDateyyymmdd(-1),
-      receiptNumber: this.props.receiptNumber,
-      payerType: '',
-      payerNationalId: '',
-      payerName: '',
-      payerId: '',
       employees: [],
       randomPaymentTypes: [
         { label: local.reissuingFees, value: 'reissuingFees' },
@@ -122,7 +101,7 @@ class ManualPayment extends Component<Props, State> {
     }
     const res = await searchUserByAction(obj)
     if (res.status === 'success') {
-      this.setState({ employees: res.body.data, payerType: 'employee' }, () =>
+      this.setState({ employees: res.body.data }, () =>
         this.props.retainState(values)
       )
       this.props.setPayerType('employee')
@@ -275,8 +254,7 @@ class ManualPayment extends Component<Props, State> {
                 value={this.props.formikProps.values.installmentNumber}
                 onChange={(event) => {
                   const installment = this.props.application.installmentsObject.installments.find(
-                    (installment) =>
-                      installment.id === Number(event.currentTarget.value)
+                    (inst) => inst.id === Number(event.currentTarget.value)
                   )
                   this.props.formikProps.setFieldValue(
                     'installmentNumber',

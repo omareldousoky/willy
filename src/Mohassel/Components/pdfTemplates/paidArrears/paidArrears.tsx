@@ -14,7 +14,7 @@ interface PaidArrearsProps {
   data: PaidArrearsResponse
 }
 
-export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
+const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
   return (
     <div className="paid-arrears" lang="ar">
       <div className="header-wrapper">
@@ -105,3 +105,5 @@ export const PaidArrears = ({ toDate, fromDate, data }: PaidArrearsProps) => {
     </div>
   )
 }
+
+export default PaidArrears

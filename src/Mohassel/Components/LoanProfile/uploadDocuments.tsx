@@ -29,7 +29,6 @@ interface Props {
 }
 interface State {
   loading: boolean
-  docsOfImagesFiles: any[]
   documentTypes: any[]
   selectAll: boolean
 }
@@ -40,22 +39,10 @@ class UploadDocuments extends Component<Props, State> {
       loading: false,
       documentTypes: [],
       selectAll: false,
-      docsOfImagesFiles: [
-        [
-          {
-            key: '',
-            url: '',
-          },
-        ],
-      ],
     }
   }
 
   async getDocumentTypes() {
-    const query =
-      this.props.application.status === 'issued'
-        ? 'loanApplication,issuedLoan'
-        : 'loanApplication'
     const response = await getDocumentsTypes('loanApplication,issuedLoan')
     if (response.status === 'success') {
       this.setState({
@@ -89,13 +76,7 @@ class UploadDocuments extends Component<Props, State> {
     const res = await getApplicationDocuments(
       this.props.application._id as string
     )
-    if (res.status === 'success') {
-      if (res.body.docs) {
-        this.setState({
-          docsOfImagesFiles: res.body.docs,
-        })
-      }
-    } else {
+    if (res.status !== 'success') {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
@@ -153,7 +134,7 @@ class UploadDocuments extends Component<Props, State> {
               disabled={this.props.selectionArray.length <= 0}
               onClick={async () => {
                 this.setState({ loading: true })
-                const res = await downloadAsZip(
+                await downloadAsZip(
                   this.props.selectionArray,
                   `loan-${this.props.application._id}-${new Date().valueOf()}`
                 )

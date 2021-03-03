@@ -65,7 +65,6 @@ import {
   getLoanApplicationFeesExcel,
 } from '../../Services/APIs/Reports/loanApplicationFees'
 import LoanApplicationFees from '../pdfTemplates/loanApplicationFees/loanApplicationFees'
-import ability from '../../config/ability'
 import Can from '../../config/Can'
 import {
   doubtfulLoans,
@@ -73,14 +72,12 @@ import {
   getDoubtfulLoansExcel,
 } from '../../Services/APIs/Reports/doubtfulLoans'
 import { cibPaymentReport } from '../../Services/APIs/Reports/cibPaymentReport'
-import { downloadTxtFile } from '../CIB/textFiles'
 import ManualPayments from '../pdfTemplates/manualPayments/manualPayments'
 import {
   getManualPayments,
   postManualPaymentsExcel,
   getManualPaymentsExcel,
 } from '../../Services/APIs/Reports/manualPayments'
-import { cibTPAYReport } from '../../Services/APIs/Reports/cibTPAYReport'
 import { downloadFile } from '../../../Shared/Services/utils'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import CustomerTransactionReport from '../pdfTemplates/customerTransactionReport/customerTransactionReport'

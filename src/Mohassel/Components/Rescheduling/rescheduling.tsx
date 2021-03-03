@@ -13,7 +13,6 @@ interface Props {
   application: any
 }
 interface State {
-  id: string
   activeTab: string
   tabsArray: Array<Tab>
 }
@@ -23,7 +22,6 @@ class Rescheduling extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      id: '',
       activeTab: '',
       tabsArray: [
         {

@@ -7,18 +7,13 @@ import Form from 'react-bootstrap/Form'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import Can from '../../config/Can'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct'
 import {
   getMaxPrinciples,
   setMaxPrinciples,
 } from '../../Services/APIs/configApis/config'
-import BackButton from '../BackButton/back-button'
 import { manageToolsArray } from '../Tools/manageToolsInitials'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 

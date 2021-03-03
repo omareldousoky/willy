@@ -1,6 +1,5 @@
 import * as Yup from 'yup'
 import * as local from '../../../Shared/Assets/ar.json'
-import { getBirthdateFromNationalId } from '../../Services/nationalIdValidation'
 
 const endOfDay: Date = new Date()
 endOfDay.setHours(23, 59, 59, 59)

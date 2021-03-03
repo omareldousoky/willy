@@ -151,9 +151,8 @@ class UserManagerForm extends Component<Props, State> {
                 hasBranch: event.hasBranch,
                 hasManager: !!event.managerRole,
               })
-              if (!event.hasBranch) {
-                ;(this.props.values.mainBranchId = ''),
-                  this.setState({ mainBranchId: '' })
+              if (!event.hasBranch && this.props.values.mainBranchId !== '') {
+                this.setState({ mainBranchId: '' })
               }
             }}
             value={this.props.roles.find(

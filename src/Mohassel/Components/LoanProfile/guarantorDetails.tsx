@@ -134,7 +134,7 @@ export const GuarantorTableView = (props: Props) => {
       changeLoading(false)
       const merged: Array<any> = []
       const validationObject: any = {}
-      for (let i = 0; i < customers.length; i++) {
+      for (let i = 0; i < customers.length; i += 1) {
         const obj = {
           ...customers[i],
           ...(res.body.data
@@ -245,19 +245,15 @@ export const GuarantorTableView = (props: Props) => {
     const guarIds = props.guarantors.map((guar) => guar._id)
     guarIds.push(selectedGuarantorId)
     changeLoading(true)
-    const selectedGuarantor = await editGuarantors(props.application._id, {
+    const guarantorToAdd = await editGuarantors(props.application._id, {
       guarantorIds: guarIds,
     })
-    if (selectedGuarantor.status === 'success') {
+    if (guarantorToAdd.status === 'success') {
       Swal.fire(local.guarantorAddedSuccessfully, '', 'success').then(() => {
         window.location.reload()
       })
     } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(selectedGuarantor.error.error),
-        'error'
-      )
+      Swal.fire('Error !', getErrorMessage(guarantorToAdd.error.error), 'error')
     }
     changeLoading(false)
   }
@@ -278,10 +274,10 @@ export const GuarantorTableView = (props: Props) => {
         )
         const ids = guarIds.map((guar) => guar._id)
         changeLoading(true)
-        const selectedGuarantor = await editGuarantors(props.application._id, {
+        const guarantorToRemove = await editGuarantors(props.application._id, {
           guarantorIds: ids,
         })
-        if (selectedGuarantor.status === 'success') {
+        if (guarantorToRemove.status === 'success') {
           Swal.fire(local.guarantorRemovedSuccessfully, '', 'success').then(
             () => {
               window.location.reload()
@@ -290,7 +286,7 @@ export const GuarantorTableView = (props: Props) => {
         } else {
           Swal.fire(
             'Error !',
-            getErrorMessage(selectedGuarantor.error.error),
+            getErrorMessage(guarantorToRemove.error.error),
             'error'
           )
         }
@@ -314,7 +310,7 @@ export const GuarantorTableView = (props: Props) => {
       <div className="d-flex flex-column align-items-start justify-content-center ">
         {((pass && ability.can('editApplicationGuarantors', 'application')) ||
           (props.status &&
-            props.status == 'issued' &&
+            props.status === 'issued' &&
             ability.can('editIssuedLoanGuarantors', 'application'))) && (
           <Button
             variant="primary"
@@ -343,7 +339,7 @@ export const GuarantorTableView = (props: Props) => {
                 {((pass &&
                   ability.can('editApplicationGuarantors', 'application')) ||
                   (props.status &&
-                    props.status == 'issued' &&
+                    props.status === 'issued' &&
                     ability.can(
                       'editIssuedLoanGuarantors',
                       'application'
@@ -456,7 +452,7 @@ export const GuarantorTableView = (props: Props) => {
                             'application'
                           )) ||
                           (props.status &&
-                            props.status == 'issued' &&
+                            props.status === 'issued' &&
                             ability.can(
                               'editIssuedLoanGuarantors',
                               'application'
@@ -464,6 +460,7 @@ export const GuarantorTableView = (props: Props) => {
                           <td style={{ cursor: 'pointer', padding: 10 }}>
                             <img
                               src={require('../../../Shared/Assets/deleteIcon.svg')}
+                              alt="delete"
                               onClick={() => removeGuarantor(guar)}
                             />
                           </td>

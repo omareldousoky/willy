@@ -144,7 +144,7 @@ class BranchesList extends Component<Props, State> {
 
   async getBranchByID() {
     const res = await getBranch(this.state.branchId)
-    if (res.status == 'success') {
+    if (res.status === 'success') {
       if (res.body?.data) this.setState({ branch: res.body.data })
     }
   }

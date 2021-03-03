@@ -164,7 +164,7 @@ class BusinessActivities extends Component<{}, State> {
           <CRUDList
             source="businessActivities"
             options={this.state.businessActivities}
-            newOption={(name, active) => {
+            newOption={(name) => {
               this.newBusinessActivity(name)
             }}
             updateOption={(id, name, active) => {

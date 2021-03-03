@@ -48,12 +48,6 @@ export const LoanDetailsTableView = ({
     }
   }
   useEffect(() => {
-    const id =
-      application.product.beneficiaryType === 'group'
-        ? application.group.individualsInGroup.find(
-            (member) => member.type === 'leader'
-          ).customer.representative
-        : application.customer.representative
     getLoanUsages()
   }, [])
   return (
@@ -256,12 +250,6 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
     }
   }
   useEffect(() => {
-    const id =
-      application.product.beneficiaryType === 'group'
-        ? application.group.individualsInGroup.find(
-            (member) => member.type === 'leader'
-          ).customer.representative
-        : application.customer.representative
     getLoanUsages()
   }, [])
   return (

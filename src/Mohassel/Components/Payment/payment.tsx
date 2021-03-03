@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Swal from 'sweetalert2'
-import { Formik, FormikProps } from 'formik'
+import { Formik } from 'formik'
 import { connect } from 'react-redux'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -192,7 +192,7 @@ class Payment extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (
       prevProps.paymentType !== this.props.paymentType &&
       this.props.paymentType === 'penalties' &&

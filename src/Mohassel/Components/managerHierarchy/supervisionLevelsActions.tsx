@@ -26,7 +26,6 @@ interface State {
   }
   loading: boolean
   selectedGroups: OfficersGroup[]
-  checkAll: boolean
   chosenStatus: string
 }
 class SupervisionLevelsActions extends Component<Props, State> {
@@ -48,7 +47,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
         ],
       },
       selectedGroups: [],
-      checkAll: false,
       chosenStatus: '',
     }
   }
@@ -73,7 +71,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
         groups: [],
       },
       selectedGroups: [],
-      checkAll: false,
       chosenStatus: this.props.mode === 'unapprove' ? 'approved' : 'pending',
     })
     await this.getGroups()
@@ -166,12 +163,11 @@ class SupervisionLevelsActions extends Component<Props, State> {
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
       this.setState({
-        checkAll: true,
         selectedGroups: this.state.data.groups.filter(
           (group) => group.status === this.state.chosenStatus
         ),
       })
-    } else this.setState({ checkAll: false, selectedGroups: [] })
+    } else this.setState({ selectedGroups: [] })
   }
 
   getStatus(status: string) {

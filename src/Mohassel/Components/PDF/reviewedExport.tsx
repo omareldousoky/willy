@@ -28,7 +28,9 @@ const styles = StyleSheet.create({
 export const ReviewedApplicationsDocument = (props: any) => {
   const result = props.pass ? props.pass : 'no result'
   let total = 0
-  result.forEach((application) => (total += application.application.principal))
+  result.forEach((application) => {
+    total += application.application.principal
+  })
   return (
     <Document>
       {result && (

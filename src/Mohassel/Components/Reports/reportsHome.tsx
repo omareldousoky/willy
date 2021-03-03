@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import CIBReports from './cibReports'
 import MonthlyQuarterlyReports from './monthlyQuarterlyReports'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -11,7 +10,6 @@ import OracleIntegration from './oracleIntegration'
 import OperationsReports from './operationsReports'
 
 interface State {
-  id: string
   activeTab: string
   tabsArray: Array<Tab>
 }
@@ -19,7 +17,6 @@ class ReportsHome extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
-      id: '',
       activeTab: 'financialReports',
       tabsArray: [
         {

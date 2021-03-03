@@ -1,9 +1,7 @@
 import React from 'react'
 import { Branch } from '../../../Shared/Services/interfaces'
 import local from '../../../Shared/Assets/ar.json'
-import { getRenderDate } from '../../Services/getRenderDate'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import { getStatus } from './customerCard'
 import {
   roundTo2,
   shareInGroup,

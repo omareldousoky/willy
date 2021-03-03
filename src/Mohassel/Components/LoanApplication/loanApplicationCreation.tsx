@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Formik } from 'formik'
 import Container from 'react-bootstrap/Container'
 import { withRouter } from 'react-router-dom'
-import { RouteProps } from 'react-router'
 import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -37,7 +36,6 @@ import {
 } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import {
   parseJwt,
-  beneficiaryType,
   getAge,
   getFullCustomerKey,
   getErrorMessage,

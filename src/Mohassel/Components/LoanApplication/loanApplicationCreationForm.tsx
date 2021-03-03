@@ -24,7 +24,6 @@ export const LoanApplicationCreationForm = (props: any) => {
     errors,
     touched,
     setFieldValue,
-    setValues,
   } = props
   const [options, setOptions] = useState<Array<any>>([])
   const [employees, setEmployees] = useState<Array<any>>([])
@@ -408,11 +407,12 @@ export const LoanApplicationCreationForm = (props: any) => {
                               )
                               let sum = 0
                               values.individualDetails.forEach(
-                                (member, index) =>
-                                  (sum +=
+                                (member, index) => {
+                                  sum +=
                                     index === i
                                       ? Number(e.currentTarget.value)
-                                      : Number(member.amount))
+                                      : Number(member.amount)
+                                }
                               )
                               setFieldValue(`principal`, sum)
                             }}

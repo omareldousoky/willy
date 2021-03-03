@@ -187,12 +187,12 @@ class LoanProfile extends Component<Props, State> {
       application.body.status === 'issued' ||
       application.body.status === 'created'
     ) {
-      const id =
+      const customerId =
         application.body.product.beneficiaryType === 'group'
           ? application.body?.group?.individualsInGroup[0]?.customer?._id
           : application.body.customer._id
       const totalRemain = await this.getRemainingLoan(
-        id,
+        customerId,
         application.body.status
       )
       if (totalRemain) {
@@ -213,6 +213,7 @@ class LoanProfile extends Component<Props, State> {
       }
       return 0
     }
+    return 0
   }
 
   async getCachediScores(application) {
