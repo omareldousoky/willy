@@ -46,7 +46,7 @@ import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
 import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
-import OfficersProductivity from "../pdfTemplates/officersPercentPayment/officersProductivity";
+import OfficersProductivity from "../pdfTemplates/officersPercentPayment/officersProductivity/officersProductivity";
 
 export interface PDF {
   key?: string;

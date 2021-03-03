@@ -336,16 +336,16 @@ export interface MonthComparisonReportResponse
   response?: MonthComparisonReportSingleResponse[];
 }
 
-interface CommonOfficersProductivity {
-	totalBranches?: number;
-	totalIssuedCount?: number;
-	totalIssuedAmount?: number;
-	expectedPaymentsThisDuration?: number;
-	paidByEndOfDuration?: number;
-	paymentPercentage?: number;
-	currentWalletAmount?: number;
-	reciepts?: number;
-	totalCount?: number;
+export interface CommonOfficersProductivity {
+  totalBranches?: number;
+  totalIssuedCount?: number;
+  totalIssuedAmount?: number;
+  expectedPaymentsThisDuration?: number;
+  paidByEndOfDuration?: number;
+  paymentPercentage?: number;
+  currentWalletAmount?: number;
+  reciepts?: number;
+  totalCount?: number;
 }
 
 interface OfficersProductivityCenterManagers
@@ -373,7 +373,7 @@ interface OfficersProductivityOperationManager
 
 export interface OfficersProductivityResponse
 	extends CommonOfficersProductivity {
-	response: OfficersProductivityOperationManager[]
+	response: OfficersProductivityOperationManager[];
 }
 
 export interface CurrentHierarchiesSingleResponse {
@@ -382,7 +382,7 @@ export interface CurrentHierarchiesSingleResponse {
 }
 
 export interface CurrentHierarchiesResponse {
-	response: CurrentHierarchiesSingleResponse[]
+	response: CurrentHierarchiesSingleResponse[];
 }
 
 interface UserBranchesSingleResponse {
@@ -391,5 +391,5 @@ interface UserBranchesSingleResponse {
 }
 
 export interface UserBranchesResponse {
-	data: UserBranchesSingleResponse[]
+	data: UserBranchesSingleResponse[];
 }

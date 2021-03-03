@@ -5,7 +5,6 @@ print {
 		text-align: center;
 		padding: 10px 5px;
 		page-break-after: always;
-		direction: rtl;
 		-webkit-print-color-adjust: exact;
 		background-color: #fff;
 		font-size: 11px;
@@ -82,11 +81,36 @@ print {
 	}
 
 	.officers-productivity {
+		font-family: Arial, Helvetica, sans-serif;
+
+		table.body>tbody tr {
+			p {
+				font-size: 11px;
+			}
+			&.total {
+				border-top: 1px solid black;
+			}
+		}
+
+		.manager {
+			border: 1px solid #ccc;
+			min-width: 3cm;
+		}
+
+		.operations {
+			@extend .manager;
+			background-color: #e4e464;
+		}
+
+		.area-manager {
+			@extend .manager;
+			background-color: #b5cbe9;
+		}
 	}
 }
 
 @media screen {
 	.officers-payment {
-		// display: none;
+		display: none;
 	}
 }

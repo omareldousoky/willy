@@ -27,7 +27,7 @@ const OfficersPercentPaymentHeader = ({
                     : &nbsp;
                     {timeToArabicDate(new Date(toDate).valueOf(), false)}
                 </p>
-								<p className="mr-3">{store.getState().auth.name}</p>
+								<p className="mr-3"><small>{store.getState().auth.name}</small></p>
             </div>
         </>
     );
