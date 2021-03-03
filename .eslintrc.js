@@ -32,8 +32,9 @@ module.exports = {
       },
     ],
 		'consistent-return': 'warn',
-		'array-callback-return': 'warn',
+		'array-callback-return': 'off',
 		'no-bitwise': 'off',
+		'import/no-cycle': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
@@ -64,6 +65,7 @@ module.exports = {
     'jsx-a11y/control-has-associated-label': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
+		'jsx-a11y/no-noninteractive-element-interactions': 'warn',
     'prettier/prettier': [
       'error',
       {
