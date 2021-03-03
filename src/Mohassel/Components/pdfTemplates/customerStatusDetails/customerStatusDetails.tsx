@@ -1,5 +1,6 @@
 import React from "react";
 import "./customerStatusDetails.scss";
+
 import {
   timeToArabicDate,
   currency,
@@ -12,7 +13,7 @@ import {
   timeToArabicDateNow,
   guarantorOrderLocal,
 } from "../../../../Shared/Services/utils";
-import { CustomerIsBlocked } from "./types";
+import { CustomerIsBlocked, CustomerStatusLocal } from "./types";
 
 const CustomerStatusDetails = (props) => {
   const {
@@ -34,18 +35,6 @@ const CustomerStatusDetails = (props) => {
     officerName,
   } = props.data;
 
-  function getCustomerStatus(status: string) {
-    switch (status) {
-      case "no commitment":
-        return "ليس عليه إلتزامات";
-      case "open loan":
-        return "قرض مفتوح";
-      case "open application":
-        return "طلب مفتوح";
-      default:
-        return "";
-    }
-  }
   const checkLoanLegalStatus = () =>
     isWrittenOff ? "معدوم" : isDoubtful ? "مشكوك فيه" : " ";
 
@@ -102,7 +91,7 @@ const CustomerStatusDetails = (props) => {
             <th className="gray frame">الكود</th>
             <td className="frame">{numbersToArabic(props.customerKey)}</td>
             <th className="gray frame">الحاله</th>
-            <td className="frame">{getCustomerStatus(customerStatus)}</td>
+            <td className="frame">{CustomerStatusLocal[customerStatus || "default"]}</td>
             <td className="frame">{checkLoanLegalStatus()}</td>
             <th className="gray frame">حالة التعامل مع العميل</th>
             <td className="frame">
