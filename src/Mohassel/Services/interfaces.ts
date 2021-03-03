@@ -348,15 +348,8 @@ interface CommonOfficersProductivity {
 	totalCount?: number;
 }
 
-interface OfficersProductivityBranches
-	extends CommonOfficersProductivity {
-	branchManager?: string;
-	branch?: string
-}
-
 interface OfficersProductivityCenterManagers
 	extends CommonOfficersProductivity {
-	branches?: OfficersProductivityBranches[];
 	centerManager?: string;
 }
 

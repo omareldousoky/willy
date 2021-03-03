@@ -1,4 +1,5 @@
 import React from "react";
+import store from "../../../../Shared/redux/store";
 import { timeToArabicDate } from "../../../../Shared/Services/utils";
 import "./officersPercentPayment.scss";
 
@@ -12,26 +13,21 @@ const OfficersPercentPaymentHeader = ({
 }: OfficersPercentPaymentHeaderProps) => {
     return (
         <>
-            <div className="wrapper">
+            <div className="officers-payment-wrapper">
                 <span className="logo-print" role="img" />
-                <p className="m-0 ml-3 text-left text-sm">
+                <p className="m-0 ml-3 text-sm">
                     ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
                 </p>
             </div>
-            <p className="mr-3 text-right">شركة تساهيل للتمويل متناهي الصغر</p>
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "95%",
-                }}
-            >
-                <p style={{ margin: "auto 0 15px", fontSize: "16px" }}>
+            <p className="ml-3 pt-1 text-left">شركة تساهيل للتمويل متناهي الصغر</p>
+            <div className="d-flex mb-3">
+                <p className="m-auto" style={{ fontSize: "16px" }}>
                     تقرير نسب السداد و الانتاجيه للمندوبين : من &nbsp;
                     {timeToArabicDate(new Date(fromDate).valueOf(), false)} إلى
                     : &nbsp;
                     {timeToArabicDate(new Date(toDate).valueOf(), false)}
                 </p>
+								<p className="mr-3">{store.getState().auth.name}</p>
             </div>
         </>
     );

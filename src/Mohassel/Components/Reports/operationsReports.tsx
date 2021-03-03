@@ -46,6 +46,7 @@ import MonthComparison from "../pdfTemplates/monthComparison/monthComparison";
 import ActiveWalletIndividual from "../pdfTemplates/activeWalletIndividual/activeWalletIndividual";
 import { ActiveWalletRequest, fetchActiveWalletGroupReport, fetchActiveWalletIndividualReport } from "../../Services/APIs/Reports/activeWallet";
 import ActiveWalletGroup from "../pdfTemplates/activeWalletGroup/activeWalletGroup";
+import OfficersProductivity from "../pdfTemplates/officersPercentPayment/officersProductivity";
 
 export interface PDF {
   key?: string;
@@ -594,6 +595,14 @@ class OperationsReports extends Component<{}, OperationsReportsState> {
             />
           )
         }
+				{this.state.print === Reports.OfficersProductivity &&
+          this.state.data && (
+            <OfficersProductivity
+              data={this.state.data}
+              fromDate={this.state.fromDate}
+              toDate={this.state.toDate}
+            />
+          )}
       </>
     );
   }

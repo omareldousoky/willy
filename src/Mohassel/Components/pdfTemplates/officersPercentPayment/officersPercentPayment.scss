@@ -42,7 +42,7 @@ print {
 			background-color: #e3e3e3;
 		}
 
-		&.wrapper {
+		.officers-payment-wrapper {
 			margin: 10px 0;
 			display: flex;
 			justify-content: space-between;
@@ -80,10 +80,13 @@ print {
 			border-top: 1px solid black;
 		}
 	}
+
+	.officers-productivity {
+	}
 }
 
 @media screen {
 	.officers-payment {
-		display: none;
+		// display: none;
 	}
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useStore } from "react-redux";
 import Select, { ValueType, Props } from "react-select";
@@ -325,41 +325,42 @@ export const AsyncManagersDropDown = ({
   const [options, setOptions] = useState(initialState);
   const [value, setValue] = useState<ValueType<CurrentHierarchiesSingleResponse> | null>();
 
-	// to avoid memory leak for in progress api call
-	let stillMounted = true
-	useEffect(() => {
-		maybeLoadOptions()
-		return () => {
-			stillMounted = false;
-		}
-	},[])
+	const mounted = useRef(false);
 
-  const handleLoadOptions = async () => {
-	if (!stillMounted) return
+	const handleLoadOptions = async () => {
+		if (!mounted.current) return
     const res = await fetchCurrentHierarchies();
     const newOptions: CurrentHierarchiesSingleResponse[] = [];
-    if (res.status === "success" && stillMounted) {
+    if (res.status === "success" && mounted.current) {
       const data = res.body?.response;
-      Array.isArray(data) && data.length
-        ? res.body?.response.map(({id, name}) => {
-            newOptions.push({ id, name });
-          })
-        : [];
-      setOptions({
-        options: newOptions,
-        isLoading: false,
-        optionsLoaded: true,
-      });
-    } else {
+      if (Array.isArray(data) && data.length)
+        res.body?.response.map(({id, name}) => 
+            newOptions.push({ id, name })
+          )
+			setOptions({
+				options: newOptions,
+				isLoading: false,
+				optionsLoaded: true,
+			});
+    } else if (mounted.current) {
       setOptions({ options: [], isLoading: false, optionsLoaded: true });
     }
   };
-  const maybeLoadOptions = () => {
-    if (!options.optionsLoaded) {
+
+  const maybeLoadOptions = useCallback(() => {
+    if (!options.optionsLoaded && mounted.current) {
       setOptions({ ...options, isLoading: true });
       handleLoadOptions();
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+	// to avoid memory leak for in progress api call
+	useEffect(() => {
+		maybeLoadOptions()
+		mounted.current = true;
+		return () => { mounted.current = false; }
+	},[maybeLoadOptions])
 
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>
