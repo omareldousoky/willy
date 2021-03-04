@@ -14,7 +14,7 @@ const {
 const TerserPlugin = require("terser-webpack-plugin");
 
 const LOGIN_APP_DIR = resolve(__dirname, '../src/Login/')
-const SHARED_DIR = resolve(__dirname, '../Shared/Login/')
+const SHARED_DIR = resolve(__dirname, '../src/Shared/')
 
 module.exports = (env) => {
 
