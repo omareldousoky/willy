@@ -147,25 +147,25 @@ class MoveCustomers extends Component<{}, State> {
         (selectedCustomer) => selectedCustomer._id === customer._id
       ) > -1
     ) {
-      this.setState({
-        selectedCustomers: this.state.selectedCustomers.filter(
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.selectedCustomers.filter(
           (el) => el._id !== customer._id
         ),
-      })
+      }))
     } else {
-      this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, customer],
-      })
+      this.setState((prevState) => ({
+        selectedCustomers: [prevState.selectedCustomers, customer],
+      }))
     }
   }
 
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState({
-        selectedCustomers: this.state.customers.filter(
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.customers.filter(
           (customer) => customer.blocked?.isBlocked !== true
         ),
-      })
+      }))
     } else this.setState({ selectedCustomers: [] })
   }
 

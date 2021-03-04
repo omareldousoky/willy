@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import Swal from 'sweetalert2'
 import { Loader } from '../../../Shared/Components/Loader'
-import DropDownList from '../DropDownList/dropDownList'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getRoles } from '../../Services/APIs/Roles/roles'
 import Can from '../../config/Can'
@@ -18,7 +17,6 @@ interface Props {
 }
 interface State {
   data: any
-  activeRole: number
   totalCount: number
   filterRoles: string
   loading: boolean
@@ -33,21 +31,15 @@ class RolesList extends Component<Props, State> {
       totalCount: 0,
       loading: false,
       filterRoles: '',
-      activeRole: -1,
       manageAccountTabs: [],
     }
   }
 
   componentDidMount() {
-    // document.body.addEventListener('click', () => this.resetActiveRole());
     this.getRoles()
     this.setState({
       manageAccountTabs: manageAccountsArray(),
     })
-  }
-
-  resetActiveRole() {
-    this.setState({ activeRole: -1 })
   }
 
   async getRoles() {
@@ -165,14 +157,6 @@ class RolesList extends Component<Props, State> {
                             </h6>
                           </div>
                         </div>
-                        {/* <div style={{ position: 'relative' }}>
-                        <span style={{ cursor: 'pointer' }} className="fa fa-ellipsis-h" onClick={() => this.setState({ activeRole: index })}></span>
-                        {this.state.activeRole === index ? <DropDownList array={[
-                          { icon: 'fa fa-eye', name: local.view },
-                          { icon: 'fa fa-pencil-alt', name: local.edit },
-                          { icon: 'fa fa-ban', name: local.disable },
-                        ]} /> : null}
-                      </div> */}
                       </div>
                     </Card.Body>
                   </Card>
