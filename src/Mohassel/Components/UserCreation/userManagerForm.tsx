@@ -135,10 +135,14 @@ class UserManagerForm extends Component<Props, State> {
             name="mainRole"
             data-qc="mainRole"
             onBlur={() => {
-              this.setState({ showMainRoleError: !this.state.mainRoleId })
+              this.setState((prevState) => ({
+                showMainRoleError: !prevState.mainRoleId,
+              }))
             }}
             onFocus={() => {
-              this.setState({ showMainRoleError: !this.state.mainRoleId })
+              this.setState((prevState) => ({
+                showMainRoleError: !prevState.mainRoleId,
+              }))
             }}
             onChange={async (event: any) => {
               this.props.values.mainRoleId = event.value
@@ -197,16 +201,16 @@ class UserManagerForm extends Component<Props, State> {
                 })
               }}
               onBlur={() => {
-                this.setState({
+                this.setState((prevState) => ({
                   showMainBranchError:
-                    !this.state.mainBranchId && this.props.branches?.length > 0,
-                })
+                    !prevState.mainBranchId && this.props.branches?.length > 0,
+                }))
               }}
               onFocus={() => {
-                this.setState({
+                this.setState((prevState) => ({
                   showMainBranchError:
-                    !this.state.mainBranchId && this.props.branches?.length > 0,
-                })
+                    !prevState.mainBranchId && this.props.branches?.length > 0,
+                }))
               }}
               value={this.props.branches?.find(
                 (item) => item.value === this.state.mainBranchId

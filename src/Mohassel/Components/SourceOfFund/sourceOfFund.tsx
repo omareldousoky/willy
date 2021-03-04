@@ -190,21 +190,17 @@ class SourceOfFund extends Component<Props, State> {
     }
   }
 
-  addRemoveItemFromChecked(customerId: string) {
-    if (
-      this.state.selectedCustomers.findIndex(
-        (selectedCustomerId) => selectedCustomerId === customerId
-      ) > -1
-    ) {
-      this.setState({
-        selectedCustomers: this.state.selectedCustomers.filter(
-          (el) => el !== customerId
-        ),
-      })
+  async getOldFiles() {
+    this.setState({ openModal: '', oldFilesDate: '' })
+    this.props.setLoading(true)
+    const date = new Date(this.state.oldFilesDate).valueOf()
+    const res = await cibExtractions(date)
+    if (res.status === 'success') {
+      this.props.setLoading(false)
+      downloadTxtFile(res.body.loans, false, date)
     } else {
-      this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, customerId],
-      })
+      this.props.setLoading(false)
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
 
@@ -235,6 +231,24 @@ class SourceOfFund extends Component<Props, State> {
     this.props.search(query)
   }
 
+  addRemoveItemFromChecked(customerId: string) {
+    if (
+      this.state.selectedCustomers.findIndex(
+        (selectedCustomerId) => selectedCustomerId === customerId
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.selectedCustomers.filter(
+          (el) => el !== customerId
+        ),
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedCustomers: [...prevState.selectedCustomers, customerId],
+      }))
+    }
+  }
+
   async submit() {
     this.setState({ openModal: '', selectedFund: '', selectedCustomers: [] })
     this.props.setLoading(true)
@@ -250,20 +264,6 @@ class SourceOfFund extends Component<Props, State> {
       Swal.fire('', local.changeSourceFundSuccess, 'success').then(() =>
         this.getLoans()
       )
-    } else {
-      this.props.setLoading(false)
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-
-  async getOldFiles() {
-    this.setState({ openModal: '', oldFilesDate: '' })
-    this.props.setLoading(true)
-    const date = new Date(this.state.oldFilesDate).valueOf()
-    const res = await cibExtractions(date)
-    if (res.status === 'success') {
-      this.props.setLoading(false)
-      downloadTxtFile(res.body.loans, false, date)
     } else {
       this.props.setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')

@@ -34,7 +34,6 @@ export const StepOneForm = (props: any) => {
     errors,
     touched,
     setFieldValue,
-    setFieldError,
   } = props
   const [mapState, openCloseMap] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -103,7 +102,7 @@ export const StepOneForm = (props: any) => {
                     event: React.ChangeEvent<HTMLInputElement>
                   ) => {
                     const re = /^\d*$/
-                    const { name, value } = event.currentTarget
+                    const { value } = event.currentTarget
                     if (
                       event.currentTarget.value === '' ||
                       re.test(event.currentTarget.value)

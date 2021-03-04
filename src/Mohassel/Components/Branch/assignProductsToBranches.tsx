@@ -82,12 +82,14 @@ class AssignProductsToBranches extends Component<Props, State> {
     const newSelectedIds = selectedIds.filter(
       (id) => !this.state.branchesHaveProductsIds.includes(id)
     )
-    this.setState({
+    this.setState((prevState) => ({
       selectedBranches: list,
       newSelectedIds,
-      deletedIds,
+      deletedIds: prevState.branchesHaveProductsIds.filter(
+        (id) => !selectedIds.includes(id)
+      ),
       isDisabled: deletedIds.length < 1 && newSelectedIds.length < 1,
-    })
+    }))
   }
 
   async getProducts() {

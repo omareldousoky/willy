@@ -17,7 +17,6 @@ const TextField = (props: TextFieldProps & FieldProps<string>) => {
   const {
     field,
     form,
-    meta,
     key,
     id,
     smSize,
