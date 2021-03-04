@@ -209,141 +209,77 @@ export const LoanDetailsBoxView = ({ application }: Props) => {
     return (
         <Form>
             <Form.Row>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.productName}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.productName}</Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.productName}</Form.Label>
+									<Form.Label>{application.product.productName}</Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.currency}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{currency(application.product.currency)} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.currency}</Form.Label>
+									<Form.Label>{currency(application.product.currency)} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.calculationFormulaId}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.calculationFormula.name} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.calculationFormulaId}</Form.Label>
+									<Form.Label>{application.product.calculationFormula.name} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.interest}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.interest + ' ' + interestPeriod(application.product.interestPeriod)} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.interest}</Form.Label>
+									<Form.Label>{application.product.interest + ' ' + interestPeriod(application.product.interestPeriod)} </Form.Label>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.inAdvanceFees}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.inAdvanceFees} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.inAdvanceFees}</Form.Label>
+									<Form.Label>{application.product.inAdvanceFees} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.periodLengthEvery}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.periodLength + ' ' + periodType(application.product.periodType)} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.periodLengthEvery}</Form.Label>
+									<Form.Label>{application.product.periodLength + ' ' + periodType(application.product.periodType)} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.gracePeriod}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.gracePeriod} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.gracePeriod}</Form.Label>
+									<Form.Label>{application.product.gracePeriod} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.pushPayment}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.pushPayment} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.pushPayment}</Form.Label>
+									<Form.Label>{application.product.pushPayment} </Form.Label>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.noOfInstallments}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.noOfInstallments} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.noOfInstallments}</Form.Label>
+									<Form.Label>{application.product.noOfInstallments} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.principal}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.principal} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.principal}</Form.Label>
+									<Form.Label>{application.principal} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.applicationFee}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.applicationFee} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.applicationFee}</Form.Label>
+									<Form.Label>{application.product.applicationFee} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.adminFees}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.product.adminFees} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.adminFees}</Form.Label>
+									<Form.Label>{application.product.adminFees} </Form.Label>
                 </Form.Group>
             </Form.Row >
             <Form.Row>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.entryDate}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{getRenderDate(application.entryDate)} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.entryDate}</Form.Label>
+									<Form.Label>{getRenderDate(application.entryDate)} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.usage}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{loanUse} </Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.usage}</Form.Label>
+									<Form.Label>{loanUse} </Form.Label>
                 </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.representative}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{(application.product.beneficiaryType === 'group') ?
-                            application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName
-                            : application.customer.representativeName}</Form.Label>
-                    </Row>
+                <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.representative}</Form.Label>
+									<Form.Label>{(application.product.beneficiaryType === 'group') ?
+											application.group.individualsInGroup.find(member => member.type === 'leader').customer.representativeName
+											: application.customer.representativeName}</Form.Label>
                 </Form.Group>
-                 <Form.Group as={Col} md="3">
-                    <Row>
-                        <Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
-                    </Row>
-                    <Row>
-                        <Form.Label>{application.enquirerName} </Form.Label>
-                    </Row>
+                 <Form.Group as={Col} md="3" className="d-flex flex-column">
+									<Form.Label style={{ color: '#6e6e6e' }}>{local.enquiror}</Form.Label>
+									<Form.Label>{application.enquirerName} </Form.Label>
                 </Form.Group> 
             </Form.Row>
         </Form >
@@ -383,64 +319,36 @@ export const CustomerLoanDetailsBoxView = ({ application, getGeoArea }: Props) =
         <div>
             <h6>{local.currentLoanInfo}</h6>
             <Form style={{ margin: '20px 0' }}>
-                <Form.Row>
-                    <Form.Group as={Col} md='3'>
-                        <Row>
-                            <Form.Label >{local.loanCode}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label >{application.applicationKey}</Form.Label>
-                        </Row>
+                <Form.Row className="col">
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.loanCode}</Form.Label>
+											<Form.Label>{application.applicationKey}</Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="3">
-                        <Row>
-                            <Form.Label>{local.loanStartDate}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{getRenderDate(application.issueDate)} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.loanStartDate}</Form.Label>
+											<Form.Label>{getRenderDate(application.issueDate)} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="3">
-                        <Row>
-                            <Form.Label>{local.principal}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{application.principal} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.principal}</Form.Label>
+											<Form.Label>{application.principal} </Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="3">
-                        <Row>
-                            <Form.Label>{local.noOfInstallments}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{application.product.noOfInstallments} </Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.noOfInstallments}</Form.Label>
+											<Form.Label>{application.product.noOfInstallments} </Form.Label>
                     </Form.Group>
                 </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col} md="3">
-                        <Row>
-                            <Form.Label>{local.loanStatus}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{englishToArabic(application.status).text}</Form.Label>
-                        </Row>
+                <Form.Row className="col">
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.loanStatus}</Form.Label>
+											<Form.Label>{englishToArabic(application.status).text}</Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="3">
-                        <Row>
-                            <Form.Label>{local.representative}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{officer}</Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.representative}</Form.Label>
+											<Form.Label>{officer}</Form.Label>
                     </Form.Group>
-                    <Form.Group as={Col} md="3">
-                        <Row>
-                            <Form.Label>{local.customerBalance}</Form.Label>
-                        </Row>
-                        <Row>
-                            <Form.Label>{remainingTotal}</Form.Label>
-                        </Row>
+                    <Form.Group as={Col} md="3" className="d-flex flex-column">
+											<Form.Label style={{ color: '#6e6e6e' }}>{local.customerBalance}</Form.Label>
+											<Form.Label>{remainingTotal}</Form.Label>
                     </Form.Group>
                 </Form.Row>
                 {application.guarantors && application.guarantors.length > 0 && application.product.beneficiaryType === 'individual' && <Form.Row>

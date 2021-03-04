@@ -282,7 +282,7 @@ class CustomersList extends Component<Props, State> {
             })
             .indexOf("customers")}
         />
-        <Card style={{ margin: "20px 50px" }}>
+        <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -302,7 +302,6 @@ class CustomersList extends Component<Props, State> {
                       this.props.history.push("/customers/new-customer");
                     }}
                     className="big-button"
-                    style={{ marginLeft: 20 }}
                   >
                     {local.newCustomer}
                   </Button>

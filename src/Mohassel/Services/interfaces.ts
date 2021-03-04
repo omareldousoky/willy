@@ -5,8 +5,8 @@ export interface ApiResponse<T> {
 }
 
 export interface OperationsReportRequest {
-  startDate: string;
-  endDate: string;
+  startDate: string | number;
+  endDate: string | number;
   branches: string[];
 }
 
@@ -128,11 +128,6 @@ export interface DueInstallmentsResponse {
   totalGheerMosadadValue?: number;
 }
 
-export interface LeakedCustomersReportRequest {
-  startDate: string;
-  endDate: string;
-  branches: string[];
-}
 export interface LeakedCustomersPerBranch {
   branchName: string;
   data: Array<LeakedCustomer>;
@@ -198,6 +193,7 @@ export interface LeakedCustomersReportRequest {
   startDate: string;
   endDate: string;
   branches: string[];
+  loanOfficerIds?: string[];
 }
 export interface LeakedCustomersPerBranch {
   branchName: string;
@@ -262,6 +258,75 @@ export interface InstallmentsDuePerOfficerCustomerCardRequest
 export interface UnpaidInstallmentsByOfficerRequest
   extends OperationsReportRequest {
   representatives?: string[];
+  creationDateFrom?: string;
+  creationDateTo?: string;
+}
+
+export interface OfficersBranchPercentPaymentRequest
+  extends OfficersPercentPaymentRequest {
+  creationDateFrom?: string;
+  creationDateTo?: string;
+}
+
+export interface UnpaidInstallmentsPerAreaRequest
+  extends OperationsReportRequest {
+  geoAreas?: string[];
+}
+
+export interface CustomerApplicationTransactionsRequest {
+  loanApplicationKey: string;
+}
+
+export interface CustomerApplicationTransactionRow {
+  transactionCode: string;
+  installmentSerial: string;
+  date: string;
+  action: string;
+  loanSerial: string;
+  transactionAmount: string;
+  currency: string;
+  branchName: string;
+  status: string;
+  username: string;
+  createdAt: string;
+}
+export interface CustomerApplicationTransactionsResponse {
+  result?: CustomerApplicationTransactionRow[];
+  customer?: {
+    name: string;
+    key: string;
+  };
+  branch?: {
+    name: string;
+    code: string;
+  };
+}
+
+interface MonthComparisonReportCommon {
+  currentDueLoanCount?: number;
+  currentDueLoanAmount?: number;
+  currentPaidLoanCount?: number;
+  currentPaidLoanAmount?: number;
+  currentPaymentPercentage?: number;
+  previousDueLoanCount?: number;
+  previousDueLoanAmount?: number;
+  previousPaidLoanCount?: number;
+  previousPaidLoanAmount?: number;
+  previousPaymentPercentage?: number;
+  diffDueLoanCount?: number;
+  diffDueLoanAmount?: number;
+  diffPaidLoanCount?: number;
+  diffPaidLoanAmount?: number;
+  diffPaymentPercentage?: number;
+}
+
+interface MonthComparisonReportSingleResponse
+  extends MonthComparisonReportCommon {
+  branchName?: string;
+}
+export interface MonthComparisonReportResponse
+  extends MonthComparisonReportCommon {
+  response?: MonthComparisonReportSingleResponse[];
 }
 
 export enum LinkageStatusEnum {

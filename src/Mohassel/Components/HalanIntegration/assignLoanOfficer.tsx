@@ -21,6 +21,7 @@ import { search } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
 import local from '../../../Shared/Assets/ar.json';
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import { theme } from '../../../theme';
 
 interface Props {
   history: Array<any>;
@@ -233,10 +234,12 @@ class AssignLoanOfficer extends Component<Props, State>{
           </Card.Body>
         </Card>
         <Modal size="lg" show={this.state.openModal} onHide={() => this.setState({ openModal: false })}>
-          <Modal.Header closeButton>
-            <Modal.Title style={{ margin: " 0 auto" }}>
+          <Modal.Header>
+            <Modal.Title className="m-auto">
               {local.chooseRepresentative}
             </Modal.Title>
+						<button type="button" className="mr-0 pr-0 close" onClick={() =>
+						this.setState({ openModal: false })}><span aria-hidden="true">×</span><span className="sr-only">Close</span></button>
           </Modal.Header>
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
@@ -245,6 +248,8 @@ class AssignLoanOfficer extends Component<Props, State>{
                 <AsyncSelect
                   name="employees"
                   data-qc="employees"
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   value={this.state.loanOfficers.find(loanOfficer => loanOfficer._id === this.state.selectedLO?._id)}
                   onChange={(loanOfficer) => this.setState({ selectedLO: loanOfficer })}
                   getOptionLabel={(option) => option.name}

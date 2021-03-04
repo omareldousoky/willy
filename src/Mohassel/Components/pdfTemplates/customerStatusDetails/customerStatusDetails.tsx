@@ -37,7 +37,7 @@ const CustomerStatusDetails = (props) => {
                             <th className="gray frame">الأسم</th>
                             <td className="frame">{props.data.customerName}</td>
                             <th className="gray frame">الكود</th>
-                            <td className="frame">{props.customerKey}</td>
+                            <td className="frame">{numbersToArabic(props.customerKey)}</td>
                             <th className="gray frame">الحاله</th>
                             <td className="frame">{getCustomerStatus(props.data.customerStatus)}</td>
                             <th className="gray frame">حالة التعامل مع العميل</th>
@@ -84,11 +84,11 @@ const CustomerStatusDetails = (props) => {
                                                     </tr>
 																										<tr>
 																											<th>الموبيل</th>
-																											<td>{props.data.MobilePhoneNumber || ""}</td>
+																											<td>{numbersToArabic(props.data.MobilePhoneNumber) || ""}</td>
 																											<th>تليفون المنزل</th>
-																											<td>{props.data.HomePhoneNumber || ""}</td>
+																											<td>{numbersToArabic(props.data.HomePhoneNumber) || ""}</td>
 																											<th>تليفون العمل</th>
-																											<td>{props.data.BusinessPhoneNumber || ""}</td>
+																											<td>{numbersToArabic(props.data.BusinessPhoneNumber) || ""}</td>
 																										</tr>
                                                     <tr>
                                                         <th>ملاحظات</th>
@@ -122,7 +122,7 @@ const CustomerStatusDetails = (props) => {
                                                         <th>عدد الأقساط</th>
                                                         <td>{numbersToArabic(loan.numInst)}</td>
                                                         <th>فترة السداد</th>
-                                                        <td>{numbersToArabic(loan.periodLength) + " " +numbersToArabic( periodType(loan.periodType))}</td>
+                                                        <td>{`${numbersToArabic(loan.periodLength, false)}  ${periodType(loan.periodType)}`}</td>
                                                         <th>فترة السماح</th>
                                                         <td>{numbersToArabic(loan.gracePeriod)}</td>
                                                         <th>عمولة المندوب</th>
@@ -132,7 +132,7 @@ const CustomerStatusDetails = (props) => {
                                                         <th>تكلفه التمويل القسط</th>
                                                         <td>{numbersToArabic(loan.feesInstallment)}</td>
                                                         <th>تكلفه التمويل الموزعه</th>
-                                                        <td>{numbersToArabic(loan.interest)} % سنويا</td>
+                                                        <td>{numbersToArabic(loan.interest, false)} % سنويا</td>
                                                         <th>تكلفه التمويل المقدمه</th>
                                                         <td colSpan={5}>0% من القرض - قيمة مستقله لا تستقطع من تكلفه التمويل الموزعه</td>
                                                     </tr>
@@ -272,12 +272,12 @@ const CustomerStatusDetails = (props) => {
                                                         if (installment.instTotal)
                                                         return (
                                                             <tr key={index}>
-                                                                <td>{installment.idx}</td>
+                                                                <td>{numbersToArabic(installment.idx)} </td>
                                                                 <td>{installment.dateOfPayment? timeToArabicDate(new Date(installment.dateOfPayment).valueOf(), false): ''}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.instTotal)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.feesInstallment)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.totalPaid)}</td>
-                                                                <td style={{ direction: 'ltr' }}>{numbersToArabic(installment.feesPaid)}</td>
+                                                                <td>{numbersToArabic(installment.instTotal)}</td>
+                                                                <td>{numbersToArabic(installment.feesInstallment)}</td>
+                                                                <td>{numbersToArabic(installment.totalPaid)}</td>
+                                                                <td>{numbersToArabic(installment.feesPaid)}</td>
                                                                 <td>{getStatus(installment)}</td>
                                                                 <td>{installment.paidAt ? timeToArabicDate(new Date(installment.paidAt).valueOf(), false) : ''}</td>
                                                                 <td>{numbersToArabic(installment.delay)}</td>
@@ -325,17 +325,17 @@ const CustomerStatusDetails = (props) => {
 																						<th>تاريخ الميلاد</th>
 																						<td>{timeToArabicDate(props.data.birthDate, false)}</td>
 																						<th>البطاقه</th>
-																						<td>{props.data.nationalId}</td>
+																						<td>{numbersToArabic(props.data.nationalId)}</td>
 																						<th>صادره من</th>
 																						<td></td>
 																				</tr>
 																				<tr>
 																						<th>الموبيل</th>
-																						<td>{props.data.MobilePhoneNumber || ""}</td>
+																						<td>{numbersToArabic(props.data.MobilePhoneNumber) || ""}</td>
 																						<th>تليفون المنزل</th>
-																						<td>{props.data.HomePhoneNumber || ""}</td>
+																						<td>{numbersToArabic(props.data.HomePhoneNumber) || ""}</td>
 																						<th>تليفون العمل</th>
-																						<td>{props.data.BusinessPhoneNumber || ""}</td>
+																						<td>{numbersToArabic(props.data.BusinessPhoneNumber) || ""}</td>
 																				</tr>
 																				<tr>
 																						<th>ملاحظات</th>

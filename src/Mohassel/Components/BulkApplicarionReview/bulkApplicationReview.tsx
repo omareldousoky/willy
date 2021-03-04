@@ -296,7 +296,7 @@ class BulkApplicationReview extends Component<Props, State>{
           array={this.state.manageApplicationsTabs}
           active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('bulkLoanApplicationsReview')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -308,7 +308,7 @@ class BulkApplicationReview extends Component<Props, State>{
               <Button onClick={() => { this.setState({ showModal: true }) }}
                 disabled={!Boolean(this.state.selectedReviewedLoans.length)}
                 className="big-button"
-                style={{ marginLeft: 20, height: 70 }}
+                style={{ height: 70 }}
               > {local.bulkLoanApplicationReviews}
               </Button>
             </div>
@@ -359,11 +359,11 @@ class BulkApplicationReview extends Component<Props, State>{
             {(formikProps) =>
               <Form onSubmit={formikProps.handleSubmit}>
                 <Modal.Header>
-                  <Modal.Title>{local.bulkLoanApplicationReviews}</Modal.Title>
+                  <Modal.Title className="m-auto">{local.bulkLoanApplicationReviews}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <Form.Group as={Row} controlId="date">
-                    <Form.Label style={{ textAlign: 'right' }} column sm={3}>{`${local.entryDate}*`}</Form.Label>
+                    <Form.Label column sm={3}>{`${local.entryDate}*`}</Form.Label>
                     <Col sm={7}>
                       <Form.Control
                         type="date"

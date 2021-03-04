@@ -197,7 +197,7 @@ class LoanProductCreation extends Component<Props, State>{
                 <BackButton title={this.props.edit? local.editLoanProduct :local.createLoanProduct} />
                 <Container>
                     <Loader open={this.state.loading} type="fullscreen" />
-                    <Card style={{ padding: '20px 10px' }}>
+                    <Card>
                         <Formik
                             enableReinitialize
                             initialValues={this.state.product}

@@ -128,15 +128,17 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getManualOtherPayments(appId) {
-        this.setState({ loading: true })
-        const res = await getManualOtherPayments(appId);
-        if (res.status === "success") {
-            this.setState({
-                randomPendingActions: res.body.pendingActions ? res.body.pendingActions : [],
-                loading: false
-            })
-        } else {
-            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+        if(ability.can("pendingAction", "application")){
+            this.setState({ loading: true })
+            const res = await getManualOtherPayments(appId);
+            if (res.status === "success") {
+                this.setState({
+                    randomPendingActions: res.body.pendingActions ? res.body.pendingActions : [],
+                    loading: false
+                })
+            } else {
+                this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+            }
         }
     }
 
@@ -152,11 +154,11 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
-            if (application.body.product.beneficiaryType === 'group') this.getMembersShare();
+             this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
-        if (application.body.status === 'pending' || application.body.status === 'issued') {
+        if (application.body.status === 'pending' || application.body.status === 'issued' || application.body.status === 'created') {
             const id = application.body.product.beneficiaryType === 'group' ? application.body?.group?.individualsInGroup[0]?.customer?._id : application.body.customer._id;
             const totalRemain = await this.getRemainingLoan(id, application.body.status);
             if (totalRemain) {
@@ -165,7 +167,7 @@ class LoanProfile extends Component<Props, State>{
         }
     }
     async getRemainingLoan(id: string, status: string) {
-        if (status === 'pending' || status === 'issued' && id) {
+        if (status === 'pending' || status === 'issued' || status === 'created' && id) {
             const res = await remainingLoan(id)
             if (res.status === "success") {
                 return res.body.remainingTotal;
@@ -231,7 +233,7 @@ class LoanProfile extends Component<Props, State>{
         const paymentTab = {
             header: local.payments,
             stringKey: 'loanPayments',
-            permission: ['payInstallment', 'payEarly'],
+            permission: ['payInstallment', 'payEarly', 'payByInsurance'],
             permissionKey: 'application'
         };
         const reschedulingTab = {
@@ -688,7 +690,7 @@ class LoanProfile extends Component<Props, State>{
                 }
                 {this.state.print === 'all' &&
                     <>
-                        <CashReceiptPDF data={this.state.application} />
+                        <CashReceiptPDF data={this.state.application}  remainingTotal = {this.state.remainingTotal}/>
                         <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />
