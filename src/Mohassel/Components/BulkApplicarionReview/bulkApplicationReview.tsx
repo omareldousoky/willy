@@ -383,18 +383,18 @@ class BulkApplicationReview extends Component<Props, State> {
   addRemoveItemFromChecked(loan: LoanItem) {
     if (
       this.state.selectedReviewedLoans.findIndex(
-        (loanItem) => loanItem.id == loan.id
+        (loanItem) => loanItem.id === loan.id
       ) > -1
     ) {
-      this.setState({
-        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(
+      this.setState((prevState) => ({
+        selectedReviewedLoans: prevState.selectedReviewedLoans.filter(
           (el) => el.id !== loan.id
         ),
-      })
+      }))
     } else {
-      this.setState({
-        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
-      })
+      this.setState((prevState) => ({
+        selectedReviewedLoans: [...prevState.selectedReviewedLoans, loan],
+      }))
     }
   }
 
@@ -456,7 +456,7 @@ class BulkApplicationReview extends Component<Props, State> {
               </div>
               <hr className="dashed-line" />
 
-              {this.state.branchId == 'hq' ? (
+              {this.state.branchId === 'hq' ? (
                 <Search
                   searchKeys={this.state.searchKey}
                   dropDownKeys={[

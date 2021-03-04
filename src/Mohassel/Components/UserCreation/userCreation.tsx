@@ -197,10 +197,13 @@ class UserCreation extends Component<Props, State> {
 
   submit = async (values: any) => {
     if (this.state.step === 1) {
-      this.setState({
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any)
+      this.setState(
+        (prevState) =>
+          ({
+            [`step${prevState.step}`]: values,
+            step: prevState.step + 1,
+          } as State)
+      )
     } else if (this.state.step === 3) {
       const user = this.prepareUser(values)
       if (this.props.edit) {

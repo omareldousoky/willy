@@ -51,6 +51,26 @@ class CreateBranch extends Component<Props, State> {
     }
   }
 
+  async getBranch() {
+    const _id = this.props.history.location.state.details
+    await this.props.getBranchById(_id)
+    if (this.props.branch.status === 'success') {
+      const branch = this.props.branch.body.data
+      branch.licenseDate = timeToDateyyymmdd(
+        this.props.branch.body.data.licenseDate
+      )
+      this.setState({
+        step1: branch,
+      })
+    } else {
+      Swal.fire(
+        'Error !',
+        getErrorMessage(this.props.branch.error.error),
+        'error'
+      )
+    }
+  }
+
   submit = (values) => {
     this.setState({
       step1: values,
@@ -62,13 +82,6 @@ class CreateBranch extends Component<Props, State> {
     }
   }
 
-  cancel() {
-    this.setState({
-      step1,
-    })
-    this.props.history.goBack()
-  }
-
   prepareBranch = (values: BasicValues) => {
     const branch: Branch = values
     branch.longitude = values.branchAddressLatLong?.lng
@@ -76,6 +89,13 @@ class CreateBranch extends Component<Props, State> {
     branch.licenseDate = new Date(values.licenseDate).valueOf()
 
     return branch
+  }
+
+  cancel() {
+    this.setState({
+      step1,
+    })
+    this.props.history.goBack()
   }
 
   async createBranch(values) {
@@ -101,26 +121,6 @@ class CreateBranch extends Component<Props, State> {
     if (this.props.branch.status === 'success') {
       Swal.fire('success', local.branchUpdated)
       this.props.history.goBack()
-    } else {
-      Swal.fire(
-        'Error !',
-        getErrorMessage(this.props.branch.error.error),
-        'error'
-      )
-    }
-  }
-
-  async getBranch() {
-    const _id = this.props.history.location.state.details
-    await this.props.getBranchById(_id)
-    if (this.props.branch.status === 'success') {
-      const branch = this.props.branch.body.data
-      branch.licenseDate = timeToDateyyymmdd(
-        this.props.branch.body.data.licenseDate
-      )
-      this.setState({
-        step1: branch,
-      })
     } else {
       Swal.fire(
         'Error !',

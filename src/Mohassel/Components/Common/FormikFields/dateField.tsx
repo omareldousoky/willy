@@ -16,7 +16,6 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
   const {
     field,
     form,
-    meta,
     key,
     id,
     smSize,

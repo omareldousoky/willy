@@ -19,7 +19,6 @@ import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval'
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation'
 import {
   timeToDateyyymmdd,
-  beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'
@@ -181,6 +180,10 @@ class BulkApplicationApproval extends Component<Props, State> {
     this.setState({ manageApplicationsTabs: manageApplicationsArray() })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getApplications() {
     const query = {
       ...this.props.searchFilters,
@@ -193,30 +196,6 @@ class BulkApplicationApproval extends Component<Props, State> {
       if (this.props.error)
         Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
     })
-  }
-
-  addRemoveItemFromChecked(loan: LoanItem) {
-    if (
-      this.state.selectedReviewedLoans.findIndex(
-        (loanItem) => loanItem.id == loan.id
-      ) > -1
-    ) {
-      this.setState({
-        selectedReviewedLoans: this.state.selectedReviewedLoans.filter(
-          (el) => el.id !== loan.id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedReviewedLoans: [...this.state.selectedReviewedLoans, loan],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
-    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
   }
 
   handleSubmit = async (values) => {
@@ -240,8 +219,28 @@ class BulkApplicationApproval extends Component<Props, State> {
     }
   }
 
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedReviewedLoans: this.props.data })
+    } else this.setState({ checkAll: false, selectedReviewedLoans: [] })
+  }
+
+  addRemoveItemFromChecked(loan: LoanItem) {
+    if (
+      this.state.selectedReviewedLoans.findIndex(
+        (loanItem) => loanItem.id === loan.id
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedReviewedLoans: prevState.selectedReviewedLoans.filter(
+          (el) => el.id !== loan.id
+        ),
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedReviewedLoans: [...prevState.selectedReviewedLoans, loan],
+      }))
+    }
   }
 
   dateSlice(date) {

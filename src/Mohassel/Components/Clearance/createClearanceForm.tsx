@@ -37,7 +37,7 @@ export const CreateClearanceForm = (props: Props) => {
   const [selectedApplication, setApplication] = useState(
     props.paidLoans.filter((loan) => loan.id === props.values.loanId)
   )
-  const [status, setStatus] = useState(props.values.status)
+  const { status } = props.values
   const handleReceiptPhotoChange = (imageFile) => {
     props.setFieldValue('receiptPhoto', imageFile)
   }

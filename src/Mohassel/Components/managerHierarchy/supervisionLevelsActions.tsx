@@ -61,21 +61,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
     }
   }
 
-  async initialState() {
-    this.setState({
-      loading: false,
-      data: {
-        id: '',
-        branchId: '',
-        startDate: 0,
-        groups: [],
-      },
-      selectedGroups: [],
-      chosenStatus: this.props.mode === 'unapprove' ? 'approved' : 'pending',
-    })
-    await this.getGroups()
-  }
-
   async getGroups() {
     const res = await getOfficersGroups(this.props.branchId)
     if (res.body?.data && res.body.data?.groups.length) {
@@ -99,6 +84,31 @@ class SupervisionLevelsActions extends Component<Props, State> {
     }
   }
 
+  getStatus(status: string) {
+    switch (status) {
+      case 'pending':
+        return (
+          <div
+            className="status-chip outline under-review"
+            style={{ width: '100px' }}
+          >
+            {local.pending}
+          </div>
+        )
+      case 'approved':
+        return (
+          <div
+            className="status-chip outline approved"
+            style={{ width: '100px' }}
+          >
+            {local.approved}
+          </div>
+        )
+      default:
+        return null
+    }
+  }
+
   submit = async () => {
     const obj = {
       branchId: this.props.branchId,
@@ -111,6 +121,21 @@ class SupervisionLevelsActions extends Component<Props, State> {
     } else if (this.props.mode === 'unapprove') {
       this.unApproveOfficers(obj)
     }
+  }
+
+  async initialState() {
+    this.setState({
+      loading: false,
+      data: {
+        id: '',
+        branchId: '',
+        startDate: 0,
+        groups: [],
+      },
+      selectedGroups: [],
+      chosenStatus: this.props.mode === 'unapprove' ? 'approved' : 'pending',
+    })
+    await this.getGroups()
   }
 
   async deleteOfficers(obj) {
@@ -148,51 +173,26 @@ class SupervisionLevelsActions extends Component<Props, State> {
         (groupItem) => groupItem.id === group.id
       ) > -1
     ) {
-      this.setState({
-        selectedGroups: this.state.selectedGroups.filter(
+      this.setState((prevState) => ({
+        selectedGroups: prevState.selectedGroups.filter(
           (el) => el.id !== group.id
         ),
-      })
+      }))
     } else {
-      this.setState({
-        selectedGroups: [...this.state.selectedGroups, group],
-      })
+      this.setState((prevState) => ({
+        selectedGroups: [...prevState.selectedGroups, group],
+      }))
     }
   }
 
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState({
-        selectedGroups: this.state.data.groups.filter(
-          (group) => group.status === this.state.chosenStatus
+      this.setState((prevState) => ({
+        selectedGroups: prevState.data.groups.filter(
+          (group) => group.status === prevState.chosenStatus
         ),
-      })
+      }))
     } else this.setState({ selectedGroups: [] })
-  }
-
-  getStatus(status: string) {
-    switch (status) {
-      case 'pending':
-        return (
-          <div
-            className="status-chip outline under-review"
-            style={{ width: '100px' }}
-          >
-            {local.pending}
-          </div>
-        )
-      case 'approved':
-        return (
-          <div
-            className="status-chip outline approved"
-            style={{ width: '100px' }}
-          >
-            {local.approved}
-          </div>
-        )
-      default:
-        return null
-    }
   }
 
   render() {

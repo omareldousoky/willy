@@ -59,10 +59,8 @@ interface LoanItem {
   application: Application
 }
 interface State {
-  applications: Array<LoanItem>
   selectedApplications: Array<LoanItem>
   showModal: boolean
-  filterCustomers: string
   size: number
   from: number
   checkAll: boolean
@@ -92,10 +90,8 @@ class BulkApplicationCreation extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      applications: [],
       selectedApplications: [],
       showModal: false,
-      filterCustomers: '',
       size: 10,
       from: 0,
       checkAll: false,
@@ -228,33 +224,6 @@ class BulkApplicationCreation extends Component<Props, State> {
     })
   }
 
-  addRemoveItemFromChecked(selectedApplication: LoanItem) {
-    if (
-      this.state.selectedApplications.findIndex(
-        (application) => application.id === selectedApplication.id
-      ) > -1
-    ) {
-      this.setState({
-        selectedApplications: this.state.selectedApplications.filter(
-          (application) => application.id !== selectedApplication.id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedApplications: [
-          ...this.state.selectedApplications,
-          selectedApplication,
-        ],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedApplications: this.props.data })
-    } else this.setState({ checkAll: false, selectedApplications: [] })
-  }
-
   handleSubmit = async (values) => {
     this.props.setLoading(true)
     this.setState({ showModal: false })
@@ -275,6 +244,33 @@ class BulkApplicationCreation extends Component<Props, State> {
       this.props.setLoading(false)
       Swal.fire('', getErrorMessage(res.error.error), 'error')
     }
+  }
+
+  addRemoveItemFromChecked(selectedApplication: LoanItem) {
+    if (
+      this.state.selectedApplications.findIndex(
+        (application) => application.id === selectedApplication.id
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedApplications: prevState.selectedApplications.filter(
+          (application) => application.id !== selectedApplication.id
+        ),
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedApplications: [
+          ...prevState.selectedApplications,
+          selectedApplication,
+        ],
+      }))
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedApplications: this.props.data })
+    } else this.setState({ checkAll: false, selectedApplications: [] })
   }
 
   dateSlice(date) {
