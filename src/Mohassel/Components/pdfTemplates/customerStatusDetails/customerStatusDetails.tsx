@@ -28,15 +28,16 @@ const CustomerStatusDetails = (props) => {
     customerName,
     customerStatus,
     gender,
-    isDoubtful,
-    isWrittenOff,
     nationalId,
     nationalIdIssueDate,
     officerName,
   } = props.data;
 
-  const checkLoanLegalStatus = () =>
-    isWrittenOff ? "معدوم" : isDoubtful ? "مشكوك فيه" : " ";
+  const checkLoanLegalStatus = (loan) =>{
+    const {isWrittenOff,isDoubtful } = loan
+
+    return isWrittenOff ? "- معدوم" : isDoubtful ? "- مشكوك فيه" : "";
+  }
 
   return (
     <div className="customer-status-details" lang="ar">
@@ -92,7 +93,6 @@ const CustomerStatusDetails = (props) => {
             <td className="frame">{numbersToArabic(props.customerKey)}</td>
             <th className="gray frame">الحاله</th>
             <td className="frame">{CustomerStatusLocal[customerStatus || "default"]}</td>
-            <td className="frame">{checkLoanLegalStatus()}</td>
             <th className="gray frame">حالة التعامل مع العميل</th>
             <td className="frame">
               {CustomerIsBlocked[customerLegalStatus] ||
@@ -218,7 +218,7 @@ const CustomerStatusDetails = (props) => {
                           </tr>
                           <tr>
                             <th>حالة القرض</th>
-                            <td>{getLoanStatus(loan.status)}</td>
+                            <td>{`${getLoanStatus(loan.status)} ${checkLoanLegalStatus(loan)}`}</td>
                             <th>غرامات مسدده</th>
                             <td>
                               {loan.penaltiesPaid === "None"
