@@ -154,7 +154,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
               >
                 <Row>
                   <Col sm={6}>
-                    <Form.Group controlId="phoneNumber" className="text-right">
+                    <Form.Group controlId="phoneNumber">
                       <Form.Label
                         column
                         sm={6}
@@ -179,10 +179,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
                     </Form.Group>
                   </Col>
                   <Col sm={6}>
-                    <Form.Group
-                      controlId="confirmationCode"
-                      className="text-right"
-                    >
+                    <Form.Group controlId="confirmationCode">
                       <Form.Label
                         column
                         sm={6}
