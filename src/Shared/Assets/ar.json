@@ -915,5 +915,11 @@
     "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا",
     "legalAffairs":"الشئون القانونية",
     "lateList":"قائمة التأخيرات",
-    "lateCustomers":"المتأخرون في السداد"
+    "lateCustomers":"المتأخرون عن السداد",
+    "customerAddedToDefaultiingListSuccess":"تم إضافة العميل لقائمة المتاخرون عن السداد بنجاح",
+    "addCustomerToLateCustomers":"إضافة عميل متأخر عن السداد",
+    "branchManagerReview":"الأول",
+    "areaManagerReview":"الثاني",
+    "areaSupervisorReview":"الثالث",
+    "financialManagerReview":"الرابع"
 }

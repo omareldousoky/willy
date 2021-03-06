@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Formik } from "formik";
+import { Formik, FormikProps, FormikValues } from "formik";
 import { connect } from "react-redux";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -252,6 +252,31 @@ class Search extends Component<Props, State> {
     };
     return arDropDownValue[key];
   }
+  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: {value: string; text: string}[]){
+    return (
+      <Col key={index} sm={6} style={{ marginTop: 20 }}>
+        <div className="dropdown-container">
+          <p className="dropdown-label">{local.status}</p>
+          <Form.Control
+            as="select"
+            className="dropdown-select"
+            data-qc="status"
+            value={formikProps.values.status}
+            onChange={(e) => {
+              formikProps.setFieldValue(
+                "status",
+                e.currentTarget.value
+              );
+            }}
+          >
+            {array.map(option =>
+              <option key={option.value} value={option.value} data-qc={option.text}>{option.text}</option>
+            )}
+          </Form.Control>
+        </div>
+      </Col>
+    )
+  }
   render() {
     return (
       <Formik
@@ -409,87 +434,25 @@ class Search extends Component<Props, State> {
                   );
                 }
                 if (searchKey === "status") {
-                  return (
-                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="dropdown-container">
-                        <p className="dropdown-label">{local.status}</p>
-                        <Form.Control
-                          as="select"
-                          className="dropdown-select"
-                          data-qc="status"
-                          value={formikProps.values.status}
-                          onChange={(e) => {
-                            formikProps.setFieldValue(
-                              "status",
-                              e.currentTarget.value
-                            );
-                          }}
-                        >
-                          <option value="" data-qc="all">
-                            {local.all}
-                          </option>
-                          <option value="paid" data-qc="paid">
-                            {local.paid}
-                          </option>
-                          <option value="issued" data-qc="issued">
-                            {local.issued}
-                          </option>
-                          <option value="pending" data-qc="pending">
-                            {local.pending}
-                          </option>
-                        </Form.Control>
-                      </div>
-                    </Col>
-                  );
+                  return this.statusDropdown(formikProps, index, [
+                    {value: "", text: local.all},
+                    {value: "paid", text: local.paid},
+                    {value: "issued", text: local.issued},
+                    {value: "pending", text: local.pending}
+                  ])
                 }
                 if (searchKey === "status-application") {
-                  return (
-                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="dropdown-container">
-                        <p className="dropdown-label">{local.status}</p>
-                        <Form.Control
-                          as="select"
-                          className="dropdown-select"
-                          data-qc="status"
-                          value={formikProps.values.status}
-                          onChange={(e) => {
-                            formikProps.setFieldValue(
-                              "status",
-                              e.currentTarget.value
-                            );
-                          }}
-                        >
-                          <option value="" data-qc="all">
-                            {local.all}
-                          </option>
-                          <option value="underReview" data-qc="underReview">
-                            {local.underReview}
-                          </option>
-                          <option value="reviewed" data-qc="reviewed">
-                            {local.reviewed}
-                          </option>
-                          <option value="secondReview" data-qc="secondReview">
-                            {local.secondReviewed}
-                          </option>
-                          <option value="thirdReview" data-qc="thirdReview">
-                            {local.thirdReviewed}
-                          </option>
-                          <option value="approved" data-qc="approved">
-                            {local.approved}
-                          </option>
-                          <option value="created" data-qc="created">
-                            {local.created}
-                          </option>
-                          <option value="rejected" data-qc="rejected">
-                            {local.rejected}
-                          </option>
-                          <option value="canceled" data-qc="canceled">
-                            {local.cancelled}
-                          </option>
-                        </Form.Control>
-                      </div>
-                    </Col>
-                  );
+                  return this.statusDropdown(formikProps, index, [
+                    {value: "", text: local.all},
+                    {value: "underReview", text: local.underReview},
+                    {value: "reviewed", text: local.reviewed},
+                    {value: "secondReview", text: local.secondReviewed},
+                    {value: "thirdReview", text: local.thirdReviewed},
+                    {value: "approved", text: local.approved},
+                    {value: "created", text: local.created},
+                    {value: "rejected", text: local.rejected},
+                    {value: "canceled", text: local.cancelled}
+                  ])
                 }
                 if (searchKey === "review-application") {
                   return (
@@ -529,38 +492,22 @@ class Search extends Component<Props, State> {
                   );
                 }
                 if (searchKey === "clearance-status") {
-                  return (
-                    <Col key={index} sm={6} style={{ marginTop: 20 }}>
-                      <div className="dropdown-container">
-                        <p className="dropdown-label">{local.status}</p>
-                        <Form.Control
-                          as="select"
-                          className="dropdown-select"
-                          data-qc="status"
-                          value={formikProps.values.status}
-                          onChange={(e) => {
-                            formikProps.setFieldValue(
-                              "status",
-                              e.currentTarget.value
-                            );
-                          }}
-                        >
-                          <option value="" data-qc="all">
-                            {local.all}
-                          </option>
-                          <option value="underReview" data-qc="underReview">
-                            {local.underReview}
-                          </option>
-                          <option value="approved" data-qc="approved">
-                            {local.approved}
-                          </option>
-                          <option value="rejected" data-qc="rejected">
-                            {local.rejected}
-                          </option>
-                        </Form.Control>
-                      </div>
-                    </Col>
-                  );
+                  return this.statusDropdown(formikProps, index, [
+                    {value: "", text: local.all},
+                    {value: "underReview", text: local.underReview},
+                    {value: "approved", text: local.approved},
+                    {value: "rejected", text: local.rejected}
+                  ])
+                }
+                if (searchKey === "defaultingCustomerStatus") {
+                  return this.statusDropdown(formikProps, index, [
+                    {value: "", text: local.all},
+                    {value: "underReview", text: local.underReview},
+                    {value: "branchManagerReview", text: local.branchManagerReview},
+                    {value: "areaManagerReview", text: local.areaManagerReview},
+                    {value: "areaSupervisorReview", text: local.areaSupervisorReview},
+                    {value: "financialManagerReview", text: local.financialManagerReview},
+                  ])
                 }
                 if (searchKey === "branch" && this.viewBranchDropdown()) {
                   return (

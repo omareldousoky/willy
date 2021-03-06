@@ -57,7 +57,8 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
-import LateList from '../Components/ManageLegalAffairs/lateList';
+import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
+
 const appRoutes = [
   {
     path: "/",
@@ -462,7 +463,7 @@ const appRoutes = [
           {
             path: '/late-list',
             label: local.lateList,
-            render: (props) => <Can I='geoArea' a='config'><LateList {...props} /></Can>
+            render: (props) => <Can I='geoArea' a='config'><DefaultingCustomersList {...props} /></Can>
           }
         ]
       }

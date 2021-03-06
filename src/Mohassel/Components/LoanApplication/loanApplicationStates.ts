@@ -15,6 +15,8 @@ interface GroupMember {
     type: string;
 }
 export interface Application {
+    _id?: string;
+    applicationCode?: string;
     beneficiaryType: string;
     individualDetails: Array<GroupMember>;
     customerID: string;
@@ -70,7 +72,6 @@ export interface Application {
     viceCustomers: Array<Vice>;
     applicationFeePercentPerPersonType: string;
     state?: string;
-    id?: string;
     reviewedDate: any;
     undoReviewDate: any;
     rejectionDate: any;
