@@ -29,7 +29,10 @@ import './leads.scss';
 import { Employee } from '../Payment/payment';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { theme } from '../../../theme';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
+const REJECTION_REASONS = ["العميل تحت السن المسموح به", "التمويل بمبلغ اكتر بالمسموح به", "العميل محتاج القرض بدون ضمانات", "العميل لا يمتلك مشروع", "اخري"]
 interface Props {
   data: any;
   error: string;
@@ -59,6 +62,9 @@ interface State {
   selectedBranch: any;
   selectedLead: any;
   branchId: string;
+  rejectLeadModal: boolean;
+  selectedLeadNumber: string;
+  viewRejectionModal: boolean;
 }
 class Leads extends Component<Props, State>{
   mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: any) => void }[]
@@ -83,14 +89,12 @@ class Leads extends Component<Props, State>{
       selectedLO: {},
       selectedBranch: {},
       selectedLead: {},
-      branchId: ''
+      branchId: '',
+      rejectLeadModal: false,
+      selectedLeadNumber: "",
+      viewRejectionModal: false,
     }
     this.mappers = [
-      // {
-      //   title: local.leadCode,
-      //   key: "customerCode",
-      //   render: data => data.uuid
-      // },
       {
         title: local.leadName,
         key: "name",
@@ -162,6 +166,7 @@ class Leads extends Component<Props, State>{
                     this.changeMainState(data.phoneNumber, 'in-review', 'view', data);
                   }}>{local.viewCustomerLead}</div>
               </Can>
+              {data.status === "rejected" && <Can I="reviewLead" a="halanuser"><div className="item" onClick={() => this.setState({ viewRejectionModal: true, selectedLead: data })}>{local.viewRejectionReason}</div></Can>}
               {data.status !== "rejected" && <Can I="leadInReviewStatus" a="halanuser">
                 <div className="item" onClick={() => this.changeMainState(data.phoneNumber, 'in-review', 'edit', data)}>{local.editLead}</div>
               </Can>}
@@ -198,41 +203,50 @@ class Leads extends Component<Props, State>{
     }
   }
   async changeLeadState(phoneNumber: string, oldState: string, oldInReviewStatus: string, newState: string, inReviewStatus: string) {
-    Swal.fire({
-      text: local.areYouSure,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: local.yes,
-      cancelButtonText: local.cancel
-    }).then(async (result) => {
-      if (result.value) {
-        if (oldState === newState) {
-          if (oldInReviewStatus === 'basic') {
-            this.props.setLoading(true);
-            const inReviewStatusRes = await changeInReviewLeadState(phoneNumber, inReviewStatus);
-            if (inReviewStatusRes.status === "success") {
-              this.props.setLoading(false);
-              this.setState({ openActionsId: "" })
-              Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
-            } else {
-              this.props.setLoading(false);
-              Swal.fire('', local.userRoleEditError, 'error');
+    if (newState === "rejected") this.setState({ rejectLeadModal: true, selectedLeadNumber: phoneNumber });
+    else {
+      Swal.fire({
+        text: local.areYouSure,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: local.yes,
+        cancelButtonText: local.cancel
+      }).then(async (result) => {
+        if (result.value) {
+          if (oldState === newState) {
+            if (oldInReviewStatus === 'basic') {
+              this.props.setLoading(true);
+              const inReviewStatusRes = await changeInReviewLeadState(phoneNumber, inReviewStatus);
+              if (inReviewStatusRes.status === "success") {
+                this.props.setLoading(false);
+                this.setState({ openActionsId: "" })
+                Swal.fire('', local.changeState, 'success').then(() => this.getLeadsCustomers());
+              } else {
+                this.props.setLoading(false);
+                Swal.fire('', local.userRoleEditError, 'error');
+              }
             }
+          } else {
+            this.changeMainState(phoneNumber, newState, '', null);
           }
-        } else {
-          this.changeMainState(phoneNumber, newState, '', null);
         }
-      }
-    })
+      })
+    }
   }
-  async changeMainState(phoneNumber: string, newState: string, action: string, data) {
+
+  rejectLead = (values: { rejectionReason: string; rejectionDetails: string }) => {
+    this.changeMainState(this.state.selectedLeadNumber, "rejected", "", null, values.rejectionReason, values.rejectionDetails)
+    this.setState({ selectedLeadNumber: "" })
+  }
+
+  async changeMainState(phoneNumber: string, newState: string, action: string, data, rejectionReason?: string, rejectionDetails?: string) {
     this.props.setLoading(true);
     if (action && data.status !== 'submitted') {
       action === 'view' ? this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data }) : this.props.history.push('/halan-integration/leads/edit-lead', { leadDetails: data })
     } else {
-      const res = await changeLeadState(phoneNumber, newState);
+      const res = await changeLeadState(phoneNumber, newState, rejectionReason, rejectionDetails);
       if (res.status === "success") {
         this.props.setLoading(false);
         this.setState({ openActionsId: "" })
@@ -374,7 +388,7 @@ class Leads extends Component<Props, State>{
             </Row>
 						<Col>
 							<Button
-								className="mt-4 w-100"							
+                className="mt-4 w-100"
 								onClick={() => this.submitLOChange()}
 								disabled={false}
 								variant="primary"
@@ -399,8 +413,8 @@ class Leads extends Component<Props, State>{
                 <AsyncSelect
                   name="branches"
                   data-qc="branches"
-									styles={theme.selectStyleWithBorder}
-									theme={theme.selectTheme}
+                  styles={theme.selectStyleWithBorder}
+                  theme={theme.selectTheme}
                   value={this.state.branches.find(branch => branch._id === this.state.selectedBranch?._id)}
                   onChange={(branch) => this.setState({ selectedBranch: branch })}
                   getOptionLabel={(option) => option.name}
@@ -410,16 +424,112 @@ class Leads extends Component<Props, State>{
                 />
               </Col>
             </Row>
-						<Col>
-							<Button
-								className="mt-4 w-100"							
-								onClick={() => this.submitBranchChange()}
-								disabled={false}
-								variant="primary"
-							>
-								{local.submit}
-							</Button>
-						</Col>
+            <Col>
+              <Button
+                className="mt-4 w-100"
+                onClick={() => this.submitBranchChange()}
+                disabled={false}
+                variant="primary"
+              >
+                {local.submit}
+              </Button>
+            </Col>
+          </Modal.Body>
+        </Modal>
+        <Modal size="lg" show={this.state.rejectLeadModal} onHide={() => this.setState({ rejectLeadModal: false })}>
+          <Modal.Header>
+            <Modal.Title className="m-auto">
+              {local.rejectApplication}
+            </Modal.Title>
+            <button type="button" className="mr-0 pr-0 close" onClick={() =>
+              this.setState({ rejectLeadModal: false })}><span aria-hidden="true">x</span><span className="sr-only">Close</span></button>
+          </Modal.Header>
+          <Modal.Body>
+            <Formik
+              enableReinitialize
+              initialValues={{ rejectionReason: "", rejectionDetails: "" }}
+              onSubmit={this.rejectLead}
+              validationSchema={
+                Yup.object().shape({
+                  rejectionReason: Yup.string().required(local.required)
+                })}
+              validateOnBlur
+              validateOnChange
+            >
+              {(formikProps) =>
+                <Form onSubmit={formikProps.handleSubmit}>
+                  <Col>
+                    <Form.Group controlId="rejectionReason">
+                      <Form.Label style={{ textAlign: 'right' }} column sm={4}>{local.rejectionReason}</Form.Label>
+                      <Form.Control as="select"
+                        name="rejectionReason"
+                        data-qc="rejectionReason"
+                        value={formikProps.values.rejectionReason}
+                        onChange={formikProps.handleChange}
+                        onBlur={formikProps.handleBlur}
+                        isInvalid={Boolean(formikProps.errors.rejectionReason) && Boolean(formikProps.touched.rejectionReason)}
+                      >
+                        <option value="" disabled></option>
+                        {REJECTION_REASONS.map((option, index) =>
+                          <option key={index} value={option}>{option}</option>
+                        )}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {formikProps.errors.rejectionReason}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="rejectionDetails">
+                      <Form.Label className="customer-form-label">{local.rejectionDetails}</Form.Label>
+                      <Form.Control as="textarea"
+                        rows={3}
+                        name="rejectionDetails"
+                        data-qc="rejectionDetails"
+                        onChange={formikProps.handleChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Button
+                      type="submit"
+                      className="mt-4 w-100"
+                      disabled={false}
+                      variant="primary"
+                    >
+                      {local.submit}
+                    </Button>
+                  </Col>
+                </Form>
+              }
+            </Formik>
+          </Modal.Body>
+        </Modal>
+        <Modal size="lg" show={this.state.viewRejectionModal} onHide={() => this.setState({ viewRejectionModal: false })}>
+          <Modal.Header>
+            <Modal.Title className="m-auto">
+              {local.rejectionReason}
+            </Modal.Title>
+            <button type="button" className="mr-0 pr-0 close" onClick={() =>
+              this.setState({ viewRejectionModal: false, selectedLead: {} })}><span aria-hidden="true">x</span><span className="sr-only">Close</span></button>
+          </Modal.Header>
+          <Modal.Body>
+            <Col>
+              <Form.Group controlId="rejectionReason">
+                <Form.Label className="font-weight-bold">{this.state.selectedLead.rejectionReason}</Form.Label>
+              </Form.Group>
+              <Form.Group controlId="rejectionDetails">
+                <Form.Label>{this.state.selectedLead.rejectionDetails}</Form.Label>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Button
+                type="submit"
+                className="mt-4 w-100"
+                variant="primary"
+                onClick={() => this.setState({ viewRejectionModal: false, selectedLead: {} })}
+              >
+                {local.done}
+              </Button>
+            </Col>
           </Modal.Body>
         </Modal>
       </>
