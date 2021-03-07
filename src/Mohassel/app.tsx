@@ -12,7 +12,7 @@ const App = (props) => {
     props.getAuthData();
   }, [props]);
   if (getCookie("token") === "") {
-    window.location.href = process.env.REACT_APP_LOGIN_URL || "";
+    location.href = process.env.REACT_APP_LOGIN_URL || "";
     return <></>;
   } else {
     return (

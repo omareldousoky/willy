@@ -11,14 +11,13 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { theme } from '../../../theme';
 import Card from 'react-bootstrap/Card';
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from '../ManageLoans/manageLoansInitials';
 
-interface Props extends RouteComponentProps {
+interface Props {
     title: string;
 };
 interface Product {
@@ -253,4 +252,4 @@ class AssignProductsToBranches extends Component<Props, State>{
         )
     }
 }
-export default withRouter(AssignProductsToBranches);
+export default AssignProductsToBranches;

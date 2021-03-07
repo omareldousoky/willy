@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
 import ManagerProfile from '../managerHierarchy/managersView';
 import  SupervisionsProfile  from '../managerHierarchy/supervisionsProfile';
+
 interface Props extends RouteComponentProps<{}, {}, { details: string }> {
     getBranchById: typeof getBranchById;
     loading: boolean;
@@ -202,7 +203,7 @@ interface State {
         }
     }
     renderEditIcon() {
-        const _id = this.props.history.location.state.details;
+        const _id = this.props.location.state.details;
         return(
             <div className={'rowContainer'}>
             <span className={'icon'}>

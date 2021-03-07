@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { getCookie } from '../../../Shared/Services/getCookie';
@@ -34,7 +33,7 @@ interface State {
   checkAll: boolean;
   chosenStatus: string;
 }
-interface Props extends RouteComponentProps {
+interface Props {
   data: GroupsByBranch[];
   totalCount: number;
   loading: boolean;
@@ -214,7 +213,7 @@ class SupervisionGroupsList extends Component<Props, State> {
     const res = await approveOfficersGroups({ branchesGroupIds })
     if (res.status === 'success') {
       this.props.setLoading(false);
-        Swal.fire('Success', '', 'success').then(() => window.location.reload())
+        Swal.fire('Success', '', 'success').then(() => location.reload())
     } else {
       this.props.setLoading(false);
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
@@ -225,7 +224,7 @@ async unApproveOfficers(branchesGroupIds) {
   const res = await unApproveOfficersGroups({branchesGroupIds})
   if (res.status === 'success') {
     this.props.setLoading(false);
-      Swal.fire('Success', '', 'success').then(() => window.location.reload())
+      Swal.fire('Success', '', 'success').then(() => location.reload())
   } else {
     this.props.setLoading(false);
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
@@ -323,4 +322,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, addSearchToProps)(withRouter(SupervisionGroupsList));
+export default connect(mapStateToProps, addSearchToProps)(SupervisionGroupsList);

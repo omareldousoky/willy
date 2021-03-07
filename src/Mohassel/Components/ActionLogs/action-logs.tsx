@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import Card from 'react-bootstrap/Card';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
@@ -16,7 +15,7 @@ interface State {
     from: number;
 }
 
-interface Props extends RouteComponentProps {
+interface Props {
     data: any;
     error: string;
     totalCount: number;
@@ -112,4 +111,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, addSearchToProps)(withRouter(ActionLogs));
+export default connect(mapStateToProps, addSearchToProps)(ActionLogs);

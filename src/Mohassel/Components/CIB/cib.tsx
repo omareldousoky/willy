@@ -1,6 +1,5 @@
 import React, { Component, ReactNode } from 'react';
 import Card from 'react-bootstrap/Card';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
@@ -49,9 +48,9 @@ interface State {
   manageLoansTabs: any[];
 }
 
-class CIB extends Component<RouteComponentProps, State> {
+class CIB extends Component<{}, State> {
   mappers: { title: string | ReactNode; key: string; sortable?: boolean; render: (data: any) => ReactNode }[]
-  constructor(props: RouteComponentProps) {
+  constructor(props = {}) {
     super(props);
     this.state = {
       size: 10,
@@ -363,4 +362,4 @@ class CIB extends Component<RouteComponentProps, State> {
   }
 }
 
-export default withRouter(CIB);
+export default CIB;

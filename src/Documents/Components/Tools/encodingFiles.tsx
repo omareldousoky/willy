@@ -9,7 +9,6 @@ import Form from 'react-bootstrap/Form';
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentTypeLocalization } from '../../../Shared/Services/utils';
 interface State {
@@ -17,8 +16,8 @@ interface State {
     loading: boolean;
 }
 
-class EncodingFiles extends Component<RouteComponentProps, State> {
-    constructor(props) {
+class EncodingFiles extends Component<{}, State> {
+    constructor(props = {}) {
         super(props);
         this.state = {
             documentTypes: [{
@@ -128,4 +127,4 @@ class EncodingFiles extends Component<RouteComponentProps, State> {
         )
     }
 }
-export default withRouter(EncodingFiles);
+export default EncodingFiles;

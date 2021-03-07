@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2';
 import * as local from '../../Assets/ar.json';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import './documentPhoto.scss';
 import Row from 'react-bootstrap/Row';
 
-interface Props extends RouteComponentProps {
+interface Props {
   photoObject?: {
     photoURL?: string;
     photoFile?: File;
@@ -225,4 +224,4 @@ class DocumentPhoto extends Component<Props, State> {
 }
 
 
-export default withRouter(DocumentPhoto)
+export default DocumentPhoto

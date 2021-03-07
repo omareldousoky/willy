@@ -81,7 +81,7 @@ class UserDetails extends Component<RouteComponentProps<{}, {} , { details: stri
     return user;
   }
   async getUserDetails() {
-    const _id = this.props.history.location.state.details;
+    const _id = this.props.location.state.details;
     const res = await getUserDetails(_id);
     const user = this.setUserDetails(res.body);
     if (res.status === "success") {

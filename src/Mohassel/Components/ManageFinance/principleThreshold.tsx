@@ -83,7 +83,7 @@ class PrincipleThreshold extends Component<RouteComponentProps, State> {
                 const res = await setMaxPrinciples(values);
                 if (res.status === "success") {
                     this.setState({ loading: false })
-                    Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() => window.location.reload());
+                    Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() => location.reload());
                 } else {
                     this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
                 }

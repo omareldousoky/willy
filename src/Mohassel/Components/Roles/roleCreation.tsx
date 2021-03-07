@@ -61,7 +61,7 @@ class RoleCreation extends Component<Props, State> {
   }
   componentDidMount() {
     if (this.props.edit) {
-      const role = { ...this.props.history.location.state };
+      const role = { ...this.props.location.state };
       const step1Edit = { ...this.state.step1 };
       step1Edit.roleName = role.roleName;
       step1Edit.hQpermission = !role.hasBranch;

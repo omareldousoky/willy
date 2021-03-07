@@ -8,11 +8,10 @@ import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import ability from '../../config/ability';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { Managers } from './branchBasicsCard';
-interface Props extends RouteComponentProps {
+interface Props {
 branchId: string;
 }
 interface State {
@@ -130,4 +129,4 @@ interface State {
         )
     }
 }
-export default withRouter(ManagersCreation);
+export default ManagersCreation;
