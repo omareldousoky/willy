@@ -24,12 +24,6 @@ export default class Wizard extends Component<Props, State> {
     }
   }
 
-  resetStateStepsSelection(steps: Step[]) {
-    return steps.forEach((step) => {
-      step.selected = false
-    })
-  }
-
   componentDidMount() {
     const { stepsDescription } = this.props
 
@@ -48,12 +42,6 @@ export default class Wizard extends Component<Props, State> {
     })
   }
 
-  handleClick(index) {
-    if (this.props.edit) {
-      this.props.onClick(index)
-    }
-  }
-
   componentDidUpdate(previousProps) {
     if (previousProps.currentStepNumber !== this.props.currentStepNumber) {
       const index = this.props.currentStepNumber
@@ -67,6 +55,18 @@ export default class Wizard extends Component<Props, State> {
       }
       this.setState({ steps: stepsState })
     }
+  }
+
+  handleClick(index) {
+    if (this.props.edit) {
+      this.props.onClick(index)
+    }
+  }
+
+  resetStateStepsSelection(steps: Step[]) {
+    return steps.forEach((step) => {
+      step.selected = false
+    })
   }
 
   render() {
