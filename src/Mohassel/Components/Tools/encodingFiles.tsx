@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
-import { documentTypeLocalization } from '../../../Shared/Services/utils';
+import { documentTypeLocalization, getErrorMessage } from '../../../Shared/Services/utils';
 import { manageToolsArray } from './manageToolsInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 interface Props {
@@ -51,7 +51,7 @@ class EncodingFiles extends Component<Props, State> {
             })
         } else {
             this.setState({ loading: false })
-            Swal.fire("error", local.getDocumentsTypesError);
+            Swal.fire("Error !", getErrorMessage(res.error.error),'error');
         }
     }
     componentDidMount() {
@@ -68,15 +68,15 @@ class EncodingFiles extends Component<Props, State> {
                     active={this.state.manageToolsTabs.map(item => {return item.icon}).indexOf('encodingFiles')}
                 />
                 <Loader type="fullscreen" open={this.state.loading} />
-                <Card>
+                <Card className="main-card">
                     <Card.Body>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
-                            <h4 style={{ textAlign: "right" }}>{local.encodingFilesHQ}</h4>
+                            <h4 style={{ marginRight: "20px" }}>{local.encodingFilesHQ}</h4>
                             <small style={{ color: '#6e6e6e', margin: "12px" }}>{`${local.numOfFiles} (${this.state.documentTypes.length})`}</small>
+													<Can I='documentTypes' a='config'>
+														<Button onClick={() => { this.props.history.push("/tools/encoding-files/create-encoding-files") }} className="big-button" style={{ marginLeft: 20, marginRight: "auto", width: "100px" }}>{local.create}</Button>
+													</Can>
                         </div>
-                        <Can I='documentTypes' a='config'>
-                            <Button onClick={() => { this.props.history.push("/tools/encoding-files/create-encoding-files") }} className="big-button" style={{ marginLeft: 20, width: "100px" }}>{local.create}</Button>
-                        </Can>
                         {
 
                             this.state.documentTypes.map((documentType, index) => {
@@ -107,7 +107,7 @@ class EncodingFiles extends Component<Props, State> {
                                             <Can I='documentTypes' a='config'><Col>
                                                 <span
                                                     onClick={() => { this.props.history.push({ pathname: "/tools/encoding-files/edit-encoding-files", state: { documentType: documentType } }) }}
-                                                    className='fa icon'><img style={{ cursor: 'pointer' }} alt={"edit"} src={require('../../Assets/editIcon.svg')}></img></span>
+                                                    className='icon'><img alt={"edit"} src={require('../../Assets/editIcon.svg')}></img></span>
                                             </Col></Can>
                                         </Row>
 

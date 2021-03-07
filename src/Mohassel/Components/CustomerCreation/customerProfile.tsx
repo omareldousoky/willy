@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { timeToDateyyymmdd, downloadFile, iscoreStatusColor } from '../../../Shared/Services/utils';
+import { timeToDateyyymmdd, downloadFile, iscoreStatusColor, getErrorMessage, iscoreBank } from '../../../Shared/Services/utils';
 import { Loader } from '../../../Shared/Components/Loader';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
@@ -18,6 +18,9 @@ import ability from '../../config/ability';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import DeathCertificate from './deathCertificate';
 import Can from '../../config/Can';
+import Swal from 'sweetalert2';
+import { CustomerCategorization } from './customerCategorization';
+import { CustomerScore, getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -28,10 +31,12 @@ interface Props {
   };
 };
 export interface Score {
+  customerName?: string;
   activeLoans?: string;
   iscore: string;
   nationalId: string;
   url?: string;
+  bankCodes?: string[];
 }
 const tabs: Array<Tab> = [
   {
@@ -47,15 +52,30 @@ const tabs: Array<Tab> = [
     stringKey: 'differentInfo'
   },
   {
+    header: local.customerCategorization,
+    stringKey: 'customerScore'
+  },
+  {
     header: local.documents,
     stringKey: 'documents'
   },
 ]
+
+const getCustomerCategorizationRating = async (id: string, setRating: (rating: Array<CustomerScore>) => void) => {
+  const res = await getCustomerCategorization({ customerId: id })
+  if (res.status === "success" && res.body?.customerScores !== undefined) {
+    setRating(res.body?.customerScores)
+  } else {
+    Swal.fire('Error !', getErrorMessage(res.error ? res.error.error : ""), 'error');
+  }
+}
+
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [iScoreDetails, changeiScoreDetails] = useState<Score>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([]);
 
   async function getCachediScores(id) {
     changeLoading(true);
@@ -65,6 +85,7 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     } else {
       changeLoading(false);
+      Swal.fire('Error !', getErrorMessage(iScores.error.error),'error');
     }
   }
   const [print, _changePrint] = useState<any>();
@@ -79,6 +100,7 @@ const CustomerProfile = (props: Props) => {
       changeLoading(false);
     } else {
       changeLoading(false);
+      Swal.fire('Error !', getErrorMessage(res.error.error),'error');
     }
   }
   const getGeoArea = async (geoArea, branch) => {
@@ -90,7 +112,10 @@ const CustomerProfile = (props: Props) => {
       if (geoAreaObject.length === 1) {
         setgeoArea(geoAreaObject[0])
       }else setgeoArea({name: '-', active: false})
-    } else changeLoading(false);
+    } else {
+       changeLoading(false);
+       Swal.fire('Error !', getErrorMessage(resGeo.error.error),'error');
+    }
   }
   async function getCustomerDetails() {
     changeLoading(true);
@@ -102,6 +127,7 @@ const CustomerProfile = (props: Props) => {
       await getGeoArea(res.body.geoAreaId, res.body.branchId);
     } else {
       changeLoading(false);
+      Swal.fire('Error !', getErrorMessage(res.error.error),'error');
     }
   }
 
@@ -126,7 +152,7 @@ const CustomerProfile = (props: Props) => {
         })
       }
     }
-
+    getCustomerCategorizationRating(props.location.state.id, setRatings);
   }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
@@ -166,9 +192,10 @@ const CustomerProfile = (props: Props) => {
               </tr>
               {ability.can('viewIscore', 'customer') && <tr>
                 <td>iScore</td>
-                <td style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}>
-                  {iScoreDetails?.iscore}
+                <td>
+                  <span style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}>{iScoreDetails?.iscore}</span>
                   <span style={{ margin: '0px 10px' }}>{iscoreStatusColor(iScoreDetails?.iscore).status}</span>
+                  {iScoreDetails?.bankCodes && iScoreDetails.bankCodes.map(code => `${iscoreBank(code)} `)}
                   {iScoreDetails?.url && <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(iScoreDetails?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>}
                 </td>
               </tr>}
@@ -328,8 +355,23 @@ const CustomerProfile = (props: Props) => {
                 <td>{local.comments}</td>
                 <td>{customerDetails?.comments}</td>
               </tr>
+            {customerDetails?.blocked && customerDetails?.blocked?.isBlocked && (
+              <tr>
+                <td>{local.blockReason}</td>
+                <td>{customerDetails.blocked.reason || ''}</td>
+              </tr>
+            )}
+            {customerDetails?.blocked && !customerDetails?.blocked?.isBlocked && customerDetails?.blocked?.reason && (
+              <tr>
+                <td>{local.unblockReason}</td>
+                <td>{customerDetails.blocked.reason || ''}</td>
+              </tr>
+            )}
             </tbody>
           </Table>}
+          {activeTab === 'customerScore' && customerDetails?.hasLoan && <Can I="customerCategorization" a="customer">
+            <CustomerCategorization ratings={ratings} />
+          </Can>}
           {activeTab === 'documents' &&
             <DocumentsUpload
               customerId={props.location.state.id}

@@ -14,6 +14,7 @@ interface Props {
     edit: boolean;
     review: boolean;
     customerKey: string;
+    penalty: number;
     handleChange: (eventOrPath: string | React.ChangeEvent<any>) => void | ((eventOrTextValue: string | React.ChangeEvent<any>) => void);
     handleBlur: (eventOrString: any) => void | ((e: any) => void);
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
@@ -43,7 +44,8 @@ export const CreateClearanceForm = (props: Props) => {
                         <Select
                             name="application"
                             data-qc="application"
-                            styles={theme.selectStyle}
+                            styles={theme.selectStyleWithBorder}
+														theme={theme.selectTheme}
                             value={selectedApplication}
                             onChange={(event) => {
                                 props.setFieldValue('loanId', event.id)
@@ -226,19 +228,20 @@ export const CreateClearanceForm = (props: Props) => {
                     </Col>
                 </Row>
                 {
-                    props.review ?
+                    props.review  ?
                         <>
                             {status === 'underReview' && <Form.Group
                                 as={Row}
                             >
                                 <Col >
                                     <Button
-                                        className={'btn-reject btn-danger'} style={{ width: '60%' }}
+                                        className={'btn-reject btn-danger'} style={{ width: ( !props.penalty || props.penalty <= 0) ? '60%':'30%' }}
                                         type="submit"
                                         onClick={() => { props.setFieldValue('status', 'rejected'); }}
                                     >{local.rejected}</Button>
                                 </Col>
-                                <Col>
+
+                              {(  !props.penalty  || props.penalty <= 0)&&  <Col>
                                     <Button
                                         type='submit'
                                         className={'btn-submit-next'}
@@ -247,7 +250,7 @@ export const CreateClearanceForm = (props: Props) => {
                                         }}
                                         style={{ float: 'left', width: '60%' }}
                                     >{local.approved}</Button>
-                                </Col>
+                                </Col> }
                             </Form.Group>
                             }
                             {status === 'rejected' && <Form.Group
@@ -270,7 +273,7 @@ export const CreateClearanceForm = (props: Props) => {
                         >
                             <Col >
                                 <Button
-                                    className={'btn-cancel-prev'} style={{ width: '60%' }}
+                                    variant="secondary" style={{ width: '60%' }}
                                     onClick={() => { props.cancel() }}
                                 >{local.cancel}</Button>
                             </Col>

@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react';
-import CustomerCreation from '../Components/CustomerCreation/customer-creation';
-import UserCreation from '../Components/UserCreation/user-creation';
+import CustomerCreation from '../Components/CustomerCreation/customerCreation';
+import UserCreation from '../Components/UserCreation/userCreation';
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation';
 import FormulaTest from '../Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from '../Components/LoanProductCreation/loanProductCreation';
@@ -22,7 +22,7 @@ import RolesList from '../Components/ManageAccounts/rolesList';
 import { Landing } from '../Components/Landing/landing';
 import Can from '../config/Can';
 import UserDetails from '../Components/userDetails/user-details';
-import CreateBranch from '../Components/BranchCreation/create-branch';
+import CreateBranch from '../Components/BranchCreation/createBranch';
 import CustomersList from '../Components/CustomerCreation/customersList';
 import LoanProducts from '../Components/ManageLoans/productsList';
 import FormulaList from '../Components/ManageLoans/calculationFormulaList';
@@ -40,7 +40,7 @@ import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
 import ReportsHome from '../Components/Reports/reportsHome';
-import MoveCustomers from '../Components/MoveCustomers/move-customers';
+import MoveCustomers from '../Components/MoveCustomers/moveCustomers';
 import BulkApplicationCreation from '../Components/BulkApplicationCreation/bulkApplicationCreation';
 import AssignProductsToBranches from '../Components/Branch/assignProductsToBranches';
 import Leads from '../Components/HalanIntegration/leads';
@@ -52,7 +52,11 @@ import GeoAreas from '../Components/GeoAreas/geoAreas';
 import BulkApplicationReview from '../Components/BulkApplicarionReview/bulkApplicationReview' ;
 import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
-
+import ClearanceProfile from '../Components/Clearance/clearanceProfile';
+import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
+import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
+import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
+import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 
 const appRoutes = [
   {
@@ -189,11 +193,27 @@ const appRoutes = [
         ]
       },
       {
-        path: "/loan-uses",
-        label: local.loanUses,
-        render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+        path: "/manage-loan-details",
+        label: local.manageLoanDetails,
+        render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>,
+        routes: [
+          {
+            path: "/loan-uses",
+            label: local.loanUses,
+            render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
+          },
+          {
+            path: "/business-activities",
+            label: local.businessActivities,
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessActivities /></Can>
+          },
+          {
+            path: "/business-specialities",
+            label: local.businessSpecialities,
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessSpecialities /></Can>
+          },
+        ]
       },
-      
       {
         path: "/manage-loans",
         label: local.loans,
@@ -320,12 +340,10 @@ const appRoutes = [
                 path: "/branch-details",
                 label: local.branchDetails,
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
-              }
+              },
             ]
           }
-
         ]
-
       },
       // {
       //   path: "/manage-finances",
@@ -367,17 +385,7 @@ const appRoutes = [
       {
         path: "/reports",
         label: local.reports,
-        render: () => <ReportsHome/>
-      },
-      {
-        path: "/move-customers",
-        label: local.moveCustomers,
-        render: (props) => <Can I = "changeOfficer" a = "customer"><MoveCustomers {...props}/></Can>
-      },
-      {
-        path: "/bulk-creation",
-        label: local.bulkApplicationCreation,
-        render: () => <Can I='createLoan' a='application'><BulkApplicationCreation/></Can>
+        render: () => <ReportsHome />
       },
       {
         path: "/halan-integration",
@@ -387,7 +395,7 @@ const appRoutes = [
           {
             path: "/leads",
             label: local.applicantsLeads,
-            render: (props) => <Leads {...props} /> ,
+            render: (props) => <Leads {...props} />,
             routes: [
               {
                 path: "/view-lead",
@@ -404,14 +412,14 @@ const appRoutes = [
           {
             path: "/exchange",
             label: local.assignOrChangeLoanOfficer,
-            render: (props) => <AssignLoanOfficer {...props} /> ,
+            render: (props) => <AssignLoanOfficer {...props} />,
           }
         ]
       },
       {
         path: '/clearances',
         label: local.clearances,
-        render: (props) => <ClearancesList {...props} />,
+        render: (props) => <Can I = "getClearance" a="application"> <ClearancesList {...props} /></Can>,
         routes:[
           {
             path: "/edit-clearance",
@@ -419,8 +427,7 @@ const appRoutes = [
             render: (props) => 
              <Can I ="editClearance" a="application">
               <CreateClearance {...props} edit={true} />
-               </Can>
-            
+               </Can>    
           },
           {
             
@@ -431,8 +438,23 @@ const appRoutes = [
                 <CreateClearance {...props} review={true} />
                  </Can>
               
+          },
+          {
+            path: "/clearance-profile",
+            label: local.clearanceDetails,
+            render: (props) => <Can I= "getClearance" a="application">
+              <ClearanceProfile  {...props}/>
+            </Can>
           }
         ]
+      },{
+        path: '/supervisions-levels',
+        label: local.levelsOfSupervision,
+        render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
+      },{
+        path: '/financial-closing',
+        label: local.financialClosing,
+        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
       }
     ]
   },

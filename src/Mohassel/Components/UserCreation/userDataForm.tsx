@@ -7,12 +7,13 @@ import './userCreation.scss'
 import * as local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
-import { checkIssueDate } from '../../../Shared/Services/utils';
+import { checkIssueDate, getErrorMessage } from '../../../Shared/Services/utils';
 import { Values, Errors, Touched } from './userCreationinterfaces';
 import { checkNationalIdDuplicates } from '../../Services/APIs/User-Creation/checkNationalIdDup';
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup';
 import { checkHRCodeDuplicates } from '../../Services/APIs/User-Creation/checkHRCodeDUP';
 import { getBirthdateFromNationalId, getGenderFromNationalId } from '../../Services/nationalIdValidation';
+import Swal from 'sweetalert2';
 interface Props {
     values: Values;
     errors: Errors;
@@ -35,12 +36,8 @@ export const UserDataForm = (props: Props) => {
     const [duplicateUserNameHR, setDuplicateUserNameHR] = useState('');
     const [nationalIdLoading, setNationalIdLoading] = useState(false);
     return (
-        <Form
-            onSubmit={handleSubmit}
-            className=" user-data-form"
-        >
+        <Form onSubmit={handleSubmit}>
             <Form.Group
-                className={'user-data-group'}
                 controlId={'name'}
             >
                 <Form.Label
@@ -66,7 +63,6 @@ export const UserDataForm = (props: Props) => {
                 <Col sm={5}>
                     <Form.Group
                         controlId={'nationalId'}
-                        className={'user-data-group'}
                     >
                         <Form.Label
                             className={'user-data-label'}
@@ -95,7 +91,10 @@ export const UserDataForm = (props: Props) => {
                                         setDuplicateUserNameNID(res.body.data.userName);
                                         props.setFieldValue('birthDate', getBirthdateFromNationalId(value));
                                         props.setFieldValue('gender', getGenderFromNationalId(value));
-                                    } else setNationalIdLoading(false);
+                                    } else {
+                                        setNationalIdLoading(false);
+                                        Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+                                    }
                                 }
                             }}
                             isInvalid={(props.errors.nationalId && props.touched.nationalId) as boolean}
@@ -176,7 +175,6 @@ export const UserDataForm = (props: Props) => {
             <Row>
                 <Col>
                     <Form.Group
-                        className={'user-data-group'}
                         controlId={'hrCode'}
                     >
                         <Form.Label
@@ -198,7 +196,10 @@ export const UserDataForm = (props: Props) => {
                                     setLoading(false);
                                     props.setFieldValue('hrCodeChecker', res.body.data.exists);
                                     setDuplicateUserNameHR(res.body.data.userName);
-                                } else setLoading(false);
+                                } else {
+                                    setLoading(false);
+                                    Swal.fire('Error !', getErrorMessage(res.error.error),'error');
+                                }
 
                             }}
                             onBlur={props.handleBlur}
@@ -213,7 +214,6 @@ export const UserDataForm = (props: Props) => {
                 <Col>
                     <Form.Group
                         controlId={'hiringDate'}
-                        className={'user-data-group'}
                     >
                         <Form.Label
                             className={'user-data-label'}
@@ -239,7 +239,6 @@ export const UserDataForm = (props: Props) => {
 
             <Form.Group
                 controlId={'mobilePhoneNumber'}
-                className={'user-data-group'}
             >
                 <Form.Label
                     className={'user-data-label'}
@@ -264,7 +263,6 @@ export const UserDataForm = (props: Props) => {
 
             <Form.Group
                 controlId={'username'}
-                className={'user-data-group'}
             >
                 <Form.Label
                     className={'user-data-label'}
@@ -284,7 +282,10 @@ export const UserDataForm = (props: Props) => {
                         if (res.status === 'success') {
                             setLoading(false);
                             props.setFieldValue('usernameChecker', res.body.data.exists);
-                        } else setLoading(false);
+                        } else {
+                            setLoading(false);
+                            Swal.fire('Error !', getErrorMessage(res.error.error), 'error');
+                        }
 
                     }}
                     onBlur={props.handleBlur}
@@ -303,7 +304,6 @@ export const UserDataForm = (props: Props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row}
-                className={'user-data-group'}
             >
                 <Col>
                     <Form.Label
@@ -348,20 +348,10 @@ export const UserDataForm = (props: Props) => {
                     </Form.Control.Feedback>
                 </Col>
             </Form.Group>
-            <Form.Group
-                as={Row}
-                className={['user-data-group']}
-            >
-                <Col >
-                    <Button
-                        className={'btn-cancel-prev'} style={{ width: '60%' }}
-                        onClick={() => { props.cancel() }}
-                    >{local.cancel}</Button>
-                </Col>
-                <Col>
-                    <Button className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="next">{local.next}</Button>
-                </Col>
-            </Form.Group>
+						<div className="d-flex justify-content-between">
+							<Button variant="secondary" className="w-25" onClick={() => { props.cancel() }}>{local.cancel}</Button>
+							<Button type="submit" data-qc="next" className="w-25">{local.next}</Button>
+						</div>
         </Form>
     );
 

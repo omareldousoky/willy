@@ -120,7 +120,7 @@ class UsersList extends Component<Props, State> {
       <>
         <img style={{cursor: 'pointer', marginLeft: 20}} alt={"view"} src={require('../../Assets/view.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/user-details", state: { details: data._id } }) }} ></img>
         <Can I="updateUser" a="user"><img style={{cursor: 'pointer', marginLeft: 20}} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/users/edit-user", state: { details: data._id } }) }} ></img></Can>
-        <Can I="userActivation" a="user"><span  className='fa icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span></Can>
+        <Can I="userActivation" a="user"><span  className='icon' onClick={() => this.handleActivationClick(data)}> {data.status === "active" && <img alt={"deactive"} src={require('../../Assets/deactivate-user.svg')} />} {data.status === "inactive" && local.activate} </span></Can>
       </>
     );
   }
@@ -143,7 +143,7 @@ class UsersList extends Component<Props, State> {
       array = {this.state.manageAccountTabs}
       active = {this.state.manageAccountTabs.map(item => {return item.icon}).indexOf('users')}
         /> }
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullsection" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -152,7 +152,7 @@ class UsersList extends Component<Props, State> {
                 <span className="text-muted">{local.noOfUsers + ` (${this.props.totalCount? this.props.totalCount : 0})`}</span>
               </div>
               <div>
-                <Can I='createUser' a='user'><Button className="big-button" style={{ marginLeft: 20 }} onClick={() => this.props.history.push('/manage-accounts/users/new-user')}>{local.createNewUser}</Button></Can>
+                <Can I='createUser' a='user'><Button className="big-button" onClick={() => this.props.history.push('/manage-accounts/users/new-user')}>{local.createNewUser}</Button></Can>
                 {/* <Button variant="outline-primary" className="big-button">download pdf</Button> */}
               </div>
             </div>

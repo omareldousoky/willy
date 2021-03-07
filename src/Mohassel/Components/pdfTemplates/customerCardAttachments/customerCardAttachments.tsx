@@ -37,7 +37,7 @@ const CustomerCardAttachments = (props) => {
                   <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
                 </tr>
                 <tr>
-                  <td>فرع : {props.branchDetails.name} - {props.data.customer.governorate}</td>
+                  <td>فرع : {props.branchDetails.name}</td>
                 </tr>
               </tbody>
             </table>
@@ -316,7 +316,7 @@ const CustomerCardAttachments = (props) => {
                       <td rowSpan={2} >تاريخ القيد بالسجل التجاري: ٢٢-٦-٢٠١٥</td>
                     </tr>
                     <tr>
-                      <td>فرع : {props.branchDetails.name} - {individualInGroup.customer.governorate}</td>
+                      <td>فرع : {props.branchDetails.name}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -5,7 +5,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
-import { download, downloadAsZip } from '../../Services/utils';
+import { download, getErrorMessage } from '../../Services/utils';
 import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
 import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments, AddToSelectionArray, RemoveFromSelectionArray } from '../../redux/document/actions'
@@ -64,7 +64,7 @@ class DocumentUploader extends Component<Props, State> {
   }
   calculateLimit() {
 
-    return (this.getImageFilesLength() - this.calculateNumOfValidDocuments(name));
+    return (this.getImageFilesLength() - this.calculateNumOfValidDocuments(this.props.documentType.name));
 
   }
   triggerInputFile() {
@@ -145,7 +145,7 @@ class DocumentUploader extends Component<Props, State> {
           }
           reader.readAsDataURL(file)
         } else {
-          Swal.fire("", local.documentUploadError, "error")
+          Swal.fire("Error !",getErrorMessage(this.props.document.error.error)  , "error")
         }
       }
     }
@@ -166,7 +166,7 @@ class DocumentUploader extends Component<Props, State> {
       this.props.invalidDocument(data.key, name);
     }
     else {
-      Swal.fire("", local.deleteError, "error")
+      Swal.fire("Error !", getErrorMessage(this.props.document.error.error), "error")
     }
 
   }
@@ -180,7 +180,7 @@ class DocumentUploader extends Component<Props, State> {
   };
   handleOnChange = (event) => {
     event.preventDefault();
-    const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(name);
+    const imagesLimit = this.props.documentType.pages + this.calculateNumOfValidDocuments(this.props.documentType.name);
     if (event.target.files.length <= imagesLimit && this.getImageFilesLength() <= imagesLimit && !this.props.view) {
       this.readFiles(event.target.files, this.props.documentType.name);
     } else {
@@ -245,9 +245,9 @@ class DocumentUploader extends Component<Props, State> {
       <Card.Body key={key} className="document-upload-container" >
         <Row data-qc="document-actions" className="document-actions" >
 
-          {(this.props.documentType.active && this.props.documents.find(doc => doc.docName === name).imagesFiles[key]?.valid) && !this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img className={this.props.documentType.updatable ? "" : "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
-          {<span className="fa icon" onClick={() => { this.downloadPhoto(this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
-          {<span className="fa icon">
+          {(this.props.documentType.active && this.props.documents.find(doc => doc.docName === name).imagesFiles[key]?.valid) && !this.props.view && <span className="icon" onClick={(e) => this.deleteDocument(e, name, key)}><img className={this.props.documentType.updatable ? "" : "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
+          {<span className="icon" onClick={() => { this.downloadPhoto(this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
+          {<span className="icon">
 
             <Form.Check
               type='checkbox'

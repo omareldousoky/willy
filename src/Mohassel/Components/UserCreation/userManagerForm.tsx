@@ -7,11 +7,12 @@ import Col from "react-bootstrap/Col";
 import "./userCreation.scss";
 import * as local from "../../../Shared/Assets/ar.json";
 import { theme } from "../../../theme";
-import { customFilterOption } from '../../../Shared/Services/utils';
+import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
 import { MainChoosesValues } from "./userCreationinterfaces";
 import Button from "react-bootstrap/Button";
 import { searchUsers } from "../../Services/APIs/Users/searchUsers";
 import { Loader } from "../../../Shared/Components/Loader";
+import Swal from "sweetalert2";
 
 interface Props {
   roles: any[];
@@ -90,14 +91,18 @@ class UserManagerForm extends Component<Props, State> {
       this.setState({ loading: true });
       const res = await searchUsers(obj);
       const users: any[] = [];
+      if(res.status === "success"){
       res.body.data.map((user: any) => {
         users.push({
           label: user.name,
           value: user._id,
         });
       });
-
       this.setState({ managersList: users, loading: false });
+    }
+      else {
+         this.setState({loading: false}, () => Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
+      }
     }
   }
   render() {
@@ -108,7 +113,8 @@ class UserManagerForm extends Component<Props, State> {
             {`${local.chooseMainRole} *`}
           </Form.Label>
           <Select
-            styles={theme.selectStyle}
+						styles={theme.selectStyleWithBorder}
+						theme={theme.selectTheme}
             isSearchable={true}
             filterOption={customFilterOption}
             placeholder={
@@ -162,7 +168,8 @@ class UserManagerForm extends Component<Props, State> {
               {`${local.chooseMainBranch} *`}
             </Form.Label>
             <Select
-              styles={theme.selectStyle}
+							styles={theme.selectStyleWithBorder}
+							theme={theme.selectTheme}
               isSearchable={true}
               filterOption={customFilterOption}
               placeholder={
@@ -217,7 +224,8 @@ class UserManagerForm extends Component<Props, State> {
                 {local.chooseManager}
               </Form.Label>
               <Select
-                styles={theme.selectStyle}
+								styles={theme.selectStyleWithBorder}
+								theme={theme.selectTheme}
                 isSearchable={true}
                 filterOption={customFilterOption}
                 placeholder={
@@ -246,35 +254,26 @@ class UserManagerForm extends Component<Props, State> {
             </Form.Group>
           </>
         )}
-        <Form.Group as={Row}>
-          <Col>
-            <Button
-              className={"btn-cancel-prev"}
-              style={{ width: "60%" }}
-              data-qc="previous"
-              onClick={() => {
-                this.props.previousStep(this.props.values);
-              }}
-            >
-              {local.previous}
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              className={"btn-submit-next"}
+				<div className="d-flex justify-content-between">
+					<Button 
+						className="btn-cancel-prev w-25"
+						data-qc="previous"
+						onClick={() => {
+							this.props.previousStep(this.props.values);
+						}}
+						>{local.previous}</Button>
+						<Button
+							variant="primary"
+							className="w-25" 
+              onClick={this.props.handleSubmit}
               disabled={
                 !this.state.mainRoleId ||
                 (!this.state.mainBranchId && this.state.hasBranch)
               }
-              style={{ float: "left", width: "60%" }}
-              type="button"
-              onClick={this.props.handleSubmit}
+							type="button"
               data-qc="submit"
-            >
-              {local.submit}
-            </Button>
-          </Col>
-        </Form.Group>
+						>{local.submit}</Button>
+				</div>
       </Container>
     );
   }

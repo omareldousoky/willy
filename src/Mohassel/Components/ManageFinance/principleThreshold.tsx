@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { manageToolsArray } from '../Tools/manageToolsInitials';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 
 interface Props {
     history: any;
@@ -67,8 +68,7 @@ class PrincipleThreshold extends Component<Props, State> {
                 principals
             })
         } else {
-            Swal.fire('', local.searchError, 'error');
-            this.setState({ loading: false });
+            this.setState({ loading: false } , () => Swal.fire('Error !', getErrorMessage(princples.error.error), 'error'));
         }
     }
     update = (values) => {
@@ -89,8 +89,7 @@ class PrincipleThreshold extends Component<Props, State> {
                     this.setState({ loading: false })
                     Swal.fire('', local.principalMaxChangeSuccess, 'success').then(() => window.location.reload());
                 } else {
-                    this.setState({ loading: false })
-                    Swal.fire('', local.principalMaxChangeError, 'error');
+                    this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'))
                 }
             }
         })
@@ -104,7 +103,7 @@ class PrincipleThreshold extends Component<Props, State> {
                     active={this.state.manageToolsTabs.map(item => {return item.icon}).indexOf('principalRange')}
                 />
                 <Loader type="fullscreen" open={this.state.loading} />
-                <Card>
+                <Card className="main-card">
                     <Formik
                         initialValues={this.state.principals}
                         onSubmit={this.update}
@@ -121,7 +120,7 @@ class PrincipleThreshold extends Component<Props, State> {
                         {(formikProps) =>
 
                             <Form onSubmit={formikProps.handleSubmit} className="data-form">
-                                <Form.Group className="data-group" controlId="maxIndividualPrincipal">
+                                <Form.Group controlId="maxIndividualPrincipal">
                                     <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxIndividualPrincipal}*`}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
@@ -138,7 +137,7 @@ class PrincipleThreshold extends Component<Props, State> {
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
-                                <Form.Group className="data-group" controlId="maxGroupIndividualPrincipal">
+                                <Form.Group controlId="maxGroupIndividualPrincipal">
                                     <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxGroupIndividualPrincipal}*`}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
@@ -155,7 +154,7 @@ class PrincipleThreshold extends Component<Props, State> {
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
-                                <Form.Group className="data-group" controlId="maxGroupReturningIndividualPrincipal">
+                                <Form.Group controlId="maxGroupReturningIndividualPrincipal">
                                     <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxGroupReturningIndividualPrincipal}*`}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
@@ -172,8 +171,8 @@ class PrincipleThreshold extends Component<Props, State> {
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
-                                <Form.Group className="data-group" controlId="maxGroupPrincipal">
-                                    <Form.Label className="data-label" style={{ textAlign: 'right' }} column sm={3}>{`${local.maxGroupPrincipal}*`}</Form.Label>
+                                <Form.Group controlId="maxGroupPrincipal">
+                                    <Form.Label className="data-label" column sm={3}>{`${local.maxGroupPrincipal}*`}</Form.Label>
                                     <Col sm={6}>
                                         <Form.Control
                                             type="number"
@@ -189,8 +188,8 @@ class PrincipleThreshold extends Component<Props, State> {
                                         </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
-                                <div className="d-flex justify-content-center" style={{ margin: '5px 0' }}>
-                                    <Button type="submit" variant="primary">{local.submit}</Button>
+                                <div className="d-flex justify-content-end mb-4 col-sm-6">
+                                    <Button type="submit" variant="primary big-btn">{local.submit}</Button>
                                 </div>
                             </Form>
                         }

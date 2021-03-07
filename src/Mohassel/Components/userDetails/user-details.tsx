@@ -16,6 +16,7 @@ import CustomersForUser from "./customersForUser";
 import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
 import Can from "../../config/Can";
 import ability from "../../config/ability";
+import { getErrorMessage } from "../../../Shared/Services/utils";
 interface Props {
   history: any;
 }
@@ -41,12 +42,13 @@ class UserDetails extends Component<Props, State> {
         nationalIdIssueDate: 0,
         gender: "",
         birthDate: 0,
-        branches: [""],
+        branches: [],
         roles: [],
         _id: "",
         hiringDate: 0,
         hrCode: "",
         mobilePhoneNumber: "",
+        mainBranchId: "",
         status: "",
         branchesObjects: [{ _id: "", name: "" }]
       }
@@ -65,8 +67,7 @@ class UserDetails extends Component<Props, State> {
       await this.getUserDetails();
       Swal.fire("success", `${this.state.data.username} is ${req.status} now`);
     } else {
-      this.setState({ isLoading: false });
-      Swal.fire("error");
+      this.setState({ isLoading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   setUserDetails(data: any): UserDateValues {
@@ -88,8 +89,7 @@ class UserDetails extends Component<Props, State> {
         isLoading: false
       });
     } else {
-      this.setState({ isLoading: false });
-      Swal.fire("error", local.userDetialsError);
+      this.setState({ isLoading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error),'error'));
     }
   }
   componentDidMount() {
@@ -122,9 +122,9 @@ class UserDetails extends Component<Props, State> {
     return (
       <div className={"rowContainer"}>
         <Can I="updateUser" a="user">
-          <span className={"fa icon"}>
+          <span className={"icon"}>
             <div
-              className={"iconConatiner fa icon"}
+              className={"iconContainer icon"}
               onClick={() => {
                 this.props.history.push({
                   pathname: "/manage-accounts/users/edit-user",
@@ -142,10 +142,10 @@ class UserDetails extends Component<Props, State> {
           </span>
         </Can>
         <Can I="userActivation" a="user">
-          <span className={"fa icon"}>
+          <span className={"icon"}>
             <div
               onClick={async () => this.handleActivationClick()}
-              className={"iconConatiner "}
+              className={"iconContainer "}
             >
               {this.state.data.status === "active" && (
                 <img

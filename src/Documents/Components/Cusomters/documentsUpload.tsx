@@ -11,7 +11,7 @@ import { DocumentType } from '../../../Shared/Services/interfaces'
 import { connect } from 'react-redux';
 import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../../../Shared/redux/document/actions'
 import { Image } from '../../../Shared/redux/document/types';
-import { downloadAsZip } from '../../../Shared/Services/utils';
+import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils';
 import * as local from '../../../Shared/Assets/ar.json';
 import { withRouter } from 'react-router-dom';
 
@@ -77,7 +77,7 @@ class DocumentsUpload extends Component<Props, State>{
         documentTypes: response.body.documentTypes,
       })
     } else {
-      Swal.fire("error", "error in getting customer documents", "error");
+      Swal.fire("Error !", getErrorMessage(response.error.error), "error");
     }
     this.props.getDocuments({ customerId: this.props.location.state.id, docType: 'customer' });
   }

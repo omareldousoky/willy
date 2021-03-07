@@ -38,10 +38,7 @@ const StepOneForm = (props: Props) => {
             />}
             <Row>
                 <Col>
-                    <Form.Group
-                        className={'branch-data-group'}
-                        controlId={'name'}
-                    >
+                    <Form.Group controlId={'name'}>
                         <Form.Label
                             className={'branch-data-label'}
                         >{`${local.branchName}*`}
@@ -78,10 +75,7 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group
-                        className={'branch-data-group'}
-                        controlId={'governorate'}
-                    >
+                    <Form.Group controlId={'governorate'}>
                         <Form.Label
                             className={'branch-data-label'}
                         >
@@ -95,27 +89,24 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Col
-                className={'branch-data-group'}
-            >
+						<Row>
+            <Col>
                 <div
                     className={'branch-data-label'}
                 >{`${local.branchOnMap}`}
                 </div>
                 <Button
-                    className={'map-btn'}
+                    className={'map-btn mb-3'}
                     name={"branchAddressLatLong"}
                     data-qc={"branchAddressLatLong"}
                     onClick={() => openCloseMap(true)}
 
                 ><span><img alt={'location'} src={require('../../Assets/activeLocation.svg')} /> {local.branchOnMap} </span></Button>
             </Col>
+						</Row>
             <Row>
                 <Col>
-                    <Form.Group
-                        className={'branch-data-group'}
-                        controlId={'address'}
-                    >
+                    <Form.Group controlId={'address'}>
                         <Form.Label
                             className={'branch-data-label'}
                         >{`${local.branchAddress}*`}
@@ -137,10 +128,7 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group
-                        controlId={'postalCode'}
-                        className={'branch-data-group'}
-                    >
+                    <Form.Group controlId={'postalCode'}>
                         <Form.Label
                             className={'branch-data-label'}
                         >{local.postalCode}
@@ -165,7 +153,7 @@ const StepOneForm = (props: Props) => {
             </Row>
             <Row>
                 <Col>
-                    <Form.Group className={'branch-data-group'}>
+                    <Form.Group >
                         <Form.Label className={'branch-data-label'}>
                             {local.mobilePhoneNumber}
                         </Form.Label>
@@ -186,7 +174,7 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group className={'branch-data-group'}>
+                    <Form.Group >
                         <Form.Label className={'branch-data-label'}>
                             {local.faxNumber}
                         </Form.Label>
@@ -209,7 +197,7 @@ const StepOneForm = (props: Props) => {
             </Row>
             <Row>
                 <Col>
-                    <Form.Group className={'branch-data-group'}>
+                    <Form.Group >
                         <Form.Label className={'branch-data-label'}>
                             {`${local.licenseNumber}*`}
                         </Form.Label>
@@ -230,7 +218,7 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group className={'branch-data-group'}>
+                    <Form.Group >
                         <Form.Label className={'branch-data-label'}>
                             {`${local.licenseDate}*`}
                         </Form.Label>
@@ -250,20 +238,14 @@ const StepOneForm = (props: Props) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Form.Group
-                as={Row}
-                className={['branch-data-group']}
-            >
-                <Col >
-                    <Button
-                        className={'btn-cancel-prev'} style={{ width: '60%' }}
-                        onClick={() => { props.cancel() }}
-                    >{local.cancel}</Button>
-                </Col>
-                <Col>
-                    <Button className={'btn-submit-next'} style={{ float: 'left', width: '60%' }} type="submit" data-qc="submit">{local.submit}</Button>
-                </Col>
-            </Form.Group>
+						<div className="d-flex justify-content-between py-4">
+							<Button
+								variant="secondary"
+								className="w-25"
+								onClick={() => { props.cancel() }}
+							>{local.cancel}</Button>
+							<Button variant="primary" className="w-25" type="submit" data-qc="submit">{local.submit}</Button>
+						</div>
         </Form>
     )
 }

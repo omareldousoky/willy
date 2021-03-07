@@ -21,7 +21,7 @@ import { theme } from "../../../theme";
 import { getRoles } from "../../Services/APIs/Roles/roles";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import { customFilterOption } from '../../../Shared/Services/utils';
+import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
 export interface Section {
   _id: string;
   key: string;
@@ -84,7 +84,7 @@ class RoleCreation extends Component<Props, State> {
         sections,
       });
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   async getRolesForManager() {
@@ -96,8 +96,7 @@ class RoleCreation extends Component<Props, State> {
         loading: false,
       });
     } else {
-      this.setState({ loading: false });
-      Swal.fire("error", local.getManagerRolesError);
+      this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   prepareManagerRolesOptions(roles: Array<any>) {
@@ -148,7 +147,7 @@ class RoleCreation extends Component<Props, State> {
         permissions: rolePermissionsArray,
       });
     } else {
-      this.setState({ loading: false });
+      this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
     }
   }
   renderSteps() {
@@ -175,7 +174,7 @@ class RoleCreation extends Component<Props, State> {
           // <UserDataForm {...formikProps} cancle={() => this.cancel()} />
           <Form onSubmit={formikProps.handleSubmit} className="data-form">
             <Col>
-              <Form.Group className="data-group" controlId="roleName">
+              <Form.Group controlId="roleName">
                 <Form.Label className="data-label">{local.roleName}</Form.Label>
                 <Form.Control
                   type="text"
@@ -197,7 +196,7 @@ class RoleCreation extends Component<Props, State> {
               <Form.Group
                 as={Row}
                 controlId="hQpermission"
-                className="data-group row-nowrap"
+                className="row-nowrap"
               >
                 <Form.Check
                   type="checkbox"
@@ -222,15 +221,15 @@ class RoleCreation extends Component<Props, State> {
                 </Form.Label>
               </Form.Group>
               <Form.Group
-                className={"data-group"}
                 controlId="managerRole"
-                style={{ minHeight: "20rem" }}
+                className="mb-4"
               >
                 <Form.Label className={"data-label"}>
                   {local.selectManagerRole}
                 </Form.Label>
                 <Select
-                  styles={theme.selectStyle}
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   isSearchable={true}
                   filterOption={customFilterOption}
                   isDisabled={this.props.edit}
@@ -257,9 +256,10 @@ class RoleCreation extends Component<Props, State> {
                   options={this.state.managerRolesList}
                 />
               </Form.Group>
-              <Form.Group as={Row} className="justify-content-around">
+							<div className="d-flex justify-content-between py-4">
                 <Button
-                  style={{ width: "20%" }}
+									variant="secondary"
+									className="w-25"
                   onClick={() => {
                     this.cancel();
                   }}
@@ -267,13 +267,14 @@ class RoleCreation extends Component<Props, State> {
                   {local.cancel}
                 </Button>
                 <Button
-                  style={{ float: "left", width: "20%" }}
+									variant="primary"
+									className="w-25"
                   type="submit"
                   data-qc="next"
                 >
                   {local.next}
                 </Button>
-              </Form.Group>
+              </div>
             </Col>
           </Form>
         )}
@@ -337,8 +338,7 @@ class RoleCreation extends Component<Props, State> {
             this.props.history.push("/manage-accounts");
           });
         } else {
-          Swal.fire("error", local.userRoleCreationError, "error");
-          this.setState({ loading: false });
+          this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
         }
       } else {
         this.setState({ loading: true });
@@ -356,8 +356,7 @@ class RoleCreation extends Component<Props, State> {
             this.props.history.push("/manage-accounts");
           });
         } else {
-          Swal.fire("error", local.userRoleEditError, "error");
-          this.setState({ loading: false });
+          this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
         }
       }
     } else {

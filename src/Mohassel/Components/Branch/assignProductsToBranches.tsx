@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getProducts } from '../../Services/APIs/loanProduct/getProduct';
 import { assignProductsToBranches, unassignProductsToBranches } from '../../Services/APIs/Branch/assignProductsToBranches';
-import { customFilterOption } from '../../../Shared/Services/utils';
+import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
 import DualBox from '../DualListBox/dualListBox';
 import Select from 'react-select';
 import Form from 'react-bootstrap/Form';
@@ -14,7 +13,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import { theme } from '../../../theme';
-import { CardBody } from 'react-bootstrap/Card';
 import Card from 'react-bootstrap/Card';
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
@@ -90,7 +88,7 @@ class AssignProductsToBranches extends Component<Props, State>{
             })
         } else {
             this.setState({ loading: false }, () => {
-                Swal.fire("error", local.searchError)
+                Swal.fire("Error !",getErrorMessage(res.error.error),'error');
             })
         }
     }
@@ -109,7 +107,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                     selectedBranches: haveBranches,
                 })
             } else {
-                Swal.fire("error", res.error);
+                Swal.fire("Error !",getErrorMessage(res.error.error),'error')
             }
         }
         this.setState({ loading: false });
@@ -161,7 +159,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                 loading: false,
                 noErrors: false,
             })
-            Swal.fire("error", local.assignProductsToBranchesError)
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error')
         }
     }
     async unassignProductsToBranches(_ids: string[]) {
@@ -180,7 +178,7 @@ class AssignProductsToBranches extends Component<Props, State>{
                 noErrors: false,
             })
 
-             Swal.fire("error", local.unassignProductsToBranchesError)
+            Swal.fire("Error !",getErrorMessage(res.error.error),'error');
         }
     }
     render() {
@@ -191,18 +189,19 @@ class AssignProductsToBranches extends Component<Props, State>{
                     array={this.state.manageLoansTabs}
                     active={this.state.manageLoansTabs.map(item =>  {return item.icon}).indexOf('assignProductToBranch')}
                 />
-                <Card>
+                <Card className="main-card">
                     <Loader open={this.state.loading} type="fullscreen" />
-                    <Card.Body style={{ width: '100%'}}>
+                    <Card.Body className="w-100">
                         <Form  className= "data-form"> 
-                            <Form.Group controlId="products" className="data-group" style={{ width: '100%' }}>
+                            <Form.Group controlId="products" className="data-group w-100">
                                 <Form.Label className="data-label">{local.productName}</Form.Label>
                                 <Row>
                                     <Col sm={10}>
                                         <Select
                                             name="products"
                                             data-qc="products"
-                                            styles={theme.selectStyle}
+                                            styles={theme.selectStyleWithBorder}
+																						theme={theme.selectTheme}
                                             value={this.state.selectedProducts}
                                             isMulti
                                             isSearchable={true}

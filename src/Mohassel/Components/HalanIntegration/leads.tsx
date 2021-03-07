@@ -28,6 +28,7 @@ import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 import { Employee } from '../Payment/payment';
 import { getErrorMessage } from '../../../Shared/Services/utils';
+import { theme } from '../../../theme';
 
 interface Props {
   data: any;
@@ -308,7 +309,7 @@ class Leads extends Component<Props, State>{
           array={this.state.tabs}
           active={this.state.tabs.map(item => { return item.icon }).indexOf('users')}
         />
-        <Card style={{ margin: '20px 50px' }}>
+        <Card className="main-card">
           <Loader type="fullscreen" open={this.props.loading} />
           <Card.Body style={{ padding: 0 }}>
             <div className="custom-card-header">
@@ -346,18 +347,22 @@ class Leads extends Component<Props, State>{
           </Card.Body>
         </Card>
         <Modal size="lg" show={this.state.openLOModal} onHide={() => this.setState({ openLOModal: false })}>
-          <Modal.Header closeButton>
-            <Modal.Title style={{ margin: " 0 auto" }}>
+          <Modal.Header>
+            <Modal.Title className="m-auto">
               {local.chooseRepresentative}
             </Modal.Title>
+						<button type="button" className="mr-0 pr-0 close" onClick={() =>
+						this.setState({ openLOModal: false })}><span aria-hidden="true">×</span><span className="sr-only">Close</span></button>
           </Modal.Header>
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
               <Form.Label className="data-label">{local.chooseLoanOfficer}</Form.Label>
-              <Col sm={12}>
+              <Col sm={12} className="p-0">
                 <AsyncSelect
                   name="employees"
                   data-qc="employees"
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   value={this.state.loanOfficers.find(loanOfficer => loanOfficer._id === this.state.selectedLO?._id)}
                   onChange={(loanOfficer) => this.setState({ selectedLO: loanOfficer })}
                   getOptionLabel={(option) => option.name}
@@ -367,33 +372,35 @@ class Leads extends Component<Props, State>{
                 />
               </Col>
             </Row>
-            <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
-              <Col >
-                <Button
-                  style={{ width: "100%", height: "100%" }}
-                  onClick={() => this.submitLOChange()}
-                  disabled={false}
-                  variant="primary"
-                >
-                  {local.submit}
-                </Button>
-              </Col>
-            </Row>
+						<Col>
+							<Button
+								className="mt-4 w-100"							
+								onClick={() => this.submitLOChange()}
+								disabled={false}
+								variant="primary"
+							>
+								{local.submit}
+							</Button>
+						</Col>
           </Modal.Body>
         </Modal>
         <Modal size="lg" show={this.state.openBranchModal} onHide={() => this.setState({ openBranchModal: false })}>
-          <Modal.Header closeButton>
-            <Modal.Title style={{ margin: " 0 auto" }}>
+          <Modal.Header>
+            <Modal.Title className="m-auto">
               {local.chooseBranch}
             </Modal.Title>
+						<button type="button" className="mr-0 pr-0 close" onClick={() =>
+						this.setState({ openBranchModal: false })}><span aria-hidden="true">×</span><span className="sr-only">Close</span></button>
           </Modal.Header>
           <Modal.Body>
             <Row style={{ padding: "10px 40px" }}>
               <Form.Label className="data-label">{local.chooseBranch}</Form.Label>
-              <Col sm={12}>
+              <Col sm={12} className="p-0">
                 <AsyncSelect
                   name="branches"
                   data-qc="branches"
+									styles={theme.selectStyleWithBorder}
+									theme={theme.selectTheme}
                   value={this.state.branches.find(branch => branch._id === this.state.selectedBranch?._id)}
                   onChange={(branch) => this.setState({ selectedBranch: branch })}
                   getOptionLabel={(option) => option.name}
@@ -403,18 +410,16 @@ class Leads extends Component<Props, State>{
                 />
               </Col>
             </Row>
-            <Row style={{ padding: "10px 40px", justifyContent: "center" }}>
-              <Col >
-                <Button
-                  style={{ width: "100%", height: "100%" }}
-                  onClick={() => this.submitBranchChange()}
-                  disabled={false}
-                  variant="primary"
-                >
-                  {local.submit}
-                </Button>
-              </Col>
-            </Row>
+						<Col>
+							<Button
+								className="mt-4 w-100"							
+								onClick={() => this.submitBranchChange()}
+								disabled={false}
+								variant="primary"
+							>
+								{local.submit}
+							</Button>
+						</Col>
           </Modal.Body>
         </Modal>
       </>

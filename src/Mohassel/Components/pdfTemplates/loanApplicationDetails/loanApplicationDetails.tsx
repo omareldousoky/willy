@@ -1,7 +1,7 @@
 import React from 'react';
 import './loanApplicationDetails.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
-import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd } from "../../../../Shared/Services/utils";
+import { timeToArabicDate, beneficiaryType, arabicGender, currency, interestPeriod, periodType, timeToDateyyymmdd, timeToArabicDateNow, guarantorOrderLocal } from "../../../../Shared/Services/utils";
 
 const LoanApplicationDetails = (props) => {
     const getStatus = (status: string) => {
@@ -39,20 +39,6 @@ const LoanApplicationDetails = (props) => {
                 return "";
         }
     }
-    function getNumberInArabic(number: number) {
-        switch (number) {
-            case 2: return 'الضامن الثاني';
-            case 3: return 'الضامن الثالث';
-            case 4: return 'الضامن الرابع';
-            case 5: return 'الضامن الخامس';
-            case 6: return 'الضامن السادس';
-            case 7: return 'الضامن السابع';
-            case 8: return 'الضامن الثامن';
-            case 9: return 'الضامن التاسع';
-            case 10: return 'الضامن العاشر';
-            default: return '';
-        }
-    }
     return (
         <div className="loan-application-details" lang="ar">
             <table style={{ fontSize: "12px", margin: "10px 0px", textAlign: "center", width: '100%' }}>
@@ -75,7 +61,7 @@ const LoanApplicationDetails = (props) => {
                                         <th rowSpan={2}>تفاصيل طلب القرض</th>
                                     </tr>
                                     <tr className="headtitle">
-                                        <th>{timeToArabicDate(0, true)}</th>
+                                        <th>{timeToArabicDateNow(true)}</th>
                                     </tr>
 
                                 </thead>
@@ -331,7 +317,7 @@ const LoanApplicationDetails = (props) => {
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th className="frame gray" colSpan={100}>{index === 0 ? 'الضامن الرئيسي' : getNumberInArabic(index + 1)}</th>
+                                                                <th className="frame gray" colSpan={100}>{guarantorOrderLocal[index > 10 ? "default" : index]}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
