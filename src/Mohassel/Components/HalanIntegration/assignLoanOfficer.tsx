@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import AsyncSelect from 'react-select/async';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
@@ -23,8 +23,7 @@ import local from '../../../Shared/Assets/ar.json';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { theme } from '../../../theme';
 
-interface Props {
-  history: Array<any>;
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   totalCount: number;

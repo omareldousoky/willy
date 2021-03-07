@@ -5,7 +5,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
 import { theme } from '../../../theme'
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import { Clearance } from '../../../Shared/Services/interfaces';
 import Table from 'react-bootstrap/Table';
@@ -17,14 +17,6 @@ import { Container, Form, Row } from 'react-bootstrap';
 import './clearance.scss'
 import Swal from 'sweetalert2';
 
-interface Props {
-    history: any;
-    location: {
-        state: {
-            id: string;
-        };
-    };
-}
 interface State {
     loading: boolean;
     tabsArray: Array<Tab>;
@@ -46,8 +38,9 @@ const cell: CSSProperties = {
     color: theme.colors.blackText,
 
 }
-class ClearanceProfile extends Component<Props, State> {
-    constructor(props: Props) {
+
+class ClearanceProfile extends Component<RouteComponentProps<{}, {}, { clearanceId: string }>, State> {
+    constructor(props: RouteComponentProps<{}, {}, { clearanceId: string }>) {
         super(props);
         this.state = {
             activeTab: 'clearanceDetails',
@@ -95,7 +88,7 @@ class ClearanceProfile extends Component<Props, State> {
     }
     async getClearanceById() {
         this.setState({loading: true})
-        const res = await getClearance(this.props.location.state.id);
+        const res = await getClearance(this.props.location.state.clearanceId);
         if (res.status === 'success') {
             this.setState({
                 data: res.body.data,
@@ -133,7 +126,6 @@ class ClearanceProfile extends Component<Props, State> {
                         name='receiptPhoto'
                         photoObject={{
                             photoURL: this.state.data.receiptPhotoURL,
-                            photoFile: "",
                         }}
                         edit={false}
                         view={true}
@@ -147,7 +139,6 @@ class ClearanceProfile extends Component<Props, State> {
                         name='documentPhoto'
                         photoObject={{
                             photoURL: this.state.data.documentPhotoURL,
-                            photoFile: "",
                         }}
                         edit={false}
                         view={true}
@@ -171,7 +162,7 @@ class ClearanceProfile extends Component<Props, State> {
             <>
                 <Loader open={this.state.loading} type="fullscreen" />
                 <div style={{ paddingLeft: 30 }}>
-                    {this.state.data.status==='underReview' && <><Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearance: { id: this.props.location.state.id } })} /></Can>
+                    {this.state.data.status==='underReview' && <><Can I="editClearance" a="application"><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={"edit"} src={require('../../Assets/editIcon.svg')} onClick={() => this.props.history.push("/clearances/edit-clearance", { clearanceId: this.props.location.state.clearanceId } )} /></Can>
                     {local.editClearance}
                     </>
                     }

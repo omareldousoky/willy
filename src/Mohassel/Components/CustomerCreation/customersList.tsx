@@ -9,7 +9,7 @@ import { search, searchFilters } from "../../../Shared/redux/search/actions";
 import { getDateAndTime } from "../../Services/getRenderDate";
 import { Loader } from "../../../Shared/Components/Loader";
 import * as local from "../../../Shared/Assets/ar.json";
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { blockCustomer } from "../../Services/APIs/blockCustomer/blockCustomer";
 import ability from "../../config/ability";
 import { manageCustomersArray } from "./manageCustomersInitial";
@@ -36,8 +36,7 @@ interface SearchFilters {
   customerShortenedCode?: string; // For FE only
 }
 
-interface Props {
-  history: any;
+interface Props extends RouteComponentProps {
   data: any;
   totalCount: number;
   loading: boolean;
@@ -216,7 +215,7 @@ class CustomersList extends Component<Props, State> {
                 ? local.customerUnblockedSuccessfully
                 : local.customerBlockedSuccessfully,
               "success"
-            ).then(() => window.location.reload());
+            ).then(() => location.reload());
           } else {
             this.setState({ loading: false });
             Swal.fire("", local.searchError, "error");

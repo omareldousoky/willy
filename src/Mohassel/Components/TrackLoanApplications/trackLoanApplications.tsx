@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../Shared/Components/Loader';
 import ReviewedApplicationsPDF from '../pdfTemplates/reviewedApplications/reviewedApplications';
@@ -54,8 +54,8 @@ interface State {
   loading: boolean;
   manageApplicationsTabs: any[];
 }
-interface Props {
-  history: any;
+
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   totalCount: number;
@@ -65,9 +65,10 @@ interface Props {
   setSearchFilters: (data) => void;
   branchId?: string;
 };
+
 class TrackLoanApplications extends Component<Props, State>{
   mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       print: false,

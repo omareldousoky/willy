@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Loader } from '../../../Shared/Components/Loader';
 import Card from 'react-bootstrap/Card';
@@ -44,8 +44,8 @@ interface State {
   loading: boolean;
   selectedApplicationToPrint: any;
 }
-interface Props {
-  history: any;
+
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   totalCount: number;
@@ -55,6 +55,7 @@ interface Props {
   setSearchFilters: (data) => void;
   branchId?: string;
 };
+
 class TrackLoanApplications extends Component<Props, State>{
   mappers: { title: string; key: string; sortable?: boolean; render: (data: any) => void }[]
   constructor(props) {

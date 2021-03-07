@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { UserDataForm } from "./userDataForm";
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Formik } from "formik";
 import Swal from "sweetalert2";
 import * as local from "../../../Shared/Assets/ar.json";
@@ -31,10 +31,11 @@ import Card from "react-bootstrap/Card";
 import UserManagerForm from "./userManagerForm";
 import { step2 } from "../CustomerCreation/customerFormIntialState";
 
-interface Props {
+interface Props 
+	extends RouteComponentProps<{}, {} , { details: string }> {
   edit: boolean;
-  history: any;
 }
+
 interface State {
   step: number;
   step1: Values;
@@ -62,7 +63,7 @@ class UserCreation extends Component<Props, State> {
     };
   }
   async getUser() {
-    const _id = this.props.history.location.state.details;
+    const _id = this.props.location.state.details;
     const res = await getUserDetails(_id);
     if(res.status === "success"){
     const step1Data: Values = {

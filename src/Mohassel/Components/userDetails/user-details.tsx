@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import BackButton from "../BackButton/back-button";
 import * as local from "../../../Shared/Assets/ar.json";
 import Card from "react-bootstrap/Card";
@@ -17,17 +17,15 @@ import { CardNavBar, Tab } from "../HeaderWithCards/cardNavbar";
 import Can from "../../config/Can";
 import ability from "../../config/ability";
 import { getErrorMessage } from "../../../Shared/Services/utils";
-interface Props {
-  history: any;
-}
+
 interface State {
   activeTab: string;
   isLoading: boolean;
   data: UserDateValues;
   tabsArray: Array<Tab>;
 }
-class UserDetails extends Component<Props, State> {
-  constructor(props: Props) {
+class UserDetails extends Component<RouteComponentProps<{}, {} , { details: string }>, State> {
+  constructor(props: RouteComponentProps<{}, {} , { details: string }>) {
     super(props);
     this.state = {
       activeTab: "userDetails",
@@ -53,9 +51,12 @@ class UserDetails extends Component<Props, State> {
         branchesObjects: [{ _id: "", name: "" }]
       }
     };
+
+		console.log(props)
   }
+
   async handleActivationClick() {
-    const id = this.props.history.location.state.details;
+    const id = this.props.location.state.details;
     const req = {
       id,
       status: this.state.data.status === "active" ? "inactive" : "active"
@@ -118,7 +119,7 @@ class UserDetails extends Component<Props, State> {
     );
   }
   renderICons() {
-    const id = this.props.history.location.state.details;
+    const id = this.props.location.state.details;
     return (
       <div className={"rowContainer"}>
         <Can I="updateUser" a="user">

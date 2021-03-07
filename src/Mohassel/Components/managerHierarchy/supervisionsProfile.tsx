@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { OfficersGroup } from '../../../Shared/Services/interfaces';
 import './managerHierarchy.scss'
 import Table from 'react-bootstrap/Table';
@@ -15,8 +15,7 @@ import { Loader } from '../../../Shared/Components/Loader';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 
-interface Props {
-    history: any;
+interface Props extends RouteComponentProps {
     branchId: string;
     name: string;
     branchCode: number;

@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
@@ -56,13 +56,7 @@ export interface Customer {
   customerBusiness: CustomerBusiness;
   customerExtraDetails: CustomerExtraDetails;
 }
-interface Props {
-  history: Array<string>;
-  location: {
-    state: {
-      id: string;
-    };
-  };
+interface Props extends RouteComponentProps<{}, {}, { id: string }> {
   edit: boolean;
 };
 interface State {

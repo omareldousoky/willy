@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import DropDownList from '../DropDownList/dropDownList';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -13,9 +13,6 @@ import { manageAccountsArray } from './manageAccountsInitials';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 
-interface Props {
-  history: Array<string>;
-};
 interface State {
   data: any;
   activeRole: number;
@@ -25,7 +22,7 @@ interface State {
   manageAccountTabs: any[];
 };
 
-class RolesList extends Component<Props, State> {
+class RolesList extends Component<RouteComponentProps, State> {
   constructor(props) {
     super(props);
     this.state = {

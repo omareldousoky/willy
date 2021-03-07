@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import * as local from '../../Assets/ar.json';
 import Can from '../../../Mohassel/config/Can';
 import { Loader } from '../Loader';
@@ -18,10 +18,10 @@ import { connect } from 'react-redux';
 import { Auth } from '../../redux/auth/types'
 import { logout } from '../../../Mohassel/Services/APIs/Auth/logout';
 import ChangePasswordModal from "../changePasswordModal/changePasswordModal";
-interface Props {
-  history: any;
+
+interface Props extends RouteComponentProps {
   auth: Auth;
-  hide: boolean;
+  hide?: boolean;
 }
 interface Branch {
   _id: string;

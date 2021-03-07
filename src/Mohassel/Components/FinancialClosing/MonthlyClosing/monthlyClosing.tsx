@@ -9,13 +9,10 @@ import { Col, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { getErrorMessage } from '../../../../Shared/Services/utils';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Can from '../../../config/Can';
 
 
-interface Props {
-    history: Array<string>;
-}
 interface State {
     loading: boolean;
 }
@@ -27,8 +24,8 @@ const monthClosingValidation = Yup.object().shape({
         return value ? new Date(value).valueOf() <= today.valueOf() : true;
     })
 })
-class MonthlyClosing extends Component<Props, State>{
-    constructor(props: Props) {
+class MonthlyClosing extends Component<RouteComponentProps, State>{
+    constructor(props: RouteComponentProps) {
         super(props);
         this.state = {
             loading: false,
@@ -133,7 +130,7 @@ class MonthlyClosing extends Component<Props, State>{
                                     className="w-25"            
                                     variant="secondary"
                                     onClick={() => {
-                                        window.location.reload();
+                                        location.reload();
                                     }}
                                 >
                                     {local.cancel}

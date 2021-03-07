@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getRollableActionsById, rollbackActionByID } from '../../Services/APIs/loanApplication/rollBack';
@@ -24,12 +24,15 @@ interface State {
     showModal: boolean;
     actionToRollback: any;
 }
-interface Props {
-    history: any;
-    location: any;
+
+interface LoanRollBackRouteState {
+	id: string;
+	status: string;
 }
-class LoanRollBack extends Component<Props, State>{
-    constructor(props: Props) {
+
+
+class LoanRollBack extends Component<RouteComponentProps<{}, {}, LoanRollBackRouteState>, State>{
+    constructor(props) {
         super(props);
         this.state = {
             loading: false,
@@ -40,7 +43,7 @@ class LoanRollBack extends Component<Props, State>{
         }
     }
     componentDidMount() {
-        const appId = this.props.history.location.state.id;
+        const appId = this.props.location.state.id;
         this.getAppRollableActionsByID(appId)
     }
     async getAppRollableActionsByID(id) {
@@ -48,7 +51,7 @@ class LoanRollBack extends Component<Props, State>{
         const application = await getRollableActionsById(id);
         if (application.status === 'success') {
             this.setState({
-                actions: application.body.RollbackObjects ? ( this.props.history.location.state.status === 'canceled' ) ? this.filterForCancelled(application.body.RollbackObjects) : application.body.RollbackObjects : [],
+                actions: application.body.RollbackObjects ? ( this.props.location.state.status === 'canceled' ) ? this.filterForCancelled(application.body.RollbackObjects) : application.body.RollbackObjects : [],
                 applicationId: id,
                 loading: false
             })

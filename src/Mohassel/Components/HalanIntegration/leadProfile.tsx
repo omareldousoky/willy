@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import BackButton from '../BackButton/back-button';
 import * as local from '../../../Shared/Assets/ar.json';
+import { Lead } from './leadInterface';
 
-interface Props {
-  history: {
-    location: {
-      state: {
-        leadDetails: any;
-      };
-    };
-  };
-};
 const tabs: Array<Tab> = [
   {
     header: local.mainInfo,
@@ -26,9 +18,9 @@ const tabs: Array<Tab> = [
     stringKey: 'workInfo'
   },
 ]
-const LeadProfile = (props: Props) => {
+const LeadProfile = (props: RouteComponentProps<{}, {}, { leadDetails: Lead }>) => {
   const [activeTab, changeActiveTab] = useState('mainInfo');
-  const leadDetails = props.history.location.state.leadDetails;
+  const leadDetails = props.location.state.leadDetails;
   function getPeriod(maxDate: number) {
     if(maxDate < 6) {
       return `${local.lessThan} 6 ${local.months}`;

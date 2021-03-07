@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,14 +19,6 @@ import { timeToDateyyymmdd, getErrorMessage } from '../../../Shared/Services/uti
 import local from '../../../Shared/Assets/ar.json';
 import './leads.scss';
 
-interface Props {
-  location: {
-    state: {
-      leadDetails: Lead;
-    };
-  };
-  history: any;
-}
 export interface LeadStepOne {
   customerName: string;
   maxAge: number;
@@ -54,8 +46,8 @@ interface State {
   uuid: string;
 }
 
-class EditLead extends Component<Props, State> {
-  constructor(props: Props) {
+class EditLead extends Component<RouteComponentProps<{}, {}, { leadDetails: Lead }>, State> {
+  constructor(props: RouteComponentProps<{}, {}, { leadDetails: Lead }>) {
     super(props);
     this.state = {
       step: 1,

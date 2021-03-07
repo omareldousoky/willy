@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { getDateAndTime } from '../../Services/getRenderDate';
@@ -17,8 +17,7 @@ import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageAccountsArray } from './manageAccountsInitials';
 import { getErrorMessage, timeToDateyyymmdd } from "../../../Shared/Services/utils";
 
-interface Props {
-  history: any;
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   totalCount: number;

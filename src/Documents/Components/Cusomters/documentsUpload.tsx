@@ -13,7 +13,7 @@ import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../..
 import { Image } from '../../../Shared/redux/document/types';
 import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils';
 import * as local from '../../../Shared/Assets/ar.json';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 interface State {
   docsOfImagesFiles: any[];
@@ -22,12 +22,8 @@ interface State {
   selectAll: boolean;
   loading: boolean;
 }
-interface Props {
-  location: {
-    state: {
-      id: string;
-    };
-  };
+
+interface Props extends RouteComponentProps<{}, {}, { id: string }>{
   previousStep?: () => void;
   getDocuments: typeof getDocuments;
   addAllToSelectionArray: typeof addAllToSelectionArray;

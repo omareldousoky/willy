@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -21,8 +21,7 @@ import Swal from 'sweetalert2';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from '../LoanList/manageLoansInitials';
 
-interface Props {
-  history: Array<any>;
+interface Props extends RouteComponentProps {
   data: any;
   branchId: string;
   fromBranch?: boolean;

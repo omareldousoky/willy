@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2';
 import * as local from '../../Assets/ar.json';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import './documentPhoto.scss';
 import Row from 'react-bootstrap/Row';
-interface Props {
+
+interface Props extends RouteComponentProps {
   photoObject?: {
-    photoURL: string;
-    photoFile: File;
+    photoURL?: string;
+    photoFile?: File;
   };
   view?: boolean;
   handleImageChange?: any;
   name: string;
   handleBlur?: any;
   handleChange?: any;
-
+	edit?: boolean;
 }
 interface State {
   dragging: boolean;

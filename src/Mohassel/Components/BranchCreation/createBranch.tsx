@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import { BasicValues } from './branchCreationInterfaces';
 import StepOneForm from './stepOneForm';
 import Card from 'react-bootstrap/Card';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import {step1,branchCreationValidationStepOne} from './branchCreationInitialState';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -18,8 +18,7 @@ interface State {
     step: number;
     step1: BasicValues;
 }
-interface Props {
- history: any;
+interface Props extends RouteComponentProps<{}, {}, { details: string }> {
  loading: boolean;
  createNewBranch: typeof createNewBranch;
  getBranchById: typeof getBranchById;
@@ -83,7 +82,7 @@ interface Props {
         }
     }
     async editBranch (values) {
-         const _id = this.props.history.location.state.details;
+         const _id = this.props.location.state.details;
         const branch = this.prepareBranch(values);
         await this.props.editBranchById(branch,_id);
         if(this.props.branch.status === "success") {
@@ -94,7 +93,7 @@ interface Props {
         }
     }
     async getBranch(){
-        const _id = this.props.history.location.state.details;
+        const _id = this.props.location.state.details;
         await this.props.getBranchById(_id);
         if(this.props.branch.status === "success") {
             const branch =  this.props.branch.body.data;

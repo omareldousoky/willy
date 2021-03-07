@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { DocumentType } from '../../Services/interfaces'
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { download, getErrorMessage } from '../../Services/utils';
@@ -11,7 +11,8 @@ import { connect } from 'react-redux';
 import { addToDocuments, deleteDocument, uploadDocument, deleteFromDocuments, invalidDocument, addNewToDocuments, AddToSelectionArray, RemoveFromSelectionArray } from '../../redux/document/actions'
 import { Image } from '../../redux/document/types';
 import Row from 'react-bootstrap/Row';
-interface Props {
+
+interface Props extends RouteComponentProps {
   documentType: DocumentType;
   keyName: string;
   keyId: string;
@@ -30,8 +31,8 @@ interface Props {
   document: any;
   documents: any[];
   selectionArray: Image[];
-
 }
+
 interface InProps {
   documentType: DocumentType;
   keyName: string;
@@ -402,4 +403,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect<{}, {}, InProps>(mapStateToProps, addDocumentToProps)(withRouter(DocumentUploader))
+export default connect(mapStateToProps, addDocumentToProps)(withRouter(DocumentUploader))

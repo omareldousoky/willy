@@ -15,21 +15,21 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import Select from "react-select";
 import { theme } from "../../../theme";
 import { getRoles } from "../../Services/APIs/Roles/roles";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
+import { Role } from "../userDetails/userDetailsInterfaces";
 export interface Section {
   _id: string;
   key: string;
   i18n: any;
   actions: Array<any>;
 }
-interface Props {
-  history: any;
+interface Props extends RouteComponentProps<{}, {}, Role> {
   edit: boolean;
   application: any;
   test: boolean;
@@ -61,7 +61,7 @@ class RoleCreation extends Component<Props, State> {
   }
   componentDidMount() {
     if (this.props.edit) {
-      const role = this.props.history.location.state.role;
+      const role = { ...this.props.history.location.state };
       const step1Edit = { ...this.state.step1 };
       step1Edit.roleName = role.roleName;
       step1Edit.hQpermission = !role.hasBranch;
@@ -116,9 +116,7 @@ class RoleCreation extends Component<Props, State> {
     if (res.status === "success") {
       const sections = res.body.actions;
       const rolePermissionsArray = [];
-      const rolePermissions = this.props.history.location.state.role.permissions
-        ? this.props.history.location.state.role.permissions
-        : {};
+      const rolePermissions = this.props.location.state.permissions || {};
       Object.keys(rolePermissions).forEach((roleSection) => {
         const sectionObject = sections.find(
           (section) => section.key === roleSection
@@ -346,7 +344,7 @@ class RoleCreation extends Component<Props, State> {
           perms.push({ key: key, value: this.state.permissions[key] })
         );
         const obj = {
-          id: this.props.history.location.state.role._id,
+          id: this.props.history.location.state._id,
           permissions: perms,
         };
         const res = await editRole(obj);

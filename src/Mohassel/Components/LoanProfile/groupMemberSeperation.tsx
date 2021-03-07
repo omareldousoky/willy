@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import Container from 'react-bootstrap/Container';
@@ -26,12 +26,9 @@ interface State {
     reason: string;
     reasons: any;
 }
-interface Props {
-    history: any;
-    location: any;
-}
-class GroupMemberSeperation extends Component<Props, State>{
-    constructor(props: Props) {
+
+class GroupMemberSeperation extends Component<RouteComponentProps<{}, {}, { id: string }>, State>{
+    constructor(props) {
         super(props);
         this.state = {
             application: {},
@@ -55,7 +52,7 @@ class GroupMemberSeperation extends Component<Props, State>{
         };
     }
     componentDidMount() {
-        const appId = this.props.history.location.state.id;
+        const appId = this.props.location.state.id;
         this.getAppByID(appId)
         this.getReasons()
     }

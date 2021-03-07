@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import Swal from 'sweetalert2';
 
@@ -15,8 +15,8 @@ interface State {
   size: number;
   from: number;
 }
-interface Props {
-  history: any;
+
+interface Props extends RouteComponentProps {
   data: any;
   totalCount: number;
   loading: boolean;

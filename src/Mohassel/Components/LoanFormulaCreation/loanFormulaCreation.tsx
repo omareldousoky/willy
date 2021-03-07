@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formula, loanFormula, loanFormulaCreationValidation } from './loanCreationInitialStates';
 import { LoanFormulaCreationForm } from './loanFormulaCreationForm';
 import { createFormula } from '../../Services/APIs/LoanFormula/createFromula';
@@ -11,9 +11,9 @@ import * as local from '../../../Shared/Assets/ar.json';
 import BackButton from '../BackButton/back-button';
 import Card from 'react-bootstrap/Card';
 import { getErrorMessage } from '../../../Shared/Services/utils';
-interface Props {
+
+interface Props extends RouteComponentProps {
     title: string;
-    history: Array<string>;
 };
 interface State {
     formula: Formula;

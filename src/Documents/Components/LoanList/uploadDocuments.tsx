@@ -14,9 +14,9 @@ import { getDocuments, addAllToSelectionArray, clearSelectionArray } from '../..
 import { Image } from '../../../Shared/redux/document/types';
 import { downloadAsZip, getErrorMessage } from "../../../Shared/Services/utils";
 import Container from 'react-bootstrap/Container';
-import { withRouter } from 'react-router-dom';
-interface Props {
-    history: any;
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+interface Props extends RouteComponentProps<{}, {}, { id: string }> {
     getDocuments: typeof getDocuments;
     addAllToSelectionArray: typeof addAllToSelectionArray;
     clearSelectionArray: typeof clearSelectionArray;
@@ -103,7 +103,7 @@ class UploadDocuments extends Component<Props, State> {
         }
     }
     async componentDidMount() {
-        const appId = this.props.history.location.state.id;
+        const appId = this.props.location.state.id;
         this.getAppByID(appId)
         this.getDocumentTypes();
     }

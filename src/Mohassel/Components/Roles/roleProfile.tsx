@@ -12,7 +12,7 @@ import { getPermissions } from '../../Services/APIs/Roles/roles';
 import { Section } from "./roleCreation";
 import RoleUsers from './roleUsers';
 import BackButton from '../BackButton/back-button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 interface Role {
     permissions: Array<any>;
@@ -29,12 +29,8 @@ interface State {
     loading: boolean;
 }
 
-interface Props {
-    history: any;
-    location: any;
-}
-class RoleProfile extends Component<Props, State>{
-    constructor(props: Props) {
+class RoleProfile extends Component<RouteComponentProps<{}, {}, Role>, State>{
+    constructor(props: RouteComponentProps<{}, {}, Role>) {
         super(props);
         this.state = {
             prevId: '',
@@ -59,7 +55,7 @@ class RoleProfile extends Component<Props, State>{
         };
     }
     componentDidMount() {
-        const role = this.props.history.location.state;
+        const role = { ...this.props.location.state };
         this.setState({
             role
         }, () => this.getAllPermissions())
@@ -113,7 +109,7 @@ class RoleProfile extends Component<Props, State>{
                         <div className="d-flex justify-content-between align-items-center">
                             <BackButton title={local.roleDetails} />
                             <div>
-                                <span style={{cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/roles/edit-role", state: { role: this.state.role } }) }}><img alt={"edit"} src={require('../../Assets/editIcon.svg')}/> {local.edit}</span>
+                                <span style={{cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/manage-accounts/roles/edit-role", state: this.state.role }) }}><img alt={"edit"} src={require('../../Assets/editIcon.svg')}/> {local.edit}</span>
                             </div>
                         </div>
                         <Card style={{ marginTop: 15 }}>

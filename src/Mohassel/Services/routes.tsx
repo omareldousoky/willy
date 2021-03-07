@@ -57,6 +57,7 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
+import { RouteProps } from 'react-router-dom';
 
 const appRoutes = [
   {
@@ -178,7 +179,7 @@ const appRoutes = [
           {
             path: "/bulk-creation",
             label: local.bulkApplicationCreation,
-            render: () => <Can I='createLoan' a='application'><BulkApplicationCreation /></Can>
+            render: (props) => <Can I='createLoan' a='application'><BulkApplicationCreation {...props} /></Can>
           },
           {
             path: "/bulk-approvals",
@@ -367,7 +368,7 @@ const appRoutes = [
           {
             path: "/source-of-fund",
             label: local.changeSourceOfFund,
-            render: () => <Can I="cibScreen" a='report' ><SourceOfFund /></Can>
+            render: (props) => <Can I="cibScreen" a='report' ><SourceOfFund {...props} /></Can>
           },
           {
             path: "/cib",

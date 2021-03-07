@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
 import Container from 'react-bootstrap/Container';
@@ -14,12 +14,14 @@ interface State {
     application: any;
     geoAreas: Array<any>;
 }
-interface Props {
-    history: any;
-    location: any;
+
+interface LoanStatusChangeRouteState {
+	id: string;
+	action: string;
 }
-class LoanStatusChange extends Component<Props, State>{
-    constructor(props: Props) {
+
+class LoanStatusChange extends Component<RouteComponentProps<{}, {}, LoanStatusChangeRouteState>, State>{
+    constructor(props: RouteComponentProps<{}, {}, LoanStatusChangeRouteState>) {
         super(props);
         this.state = {
             prevId: '',
@@ -29,7 +31,7 @@ class LoanStatusChange extends Component<Props, State>{
         };
     }
     componentDidMount() {
-        const appId = this.props.history.location.state.id;
+        const appId = this.props.location.state.id;
         this.getAppByID(appId)
     }
     async getAppByID(id) {
@@ -95,7 +97,7 @@ class LoanStatusChange extends Component<Props, State>{
             <Container style={{ textAlign: 'right' }}>
                 <Loader type="fullscreen" open={this.state.loading} />
                 {Object.keys(this.state.application).length > 0 && <div>
-                    <StatusHelper status={this.props.history.location.state.action} id={this.state.application._id} handleStatusChange={(values, status) => { this.handleStatusChange(values, status) }} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} />
+                    <StatusHelper status={this.props.location.state.action} id={this.state.application._id} handleStatusChange={(values, status) => { this.handleStatusChange(values, status) }} application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} />
                 </div>}
             </Container>
         )

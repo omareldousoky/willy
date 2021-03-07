@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { RouteProps } from 'react-router';
 import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/Button';
@@ -20,7 +20,6 @@ import { getProductsByBranch } from '../../Services/APIs/Branch/getBranches';
 import { getGenderFromNationalId } from '../../Services/nationalIdValidation';
 import { newApplication, editApplication } from '../../Services/APIs/loanApplication/newApplication';
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication';
-import { Location } from '../LoanCreation/loanCreation';
 import { getCookie } from '../../../Shared/Services/getCookie';
 import { getLoanUsage } from '../../Services/APIs/LoanUsage/getLoanUsage';
 import { getLoanOfficer, searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
@@ -37,9 +36,13 @@ import Select from 'react-select';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 import { theme } from '../../../theme';
 
-interface Props {
-    history: any;
-    location: Location;
+interface LoanApplicationCreationRouteState {
+	id: string;
+	action: string;
+}
+
+interface Props 
+	extends RouteComponentProps<{}, {}, LoanApplicationCreationRouteState> {
     edit: boolean;
 };
 export interface Formula {
@@ -99,8 +102,6 @@ interface State {
     customerToView: Customer;
 }
 const date = new Date();
-
-
 
 class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     tokenData: any;
@@ -235,10 +236,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     static getDerivedStateFromProps(props, state) {
         const application = { ...state.application };
-        if ((props.history.location.state.id !== state.prevId) && (props.history.location.state.action !== state.application.state)) {
-            application.state = props.history.location.state.action
-            application.id = props.history.location.state.id
-            return { prevId: props.history.location.state.id, application: application }
+        if ((props.location.state.id !== state.prevId) && (props.location.state.action !== state.application.state)) {
+            application.state = props.location.state.action
+            application.id = props.location.state.id
+            return { prevId: props.location.state.id, application: application }
         }
         return null
     }

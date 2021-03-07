@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import Card from 'react-bootstrap/Card';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
@@ -21,18 +21,6 @@ import { manageLoansArray } from '../LoanList/manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 
-interface Props {
-  history: Array<any>;
-  data: any;
-  branchId: string;
-  fromBranch?: boolean;
-  totalCount: number;
-  loading: boolean;
-  searchFilters: any;
-  search: (data) => void;
-  setSearchFilters: (data) => void;
-  setLoading: (data) => void;
-};
 interface CibLoan {
   loanId: string;
   principal: string;
@@ -61,9 +49,9 @@ interface State {
   manageLoansTabs: any[];
 }
 
-class CIB extends Component<Props, State> {
+class CIB extends Component<RouteComponentProps, State> {
   mappers: { title: string | ReactNode; key: string; sortable?: boolean; render: (data: any) => ReactNode }[]
-  constructor(props: Props) {
+  constructor(props: RouteComponentProps) {
     super(props);
     this.state = {
       size: 10,

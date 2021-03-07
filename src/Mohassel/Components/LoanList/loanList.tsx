@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -11,8 +11,8 @@ import { timeToDateyyymmdd, beneficiaryType, iscoreDate, getErrorMessage, getFul
 import { manageLoansArray } from './manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Swal from 'sweetalert2';
-interface Props {
-  history: Array<any>;
+
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   branchId: string;

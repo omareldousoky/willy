@@ -9,6 +9,7 @@ export interface Role {
   hasBranch: boolean;
   roleName: string;
   _id: string;
+	managerRole?: string;
 }
 interface Branch {
   _id: string;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
@@ -65,8 +65,7 @@ interface State {
   checkAll: boolean;
   manageApplicationsTabs: any[];
 }
-interface Props {
-  history: Array<any>;
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   branchId: string;
@@ -320,7 +319,8 @@ const mapStateToProps = state => {
     error: state.search.error,
     totalCount: state.search.totalCount,
     loading: state.loading,
-    searchFilters: state.searchFilters
+    searchFilters: state.searchFilters,
+		setLoading: state.setLoading
   };
 };
 

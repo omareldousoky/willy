@@ -9,22 +9,20 @@ import Can from '../../config/Can';
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentTypeLocalization, getErrorMessage } from '../../../Shared/Services/utils';
 import { manageToolsArray } from './manageToolsInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
-interface Props {
-    history: any;
-}
 
 interface State {
     documentTypes: DocumentType[];
     loading: boolean;
     manageToolsTabs: any[];
 }
-class EncodingFiles extends Component<Props, State> {
-    constructor(props: Props) {
+
+class EncodingFiles extends Component<RouteComponentProps, State> {
+    constructor(props: RouteComponentProps) {
         super(props);
         this.state = {
             documentTypes: [{

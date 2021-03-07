@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { getCookie } from '../../../Shared/Services/getCookie';
@@ -34,7 +34,7 @@ interface State {
   checkAll: boolean;
   chosenStatus: string;
 }
-interface Props {
+interface Props extends RouteComponentProps {
   data: GroupsByBranch[];
   totalCount: number;
   loading: boolean;

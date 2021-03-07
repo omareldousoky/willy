@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -63,8 +63,7 @@ interface State {
   size: number;
   manageApplicationsTabs: any[];
 }
-interface Props {
-  history: Array<any>;
+interface Props extends RouteComponentProps {
   loading: boolean;
   totalCount: number;
   data: any;

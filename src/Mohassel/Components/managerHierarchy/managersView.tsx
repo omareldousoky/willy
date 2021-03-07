@@ -4,7 +4,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
 import Can from '../../config/Can';
 import { theme } from '../../../theme'
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { getErrorMessage, } from '../../../Shared/Services/utils';
@@ -13,8 +13,7 @@ import { getManagerHierarchy } from "../../Services/APIs/ManagerHierarchy/getMan
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
 import ManagersCreation from './managersCreation';
-interface Props {
-    history: any;
+interface Props extends RouteComponentProps {
     branchId: string;
     name: string;
     branchCode: number;

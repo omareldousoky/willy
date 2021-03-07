@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
@@ -22,14 +22,6 @@ import Swal from 'sweetalert2';
 import { CustomerCategorization } from './customerCategorization';
 import { CustomerScore, getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
 
-interface Props {
-  history: Array<string | { id: string }>;
-  location: {
-    state: {
-      id: string;
-    };
-  };
-};
 export interface Score {
   customerName?: string;
   activeLoans?: string;
@@ -70,7 +62,7 @@ const getCustomerCategorizationRating = async (id: string, setRating: (rating: A
   }
 }
 
-const CustomerProfile = (props: Props) => {
+const CustomerProfile = (props: RouteComponentProps<{}, {}, { id: string }>) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [iScoreDetails, changeiScoreDetails] = useState<Score>();

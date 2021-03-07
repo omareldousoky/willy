@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import CustomerBasicsCard from './basicInfoCustomer'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { CreateClearanceForm } from './createClearanceForm';
@@ -17,16 +17,14 @@ import { calculatePenalties } from '../../Services/APIs/Payment/calculatePenalti
 import { updateClearance } from '../../Services/APIs/clearance/updateClearance';
 import { Loader } from '../../../Shared/Components/Loader';
 import { reviewClearance } from '../../Services/APIs/clearance/reviewClearance';
-interface Props {
-    history: any;
-    location: {
-        state: {
-            id: string;
-            clearance?: {
-                id: string;
-            };
-        };
-    };
+
+interface CreateClearanceRouteState {
+	customerId?: string;
+	clearanceId?: string;
+}
+
+interface Props 
+	extends RouteComponentProps<{}, {}, CreateClearanceRouteState> {
     edit: boolean;
     review: boolean;
 }
@@ -68,9 +66,9 @@ class CreateClearance extends Component<Props, State> {
         if (this.props.edit || this.props.review) {
             this.getClearanceById();
         }
-        else {
-            this.getCustomer(this.props.location.state.id);
-            this.getCustomerPaidLoans(this.props.location.state.id);
+        else if (this.props.location.state?.customerId) {
+            this.getCustomer(this.props.location.state.customerId);
+            this.getCustomerPaidLoans(this.props.location.state.customerId);
         }
     }
     async calculatePenalty(loanId: string) {
@@ -84,9 +82,9 @@ class CreateClearance extends Component<Props, State> {
         } else this.setState({ loading: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
       }
     async getClearanceById() {
-        if (this.props.location.state.clearance?.id) {
+        if (this.props.location.state?.clearanceId) {
             this.setState({ loading: true });
-            const res = await getClearance(this.props.location.state.clearance?.id);
+            const res = await getClearance(this.props.location.state.clearanceId);
             if (res.status === 'success') {
                 const clearance: ClearanceValues = {
                     customerId: res.body.data.customerId,
@@ -176,7 +174,7 @@ class CreateClearance extends Component<Props, State> {
     prepareClearance = (values: ClearanceValues) => {
         const clearance = values;
         if (!clearance.customerId) {
-            clearance.customerId = this.props.location.state.id;
+            clearance.customerId = this.props.location.state?.customerId || "";
         }
         if (clearance.transactionKey) {
             clearance.transactionKey = clearance.transactionKey;
@@ -209,8 +207,8 @@ class CreateClearance extends Component<Props, State> {
     async editClearance(values) {
         this.setState({loading: true})
         const clearance = this.prepareClearance(values);
-        if (this.props.location.state.clearance?.id) {
-            const res = await updateClearance(this.props.location.state.clearance?.id, clearance);
+        if (this.props.location.state?.clearanceId) {
+            const res = await updateClearance(this.props.location.state.clearanceId, clearance);
             if (res.status == 'success') {
                 Swal.fire('Success', '', 'success').then(() => this.props.history.goBack());;
             } else {
@@ -220,9 +218,9 @@ class CreateClearance extends Component<Props, State> {
         this.setState({loading: false})
     }
     async reviewClearance(values) {
-        if (this.props.location.state.clearance?.id) {
+        if (this.props.location.state?.clearanceId) {
             this.setState({ loading: true })
-            const res = await reviewClearance(this.props.location.state.clearance?.id, { status: values.status })
+            const res = await reviewClearance(this.props.location.state.clearanceId, { status: values.status })
             if (res.status === 'success') {
                 Swal.fire('Success', '', 'success').then(() => this.props.history.goBack());
             } else {

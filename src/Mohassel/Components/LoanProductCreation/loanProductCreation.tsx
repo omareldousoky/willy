@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { LoanProductValidation } from './loanProductStates';
 import { LoanProductCreationForm } from './loanProductCreationForm';
 import { createProduct } from '../../Services/APIs/loanProduct/createProduct';
@@ -16,9 +16,8 @@ import Card from 'react-bootstrap/Card';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 
-interface Props {
+interface Props extends RouteComponentProps<{}, {}, { id: string }> {
     title: string;
-    history: any;
     edit: boolean;
 
 };
@@ -142,7 +141,7 @@ class LoanProductCreation extends Component<Props, State>{
     }
     submit = async (values: any) => {
         if(this.props.edit){
-            const id = this.props.history.location.state.id;
+            const id = this.props.location.state.id;
             this.setState({loading: true});
                 const res = await editProductsPrincipals(id, {
                     maxPrincipal: values.maxPrincipal,
@@ -174,7 +173,7 @@ class LoanProductCreation extends Component<Props, State>{
     }
     }
     async getProduct() {
-        const id = this.props.history.location.state.id;
+        const id = this.props.location.state.id;
         this.setState({ loading: true });
         const product = await getProduct(id);
         if (product.status === 'success') {

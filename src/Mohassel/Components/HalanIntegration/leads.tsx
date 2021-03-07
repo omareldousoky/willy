@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import AsyncSelect from 'react-select/async';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -30,13 +30,12 @@ import { Employee } from '../Payment/payment';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 import { theme } from '../../../theme';
 
-interface Props {
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   totalCount: number;
   loading: boolean;
   searchFilters: any;
-  history: any;
   search: (data) => Promise<void>;
   setLoading: (data) => void;
   setSearchFilters: (data) => void;

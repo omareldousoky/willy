@@ -6,7 +6,7 @@ import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import Can from '../../config/Can';
 import * as local from '../../../Shared/Assets/ar.json';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
@@ -23,8 +23,7 @@ interface State {
   branchId: string;
   branch: object;
 }
-interface Props {
-  history: any;
+interface Props extends RouteComponentProps {
   data: any;
   error: string;
   totalCount: number;

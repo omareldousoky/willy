@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Loader } from '../../../Shared/Components/Loader';
 import Card from 'react-bootstrap/Card';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
@@ -15,8 +15,8 @@ interface State {
     size: number;
     from: number;
 }
-interface Props {
-    history: any;
+
+interface Props extends RouteComponentProps {
     data: any;
     error: string;
     totalCount: number;

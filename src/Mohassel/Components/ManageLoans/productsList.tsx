@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -14,8 +14,7 @@ import Form from 'react-bootstrap/Form';
 import { getDetailedProducts } from '../../Services/APIs/loanProduct/getProduct';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 
-interface Props {
-    history: any;
+interface Props extends RouteComponentProps {
     data: any;
     totalCount: number;
     searchFilters: any;

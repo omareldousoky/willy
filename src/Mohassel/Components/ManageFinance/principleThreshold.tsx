@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
@@ -19,10 +19,6 @@ import Row from 'react-bootstrap/Row';
 import { manageToolsArray } from '../Tools/manageToolsInitials';
 import { getErrorMessage } from '../../../Shared/Services/utils';
 
-interface Props {
-    history: any;
-
-};
 interface Principals {
     maxIndividualPrincipal: number;
     maxGroupIndividualPrincipal: number;
@@ -35,8 +31,8 @@ interface State {
     manageToolsTabs: any[];
 }
 
-class PrincipleThreshold extends Component<Props, State> {
-    constructor(props: Props) {
+class PrincipleThreshold extends Component<RouteComponentProps, State> {
+    constructor(props: RouteComponentProps) {
         super(props);
         this.state = {
             loading: false,

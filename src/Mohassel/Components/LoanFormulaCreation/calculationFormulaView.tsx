@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormula } from '../../Services/APIs/LoanFormula/getFormula';
@@ -14,13 +14,8 @@ interface State {
     loading: boolean;
 }
 
-interface Props {
-    history: any;
-    location: any;
-}
-
-class FormulaView extends Component<Props, State>{
-    constructor(props: Props) {
+class FormulaView extends Component<RouteComponentProps<{}, {}, { id: string }>, State>{
+    constructor(props: RouteComponentProps<{}, {}, { id: string }>) {
         super(props);
         this.state = {
             formula: {},
@@ -28,7 +23,7 @@ class FormulaView extends Component<Props, State>{
         };
     }
     componentDidMount() {
-        const id = this.props.history.location.state.id;
+        const id = this.props.location.state.id;
         this.getFomula(id)
     }
     async getFomula(id: string) {

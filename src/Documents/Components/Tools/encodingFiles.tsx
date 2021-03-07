@@ -9,14 +9,15 @@ import Form from 'react-bootstrap/Form';
 import { Loader } from '../../../Shared/Components/Loader';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentTypeLocalization } from '../../../Shared/Services/utils';
 interface State {
     documentTypes: DocumentType[];
     loading: boolean;
 }
-class EncodingFiles extends Component<{}, State> {
+
+class EncodingFiles extends Component<RouteComponentProps, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -69,7 +70,7 @@ class EncodingFiles extends Component<{}, State> {
                     <Card>
                         <Card.Body>
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                <h4 style={{ textAlign: "right" }}>{local.encodingFilesHQ}</h4>
+                                <h4 style={{ marginRight: "20px" }}>{local.encodingFilesHQ}</h4>
                                 <small style={{ color: '#6e6e6e', margin: "12px" }}>{`${local.numOfFiles} (${this.state.documentTypes.length})`}</small>
                             </div>
                             {

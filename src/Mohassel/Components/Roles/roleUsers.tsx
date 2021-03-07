@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { Loader } from '../../../Shared/Components/Loader';
 import * as local from '../../../Shared/Assets/ar.json';
@@ -11,8 +11,7 @@ import Can from '../../config/Can';
 import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
 import { getDateAndTime } from '../../Services/getRenderDate';
 
-interface Props {
-    history: any;
+interface Props extends RouteComponentProps {
     _id: string;
     data: any;
     totalCount: number;

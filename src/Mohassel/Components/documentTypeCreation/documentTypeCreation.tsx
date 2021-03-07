@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Formik } from 'formik'
 import Container from 'react-bootstrap/Container';
 import DocumentTypeCreationForm from './documentTypeCreationForm'
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import { DocumentType } from '../../../Shared/Services/interfaces';
 import { documentType, documentTypeCreationValidation, documentTypeEditValidation } from './documnetTypeinitialState';
@@ -11,8 +11,9 @@ import { editDocumentsType } from '../../Services/APIs/encodingFiles/editDocumen
 import Swal from 'sweetalert2';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getErrorMessage } from '../../../Shared/Services/utils';
-interface Props {
-    history: any;
+
+interface Props 
+extends RouteComponentProps<{}, {}, { documentType: DocumentType }> {
     edit: boolean;
 }
 interface State {
@@ -29,7 +30,7 @@ class DocumentTypeCreation extends Component<Props, State> {
     }
 
     getDocumentType() {
-        const documentTypeFromH: DocumentType = this.props.history.location.state.documentType;
+        const documentTypeFromH: DocumentType = this.props.location.state.documentType;
         this.setState({ documentType: documentTypeFromH });
     }
 

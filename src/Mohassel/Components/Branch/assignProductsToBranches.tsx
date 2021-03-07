@@ -11,16 +11,15 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { theme } from '../../../theme';
 import Card from 'react-bootstrap/Card';
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { manageLoansArray } from '../ManageLoans/manageLoansInitials';
 
-interface Props {
+interface Props extends RouteComponentProps {
     title: string;
-    history: Array<string>;
 };
 interface Product {
     _id: string;
