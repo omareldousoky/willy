@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
 import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
-import * as local from '../../../Shared/Assets/ar.json';
+import local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
 import Search from '../../../Shared/Components/Search/search';
 import { connect } from 'react-redux';
@@ -159,9 +159,11 @@ class DefaultingCustomersList extends Component<Props, State> {
         const daysSince = this.getRecordAgeInDays(data.created.at)
         return (
             <>
-                {daysSince >= 3 && daysSince < 6 && <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { console.log('second', data) }} ></img>}
+                {daysSince < 3 && <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan(data._id,'branchManagerReview') }} ></img>}
+                {daysSince >= 3 && daysSince < 6 && <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id,'areaSupervisorReview') }} ></img>}
+                {daysSince >= 6 && daysSince < 9 && <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id,'areaManagerReview') }} ></img>}
+                {daysSince >= 9 && daysSince < 15 && <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id,'financialManagerReview') }} ></img>}
                 {/* <Can I='updateUser' a='user'> */}
-                {daysSince < 3 && <img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { console.log('first', data) }} ></img>}
                 {/* </Can> */}
                 {/* <Can I='userActivation' a='user'> */}
                 {/* < span className='icon' onClick={() => this.handleActivationClick(data)}> {data.status === 'active' && <img alt={'deactive'} src={require('../../Assets/deactivate-user.svg')} />} {data.status === 'inactive' && local.activate} </span> */}
@@ -217,6 +219,47 @@ class DefaultingCustomersList extends Component<Props, State> {
                 this.setState({ modalLoader: false })
                 Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
             }
+        }
+    }
+    async reviewDefaultedLoan(id, type) {
+        const { value: text } = await Swal.fire({
+            title: local[type],
+            input: 'textarea',
+            inputPlaceholder: local.writeNotes,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.review,
+            cancelButtonText: local.cancel,
+            inputValidator: (value) => {
+                if (!value) {
+                    return local.required
+                } else return ''
+            }
+        })
+        if (text) {
+            console.log(id, type, text)
+            // Swal.fire({
+            //     title: local.areYouSure,
+            //     text: `${local.loanWillBeWrittenOff}`,
+            //     icon: 'warning',
+            //     showCancelButton: true,
+            //     confirmButtonColor: '#3085d6',
+            //     cancelButtonColor: '#d33',
+            //     confirmButtonText: local.writeOffLoan,
+            //     cancelButtonText: local.cancel
+            // }).then(async (result) => {
+            //     if (result.value) {
+            //         this.setState({ loading: true });
+            //         const res = await writeOffLoan(this.props.history.location.state.id, { writeOffReason: text });
+            //         if (res.status === "success") {
+            //             this.setState({ loading: false })
+            //             Swal.fire('', local.loanWriteOffSuccess, 'success').then(() => window.location.reload());
+            //         } else {
+            //             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+            //         }
+            //     }
+            // })
         }
     }
     render() {

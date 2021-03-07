@@ -918,8 +918,10 @@
     "lateCustomers":"المتأخرون عن السداد",
     "customerAddedToDefaultiingListSuccess":"تم إضافة العميل لقائمة المتاخرون عن السداد بنجاح",
     "addCustomerToLateCustomers":"إضافة عميل متأخر عن السداد",
-    "branchManagerReview":"الأول",
-    "areaManagerReview":"الثاني",
-    "areaSupervisorReview":"الثالث",
-    "financialManagerReview":"الرابع"
+    "branchManagerReview":"مراجعة مدير الفرع",
+    "areaManagerReview":"مراجعة مدير المنطقة",
+    "areaSupervisorReview":"مراجعة مشرف المنطقة",
+    "financialManagerReview":"مراجعة المدير المالي",
+    "writeNotes":"برجاء إدخال الملاحظات",
+    "review":"مراجعة"
 }
