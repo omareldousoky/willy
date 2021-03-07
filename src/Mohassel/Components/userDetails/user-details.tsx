@@ -51,8 +51,6 @@ class UserDetails extends Component<RouteComponentProps<{}, {} , { details: stri
         branchesObjects: [{ _id: "", name: "" }]
       }
     };
-
-		console.log(props)
   }
 
   async handleActivationClick() {
