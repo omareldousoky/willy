@@ -279,26 +279,26 @@ class SupervisionGroupsList extends Component<Props, State> {
         (groupItem) => groupItem.id === group.id
       ) > -1
     ) {
-      this.setState({
-        selectedGroups: this.state.selectedGroups.filter(
+      this.setState((previousState) => ({
+        selectedGroups: previousState.selectedGroups.filter(
           (el) => el.id !== group.id
         ),
-      })
+      }))
     } else {
-      this.setState({
-        selectedGroups: [...this.state.selectedGroups, group],
-      })
+      this.setState((previousState) => ({
+        selectedGroups: [...previousState.selectedGroups, group],
+      }))
     }
   }
 
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState({
+      this.setState((previousState) => ({
         checkAll: true,
         selectedGroups: this.props.data.filter(
-          (group) => group.status === this.state.chosenStatus
+          (group) => group.status === previousState.chosenStatus
         ),
-      })
+      }))
     } else this.setState({ checkAll: false, selectedGroups: [] })
   }
 

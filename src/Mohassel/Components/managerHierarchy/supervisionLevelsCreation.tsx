@@ -43,22 +43,10 @@ class SupervisionLevelsCreation extends Component<Props, State> {
     this.initialState()
   }
 
-  async initialState() {
-    this.setState({
-      groups: [],
-      users: [],
-      loanOfficers: [],
-      loading: false,
-    })
-    if (this.props.mode === 'edit') {
-      await this.getGroups()
-    } else {
-      this.setState({
-        groups: [],
-      })
+  componentDidUpdate(pervProps) {
+    if (this.props.mode !== pervProps.mode) {
+      this.initialState()
     }
-    await this.getUsers()
-    await this.getLoanOfficers()
   }
 
   async getUsers() {
@@ -85,12 +73,6 @@ class SupervisionLevelsCreation extends Component<Props, State> {
       this.setState({ loanOfficers: res.body.data })
     }
     this.setState({ loading: false })
-  }
-
-  componentDidUpdate(pervProps) {
-    if (this.props.mode !== pervProps.mode) {
-      this.initialState()
-    }
   }
 
   async getGroups() {
@@ -143,6 +125,24 @@ class SupervisionLevelsCreation extends Component<Props, State> {
         Swal.fire('Error c!', getErrorMessage(res.error.error), 'error')
       }
     }
+  }
+
+  async initialState() {
+    this.setState({
+      groups: [],
+      users: [],
+      loanOfficers: [],
+      loading: false,
+    })
+    if (this.props.mode === 'edit') {
+      await this.getGroups()
+    } else {
+      this.setState({
+        groups: [],
+      })
+    }
+    await this.getUsers()
+    await this.getLoanOfficers()
   }
 
   prepareGroups() {
@@ -199,12 +199,14 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                   <span
                     className="add-member"
                     onClick={() => {
-                      const newGroup = this.state.groups
-                      newGroup.push({
-                        leader: { id: '', name: '' },
-                        officers: [],
+                      this.setState((previousState) => {
+                        const newGroup = previousState.groups
+                        newGroup.push({
+                          leader: { id: '', name: '' },
+                          officers: [],
+                        })
+                        return { groups: newGroup }
                       })
-                      this.setState({ groups: newGroup })
                     }}
                   >
                     <img

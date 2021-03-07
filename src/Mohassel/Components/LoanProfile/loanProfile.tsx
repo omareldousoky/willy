@@ -81,7 +81,6 @@ export interface IndividualWithInstallments {
   }
 }
 interface State {
-  prevId: string
   application: any
   activeTab: string
   tabsArray: Array<Tab>
@@ -110,7 +109,6 @@ class LoanProfile extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      prevId: '',
       application: {},
       activeTab: 'loanDetails',
       tabsArray: [],
@@ -405,164 +403,53 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
-  async calculatePenalties() {
+  async getIscore(data) {
     this.setState({ loading: true })
-    const res = await calculatePenalties({
-      id: this.state.application._id,
-      truthDate: new Date().getTime(),
+    const obj = {
+      requestNumber: '148',
+      reportId: '3004',
+      product: '023',
+      loanAccountNumber: `${data.key}`,
+      number: '1703943',
+      date: '02/12/2014',
+      amount: `${this.state.application.principal}`,
+      lastName: `${data.customerName}`,
+      idSource: '003',
+      idValue: `${data.nationalId}`,
+      gender: data.gender === 'male' ? '001' : '002',
+      dateOfBirth: iscoreDate(data.birthDate),
+    }
+    const iScore = await getIscore(obj)
+    if (iScore.status === 'success') {
+      this.getCachediScores(this.state.application)
+      this.setState({ loading: false })
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
+      )
+    }
+  }
+
+  getSumOfPendingActions() {
+    let sum = 0
+    this.state.pendingActions.transactions?.forEach((transaction) => {
+      sum += transaction.transactionAmount
     })
-    if (res.body) {
-      this.setState({ penalty: res.body.penalty, loading: false })
+    return numTo2Decimal(sum)
+  }
+
+  async getMembersShare() {
+    this.setState({ loading: true })
+    const res = await getGroupMemberShares(this.props.history.location.state.id)
+    if (res.status === 'success') {
+      this.setState({
+        loading: false,
+        individualsWithInstallments: res.body.individualsWithInstallments,
+      })
     } else
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
-  }
-
-  renderContent() {
-    switch (this.state.activeTab) {
-      case 'loanDetails':
-        return (
-          <LoanDetailsTableView
-            application={this.state.application}
-            branchName={this.state.branchDetails?.name}
-          />
-        )
-      case 'loanGuarantors':
-        return (
-          <GuarantorTableView
-            guarantors={this.state.application.guarantors}
-            customerId={this.state.application.customer._id}
-            application={this.state.application}
-            getGeoArea={(area) => this.getCustomerGeoArea(area)}
-            getIscore={(data) => this.getIscore(data)}
-            iScores={this.state.iscores}
-            status={this.state.application.status}
-          />
-        )
-      case 'loanLogs':
-        return <Logs id={this.props.history.location.state.id} />
-      case 'loanPayments':
-        return (
-          <Payment
-            print={(data) =>
-              this.setState(
-                {
-                  print: data.print,
-                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
-                },
-                () => window.print()
-              )
-            }
-            setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
-            application={this.state.application}
-            installments={
-              this.state.application.installmentsObject.installments
-            }
-            currency={this.state.application.product.currency}
-            applicationId={this.state.application._id}
-            pendingActions={this.state.pendingActions}
-            manualPaymentEditId={this.state.manualPaymentEditId}
-            refreshPayment={() => this.getAppByID(this.state.application._id)}
-            paymentType="normal"
-            randomPendingActions={this.state.randomPendingActions}
-          />
-        )
-      case 'customerCard':
-        return (
-          <CustomerCardView
-            application={this.state.application}
-            getGeoArea={(area) => this.getCustomerGeoArea(area)}
-            penalty={this.state.penalty}
-            print={() =>
-              this.setState({ print: 'customerCard' }, () => window.print())
-            }
-          />
-        )
-      case 'followUpStatement':
-        return (
-          <FollowUpStatementView
-            application={this.state.application}
-            print={() =>
-              this.setState({ print: 'followUpStatement' }, () =>
-                window.print()
-              )
-            }
-            members={this.state.individualsWithInstallments}
-          />
-        )
-      case 'loanRescheduling':
-        return (
-          <Rescheduling application={this.state.application} test={false} />
-        )
-      case 'loanReschedulingTest':
-        return <Rescheduling application={this.state.application} test />
-      case 'documents':
-        return <UploadDocuments application={this.state.application} />
-      case 'financialTransactions':
-        return (
-          <Payment
-            print={(data) =>
-              this.setState(
-                {
-                  print: data.print,
-                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
-                },
-                () => window.print()
-              )
-            }
-            setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
-            application={this.state.application}
-            installments={
-              this.state.application.installmentsObject.installments
-            }
-            currency={this.state.application.product.currency}
-            applicationId={this.state.application._id}
-            pendingActions={this.state.pendingActions}
-            manualPaymentEditId={this.state.manualPaymentEditId}
-            refreshPayment={() => this.getAppByID(this.state.application._id)}
-            paymentType="random"
-            randomPendingActions={this.state.randomPendingActions}
-          />
-        )
-      case 'penalties':
-        return (
-          <Payment
-            print={(data) =>
-              this.setState(
-                {
-                  print: data.print,
-                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
-                },
-                () => window.print()
-              )
-            }
-            setReceiptData={(data) => this.setState({ receiptData: data })}
-            setEarlyPaymentData={(data) =>
-              this.setState({ earlyPaymentData: data })
-            }
-            application={this.state.application}
-            installments={
-              this.state.application.installmentsObject.installments
-            }
-            currency={this.state.application.product.currency}
-            applicationId={this.state.application._id}
-            pendingActions={this.state.pendingActions}
-            manualPaymentEditId={this.state.manualPaymentEditId}
-            refreshPayment={() => this.getAppByID(this.state.application._id)}
-            paymentType="penalties"
-            randomPendingActions={this.state.randomPendingActions}
-          />
-        )
-      default:
-        return null
-    }
   }
 
   async rejectManualPayment(randomPendingActionId: string) {
@@ -570,12 +457,12 @@ class LoanProfile extends Component<Props, State> {
     if (randomPendingActionId !== '') {
       const res = await rejectManualOtherPayment(randomPendingActionId)
       if (res.status === 'success') {
-        this.setState({
+        this.setState((previousState) => ({
           loading: false,
-          randomPendingActions: this.state.randomPendingActions.filter(
+          randomPendingActions: previousState.randomPendingActions.filter(
             (el) => el._id !== randomPendingActionId
           ),
-        })
+        }))
         Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
           this.getManualOtherPayments(this.props.history.location.state.id)
         )
@@ -597,6 +484,20 @@ class LoanProfile extends Component<Props, State> {
           Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
         )
     }
+  }
+
+  async calculatePenalties() {
+    this.setState({ loading: true })
+    const res = await calculatePenalties({
+      id: this.state.application._id,
+      truthDate: new Date().getTime(),
+    })
+    if (res.body) {
+      this.setState({ penalty: res.body.penalty, loading: false })
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
   }
 
   async approveManualPayment(randomPendingActionId: string) {
@@ -667,48 +568,24 @@ class LoanProfile extends Component<Props, State> {
     this.props.changePaymentState(3)
     window.scrollTo(0, document.body.scrollHeight)
     if (randomPendingActionId !== '') {
-      const pendingAction = this.state.randomPendingActions.find(
-        (el) => el._id === randomPendingActionId
-      )
-      const tab =
-        pendingAction.transactions[0].action === 'penalty'
-          ? 'penalties'
-          : 'financialTransactions'
-      this.setState({ activeTab: tab, manualPaymentEditId: pendingAction._id })
-    } else {
-      this.setState({
-        activeTab: 'loanPayments',
-        manualPaymentEditId: this.state.pendingActions._id
-          ? this.state.pendingActions?._id
-          : '',
+      this.setState((previousState) => {
+        const pendingAction = previousState.randomPendingActions.find(
+          (el) => el._id === randomPendingActionId
+        )
+        const tab =
+          pendingAction.transactions[0].action === 'penalty'
+            ? 'penalties'
+            : 'financialTransactions'
+        return {
+          activeTab: tab,
+          manualPaymentEditId: pendingAction._id,
+        }
       })
-    }
-  }
-
-  async getIscore(data) {
-    this.setState({ loading: true })
-    const obj = {
-      requestNumber: '148',
-      reportId: '3004',
-      product: '023',
-      loanAccountNumber: `${data.key}`,
-      number: '1703943',
-      date: '02/12/2014',
-      amount: `${this.state.application.principal}`,
-      lastName: `${data.customerName}`,
-      idSource: '003',
-      idValue: `${data.nationalId}`,
-      gender: data.gender === 'male' ? '001' : '002',
-      dateOfBirth: iscoreDate(data.birthDate),
-    }
-    const iScore = await getIscore(obj)
-    if (iScore.status === 'success') {
-      this.getCachediScores(this.state.application)
-      this.setState({ loading: false })
     } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(iScore.error.error), 'error')
-      )
+      this.setState((previousState) => ({
+        activeTab: 'loanPayments',
+        manualPaymentEditId: previousState.pendingActions?._id || '',
+      }))
     }
   }
 
@@ -836,26 +713,153 @@ class LoanProfile extends Component<Props, State> {
     }
   }
 
-  getSumOfPendingActions() {
-    let sum = 0
-    this.state.pendingActions.transactions?.forEach((transaction) => {
-      sum += transaction.transactionAmount
-    })
-    return numTo2Decimal(sum)
-  }
-
-  async getMembersShare() {
-    this.setState({ loading: true })
-    const res = await getGroupMemberShares(this.props.history.location.state.id)
-    if (res.status === 'success') {
-      this.setState({
-        loading: false,
-        individualsWithInstallments: res.body.individualsWithInstallments,
-      })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+  renderContent() {
+    switch (this.state.activeTab) {
+      case 'loanDetails':
+        return (
+          <LoanDetailsTableView
+            application={this.state.application}
+            branchName={this.state.branchDetails?.name}
+          />
+        )
+      case 'loanGuarantors':
+        return (
+          <GuarantorTableView
+            guarantors={this.state.application.guarantors}
+            customerId={this.state.application.customer._id}
+            application={this.state.application}
+            getGeoArea={(area) => this.getCustomerGeoArea(area)}
+            getIscore={(data) => this.getIscore(data)}
+            iScores={this.state.iscores}
+            status={this.state.application.status}
+          />
+        )
+      case 'loanLogs':
+        return <Logs id={this.props.history.location.state.id} />
+      case 'loanPayments':
+        return (
+          <Payment
+            print={(data) =>
+              this.setState(
+                {
+                  print: data.print,
+                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
+                },
+                () => window.print()
+              )
+            }
+            setReceiptData={(data) => this.setState({ receiptData: data })}
+            setEarlyPaymentData={(data) =>
+              this.setState({ earlyPaymentData: data })
+            }
+            application={this.state.application}
+            installments={
+              this.state.application.installmentsObject.installments
+            }
+            currency={this.state.application.product.currency}
+            applicationId={this.state.application._id}
+            pendingActions={this.state.pendingActions}
+            manualPaymentEditId={this.state.manualPaymentEditId}
+            refreshPayment={() => this.getAppByID(this.state.application._id)}
+            paymentType="normal"
+            randomPendingActions={this.state.randomPendingActions}
+          />
+        )
+      case 'customerCard':
+        return (
+          <CustomerCardView
+            application={this.state.application}
+            getGeoArea={(area) => this.getCustomerGeoArea(area)}
+            penalty={this.state.penalty}
+            print={() =>
+              this.setState({ print: 'customerCard' }, () => window.print())
+            }
+          />
+        )
+      case 'followUpStatement':
+        return (
+          <FollowUpStatementView
+            application={this.state.application}
+            print={() =>
+              this.setState({ print: 'followUpStatement' }, () =>
+                window.print()
+              )
+            }
+            members={this.state.individualsWithInstallments}
+          />
+        )
+      case 'loanRescheduling':
+        return (
+          <Rescheduling application={this.state.application} test={false} />
+        )
+      case 'loanReschedulingTest':
+        return <Rescheduling application={this.state.application} test />
+      case 'documents':
+        return <UploadDocuments application={this.state.application} />
+      case 'financialTransactions':
+        return (
+          <Payment
+            print={(data) =>
+              this.setState(
+                {
+                  print: data.print,
+                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
+                },
+                () => window.print()
+              )
+            }
+            setReceiptData={(data) => this.setState({ receiptData: data })}
+            setEarlyPaymentData={(data) =>
+              this.setState({ earlyPaymentData: data })
+            }
+            application={this.state.application}
+            installments={
+              this.state.application.installmentsObject.installments
+            }
+            currency={this.state.application.product.currency}
+            applicationId={this.state.application._id}
+            pendingActions={this.state.pendingActions}
+            manualPaymentEditId={this.state.manualPaymentEditId}
+            refreshPayment={() => this.getAppByID(this.state.application._id)}
+            paymentType="random"
+            randomPendingActions={this.state.randomPendingActions}
+          />
+        )
+      case 'penalties':
+        return (
+          <Payment
+            print={(data) =>
+              this.setState(
+                (previousState) => ({
+                  print: data.print,
+                  earlyPaymentData: {
+                    ...previousState.earlyPaymentData,
+                    ...data,
+                  },
+                }),
+                () => window.print()
+              )
+            }
+            setReceiptData={(data) => this.setState({ receiptData: data })}
+            setEarlyPaymentData={(data) =>
+              this.setState({ earlyPaymentData: data })
+            }
+            application={this.state.application}
+            installments={
+              this.state.application.installmentsObject.installments
+            }
+            currency={this.state.application.product.currency}
+            applicationId={this.state.application._id}
+            pendingActions={this.state.pendingActions}
+            manualPaymentEditId={this.state.manualPaymentEditId}
+            refreshPayment={() => this.getAppByID(this.state.application._id)}
+            paymentType="penalties"
+            randomPendingActions={this.state.randomPendingActions}
+          />
+        )
+      default:
+        return null
+    }
   }
 
   render() {

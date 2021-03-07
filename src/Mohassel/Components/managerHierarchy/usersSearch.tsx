@@ -104,10 +104,11 @@ class UsersSearch extends Component<Props, State> {
   selectUser(event) {
     this.props.item[this.props.objectKey] = { id: event._id, name: event.name }
     const index = this.state.users.findIndex((user) => user._id === event._id)
-    const newUsers = this.state.users
-    newUsers.splice(index, 1)
-    this.setState({
-      users: newUsers,
+
+    this.setState((previousState) => {
+      const newUsers = previousState.users
+      newUsers.splice(index, 1)
+      return { users: newUsers }
     })
     this.checkError()
   }
