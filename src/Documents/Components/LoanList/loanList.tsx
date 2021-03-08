@@ -31,9 +31,6 @@ interface Props {
 interface State {
   size: number
   from: number
-  iScoreModal: boolean
-  iScoreCustomers: any
-  loading: boolean
   searchKeys: any
 }
 
@@ -50,9 +47,6 @@ class LoanList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      iScoreModal: false,
-      iScoreCustomers: [],
-      loading: false,
       searchKeys: [
         'keyword',
         'dateFromTo',
@@ -160,6 +154,10 @@ class LoanList extends Component<Props, State> {
       })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getStatus(status: string) {
     switch (status) {
       case 'paid':
@@ -173,32 +171,6 @@ class LoanList extends Component<Props, State> {
       default:
         return null
     }
-  }
-
-  renderIcons(data) {
-    if (
-      !(
-        data.application.status === 'paid' ||
-        data.application.status === 'canceled' ||
-        data.application.status === 'rejected'
-      )
-    ) {
-      return (
-        <Can I="addingDocuments" a="application">
-          <img
-            style={{ cursor: 'pointer', marginLeft: 20 }}
-            alt="edit"
-            src={require('../../../Shared/Assets/upload.svg')}
-            onClick={() =>
-              this.props.history.push('/edit-loan-profile', {
-                id: data.application._id,
-              })
-            }
-          />
-        </Can>
-      )
-    }
-    return null
   }
 
   async getLoans() {
@@ -229,8 +201,30 @@ class LoanList extends Component<Props, State> {
     })
   }
 
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
+  renderIcons(data) {
+    if (
+      !(
+        data.application.status === 'paid' ||
+        data.application.status === 'canceled' ||
+        data.application.status === 'rejected'
+      )
+    ) {
+      return (
+        <Can I="addingDocuments" a="application">
+          <img
+            style={{ cursor: 'pointer', marginLeft: 20 }}
+            alt="edit"
+            src={require('../../../Shared/Assets/upload.svg')}
+            onClick={() =>
+              this.props.history.push('/edit-loan-profile', {
+                id: data.application._id,
+              })
+            }
+          />
+        </Can>
+      )
+    }
+    return null
   }
 
   render() {

@@ -41,10 +41,6 @@ interface State {
   print: boolean
   size: number
   from: number
-  branchDetails: any
-  reviewedResults: any
-  iScoreModal: boolean
-  iScoreCustomers: any
   loading: boolean
   selectedApplicationToPrint: any
 }
@@ -73,10 +69,6 @@ class TrackLoanApplications extends Component<Props, State> {
       print: false,
       size: 10,
       from: 0,
-      branchDetails: {},
-      reviewedResults: [],
-      iScoreModal: false,
-      iScoreCustomers: [],
       loading: false,
       selectedApplicationToPrint: {},
     }
@@ -152,42 +144,6 @@ class TrackLoanApplications extends Component<Props, State> {
         render: (data) => this.renderIcons(data),
       },
     ]
-  }
-
-  renderIcons(data) {
-    if (
-      !(
-        data.application.status === 'paid' ||
-        data.application.status === 'canceled' ||
-        data.application.status === 'rejected'
-      )
-    ) {
-      return (
-        <>
-          <Can I="addingDocuments" a="application">
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../../Shared/Assets/upload.svg')}
-              onClick={() =>
-                this.props.history.push('/edit-loan-profile', {
-                  id: data.application._id,
-                })
-              }
-            />
-          </Can>
-          {data.application.status === 'created' && (
-            <img
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../../Shared/Assets/downloadIcon.svg')}
-              onClick={() => this.getApplicationById(data.application._id)}
-            />
-          )}
-        </>
-      )
-    }
-    return null
   }
 
   componentDidMount() {
@@ -275,6 +231,42 @@ class TrackLoanApplications extends Component<Props, State> {
     } else {
       this.setState({ loading: false })
     }
+  }
+
+  renderIcons(data) {
+    if (
+      !(
+        data.application.status === 'paid' ||
+        data.application.status === 'canceled' ||
+        data.application.status === 'rejected'
+      )
+    ) {
+      return (
+        <>
+          <Can I="addingDocuments" a="application">
+            <img
+              style={{ cursor: 'pointer', marginLeft: 20 }}
+              alt="edit"
+              src={require('../../../Shared/Assets/upload.svg')}
+              onClick={() =>
+                this.props.history.push('/edit-loan-profile', {
+                  id: data.application._id,
+                })
+              }
+            />
+          </Can>
+          {data.application.status === 'created' && (
+            <img
+              style={{ cursor: 'pointer', marginLeft: 20 }}
+              alt="edit"
+              src={require('../../../Shared/Assets/downloadIcon.svg')}
+              onClick={() => this.getApplicationById(data.application._id)}
+            />
+          )}
+        </>
+      )
+    }
+    return null
   }
 
   render() {
