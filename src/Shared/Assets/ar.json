@@ -912,5 +912,15 @@
     "monthlyClosing": "الإغلاق الشهري",
     "closeDate": "تاريخ الإغلاق",
     "dateCantBeInFuture":"التاريخ لايمكن أن يكون في المستقبل",
-    "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا"
+    "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا",
+    "antiTerrorismMoneyLaundering": "مكافحة الإرهاب و غسيل الأموال",
+    "antiTerrorism": "مكافحة الإرهاب",
+    "antiMoneyLaundering": "مكافحة غسيل الأموال",
+		"terroristsList": "قوائم الإرهابين المحلية",
+		"noOfTerrorists": "عدد الإرهابين",
+		"nationality": "الجنسية",
+		"customerMaySuspect": "هذا العميل مشكوك فيه قد يكون إرهابي",
+		"uploadSuspectsList": "رفع قوائم الإرهابين",
+		"uploadedSuccessfully": "تم رفع المستند بنجاح"
+
 }

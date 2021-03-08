@@ -75,7 +75,8 @@ export interface Customer {
 	blocked?: {
 		isBlocked?: boolean;
 		reason?: string;
-	};
+    };
+    suspectId?: string;
 }
 
 export interface Action {
@@ -370,4 +371,21 @@ export interface GroupsByBranch{
             id: string;
             name: string;
         }[];
+}
+export interface SuspectResponse {
+	id: string;
+	name: string;
+	nationality: string;
+	nationalId: string;
+	birthDate: string;
+	created: {
+		by: string;
+		at: number;
+		userName: string;
+	};
+	updated: {
+		by: string;
+		at: number;
+		userName: string;
+	};
 }

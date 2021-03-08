@@ -57,6 +57,7 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
+import TerrorismList from '../Components/terrorismMoneyLaundering/terrorismList';
 
 const appRoutes = [
   {
@@ -455,7 +456,16 @@ const appRoutes = [
         path: '/financial-closing',
         label: local.financialClosing,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
-      }
+      },{
+				path: "/anti-terrorism-money-laundering",
+				label: local.antiTerrorismMoneyLaundering,
+				routes: [{
+					path: '/anti-terrorism',
+					label: local.antiTerrorism,
+					render: (props) => <Can I="getSuspect" a="customer"><TerrorismList {...props} /></Can>
+				},
+				]
+			}
     ]
   },
 ];

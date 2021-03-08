@@ -7,6 +7,8 @@ import {searchActionLogs} from '../../../Mohassel/Services/APIs/ActionLogs/searc
 import { searchLeads } from '../../../Mohassel/Services/APIs/Leads/searchLeads';
 import {searchClearance} from '../../../Mohassel/Services/APIs/clearance/searchClearance'
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups';
+import { searchSuspects } from '../../../Mohassel/Services/APIs/Terrorism/terrorism';
+
 export const search = (obj) => {
     switch (obj.url) {
         case ('customer'):
@@ -126,6 +128,19 @@ export const search = (obj) => {
                         dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
                     }  
              }     
+        case ('suspect'):
+            return async (dispatch)=>{
+                delete obj.url
+                dispatch({type: "SET_LOADING", payload: true})
+                const res = await searchSuspects(obj)
+                if(res.status === "success") {
+                        dispatch({type: "SET_LOADING", payload: false})
+                        dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
+                } else {
+                    dispatch({ type: 'SET_LOADING', payload: false })
+                    dispatch({ type: 'SEARCH', payload: {...(res.error as Record<string, string>)}})
+                }
+            }
         case ('clearData'):
             return (dispatch) => {
                 dispatch({ type: 'CLEAR_DATA', payload: {} })
