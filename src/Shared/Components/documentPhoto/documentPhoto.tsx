@@ -229,7 +229,7 @@ class DocumentPhoto extends Component<Props, State> {
           border: '#e5e5e5 solid 1px',
           borderRadius: 4,
         }}
-        data-qc={`upload-${name}`}
+        data-qc={`upload-${this.props.name}`}
         onDrag={this.overrideEventDefaults}
         onDragStart={this.overrideEventDefaults}
         onDragEnd={this.overrideEventDefaults}

@@ -469,7 +469,8 @@ export const getDataURL = async (url) => {
     reader.onload = () => resolve(reader.result)
     reader.readAsDataURL(blob)
   })
-  return await dataUrl.replace('data:application/octet-stream;base64,', '')
+  const res = await dataUrl.replace('data:application/octet-stream;base64,', '')
+  return res
 }
 export const downloadAsZip = async (
   images: Array<{ url: string; fileName: string }>,

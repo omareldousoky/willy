@@ -39,7 +39,7 @@ export const DocumentsReducer = produce(
   (draft: any[] = [], action: DocumentActionType) => {
     switch (action.type) {
       case GET_DOCUMENTS: {
-        return (draft = action.payload)
+        return action.payload
       }
       case ADD_TO_DOCUMENTS: {
         for (const doc of draft) {
@@ -87,7 +87,7 @@ export const DocumentsReducer = produce(
 export const selectionArrayReducer = produce((draft: Image[] = [], action) => {
   switch (action.type) {
     case ADD_ALL_TO_SELECTION_ARRAY:
-      return (draft = action.payload)
+      return action.payload
     case ADD_TO_SELECTION_ARRAY:
       draft.push(action.payload)
       break
