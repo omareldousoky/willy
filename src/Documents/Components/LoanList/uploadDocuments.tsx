@@ -55,6 +55,16 @@ class UploadDocuments extends Component<Props, State> {
     }
   }
 
+  async componentDidMount() {
+    const appId = this.props.history.location.state.id
+    this.getAppByID(appId)
+    this.getDocumentTypes()
+  }
+
+  componentWillUnmount() {
+    this.props.clearSelectionArray()
+  }
+
   async getDocumentTypes() {
     const query =
       this.state.application.status === 'issued'
@@ -67,25 +77,6 @@ class UploadDocuments extends Component<Props, State> {
       })
     } else {
       Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
-    }
-  }
-
-  selectAllOptions() {
-    if (this.state.selectAll === true) {
-      this.setState({ selectAll: false })
-      this.props.clearSelectionArray()
-    } else {
-      this.setState({ selectAll: true })
-      const images: Image[] = []
-      this.props.documents.map((doc) => {
-        doc.imagesFiles.map((image) => {
-          images.push({
-            fileName: image.key,
-            url: image.url,
-          })
-        })
-      })
-      this.props.addAllToSelectionArray(images)
     }
   }
 
@@ -129,10 +120,23 @@ class UploadDocuments extends Component<Props, State> {
     }
   }
 
-  async componentDidMount() {
-    const appId = this.props.history.location.state.id
-    this.getAppByID(appId)
-    this.getDocumentTypes()
+  selectAllOptions() {
+    if (this.state.selectAll === true) {
+      this.setState({ selectAll: false })
+      this.props.clearSelectionArray()
+    } else {
+      this.setState({ selectAll: true })
+      const images: Image[] = []
+      this.props.documents.map((doc) => {
+        doc.imagesFiles.map((image) => {
+          images.push({
+            fileName: image.key,
+            url: image.url,
+          })
+        })
+      })
+      this.props.addAllToSelectionArray(images)
+    }
   }
 
   render() {
@@ -198,10 +202,6 @@ class UploadDocuments extends Component<Props, State> {
         })}
       </Container>
     )
-  }
-
-  componentWillUnmount() {
-    this.props.clearSelectionArray()
   }
 }
 const addDocumentToProps = (dispatch) => {
