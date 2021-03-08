@@ -16,6 +16,7 @@ interface GroupMember {
 }
 export interface Application {
     _id?: string;
+    loanApplicationKey?: string;
     applicationCode?: string;
     beneficiaryType: string;
     individualDetails: Array<GroupMember>;

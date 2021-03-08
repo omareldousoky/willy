@@ -923,5 +923,7 @@
     "areaSupervisorReview":"مراجعة مشرف المنطقة",
     "financialManagerReview":"مراجعة المدير المالي",
     "writeNotes":"برجاء إدخال الملاحظات",
-    "review":"مراجعة"
+    "review":"مراجعة",
+    "defaultingReviewSuccess":"تم مراجعة القرض بنجاح",
+    "choose":"اختر"
 }
