@@ -11,7 +11,7 @@ import './index.scss'
 const App = (props) => {
   useEffect(() => {
     props.getAuthData()
-  }, [])
+  })
   if (getCookie('token') === '') {
     window.location.href = process.env.REACT_APP_LOGIN_URL || ''
     return <></>
