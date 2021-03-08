@@ -1,6 +1,5 @@
 /* eslint-disable react/display-name */
 import React from 'react'
-import NavBar from '../../Shared/Components/NavBar/navBar'
 import CustomersList from '../Components/Cusomters/customersList'
 import DocumentsUpload from '../Components/Cusomters/documentsUpload'
 import TrackLoanApplications from '../Components/TrackLoanApplications/trackLoanApplications'
@@ -35,7 +34,7 @@ const appRoutes = [
       {
         path: '/track-loan-applications',
         label: local.loanApplications,
-        render: (props) => <TrackLoanApplications />,
+        render: () => <TrackLoanApplications />,
       },
 
       {
