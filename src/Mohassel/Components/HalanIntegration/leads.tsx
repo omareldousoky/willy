@@ -249,7 +249,7 @@ class Leads extends Component<Props, State>{
       const res = await changeLeadState(phoneNumber, newState, rejectionReason, rejectionDetails);
       if (res.status === "success") {
         this.props.setLoading(false);
-        this.setState({ openActionsId: "" })
+        this.setState({ openActionsId: "", rejectLeadModal: false })
         if (action === 'view') {
           this.props.history.push('/halan-integration/leads/view-lead', { leadDetails: data })
         } else if (action === 'edit') {
