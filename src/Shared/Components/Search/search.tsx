@@ -1,157 +1,161 @@
-import React, { Component } from "react";
-import { Formik } from "formik";
-import { connect } from "react-redux";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import * as local from "../../Assets/ar.json";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import FormControl from "react-bootstrap/FormControl";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
+import React, { Component } from 'react'
+import { Formik } from 'formik'
+import { connect } from 'react-redux'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
+import FormControl from 'react-bootstrap/FormControl'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
+import Swal from 'sweetalert2'
+import * as local from '../../Assets/ar.json'
 import {
   search,
   searchFilters,
   issuedLoansSearchFilters,
-} from "../../redux/search/actions";
-import { BranchesDropDown } from "../../../Mohassel/Components/dropDowns/allDropDowns";
+} from '../../redux/search/actions'
+import { BranchesDropDown } from '../../../Mohassel/Components/dropDowns/allDropDowns'
 import {
   getFullCustomerKey,
   parseJwt,
   timeToDateyyymmdd,
-} from "../../../Shared/Services/utils";
-import { getCookie } from "../../Services/getCookie";
-import { getGovernorates } from "../../../Mohassel/Services/APIs/configApis/config";
-import { loading } from "../../redux/loading/actions";
-import { getActionsList } from "../../../Mohassel/Services/APIs/ActionLogs/getActionsList";
-import Swal from "sweetalert2";
-import Can from "../../../Mohassel/config/Can";
+} from '../../Services/utils'
+import { getCookie } from '../../Services/getCookie'
+import { getGovernorates } from '../../../Mohassel/Services/APIs/configApis/config'
+import { loading } from '../../redux/loading/actions'
+import { getActionsList } from '../../../Mohassel/Services/APIs/ActionLogs/getActionsList'
+import Can from '../../../Mohassel/config/Can'
 
 interface InitialFormikState {
-  name?: string;
-  keyword?: string;
-  fromDate?: string;
-  toDate?: string;
-  governorate?: string;
-  status?: string;
-  action?: string;
-  branchId?: string;
-  isDoubtful?: boolean;
-  isWrittenOff?: boolean;
-  printed?: boolean;
+  name?: string
+  keyword?: string
+  fromDate?: string
+  toDate?: string
+  governorate?: string
+  status?: string
+  action?: string
+  branchId?: string
+  isDoubtful?: boolean
+  isWrittenOff?: boolean
+  printed?: boolean
 }
 interface Props {
-  size: number;
-  from: number;
-  url: string;
-  roleId?: string;
-  searchPlaceholder?: string;
-  datePlaceholder?: string;
-  hqBranchIdRequest?: string;
-  status?: string;
-  fundSource?: string;
-  searchKeys: Array<string>;
-  dropDownKeys?: Array<string>;
-  issuedLoansSearchFilters: any;
-  chosenStatus?: string;
-  setFrom?: (from: number) => void;
-  search: (data) => void;
-  searchFilters: (data) => void;
-  setIssuedLoansSearchFilters: (data) => void;
-  setLoading: (data) => void;
-	submitClassName?: string;
+  size: number
+  from: number
+  url: string
+  roleId?: string
+  searchPlaceholder?: string
+  datePlaceholder?: string
+  hqBranchIdRequest?: string
+  status?: string
+  fundSource?: string
+  searchKeys: Array<string>
+  dropDownKeys?: Array<string>
+  issuedLoansSearchFilters: any
+  chosenStatus?: string
+  setFrom?: (from: number) => void
+  search: (data) => void
+  searchFilters: (data) => void
+  setIssuedLoansSearchFilters: (data) => void
+  setLoading: (data) => void
+  submitClassName?: string
 }
 interface State {
-  governorates: Array<any>;
-  dropDownValue: string;
-  actionsList: Array<string>;
+  governorates: Array<any>
+  dropDownValue: string
+  actionsList: Array<string>
 }
 class Search extends Component<Props, State> {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       governorates: [],
-      dropDownValue: this.props.url === "actionLogs" ? "authorName" : "name",
+      dropDownValue: this.props.url === 'actionLogs' ? 'authorName' : 'name',
       actionsList: [],
-    };
+    }
   }
+
   componentDidMount() {
-    if (this.props.url === "customer") {
-      this.getGov();
-    } else if (this.props.url === "actionLogs") {
-      this.getActionsList();
+    if (this.props.url === 'customer') {
+      this.getGov()
+    } else if (this.props.url === 'actionLogs') {
+      this.getActionsList()
     }
   }
+
   async getGov() {
-    this.props.setLoading(true);
-    const res = await getGovernorates();
-    if (res.status === "success") {
-      this.setState({ governorates: res.body.governorates });
-      this.props.setLoading(false);
+    this.props.setLoading(true)
+    const res = await getGovernorates()
+    if (res.status === 'success') {
+      this.setState({ governorates: res.body.governorates })
+      this.props.setLoading(false)
     } else {
-      this.props.setLoading(false);
-      console.log("Error getting governorates");
+      this.props.setLoading(false)
+      console.log('Error getting governorates')
     }
   }
+
   async getActionsList() {
-    this.props.setLoading(true);
-    const res = await getActionsList();
-    if (res.status === "success") {
-      this.setState({ actionsList: res.body.data });
-      this.props.setLoading(false);
+    this.props.setLoading(true)
+    const res = await getActionsList()
+    if (res.status === 'success') {
+      this.setState({ actionsList: res.body.data })
+      this.props.setLoading(false)
     } else {
-      this.props.setLoading(false);
-      console.log("Error getting  actionsLogs list"); // log for purpose
+      this.props.setLoading(false)
+      console.log('Error getting  actionsLogs list') // log for purpose
     }
   }
+
   submit = async (values) => {
     let obj = {
       ...values,
       ...{ from: this.props.from },
       [this.state.dropDownValue]: values.keyword,
-    };
-    delete obj.keyword;
-    const { url } = this.props;
-    if (obj.hasOwnProperty("fromDate"))
-      obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf();
-    if (obj.hasOwnProperty("toDate"))
-      obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 59).valueOf();
-    if (this.props.roleId) obj.roleId = this.props.roleId;
-    obj.from = 0;
-    if (obj.key) obj.key = isNaN(Number(obj.key)) ? 10 : Number(obj.key);
-    if (obj.code) obj.code = isNaN(Number(obj.code)) ? 10 : Number(obj.code);
-    if (obj.customerKey) obj.customerKey = Number(obj.customerKey);
-    if (obj.customerCode) obj.customerCode = Number(obj.customerCode);
+    }
+    delete obj.keyword
+    const { url } = this.props
+    if (obj.hasOwnProperty('fromDate'))
+      obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf()
+    if (obj.hasOwnProperty('toDate'))
+      obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 59).valueOf()
+    if (this.props.roleId) obj.roleId = this.props.roleId
+    obj.from = 0
+    if (obj.key) obj.key = isNaN(Number(obj.key)) ? 10 : Number(obj.key)
+    if (obj.code) obj.code = isNaN(Number(obj.code)) ? 10 : Number(obj.code)
+    if (obj.customerKey) obj.customerKey = Number(obj.customerKey)
+    if (obj.customerCode) obj.customerCode = Number(obj.customerCode)
     if (obj.customerShortenedCode) {
-      if (url === "customer")
+      if (url === 'customer')
         obj.key = Number(
           getFullCustomerKey(obj.customerShortenedCode) || undefined
-        );
-      if (url === "application" || url === "loan")
+        )
+      if (url === 'application' || url === 'loan')
         obj.customerKey = Number(
           getFullCustomerKey(obj.customerShortenedCode) || undefined
-        );
+        )
     }
-    if (url === "loan" && obj.sort !== "issueDate") {
-      obj.sort = "issueDate";
+    if (url === 'loan' && obj.sort !== 'issueDate') {
+      obj.sort = 'issueDate'
     }
-    if (this.props.status) obj.status = this.props.status;
-    if (this.props.fundSource) obj.fundSource = this.props.fundSource;
-    if (url === "loan") this.props.setIssuedLoansSearchFilters(obj);
+    if (this.props.status) obj.status = this.props.status
+    if (this.props.fundSource) obj.fundSource = this.props.fundSource
+    if (url === 'loan') this.props.setIssuedLoansSearchFilters(obj)
     if (
-      url === "application" &&
+      url === 'application' &&
       !obj.status &&
-      this.props.searchKeys.includes("review-application")
+      this.props.searchKeys.includes('review-application')
     ) {
-      obj.status = "reviewed";
+      obj.status = 'reviewed'
     }
-    if (url === "supervisionsGroups") {
-      obj.status = this.props.chosenStatus;
+    if (url === 'supervisionsGroups') {
+      obj.status = this.props.chosenStatus
     }
-    obj = this.removeEmptyArg(obj);
-    this.props.setFrom ? this.props.setFrom(0) : null;
-    this.props.searchFilters(obj);
+    obj = this.removeEmptyArg(obj)
+    this.props.setFrom ? this.props.setFrom(0) : null
+    this.props.searchFilters(obj)
     this.props.search({
       ...obj,
       from: 0,
@@ -160,80 +164,84 @@ class Search extends Component<Props, State> {
       branchId: this.props.hqBranchIdRequest
         ? this.props.hqBranchIdRequest
         : values.branchId,
-    });
-  };
+    })
+  }
+
   removeEmptyArg(obj) {
     Object.keys(obj).forEach((el) => {
-      if (obj[el] === "" || obj[el] === undefined) {
-        delete obj[el];
+      if (obj[el] === '' || obj[el] === undefined) {
+        delete obj[el]
       }
-    });
-    return obj;
+    })
+    return obj
   }
+
   getInitialState() {
-    const initialState: InitialFormikState = {};
+    const initialState: InitialFormikState = {}
     this.props.searchKeys.forEach((searchkey) => {
       switch (searchkey) {
-        case "dateFromTo":
+        case 'dateFromTo':
           initialState.fromDate =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.fromDate)
-              : "";
+              : ''
           initialState.toDate =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.toDate)
-              : "";
-        case "keyword":
+              : ''
+        case 'keyword':
           initialState.keyword =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters[this.state.dropDownValue]
-              : "";
-        case "governorate":
-          initialState.governorate = "";
-        case "status":
+              : ''
+        case 'governorate':
+          initialState.governorate = ''
+        case 'status':
           initialState.status =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.status
-              : "";
-        case "branch":
+              : ''
+        case 'branch':
           initialState.branchId =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.branchId
-              : "";
-        case "status-application":
+              : ''
+        case 'status-application':
           initialState.status =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.status
-              : "";
-        case "review-application":
+              : ''
+        case 'review-application':
           initialState.status =
-            this.props.url === "application"
+            this.props.url === 'application'
               ? this.props.issuedLoansSearchFilters.status
-              : "";
-        case "doubtful":
+              : ''
+        case 'doubtful':
           initialState.isDoubtful =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.isDoubtful
-              : false;
-        case "writtenOff":
+              : false
+        case 'writtenOff':
           initialState.isWrittenOff =
-            this.props.url === "loan"
+            this.props.url === 'loan'
               ? this.props.issuedLoansSearchFilters.isWrittenOff
-              : false;
-        case "printed":
-          initialState.printed = false;
+              : false
+        case 'printed':
+          initialState.printed = false
       }
-    });
-    return initialState;
+    })
+    return initialState
   }
+
   viewBranchDropdown() {
-    const token = getCookie("token");
-    const tokenData = parseJwt(token);
-    if (this.props.hqBranchIdRequest) return false;
-    if (this.props.url === "application") {
-      if (tokenData?.requireBranch === false) return true;
-      else return false;
-    } else return true;
+    const token = getCookie('token')
+    const tokenData = parseJwt(token)
+    if (this.props.hqBranchIdRequest) return false
+    if (this.props.url === 'application') {
+      if (tokenData?.requireBranch === false) return true
+      return false
+    }
+    return true
   }
 
   getArValue(key: string) {
@@ -248,10 +256,11 @@ class Search extends Component<Props, State> {
       userName: local.username,
       hrCode: local.hrCode,
       customerShortenedCode: local.customerShortenedCode,
-      default: "",
-    };
-    return arDropDownValue[key];
+      default: '',
+    }
+    return arDropDownValue[key]
   }
+
   render() {
     return (
       <Formik
@@ -265,11 +274,11 @@ class Search extends Component<Props, State> {
         {(formikProps) => (
           <Form
             onSubmit={formikProps.handleSubmit}
-            style={{ padding: "10px 30px 26px 30px" }}
+            style={{ padding: '10px 30px 26px 30px' }}
           >
             <Row>
               {this.props.searchKeys.map((searchKey, index) => {
-                if (searchKey === "keyword") {
+                if (searchKey === 'keyword') {
                   return (
                     <Col key={index} sm={6}>
                       <InputGroup>
@@ -288,8 +297,8 @@ class Search extends Component<Props, State> {
                                 key={index}
                                 data-qc={key}
                                 onClick={() => {
-                                  this.setState({ dropDownValue: key });
-                                  formikProps.setFieldValue("keyword", "");
+                                  this.setState({ dropDownValue: key })
+                                  formikProps.setFieldValue('keyword', '')
                                 }}
                               >
                                 {this.getArValue(key)}
@@ -307,14 +316,18 @@ class Search extends Component<Props, State> {
                         />
                       </InputGroup>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "dateFromTo") {
+                if (searchKey === 'dateFromTo') {
                   return (
-                    <Col key={index} sm={6} className="d-flex align-items-center">
+                    <Col
+                      key={index}
+                      sm={6}
+                      className="d-flex align-items-center"
+                    >
                       <div
                         className="dropdown-container"
-                        style={{ flex: 1, alignItems: "center" }}
+                        style={{ flex: 1, alignItems: 'center' }}
                       >
                         <p className="dropdown-label text-nowrap border-0 align-self-stretch mr-2">
                           {this.props.datePlaceholder
@@ -330,13 +343,13 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.fromDate}
                           onChange={(e) => {
                             formikProps.setFieldValue(
-                              "fromDate",
+                              'fromDate',
                               e.currentTarget.value
-                            );
-                            if (e.currentTarget.value === "")
-                              formikProps.setFieldValue("toDate", "");
+                            )
+                            if (e.currentTarget.value === '')
+                              formikProps.setFieldValue('toDate', '')
                           }}
-                        ></Form.Control>
+                        />
                         <span className="mr-1">{local.to}</span>
                         <Form.Control
                           className="border-0"
@@ -346,13 +359,13 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.toDate}
                           min={formikProps.values.fromDate}
                           onChange={formikProps.handleChange}
-                          disabled={!Boolean(formikProps.values.fromDate)}
-                        ></Form.Control>
+                          disabled={!formikProps.values.fromDate}
+                        />
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "governorate") {
+                if (searchKey === 'governorate') {
                   return (
                     <Col key={index} sm={6}>
                       <div
@@ -379,14 +392,14 @@ class Search extends Component<Props, State> {
                               >
                                 {governorate.governorateName.ar}
                               </option>
-                            );
+                            )
                           })}
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "employment") {
+                if (searchKey === 'employment') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
@@ -406,9 +419,9 @@ class Search extends Component<Props, State> {
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "status") {
+                if (searchKey === 'status') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
@@ -420,9 +433,9 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.status}
                           onChange={(e) => {
                             formikProps.setFieldValue(
-                              "status",
+                              'status',
                               e.currentTarget.value
-                            );
+                            )
                           }}
                         >
                           <option value="" data-qc="all">
@@ -440,9 +453,9 @@ class Search extends Component<Props, State> {
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "status-application") {
+                if (searchKey === 'status-application') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
@@ -454,9 +467,9 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.status}
                           onChange={(e) => {
                             formikProps.setFieldValue(
-                              "status",
+                              'status',
                               e.currentTarget.value
-                            );
+                            )
                           }}
                         >
                           <option value="" data-qc="all">
@@ -489,9 +502,9 @@ class Search extends Component<Props, State> {
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "review-application") {
+                if (searchKey === 'review-application') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
@@ -503,13 +516,13 @@ class Search extends Component<Props, State> {
                           value={
                             formikProps.values.status
                               ? formikProps.values.status
-                              : "reviewed"
+                              : 'reviewed'
                           }
                           onChange={(e) => {
                             formikProps.setFieldValue(
-                              "status",
+                              'status',
                               e.currentTarget.value
-                            );
+                            )
                           }}
                         >
                           <option value="reviewed" data-qc="reviewed">
@@ -526,9 +539,9 @@ class Search extends Component<Props, State> {
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "clearance-status") {
+                if (searchKey === 'clearance-status') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
@@ -540,9 +553,9 @@ class Search extends Component<Props, State> {
                           value={formikProps.values.status}
                           onChange={(e) => {
                             formikProps.setFieldValue(
-                              "status",
+                              'status',
                               e.currentTarget.value
-                            );
+                            )
                           }}
                         >
                           <option value="" data-qc="all">
@@ -560,21 +573,21 @@ class Search extends Component<Props, State> {
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "branch" && this.viewBranchDropdown()) {
+                if (searchKey === 'branch' && this.viewBranchDropdown()) {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <BranchesDropDown
                         value={formikProps.values.branchId}
                         onSelectBranch={(branch) => {
-                          formikProps.setFieldValue("branchId", branch._id);
+                          formikProps.setFieldValue('branchId', branch._id)
                         }}
                       />
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "actions") {
+                if (searchKey === 'actions') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <div className="dropdown-container">
@@ -585,9 +598,9 @@ class Search extends Component<Props, State> {
                           data-qc="actions"
                           value={formikProps.values.action}
                           onChange={(e) => {
-                            formikProps.setFieldValue("action", [
+                            formikProps.setFieldValue('action', [
                               e.currentTarget.value,
-                            ]);
+                            ])
                           }}
                         >
                           <option value="" data-qc="all">
@@ -602,14 +615,14 @@ class Search extends Component<Props, State> {
                               >
                                 {action}
                               </option>
-                            );
+                            )
                           })}
                         </Form.Control>
                       </div>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "doubtful") {
+                if (searchKey === 'doubtful') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <Form.Group className="row-nowrap" controlId="doubtful">
@@ -620,7 +633,7 @@ class Search extends Component<Props, State> {
                           checked={formikProps.values.isDoubtful}
                           onChange={(e) =>
                             formikProps.setFieldValue(
-                              "isDoubtful",
+                              'isDoubtful',
                               e.currentTarget.checked
                             )
                           }
@@ -629,9 +642,9 @@ class Search extends Component<Props, State> {
                         />
                       </Form.Group>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "writtenOff") {
+                if (searchKey === 'writtenOff') {
                   return (
                     <Col key={index} sm={6} style={{ marginTop: 20 }}>
                       <Form.Group className="row-nowrap" controlId="writtenOff">
@@ -642,7 +655,7 @@ class Search extends Component<Props, State> {
                           checked={formikProps.values.isWrittenOff}
                           onChange={(e) =>
                             formikProps.setFieldValue(
-                              "isWrittenOff",
+                              'isWrittenOff',
                               e.currentTarget.checked
                             )
                           }
@@ -651,9 +664,9 @@ class Search extends Component<Props, State> {
                         />
                       </Form.Group>
                     </Col>
-                  );
+                  )
                 }
-                if (searchKey === "printed") {
+                if (searchKey === 'printed') {
                   return (
                     <Col key={index} sm={3} style={{ marginTop: 20 }}>
                       <Form.Group className="row-nowrap" controlId="writtenOff">
@@ -664,7 +677,7 @@ class Search extends Component<Props, State> {
                           checked={formikProps.values.printed}
                           onChange={(e) =>
                             formikProps.setFieldValue(
-                              "printed",
+                              'printed',
                               e.currentTarget.checked
                             )
                           }
@@ -672,20 +685,20 @@ class Search extends Component<Props, State> {
                         />
                       </Form.Group>
                     </Col>
-                  );
+                  )
                 }
               })}
 
               <Col className="d-flex">
                 <Button
                   type="submit"
-                  className={`ml-auto ${this.props.submitClassName || ""}`}
+                  className={`ml-auto ${this.props.submitClassName || ''}`}
                   style={{ width: 180, height: 50, marginTop: 20 }}
                   disabled={
                     formikProps.values.fromDate
-                      ? !Boolean(
+                      ? !(
                           formikProps.values.fromDate &&
-                            formikProps.values.toDate
+                          formikProps.values.toDate
                         )
                       : false
                   }
@@ -697,14 +710,14 @@ class Search extends Component<Props, State> {
           </Form>
         )}
       </Formik>
-    );
+    )
   }
 }
 const mapStateToProps = (state) => {
   return {
     issuedLoansSearchFilters: state.issuedLoansSearchFilters,
-  };
-};
+  }
+}
 const addSearchToProps = (dispatch) => {
   return {
     search: (data) => dispatch(search(data)),
@@ -712,7 +725,7 @@ const addSearchToProps = (dispatch) => {
     setLoading: (data) => dispatch(loading(data)),
     setIssuedLoansSearchFilters: (data) =>
       dispatch(issuedLoansSearchFilters(data)),
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, addSearchToProps)(Search);
+export default connect(mapStateToProps, addSearchToProps)(Search)

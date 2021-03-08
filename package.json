@@ -21,7 +21,9 @@
     "lint-mohassel:sass": "stylelint './src/Mohassel/**/*.scss'",
     "lint-mohassel:sass:fix": "stylelint './src/Mohassel/**/*.scss' --fix",
     "lint-documents:sass": "stylelint './src/Documents/**/*.scss'",
-    "lint-documents:sass:fix": "stylelint './src/Documents/**/*.scss' --fix"
+    "lint-documents:sass:fix": "stylelint './src/Documents/**/*.scss' --fix",
+    "lint-shared": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern",
+    "lint-shared:fix": "eslint --cache src/Shared --ext .ts,.tsx --no-error-on-unmatched-pattern --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

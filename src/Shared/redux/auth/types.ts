@@ -1,13 +1,13 @@
 export interface Branch {
-    name: string;
-    _id: string;
+  name: string
+  _id: string
 }
 
 export interface Auth {
-    validBranches: Array<Branch>;
-    roles?: Array<string>;
-    loading: boolean;
-    clientPermissions?: any;
-    name?: string;
-    requireBranch?: boolean;
+  validBranches: Array<Branch>
+  roles?: Array<string>
+  loading: boolean
+  clientPermissions?: any
+  name?: string
+  requireBranch?: boolean
 }

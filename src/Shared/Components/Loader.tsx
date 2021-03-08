@@ -1,25 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Spinner from "react-bootstrap/Spinner";
+import React from 'react'
+import PropTypes from 'prop-types'
+import Spinner from 'react-bootstrap/Spinner'
 
 type Props = {
-  open: boolean;
-  type: string;
+  open: boolean
+  type: string
 }
 export const Loader = (props: Props) => {
   function renderFullScreen() {
     return (
       <div className="loader-full-screen">
-        <div className="cover"></div>
-        <Spinner animation="border" variant="primary" style={{ width: 100, height: 100 }} />
+        <div className="cover" />
+        <Spinner
+          animation="border"
+          variant="primary"
+          style={{ width: 100, height: 100 }}
+        />
       </div>
     )
   }
-  //To use fullsection type please make sure that it's parent has position absolute
+  // To use fullsection type please make sure that it's parent has position absolute
   function renderFullSection() {
     return (
       <div className="loader-full-section">
-        <div className="cover"></div>
+        <div className="cover" />
         <Spinner animation="border" variant="primary" />
       </div>
     )
@@ -28,16 +32,14 @@ export const Loader = (props: Props) => {
     return <Spinner animation="border" variant="primary" />
   }
   if (props.open) {
-    if (props.type === "fullscreen")
-      return renderFullScreen();
-    else if (props.type === "fullsection")
-      return renderFullSection();
-    else return renderInline();
+    if (props.type === 'fullscreen') return renderFullScreen()
+    if (props.type === 'fullsection') return renderFullSection()
+    return renderInline()
   }
-  else return null;
+  return null
 }
 
 Loader.propTypes = {
   open: PropTypes.bool, // true to open loader and false to close it
-  type: PropTypes.string // ['fullscreen' or 'fullsection' or 'inline']
-};
+  type: PropTypes.string, // ['fullscreen' or 'fullsection' or 'inline']
+}
