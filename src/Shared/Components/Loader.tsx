@@ -1,10 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Spinner from 'react-bootstrap/Spinner'
 
 type Props = {
   open: boolean
-  type: string
+  type: 'fullscreen' | 'fullsection' | 'inline'
 }
 export const Loader = (props: Props) => {
   function renderFullScreen() {
@@ -37,9 +36,4 @@ export const Loader = (props: Props) => {
     return renderInline()
   }
   return null
-}
-
-Loader.propTypes = {
-  open: PropTypes.bool, // true to open loader and false to close it
-  type: PropTypes.string, // ['fullscreen' or 'fullsection' or 'inline']
 }

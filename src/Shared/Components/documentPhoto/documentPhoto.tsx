@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import * as local from '../../Assets/ar.json'
 import { withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import './documentPhoto.scss'
 import Row from 'react-bootstrap/Row'
+import local from '../../Assets/ar.json'
 
 interface Props {
   photoObject?: {
@@ -54,11 +54,6 @@ class DocumentPhoto extends Component<Props, State> {
     return null
   }
 
-  triggerInputFile() {
-    const limit = 1
-    this.fileInput.current?.click()
-  }
-
   overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
@@ -66,7 +61,7 @@ class DocumentPhoto extends Component<Props, State> {
 
   dragenterListener = (event: React.DragEvent<HTMLDivElement>) => {
     this.overrideEventDefaults(event)
-    this.dragEventCounter++
+    this.dragEventCounter += 1
     if (event.dataTransfer.items && event.dataTransfer.items[0]) {
       this.setState({ dragging: true })
     } else if (
@@ -79,59 +74,10 @@ class DocumentPhoto extends Component<Props, State> {
 
   dragleaveListener = (event: React.DragEvent<HTMLDivElement>) => {
     this.overrideEventDefaults(event)
-    this.dragEventCounter--
+    this.dragEventCounter -= 1
     if (this.dragEventCounter === 0) {
       this.setState({ dragging: false })
     }
-  }
-
-  constructArr() {
-    const len = 1
-    const arr: number[] = []
-    for (let i = 0; i < len; i++) {
-      arr.push(i)
-    }
-    return arr
-  }
-
-  checkFileType(files: Array<File> | FileList) {
-    const { length } = files
-    let flag = false
-    for (let index = 0; index < length; index++) {
-      if (
-        files[index].type === 'image/png' ||
-        files[index].type === 'image/jpeg' ||
-        files[index].type === 'image/jpg'
-      )
-        flag = false
-      else return true
-    }
-    return flag
-  }
-
-  async readFiles(files: Array<File> | FileList) {
-    const imagesLimit = 1
-    const flag: boolean = this.checkFileType(files)
-    if (flag) Swal.fire('', local.invalidFileType, 'error')
-    else if (files.length <= imagesLimit) {
-      for (let index = 0; index < files.length; index++) {
-        const reader = new FileReader()
-        const file = files[index]
-        reader.onloadend = () => {
-          this.setState({
-            imgSrc: reader.result,
-          })
-          this.props.handleImageChange(file)
-        }
-        reader.readAsDataURL(file)
-      }
-    }
-  }
-
-  async deleteDocument(event) {
-    this.overrideEventDefaults(event)
-    this.setState({ imgSrc: '' })
-    this.props.handleImageChange('')
   }
 
   dropListener = (event: React.DragEvent<HTMLDivElement>) => {
@@ -153,6 +99,59 @@ class DocumentPhoto extends Component<Props, State> {
     if (event.target.files.length <= imagesLimit && !this.props.view) {
       this.readFiles(event.target.files)
     }
+  }
+
+  async readFiles(files: Array<File> | FileList) {
+    const imagesLimit = 1
+    const flag: boolean = this.checkFileType(files)
+    if (flag) Swal.fire('', local.invalidFileType, 'error')
+    else if (files.length <= imagesLimit) {
+      for (let index = 0; index < files.length; index += 1) {
+        const reader = new FileReader()
+        const file = files[index]
+        reader.onloadend = () => {
+          this.setState({
+            imgSrc: reader.result,
+          })
+          this.props.handleImageChange(file)
+        }
+        reader.readAsDataURL(file)
+      }
+    }
+  }
+
+  async deleteDocument(event) {
+    this.overrideEventDefaults(event)
+    this.setState({ imgSrc: '' })
+    this.props.handleImageChange('')
+  }
+
+  checkFileType(files: Array<File> | FileList) {
+    const { length } = files
+    let flag = false
+    for (let index = 0; index < length; index += 1) {
+      if (
+        files[index].type === 'image/png' ||
+        files[index].type === 'image/jpeg' ||
+        files[index].type === 'image/jpg'
+      )
+        flag = false
+      else return true
+    }
+    return flag
+  }
+
+  constructArr() {
+    const len = 1
+    const arr: number[] = []
+    for (let i = 0; i < len; i += 1) {
+      arr.push(i)
+    }
+    return arr
+  }
+
+  triggerInputFile() {
+    this.fileInput.current?.click()
   }
 
   renderDropHere(key: number) {
@@ -215,7 +214,6 @@ class DocumentPhoto extends Component<Props, State> {
   }
 
   renderContainer() {
-    const Limit = 1
     return (
       <Card
         style={{

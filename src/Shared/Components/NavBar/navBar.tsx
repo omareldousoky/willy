@@ -101,6 +101,18 @@ class NavBar extends Component<Props, State> {
     }
   }
 
+  getDaysOfMonth() {
+    const date = new Date()
+    const y = date.getFullYear()
+    const m = date.getMonth()
+    const firstDay = new Date(y, m, 2).valueOf()
+    const lastDay = new Date(y, m + 1, 1).valueOf()
+    return {
+      firstDay: timeToDateyyymmdd(firstDay),
+      lastDay: timeToDateyyymmdd(lastDay),
+    }
+  }
+
   async goToBranch(branch: Branch, refresh: boolean) {
     document.cookie = 'token=; expires = Thu, 01 Jan 1970 00:00:00 GMT'
     this.setState({ loading: true, openBranchList: false })
@@ -212,18 +224,6 @@ class NavBar extends Component<Props, State> {
     )
   }
 
-  getDaysOfMonth() {
-    const date = new Date()
-    const y = date.getFullYear()
-    const m = date.getMonth()
-    const firstDay = new Date(y, m, 2).valueOf()
-    const lastDay = new Date(y, m + 1, 1).valueOf()
-    return {
-      firstDay: timeToDateyyymmdd(firstDay),
-      lastDay: timeToDateyyymmdd(lastDay),
-    }
-  }
-
   render() {
     return (
       <>
@@ -267,7 +267,9 @@ class NavBar extends Component<Props, State> {
               <div
                 className="navbar-choose-branch"
                 onClick={() =>
-                  this.setState({ openBranchList: !this.state.openBranchList })
+                  this.setState((prevState) => ({
+                    openBranchList: !prevState.openBranchList,
+                  }))
                 }
               >
                 <div>

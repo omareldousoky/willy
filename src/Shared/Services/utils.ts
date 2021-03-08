@@ -3,7 +3,7 @@ import JsZip from 'jszip'
 import { saveAs } from 'file-saver'
 import Swal from 'sweetalert2'
 import * as local from '../Assets/ar.json'
-import { default as errorMessages } from '../Assets/errorMessages.json'
+import errorMessages from '../Assets/errorMessages.json'
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -16,7 +16,7 @@ export const timeToDateyyymmdd = (timeStamp: number): any => {
   if (timeStamp === -1) {
     return new Date().toISOString().slice(0, 10)
   }
-  if (timeStamp !== undefined && !isNaN(timeStamp))
+  if (timeStamp !== undefined && !Number.isNaN(timeStamp))
     return new Date(timeStamp).toISOString().slice(0, 10)
 }
 
@@ -416,13 +416,13 @@ export const getTimestamp = (datetimeString: string) => {
   return datum
 }
 export const iscoreDate = (date: any) => {
-  const iscoreDate = new Date(date)
+  const iscoreDateVal = new Date(date)
   const iscoreDateString =
-    ('0' + iscoreDate.getDate()).slice(-2) +
+    ('0' + iscoreDateVal.getDate()).slice(-2) +
     '/' +
-    ('0' + (iscoreDate.getMonth() + 1)).slice(-2) +
+    ('0' + (iscoreDateVal.getMonth() + 1)).slice(-2) +
     '/' +
-    iscoreDate.getFullYear()
+    iscoreDateVal.getFullYear()
   return iscoreDateString
 }
 
@@ -486,10 +486,10 @@ export const downloadAsZip = async (
           image.url.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''),
           { base64: true }
         )
-        counter++
+        counter += 1
       } else {
         zip.file(image.fileName, getDataURL(image.url), { base64: true })
-        counter++
+        counter += 1
       }
     })
     if (counter === images.length)

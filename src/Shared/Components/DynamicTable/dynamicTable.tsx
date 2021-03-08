@@ -36,14 +36,14 @@ const DynamicTable = (props: Props) => {
   for (
     let index = 1;
     index <= Math.ceil(props.totalCount / rowsPerPage);
-    index++
+    index += 1
   ) {
     totalPages.push(index)
   }
   function getArrayOfNumbers() {
     const length = page + 5 >= totalPages.length ? totalPages.length : page + 5
     const output: Array<number> = []
-    for (let index = page + 1; index <= length; index++) {
+    for (let index = page + 1; index <= length; index += 1) {
       output.push(index)
     }
     return output
@@ -142,12 +142,12 @@ const DynamicTable = (props: Props) => {
             {props.data.map((item, index: number) => {
               return (
                 <tr key={index}>
-                  {props.mappers?.map((mapper, index: number) => {
+                  {props.mappers?.map((mapper, i: number) => {
                     return (
-                      <td key={index}>
+                      <td key={i}>
                         {(mapper.render || ((data) => data[mapper.key]))(
                           item,
-                          index
+                          i
                         )}
                       </td>
                     )

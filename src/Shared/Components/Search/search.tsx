@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/Button'
 import FormControl from 'react-bootstrap/FormControl'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
-import Swal from 'sweetalert2'
 import * as local from '../../Assets/ar.json'
 import {
   search,
@@ -77,6 +76,75 @@ class Search extends Component<Props, State> {
     }
   }
 
+  getInitialState() {
+    const initialState: InitialFormikState = {}
+    this.props.searchKeys.forEach((searchkey) => {
+      switch (searchkey) {
+        case 'dateFromTo':
+          initialState.fromDate =
+            this.props.url === 'loan'
+              ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.fromDate)
+              : ''
+          initialState.toDate =
+            this.props.url === 'loan'
+              ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.toDate)
+              : ''
+          break
+        case 'keyword':
+          initialState.keyword =
+            this.props.url === 'loan'
+              ? this.props.issuedLoansSearchFilters[this.state.dropDownValue]
+              : ''
+          break
+        case 'governorate':
+          initialState.governorate = ''
+          break
+        case 'status':
+          initialState.status =
+            this.props.url === 'loan'
+              ? this.props.issuedLoansSearchFilters.status
+              : ''
+          break
+        case 'branch':
+          initialState.branchId =
+            this.props.url === 'loan'
+              ? this.props.issuedLoansSearchFilters.branchId
+              : ''
+          break
+        case 'status-application':
+          initialState.status =
+            this.props.url === 'loan'
+              ? this.props.issuedLoansSearchFilters.status
+              : ''
+          break
+        case 'review-application':
+          initialState.status =
+            this.props.url === 'application'
+              ? this.props.issuedLoansSearchFilters.status
+              : ''
+          break
+        case 'doubtful':
+          initialState.isDoubtful =
+            this.props.url === 'loan'
+              ? this.props.issuedLoansSearchFilters.isDoubtful
+              : false
+          break
+        case 'writtenOff':
+          initialState.isWrittenOff =
+            this.props.url === 'loan'
+              ? this.props.issuedLoansSearchFilters.isWrittenOff
+              : false
+          break
+        case 'printed':
+          initialState.printed = false
+          break
+        default:
+          break
+      }
+    })
+    return initialState
+  }
+
   componentDidMount() {
     if (this.props.url === 'customer') {
       this.getGov()
@@ -109,6 +177,23 @@ class Search extends Component<Props, State> {
     }
   }
 
+  getArValue(key: string) {
+    const arDropDownValue = {
+      name: local.name,
+      nationalId: local.nationalId,
+      key: local.code,
+      code: local.partialCode,
+      authorName: local.employeeName,
+      customerKey: local.customerCode,
+      customerCode: local.customerPartialCode,
+      userName: local.username,
+      hrCode: local.hrCode,
+      customerShortenedCode: local.customerShortenedCode,
+      default: '',
+    }
+    return arDropDownValue[key]
+  }
+
   submit = async (values) => {
     let obj = {
       ...values,
@@ -117,14 +202,15 @@ class Search extends Component<Props, State> {
     }
     delete obj.keyword
     const { url } = this.props
-    if (obj.hasOwnProperty('fromDate'))
+    if (Object.getOwnPropertyDescriptor(obj, 'fromDate'))
       obj.fromDate = new Date(obj.fromDate).setHours(0, 0, 0, 0).valueOf()
-    if (obj.hasOwnProperty('toDate'))
+    if (Object.getOwnPropertyDescriptor(obj, 'toDate'))
       obj.toDate = new Date(obj.toDate).setHours(23, 59, 59, 59).valueOf()
     if (this.props.roleId) obj.roleId = this.props.roleId
     obj.from = 0
-    if (obj.key) obj.key = isNaN(Number(obj.key)) ? 10 : Number(obj.key)
-    if (obj.code) obj.code = isNaN(Number(obj.code)) ? 10 : Number(obj.code)
+    if (obj.key) obj.key = Number.isNaN(Number(obj.key)) ? 10 : Number(obj.key)
+    if (obj.code)
+      obj.code = Number.isNaN(Number(obj.code)) ? 10 : Number(obj.code)
     if (obj.customerKey) obj.customerKey = Number(obj.customerKey)
     if (obj.customerCode) obj.customerCode = Number(obj.customerCode)
     if (obj.customerShortenedCode) {
@@ -176,63 +262,6 @@ class Search extends Component<Props, State> {
     return obj
   }
 
-  getInitialState() {
-    const initialState: InitialFormikState = {}
-    this.props.searchKeys.forEach((searchkey) => {
-      switch (searchkey) {
-        case 'dateFromTo':
-          initialState.fromDate =
-            this.props.url === 'loan'
-              ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.fromDate)
-              : ''
-          initialState.toDate =
-            this.props.url === 'loan'
-              ? timeToDateyyymmdd(this.props.issuedLoansSearchFilters.toDate)
-              : ''
-        case 'keyword':
-          initialState.keyword =
-            this.props.url === 'loan'
-              ? this.props.issuedLoansSearchFilters[this.state.dropDownValue]
-              : ''
-        case 'governorate':
-          initialState.governorate = ''
-        case 'status':
-          initialState.status =
-            this.props.url === 'loan'
-              ? this.props.issuedLoansSearchFilters.status
-              : ''
-        case 'branch':
-          initialState.branchId =
-            this.props.url === 'loan'
-              ? this.props.issuedLoansSearchFilters.branchId
-              : ''
-        case 'status-application':
-          initialState.status =
-            this.props.url === 'loan'
-              ? this.props.issuedLoansSearchFilters.status
-              : ''
-        case 'review-application':
-          initialState.status =
-            this.props.url === 'application'
-              ? this.props.issuedLoansSearchFilters.status
-              : ''
-        case 'doubtful':
-          initialState.isDoubtful =
-            this.props.url === 'loan'
-              ? this.props.issuedLoansSearchFilters.isDoubtful
-              : false
-        case 'writtenOff':
-          initialState.isWrittenOff =
-            this.props.url === 'loan'
-              ? this.props.issuedLoansSearchFilters.isWrittenOff
-              : false
-        case 'printed':
-          initialState.printed = false
-      }
-    })
-    return initialState
-  }
-
   viewBranchDropdown() {
     const token = getCookie('token')
     const tokenData = parseJwt(token)
@@ -242,23 +271,6 @@ class Search extends Component<Props, State> {
       return false
     }
     return true
-  }
-
-  getArValue(key: string) {
-    const arDropDownValue = {
-      name: local.name,
-      nationalId: local.nationalId,
-      key: local.code,
-      code: local.partialCode,
-      authorName: local.employeeName,
-      customerKey: local.customerCode,
-      customerCode: local.customerPartialCode,
-      userName: local.username,
-      hrCode: local.hrCode,
-      customerShortenedCode: local.customerShortenedCode,
-      default: '',
-    }
-    return arDropDownValue[key]
   }
 
   render() {
@@ -292,9 +304,9 @@ class Search extends Component<Props, State> {
                             id="input-group-dropdown-2"
                             data-qc="search-dropdown"
                           >
-                            {this.props.dropDownKeys.map((key, index) => (
+                            {this.props.dropDownKeys.map((key, i) => (
                               <Dropdown.Item
-                                key={index}
+                                key={i}
                                 data-qc={key}
                                 onClick={() => {
                                   this.setState({ dropDownValue: key })
@@ -383,10 +395,10 @@ class Search extends Component<Props, State> {
                           <option value="" data-qc="all">
                             {local.all}
                           </option>
-                          {this.state.governorates.map((governorate, index) => {
+                          {this.state.governorates.map((governorate, i) => {
                             return (
                               <option
-                                key={index}
+                                key={i}
                                 value={governorate.governorateName.ar}
                                 data-qc={governorate.governorateName.ar}
                               >
@@ -606,13 +618,9 @@ class Search extends Component<Props, State> {
                           <option value="" data-qc="all">
                             {local.all}
                           </option>
-                          {this.state.actionsList.map((action, index) => {
+                          {this.state.actionsList.map((action, i) => {
                             return (
-                              <option
-                                key={index}
-                                value={action}
-                                data-qc={action}
-                              >
+                              <option key={i} value={action} data-qc={action}>
                                 {action}
                               </option>
                             )
