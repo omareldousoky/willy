@@ -108,6 +108,10 @@ class CustomersList extends Component<Props, State> {
       })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getCustomers() {
     this.props
       .search({
@@ -122,10 +126,6 @@ class CustomersList extends Component<Props, State> {
           Swal.fire('error', getErrorMessage(this.props.error), 'error')
         }
       })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
   }
 
   render() {

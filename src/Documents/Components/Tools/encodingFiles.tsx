@@ -34,6 +34,10 @@ class EncodingFiles extends Component<{}, State> {
     }
   }
 
+  componentDidMount() {
+    this.getDocumentsTypes()
+  }
+
   async getDocumentsTypes() {
     this.setState({ loading: true })
     const res = await getDocumentsTypes('', true)
@@ -46,10 +50,6 @@ class EncodingFiles extends Component<{}, State> {
       this.setState({ loading: false })
       Swal.fire('error', local.getDocumentsTypesError)
     }
-  }
-
-  componentDidMount() {
-    this.getDocumentsTypes()
   }
 
   async hideShowDocument(hidden: boolean, id: string | undefined) {
