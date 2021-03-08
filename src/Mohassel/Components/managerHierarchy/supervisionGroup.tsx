@@ -96,6 +96,7 @@ export class SupervisionGroup extends Component<Props, State> {
             >
               <img
                 className="green-add-icon"
+                alt="add"
                 src={require('../../Assets/greenAdd.svg')}
               />
               {local.addLoanOfficer}

@@ -42,6 +42,32 @@ class UploadDocuments extends Component<Props, State> {
     }
   }
 
+  async componentDidMount() {
+    this.setState({ loading: true })
+    this.getDocumentTypes()
+    await this.props.getDocuments({
+      applicationId: this.props.application._id,
+      docType:
+        this.props.application.status === 'issued'
+          ? 'issuedLoan'
+          : 'loanApplication',
+    })
+    this.setState({ loading: false })
+  }
+
+  componentWillUnmount() {
+    this.props.clearSelectionArray()
+  }
+
+  async getApplicationDocuments() {
+    const res = await getApplicationDocuments(
+      this.props.application._id as string
+    )
+    if (res.status !== 'success') {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
+  }
+
   async getDocumentTypes() {
     const response = await getDocumentsTypes('loanApplication,issuedLoan')
     if (response.status === 'success') {
@@ -70,28 +96,6 @@ class UploadDocuments extends Component<Props, State> {
       })
       this.props.addAllToSelectionArray(images)
     }
-  }
-
-  async getApplicationDocuments() {
-    const res = await getApplicationDocuments(
-      this.props.application._id as string
-    )
-    if (res.status !== 'success') {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-
-  async componentDidMount() {
-    this.setState({ loading: true })
-    this.getDocumentTypes()
-    await this.props.getDocuments({
-      applicationId: this.props.application._id,
-      docType:
-        this.props.application.status === 'issued'
-          ? 'issuedLoan'
-          : 'loanApplication',
-    })
-    this.setState({ loading: false })
   }
 
   checkPermission() {
@@ -162,10 +166,6 @@ class UploadDocuments extends Component<Props, State> {
         })}
       </>
     )
-  }
-
-  componentWillUnmount() {
-    this.props.clearSelectionArray()
   }
 }
 const addDocumentToProps = (dispatch) => {

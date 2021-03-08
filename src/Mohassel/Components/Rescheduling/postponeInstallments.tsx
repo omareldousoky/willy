@@ -79,6 +79,19 @@ class PostponeInstallments extends Component<Props, State> {
     ]
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.edit && props.values.name !== '' && state.key !== 'updated') {
+      if (props.edit) props.setFieldValue('currPage', props.values.pages)
+      return {
+        updatable: !!props.values.updatable,
+        active: !!props.values.active,
+        key: 'updated',
+      }
+    }
+    return null
+  }
+
+  // TODO:lint: convert to getDerivedStateFromProps
   componentDidUpdate(prevProps: Props) {
     if (prevProps.test !== this.props.test) {
       this.setState({
@@ -89,7 +102,7 @@ class PostponeInstallments extends Component<Props, State> {
     }
   }
 
-  async handleSubmit(values) {
+  handleSubmit = async (values) => {
     this.setState({ loading: true })
     const obj = {
       noOfInstallments: values.noOfInstallments,
@@ -110,6 +123,7 @@ class PostponeInstallments extends Component<Props, State> {
         installmentNumber: values.installmentNumber,
         installmentsAfterRescheduling: res.body.output,
       })
+      // TODO:lint: remove??
       Swal.fire('', 'Test Success', 'success')
     } else {
       this.setState({ loading: false }, () =>
@@ -175,7 +189,7 @@ class PostponeInstallments extends Component<Props, State> {
             payWhere: this.state.payWhere,
             installmentNumber: this.state.installmentNumber,
           }}
-          onSubmit={this.handleSubmit.bind(this)}
+          onSubmit={this.handleSubmit}
           validationSchema={reschedulingValidation}
           validateOnBlur
           validateOnChange

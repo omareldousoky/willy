@@ -120,6 +120,10 @@ class UsersList extends Component<Props, State> {
     })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   async handleActivationClick(data: any) {
     const req = {
       id: data._id,
@@ -137,6 +141,21 @@ class UsersList extends Component<Props, State> {
       this.props.setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
+  }
+
+  async getUsers() {
+    this.props
+      .search({
+        ...this.props.searchFilters,
+        size: this.state.size,
+        from: this.state.from,
+        url: 'user',
+        branchId: this.props.branchId,
+      })
+      .then(() => {
+        if (this.props.error)
+          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
+      })
   }
 
   renderIcons(data: any) {
@@ -183,25 +202,6 @@ class UsersList extends Component<Props, State> {
         </Can>
       </>
     )
-  }
-
-  async getUsers() {
-    this.props
-      .search({
-        ...this.props.searchFilters,
-        size: this.state.size,
-        from: this.state.from,
-        url: 'user',
-        branchId: this.props.branchId,
-      })
-      .then(() => {
-        if (this.props.error)
-          Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
-      })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
   }
 
   render() {

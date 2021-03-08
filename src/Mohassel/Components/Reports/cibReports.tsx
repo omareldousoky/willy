@@ -49,20 +49,6 @@ class CIBReports extends Component<{}, State> {
     this.getCibReports()
   }
 
-  async getCibReports() {
-    this.setState({ loading: true })
-    const res = await getTpayFiles()
-    if (res.status === 'success' && res.body) {
-      this.setState({
-        data: res.body.cibFile ? res.body.cibFile : [],
-        loading: false,
-      })
-    } else {
-      this.setState({ loading: false })
-      Swal.fire('error', local.searchError, 'error')
-    }
-  }
-
   async handleSubmit(values) {
     const date = new Date(values.date).setHours(23, 59, 59, 999).valueOf()
     this.setState({ loading: true, showModal: false })
@@ -84,6 +70,20 @@ class CIBReports extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('', local.fileQueuedError, 'error')
+    }
+  }
+
+  async getCibReports() {
+    this.setState({ loading: true })
+    const res = await getTpayFiles()
+    if (res.status === 'success' && res.body) {
+      this.setState({
+        data: res.body.cibFile ? res.body.cibFile : [],
+        loading: false,
+      })
+    } else {
+      this.setState({ loading: false })
+      Swal.fire('error', local.searchError, 'error')
     }
   }
 

@@ -205,56 +205,30 @@ class Payment extends Component<Props, State> {
     }
   }
 
-  setManualPaymentValues() {
-    const pendingAction = this.props.randomPendingActions.find(
-      (el) => el._id === this.props.manualPaymentEditId
-    )
-    if (pendingAction) {
+  componentWillUnmount() {
+    this.props.changePaymentState(0)
+  }
+
+  async handleClickEarlyPayment() {
+    this.props.changePaymentState(2)
+    this.setState({ loading: true })
+    const res = await calculateEarlyPayment(this.props.applicationId)
+    if (res.status === 'success') {
+      this.props.setEarlyPaymentData({
+        remainingPrincipal: res.body.remainingPrincipal,
+        earlyPaymentFees: res.body.earlyPaymentFees,
+        requiredAmount: res.body.requiredAmount,
+      })
       this.setState({
-        randomPaymentType: pendingAction.transactions[0].action,
-        payAmount: pendingAction.transactions[0].transactionAmount,
-        payerType: pendingAction.payerType,
-        payerNationalId: pendingAction.payerNationalId,
-        payerName: pendingAction.transactions[0].payerName,
-        payerId: pendingAction.transactions[0].payerId,
-        receiptNumber: pendingAction.receiptNumber,
-        installmentNumber: pendingAction.transactions[0].installmentSerial,
-        truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
+        loading: false,
+        remainingPrincipal: res.body.remainingPrincipal,
+        earlyPaymentFees: res.body.earlyPaymentFees,
+        requiredAmount: res.body.requiredAmount,
       })
     } else {
-      const payAmount = this.props.pendingActions.transactions?.reduce(
-        (accumulator, pendingAction) => {
-          return accumulator + pendingAction.transactionAmount
-        },
-        0
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
-      this.setState({
-        randomPaymentType: '',
-        payAmount: payAmount || 0,
-        payerType: this.props.pendingActions.payerType
-          ? this.props.pendingActions.payerType
-          : '',
-        payerNationalId: this.props.pendingActions.payerNationalId
-          ? this.props.pendingActions.payerNationalId
-          : '',
-        payerName: this.props.pendingActions.payerName
-          ? this.props.pendingActions.payerName
-          : '',
-        payerId: this.props.pendingActions.payerId
-          ? this.props.pendingActions.payerId
-          : '',
-        receiptNumber: this.props.pendingActions.receiptNumber
-          ? this.props.pendingActions.receiptNumber
-          : '',
-        installmentNumber: this.props.pendingActions.transactions
-          ? this.props.pendingActions.transactions[0].installmentSerial
-          : -1,
-        truthDate: this.props.pendingActions.transactions
-          ? timeToDateyyymmdd(
-              this.props.pendingActions.transactions[0].truthDate
-            )
-          : timeToDateyyymmdd(-1),
-      })
     }
   }
 
@@ -547,31 +521,71 @@ class Payment extends Component<Props, State> {
     this.props.changePaymentState(0)
   }
 
-  async handleClickEarlyPayment() {
-    this.props.changePaymentState(2)
-    this.setState({ loading: true })
-    const res = await calculateEarlyPayment(this.props.applicationId)
-    if (res.status === 'success') {
-      this.props.setEarlyPaymentData({
-        remainingPrincipal: res.body.remainingPrincipal,
-        earlyPaymentFees: res.body.earlyPaymentFees,
-        requiredAmount: res.body.requiredAmount,
-      })
+  setManualPaymentValues() {
+    const pendingAction = this.props.randomPendingActions.find(
+      (el) => el._id === this.props.manualPaymentEditId
+    )
+    if (pendingAction) {
       this.setState({
-        loading: false,
-        remainingPrincipal: res.body.remainingPrincipal,
-        earlyPaymentFees: res.body.earlyPaymentFees,
-        requiredAmount: res.body.requiredAmount,
+        randomPaymentType: pendingAction.transactions[0].action,
+        payAmount: pendingAction.transactions[0].transactionAmount,
+        payerType: pendingAction.payerType,
+        payerNationalId: pendingAction.payerNationalId,
+        payerName: pendingAction.transactions[0].payerName,
+        payerId: pendingAction.transactions[0].payerId,
+        receiptNumber: pendingAction.receiptNumber,
+        installmentNumber: pendingAction.transactions[0].installmentSerial,
+        truthDate: timeToDateyyymmdd(pendingAction.transactions[0].truthDate),
       })
     } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      const payAmount = this.props.pendingActions.transactions?.reduce(
+        (accumulator, pendingAct) => {
+          return accumulator + pendingAct.transactionAmount
+        },
+        0
       )
+      this.setState({
+        randomPaymentType: '',
+        payAmount: payAmount || 0,
+        payerType: this.props.pendingActions.payerType
+          ? this.props.pendingActions.payerType
+          : '',
+        payerNationalId: this.props.pendingActions.payerNationalId
+          ? this.props.pendingActions.payerNationalId
+          : '',
+        payerName: this.props.pendingActions.payerName
+          ? this.props.pendingActions.payerName
+          : '',
+        payerId: this.props.pendingActions.payerId
+          ? this.props.pendingActions.payerId
+          : '',
+        receiptNumber: this.props.pendingActions.receiptNumber
+          ? this.props.pendingActions.receiptNumber
+          : '',
+        installmentNumber: this.props.pendingActions.transactions
+          ? this.props.pendingActions.transactions[0].installmentSerial
+          : -1,
+        truthDate: this.props.pendingActions.transactions
+          ? timeToDateyyymmdd(
+              this.props.pendingActions.transactions[0].truthDate
+            )
+          : timeToDateyyymmdd(-1),
+      })
     }
   }
 
-  componentWillUnmount() {
-    this.props.changePaymentState(0)
+  async calculatePenalties() {
+    this.setState({ loadingFullScreen: true })
+    const res = await calculatePenalties({
+      id: this.props.applicationId,
+      truthDate: new Date().getTime(),
+    })
+    if (res.body) {
+      this.setState({ penalty: res.body.penalty, loadingFullScreen: false })
+    } else
+      this.setState({ loadingFullScreen: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
   }
 
   renderPaymentMethods() {
@@ -736,20 +750,6 @@ class Payment extends Component<Props, State> {
       default:
         return null
     }
-  }
-
-  async calculatePenalties() {
-    this.setState({ loadingFullScreen: true })
-    const res = await calculatePenalties({
-      id: this.props.applicationId,
-      truthDate: new Date().getTime(),
-    })
-    if (res.body) {
-      this.setState({ penalty: res.body.penalty, loadingFullScreen: false })
-    } else
-      this.setState({ loadingFullScreen: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
   }
 
   render() {

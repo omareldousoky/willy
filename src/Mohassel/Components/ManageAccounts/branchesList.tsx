@@ -127,6 +127,11 @@ class BranchesList extends Component<Props, State> {
     })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+    this.props.search({ url: 'clearData' })
+  }
+
   getBranches() {
     this.props
       .search({
@@ -147,11 +152,6 @@ class BranchesList extends Component<Props, State> {
     if (res.status === 'success') {
       if (res.body?.data) this.setState({ branch: res.body.data })
     }
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
-    this.props.search({ url: 'clearData' })
   }
 
   render() {

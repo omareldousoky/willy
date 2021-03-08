@@ -54,7 +54,6 @@ const ReportsModal = (props: Props) => {
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id) : []
   const getCustomerKey = (key?: string): string | undefined => {
-    console.log(key)
     if (!customerDropDownValue || key === undefined) return undefined
     return customerDropDownValue === 'customerKey'
       ? key
@@ -71,37 +70,51 @@ const ReportsModal = (props: Props) => {
     })
   }
   function getInitialValues() {
-    const initValues: InitialFormikState = { branches: [] }
-    props.pdf.inputs?.forEach((input) => {
-      switch (input) {
-        case 'dateFromTo':
-          initValues.fromDate = ''
-          initValues.toDate = ''
-        case 'branches':
-          initValues.branches = []
-        case 'customerKey':
-          initValues.customerKeyword = ''
-        case 'quarterYear':
-          initValues.quarterYear = ''
-        case 'quarterNumber':
-          initValues.quarterNumber = '01'
-        case 'date':
-          initValues.date = ''
-        case 'representatives':
-          initValues.representatives = []
-          initValues.loanOfficers = []
-          initValues.loanOfficerIds = []
-        case 'gracePeriod':
-          initValues.gracePeriod = 0
-        case 'geoAreas':
-          initValues.geoAreas = []
-        case 'creationDateFromTo':
-          initValues.creationDateFrom = ''
-          initValues.creationDateTo = ''
-        case 'applicationKey':
-          initValues.loanApplicationKey = ''
+    const initValues: InitialFormikState = props.pdf.inputs?.forEach(
+      (input) => {
+        switch (input) {
+          case 'dateFromTo':
+            initValues.fromDate = ''
+            initValues.toDate = ''
+            break
+          case 'branches':
+            initValues.branches = []
+            break
+          case 'customerKey':
+            initValues.customerKeyword = ''
+            break
+          case 'quarterYear':
+            initValues.quarterYear = ''
+            break
+          case 'quarterNumber':
+            initValues.quarterNumber = '01'
+            break
+          case 'date':
+            initValues.date = ''
+            break
+          case 'representatives':
+            initValues.representatives = []
+            initValues.loanOfficers = []
+            initValues.loanOfficerIds = []
+            break
+          case 'gracePeriod':
+            initValues.gracePeriod = 0
+            break
+          case 'geoAreas':
+            initValues.geoAreas = []
+            break
+          case 'creationDateFromTo':
+            initValues.creationDateFrom = ''
+            initValues.creationDateTo = ''
+            break
+          case 'applicationKey':
+            initValues.loanApplicationKey = ''
+            break
+          default:
+            initValues.branches = []
+        }
       }
-    })
+    ) || { branches: [] }
     return initValues
   }
 

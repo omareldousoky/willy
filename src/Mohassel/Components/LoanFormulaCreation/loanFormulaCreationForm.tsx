@@ -13,7 +13,7 @@ export const LoanFormulaCreationForm = (props: any) => {
     handleChange,
     errors,
     touched,
-=  } = props
+  } = props
   return (
     <Form style={{ textAlign: 'right' }} onSubmit={handleSubmit}>
       <Col sm={12}>

@@ -68,13 +68,10 @@ class RoleCreation extends Component<Props, State> {
   componentDidMount() {
     if (this.props.edit) {
       const { role } = this.props.history.location.state
-      const step1Edit = { ...this.state.step1 }
-      step1Edit.roleName = role.roleName
-      step1Edit.hQpermission = !role.hasBranch
-      step1Edit.managerRole = role.managerRole
+      const { roleName, hasBranch, managerRole } = role
       this.getEditPermissions(role.hasBranch)
       this.setState({
-        step1: step1Edit,
+        step1: { roleName, hQpermission: !hasBranch, managerRole },
       })
     }
     this.getRolesForManager()
@@ -110,17 +107,6 @@ class RoleCreation extends Component<Props, State> {
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
     }
-  }
-
-  prepareManagerRolesOptions(roles: Array<any>) {
-    const managerRoles: any[] = []
-    roles.forEach((role) => {
-      managerRoles.push({
-        label: role.roleName,
-        value: role._id,
-      })
-    })
-    return managerRoles
   }
 
   async getEditPermissions(hasbranch) {
@@ -171,15 +157,97 @@ class RoleCreation extends Component<Props, State> {
     }
   }
 
-  renderSteps() {
-    switch (this.state.step) {
-      case 1:
-        return this.renderStepOne()
-      case 2:
-        return this.renderStepTwo()
-      default:
-        return null
+  submitToStep2 = (values: object) => {
+    this.setState(
+      {
+        [`step${this.state.step}`]: values,
+        step: this.state.step + 1,
+      } as any,
+      () => {
+        if (this.state.step === 2 && !this.props.edit) {
+          this.getPermissions()
+        }
+      }
+    )
+  }
+
+  async submit() {
+    const perms: Array<any> = []
+    if (
+      this.state.permissions &&
+      Object.keys(this.state.permissions).length > 0
+    ) {
+      if (!this.props.edit) {
+        this.setState({ loading: true })
+        Object.keys(this.state.permissions).forEach((key) =>
+          perms.push({ key, value: this.state.permissions[key] })
+        )
+        const obj = {
+          roleName: this.state.step1.roleName,
+          hasBranch: !this.state.step1.hQpermission,
+          managerRole: this.state.step1.managerRole,
+          permissions: perms,
+        }
+        const res = await createRole(obj)
+        if (res.status === 'success') {
+          this.setState({ loading: false })
+          Swal.fire('success', local.userRoleCreated).then(() => {
+            this.props.history.push('/manage-accounts')
+          })
+        } else {
+          this.setState({ loading: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      } else {
+        this.setState({ loading: true })
+        Object.keys(this.state.permissions).forEach((key) =>
+          perms.push({ key, value: this.state.permissions[key] })
+        )
+        const obj = {
+          id: this.props.history.location.state.role._id,
+          permissions: perms,
+        }
+        const res = await editRole(obj)
+        if (res.status === 'success') {
+          this.setState({ loading: false })
+          Swal.fire('success', local.userRoleEdited).then(() => {
+            this.props.history.push('/manage-accounts')
+          })
+        } else {
+          this.setState({ loading: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      }
+    } else {
+      Swal.fire('warning', local.mustSelectPermissions, 'warning')
     }
+  }
+
+  prepareManagerRolesOptions(roles: Array<any>) {
+    const managerRoles: any[] = []
+    roles.forEach((role) => {
+      managerRoles.push({
+        label: role.roleName,
+        value: role._id,
+      })
+    })
+    return managerRoles
+  }
+
+  previousStep(step: number): void {
+    this.setState({
+      step: step - 1,
+    } as State)
+  }
+
+  cancel(): void {
+    this.setState({
+      step: 1,
+      step1,
+    })
+    this.props.history.push('/manage-accounts')
   }
 
   renderStepOne(): any {
@@ -332,86 +400,15 @@ class RoleCreation extends Component<Props, State> {
     )
   }
 
-  async submit() {
-    const perms: Array<any> = []
-    if (
-      this.state.permissions &&
-      Object.keys(this.state.permissions).length > 0
-    ) {
-      if (!this.props.edit) {
-        this.setState({ loading: true })
-        Object.keys(this.state.permissions).forEach((key) =>
-          perms.push({ key, value: this.state.permissions[key] })
-        )
-        const obj = {
-          roleName: this.state.step1.roleName,
-          hasBranch: !this.state.step1.hQpermission,
-          managerRole: this.state.step1.managerRole,
-          permissions: perms,
-        }
-        const res = await createRole(obj)
-        if (res.status === 'success') {
-          this.setState({ loading: false })
-          Swal.fire('success', local.userRoleCreated).then(() => {
-            this.props.history.push('/manage-accounts')
-          })
-        } else {
-          this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-          )
-        }
-      } else {
-        this.setState({ loading: true })
-        Object.keys(this.state.permissions).forEach((key) =>
-          perms.push({ key, value: this.state.permissions[key] })
-        )
-        const obj = {
-          id: this.props.history.location.state.role._id,
-          permissions: perms,
-        }
-        const res = await editRole(obj)
-        if (res.status === 'success') {
-          this.setState({ loading: false })
-          Swal.fire('success', local.userRoleEdited).then(() => {
-            this.props.history.push('/manage-accounts')
-          })
-        } else {
-          this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-          )
-        }
-      }
-    } else {
-      Swal.fire('warning', local.mustSelectPermissions, 'warning')
+  renderSteps() {
+    switch (this.state.step) {
+      case 1:
+        return this.renderStepOne()
+      case 2:
+        return this.renderStepTwo()
+      default:
+        return null
     }
-  }
-
-  submitToStep2 = (values: object) => {
-    this.setState(
-      {
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any,
-      () => {
-        if (this.state.step === 2 && !this.props.edit) {
-          this.getPermissions()
-        }
-      }
-    )
-  }
-
-  previousStep(step: number): void {
-    this.setState({
-      step: step - 1,
-    } as State)
-  }
-
-  cancel(): void {
-    this.setState({
-      step: 1,
-      step1,
-    })
-    this.props.history.push('/manage-accounts')
   }
 
   render() {

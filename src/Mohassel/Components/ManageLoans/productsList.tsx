@@ -67,6 +67,21 @@ class LoanProducts extends Component<Props, State> {
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
+  async getProducts() {
+    this.setState({ loading: true })
+    const products = await getDetailedProducts()
+    if (products.status === 'success') {
+      this.setState({
+        products: products.body.data,
+        loading: false,
+      })
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
+      )
+    }
+  }
+
   renderIcons(data: any) {
     return (
       <>
@@ -96,21 +111,6 @@ class LoanProducts extends Component<Props, State> {
         </Can>
       </>
     )
-  }
-
-  async getProducts() {
-    this.setState({ loading: true })
-    const products = await getDetailedProducts()
-    if (products.status === 'success') {
-      this.setState({
-        products: products.body.data,
-        loading: false,
-      })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
-      )
-    }
   }
 
   render() {

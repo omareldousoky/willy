@@ -71,22 +71,22 @@ class LoanRollBack extends Component<Props, State> {
     }
   }
 
-  async rollbackAction(id, date) {
-    this.setState({ loading: true })
-    const application = await rollbackActionByID(
-      { actionId: id, truthDate: date },
-      this.state.applicationId
-    )
-    if (application.status === 'success') {
-      this.setState({ loading: false })
-      Swal.fire('', local.rollbackSuccess, 'success').then(() =>
-        this.props.history.goBack()
+  getMinDate() {
+    const minDate = '2021-02-01'
+    let compared = ''
+    if (
+      this.state.actionToRollback.transactions &&
+      this.state.actionToRollback.transactions[0]
+    ) {
+      compared = getDateString(
+        this.state.actionToRollback.transactions[0].truthDate
       )
     } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
-      )
+      compared = getDateString(this.state.actionToRollback.insertedAt)
     }
+    if (new Date(compared).valueOf() > new Date(minDate).valueOf())
+      return compared
+    return minDate
   }
 
   rollbackConfirmation = (values) => {
@@ -107,6 +107,24 @@ class LoanRollBack extends Component<Props, State> {
         )
       }
     })
+  }
+
+  async rollbackAction(id, date) {
+    this.setState({ loading: true })
+    const application = await rollbackActionByID(
+      { actionId: id, truthDate: date },
+      this.state.applicationId
+    )
+    if (application.status === 'success') {
+      this.setState({ loading: false })
+      Swal.fire('', local.rollbackSuccess, 'success').then(() =>
+        this.props.history.goBack()
+      )
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
+      )
+    }
   }
 
   rollbackModal(action) {
@@ -144,24 +162,6 @@ class LoanRollBack extends Component<Props, State> {
       'rejectManualRandomPayment',
     ]
     return array.filter((action) => actionList.includes(action.action))
-  }
-
-  getMinDate() {
-    const minDate = '2021-02-01'
-    let compared = ''
-    if (
-      this.state.actionToRollback.transactions &&
-      this.state.actionToRollback.transactions[0]
-    ) {
-      compared = getDateString(
-        this.state.actionToRollback.transactions[0].truthDate
-      )
-    } else {
-      compared = getDateString(this.state.actionToRollback.insertedAt)
-    }
-    if (new Date(compared).valueOf() > new Date(minDate).valueOf())
-      return compared
-    return minDate
   }
 
   render() {

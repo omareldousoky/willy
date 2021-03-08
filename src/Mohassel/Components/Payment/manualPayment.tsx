@@ -7,10 +7,7 @@ import { connect } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
-import {
-  timeToDateyyymmdd,
-  getErrorMessage,
-} from '../../../Shared/Services/utils'
+import { getErrorMessage } from '../../../Shared/Services/utils'
 import { payment } from '../../../Shared/redux/payment/actions'
 import { Employee } from './payment'
 import * as local from '../../../Shared/Assets/ar.json'

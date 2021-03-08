@@ -44,6 +44,25 @@ class IscoreReports extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('error', local.searchError, 'error')
+      // TODO:lint: (3 in file) remove??
+      console.log(res)
+    }
+  }
+
+  async getFile(fileRequest) {
+    const res = await getiScoreReport(fileRequest._id)
+    if (res.status === 'success') {
+      this.setState(
+        {
+          loading: false,
+        },
+        () => {
+          downloadFile(res.body.presignedUrl)
+        }
+      )
+    } else {
+      this.setState({ loading: false })
+      Swal.fire('error', local.searchError, 'error')
       console.log(res)
     }
   }
@@ -64,24 +83,6 @@ class IscoreReports extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('error', local.fileQueuedError, 'error')
-      console.log(res)
-    }
-  }
-
-  async getFile(fileRequest) {
-    const res = await getiScoreReport(fileRequest._id)
-    if (res.status === 'success') {
-      this.setState(
-        {
-          loading: false,
-        },
-        () => {
-          downloadFile(res.body.presignedUrl)
-        }
-      )
-    } else {
-      this.setState({ loading: false })
-      Swal.fire('error', local.searchError, 'error')
       console.log(res)
     }
   }

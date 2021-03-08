@@ -204,22 +204,22 @@ export const GuarantorTableView = (props: Props) => {
   }
   async function selectGuarantor(guarantor) {
     changeLoading(true)
-    const selectedGuarantor = await getCustomerByID(guarantor._id)
+    const targetGuarantor = await getCustomerByID(guarantor._id)
 
-    if (selectedGuarantor.status === 'success') {
+    if (targetGuarantor.status === 'success') {
       let errorMessage1 = ''
       let errorMessage2 = ''
-      if (selectedGuarantor.body.blocked.isBlocked === true) {
+      if (targetGuarantor.body.blocked.isBlocked === true) {
         errorMessage1 = local.theCustomerIsBlocked
       }
-      const check = await checkCustomersLimits([selectedGuarantor.body], true)
+      const check = await checkCustomersLimits([targetGuarantor.body], true)
       if (
         check.flag === true &&
         check.customers &&
-        selectedGuarantor.body.blocked.isBlocked !== true
+        targetGuarantor.body.blocked.isBlocked !== true
       ) {
-        const newguarantor = { ...selectedGuarantor.body, id: guarantor._id }
-        changeSelected(newguarantor)
+        const newGuarantor = { ...targetGuarantor.body, id: guarantor._id }
+        changeSelected(newGuarantor)
         changeSelectedId(guarantor._id)
       } else if (check.flag === false && check.validationObject) {
         errorMessage2 = local.customerInvolvedInAnotherLoan
@@ -235,7 +235,7 @@ export const GuarantorTableView = (props: Props) => {
     } else {
       Swal.fire(
         'Error !',
-        getErrorMessage(selectedGuarantor.error.error),
+        getErrorMessage(targetGuarantor.error.error),
         'error'
       )
     }

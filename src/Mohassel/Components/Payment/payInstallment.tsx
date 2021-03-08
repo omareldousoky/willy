@@ -234,8 +234,8 @@ class PayInstallment extends Component<Props, State> {
                               data-qc="installmentNumber"
                               onChange={(event) => {
                                 const installment = this.props.installments.find(
-                                  (installment) =>
-                                    installment.id ===
+                                  (inst) =>
+                                    inst.id ===
                                     Number(event.currentTarget.value)
                                 )
                                 formikBag.setFieldValue(

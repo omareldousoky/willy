@@ -33,6 +33,7 @@ class OracleIntegration extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('error', local.oracleIntegrationFail, 'error')
+      // TODO:lint: remove ??
       console.log(res)
     }
   }

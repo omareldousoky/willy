@@ -69,9 +69,7 @@ class BusinessSpecialities extends Component<{}, State> {
   }
 
   prepareActivites(id) {
-    const sector = this.state.businessSectors.filter(
-      (sctr) => sctr.id === id
-    )[0]
+    const [sector] = this.state.businessSectors.filter((sctr) => sctr.id === id)
     this.setState({ businessActivities: sector.activities })
   }
 

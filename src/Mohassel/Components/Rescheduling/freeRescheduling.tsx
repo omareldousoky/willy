@@ -91,15 +91,17 @@ class FreeRescheduling extends Component<Props, State> {
     ]
   }
 
+  // TODO:lint: check return
   static getDerivedStateFromProps(props: Props, state: State) {
     if (props.application._id !== state.application._id) {
       return {
         application: props.application,
       }
     }
+    return state
   }
 
-  async handleSubmit(values) {
+  handleSubmit = async (values) => {
     this.setState({ loading: true })
     values.installments.forEach((inst) => {
       if (inst.new) {
@@ -120,7 +122,74 @@ class FreeRescheduling extends Component<Props, State> {
     }
   }
 
-  addRow(values) {
+  getTotals(values) {
+    let feesSum = 0
+    let principleSum = 0
+    values.installments.forEach((inst) => {
+      if (inst.status !== 'rescheduled') {
+        feesSum += inst.feesInstallment
+        principleSum += inst.principalInstallment
+      }
+    })
+    return { feesSum, principleSum }
+  }
+
+  getRescheuleDate(values, index) {
+    const reschedFreeInsts = values.installments
+      .slice(0, index - 1)
+      .filter((i) => i.status !== 'rescheduled')
+    if (reschedFreeInsts.length > 0) {
+      let maxDate = reschedFreeInsts[0].dateOfPayment
+      reschedFreeInsts.forEach((element) => {
+        if (element.dateOfPayment > maxDate) {
+          maxDate = element.dateOfPayment
+        }
+      })
+      return maxDate
+    }
+    return 0
+  }
+
+  rescheduleInstallment(values, index) {
+    const installments = [...values.installments]
+    installments[index].status = 'rescheduled'
+    return installments
+  }
+
+  async pushInstallments() {
+    this.setState({ loading: true })
+    const obj = {
+      installments: this.state.installmentsAfterRescheduling,
+    }
+    const res = await freeRescheduling(this.props.application._id, obj)
+    if (res.status === 'success') {
+      this.setState({ loading: false })
+      Swal.fire('', local.loanFreeReschedulingSuccess, 'success').then(() =>
+        window.location.reload()
+      )
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+    }
+  }
+
+  applyChanges() {
+    Swal.fire({
+      title: local.areYouSure,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.freeRescheduling,
+    }).then((result) => {
+      if (result.value) {
+        this.pushInstallments()
+      }
+    })
+  }
+
+  addRow(values: { installments: any }) {
     const installments = [...values.installments]
     installments.push({
       id:
@@ -147,7 +216,7 @@ class FreeRescheduling extends Component<Props, State> {
     const installments = [...values.installments]
     installments.forEach((installment, i) => {
       if (i > index) {
-        installment.id--
+        installment.id = -1
       }
     })
     installments.splice(index, 1)
@@ -164,73 +233,6 @@ class FreeRescheduling extends Component<Props, State> {
       return false
     }
     return true
-  }
-
-  getTotals(values) {
-    let feesSum = 0
-    let principleSum = 0
-    values.installments.forEach((inst) => {
-      if (inst.status !== 'rescheduled') {
-        feesSum += inst.feesInstallment
-        principleSum += inst.principalInstallment
-      }
-    })
-    return { feesSum, principleSum }
-  }
-
-  rescheduleInstallment(values, index) {
-    const installments = [...values.installments]
-    installments[index].status = 'rescheduled'
-    return installments
-  }
-
-  applyChanges() {
-    Swal.fire({
-      title: local.areYouSure,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: local.freeRescheduling,
-    }).then((result) => {
-      if (result.value) {
-        this.pushInstallments()
-      }
-    })
-  }
-
-  async pushInstallments() {
-    this.setState({ loading: true })
-    const obj = {
-      installments: this.state.installmentsAfterRescheduling,
-    }
-    const res = await freeRescheduling(this.props.application._id, obj)
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-      Swal.fire('', local.loanFreeReschedulingSuccess, 'success').then(() =>
-        window.location.reload()
-      )
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
-    }
-  }
-
-  getRescheuleDate(values, index) {
-    const reschedFreeInsts = values.installments
-      .slice(0, index - 1)
-      .filter((i) => i.status !== 'rescheduled')
-    if (reschedFreeInsts.length > 0) {
-      let maxDate = reschedFreeInsts[0].dateOfPayment
-      reschedFreeInsts.forEach((element) => {
-        if (element.dateOfPayment > maxDate) {
-          maxDate = element.dateOfPayment
-        }
-      })
-      return maxDate
-    }
-    return 0
   }
 
   render() {
@@ -253,7 +255,7 @@ class FreeRescheduling extends Component<Props, State> {
                 )
               ),
             }}
-            onSubmit={this.handleSubmit.bind(this)}
+            onSubmit={this.handleSubmit}
             validationSchema={freeReschedulingValidation}
             validateOnBlur
             validateOnChange

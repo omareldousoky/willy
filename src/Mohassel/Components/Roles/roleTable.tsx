@@ -54,10 +54,11 @@ class RoleTable extends Component<Props, State> {
     const actionsInRelation = section?.actions.filter((obj) =>
       Object.keys(obj).includes(action)
     )
-    let perms = { ...this.state.permissions }
+
+    const { permissions } = this.state
+    let perms
     actionsInRelation?.forEach((elem) => {
-      const newPerms = this.objectHandler(perms, e, parent, elem[action])
-      perms = newPerms
+      perms = this.objectHandler(permissions, e, parent, elem[action])
     })
     this.setState({
       permissions: perms,
@@ -262,9 +263,9 @@ class RoleTable extends Component<Props, State> {
               </tr>
             </thead>
             <tbody>
-              {obj.actions.map((action, i) => {
+              {obj.actions.map((action, actionIndex) => {
                 return (
-                  <tr key={i}>
+                  <tr key={actionIndex}>
                     <td style={{ width: '30%', fontSize: 12 }}>
                       {action.i18n.ar}
                     </td>
