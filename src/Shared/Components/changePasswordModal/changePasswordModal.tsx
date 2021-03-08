@@ -1,28 +1,28 @@
-import React, { ChangeEvent, PureComponent, SyntheticEvent } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
-import Form from "react-bootstrap/Form";
-import { changePassword } from "../../../Mohassel/Services/APIs/Auth/changePassword";
-import { logout } from "../../../Mohassel/Services/APIs/Auth/logout";
-import * as local from "../../Assets/ar.json";
-import { clearAllCookies } from "../../Services/getCookie";
-import { getErrorMessage } from "../../Services/utils";
+import React, { ChangeEvent, PureComponent, SyntheticEvent } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Form from 'react-bootstrap/Form'
+import { changePassword } from '../../../Mohassel/Services/APIs/Auth/changePassword'
+import { logout } from '../../../Mohassel/Services/APIs/Auth/logout'
+import * as local from '../../Assets/ar.json'
+import { clearAllCookies } from '../../Services/getCookie'
+import { getErrorMessage } from '../../Services/utils'
 
 interface ChangePasswordModalProps {
-  show: boolean;
-  handleClose: Function;
+  show: boolean
+  handleClose: Function
 }
 
 interface ChangePasswordModalState {
-  currentPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-  newPasswordError?: string;
-  confirmNewPasswordError?: string;
-  error?: string;
+  currentPassword: string
+  newPassword: string
+  confirmNewPassword: string
+  newPasswordError?: string
+  confirmNewPasswordError?: string
+  error?: string
 }
 
 class ChangePasswordModal extends PureComponent<
@@ -30,12 +30,12 @@ class ChangePasswordModal extends PureComponent<
   ChangePasswordModalState
 > {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    };
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    }
   }
 
   handleChange = (key: string, value: string) => {
@@ -46,24 +46,24 @@ class ChangePasswordModal extends PureComponent<
       newPasswordError,
       confirmNewPasswordError,
       error,
-    } = this.state;
-    const re = /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
-    if (error) this.setState({ error: undefined });
-    if (key === "currentPassword" && newPassword) {
+    } = this.state
+    const re = /^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/
+    if (error) this.setState({ error: undefined })
+    if (key === 'currentPassword' && newPassword) {
       if (newPassword === value)
         this.setState({
           newPasswordError: local.newPasswordAsCurrentPasswordError,
-        });
+        })
       else if (newPasswordError === local.newPasswordAsCurrentPasswordError)
-        this.setState({ newPasswordError: undefined });
+        this.setState({ newPasswordError: undefined })
     }
-    if (key === "newPassword") {
+    if (key === 'newPassword') {
       if (!re.test(value))
-        this.setState({ newPasswordError: local.wrongNewPassword });
+        this.setState({ newPasswordError: local.wrongNewPassword })
       else if (value === currentPassword)
         this.setState({
           newPasswordError: local.newPasswordAsCurrentPasswordError,
-        });
+        })
       else if (confirmNewPassword)
         confirmNewPasswordError && confirmNewPassword === value
           ? this.setState({
@@ -73,48 +73,50 @@ class ChangePasswordModal extends PureComponent<
           : this.setState({
               confirmNewPasswordError: local.confirmPasswordCheck,
               newPasswordError: undefined,
-            });
-      else this.setState({ newPasswordError: undefined });
+            })
+      else this.setState({ newPasswordError: undefined })
     }
 
-    if (key === "confirmNewPassword") {
+    if (key === 'confirmNewPassword') {
       if (this.state.newPassword !== value)
-        this.setState({ confirmNewPasswordError: local.confirmPasswordCheck });
-      else this.setState({ confirmNewPasswordError: undefined });
+        this.setState({ confirmNewPasswordError: local.confirmPasswordCheck })
+      else this.setState({ confirmNewPasswordError: undefined })
     }
-  };
+  }
+
   handleSubmit = async () => {
-    const { currentPassword, newPassword } = this.state;
+    const { currentPassword, newPassword } = this.state
     const res = await changePassword({
       oldPassword: currentPassword,
       newPassword,
-    });
-    if (res.status === "success") {
-      await logout();
-      clearAllCookies();
-      window.location.href = process.env.REACT_APP_LOGIN_URL || "";
+    })
+    if (res.status === 'success') {
+      await logout()
+      clearAllCookies()
+      window.location.href = process.env.REACT_APP_LOGIN_URL || ''
     }
-    if (res.status === "error") {
-      this.setState({ error: getErrorMessage(res.error.error) });
+    if (res.status === 'error') {
+      this.setState({ error: getErrorMessage(res.error.error) })
     }
-  };
+  }
 
   handleCloseModal() {
-    const { handleClose } = this.props;
+    const { handleClose } = this.props
     this.setState(
       {
-        currentPassword: "",
-        newPassword: "",
-        confirmNewPassword: "",
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
         newPasswordError: undefined,
         confirmNewPasswordError: undefined,
         error: undefined,
       },
       () => handleClose()
-    );
+    )
   }
+
   render() {
-    const { show } = this.props;
+    const { show } = this.props
     const {
       currentPassword,
       newPassword,
@@ -122,13 +124,13 @@ class ChangePasswordModal extends PureComponent<
       confirmNewPasswordError,
       newPasswordError,
       error,
-    } = this.state;
+    } = this.state
     const disableSubmit =
       !currentPassword ||
       !newPassword ||
       !confirmNewPassword ||
       !!newPasswordError ||
-      !!confirmNewPasswordError;
+      !!confirmNewPasswordError
     return (
       <Modal show={show} onHide={() => this.handleCloseModal()}>
         <Modal.Header closeButton>
@@ -136,8 +138,8 @@ class ChangePasswordModal extends PureComponent<
         </Modal.Header>
         <Form
           onSubmit={(e: SyntheticEvent) => {
-            e.preventDefault();
-            if (!disableSubmit) return this.handleSubmit();
+            e.preventDefault()
+            if (!disableSubmit) return this.handleSubmit()
           }}
         >
           <Modal.Body>
@@ -154,9 +156,9 @@ class ChangePasswordModal extends PureComponent<
                       data-qc="currentPassword"
                       value={currentPassword}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const trimmedValue = e.target.value.trim();
-                        this.setState({ currentPassword: trimmedValue });
-                        this.handleChange("currentPassword", trimmedValue);
+                        const trimmedValue = e.target.value.trim()
+                        this.setState({ currentPassword: trimmedValue })
+                        this.handleChange('currentPassword', trimmedValue)
                       }}
                     />
                   </InputGroup>
@@ -177,9 +179,9 @@ class ChangePasswordModal extends PureComponent<
                       className="rounded"
                       value={newPassword}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const trimmedValue = e.target.value.trim();
-                        this.setState({ newPassword: trimmedValue });
-                        this.handleChange("newPassword", trimmedValue);
+                        const trimmedValue = e.target.value.trim()
+                        this.setState({ newPassword: trimmedValue })
+                        this.handleChange('newPassword', trimmedValue)
                       }}
                       isInvalid={!!newPasswordError}
                     />
@@ -192,10 +194,7 @@ class ChangePasswordModal extends PureComponent<
             </Row>
             <Row>
               <Col sm={12}>
-                <Form.Group
-                  controlId="confirmNewPassword"
-                
-                >
+                <Form.Group controlId="confirmNewPassword">
                   <Form.Label column sm={6} className="mr-0 pr-0">
                     {local.confirmNewPassword}
                   </Form.Label>
@@ -207,9 +206,9 @@ class ChangePasswordModal extends PureComponent<
                       className="rounded"
                       value={confirmNewPassword}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        const trimmedValue = e.target.value.trim();
-                        this.setState({ confirmNewPassword: trimmedValue });
-                        this.handleChange("confirmNewPassword", trimmedValue);
+                        const trimmedValue = e.target.value.trim()
+                        this.setState({ confirmNewPassword: trimmedValue })
+                        this.handleChange('confirmNewPassword', trimmedValue)
                       }}
                       isInvalid={!!confirmNewPasswordError}
                     />
@@ -227,24 +226,17 @@ class ChangePasswordModal extends PureComponent<
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => this.handleCloseModal()}
-            >
+            <Button variant="secondary" onClick={() => this.handleCloseModal()}>
               {local.cancel}
             </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={disableSubmit}
-            >
+            <Button variant="primary" type="submit" disabled={disableSubmit}>
               {local.save}
             </Button>
           </Modal.Footer>
         </Form>
       </Modal>
-    );
+    )
   }
 }
 
-export default ChangePasswordModal;
+export default ChangePasswordModal
