@@ -26,9 +26,6 @@ interface GeoArea {
 }
 interface State {
   loading: boolean
-  showModal: boolean
-  filterGeoAreas: string
-  temp: Array<string>
   branches: Array<any>
   branchAreas: Array<GeoArea>
   branch: Branch
@@ -39,9 +36,6 @@ class GeoAreas extends Component<{}, State> {
     super(props)
     this.state = {
       loading: false,
-      showModal: false,
-      filterGeoAreas: '',
-      temp: [],
       branches: [],
       branchAreas: [],
       branch: {
@@ -55,46 +49,6 @@ class GeoAreas extends Component<{}, State> {
   async componentDidMount() {
     await this.getBranches()
     this.setState({ manageToolsTabs: manageToolsArray() })
-  }
-
-  async newGeoArea(name, active) {
-    this.setState({ loading: true })
-    const res = await addGeoArea({
-      name,
-      branchId: this.state.branch._id,
-      active,
-    })
-    if (res.status === 'success') {
-      this.setState(
-        {
-          loading: false,
-        },
-        () => this.getBranchAreas()
-      )
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
-  }
-
-  async editGeoArea(id, name, active) {
-    this.setState({ loading: true })
-    const res = await updateGeoArea(id, {
-      name,
-      active,
-      branchId: this.state.branch._id,
-    })
-    if (res.status === 'success') {
-      this.setState(
-        {
-          loading: false,
-        },
-        () => this.getBranchAreas()
-      )
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
   }
 
   async getBranches() {
@@ -141,6 +95,46 @@ class GeoAreas extends Component<{}, State> {
           )
       )
     }
+  }
+
+  async editGeoArea(id, name, active) {
+    this.setState({ loading: true })
+    const res = await updateGeoArea(id, {
+      name,
+      active,
+      branchId: this.state.branch._id,
+    })
+    if (res.status === 'success') {
+      this.setState(
+        {
+          loading: false,
+        },
+        () => this.getBranchAreas()
+      )
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+  }
+
+  async newGeoArea(name, active) {
+    this.setState({ loading: true })
+    const res = await addGeoArea({
+      name,
+      branchId: this.state.branch._id,
+      active,
+    })
+    if (res.status === 'success') {
+      this.setState(
+        {
+          loading: false,
+        },
+        () => this.getBranchAreas()
+      )
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
   }
 
   render() {
@@ -196,10 +190,10 @@ class GeoAreas extends Component<{}, State> {
               <CRUDList
                 source="geoAreas"
                 options={this.state.branchAreas}
-                newOption={(name, active, index) => {
+                newOption={(name, active) => {
                   this.newGeoArea(name, active)
                 }}
-                updateOption={(id, name, active, index) => {
+                updateOption={(id, name, active) => {
                   this.editGeoArea(id, name, active)
                 }}
                 canCreate

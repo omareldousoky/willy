@@ -30,7 +30,6 @@ interface Props {
 interface State {
   options: Array<any>
   selectedOptions: Array<any>
-  selectedOptionsIDs: Array<any>
   selectionArray: Array<any>
   filterKey: string
   dropDownValue: string
@@ -38,13 +37,13 @@ interface State {
   searchKeyword: string
   searchSelectedKeyWord: string
 }
+
 class DualBox extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
       options: [],
       selectedOptions: [],
-      selectedOptionsIDs: [],
       selectionArray: [],
       filterKey: '',
       dropDownValue: 'name',
@@ -73,55 +72,78 @@ class DualBox extends Component<Props, State> {
       filterKey: props.filterKey,
       options: props.options,
     }
-
-    return null
   }
 
+  // TODO:lint: check
   componentDidUpdate(prevProps) {
     if (this.props.filterKey !== prevProps.filterKey) {
       this.setState({ filterKey: this.props.filterKey })
     }
   }
 
-  selectItem = (option) => {
-    const arr: Array<any> = this.state.selectionArray
-    if (!arr.find((element) => option._id === element._id)) {
-      arr.push(option)
+  handleSearch(e) {
+    if (
+      this.props.search &&
+      this.props.dropDownKeys &&
+      this.props.dropDownKeys.length > 0 &&
+      e &&
+      ['code', 'key', 'nationalId'].includes(this.state.dropDownValue) &&
+      Number.isNaN(Number(e))
+    ) {
+      Swal.fire('warning', local.onlyNumbers, 'warning')
     } else {
-      const index = arr.indexOf(option)
-      if (index !== -1) arr.splice(index, 1)
+      this.setState({ searchKeyword: e }, () => {
+        if (
+          this.props.search &&
+          this.props.dropDownKeys &&
+          this.props.dropDownKeys.length > 0
+        ) {
+          this.props.search(this.state.searchKeyword, this.state.dropDownValue)
+        }
+      })
     }
-    this.setState({ selectionArray: arr })
   }
 
-  addToSelectedList() {
-    let options = [...this.state.options]
-    this.state.selectionArray.forEach((el) => {
-      options = options.filter(
-        (item) => item[this.props.labelKey] !== el[this.props.labelKey]
-      )
-    })
-    const newList = [
-      ...this.state.selectedOptions,
-      ...this.state.selectionArray,
-    ]
-    this.props.onChange(newList)
-    this.setState({
-      options,
-      selectedOptions: newList,
-      selectionArray: [],
+  getArValue(key: string) {
+    switch (key) {
+      case 'name':
+        return local.name
+      case 'nationalId':
+        return local.nationalId
+      case 'key':
+        return local.code
+      case 'code':
+        return local.partialCode
+      case 'customerShortenedCode':
+        return local.customerShortenedCode
+      default:
+        return ''
+    }
+  }
+
+  selectItem = (option) => {
+    this.setState((prevState) => {
+      const arr = prevState.selectionArray
+      if (!arr.find((element) => option._id === element._id)) {
+        arr.push(option)
+      } else {
+        const index = arr.indexOf(option)
+        if (index !== -1) arr.splice(index, 1)
+      }
+      return { selectionArray: arr }
     })
   }
 
   removeItemFromList(option) {
-    const newList = this.state.selectedOptions.filter(
-      (item) => item._id !== option._id
+    this.setState(
+      (prevState) => ({
+        selectedOptions: prevState.selectedOptions.filter(
+          (item) => item._id !== option._id
+        ),
+        options: [...prevState.options, option],
+      }),
+      () => this.props.onChange(this.state.selectedOptions)
     )
-    this.props.onChange(newList)
-    this.setState({
-      selectedOptions: newList,
-      options: [...this.state.options, option],
-    })
   }
 
   selectAllOptions() {
@@ -151,50 +173,29 @@ class DualBox extends Component<Props, State> {
     })
   }
 
-  handleSearch(e) {
-    if (
-      this.props.search &&
-      this.props.dropDownKeys &&
-      this.props.dropDownKeys.length > 0 &&
-      e &&
-      ['code', 'key', 'nationalId'].includes(this.state.dropDownValue) &&
-      isNaN(Number(e))
-    ) {
-      Swal.fire('warning', local.onlyNumbers, 'warning')
-    } else {
-      this.setState({ searchKeyword: e }, () => {
-        if (
-          this.props.search &&
-          this.props.dropDownKeys &&
-          this.props.dropDownKeys.length > 0
-        ) {
-          this.props.search(this.state.searchKeyword, this.state.dropDownValue)
-        }
-      })
-    }
-  }
-
   viewSelected(id) {
     if (this.props.viewSelected) {
       this.props.viewSelected(id)
     }
   }
 
-  getArValue(key: string) {
-    switch (key) {
-      case 'name':
-        return local.name
-      case 'nationalId':
-        return local.nationalId
-      case 'key':
-        return local.code
-      case 'code':
-        return local.partialCode
-      case 'customerShortenedCode':
-        return local.customerShortenedCode
-      default:
-        return ''
-    }
+  addToSelectedList() {
+    let options = [...this.state.options]
+    this.state.selectionArray.forEach((el) => {
+      options = options.filter(
+        (item) => item[this.props.labelKey] !== el[this.props.labelKey]
+      )
+    })
+    const newList = [
+      ...this.state.selectedOptions,
+      ...this.state.selectionArray,
+    ]
+    this.props.onChange(newList)
+    this.setState({
+      options,
+      selectedOptions: newList,
+      selectionArray: [],
+    })
   }
 
   render() {

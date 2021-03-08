@@ -1,5 +1,4 @@
 import React from 'react'
-import Can from '../../config/Can'
 import * as local from '../../../Shared/Assets/ar.json'
 
 export const Landing = () => {

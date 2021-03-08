@@ -56,7 +56,7 @@ export const CardNavBar = (props: Props) => {
           let arr = 0
           item.permission.forEach((perm: string) => {
             if (ability.can(perm, item.permissionKey)) {
-              arr++
+              arr += 1
             }
           })
           if (arr > 0) {

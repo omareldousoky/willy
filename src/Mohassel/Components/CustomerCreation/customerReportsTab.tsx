@@ -6,7 +6,6 @@ import { PDF } from '../Reports/reports'
 
 interface State {
   PDFsArray: Array<PDF>
-  selectedPdf: any
 }
 interface Props {
   PDFsArray: Array<any>
@@ -17,7 +16,6 @@ export class CustomerReportsTab extends Component<Props, State> {
     super(props)
     this.state = {
       PDFsArray: this.props.PDFsArray,
-      selectedPdf: { permission: '' },
     }
   }
 

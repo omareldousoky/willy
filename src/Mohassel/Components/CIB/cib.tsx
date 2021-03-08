@@ -121,6 +121,10 @@ class CIB extends Component<Props, State> {
     ]
   }
 
+  componentDidMount() {
+    this.setState({ manageLoansTabs: manageLoansArray() })
+  }
+
   getStatus(status: string) {
     switch (status) {
       case 'paid':
@@ -134,40 +138,6 @@ class CIB extends Component<Props, State> {
       default:
         return null
     }
-  }
-
-  addRemoveItemFromChecked(loan: CibLoan) {
-    if (
-      this.state.selectedCustomers.findIndex(
-        (selectedCustomerLoanId) => selectedCustomerLoanId === loan.loanId
-      ) > -1
-    ) {
-      this.setState({
-        selectedCustomers: this.state.selectedCustomers.filter(
-          (el) => el !== loan.loanId
-        ),
-        principalSelectedSum:
-          this.state.principalSelectedSum - Number(loan.principal),
-      })
-    } else {
-      this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, loan.loanId],
-        principalSelectedSum:
-          this.state.principalSelectedSum + Number(loan.principal),
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({
-        selectedCustomers: this.state.data.map((el) => el.loanId),
-        principalSelectedSum: this.state.data.reduce(
-          (a, b) => a + (Number(b.principal) || 0),
-          0
-        ),
-      })
-    } else this.setState({ selectedCustomers: [], principalSelectedSum: 0 })
   }
 
   handleSearch = async (values) => {
@@ -186,6 +156,47 @@ class CIB extends Component<Props, State> {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
+    }
+  }
+
+  getArrayOfNumbers() {
+    const totalPages: Array<number> = []
+    for (
+      let index = 0;
+      index <
+      Math.ceil(
+        this.state[
+          this.state.keyword || this.state.filteredBranch
+            ? 'filteredData'
+            : 'data'
+        ].length / this.state.size
+      );
+      index = +1
+    ) {
+      totalPages.push(index)
+    }
+    return totalPages
+  }
+
+  addRemoveItemFromChecked(loan: CibLoan) {
+    if (
+      this.state.selectedCustomers.findIndex(
+        (selectedCustomerLoanId) => selectedCustomerLoanId === loan.loanId
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.selectedCustomers.filter(
+          (el) => el !== loan.loanId
+        ),
+        principalSelectedSum:
+          prevState.principalSelectedSum - Number(loan.principal),
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedCustomers: [...prevState.selectedCustomers, loan.loanId],
+        principalSelectedSum:
+          prevState.principalSelectedSum + Number(loan.principal),
+      }))
     }
   }
 
@@ -215,27 +226,16 @@ class CIB extends Component<Props, State> {
       )
   }
 
-  getArrayOfNumbers() {
-    const totalPages: Array<number> = []
-    for (
-      let index = 0;
-      index <
-      Math.ceil(
-        this.state[
-          this.state.keyword || this.state.filteredBranch
-            ? 'filteredData'
-            : 'data'
-        ].length / this.state.size
-      );
-      index++
-    ) {
-      totalPages.push(index)
-    }
-    return totalPages
-  }
-
-  componentDidMount() {
-    this.setState({ manageLoansTabs: manageLoansArray() })
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.data.map((el) => el.loanId),
+        principalSelectedSum: prevState.data.reduce(
+          (a, b) => a + (Number(b.principal) || 0),
+          0
+        ),
+      }))
+    } else this.setState({ selectedCustomers: [], principalSelectedSum: 0 })
   }
 
   render() {
@@ -312,12 +312,12 @@ class CIB extends Component<Props, State> {
                           data-qc="searchKeyword"
                           className="border-right-0"
                           onChange={(e) => {
-                            this.setState({
+                            this.setState((prevState) => ({
                               keyword: e.currentTarget.value,
-                              filteredData: this.state.data.filter((el) =>
+                              filteredData: prevState.data.filter((el) =>
                                 el.customerName.includes(e.currentTarget.value)
                               ),
-                            })
+                            }))
                             formikProps.setFieldValue(
                               'keyword',
                               e.currentTarget.value
@@ -378,12 +378,12 @@ class CIB extends Component<Props, State> {
                       <BranchesDropDown
                         onSelectBranch={(branch) => {
                           formikProps.setFieldValue('branchId', branch._id)
-                          this.setState({
+                          this.setState((prevState) => ({
                             filteredBranch: branch._id,
-                            filteredData: this.state.data.filter(
+                            filteredData: prevState.data.filter(
                               (item) => item.loanBranch === branch._id
                             ),
-                          })
+                          }))
                         }}
                       />
                     </Col>
@@ -430,8 +430,10 @@ class CIB extends Component<Props, State> {
                     .map((item, index: number) => {
                       return (
                         <tr key={index}>
-                          {this.mappers?.map((mapper, index: number) => {
-                            return <td key={index}>{mapper.render(item)}</td>
+                          {this.mappers?.map((mapper, mapperIndex: number) => {
+                            return (
+                              <td key={mapperIndex}>{mapper.render(item)}</td>
+                            )
                           })}
                         </tr>
                       )
@@ -488,7 +490,9 @@ class CIB extends Component<Props, State> {
                     }
                     onClick={() => {
                       if (this.state.from !== 0) {
-                        this.setState({ from: this.state.from - 1 })
+                        this.setState((prevState) => ({
+                          from: prevState.from - 1,
+                        }))
                       }
                     }}
                   >
@@ -537,7 +541,9 @@ class CIB extends Component<Props, State> {
                           ].length / this.state.size
                         )
                       ) {
-                        this.setState({ from: this.state.from + 1 })
+                        this.setState((prevState) => ({
+                          from: prevState.from + 1,
+                        }))
                       }
                     }}
                   >

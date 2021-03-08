@@ -46,7 +46,6 @@ interface State {
     customerName: string
   }
   loading: boolean
-  step: number
   step1: ClearanceValues
   paidLoans: {
     Key: number
@@ -63,7 +62,6 @@ class CreateClearance extends Component<Props, State> {
         branchName: '',
         customerName: '',
       },
-      step: 1,
       step1: clearanceData,
       paidLoans: [],
       loading: false,
@@ -78,20 +76,6 @@ class CreateClearance extends Component<Props, State> {
       this.getCustomer(this.props.location.state.id)
       this.getCustomerPaidLoans(this.props.location.state.id)
     }
-  }
-
-  async calculatePenalty(loanId: string) {
-    this.setState({ loading: true })
-    const res = await calculatePenalties({
-      id: loanId,
-      truthDate: new Date().getTime(),
-    })
-    if (res.body) {
-      this.setState({ penalty: res.body.penalty, loading: false })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
   }
 
   async getClearanceById() {
@@ -145,7 +129,7 @@ class CreateClearance extends Component<Props, State> {
       const paidLoansIds: string[] = res.body.data[0].paidLoans
       if (paidLoansIds) {
         const paidLoans = await getApplicationsKeys({ ids: paidLoansIds })
-        if (paidLoans.status == 'success') {
+        if (paidLoans.status === 'success') {
           this.setState({ paidLoans: paidLoans.body.data })
         } else {
           Swal.fire('Error !', getErrorMessage(paidLoans.error.error), 'error')
@@ -174,14 +158,6 @@ class CreateClearance extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  cancel() {
-    this.setState({
-      step: 1,
-      step1: clearanceData,
-    })
-    this.props.history.goBack()
-  }
-
   submit = async (values) => {
     if (this.props.edit) {
       await this.editClearance(values)
@@ -198,7 +174,7 @@ class CreateClearance extends Component<Props, State> {
       clearance.customerId = this.props.location.state.id
     }
     if (clearance.transactionKey) {
-      clearance.transactionKey = clearance.transactionKey
+      clearance.transactionKey = Number(clearance.transactionKey)
     }
     if (clearance.receiptDate) {
       clearance.receiptDate = new Date(clearance.receiptDate).valueOf()
@@ -212,6 +188,27 @@ class CreateClearance extends Component<Props, State> {
       formData.append(key, clearance[key])
     }
     return formData
+  }
+
+  cancel() {
+    this.setState({
+      step1: clearanceData,
+    })
+    this.props.history.goBack()
+  }
+
+  async calculatePenalty(loanId: string) {
+    this.setState({ loading: true })
+    const res = await calculatePenalties({
+      id: loanId,
+      truthDate: new Date().getTime(),
+    })
+    if (res.body) {
+      this.setState({ penalty: res.body.penalty, loading: false })
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
   }
 
   async createNewClearance(values) {
@@ -236,7 +233,7 @@ class CreateClearance extends Component<Props, State> {
         this.props.location.state.clearance?.id,
         clearance
       )
-      if (res.status == 'success') {
+      if (res.status === 'success') {
         Swal.fire('Success', '', 'success').then(() =>
           this.props.history.goBack()
         )

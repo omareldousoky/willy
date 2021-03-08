@@ -11,16 +11,7 @@ import GroupInfoBox from '../LoanProfile/groupInfoBox'
 import { guarantorOrderLocal } from '../../../Shared/Services/utils'
 
 export const LoanApplicationCreationGuarantorForm = (props: any) => {
-  const {
-    values,
-    handleSubmit,
-    handleBlur,
-    handleChange,
-    errors,
-    touched,
-    setFieldValue,
-    setValues,
-  } = props
+  const { values, handleSubmit, handleBlur, handleChange, errors } = props
   return (
     <>
       <Form style={{ width: '90%', padding: 20 }} onSubmit={handleSubmit}>
@@ -57,12 +48,12 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         props.handleSearch(key, query, i)
                       }
                       searchResults={guarantor.searchResults}
-                      selectCustomer={(guarantor) => {
-                        props.selectGuarantor(guarantor, i, values)
+                      selectCustomer={(item) => {
+                        props.selectGuarantor(item, i, values)
                       }}
                       selectedCustomer={guarantor.guarantor}
-                      removeCustomer={(guarantor) => {
-                        props.removeGuarantor(guarantor, i, values)
+                      removeCustomer={(item) => {
+                        props.removeGuarantor(item, i, values)
                       }}
                       header={text}
                     />

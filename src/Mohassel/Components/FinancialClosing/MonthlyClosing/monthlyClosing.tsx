@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
-import { Col, Form, Row } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { withRouter } from 'react-router-dom'
@@ -38,20 +38,6 @@ class MonthlyClosing extends Component<Props, State> {
     }
   }
 
-  async Close(closeDate: number) {
-    this.setState({ loading: true })
-    const res = await financialClosing({ closeDate })
-    if (res.status == 'success') {
-      this.setState({ loading: false })
-      Swal.fire('Success', '', 'success').then(() =>
-        this.props.history.push('/')
-      )
-    } else {
-      this.setState({ loading: false })
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-    }
-  }
-
   handleSubmit = async (values) => {
     const { closeDate } = values
     const endOfCloseDate = new Date(closeDate)
@@ -71,6 +57,20 @@ class MonthlyClosing extends Component<Props, State> {
         await this.Close(endOfCloseDate)
       }
     })
+  }
+
+  async Close(closeDate: number) {
+    this.setState({ loading: true })
+    const res = await financialClosing({ closeDate })
+    if (res.status === 'success') {
+      this.setState({ loading: false })
+      Swal.fire('Success', '', 'success').then(() =>
+        this.props.history.push('/')
+      )
+    } else {
+      this.setState({ loading: false })
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    }
   }
 
   render() {

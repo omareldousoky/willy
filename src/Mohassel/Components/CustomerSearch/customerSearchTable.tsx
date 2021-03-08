@@ -83,12 +83,6 @@ class CustomerSearch extends Component<Props, State> {
     })
   }
 
-  _handleKeyDown = (event) => {
-    if (event.key === 'Enter' && this.state.searchKey.trim().length > 0) {
-      this.handleSubmit(event)
-    }
-  }
-
   getArValue(key: string) {
     switch (key) {
       case 'name':
@@ -106,6 +100,12 @@ class CustomerSearch extends Component<Props, State> {
     }
   }
 
+  _handleKeyDown = (event) => {
+    if (event.key === 'Enter' && this.state.searchKey.trim().length > 0) {
+      this.handleSubmit(event)
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault()
     const { handleSearch } = this.props
@@ -115,7 +115,7 @@ class CustomerSearch extends Component<Props, State> {
 
     if (
       (dropDownValue === 'nationalId' || isKey || isCode) &&
-      isNaN(Number(searchKey))
+      Number.isNaN(Number(searchKey))
     ) {
       Swal.fire('', local.SearchOnlyNumbers, 'error')
     } else {

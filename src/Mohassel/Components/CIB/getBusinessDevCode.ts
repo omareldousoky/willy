@@ -1,3 +1,4 @@
+/* eslint-disable no-duplicate-case */
 export const getBusinessDevCode = (businessDev: string) => {
   switch (businessDev) {
     case 'تجارى':

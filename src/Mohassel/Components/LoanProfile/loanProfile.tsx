@@ -805,10 +805,13 @@ class LoanProfile extends Component<Props, State> {
           <Payment
             print={(data) =>
               this.setState(
-                {
+                (prevState) => ({
                   print: data.print,
-                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
-                },
+                  earlyPaymentData: {
+                    ...prevState.earlyPaymentData,
+                    ...data,
+                  },
+                }),
                 () => window.print()
               )
             }

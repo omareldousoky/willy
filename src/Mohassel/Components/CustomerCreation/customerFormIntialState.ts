@@ -117,6 +117,7 @@ export const customerCreationValidationStepOne = Yup.object().shape({
   mobilePhoneNumber: Yup.string().min(11, local.minLength11),
   faxNumber: Yup.string().max(11, local.maxLength10).min(10, local.minLength10),
   emailAddress: Yup.string().matches(
+    // eslint-disable-next-line no-useless-escape
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     local.invalidEmail
   ),

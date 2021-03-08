@@ -21,8 +21,8 @@ const getGender = (gender: string) => {
   return 'F'
 }
 
-const periodType = (periodType: string) => {
-  if (periodType === 'days') return 'D'
+const periodType = (type: string) => {
+  if (type === 'days') return 'D'
   return 'M'
 }
 
@@ -35,8 +35,8 @@ const getTotalNumberOfLines = (textData) => {
 }
 
 export const numTo2Decimal = (num: number | string) => {
-  if (typeof num === 'string') num = Number(num)
-  return (Math.round(num * 100) / 100).toFixed(2)
+  const number = Number(num) || 0
+  return (Math.round(number * 100) / 100).toFixed(2)
 }
 
 const getTotalPrincipals = (textData) => {
@@ -65,7 +65,7 @@ const sameDay = (paidAt: number, dateOfPay: number) => {
 const getTotalNumbersOfCustomers = (textData) => {
   let total = 0
   textData.forEach((loan) => {
-    if (Object.keys(loan.customer).length > 0) total++
+    if (Object.keys(loan.customer).length > 0) total = +1
     else total += loan.group.individualsInGroup.length
   })
   return total
@@ -332,46 +332,44 @@ const payText = (textData, dateOfPay: number) => {
     .replace(/\n/g, '\r\n')
 }
 
-const trfText = (textData) => {
-  const branchData = {}
-  let total = 0
-  textData.forEach((application) => {
-    if (branchData[application.branchId]) {
-      branchData[application.branchId] =
-        branchData[application.branchId] +
-        (application.principal ? Number(application.principal) : 0)
-    } else
-      branchData[application.branchId] = application.principal
-        ? Number(application.principal)
-        : 0
-    total += application.principal ? Number(application.principal) : 0
-  })
-  return (
-    `H|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${
-      Object.keys(branchData).length
-    }|TDIS_TRF|\n` +
-    Object.keys(branchData).map((branch) => {
-      return `D|100005743642      |100005143076     |EGP|${numTo2Decimal(
-        branchData[branch]
-      )}|${getYearMonthDay(0)}|0.00|\n`
-    }) +
-    `T|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${
-      Object.keys(branchData).length
-    }|TDIS_TRF|\n`
-  )
-}
+// const trfText = (textData) => {
+//   const branchData = {}
+//   let total = 0
+//   textData.forEach((application) => {
+//     if (branchData[application.branchId]) {
+//       branchData[application.branchId] =
+//         branchData[application.branchId] +
+//         (application.principal ? Number(application.principal) : 0)
+//     } else
+//       branchData[application.branchId] = application.principal
+//         ? Number(application.principal)
+//         : 0
+//     total += application.principal ? Number(application.principal) : 0
+//   })
+//   return (
+//     `H|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${
+//       Object.keys(branchData).length
+//     }|TDIS_TRF|\n` +
+//     Object.keys(branchData).map((branch) => {
+//       return `D|100005743642      |100005143076     |EGP|${numTo2Decimal(
+//         branchData[branch]
+//       )}|${getYearMonthDay(0)}|0.00|\n`
+//     }) +
+//     `T|${getYearMonthDay(0)}|${numTo2Decimal(total)}|${
+//       Object.keys(branchData).length
+//     }|TDIS_TRF|\n`
+//   )
+// }
 
 export const downloadTxtFile = (textData, tPay: boolean, dateOfPay: number) => {
   let filesArr: Array<TextReport> = []
   if (tPay) {
-    filesArr = [
-      { name: 'TPAY', func: (textData) => payText(textData, dateOfPay) },
-    ]
+    filesArr = [{ name: 'TPAY', func: (data) => payText(data, dateOfPay) }]
   } else {
     filesArr = [
-      { name: 'TDIS_CUS', func: (textData) => cusTxt(textData) },
-      { name: 'TDIS_FIN', func: (textData) => finText(textData) },
-      { name: 'TDIS_INST', func: (textData) => instText(textData) },
+      { name: 'TDIS_CUS', func: (data) => cusTxt(data) },
+      { name: 'TDIS_FIN', func: (data) => finText(data) },
+      { name: 'TDIS_INST', func: (data) => instText(data) },
       // { name: 'TPAY', func: (textData) => payText(textData) },
       // { name: 'TDIS_TRF', func: (textData) => trfText(textData) }
     ]

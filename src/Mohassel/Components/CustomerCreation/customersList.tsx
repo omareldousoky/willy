@@ -60,7 +60,6 @@ class CustomersList extends Component<Props, State> {
     this.state = {
       size: 10,
       from: 0,
-      loading: false,
       manageCustomersTabs: [],
     }
     this.mappers = [
@@ -166,6 +165,26 @@ class CustomersList extends Component<Props, State> {
     ]
   }
 
+  componentDidMount() {
+    this.props
+      .search({
+        size: this.state.size,
+        from: this.state.from,
+        url: 'customer',
+        branchId: this.props.branchId,
+      })
+      .then(() => {
+        if (this.props.error) {
+          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+        }
+      })
+    this.setState({ manageCustomersTabs: manageCustomersArray() })
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   async handleActivationClick(data) {
     const { value: text } = await Swal.fire({
       title:
@@ -206,13 +225,11 @@ class CustomersList extends Component<Props, State> {
         cancelButtonText: local.cancel,
       }).then(async (result) => {
         if (result.value) {
-          this.setState({ loading: true })
           const res = await blockCustomer(data._id, {
             toBeBlocked: data.blocked?.isBlocked !== true,
             reason: text,
           })
           if (res.status === 'success') {
-            this.setState({ loading: false })
             Swal.fire(
               '',
               data.blocked?.isBlocked === true
@@ -221,7 +238,6 @@ class CustomersList extends Component<Props, State> {
               'success'
             ).then(() => window.location.reload())
           } else {
-            this.setState({ loading: false })
             Swal.fire('', local.searchError, 'error')
           }
         }
@@ -229,40 +245,26 @@ class CustomersList extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
+  getCustomers() {
+    const { error, branchId } = this.props
+    const { customerShortenedCode, key } = this.props.searchFilters
+    const { size, from } = this.state
     this.props
       .search({
-        size: this.state.size,
-        from: this.state.from,
+        ...searchFilters,
+        key: customerShortenedCode
+          ? getFullCustomerKey(customerShortenedCode)
+          : key || undefined,
+        size,
+        from,
         url: 'customer',
-        branchId: this.props.branchId,
+        branchId,
       })
       .then(() => {
-        if (this.props.error) {
-          Swal.fire('error', getErrorMessage(this.props.error), 'error')
+        if (error) {
+          Swal.fire('error', getErrorMessage(error), 'error')
         }
       })
-    this.setState({ manageCustomersTabs: manageCustomersArray() })
-  }
-
-  getCustomers() {
-    const { searchFilters, search, error, branchId } = this.props
-    const { customerShortenedCode, key } = searchFilters
-    const { size, from } = this.state
-    search({
-      ...searchFilters,
-      key: customerShortenedCode
-        ? getFullCustomerKey(customerShortenedCode)
-        : key || undefined,
-      size,
-      from,
-      url: 'customer',
-      branchId,
-    }).then(() => {
-      if (error) {
-        Swal.fire('error', getErrorMessage(error), 'error')
-      }
-    })
   }
 
   render() {
@@ -341,10 +343,6 @@ class CustomersList extends Component<Props, State> {
         </Card>
       </>
     )
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
   }
 }
 const addSearchToProps = (dispatch) => {

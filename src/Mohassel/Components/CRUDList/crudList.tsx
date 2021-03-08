@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
-import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 
 export interface CrudOption {
@@ -86,7 +85,7 @@ export const CRUDList = (props: Props) => {
 
   function reset(option: CrudOption) {
     if (option.id === '') {
-      const optionsTemp = options.filter((option) => option.id !== '')
+      const optionsTemp = options.filter((item) => item.id !== '')
       setOptions(optionsTemp)
     } else {
       const resetTo = temp.filter((tmp) => tmp.id === option.id)[0]

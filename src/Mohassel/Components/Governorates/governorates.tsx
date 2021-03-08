@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import Form from 'react-bootstrap/Form'
+import React from 'react'
 import Select from 'react-select'
 import Swal from 'sweetalert2'
 import { getGovernorates } from '../../Services/APIs/configApis/config'
 import { theme } from '../../../theme'
 import { Loader } from '../../../Shared/Components/Loader'
-import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 
 interface Village {
@@ -55,7 +53,7 @@ export default class Governorates extends React.Component<Props, State> {
     if (resGov.status === 'success') {
       const { governorates } = resGov.body
       const options: any[] = []
-      governorates.map((gov, index) => {
+      governorates.map((gov) => {
         if (gov.governorateName.ar === this.props.values.governorate) {
           this.setState({
             governorate: {

@@ -16,10 +16,6 @@ interface Props {
   approvedClearancesList: Array<Clearance>
 }
 export default class ClearancePaper extends Component<Props, {}> {
-  constructor(props: Props) {
-    super(props)
-  }
-
   renderGroup(clearance: Clearance, index) {
     return (
       <div className="clearance-paper-print" dir="rtl" lang="ar" key={index}>

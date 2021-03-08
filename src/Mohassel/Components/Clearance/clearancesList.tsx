@@ -201,35 +201,6 @@ class ClearancesList extends Component<Props, State> {
     ]
   }
 
-  addRemoveItemFromChecked(clearance) {
-    if (
-      this.state.selectedClearances.findIndex(
-        (clearanceItem) => clearanceItem._id == clearance._id
-      ) > -1
-    ) {
-      this.setState({
-        selectedClearances: this.state.selectedClearances.filter(
-          (el) => el._id !== clearance._id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedClearances: [...this.state.selectedClearances, clearance],
-      })
-    }
-  }
-
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({
-        checkAll: true,
-        selectedClearances: this.props.data.filter(
-          (clearance) => clearance.status === 'approved'
-        ),
-      })
-    } else this.setState({ checkAll: false, selectedClearances: [] })
-  }
-
   componentDidMount() {
     this.props
       .search({
@@ -254,6 +225,10 @@ class ClearancesList extends Component<Props, State> {
           })
         }
       })
+  }
+
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
   }
 
   getClearances() {
@@ -293,8 +268,33 @@ class ClearancesList extends Component<Props, State> {
     }
   }
 
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({
+        checkAll: true,
+        selectedClearances: this.props.data.filter(
+          (clearance) => clearance.status === 'approved'
+        ),
+      })
+    } else this.setState({ checkAll: false, selectedClearances: [] })
+  }
+
+  addRemoveItemFromChecked(clearance) {
+    if (
+      this.state.selectedClearances.findIndex(
+        (clearanceItem) => clearanceItem._id === clearance._id
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedClearances: prevState.selectedClearances.filter(
+          (el) => el._id !== clearance._id
+        ),
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedClearances: [...prevState.selectedClearances, clearance],
+      }))
+    }
   }
 
   async print() {
@@ -344,7 +344,7 @@ class ClearancesList extends Component<Props, State> {
                 </Button>
               </div>
               <hr className="dashed-line" />
-              {this.state.branchId == 'hq' ? (
+              {this.state.branchId === 'hq' ? (
                 <Search
                   searchKeys={this.state.searchKey}
                   dropDownKeys={['name', 'customerKey']}

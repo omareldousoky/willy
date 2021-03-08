@@ -49,7 +49,6 @@ import DualBox from '../DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
 import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../wizard/Wizard'
-import { BusinessSector } from '../CustomerCreation/StepTwoForm'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 
 import { theme } from '../../../theme'
@@ -105,7 +104,6 @@ interface State {
   loanOfficers: Array<LoanOfficer>
   branchCustomers: Array<object>
   selectedCustomers: Array<Customer>
-  businessSectors: Array<BusinessSector>
   guarantor1: any
   guarantor2: any
   viceCustomers: Array<Vice>
@@ -116,7 +114,7 @@ interface State {
 }
 const date = new Date()
 
-class LoanApplicationCreation extends Component<Props & RouteProps, State> {
+class LoanApplicationCreation extends Component<Props, State> {
   tokenData: any
 
   constructor(props: Props) {
@@ -124,6 +122,449 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State> {
     this.state = this.setInitState()
     const token = getCookie('token')
     this.tokenData = parseJwt(token)
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const application = { ...state.application }
+    if (
+      props.history.location.state.id !== state.prevId &&
+      props.history.location.state.action !== state.application.state
+    ) {
+      application.state = props.history.location.state.action
+      application.id = props.history.location.state.id
+      return {
+        prevId: props.history.location.state.id,
+        application,
+      }
+    }
+    return null
+  }
+
+  componentDidMount() {
+    this.setappStats()
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (
+      prevProps.location.state.action !== this.props.location.state.action &&
+      prevProps.location.state.id !== this.props.location.state.id
+    ) {
+      // set State to initial value
+      // I need to add application id in the form values to be passed to status helper component
+      this.setappStats()
+    }
+  }
+
+  async handleGroupChange(customers) {
+    this.setState({ selectedGroupLeader: '' })
+    const customersTemp: {
+      customer: Customer
+      amount: number
+      type: string
+    }[] = []
+    const defaultApplication = this.state.application
+    if (customers.length > 0) {
+      const check = await this.checkCustomersLimits(customers, false)
+      if (check.flag === true && check.customers) {
+        check.customers.forEach((customer) => {
+          const obj = {
+            customer,
+            amount: 0,
+            type: 'member',
+          }
+          customersTemp.push(obj)
+        })
+        defaultApplication.individualDetails = customersTemp
+        this.setState({
+          selectedCustomers: check.customers,
+          application: defaultApplication,
+        })
+      } else if (
+        check.flag === false &&
+        check.validationObject &&
+        Object.keys(check.validationObject).length > 0
+      ) {
+        let names = ''
+        let financeNames = ''
+        Object.keys(check.validationObject).forEach((id, i) => {
+          if (check.validationObject[id].totalPrincipals) {
+            i === 0
+              ? (financeNames += check.validationObject[id].customerName)
+              : (financeNames =
+                  financeNames + ', ' + check.validationObject[id].customerName)
+          } else
+            i === 0
+              ? (names += check.validationObject[id].customerName)
+              : (names = names + ', ' + check.validationObject[id].customerName)
+        })
+        Swal.fire(
+          'error',
+          `${names.length > 0 ? names : ''} ${
+            names.length > 0 ? local.memberInvolvedInAnotherLoan : ''
+          } ${
+            financeNames.length > 0
+              ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}`
+              : ''
+          }`,
+          'error'
+        )
+      }
+    } else {
+      this.setState({
+        selectedCustomers: [],
+      })
+    }
+  }
+
+  handleSearch = async (key, query) => {
+    this.setState({ loading: true })
+    const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
+    if (results.status === 'success') {
+      if (results.body.data.length > 0) {
+        this.setState({
+          loading: false,
+          searchResults: { results: results.body.data, empty: false },
+        })
+      } else {
+        this.setState({
+          loading: false,
+          searchResults: { results: results.body.data, empty: true },
+        })
+      }
+    } else {
+      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  handleSearchGuarantors = async (key, query, index) => {
+    const obj = {
+      [key]: query,
+      from: 0,
+      size: 1000,
+      excludedIds: [
+        this.state.application.customerID,
+        ...this.state.application.guarantorIds,
+      ],
+    }
+    this.setState({ loading: true })
+    const results = await searchCustomer(obj)
+    if (results.status === 'success') {
+      const defaultApp = { ...this.state.application }
+      const defaultGuarantors = { ...defaultApp.guarantors }
+      const defaultGuar = { ...defaultGuarantors[index] }
+      if (results.body.data.length > 0) {
+        defaultGuar.searchResults = { results: results.body.data, empty: false }
+      } else {
+        defaultGuar.searchResults = { results: results.body.data, empty: true }
+      }
+      defaultApp.guarantors[index] = defaultGuar
+      this.setState(
+        {
+          application: defaultApp,
+        },
+        () => {
+          this.setState({ loading: false })
+        }
+      )
+    } else {
+      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getGlobalPrinciple() {
+    this.setState({ loading: true })
+    const princples = await getMaxPrinciples()
+    if (princples.status === 'success') {
+      const principals = {
+        maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
+        maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
+        maxGroupPrincipal: princples.body.maxGroupPrincipal,
+        maxGroupReturningIndividualPrincipal:
+          princples.body.maxGroupReturningIndividualPrincipal,
+      }
+      const { application } = this.state
+      application.principals = principals
+      this.setState({
+        loading: false,
+        application,
+      })
+    } else {
+      Swal.fire('Error!', getErrorMessage(princples.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getOfficerName(id) {
+    const res = await getLoanOfficer(id)
+    const defaultApplication = this.state.application
+    if (res.status === 'success') {
+      const { name } = res.body
+      defaultApplication.representativeName = name
+    } else {
+      defaultApplication.representativeName = id
+    }
+    this.setState({
+      application: defaultApplication,
+    })
+  }
+
+  async getCustomerLimits(customers) {
+    const customerIds: Array<string> = []
+    customers.forEach((customer) => customerIds.push(customer._id))
+    this.setState({ loading: true })
+    const res = await getCustomersBalances({ ids: customerIds })
+    if (res.status === 'success') {
+      this.setState({ loading: false })
+      const merged: Array<any> = []
+      for (let i = 0; i < customers.length; i++) {
+        const obj = {
+          ...customers[i],
+          ...(res.body.data
+            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
+            : { id: customers[i]._id }),
+          ...this.state.application.principals,
+        }
+        delete obj.id
+        merged.push(obj)
+      }
+      return merged
+    }
+    Swal.fire('error', getErrorMessage(res.error.error), 'error')
+    this.setState({ loading: false })
+    return []
+  }
+
+  setCustomerType(type) {
+    const defaultApplication = this.state.application
+    defaultApplication.beneficiaryType = type
+    this.setState(
+      {
+        customerType: type,
+        application: defaultApplication,
+      },
+      () => {
+        if (type === 'group') {
+          this.getBusinessSectors()
+        }
+      }
+    )
+  }
+
+  getDateString(targetDate) {
+    return new Date(
+      new Date(targetDate).getTime() -
+        new Date(targetDate).getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split('T')[0]
+  }
+
+  async getBusinessSectors() {
+    this.setState({ loading: true })
+    const sectors = await getBusinessSectors()
+    if (sectors.status === 'success') {
+      this.setState({
+        loading: false,
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(sectors.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getLoanOfficers() {
+    this.setState({ loanOfficers: [], loading: true })
+    const res = await searchLoanOfficer({
+      from: 0,
+      size: 100,
+      branchId: this.tokenData.branch,
+      status: 'active',
+    })
+    if (res.status === 'success') {
+      this.setState({
+        loanOfficers: res.body.data.filter(
+          (officer) => officer.status === 'active'
+        ),
+        loading: false,
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getProducts() {
+    this.setState({ products: [], loading: true })
+    if (this.tokenData.branch.length > 0) {
+      const products = await getProductsByBranch(this.tokenData.branch)
+      if (products.status === 'success') {
+        this.setState({
+          products: products.body.data.productIds
+            ? products.body.data.productIds
+            : [],
+          loading: false,
+        })
+      } else {
+        Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
+        this.setState({ loading: false })
+      }
+    } else {
+      Swal.fire('', local.selectBranch, 'error')
+    }
+  }
+
+  async getLoanUsage() {
+    this.setState({ loanUsage: [], loading: true })
+    const usage = await getLoanUsage()
+    if (usage.status === 'success') {
+      this.setState({
+        loanUsage: usage.body.usages.filter((item) => item.activated),
+        loading: false,
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(usage.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getFormulas() {
+    this.setState({ loading: true })
+    const formulas = await getFormulas()
+    if (formulas.status === 'success') {
+      this.setState({
+        formulas: formulas.body.data,
+        loading: false,
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getAppByID(id) {
+    this.setState({ loading: true })
+    const application = await getApplication(id)
+    if (application.status === 'success') {
+      const formData = this.state.application
+      if (application.body.product.beneficiaryType === 'group') {
+        this.getBusinessSectors()
+        const selectedCustomers: Customer[] = application.body.group.individualsInGroup.map(
+          (x) => x.customer
+        )
+        const customers = await this.getCustomerLimits(selectedCustomers)
+        application.body.group.individualsInGroup.forEach((customer) => {
+          if (customer.type === 'leader') {
+            this.setState({
+              selectedGroupLeader: customer.customer._id,
+              selectedLoanOfficer: this.state.loanOfficers.filter(
+                (officer) => officer._id === customer.customer.representative
+              )[0],
+            })
+          }
+          ;[customer.customer] = customers.filter(
+            (member) => member._id === customer.customer._id
+          )
+        })
+        formData.individualDetails = application.body.group.individualsInGroup
+        this.setState({
+          selectedCustomers,
+        })
+      } else {
+        const customers = await this.getCustomerLimits([
+          application.body.customer,
+        ])
+        this.populateCustomer(customers[0])
+        formData.customerTotalPrincipals = customers[0].totalPrincipals
+          ? customers[0].totalPrincipals
+          : 0
+        formData.customerMaxPrincipal = customers[0].maxPrincipal
+          ? customers[0].maxPrincipal
+          : 0
+        formData.individualDetails = application.body.group.individualsInGroup
+      }
+      this.populateLoanProduct(application.body.product)
+      const value =
+        this.state.prevId.length > 0
+          ? application.body.guarantors.length
+          : application.body.product.noOfGuarantors
+      const guarsArr: Array<any> = []
+      for (let i = 0; i < value; i++) {
+        if (application.body.guarantors[i]) {
+          guarsArr.push({
+            searchResults: {
+              results: [],
+              empty: false,
+            },
+            guarantor: application.body.guarantors[i],
+          })
+          formData.guarantorIds.push(application.body.guarantors[i]._id)
+        } else {
+          guarsArr.push({
+            searchResults: {
+              results: [],
+              empty: false,
+            },
+            guarantor: {},
+          })
+        }
+      }
+      formData.entryDate = application.body.entryDate
+        ? this.getDateString(application.body.entryDate)
+        : ''
+      formData.visitationDate = application.body.visitationDate
+        ? this.getDateString(application.body.visitationDate)
+        : ''
+      formData.usage = application.body.usage ? application.body.usage : ''
+      formData.enquirorId = application.body.enquirorId
+        ? application.body.enquirorId
+        : ''
+      formData.viceCustomers = application.body.viceCustomers
+      formData.principal = application.body.principal
+        ? application.body.principal
+        : 0
+      formData.customerID = application.body.customer._id
+      formData.productID = application.body.product._id
+      formData.reviewedDate = application.body.reviewedDate
+      formData.undoReviewDate = application.body.undoReviewDate
+      formData.rejectionDate = application.body.reviewedDate
+      formData.guarantors = guarsArr
+      // formData.individualDetails = application.body.group.individualsInGroups
+      formData.managerVisitDate =
+        !application.body.managerVisitDate ||
+        application.body.managerVisitDate === 0
+          ? ''
+          : this.getDateString(application.body.managerVisitDate)
+      formData.branchManagerId = application.body.branchManagerId
+      this.setState({
+        selectedCustomer: application.body.customer,
+        customerType: application.body.product.beneficiaryType,
+        application: formData,
+        loading: false,
+      })
+    } else {
+      Swal.fire('Error!', getErrorMessage(application.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async setappStats() {
+    if (this.state.prevId.length > 0) {
+      await this.getProducts()
+      await this.getFormulas()
+      await this.getLoanUsage()
+      await this.getLoanOfficers()
+      await this.getGlobalPrinciple()
+      this.getAppByID(this.state.prevId)
+    } else {
+      this.setState(this.setInitState())
+      await this.getProducts()
+      await this.getFormulas()
+      await this.getLoanUsage()
+      await this.getLoanOfficers()
+      await this.getGlobalPrinciple()
+    }
   }
 
   setInitState() {
@@ -231,7 +672,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State> {
       loanOfficers: [],
       products: [],
       branchCustomers: [],
-      businessSectors: [],
       selectedCustomers: [],
       searchGroupCustomerKey: '',
       guarantor1Res: {
@@ -256,373 +696,78 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State> {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const application = { ...state.application }
-    if (
-      props.history.location.state.id !== state.prevId &&
-      props.history.location.state.action !== state.application.state
-    ) {
-      application.state = props.history.location.state.action
-      application.id = props.history.location.state.id
-      return {
-        prevId: props.history.location.state.id,
-        application,
-      }
-    }
-    return null
-  }
-
-  componentDidMount() {
-    this.setappStats()
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (
-      prevProps.location.state.action !== this.props.location.state.action &&
-      prevProps.location.state.id !== this.props.location.state.id
-    ) {
-      // set State to initial value
-      // I need to add application id in the form values to be passed to status helper component
-      this.setappStats()
-    }
-  }
-
-  async setappStats() {
-    if (this.state.prevId.length > 0) {
-      await this.getProducts()
-      await this.getFormulas()
-      await this.getLoanUsage()
-      await this.getLoanOfficers()
-      await this.getGlobalPrinciple()
-      this.getAppByID(this.state.prevId)
-    } else {
-      this.setState(this.setInitState())
-      await this.getProducts()
-      await this.getFormulas()
-      await this.getLoanUsage()
-      await this.getLoanOfficers()
-      await this.getGlobalPrinciple()
-    }
-  }
-
-  async getAppByID(id) {
-    this.setState({ loading: true })
-    const application = await getApplication(id)
-    if (application.status === 'success') {
-      const formData = this.state.application
-      if (application.body.product.beneficiaryType === 'group') {
-        this.getBusinessSectors()
-        const selectedCustomers: Customer[] = application.body.group.individualsInGroup.map(
-          (x) => x.customer
-        )
-        const customers = await this.getCustomerLimits(selectedCustomers)
-        application.body.group.individualsInGroup.forEach((customer) => {
-          if (customer.type === 'leader') {
-            this.setState({
-              selectedGroupLeader: customer.customer._id,
-              selectedLoanOfficer: this.state.loanOfficers.filter(
-                (officer) => officer._id === customer.customer.representative
-              )[0],
-            })
-          }
-          customer.customer = customers.filter(
-            (member) => member._id === customer.customer._id
-          )[0]
-        })
-        formData.individualDetails = application.body.group.individualsInGroup
-        this.setState({
-          selectedCustomers,
-        })
-      } else {
-        const customers = await this.getCustomerLimits([
-          application.body.customer,
-        ])
-        this.populateCustomer(customers[0])
-        formData.customerTotalPrincipals = customers[0].totalPrincipals
-          ? customers[0].totalPrincipals
-          : 0
-        formData.customerMaxPrincipal = customers[0].maxPrincipal
-          ? customers[0].maxPrincipal
-          : 0
-        formData.individualDetails = application.body.group.individualsInGroup
-      }
-      this.populateLoanProduct(application.body.product)
-      const value =
-        this.state.prevId.length > 0
-          ? application.body.guarantors.length
-          : application.body.product.noOfGuarantors
-      const guarsArr: Array<any> = []
-      for (let i = 0; i < value; i++) {
-        if (application.body.guarantors[i]) {
-          guarsArr.push({
-            searchResults: {
-              results: [],
-              empty: false,
-            },
-            guarantor: application.body.guarantors[i],
-          })
-          formData.guarantorIds.push(application.body.guarantors[i]._id)
-        } else {
-          guarsArr.push({
-            searchResults: {
-              results: [],
-              empty: false,
-            },
-            guarantor: {},
-          })
-        }
-      }
-      formData.entryDate = application.body.entryDate
-        ? this.getDateString(application.body.entryDate)
-        : ''
-      formData.visitationDate = application.body.visitationDate
-        ? this.getDateString(application.body.visitationDate)
-        : ''
-      formData.usage = application.body.usage ? application.body.usage : ''
-      formData.enquirorId = application.body.enquirorId
-        ? application.body.enquirorId
-        : ''
-      formData.viceCustomers = application.body.viceCustomers
-      formData.principal = application.body.principal
-        ? application.body.principal
-        : 0
-      formData.customerID = application.body.customer._id
-      formData.productID = application.body.product._id
-      formData.reviewedDate = application.body.reviewedDate
-      formData.undoReviewDate = application.body.undoReviewDate
-      formData.rejectionDate = application.body.reviewedDate
-      formData.guarantors = guarsArr
-      // formData.individualDetails = application.body.group.individualsInGroups
-      formData.managerVisitDate =
-        !application.body.managerVisitDate ||
-        application.body.managerVisitDate === 0
-          ? ''
-          : this.getDateString(application.body.managerVisitDate)
-      formData.branchManagerId = application.body.branchManagerId
-      this.setState({
-        selectedCustomer: application.body.customer,
-        customerType: application.body.product.beneficiaryType,
-        application: formData,
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error!', getErrorMessage(application.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  async getFormulas() {
-    this.setState({ loading: true })
-    const formulas = await getFormulas()
-    if (formulas.status === 'success') {
-      this.setState({
-        formulas: formulas.body.data,
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  async getLoanUsage() {
-    this.setState({ loanUsage: [], loading: true })
-    const usage = await getLoanUsage()
-    if (usage.status === 'success') {
-      this.setState({
-        loanUsage: usage.body.usages.filter((usage) => usage.activated),
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(usage.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  async getBusinessSectors() {
-    this.setState({ businessSectors: [], loading: true })
-    const sectors = await getBusinessSectors()
-    if (sectors.status === 'success') {
-      this.setState({
-        businessSectors: sectors.body.sectors,
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(sectors.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  async getLoanOfficers() {
-    this.setState({ loanOfficers: [], loading: true })
-    const res = await searchLoanOfficer({
-      from: 0,
-      size: 100,
-      branchId: this.tokenData.branch,
-      status: 'active',
-    })
-    if (res.status === 'success') {
-      this.setState({
-        loanOfficers: res.body.data.filter(
-          (officer) => officer.status === 'active'
-        ),
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  async getProducts() {
-    this.setState({ products: [], loading: true })
-    if (this.tokenData.branch.length > 0) {
-      const products = await getProductsByBranch(this.tokenData.branch)
-      if (products.status === 'success') {
-        this.setState({
-          products: products.body.data.productIds
-            ? products.body.data.productIds
-            : [],
-          loading: false,
-        })
-      } else {
-        Swal.fire('Error !', getErrorMessage(products.error.error), 'error')
-        this.setState({ loading: false })
-      }
-    } else {
-      Swal.fire('', local.selectBranch, 'error')
-    }
-  }
-
-  async searchCustomers(keyword?: string, key?: string) {
-    this.setState({ loading: true, branchCustomers: [] })
-    const query =
-      !keyword || keyword.trim().length === 0 || !key
-        ? {
-            from: 0,
-            size: 2000,
-            branchId: this.tokenData.branch,
-            representativeId: this.state.selectedLoanOfficer._id,
-          }
-        : {
-            from: 0,
-            size: 2000,
-            branchId: this.tokenData.branch,
-            representativeId: this.state.selectedLoanOfficer._id,
-            [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword,
-            key: ['customerShortenedCode'].includes(key)
-              ? getFullCustomerKey(keyword)
-              : ['key'].includes(key)
-              ? Number(keyword)
-              : undefined,
-          }
-    const results = await searchCustomer(query)
-    if (results.status === 'success') {
-      this.setState({ loading: false, branchCustomers: results.body.data })
-    } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  handleSearch = async (key, query) => {
-    this.setState({ loading: true })
-    const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
-    if (results.status === 'success') {
-      if (results.body.data.length > 0) {
-        this.setState({
-          loading: false,
-          searchResults: { results: results.body.data, empty: false },
-        })
-      } else {
-        this.setState({
-          loading: false,
-          searchResults: { results: results.body.data, empty: true },
-        })
-      }
-    } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  handleSearchGuarantors = async (key, query, index) => {
-    const obj = {
-      [key]: query,
-      from: 0,
-      size: 1000,
-      excludedIds: [
-        this.state.application.customerID,
-        ...this.state.application.guarantorIds,
-      ],
-    }
-    this.setState({ loading: true })
-    const results = await searchCustomer(obj)
-    if (results.status === 'success') {
-      const defaultApp = { ...this.state.application }
-      const defaultGuarantors = { ...defaultApp.guarantors }
-      const defaultGuar = { ...defaultGuarantors[index] }
-      if (results.body.data.length > 0) {
-        defaultGuar.searchResults = { results: results.body.data, empty: false }
-      } else {
-        defaultGuar.searchResults = { results: results.body.data, empty: true }
-      }
-      defaultApp.guarantors[index] = defaultGuar
-      this.setState(
-        {
-          application: defaultApp,
-        },
-        () => {
-          this.setState({ loading: false })
+  setGroupLeader(id) {
+    this.setState((prevState) => {
+      const newApp = prevState.application.individualDetails.forEach(
+        (member) => {
+          if (member.customer._id === id) member.type = 'leader'
+          else member.type = 'member'
         }
       )
+      return {
+        application: newApp,
+        selectedGroupLeader: id,
+      } as any
+    })
+  }
+
+  getGroupErrorMessage(customer) {
+    let errorMessage1 = ''
+    let errorMessage = ''
+    if (customer.blocked?.isBlocked === true) {
+      errorMessage1 = `${local.theCustomerIsBlocked}`
+    }
+    const age = getAge(customer.birthDate)
+    if (age > 67 || age < 18) {
+      errorMessage = `${local.groupAgeError}`
+    }
+    return (
+      <span>
+        {errorMessage1} {errorMessage1 ? <br /> : null} {errorMessage}
+      </span>
+    )
+  }
+
+  removeGuarantor = (obj, index, values) => {
+    this.setState({ loading: true })
+    const defaultApplication = { ...values }
+    const defaultGuarantors = { ...defaultApplication.guarantors }
+    const defaultGuar = { ...defaultGuarantors[index] }
+    defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(
+      (id) => obj._id !== id
+    )
+    defaultGuar.guarantor = {}
+    defaultGuar.searchResults.results = []
+    defaultGuar.searchResults.empty = false
+    defaultApplication.guarantors[index] = defaultGuar
+    this.setState({ application: defaultApplication, loading: false })
+  }
+
+  getSelectedLoanProduct = async (id) => {
+    this.setState({ loading: true })
+    const selectedProduct = await getProduct(id)
+    if (selectedProduct.status === 'success') {
+      const selectedProductDetails = selectedProduct.body.data
+      this.populateLoanProduct(selectedProductDetails)
+      const element = {
+        searchResults: {
+          results: [],
+          empty: false,
+        },
+        guarantor: {},
+      }
+      const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(
+        element
+      )
+      const defaultApplication = { ...this.state.application }
+      defaultApplication.guarantors = guarsArr
+      defaultApplication.productID = id
+      defaultApplication.guarantorIds = []
+      this.setState({ loading: false, application: defaultApplication })
     } else {
-      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      Swal.fire('error', getErrorMessage(selectedProduct.error.error), 'error')
       this.setState({ loading: false })
     }
-  }
-
-  getDateString(date) {
-    return new Date(
-      new Date(date).getTime() - new Date(date).getTimezoneOffset() * 60000
-    )
-      .toISOString()
-      .split('T')[0]
-  }
-
-  async getOfficerName(id) {
-    const res = await getLoanOfficer(id)
-    const defaultApplication = this.state.application
-    if (res.status === 'success') {
-      const { name } = res.body
-      defaultApplication.representativeName = name
-    } else {
-      defaultApplication.representativeName = id
-    }
-    this.setState({
-      application: defaultApplication,
-    })
-  }
-
-  populateCustomer(response) {
-    const defaultApplication = this.state.application
-    this.getOfficerName(response.representative)
-    defaultApplication.customerName = response.customerName
-    defaultApplication.nationalId = response.nationalId
-    defaultApplication.birthDate = this.getDateString(response.birthDate)
-    defaultApplication.gender = getGenderFromNationalId(response.nationalId)
-    defaultApplication.nationalIdIssueDate = this.getDateString(
-      response.nationalIdIssueDate
-    )
-    defaultApplication.businessSector = response.businessSector
-    defaultApplication.businessActivity = response.businessActivity
-    defaultApplication.businessSpeciality = response.businessSpeciality
-    defaultApplication.permanentEmployeeCount = response.permanentEmployeeCount
-    defaultApplication.partTimeEmployeeCount = response.partTimeEmployeeCount
-    defaultApplication.representative = response.representative
-    this.setState({
-      application: defaultApplication,
-    })
   }
 
   selectCustomer = async (customer) => {
@@ -743,181 +888,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State> {
     this.setState({ loading: false })
   }
 
-  removeGuarantor = (obj, index, values) => {
-    this.setState({ loading: true })
-    const defaultApplication = { ...values }
-    const defaultGuarantors = { ...defaultApplication.guarantors }
-    const defaultGuar = { ...defaultGuarantors[index] }
-    defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(
-      (id) => obj._id !== id
-    )
-    defaultGuar.guarantor = {}
-    defaultGuar.searchResults.results = []
-    defaultGuar.searchResults.empty = false
-    defaultApplication.guarantors[index] = defaultGuar
-    this.setState({ application: defaultApplication, loading: false })
-  }
-
-  removeOptionalGuar(obj, index, values) {
-    this.setState({ loading: true })
-    const defaultApplication = { ...values }
-    defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(
-      (id) => obj.guarantor._id !== id
-    )
-    defaultApplication.guarantors.splice(index, 1)
-    this.setState({ application: defaultApplication, loading: false })
-  }
-
-  populateLoanProduct(selectedProductDetails) {
-    const defaultApplication = this.state.application
-    const defaultValues = this.setInitState().application
-    defaultApplication.calculationFormulaId =
-      selectedProductDetails.calculationFormula._id
-    defaultApplication.currency = selectedProductDetails.currency
-    defaultApplication.interest = selectedProductDetails.interest
-      ? selectedProductDetails.interest
-      : defaultValues.interest
-    defaultApplication.interestPeriod = selectedProductDetails.interestPeriod
-    defaultApplication.allowInterestAdjustment =
-      selectedProductDetails.allowInterestAdjustment
-    defaultApplication.inAdvanceFees = selectedProductDetails.inAdvanceFees
-      ? selectedProductDetails.inAdvanceFees
-      : defaultValues.inAdvanceFees
-    defaultApplication.inAdvanceFrom = selectedProductDetails.inAdvanceFrom
-    defaultApplication.inAdvanceType = selectedProductDetails.inAdvanceType
-    defaultApplication.periodLength = selectedProductDetails.periodLength
-      ? selectedProductDetails.periodLength
-      : defaultValues.periodLength
-    defaultApplication.periodType = selectedProductDetails.periodType
-    defaultApplication.gracePeriod = selectedProductDetails.gracePeriod
-      ? selectedProductDetails.gracePeriod
-      : defaultValues.gracePeriod
-    defaultApplication.pushPayment = selectedProductDetails.pushPayment
-      ? selectedProductDetails.pushPayment
-      : defaultValues.pushPayment
-    defaultApplication.noOfInstallments = selectedProductDetails.noOfInstallments
-      ? selectedProductDetails.noOfInstallments
-      : defaultValues.noOfInstallments
-    defaultApplication.applicationFee = selectedProductDetails.applicationFee
-      ? selectedProductDetails.applicationFee
-      : defaultValues.applicationFee
-    defaultApplication.individualApplicationFee = selectedProductDetails.individualApplicationFee
-      ? selectedProductDetails.individualApplicationFee
-      : defaultValues.individualApplicationFee
-    defaultApplication.applicationFeePercent = selectedProductDetails.applicationFeePercent
-      ? selectedProductDetails.applicationFeePercent
-      : defaultValues.applicationFeePercent
-    defaultApplication.applicationFeeType =
-      selectedProductDetails.applicationFeeType
-    defaultApplication.applicationFeePercentPerPerson = selectedProductDetails.applicationFeePercentPerPerson
-      ? selectedProductDetails.applicationFeePercentPerPerson
-      : defaultValues.applicationFeePercentPerPerson
-    defaultApplication.applicationFeePercentPerPersonType =
-      selectedProductDetails.applicationFeePercentPerPersonType
-    defaultApplication.representativeFees = selectedProductDetails.representativeFees
-      ? selectedProductDetails.representativeFees
-      : defaultValues.representativeFees
-    defaultApplication.allowRepresentativeFeesAdjustment =
-      selectedProductDetails.allowRepresentativeFeesAdjustment
-    defaultApplication.stamps = selectedProductDetails.stamps
-      ? selectedProductDetails.stamps
-      : defaultValues.stamps
-    defaultApplication.allowStampsAdjustment =
-      selectedProductDetails.allowStampsAdjustment
-    defaultApplication.adminFees = selectedProductDetails.adminFees
-      ? selectedProductDetails.adminFees
-      : defaultValues.adminFees
-    defaultApplication.allowAdminFeesAdjustment =
-      selectedProductDetails.allowAdminFeesAdjustment
-    defaultApplication.minPrincipal = selectedProductDetails.minPrincipal
-      ? selectedProductDetails.minPrincipal
-      : defaultValues.minPrincipal
-    defaultApplication.maxPrincipal = selectedProductDetails.maxPrincipal
-      ? selectedProductDetails.maxPrincipal
-      : defaultValues.maxPrincipal
-    defaultApplication.minInstallment = selectedProductDetails.minInstallment
-      ? selectedProductDetails.minInstallment
-      : defaultValues.minInstallment
-    defaultApplication.maxInstallment = selectedProductDetails.maxInstallment
-      ? selectedProductDetails.maxInstallment
-      : defaultValues.maxInstallment
-    defaultApplication.noOfGuarantors = selectedProductDetails.noOfGuarantors
-      ? selectedProductDetails.noOfGuarantors
-      : defaultValues.noOfGuarantors
-    defaultApplication.allowApplicationFeeAdjustment =
-      selectedProductDetails.allowApplicationFeeAdjustment
-    defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType
-    defaultApplication.branchManagerAndDate =
-      selectedProductDetails.branchManagerAndDate
-    defaultApplication.branchManagerId = ''
-    defaultApplication.managerVisitDate = ''
-    if (
-      selectedProductDetails.beneficiaryType === 'group' &&
-      this.state.step === 1
-    ) {
-      this.searchCustomers()
-    }
-    this.setState({ application: defaultApplication })
-  }
-
-  getSelectedLoanProduct = async (id) => {
-    this.setState({ loading: true })
-    const selectedProduct = await getProduct(id)
-    if (selectedProduct.status === 'success') {
-      const selectedProductDetails = selectedProduct.body.data
-      this.populateLoanProduct(selectedProductDetails)
-      const element = {
-        searchResults: {
-          results: [],
-          empty: false,
-        },
-        guarantor: {},
-      }
-      const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(
-        element
-      )
-      const defaultApplication = { ...this.state.application }
-      defaultApplication.guarantors = guarsArr
-      defaultApplication.productID = id
-      defaultApplication.guarantorIds = []
-      this.setState({ loading: false, application: defaultApplication })
-    } else {
-      Swal.fire('error', getErrorMessage(selectedProduct.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  addOptionalGuarantor() {
-    const element = {
-      searchResults: {
-        results: [],
-        empty: false,
-      },
-      guarantor: {},
-    }
-    const defaultApplication = { ...this.state.application }
-    defaultApplication.guarantors.push(element)
-    this.setState({
-      application: defaultApplication,
-    })
-  }
-
-  setCustomerType(type) {
-    const defaultApplication = this.state.application
-    defaultApplication.beneficiaryType = type
-    this.setState(
-      {
-        customerType: type,
-        application: defaultApplication,
-      },
-      () => {
-        if (type === 'group') {
-          this.getBusinessSectors()
-        }
-      }
-    )
-  }
-
   submit = async (values: Application) => {
     if (this.state.step === 2 && this.state.customerType === 'individual') {
       this.step('forward')
@@ -1013,42 +983,202 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State> {
     }
   }
 
-  step(key) {
-    let currentStep = this.state.step
-    if (this.state.step < 3 && key === 'forward') {
-      currentStep++
-    } else if (this.state.step >= 1 && key === 'backward') {
-      currentStep--
+  async viewCustomer(id) {
+    this.setState({ loading: true })
+    const selectedCustomer = await getCustomerByID(id)
+    if (selectedCustomer.status === 'success') {
+      this.setState({
+        customerToView: selectedCustomer.body,
+        loading: false,
+        showModal: true,
+      })
+    } else {
+      Swal.fire('error', local.searchError, 'error')
+      this.setState({ loading: false })
     }
+  }
+
+  addOptionalGuarantor() {
+    const element = {
+      searchResults: {
+        results: [],
+        empty: false,
+      },
+      guarantor: {},
+    }
+    const defaultApplication = { ...this.state.application }
+    defaultApplication.guarantors.push(element)
     this.setState({
-      step: currentStep,
+      application: defaultApplication,
     })
   }
 
-  async getCustomerLimits(customers) {
-    const customerIds: Array<string> = []
-    customers.forEach((customer) => customerIds.push(customer._id))
-    this.setState({ loading: true })
-    const res = await getCustomersBalances({ ids: customerIds })
-    if (res.status === 'success') {
-      this.setState({ loading: false })
-      const merged: Array<any> = []
-      for (let i = 0; i < customers.length; i++) {
-        const obj = {
-          ...customers[i],
-          ...(res.body.data
-            ? res.body.data.find((itmInner) => itmInner.id === customers[i]._id)
-            : { id: customers[i]._id }),
-          ...this.state.application.principals,
-        }
-        delete obj.id
-        merged.push(obj)
-      }
-      return merged
+  populateLoanProduct(selectedProductDetails) {
+    const defaultApplication = this.state.application
+    const defaultValues = this.setInitState().application
+    defaultApplication.calculationFormulaId =
+      selectedProductDetails.calculationFormula._id
+    defaultApplication.currency = selectedProductDetails.currency
+    defaultApplication.interest = selectedProductDetails.interest
+      ? selectedProductDetails.interest
+      : defaultValues.interest
+    defaultApplication.interestPeriod = selectedProductDetails.interestPeriod
+    defaultApplication.allowInterestAdjustment =
+      selectedProductDetails.allowInterestAdjustment
+    defaultApplication.inAdvanceFees = selectedProductDetails.inAdvanceFees
+      ? selectedProductDetails.inAdvanceFees
+      : defaultValues.inAdvanceFees
+    defaultApplication.inAdvanceFrom = selectedProductDetails.inAdvanceFrom
+    defaultApplication.inAdvanceType = selectedProductDetails.inAdvanceType
+    defaultApplication.periodLength = selectedProductDetails.periodLength
+      ? selectedProductDetails.periodLength
+      : defaultValues.periodLength
+    defaultApplication.periodType = selectedProductDetails.periodType
+    defaultApplication.gracePeriod = selectedProductDetails.gracePeriod
+      ? selectedProductDetails.gracePeriod
+      : defaultValues.gracePeriod
+    defaultApplication.pushPayment = selectedProductDetails.pushPayment
+      ? selectedProductDetails.pushPayment
+      : defaultValues.pushPayment
+    defaultApplication.noOfInstallments = selectedProductDetails.noOfInstallments
+      ? selectedProductDetails.noOfInstallments
+      : defaultValues.noOfInstallments
+    defaultApplication.applicationFee = selectedProductDetails.applicationFee
+      ? selectedProductDetails.applicationFee
+      : defaultValues.applicationFee
+    defaultApplication.individualApplicationFee = selectedProductDetails.individualApplicationFee
+      ? selectedProductDetails.individualApplicationFee
+      : defaultValues.individualApplicationFee
+    defaultApplication.applicationFeePercent = selectedProductDetails.applicationFeePercent
+      ? selectedProductDetails.applicationFeePercent
+      : defaultValues.applicationFeePercent
+    defaultApplication.applicationFeeType =
+      selectedProductDetails.applicationFeeType
+    defaultApplication.applicationFeePercentPerPerson = selectedProductDetails.applicationFeePercentPerPerson
+      ? selectedProductDetails.applicationFeePercentPerPerson
+      : defaultValues.applicationFeePercentPerPerson
+    defaultApplication.applicationFeePercentPerPersonType =
+      selectedProductDetails.applicationFeePercentPerPersonType
+    defaultApplication.representativeFees = selectedProductDetails.representativeFees
+      ? selectedProductDetails.representativeFees
+      : defaultValues.representativeFees
+    defaultApplication.allowRepresentativeFeesAdjustment =
+      selectedProductDetails.allowRepresentativeFeesAdjustment
+    defaultApplication.stamps = selectedProductDetails.stamps
+      ? selectedProductDetails.stamps
+      : defaultValues.stamps
+    defaultApplication.allowStampsAdjustment =
+      selectedProductDetails.allowStampsAdjustment
+    defaultApplication.adminFees = selectedProductDetails.adminFees
+      ? selectedProductDetails.adminFees
+      : defaultValues.adminFees
+    defaultApplication.allowAdminFeesAdjustment =
+      selectedProductDetails.allowAdminFeesAdjustment
+    defaultApplication.minPrincipal = selectedProductDetails.minPrincipal
+      ? selectedProductDetails.minPrincipal
+      : defaultValues.minPrincipal
+    defaultApplication.maxPrincipal = selectedProductDetails.maxPrincipal
+      ? selectedProductDetails.maxPrincipal
+      : defaultValues.maxPrincipal
+    defaultApplication.minInstallment = selectedProductDetails.minInstallment
+      ? selectedProductDetails.minInstallment
+      : defaultValues.minInstallment
+    defaultApplication.maxInstallment = selectedProductDetails.maxInstallment
+      ? selectedProductDetails.maxInstallment
+      : defaultValues.maxInstallment
+    defaultApplication.noOfGuarantors = selectedProductDetails.noOfGuarantors
+      ? selectedProductDetails.noOfGuarantors
+      : defaultValues.noOfGuarantors
+    defaultApplication.allowApplicationFeeAdjustment =
+      selectedProductDetails.allowApplicationFeeAdjustment
+    defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType
+    defaultApplication.branchManagerAndDate =
+      selectedProductDetails.branchManagerAndDate
+    defaultApplication.branchManagerId = ''
+    defaultApplication.managerVisitDate = ''
+    if (
+      selectedProductDetails.beneficiaryType === 'group' &&
+      this.state.step === 1
+    ) {
+      this.searchCustomers()
     }
-    Swal.fire('error', getErrorMessage(res.error.error), 'error')
-    this.setState({ loading: false })
-    return []
+    this.setState({ application: defaultApplication })
+  }
+
+  removeOptionalGuar(obj, index, values) {
+    this.setState({ loading: true })
+    const defaultApplication = { ...values }
+    defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(
+      (id) => obj.guarantor._id !== id
+    )
+    defaultApplication.guarantors.splice(index, 1)
+    this.setState({ application: defaultApplication, loading: false })
+  }
+
+  populateCustomer(response) {
+    const defaultApplication = this.state.application
+    this.getOfficerName(response.representative)
+    defaultApplication.customerName = response.customerName
+    defaultApplication.nationalId = response.nationalId
+    defaultApplication.birthDate = this.getDateString(response.birthDate)
+    defaultApplication.gender = getGenderFromNationalId(response.nationalId)
+    defaultApplication.nationalIdIssueDate = this.getDateString(
+      response.nationalIdIssueDate
+    )
+    defaultApplication.businessSector = response.businessSector
+    defaultApplication.businessActivity = response.businessActivity
+    defaultApplication.businessSpeciality = response.businessSpeciality
+    defaultApplication.permanentEmployeeCount = response.permanentEmployeeCount
+    defaultApplication.partTimeEmployeeCount = response.partTimeEmployeeCount
+    defaultApplication.representative = response.representative
+    this.setState({
+      application: defaultApplication,
+    })
+  }
+
+  async searchCustomers(keyword?: string, key?: string) {
+    this.setState({ loading: true, branchCustomers: [] })
+    const query =
+      !keyword || keyword.trim().length === 0 || !key
+        ? {
+            from: 0,
+            size: 2000,
+            branchId: this.tokenData.branch,
+            representativeId: this.state.selectedLoanOfficer._id,
+          }
+        : {
+            from: 0,
+            size: 2000,
+            branchId: this.tokenData.branch,
+            representativeId: this.state.selectedLoanOfficer._id,
+            [key]: ['code', 'key'].includes(key) ? Number(keyword) : keyword,
+            key: ['customerShortenedCode'].includes(key)
+              ? getFullCustomerKey(keyword)
+              : ['key'].includes(key)
+              ? Number(keyword)
+              : undefined,
+          }
+    const results = await searchCustomer(query)
+    if (results.status === 'success') {
+      this.setState({ loading: false, branchCustomers: results.body.data })
+    } else {
+      Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  selectLO(e) {
+    this.setState({ selectedLoanOfficer: e }, () => {
+      this.searchCustomers()
+    })
+  }
+
+  checkGroupValidation(customer) {
+    const age = getAge(customer.birthDate)
+    if (age <= 67 && age >= 18 && customer.blocked?.isBlocked !== true) {
+      return false
+    }
+    return true
   }
 
   async checkCustomersLimits(customers, guarantor) {
@@ -1197,148 +1327,15 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State> {
     return { flag: false }
   }
 
-  async getGlobalPrinciple() {
-    this.setState({ loading: true })
-    const princples = await getMaxPrinciples()
-    if (princples.status === 'success') {
-      const principals = {
-        maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
-        maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
-        maxGroupPrincipal: princples.body.maxGroupPrincipal,
-        maxGroupReturningIndividualPrincipal:
-          princples.body.maxGroupReturningIndividualPrincipal,
-      }
-      const { application } = this.state
-      application.principals = principals
-      this.setState({
-        loading: false,
-        application,
-      })
-    } else {
-      Swal.fire('Error!', getErrorMessage(princples.error.error), 'error')
-      this.setState({ loading: false })
+  step(key) {
+    let currentStep = this.state.step
+    if (this.state.step < 3 && key === 'forward') {
+      currentStep++
+    } else if (this.state.step >= 1 && key === 'backward') {
+      currentStep--
     }
-  }
-
-  async handleGroupChange(customers) {
-    this.setState({ selectedGroupLeader: '' })
-    const customersTemp: {
-      customer: Customer
-      amount: number
-      type: string
-    }[] = []
-    const defaultApplication = this.state.application
-    if (customers.length > 0) {
-      const check = await this.checkCustomersLimits(customers, false)
-      if (check.flag === true && check.customers) {
-        check.customers.forEach((customer) => {
-          const obj = {
-            customer,
-            amount: 0,
-            type: 'member',
-          }
-          customersTemp.push(obj)
-        })
-        defaultApplication.individualDetails = customersTemp
-        this.setState({
-          selectedCustomers: check.customers,
-          application: defaultApplication,
-        })
-      } else if (
-        check.flag === false &&
-        check.validationObject &&
-        Object.keys(check.validationObject).length > 0
-      ) {
-        let names = ''
-        let financeNames = ''
-        Object.keys(check.validationObject).forEach((id, i) => {
-          if (check.validationObject[id].totalPrincipals) {
-            i === 0
-              ? (financeNames += check.validationObject[id].customerName)
-              : (financeNames =
-                  financeNames + ', ' + check.validationObject[id].customerName)
-          } else
-            i === 0
-              ? (names += check.validationObject[id].customerName)
-              : (names = names + ', ' + check.validationObject[id].customerName)
-        })
-        Swal.fire(
-          'error',
-          `${names.length > 0 ? names : ''} ${
-            names.length > 0 ? local.memberInvolvedInAnotherLoan : ''
-          } ${
-            financeNames.length > 0
-              ? `\n ${financeNames} ${local.customersMaxLoanPrincipalError}`
-              : ''
-          }`,
-          'error'
-        )
-      }
-    } else {
-      this.setState({
-        selectedCustomers: [],
-      })
-    }
-  }
-
-  async viewCustomer(id) {
-    this.setState({ loading: true })
-    const selectedCustomer = await getCustomerByID(id)
-    if (selectedCustomer.status === 'success') {
-      this.setState({
-        customerToView: selectedCustomer.body,
-        loading: false,
-        showModal: true,
-      })
-    } else {
-      Swal.fire('error', local.searchError, 'error')
-      this.setState({ loading: false })
-    }
-  }
-
-  setGroupLeader(id) {
-    const defaultApplication = this.state.application
-    defaultApplication.individualDetails.forEach((member) => {
-      if (member.customer._id === id) {
-        member.type = 'leader'
-      } else {
-        member.type = 'member'
-      }
-    })
     this.setState({
-      application: defaultApplication,
-      selectedGroupLeader: id,
-    })
-  }
-
-  checkGroupValidation(customer) {
-    const age = getAge(customer.birthDate)
-    if (age <= 67 && age >= 18 && customer.blocked?.isBlocked !== true) {
-      return false
-    }
-    return true
-  }
-
-  getGroupErrorMessage(customer) {
-    let errorMessage1 = ''
-    let errorMessage = ''
-    if (customer.blocked?.isBlocked === true) {
-      errorMessage1 = `${local.theCustomerIsBlocked}`
-    }
-    const age = getAge(customer.birthDate)
-    if (age > 67 || age < 18) {
-      errorMessage = `${local.groupAgeError}`
-    }
-    return (
-      <span>
-        {errorMessage1} {errorMessage1 ? <br /> : null} {errorMessage}
-      </span>
-    )
-  }
-
-  selectLO(e) {
-    this.setState({ selectedLoanOfficer: e }, () => {
-      this.searchCustomers()
+      step: currentStep,
     })
   }
 

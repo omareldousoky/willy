@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import AsyncSelect from 'react-select/async'
 import Swal from 'sweetalert2'
-import { getGeoDivision } from '../../Services/APIs/configApis/config'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -125,7 +124,7 @@ export const StepThreeForm = (props: any) => {
           <Form.Group controlId="representative">
             <Form.Label className="customer-form-label">{`${local.representative}*`}</Form.Label>
             <Can I="updateNationalId" a="customer" passThrough>
-              {(allowed) => (
+              {() => (
                 <AsyncSelect
                   className={errors.representative ? 'error' : ''}
                   name="representative"
@@ -374,7 +373,7 @@ export const StepThreeForm = (props: any) => {
               {local.comments}
             </Form.Label>
             <Can I="updateNationalId" a="customer" passThrough>
-              {(allowed) => (
+              {() => (
                 <Form.Control
                   as="textarea"
                   rows={3}

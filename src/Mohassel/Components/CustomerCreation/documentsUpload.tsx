@@ -18,9 +18,7 @@ import { Image } from '../../../Shared/redux/document/types'
 import { downloadAsZip, getErrorMessage } from '../../../Shared/Services/utils'
 
 interface State {
-  docsOfImagesFiles: any[]
   documentTypes: any[]
-  options: any[]
   selectAll: boolean
   loading: boolean
 }
@@ -41,18 +39,30 @@ class DocumentsUpload extends Component<Props, State> {
     super(props)
     this.state = {
       documentTypes: [],
-      docsOfImagesFiles: [
-        [
-          {
-            key: '',
-            url: '',
-          },
-        ],
-      ],
-      options: [],
       selectAll: false,
       loading: false,
     }
+  }
+
+  async componentDidMount() {
+    const response = await getDocumentsTypes('customer')
+    if (response.status === 'success') {
+      this.setState({
+        documentTypes: response.body.documentTypes,
+      })
+    } else {
+      Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
+    }
+    if (this.props.edit || this.props.view) {
+      await this.props.getDocuments({
+        customerId: this.props.customerId,
+        docType: 'customer',
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.clearSelectionArray()
   }
 
   selectAllOptions() {
@@ -71,23 +81,6 @@ class DocumentsUpload extends Component<Props, State> {
         })
       })
       this.props.addAllToSelectionArray(images)
-    }
-  }
-
-  async componentDidMount() {
-    const response = await getDocumentsTypes('customer')
-    if (response.status === 'success') {
-      this.setState({
-        documentTypes: response.body.documentTypes,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(response.error.error), 'error')
-    }
-    if (this.props.edit || this.props.view) {
-      await this.props.getDocuments({
-        customerId: this.props.customerId,
-        docType: 'customer',
-      })
     }
   }
 
@@ -127,7 +120,7 @@ class DocumentsUpload extends Component<Props, State> {
               disabled={this.props.selectionArray.length <= 0}
               onClick={async () => {
                 this.setState({ loading: true })
-                const res = await downloadAsZip(
+                await downloadAsZip(
                   this.props.selectionArray,
                   `customer-${this.props.customerId}-${new Date().valueOf()}`
                 )
@@ -150,10 +143,6 @@ class DocumentsUpload extends Component<Props, State> {
         })}
       </>
     )
-  }
-
-  componentWillUnmount() {
-    this.props.clearSelectionArray()
   }
 }
 

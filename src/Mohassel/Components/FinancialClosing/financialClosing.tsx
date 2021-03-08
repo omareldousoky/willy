@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import { Card } from 'react-bootstrap'
-import { Field, Formik, FormikProps } from 'formik'
-import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import MonthlyClosing from './MonthlyClosing/monthlyClosing'
 
 interface State {
-  id: string
   activeTab: string
   tabsArray: Array<Tab>
 }
@@ -18,7 +15,6 @@ class FinancialClosing extends Component<{}, State> {
   constructor(props) {
     super(props)
     this.state = {
-      id: '',
       activeTab: TabsToRender.MonthClosing,
       tabsArray: [
         {

@@ -112,13 +112,11 @@ class LoanCreation extends Component<Props, State> {
     }
     const res = await getApplication(id)
     if (res.status === 'success') {
-      this.setState({
+      this.setState((prevState) => ({
         loading: false,
         application: res.body,
         approvalDate: res.body.approvalDate,
-        loanCreationDate: res.body.creationDate
-          ? res.body.creationDate
-          : this.state.loanCreationDate,
+        loanCreationDate: res.body.creationDate || prevState.loanCreationDate,
         beneficiaryType: res.body.product.beneficiaryType,
         customerData: {
           id,
@@ -134,7 +132,7 @@ class LoanCreation extends Component<Props, State> {
           entryDate: res.body.entryDate,
           status: res.body.status,
         },
-      })
+      }))
       if (type === 'issue') {
         this.setState({ installmentsData: res.body.installmentsObject })
       }
@@ -189,31 +187,6 @@ class LoanCreation extends Component<Props, State> {
     }
   }
 
-  getCurrency() {
-    switch (this.state.customerData.currency) {
-      case 'egp':
-        return local.egp
-      default:
-        return ''
-    }
-  }
-
-  getPeriod() {
-    switch (this.state.customerData.periodType) {
-      case 'days':
-        return local.day
-      case 'months':
-        return local.month
-      default:
-        return ''
-    }
-  }
-
-  getStatus(status: string) {
-    if (status === 'created') return local.created
-    return local.approved
-  }
-
   async handleCreationDateChange(creationDate: string) {
     const { id } = this.props.location.state
     this.setState({ loading: true })
@@ -227,6 +200,31 @@ class LoanCreation extends Component<Props, State> {
       this.setState({ loading: false }, () => {
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       })
+  }
+
+  getStatus(status: string) {
+    if (status === 'created') return local.created
+    return local.approved
+  }
+
+  getPeriod() {
+    switch (this.state.customerData.periodType) {
+      case 'days':
+        return local.day
+      case 'months':
+        return local.month
+      default:
+        return ''
+    }
+  }
+
+  getCurrency() {
+    switch (this.state.customerData.currency) {
+      case 'egp':
+        return local.egp
+      default:
+        return ''
+    }
   }
 
   render() {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
@@ -14,7 +14,7 @@ export default function CustomerBasicsCard(props: Props) {
     <div className="customer-basics-card">
       <div className="row-nowrap">
         <span className="basic-info">
-          <img src={require('../../Assets/usersBasic.svg')} />
+          <img alt="user-basic" src={require('../../Assets/usersBasic.svg')} />
           <Form.Label>{local.basicInfo}</Form.Label>
         </span>
       </div>

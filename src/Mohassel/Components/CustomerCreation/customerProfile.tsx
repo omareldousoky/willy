@@ -122,13 +122,13 @@ const CustomerProfile = (props: Props) => {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     }
   }
-  const getGeoArea = async (geoArea, branch) => {
+  const getGeoArea = async (geoAreaId, branch) => {
     changeLoading(true)
     const resGeo = await getGeoAreasByBranch(branch)
     if (resGeo.status === 'success') {
       changeLoading(false)
       const geoAreaObject = resGeo.body.data.filter(
-        (area) => area._id === geoArea
+        (area) => area._id === geoAreaId
       )
       if (geoAreaObject.length === 1) {
         setgeoArea(geoAreaObject[0])
@@ -156,6 +156,7 @@ const CustomerProfile = (props: Props) => {
   useEffect(() => {
     getCustomerDetails()
     if (ability.can('deathCertificate', 'customer')) {
+      // eslint-disable-next-line no-empty
       if (tabs.some((tab) => tab.stringKey === 'deathCertificate')) {
       } else {
         tabs.push({
@@ -165,6 +166,7 @@ const CustomerProfile = (props: Props) => {
       }
     }
     if (ability.can('guaranteed', 'report')) {
+      // eslint-disable-next-line no-empty
       if (tabs.some((tab) => tab.stringKey === 'reports')) {
       } else {
         tabs.push({

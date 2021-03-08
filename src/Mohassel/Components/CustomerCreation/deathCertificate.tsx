@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import Swal from 'sweetalert2'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
-import { getDocumentsTypes } from '../../Services/APIs/encodingFiles/getDocumentsTypes'
 import * as local from '../../../Shared/Assets/ar.json'
 import DocumentUploader from '../../../Shared/Components/documentUploader/documentUploader'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -29,9 +27,6 @@ interface Props {
   selectionArray: Image[]
 }
 interface State {
-  docsOfImagesFiles: any[]
-  documentTypes: any[]
-  options: any[]
   selectAll: boolean
   loading: boolean
 }
@@ -39,19 +34,22 @@ class DeathCertificate extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      documentTypes: [],
-      docsOfImagesFiles: [
-        [
-          {
-            key: '',
-            url: '',
-          },
-        ],
-      ],
-      options: [],
       selectAll: false,
       loading: false,
     }
+  }
+
+  async componentDidMount() {
+    if (this.props.edit || this.props.view) {
+      await this.props.getDocuments({
+        customerId: this.props.customerId,
+        docType: 'deathCertificate',
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.clearSelectionArray()
   }
 
   selectAllOptions() {
@@ -70,15 +68,6 @@ class DeathCertificate extends Component<Props, State> {
         })
       })
       this.props.addAllToSelectionArray(images)
-    }
-  }
-
-  async componentDidMount() {
-    if (this.props.edit || this.props.view) {
-      await this.props.getDocuments({
-        customerId: this.props.customerId,
-        docType: 'deathCertificate',
-      })
     }
   }
 
@@ -118,7 +107,7 @@ class DeathCertificate extends Component<Props, State> {
               disabled={this.props.selectionArray.length <= 0}
               onClick={async () => {
                 this.setState({ loading: true })
-                const res = await downloadAsZip(
+                await downloadAsZip(
                   this.props.selectionArray,
                   `deathCertificate-customer-${
                     this.props.customerId
@@ -145,10 +134,6 @@ class DeathCertificate extends Component<Props, State> {
         />
       </>
     )
-  }
-
-  componentWillUnmount() {
-    this.props.clearSelectionArray()
   }
 }
 const addDocumentToProps = (dispatch) => {

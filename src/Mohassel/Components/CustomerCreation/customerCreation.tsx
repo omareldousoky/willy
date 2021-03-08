@@ -135,42 +135,11 @@ interface State {
   loading: boolean
   hasLoan: boolean
   isGuarantor: boolean
-  searchResults: {
-    results: Array<object>
-    empty: boolean
-  }
   oldRepresentative: string
   branchId: string
 }
 
 class CustomerCreation extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      step: 1,
-      step1,
-      step2,
-      step3,
-      customerId: '',
-      loading: false,
-      hasLoan: false,
-      isGuarantor: false,
-      searchResults: {
-        results: [],
-        empty: false,
-      },
-      selectedCustomer: {},
-      oldRepresentative: '',
-      branchId: '',
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.edit) {
-      this.getCustomerById()
-    }
-  }
-
   formikStep1: any = {
     isValid: true,
     values: step1,
@@ -187,6 +156,29 @@ class CustomerCreation extends Component<Props, State> {
     isValid: true,
     values: step3,
     errors: {},
+  }
+
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      step: 1,
+      step1,
+      step2,
+      step3,
+      customerId: '',
+      loading: false,
+      hasLoan: false,
+      isGuarantor: false,
+      selectedCustomer: {},
+      oldRepresentative: '',
+      branchId: '',
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.edit) {
+      this.getCustomerById()
+    }
   }
 
   async getCustomerById() {
@@ -279,17 +271,20 @@ class CustomerCreation extends Component<Props, State> {
         values: { ...this.state.step3, ...customerExtraDetails },
         isValid: true,
       }
-      this.setState({
-        loading: false,
-        selectedCustomer: res.body,
-        step1: { ...this.state.step1, ...customerInfo },
-        step2: { ...this.state.step2, ...customerBusiness },
-        step3: { ...this.state.step3, ...customerExtraDetails },
-        hasLoan: res.body.hasLoan,
-        isGuarantor: res.body.isGuarantor,
-        oldRepresentative: res.body.representative,
-        branchId: res.body.branchId,
-      } as any)
+      this.setState(
+        (prevState) =>
+          ({
+            loading: false,
+            selectedCustomer: res.body,
+            step1: { ...prevState.step1, ...customerInfo },
+            step2: { ...prevState.step2, ...customerBusiness },
+            step3: { ...prevState.step3, ...customerExtraDetails },
+            hasLoan: res.body.hasLoan,
+            isGuarantor: res.body.isGuarantor,
+            oldRepresentative: res.body.representative,
+            branchId: res.body.branchId,
+          } as any)
+      )
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -297,18 +292,72 @@ class CustomerCreation extends Component<Props, State> {
     }
   }
 
+  async getGlobalPrinciple() {
+    this.setState({ loading: true })
+    const princples = await getMaxPrinciples()
+    if (princples.status === 'success') {
+      const principals = {
+        maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
+        maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
+        maxGroupPrincipal: princples.body.maxGroupPrincipal,
+      }
+      step3.principals = principals
+      this.setState((prevState) => ({
+        loading: false,
+        step3: { ...prevState.step3, principals },
+      }))
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(princples.error.error), 'error')
+      )
+    }
+  }
+
   submit = (values: object) => {
     if (this.props.edit && this.state.step === 2) this.getGlobalPrinciple()
     if (this.state.step < 3) {
-      this.setState({
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any)
+      this.setState(
+        (prevState) =>
+          ({
+            [`step${prevState.step}`]: values,
+            step: prevState.step + 1,
+          } as any)
+      )
     } else {
       this.setState({ step3: values, loading: true } as any, () =>
         this.createEditCustomer()
       )
     }
+  }
+
+  handleWizardClick = (index: number) => {
+    if (this.props.edit && index === 2) this.getGlobalPrinciple()
+    if (
+      this.formikStep1.isValid === true &&
+      this.formikStep2.isValid === true &&
+      this.formikStep3.isValid === true
+    )
+      switch (this.state.step) {
+        case 1:
+          return this.setState({
+            step1: this.formikStep1.values,
+            step: index + 1,
+          })
+        case 2:
+          return this.setState({
+            step2: this.formikStep2.values,
+            step: index + 1,
+          })
+        case 3:
+          return this.setState({
+            step3: this.formikStep3.values,
+            step: index + 1,
+          })
+        default:
+          return this.setState({
+            step: index + 1,
+          })
+      }
   }
 
   async createEditCustomer() {
@@ -391,28 +440,6 @@ class CustomerCreation extends Component<Props, State> {
           Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
         )
       }
-    }
-  }
-
-  async getGlobalPrinciple() {
-    this.setState({ loading: true })
-    const princples = await getMaxPrinciples()
-    if (princples.status === 'success') {
-      const principals = {
-        maxIndividualPrincipal: princples.body.maxIndividualPrincipal,
-        maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
-        maxGroupPrincipal: princples.body.maxGroupPrincipal,
-      }
-      const { step3 } = this.state
-      step3.principals = principals
-      this.setState({
-        loading: false,
-        step3,
-      })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(princples.error.error), 'error')
-      )
     }
   }
 
@@ -546,36 +573,6 @@ class CustomerCreation extends Component<Props, State> {
       default:
         return null
     }
-  }
-
-  handleWizardClick = (index: number) => {
-    if (this.props.edit && index === 2) this.getGlobalPrinciple()
-    if (
-      this.formikStep1.isValid == true &&
-      this.formikStep2.isValid == true &&
-      this.formikStep3.isValid == true
-    )
-      switch (this.state.step) {
-        case 1:
-          return this.setState({
-            step1: this.formikStep1.values,
-            step: index + 1,
-          })
-        case 2:
-          return this.setState({
-            step2: this.formikStep2.values,
-            step: index + 1,
-          })
-        case 3:
-          return this.setState({
-            step3: this.formikStep3.values,
-            step: index + 1,
-          })
-        default:
-          return this.setState({
-            step: index + 1,
-          })
-      }
   }
 
   render() {
