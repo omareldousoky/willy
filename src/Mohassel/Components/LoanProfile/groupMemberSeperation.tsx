@@ -90,36 +90,6 @@ class GroupMemberSeperation extends Component<Props, State> {
     }
   }
 
-  selectMemberToRemove(event) {
-    const member = this.state.application.group.individualsInGroup.filter(
-      (customer) => customer.customer._id === event.currentTarget.value
-    )[0]
-    this.setState({ selectedMember: member }, () => {
-      let leader = {
-        type: '',
-        amount: 0,
-        customer: {
-          _id: '',
-        },
-      }
-      if (member.type !== 'leader') {
-        leader = this.state.application.group.individualsInGroup.filter(
-          (customer) => customer.type === 'leader'
-        )[0]
-      }
-      this.setState({
-        newGroupLeader: leader,
-      })
-    })
-  }
-
-  selectNewLeader(event) {
-    const leader = this.state.application.group.individualsInGroup.filter(
-      (customer) => customer.customer._id === event.currentTarget.value
-    )[0]
-    this.setState({ newGroupLeader: leader })
-  }
-
   submit = async () => {
     this.setState({ loading: true })
     const obj = {
@@ -154,6 +124,36 @@ class GroupMemberSeperation extends Component<Props, State> {
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
       )
     }
+  }
+
+  selectMemberToRemove(event) {
+    const member = this.state.application.group.individualsInGroup.filter(
+      (customer) => customer.customer._id === event.currentTarget.value
+    )[0]
+    this.setState({ selectedMember: member }, () => {
+      let leader = {
+        type: '',
+        amount: 0,
+        customer: {
+          _id: '',
+        },
+      }
+      if (member.type !== 'leader') {
+        leader = this.state.application.group.individualsInGroup.filter(
+          (customer) => customer.type === 'leader'
+        )[0]
+      }
+      this.setState({
+        newGroupLeader: leader,
+      })
+    })
+  }
+
+  selectNewLeader(event) {
+    const leader = this.state.application.group.individualsInGroup.filter(
+      (customer) => customer.customer._id === event.currentTarget.value
+    )[0]
+    this.setState({ newGroupLeader: leader })
   }
 
   render() {

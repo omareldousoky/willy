@@ -55,7 +55,6 @@ export function getOriginalTableData(groupMembers, type) {
 
 export const FollowUpStatementView = ({
   application,
-  branch,
   print,
   members,
 }: FollowUpStatementProps) => {
