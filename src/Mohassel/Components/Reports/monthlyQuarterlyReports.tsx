@@ -72,41 +72,8 @@ class MonthlyQuarterlyReports extends Component<{}, State> {
         return this.monthlyReport()
       case 'quarterlyReport':
         return this.quarterlyReport(values)
-    }
-  }
-
-  async monthlyReport() {
-    this.setState({ loading: true, showModal: false })
-    const res = await monthlyReport()
-    if (res.status === 'success') {
-      this.setState({ loading: false, print: 'monthly', data: res.body }, () =>
-        window.print()
-      )
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
-    }
-  }
-
-  async quarterlyReport(values) {
-    const date = values.quarterYear.split('-')
-    const year = date[0]
-    this.setState({ loading: true, showModal: false })
-    if (values) {
-      const res = await quarterlyReport({
-        quarter: `${year}-${values.quarterNumber}`,
-      })
-      if (res.status === 'success') {
-        this.setState(
-          { loading: false, print: 'quarterly', data: res.body },
-          () => window.print()
-        )
-      } else {
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-      }
+      default:
+        return ''
     }
   }
 
@@ -132,6 +99,8 @@ class MonthlyQuarterlyReports extends Component<{}, State> {
           getQuarterlyReportExcel,
           obj
         )
+      default:
+        return ''
     }
   }
 
@@ -176,6 +145,41 @@ class MonthlyQuarterlyReports extends Component<{}, State> {
     } else {
       this.setState({ loading: false })
       Swal.fire('error', 'TimeOut')
+    }
+  }
+
+  async monthlyReport() {
+    this.setState({ loading: true, showModal: false })
+    const res = await monthlyReport()
+    if (res.status === 'success') {
+      this.setState({ loading: false, print: 'monthly', data: res.body }, () =>
+        window.print()
+      )
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+    }
+  }
+
+  async quarterlyReport(values) {
+    const date = values.quarterYear.split('-')
+    const year = date[0]
+    this.setState({ loading: true, showModal: false })
+    if (values) {
+      const res = await quarterlyReport({
+        quarter: `${year}-${values.quarterNumber}`,
+      })
+      if (res.status === 'success') {
+        this.setState(
+          { loading: false, print: 'quarterly', data: res.body },
+          () => window.print()
+        )
+      } else {
+        this.setState({ loading: false }, () =>
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        )
+      }
     }
   }
 

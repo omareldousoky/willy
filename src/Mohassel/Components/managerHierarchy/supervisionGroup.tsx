@@ -58,10 +58,14 @@ export class SupervisionGroup extends Component<Props, State> {
                 <Form.Label className="supervision-label">
                   <img
                     onClick={() => {
-                      const newOfficers = this.state.officers
-                      newOfficers.splice(index, 1)
-                      this.props.group.officers = newOfficers
-                      this.setState({ officers: newOfficers })
+                      this.setState(
+                        (prevState) => ({
+                          officers: prevState.officers.splice(index, 1),
+                        }),
+                        () => {
+                          this.props.group.officers = this.state.officers
+                        }
+                      )
                     }}
                     alt="removeIcon"
                     src={require('../../Assets/removeIcon.svg')}

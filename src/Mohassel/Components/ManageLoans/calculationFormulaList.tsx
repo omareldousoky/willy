@@ -26,8 +26,6 @@ interface Props {
   withHeader: boolean
 }
 interface State {
-  size: number
-  from: number
   loading: boolean
   formulas: Array<Formula>
   filterFormulas: string
@@ -69,6 +67,21 @@ class FormulaList extends Component<Props, State> {
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
 
+  async getFormulas() {
+    this.setState({ loading: true })
+    const formulas = await getFormulas()
+    if (formulas.status === 'success') {
+      this.setState({
+        formulas: formulas.body.data,
+        loading: false,
+      })
+    } else {
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error')
+      )
+    }
+  }
+
   renderIcons(data: any) {
     return (
       <>
@@ -85,21 +98,6 @@ class FormulaList extends Component<Props, State> {
         />
       </>
     )
-  }
-
-  async getFormulas() {
-    this.setState({ loading: true })
-    const formulas = await getFormulas()
-    if (formulas.status === 'success') {
-      this.setState({
-        formulas: formulas.body.data,
-        loading: false,
-      })
-    } else {
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(formulas.error.error), 'error')
-      )
-    }
   }
 
   render() {

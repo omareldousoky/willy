@@ -106,6 +106,14 @@ class LoanProductCreation extends Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    if (this.props.edit) {
+      this.getProduct()
+    }
+    this.getFormulas()
+    this.getGlobalPrinciple()
+  }
+
   async getFormulas() {
     this.setState({ loading: true })
     const formulas = await getFormulas()
@@ -141,16 +149,22 @@ class LoanProductCreation extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    if (this.props.edit) {
-      this.getProduct()
+  async getProduct() {
+    const { id } = this.props.history.location.state
+    this.setState({ loading: true })
+    const product = await getProduct(id)
+    if (product.status === 'success') {
+      const calculationFormulaId = product.body.data.calculationFormula._id
+      const loanProduct = product.body.data
+      loanProduct.calculationFormulaId = calculationFormulaId
+      this.setState({
+        product: loanProduct,
+        loading: false,
+      })
+    } else {
+      Swal.fire('error', getErrorMessage(product.error.error), 'error')
+      this.setState({ loading: false })
     }
-    this.getFormulas()
-    this.getGlobalPrinciple()
-  }
-
-  cancel() {
-    this.props.history.goBack()
   }
 
   submit = async (values: any) => {
@@ -190,22 +204,8 @@ class LoanProductCreation extends Component<Props, State> {
     }
   }
 
-  async getProduct() {
-    const { id } = this.props.history.location.state
-    this.setState({ loading: true })
-    const product = await getProduct(id)
-    if (product.status === 'success') {
-      const calculationFormulaId = product.body.data.calculationFormula._id
-      const loanProduct = product.body.data
-      loanProduct.calculationFormulaId = calculationFormulaId
-      this.setState({
-        product: loanProduct,
-        loading: false,
-      })
-    } else {
-      Swal.fire('error', getErrorMessage(product.error.error), 'error')
-      this.setState({ loading: false })
-    }
+  cancel() {
+    this.props.history.goBack()
   }
 
   render() {

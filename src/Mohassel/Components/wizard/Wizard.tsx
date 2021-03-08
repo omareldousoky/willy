@@ -15,6 +15,8 @@ interface Props {
 interface State {
   steps: Step[]
 }
+
+// TODO:lint: convert to FC
 export default class Wizard extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
@@ -53,7 +55,7 @@ export default class Wizard extends Component<Props, State> {
         stepsState[index - 1].completed = true
         stepsState[index - 1].selected = false
       }
-      this.setState({ steps: stepsState })
+      this.updateSteps(stepsState)
     }
   }
 
@@ -61,6 +63,10 @@ export default class Wizard extends Component<Props, State> {
     if (this.props.edit) {
       this.props.onClick(index)
     }
+  }
+
+  updateSteps = (steps) => {
+    this.setState({ steps })
   }
 
   resetStateStepsSelection(steps: Step[]) {

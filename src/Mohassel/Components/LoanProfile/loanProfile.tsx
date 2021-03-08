@@ -737,14 +737,18 @@ class LoanProfile extends Component<Props, State> {
       case 'loanLogs':
         return <Logs id={this.props.history.location.state.id} />
       case 'loanPayments':
+        // TODO:lint: check if working fine
         return (
           <Payment
             print={(data) =>
               this.setState(
-                {
+                (prevState) => ({
                   print: data.print,
-                  earlyPaymentData: { ...this.state.earlyPaymentData, ...data },
-                },
+                  earlyPaymentData: {
+                    ...prevState.earlyPaymentData,
+                    ...data,
+                  },
+                }),
                 () => window.print()
               )
             }

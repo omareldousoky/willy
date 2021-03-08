@@ -170,6 +170,10 @@ class LoanList extends Component<Props, State> {
       })
   }
 
+  componentWillUnmount() {
+    this.props.setSearchFilters({})
+  }
+
   getStatus(status: string) {
     switch (status) {
       case 'paid':
@@ -183,6 +187,30 @@ class LoanList extends Component<Props, State> {
       default:
         return null
     }
+  }
+
+  async getLoans() {
+    const { error, fromBranch, branchId, issuedLoansSearchFilters } = this.props
+    const { customerShortenedCode, customerKey } = this.props.searchFilters
+    const { size, from } = this.state
+    const modifiedSearchFilters = {
+      ...searchFilters,
+      customerKey: customerShortenedCode
+        ? getFullCustomerKey(customerShortenedCode)
+        : customerKey || undefined,
+    }
+    const query = {
+      ...modifiedSearchFilters,
+      ...issuedLoansSearchFilters,
+      size,
+      from,
+      url: 'loan',
+      branchId: fromBranch ? branchId : undefined,
+      sort: 'issueDate',
+    }
+    this.props.search(query).then(() => {
+      if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
+    })
   }
 
   renderIcons(data) {
@@ -200,41 +228,6 @@ class LoanList extends Component<Props, State> {
         />
       </>
     )
-  }
-
-  async getLoans() {
-    const {
-      searchFilters,
-      search,
-      error,
-      fromBranch,
-      branchId,
-      issuedLoansSearchFilters,
-    } = this.props
-    const { customerShortenedCode, customerKey } = searchFilters
-    const { size, from } = this.state
-    const modifiedSearchFilters = {
-      ...searchFilters,
-      customerKey: customerShortenedCode
-        ? getFullCustomerKey(customerShortenedCode)
-        : customerKey || undefined,
-    }
-    const query = {
-      ...modifiedSearchFilters,
-      ...issuedLoansSearchFilters,
-      size,
-      from,
-      url: 'loan',
-      branchId: fromBranch ? branchId : undefined,
-      sort: 'issueDate',
-    }
-    search(query).then(() => {
-      if (error) Swal.fire('Error !', getErrorMessage(error), 'error')
-    })
-  }
-
-  componentWillUnmount() {
-    this.props.setSearchFilters({})
   }
 
   render() {

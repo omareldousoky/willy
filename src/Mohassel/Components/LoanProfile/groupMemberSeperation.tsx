@@ -127,9 +127,9 @@ class GroupMemberSeperation extends Component<Props, State> {
   }
 
   selectMemberToRemove(event) {
-    const member = this.state.application.group.individualsInGroup.filter(
+    const [member] = this.state.application.group.individualsInGroup.filter(
       (customer) => customer.customer._id === event.currentTarget.value
-    )[0]
+    )
     this.setState({ selectedMember: member }, () => {
       let leader = {
         type: '',
@@ -138,11 +138,11 @@ class GroupMemberSeperation extends Component<Props, State> {
           _id: '',
         },
       }
-      if (member.type !== 'leader') {
-        leader = this.state.application.group.individualsInGroup.filter(
+      if (member.type !== 'leader')
+        [leader] = this.state.application.group.individualsInGroup.filter(
           (customer) => customer.type === 'leader'
-        )[0]
-      }
+        )
+
       this.setState({
         newGroupLeader: leader,
       })
@@ -150,9 +150,9 @@ class GroupMemberSeperation extends Component<Props, State> {
   }
 
   selectNewLeader(event) {
-    const leader = this.state.application.group.individualsInGroup.filter(
+    const [leader] = this.state.application.group.individualsInGroup.filter(
       (customer) => customer.customer._id === event.currentTarget.value
-    )[0]
+    )
     this.setState({ newGroupLeader: leader })
   }
 

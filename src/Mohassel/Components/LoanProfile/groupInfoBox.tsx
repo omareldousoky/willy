@@ -70,10 +70,10 @@ class GroupInfoBox extends Component<Props, State> {
           array={this.state.tabsArray}
           active={this.state.activeTab}
           selectTab={(index: number) =>
-            this.setState({
-              activeCustomer: this.state.group[index],
+            this.setState((prevState) => ({
+              activeCustomer: prevState.group[index],
               activeTab: index.toString(),
-            })
+            }))
           }
         />
         <div style={{ padding: 20 }}>

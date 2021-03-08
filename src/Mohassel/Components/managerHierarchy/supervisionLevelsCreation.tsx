@@ -94,11 +94,9 @@ class SupervisionLevelsCreation extends Component<Props, State> {
   }
 
   removeGroup = (index) => {
-    const newGroups = this.state.groups
-    newGroups.splice(index, 1)
-    this.setState({
-      groups: newGroups,
-    })
+    this.setState((prevState) => ({
+      groups: prevState.groups.splice(index, 1),
+    }))
   }
 
   submit = async () => {

@@ -159,14 +159,13 @@ class RoleCreation extends Component<Props, State> {
 
   submitToStep2 = (values: object) => {
     this.setState(
-      {
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any,
+      (prevState) =>
+        ({
+          [`step${prevState.step}`]: values,
+          step: prevState.step + 1,
+        } as any),
       () => {
-        if (this.state.step === 2 && !this.props.edit) {
-          this.getPermissions()
-        }
+        if (this.state.step === 2 && !this.props.edit) this.getPermissions()
       }
     )
   }
