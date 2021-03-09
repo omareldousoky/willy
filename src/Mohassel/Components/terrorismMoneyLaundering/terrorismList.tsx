@@ -14,7 +14,7 @@ import { antiTerrorismMoneyLaunderingArray } from "./terrorismMoneyLaunderingIni
 import { Button, Card, Form, Row, Col } from "react-bootstrap"
 import { getErrorMessage } from "../../../Shared/Services/utils"
 import { Formik } from "formik"
-import { uploadSuspectDocument } from "../../Services/APIs/Terroism/terrorism"
+import { uploadSuspectDocument } from "../../Services/APIs/Terrorism/terrorism"
 import * as Yup from "yup"
 import { SuspectResponse } from "../../../Shared/Services/interfaces"
 interface Props {
@@ -180,6 +180,7 @@ class TerrorismList extends Component<Props, State> {
 											type="file"
 											onChange={(e) => formikProps.setFieldValue('terrorismLListFile', e.target.files[0])}
 											isInvalid={Boolean(formikProps.errors.terrorismLListFile) && Boolean(formikProps.touched.terrorismLListFile)}
+											accept={".xlsx,.xls,.xlsm,.csv"}
 										/>
 										<Form.Control.Feedback type="invalid">
 											{formikProps.errors.terrorismLListFile}</Form.Control.Feedback>
