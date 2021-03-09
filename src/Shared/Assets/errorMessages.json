@@ -113,5 +113,6 @@
     "activity_not_found":{"en": "activity not found ","ar": "نوع النشاط غير موجود"},
     "invalid_close_date_in_future":{"en":"The financial closing date is in the future","ar":"تاريخ الإقفال المالي في المستقبل"},
     "invalid_close_date_pending_actions":{"en":"There are pending actions before that date, please close them first","ar":"يوجد حركات معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"},
-    "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"}
+    "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"},
+    "customer_is_defaulting": {"en":"This customer is a defaulting customer", "ar": "هذا العميل موجود في قائمة الشئون القانونية"}
 }
