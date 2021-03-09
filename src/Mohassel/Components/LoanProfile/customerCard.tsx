@@ -1,126 +1,170 @@
-import React from 'react';
-import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
-import * as local from '../../../Shared/Assets/ar.json';
-import { getRenderDate } from '../../Services/getRenderDate';
-import { CustomerLoanDetailsBoxView } from '../LoanProfile/applicationsDetails';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { numbersToArabic } from "../../../Shared/Services/utils";
+import React from 'react'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
+import * as local from '../../../Shared/Assets/ar.json'
+import { getRenderDate } from '../../Services/getRenderDate'
+import { CustomerLoanDetailsBoxView } from './applicationsDetails'
+import { numbersToArabic } from '../../../Shared/Services/utils'
+
 interface Props {
-  application: any;
-  penalty?: number;
-  print: () => void;
-  getGeoArea?: Function;
+  application: any
+  penalty?: number
+  print: () => void
+  getGeoArea?: Function
 }
 export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
-  const todaysDate = new Date().valueOf();
+  const todaysDate = new Date().valueOf()
   switch (data.status) {
     case 'unpaid':
       if (data.dateOfPayment < todaysDate)
         return <div className="status-chip late">{local.late}</div>
-      else
-        return <div className="status-chip unpaid">{local.unpaid}</div>
+      return <div className="status-chip unpaid">{local.unpaid}</div>
     case 'pending':
       return <div className="status-chip pending">{local.pending}</div>
     case 'rescheduled':
       return (
-        <div className="status-chip rescheduled" style={data.earlyPaymentReschedule? {flexDirection: 'column', minHeight: 50}: {}}>
+        <div
+          className="status-chip rescheduled"
+          style={
+            data.earlyPaymentReschedule
+              ? { flexDirection: 'column', minHeight: 50 }
+              : {}
+          }
+        >
           <span>{local.rescheduled}</span>
-          {data.earlyPaymentReschedule ? <span> ({local.earlyPayment})</span> : null}
+          {data.earlyPaymentReschedule ? (
+            <span> ({local.earlyPayment})</span>
+          ) : null}
         </div>
       )
     case 'partiallyPaid':
-      return <div className="status-chip partially-paid">{local.partiallyPaid}</div>
+      return (
+        <div className="status-chip partially-paid">{local.partiallyPaid}</div>
+      )
     case 'cancelled':
       return <div className="status-chip cancelled">{local.cancelled}</div>
     case 'paid':
       return <div className="status-chip paid">{local.paid}</div>
-    default: return null;
+    default:
+      return null
   }
 }
 export const CustomerCardView = (props: Props) => {
-  const renderPaidAt = (data) =>{
-    if(data.paidAt){
-      return (<div style={{width:'100px'}}>{getRenderDate(data.paidAt)}</div>)
-    } else {
-      return '';
+  const renderPaidAt = (data) => {
+    if (data.paidAt) {
+      return <div style={{ width: '100px' }}>{getRenderDate(data.paidAt)}</div>
     }
-}
+    return ''
+  }
   const mappers = [
     {
       title: local.installmentNumber,
-      key: "id",
-      render: data => data.id
+      key: 'id',
+      render: (data) => data.id,
     },
     {
       title: local.dateOfPayment,
-      key: "dateOfPayment",
-      render: data => getRenderDate(data.dateOfPayment)
+      key: 'dateOfPayment',
+      render: (data) => getRenderDate(data.dateOfPayment),
     },
     {
       title: local.installmentResponse,
-      key: "installmentResponse",
-      render: data => data.installmentResponse
+      key: 'installmentResponse',
+      render: (data) => data.installmentResponse,
     },
     {
       title: local.principalInstallment,
-      key: "principalInstallment",
-      render: data => data.principalInstallment
+      key: 'principalInstallment',
+      render: (data) => data.principalInstallment,
     },
     {
       title: local.feesInstallment,
-      key: "feesInstallment",
-      render: data => data.feesInstallment
+      key: 'feesInstallment',
+      render: (data) => data.feesInstallment,
     },
     {
       title: local.principalPaid,
-      key: "principalPaid",
-      render: data => data.principalPaid
+      key: 'principalPaid',
+      render: (data) => data.principalPaid,
     },
     {
       title: local.feesPaid,
-      key: "feesPaid",
-      render: data => data.feesPaid
+      key: 'feesPaid',
+      render: (data) => data.feesPaid,
     },
     {
       title: local.installmentStatus,
-      key: "loanStatus",
-      render: data => getStatus(data)
+      key: 'loanStatus',
+      render: (data) => getStatus(data),
     },
     {
       title: local.statusDate,
-      key: "paidAt",
-      render: data => renderPaidAt(data),
+      key: 'paidAt',
+      render: (data) => renderPaidAt(data),
     },
   ]
   return (
     <div style={{ textAlign: 'right' }}>
-      <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
-        onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
-      <CustomerLoanDetailsBoxView application={props.application} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
-      {props.penalty && <div>
-        <h6>{local.penalties}</h6>
-        <Form style={{ margin: '20px 0' }}>
-          <Form.Row className="col">
-            <Form.Group as={Col} md="3" className="d-flex flex-column">
-                <Form.Label style={{ color: '#6e6e6e' }}>غرامات مسددة</Form.Label>
-                <Form.Label>{numbersToArabic(props.application.penaltiesPaid)}</Form.Label>
-            </Form.Group>
-            <Form.Group as={Col} md="3" className="d-flex flex-column">
-                <Form.Label style={{ color: '#6e6e6e' }}>غرامات مطلوبة</Form.Label>
+      <span
+        style={{
+          cursor: 'pointer',
+          float: 'left',
+          background: '#E5E5E5',
+          padding: 10,
+          borderRadius: 15,
+        }}
+        onClick={() => props.print()}
+      >
+        {' '}
+        <span
+          className="fa fa-download"
+          style={{ margin: '0px 0px 0px 5px' }}
+        />{' '}
+        {local.downloadPDF}
+      </span>
+      <CustomerLoanDetailsBoxView
+        application={props.application}
+        getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}
+      />
+      {props.penalty && (
+        <div>
+          <h6>{local.penalties}</h6>
+          <Form style={{ margin: '20px 0' }}>
+            <Form.Row className="col">
+              <Form.Group as={Col} md="3" className="d-flex flex-column">
+                <Form.Label style={{ color: '#6e6e6e' }}>
+                  غرامات مسددة
+                </Form.Label>
+                <Form.Label>
+                  {numbersToArabic(props.application.penaltiesPaid)}
+                </Form.Label>
+              </Form.Group>
+              <Form.Group as={Col} md="3" className="d-flex flex-column">
+                <Form.Label style={{ color: '#6e6e6e' }}>
+                  غرامات مطلوبة
+                </Form.Label>
                 <Form.Label>{numbersToArabic(props.penalty)}</Form.Label>
-            </Form.Group>
-            <Form.Group as={Col} md="3" className="d-flex flex-column">
-                <Form.Label style={{ color: '#6e6e6e' }}>غرامات معفاة</Form.Label>
-                <Form.Label>{numbersToArabic(props.application.penaltiesCanceled)}</Form.Label>
-            </Form.Group>
-          </Form.Row>
-        </Form>
-      </div>
-      }
-      <DynamicTable totalCount={0} pagination={false} data={props.application.installmentsObject.installments} mappers={mappers} />
+              </Form.Group>
+              <Form.Group as={Col} md="3" className="d-flex flex-column">
+                <Form.Label style={{ color: '#6e6e6e' }}>
+                  غرامات معفاة
+                </Form.Label>
+                <Form.Label>
+                  {numbersToArabic(props.application.penaltiesCanceled)}
+                </Form.Label>
+              </Form.Group>
+            </Form.Row>
+          </Form>
+        </div>
+      )}
+      <DynamicTable
+        totalCount={0}
+        pagination={false}
+        data={props.application.installmentsObject.installments}
+        mappers={mappers}
+      />
     </div>
   )
 }

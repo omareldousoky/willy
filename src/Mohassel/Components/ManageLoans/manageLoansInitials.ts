@@ -1,10 +1,9 @@
-import * as local from '../../../Shared/Assets/ar.json';
-import { Card } from '../ManageAccounts/manageAccountsInitials';
+import * as local from '../../../Shared/Assets/ar.json'
+import { Card } from '../ManageAccounts/manageAccountsInitials'
 import ability from '../../config/ability'
 
-
 export const manageLoansArray = (): Card[] => {
-  const manageLoanArr: Card[] = [];
+  const manageLoanArr: Card[] = []
   if (ability.can('getLoanProduct', 'product')) {
     manageLoanArr.push({
       icon: 'loanProducts',
@@ -26,7 +25,7 @@ export const manageLoansArray = (): Card[] => {
       icon: 'testCalculationMethod',
       header: local.testCalculationMethod,
       desc: local.testCalculationMethodDesc,
-      path: '/manage-loans/test-formula'
+      path: '/manage-loans/test-formula',
     })
   }
   if (ability.can('assignProductToBranch', 'product')) {
@@ -34,8 +33,8 @@ export const manageLoansArray = (): Card[] => {
       icon: 'assignProductToBranch',
       header: local.assignProductToBranch,
       desc: local.assignProductToBranch,
-      path: '/manage-loans/assign-products-branches'
+      path: '/manage-loans/assign-products-branches',
     })
   }
-  return manageLoanArr;
+  return manageLoanArr
 }

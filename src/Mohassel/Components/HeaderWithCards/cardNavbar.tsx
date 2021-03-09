@@ -1,56 +1,92 @@
-import React from 'react';
-import './styles.scss';
-import Can from '../../config/Can';
-import ability from '../../config/ability';
+import React from 'react'
+import './styles.scss'
+import Can from '../../config/Can'
+import ability from '../../config/ability'
 
 export interface Tab {
-  icon?: string;
-  header?: string;
-  desc?: string;
-  stringKey: string;
-  permission?: string;
-  permissionKey?: string;
+  icon?: string
+  header?: string
+  desc?: string
+  stringKey: string
+  permission?: string
+  permissionKey?: string
 }
 interface Props {
-  header: string;
-  array: Array<Tab>;
-  active: number | string;
-  selectTab: (index) => void;
+  header: string
+  array: Array<Tab>
+  active: number | string
+  selectTab: (index) => void
 }
 export const CardNavBar = (props: Props) => {
   return (
     <div className="cards-container">
       {props.array.map((item, index) => {
-        if (item.permission && item.permission.length > 0 && item.permissionKey && item.permissionKey.length > 0 && !Array.isArray(item.permission)) {
+        if (
+          item.permission &&
+          item.permission.length > 0 &&
+          item.permissionKey &&
+          item.permissionKey.length > 0 &&
+          !Array.isArray(item.permission)
+        ) {
           return (
-            <Can I={item.permission} a={item.permissionKey} key={index} >
-              <div key={index} className={item.stringKey === props.active ? "navBar-item active" : "navBar-item"} onClick={() => props.selectTab(item.stringKey)}>
+            <Can I={item.permission} a={item.permissionKey} key={index}>
+              <div
+                key={index}
+                className={
+                  item.stringKey === props.active
+                    ? 'navBar-item active'
+                    : 'navBar-item'
+                }
+                onClick={() => props.selectTab(item.stringKey)}
+              >
                 <div style={{ margin: 'auto 0px' }}>
                   <h6>{item.header}</h6>
                 </div>
               </div>
             </Can>
           )
-        } else if (item.permission && item.permission.length > 0 && item.permissionKey && item.permissionKey.length > 0 && Array.isArray(item.permission)) {
-          let arr = 0;
-          item.permission.forEach((perm: string) => {
-            if(ability.can(perm, item.permissionKey)){
-              arr++;
-          }
-        })
-        if(arr > 0){
-          return (
-            <div key={index} className={item.stringKey === props.active ? "navBar-item active" : "navBar-item"} onClick={() => props.selectTab(item.stringKey)}>
-              <div style={{ margin: 'auto 0px' }}>
-                <h6>{item.header}</h6>
-              </div>
-            </div>
-          )
-        } 
         }
-          else {
+        if (
+          item.permission &&
+          item.permission.length > 0 &&
+          item.permissionKey &&
+          item.permissionKey.length > 0 &&
+          Array.isArray(item.permission)
+        ) {
+          let arr = 0
+          item.permission.forEach((perm: string) => {
+            if (ability.can(perm, item.permissionKey)) {
+              arr += 1
+            }
+          })
+          if (arr > 0) {
+            return (
+              <div
+                key={index}
+                className={
+                  item.stringKey === props.active
+                    ? 'navBar-item active'
+                    : 'navBar-item'
+                }
+                onClick={() => props.selectTab(item.stringKey)}
+              >
+                <div style={{ margin: 'auto 0px' }}>
+                  <h6>{item.header}</h6>
+                </div>
+              </div>
+            )
+          }
+        } else {
           return (
-            <div key={index} className={item.stringKey === props.active ? "navBar-item active" : "navBar-item"} onClick={() => props.selectTab(item.stringKey)}>
+            <div
+              key={index}
+              className={
+                item.stringKey === props.active
+                  ? 'navBar-item active'
+                  : 'navBar-item'
+              }
+              onClick={() => props.selectTab(item.stringKey)}
+            >
               <div style={{ margin: 'auto 0px' }}>
                 <h6>{item.header}</h6>
               </div>

@@ -1,126 +1,126 @@
-import { AxiosResponse } from "axios";
-import axios from "../axios-instance";
+import { AxiosResponse } from 'axios'
+import axios from '../axios-instance'
 
-const { REACT_APP_BASE_URL } = process.env;
-const fetchActiveWalletIndividualUrl = `${REACT_APP_BASE_URL}/report/individual-active-wallets`;
-const fetchActiveWalletGroupUrl = `${REACT_APP_BASE_URL}/report/group-active-wallets`;
+const { REACT_APP_BASE_URL } = process.env
+const fetchActiveWalletIndividualUrl = `${REACT_APP_BASE_URL}/report/individual-active-wallets`
+const fetchActiveWalletGroupUrl = `${REACT_APP_BASE_URL}/report/group-active-wallets`
 
 export interface ActiveWalletRequest {
-  date: string;
-  branches?: Array<string>;
-  loanOfficerIds?: Array<string>;
+  date: string
+  branches?: Array<string>
+  loanOfficerIds?: Array<string>
 }
 
 export interface ActiveWalletIndividualResponse {
   response: {
-    branchName: string;
-    totalLoanCount: number;
-    totalPrincipal: number;
-    customersCount: number;
-    totalCreditInstallmentCount: number;
-    totalCreditInstallmentAmount: number;
-    totalLateInstallmentCount: number;
-    totalLateInstallmentAmount: number;
+    branchName: string
+    totalLoanCount: number
+    totalPrincipal: number
+    customersCount: number
+    totalCreditInstallmentCount: number
+    totalCreditInstallmentAmount: number
+    totalLateInstallmentCount: number
+    totalLateInstallmentAmount: number
     officers: {
-      officerName: string;
-      customersCount: number;
-      totalCreditInstallmentAmount: number;
-      totalCreditInstallmentCount: number;
-      totalLateInstallmentAmount: number;
-      totalLateInstallmentCount: number;
-      totalLoanCount: number;
-      totalPrincipal: number;
+      officerName: string
+      customersCount: number
+      totalCreditInstallmentAmount: number
+      totalCreditInstallmentCount: number
+      totalLateInstallmentAmount: number
+      totalLateInstallmentCount: number
+      totalLoanCount: number
+      totalPrincipal: number
       areas: {
-        areaName: string;
-        customersCount: string;
-        totalCreditInstallmentAmount: number;
-        totalCreditInstallmentCount: number;
-        totalLateInstallmentAmount: number;
-        totalLateInstallmentCount: number;
-        totalLoanCount: number;
-        totalPrincipal: number;
+        areaName: string
+        customersCount: string
+        totalCreditInstallmentAmount: number
+        totalCreditInstallmentCount: number
+        totalLateInstallmentAmount: number
+        totalLateInstallmentCount: number
+        totalLoanCount: number
+        totalPrincipal: number
         data: {
-          phoneNumber: string;
-          homePhoneNumber: string;
-          workArea: string;
-          address: string;
-          activity: string;
-          creditAmount: number;
-          creditCount: number;
-          firstLateDate: string;
-          latestPaymentDate: string;
-          lateAmount: number;
-          lateCount: number;
-          principal: number;
-          loanDate: string;
-          customerName: string;
-          customerCode: number;
-          sector: string;
-        }[];
-      }[];
-    }[];
-  }[];
+          phoneNumber: string
+          homePhoneNumber: string
+          workArea: string
+          address: string
+          activity: string
+          creditAmount: number
+          creditCount: number
+          firstLateDate: string
+          latestPaymentDate: string
+          lateAmount: number
+          lateCount: number
+          principal: number
+          loanDate: string
+          customerName: string
+          customerCode: number
+          sector: string
+        }[]
+      }[]
+    }[]
+  }[]
 }
 export interface ActiveWalletGroupResponse {
   response: {
-    totalGroups: number;
-    totalPrincipal: number;
-    membersCount: number;
-    creditLoanCount: number;
-    creditLoanPrincipal: number;
-    latePaymentsCount: number;
-    latePaymentsAmount: number;
-    branchName: string;
+    totalGroups: number
+    totalPrincipal: number
+    membersCount: number
+    creditLoanCount: number
+    creditLoanPrincipal: number
+    latePaymentsCount: number
+    latePaymentsAmount: number
+    branchName: string
     officers: {
-      loanOfficerName: string;
-      totalGroups: number;
-      totalPrincipal: number;
-      membersCount: number;
-      creditLoanCount: number;
-      creditLoanPrincipal: number;
-      latePaymentsCount: number;
-      latePaymentsAmount: number;
+      loanOfficerName: string
+      totalGroups: number
+      totalPrincipal: number
+      membersCount: number
+      creditLoanCount: number
+      creditLoanPrincipal: number
+      latePaymentsCount: number
+      latePaymentsAmount: number
       areas: {
-        areaName: string;
-        totalGroups: number;
-        totalPrincipal: number;
-        membersCount: number;
-        creditLoanCount: number;
-        creditLoanPrincipal: number;
-        latePaymentsCount: number;
-        latePaymentsAmount: number;
+        areaName: string
+        totalGroups: number
+        totalPrincipal: number
+        membersCount: number
+        creditLoanCount: number
+        creditLoanPrincipal: number
+        latePaymentsCount: number
+        latePaymentsAmount: number
         groups: {
-          leaderName: string;
-          issueDate: string;
-          installmentsCount: number;
-          principal: number;
-          creditCount: number;
-          creditAmount: number;
-          lateCount: number;
-          lateAmount: number;
-          latestPaymentDate: string;
-          lateDate: string;
+          leaderName: string
+          issueDate: string
+          installmentsCount: number
+          principal: number
+          creditCount: number
+          creditAmount: number
+          lateCount: number
+          lateAmount: number
+          latestPaymentDate: string
+          lateDate: string
           members: {
-            customerCode: string;
-            customerName: string;
-            businessActivity: string;
-            principal: number;
-            address: string;
-            type: string;
-            phoneNumber: string;
-            homePhoneNumber: string;
-            businessSector: string;
-          }[];
-        }[];
-      }[];
-    }[];
-  }[];
+            customerCode: string
+            customerName: string
+            businessActivity: string
+            principal: number
+            address: string
+            type: string
+            phoneNumber: string
+            homePhoneNumber: string
+            businessSector: string
+          }[]
+        }[]
+      }[]
+    }[]
+  }[]
 }
 // TODO: move out to common file
 export interface ApiResponse<T> {
-  status: "success" | "error";
-  body?: T;
-  error?: unknown;
+  status: 'success' | 'error'
+  body?: T
+  error?: unknown
 }
 
 export const fetchActiveWalletIndividualReport = async (
@@ -130,12 +130,12 @@ export const fetchActiveWalletIndividualReport = async (
     const res: AxiosResponse<ActiveWalletIndividualResponse> = await axios.post(
       fetchActiveWalletIndividualUrl,
       request
-    );
-    return { status: "success", body: res.data };
+    )
+    return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: "error", error: error.response.data };
+    return { status: 'error', error: error.response.data }
   }
-};
+}
 export const fetchActiveWalletGroupReport = async (
   request: ActiveWalletRequest
 ): Promise<ApiResponse<ActiveWalletGroupResponse>> => {
@@ -143,9 +143,9 @@ export const fetchActiveWalletGroupReport = async (
     const res: AxiosResponse<ActiveWalletGroupResponse> = await axios.post(
       fetchActiveWalletGroupUrl,
       request
-    );
-    return { status: "success", body: res.data };
+    )
+    return { status: 'success', body: res.data }
   } catch (error) {
-    return { status: "error", error: error.response.data };
+    return { status: 'error', error: error.response.data }
   }
-};
+}

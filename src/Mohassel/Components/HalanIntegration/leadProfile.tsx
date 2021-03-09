@@ -1,40 +1,49 @@
-import React, { useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import Card from 'react-bootstrap/Card';
-import Table from 'react-bootstrap/Table';
-import { timeToDateyyymmdd } from '../../../Shared/Services/utils';
+import React, { useState } from 'react'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Card from 'react-bootstrap/Card'
+import Table from 'react-bootstrap/Table'
+import { timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
-import BackButton from '../BackButton/back-button';
-import * as local from '../../../Shared/Assets/ar.json';
-import { Lead } from './leadInterface';
+import BackButton from '../BackButton/back-button'
+import * as local from '../../../Shared/Assets/ar.json'
+import { Lead } from './leadInterface'
 
 const tabs: Array<Tab> = [
   {
     header: local.mainInfo,
-    stringKey: 'mainInfo'
+    stringKey: 'mainInfo',
   },
   {
     header: local.workInfo,
-    stringKey: 'workInfo'
+    stringKey: 'workInfo',
   },
 ]
-const LeadProfile = (props: RouteComponentProps<{}, {}, { leadDetails: Lead }>) => {
-  const [activeTab, changeActiveTab] = useState('mainInfo');
-  const leadDetails = props.location.state.leadDetails;
+const LeadProfile = (
+  props: RouteComponentProps<{}, {}, { leadDetails: Lead }>
+) => {
+  const [activeTab, changeActiveTab] = useState('mainInfo')
+  const { leadDetails } = props.location.state
   function getPeriod(maxDate: number) {
-    if(maxDate < 6) {
-      return `${local.lessThan} 6 ${local.months}`;
-    } else if(maxDate > 12){
-      return `${local.moreThan} 1 ${local.year}`;
-    } else return `${local.from} ${leadDetails.minBusinessDate} ${local.to} ${leadDetails.maxBusinessDate} ${local.months}`
+    if (maxDate < 6) {
+      return `${local.lessThan} 6 ${local.months}`
+    }
+    if (maxDate > 12) {
+      return `${local.moreThan} 1 ${local.year}`
+    }
+    return `${local.from} ${leadDetails.minBusinessDate} ${local.to} ${leadDetails.maxBusinessDate} ${local.months}`
   }
   function getSector(businessSector) {
-    switch(businessSector) {
-      case '1': return local.industrialProjects;
-      case '2': return local.commercialProjects;
-      case '3': return local.agriculturalProjects;
-      case '4': return local.serviceProjects;
-      default: return '';
+    switch (businessSector) {
+      case '1':
+        return local.industrialProjects
+      case '2':
+        return local.commercialProjects
+      case '3':
+        return local.agriculturalProjects
+      case '4':
+        return local.serviceProjects
+      default:
+        return ''
     }
   }
   return (
@@ -44,60 +53,80 @@ const LeadProfile = (props: RouteComponentProps<{}, {}, { leadDetails: Lead }>) 
       </div>
       <Card style={{ marginTop: 10 }} className="print-none">
         <CardNavBar
-          header={'here'}
+          header="here"
           array={tabs}
           active={activeTab}
           selectTab={(stringKey: string) => changeActiveTab(stringKey)}
         />
         <Card.Body>
-          {activeTab === 'mainInfo' && <Table striped bordered style={{ textAlign: 'right' }} className="horizontal-table">
-            <tbody>
-              <tr>
-                <td>{local.name}</td>
-                <td>{leadDetails.customerName}</td>
-              </tr>
-              <tr>
-                <td>{local.age}</td>
-                <td>{`${local.from} ${leadDetails.minAge? leadDetails.minAge : 1} ${local.to} ${leadDetails.maxAge} ${local.year}` }</td>
-              </tr>
-              <tr>
-                <td>{local.mobilePhoneNumber}</td>
-                <td>{leadDetails.phoneNumber}</td>
-              </tr>
-              <tr>
-                <td>{local.nationalId}</td>
-                <td>{leadDetails.customerNationalId}</td>
-              </tr>
-              <tr>
-                <td>{local.creationDate}</td>
-                <td>{timeToDateyyymmdd(leadDetails.createdAt)}</td>
-              </tr>
-            </tbody>
-          </Table>}
-          {activeTab === 'workInfo' && <Table striped bordered style={{ textAlign: 'right' }} className="horizontal-table">
-            <tbody>
-              <tr>
-                <td>{local.businessSector}</td>
-                <td>{getSector(leadDetails.businessSector)}</td>
-              </tr>
-              <tr>
-                <td>{local.activityPeriod}</td>
-                <td>{getPeriod(leadDetails.maxBusinessDate)}</td>
-              </tr>
-              <tr>
-                <td>{local.businessAddress}</td>
-                <td>{`${leadDetails.businessStreet? leadDetails.businessStreet : ''}, ${leadDetails.businessArea}, ${leadDetails.businessCity}, ${leadDetails.businessGovernate}`}</td>
-              </tr>
-              <tr>
-                <td>{local.addressDescription}</td>
-                <td>{leadDetails.businessAddressDescription}</td>
-              </tr>
-            </tbody>
-          </Table>}
+          {activeTab === 'mainInfo' && (
+            <Table
+              striped
+              bordered
+              style={{ textAlign: 'right' }}
+              className="horizontal-table"
+            >
+              <tbody>
+                <tr>
+                  <td>{local.name}</td>
+                  <td>{leadDetails.customerName}</td>
+                </tr>
+                <tr>
+                  <td>{local.age}</td>
+                  <td>{`${local.from} ${
+                    leadDetails.minAge ? leadDetails.minAge : 1
+                  } ${local.to} ${leadDetails.maxAge} ${local.year}`}</td>
+                </tr>
+                <tr>
+                  <td>{local.mobilePhoneNumber}</td>
+                  <td>{leadDetails.phoneNumber}</td>
+                </tr>
+                <tr>
+                  <td>{local.nationalId}</td>
+                  <td>{leadDetails.customerNationalId}</td>
+                </tr>
+                <tr>
+                  <td>{local.creationDate}</td>
+                  <td>{timeToDateyyymmdd(leadDetails.createdAt)}</td>
+                </tr>
+              </tbody>
+            </Table>
+          )}
+          {activeTab === 'workInfo' && (
+            <Table
+              striped
+              bordered
+              style={{ textAlign: 'right' }}
+              className="horizontal-table"
+            >
+              <tbody>
+                <tr>
+                  <td>{local.businessSector}</td>
+                  <td>{getSector(leadDetails.businessSector)}</td>
+                </tr>
+                <tr>
+                  <td>{local.activityPeriod}</td>
+                  <td>{getPeriod(leadDetails.maxBusinessDate)}</td>
+                </tr>
+                <tr>
+                  <td>{local.businessAddress}</td>
+                  <td>{`${
+                    leadDetails.businessStreet ? leadDetails.businessStreet : ''
+                  }, ${leadDetails.businessArea}, ${
+                    leadDetails.businessCity
+                  }, ${leadDetails.businessGovernate}`}</td>
+                </tr>
+                <tr>
+                  <td>{local.addressDescription}</td>
+                  <td>{leadDetails.businessAddressDescription}</td>
+                </tr>
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
       </Card>
     </>
   )
 }
 
-export default withRouter(LeadProfile);
+export default withRouter(LeadProfile)

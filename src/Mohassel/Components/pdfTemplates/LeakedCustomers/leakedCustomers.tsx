@@ -1,12 +1,12 @@
-import React from "react";
-import { timeToArabicDate } from "../../../../Shared/Services/utils";
-import { LeakedCustomersReportResponse } from "../../../Services/interfaces";
-import "./leakedCustomers.scss";
+import React from 'react'
+import { timeToArabicDate } from '../../../../Shared/Services/utils'
+import { LeakedCustomersReportResponse } from '../../../Services/interfaces'
+import './leakedCustomers.scss'
 
 type Props = {
-  data: LeakedCustomersReportResponse;
-  fromDate: string;
-  toDate: string;
+  data: LeakedCustomersReportResponse
+  fromDate: string
+  toDate: string
 }
 
 const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
@@ -19,11 +19,17 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
           <table key={index}>
             <thead>
               <tr>
-                <th colSpan={4} className="noborder">شركة تساهيل للتمويل متناهي الصغر</th>
-                <th colSpan={9} className="noborder">
-                  العملاء المتسربون عن الفتره من  {timeToArabicDate(from, false)} الي {timeToArabicDate(to, false)}
+                <th colSpan={4} className="noborder">
+                  شركة تساهيل للتمويل متناهي الصغر
                 </th>
-                <th colSpan={2} className="noborder"> فرع: {branchCustomers.branchName}</th>
+                <th colSpan={9} className="noborder">
+                  العملاء المتسربون عن الفتره من {timeToArabicDate(from, false)}{' '}
+                  الي {timeToArabicDate(to, false)}
+                </th>
+                <th colSpan={2} className="noborder">
+                  {' '}
+                  فرع: {branchCustomers.branchName}
+                </th>
               </tr>
               <tr>
                 <th>م</th>
@@ -43,10 +49,10 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
               </tr>
             </thead>
             <tbody>
-              {branchCustomers.data.map((customer, index) => {
+              {branchCustomers.data.map((customer, customerIndex) => {
                 return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
+                  <tr key={customerIndex}>
+                    <td>{customerIndex + 1}</td>
                     <td>{customer.customerCode}</td>
                     <td>{customer.customerName}</td>
                     <td>{customer.beneficiaryType}</td>
@@ -67,10 +73,9 @@ const LeakedCustomersPDF = ({ data, fromDate, toDate }: Props) => {
             </tbody>
           </table>
         )
-      })
-      }
+      })}
     </div>
   )
 }
 
-export default LeakedCustomersPDF;
+export default LeakedCustomersPDF

@@ -1,163 +1,254 @@
-import React, { Component } from "react";
+import React, { Component } from 'react'
+import { Formik } from 'formik'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
+import Swal from 'sweetalert2'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
+import Select from 'react-select'
+import Card from 'react-bootstrap/Card'
+import Container from 'react-bootstrap/Container'
+import { theme } from '../../../theme'
 import {
+  getRoles,
   getPermissions,
   createRole,
   editRole,
-} from "../../Services/APIs/Roles/roles";
-import { Loader } from "../../../Shared/Components/Loader";
-import { step1, roleCreationStep1Validation } from "./roleStates";
-import Wizard from "../wizard/Wizard";
-import * as local from "../../../Shared/Assets/ar.json";
-import RoleTable from "./roleTable";
-import { Formik } from "formik";
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import Swal from "sweetalert2";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import Select from "react-select";
-import { theme } from "../../../theme";
-import { getRoles } from "../../Services/APIs/Roles/roles";
-import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
-import { customFilterOption, getErrorMessage } from '../../../Shared/Services/utils';
-import { Role } from "../userDetails/userDetailsInterfaces";
+} from '../../Services/APIs/Roles/roles'
+import { Loader } from '../../../Shared/Components/Loader'
+import { step1, roleCreationStep1Validation } from './roleStates'
+import Wizard from '../wizard/Wizard'
+import * as local from '../../../Shared/Assets/ar.json'
+import RoleTable from './roleTable'
+
+import {
+  customFilterOption,
+  getErrorMessage,
+} from '../../../Shared/Services/utils'
+import { Role } from '../userDetails/userDetailsInterfaces'
+
 export interface Section {
-  _id: string;
-  key: string;
-  i18n: any;
-  actions: Array<any>;
+  _id: string
+  key: string
+  i18n: any
+  actions: Array<any>
 }
 interface Props extends RouteComponentProps<{}, {}, Role> {
-  edit: boolean;
-  application: any;
-  test: boolean;
+  edit: boolean
+  application: any
+  test: boolean
 }
 interface State {
-  step: number;
+  step: number
   step1: {
-    roleName: string;
-    hQpermission: boolean;
-    managerRole?: string;
-  };
+    roleName: string
+    hQpermission: boolean
+    managerRole?: string
+  }
 
-  sections: Array<Section>;
-  permissions: Array<any>;
-  managerRolesList: Array<any>;
-  loading: boolean;
+  sections: Array<Section>
+  permissions: Array<any>
+  managerRolesList: Array<any>
+  loading: boolean
 }
 class RoleCreation extends Component<Props, State> {
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
       step: 1,
-      step1: step1,
+      step1,
       sections: [],
       permissions: [],
       managerRolesList: [],
       loading: false,
-    };
+    }
   }
+
   componentDidMount() {
     if (this.props.edit) {
-      const role = { ...this.props.location.state };
-      const step1Edit = { ...this.state.step1 };
-      step1Edit.roleName = role.roleName;
-      step1Edit.hQpermission = !role.hasBranch;
-      step1Edit.managerRole = role.managerRole;
-      this.getEditPermissions(role.hasBranch);
+      const role = { ...this.props.location.state }
+      const { roleName, hasBranch, managerRole } = role
+      this.getEditPermissions(role.hasBranch)
       this.setState({
-        step1: step1Edit,
-      });
+        step1: { roleName, hQpermission: !hasBranch, managerRole },
+      })
     }
-    this.getRolesForManager();
+    this.getRolesForManager()
   }
+
   async getPermissions() {
-    this.setState({ loading: true });
-    const id = this.state.step1.hQpermission ? "hq" : "branch";
-    const res = await getPermissions(id);
-    if (res.status === "success") {
-      const sections = res.body.actions;
+    this.setState({ loading: true })
+    const id = this.state.step1.hQpermission ? 'hq' : 'branch'
+    const res = await getPermissions(id)
+    if (res.status === 'success') {
+      const sections = res.body.actions
       this.setState({
         loading: false,
         sections,
-      });
+      })
     } else {
-      this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
     }
   }
+
   async getRolesForManager() {
-    this.setState({ loading: true });
-    const res = await getRoles();
-    if (res.status === "success") {
+    this.setState({ loading: true })
+    const res = await getRoles()
+    if (res.status === 'success') {
       this.setState({
         managerRolesList: this.prepareManagerRolesOptions(res.body.roles),
         loading: false,
-      });
+      })
     } else {
-      this.setState({ loading: false },()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
     }
   }
-  prepareManagerRolesOptions(roles: Array<any>) {
-    const managerRoles: any[] = [];
-    roles.forEach((role) => {
-      managerRoles.push({
-        label: role.roleName,
-        value: role._id,
-      });
-    });
-    return managerRoles;
-  }
+
   async getEditPermissions(hasbranch) {
-    this.setState({ loading: true });
-    const id = !hasbranch ? "hq" : "branch";
-    const res = await getPermissions(id);
-    if (res.status === "success") {
-      const sections = res.body.actions;
-      const rolePermissionsArray = [];
-      const rolePermissions = this.props.location.state.permissions || {};
+    this.setState({ loading: true })
+    const id = !hasbranch ? 'hq' : 'branch'
+    const res = await getPermissions(id)
+    if (res.status === 'success') {
+      const sections = res.body.actions
+      const rolePermissionsArray = []
+      const rolePermissions = this.props.history.location.state.permissions
+        ? this.props.history.location.state.permissions
+        : {}
       Object.keys(rolePermissions).forEach((roleSection) => {
         const sectionObject = sections.find(
           (section) => section.key === roleSection
-        );
+        )
         sectionObject &&
-          sectionObject.actions.map((action, i) => {
-            const keyArray = Object.keys(action);
-            const i18nI = keyArray.indexOf("i18n");
-            keyArray.splice(i18nI, 1);
+          sectionObject.actions.map((action) => {
+            const keyArray = Object.keys(action)
+            const i18nI = keyArray.indexOf('i18n')
+            keyArray.splice(i18nI, 1)
             keyArray.map((key) => {
-              const value = action[key];
-              if ((BigInt(rolePermissions[roleSection]) & BigInt(value)).toString() === BigInt(value).toString()) {
+              const value = action[key]
+              if (
+                (
+                  BigInt(rolePermissions[roleSection]) & BigInt(value)
+                ).toString() === BigInt(value).toString()
+              ) {
                 if (!Object.keys(rolePermissionsArray).includes(roleSection)) {
-                  rolePermissionsArray[roleSection] = [];
+                  rolePermissionsArray[roleSection] = []
                 }
                 if (!rolePermissionsArray[roleSection].includes(value)) {
-                  rolePermissionsArray[roleSection].push(value);
+                  rolePermissionsArray[roleSection].push(value)
                 }
               }
-            });
-          });
-      });
+            })
+          })
+      })
       this.setState({
         loading: false,
         sections,
         permissions: rolePermissionsArray,
-      });
+      })
     } else {
-      this.setState({ loading: false }, ()=> Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
     }
   }
-  renderSteps() {
-    switch (this.state.step) {
-      case 1:
-        return this.renderStepOne();
-      case 2:
-        return this.renderStepTwo();
-      default:
-        return null;
+
+  submitToStep2 = (values: object) => {
+    this.setState(
+      (prevState) =>
+        ({
+          [`step${prevState.step}`]: values,
+          step: prevState.step + 1,
+        } as any),
+      () => {
+        if (this.state.step === 2 && !this.props.edit) this.getPermissions()
+      }
+    )
+  }
+
+  async submit() {
+    const perms: Array<any> = []
+    if (
+      this.state.permissions &&
+      Object.keys(this.state.permissions).length > 0
+    ) {
+      if (!this.props.edit) {
+        this.setState({ loading: true })
+        Object.keys(this.state.permissions).forEach((key) =>
+          perms.push({ key, value: this.state.permissions[key] })
+        )
+        const obj = {
+          roleName: this.state.step1.roleName,
+          hasBranch: !this.state.step1.hQpermission,
+          managerRole: this.state.step1.managerRole,
+          permissions: perms,
+        }
+        const res = await createRole(obj)
+        if (res.status === 'success') {
+          this.setState({ loading: false })
+          Swal.fire('success', local.userRoleCreated).then(() => {
+            this.props.history.push('/manage-accounts')
+          })
+        } else {
+          this.setState({ loading: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      } else {
+        this.setState({ loading: true })
+        Object.keys(this.state.permissions).forEach((key) =>
+          perms.push({ key, value: this.state.permissions[key] })
+        )
+        const obj = {
+          id: this.props.history.location.state._id,
+          permissions: perms,
+        }
+        const res = await editRole(obj)
+        if (res.status === 'success') {
+          this.setState({ loading: false })
+          Swal.fire('success', local.userRoleEdited).then(() => {
+            this.props.history.push('/manage-accounts')
+          })
+        } else {
+          this.setState({ loading: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      }
+    } else {
+      Swal.fire('warning', local.mustSelectPermissions, 'warning')
     }
   }
+
+  prepareManagerRolesOptions(roles: Array<any>) {
+    const managerRoles: any[] = []
+    roles.forEach((role) => {
+      managerRoles.push({
+        label: role.roleName,
+        value: role._id,
+      })
+    })
+    return managerRoles
+  }
+
+  previousStep(step: number): void {
+    this.setState({
+      step: step - 1,
+    } as State)
+  }
+
+  cancel(): void {
+    this.setState({
+      step: 1,
+      step1,
+    })
+    this.props.history.push('/manage-accounts')
+  }
+
   renderStepOne(): any {
     return (
       <Formik
@@ -186,7 +277,7 @@ class RoleCreation extends Component<Props, State> {
                     Boolean(formikProps.touched.roleName)
                   }
                   disabled={this.props.edit}
-                ></Form.Control>
+                />
                 <Form.Control.Feedback type="invalid">
                   {formikProps.errors.roleName}
                 </Form.Control.Feedback>
@@ -200,7 +291,7 @@ class RoleCreation extends Component<Props, State> {
                   type="checkbox"
                   name="hQpermission"
                   data-qc="hQpermission"
-                  style={{ marginRight: "20px" }}
+                  style={{ marginRight: '20px' }}
                   value={formikProps.values.hQpermission.toString()}
                   checked={formikProps.values.hQpermission}
                   onBlur={formikProps.handleBlur}
@@ -214,32 +305,29 @@ class RoleCreation extends Component<Props, State> {
                 <Form.Control.Feedback type="invalid">
                   {formikProps.errors.hQpermission}
                 </Form.Control.Feedback>
-                <Form.Label style={{ textAlign: "right" }}>
+                <Form.Label style={{ textAlign: 'right' }}>
                   {local.hQpermission}
                 </Form.Label>
               </Form.Group>
-              <Form.Group
-                controlId="managerRole"
-                className="mb-4"
-              >
-                <Form.Label className={"data-label"}>
+              <Form.Group controlId="managerRole" className="mb-4">
+                <Form.Label className="data-label">
                   {local.selectManagerRole}
                 </Form.Label>
                 <Select
-									styles={theme.selectStyleWithBorder}
-									theme={theme.selectTheme}
-                  isSearchable={true}
+                  styles={theme.selectStyleWithBorder}
+                  theme={theme.selectTheme}
+                  isSearchable
                   filterOption={customFilterOption}
                   isDisabled={this.props.edit}
                   placeholder={
                     <span
-                      style={{ width: "100%", padding: "5px", margin: "5px" }}
+                      style={{ width: '100%', padding: '5px', margin: '5px' }}
                     >
                       <img
-                        style={{ float: "right" }}
+                        style={{ float: 'right' }}
                         alt="search-icon"
-                        src={require("../../Assets/searchIcon.svg")}
-                      />{" "}
+                        src={require('../../Assets/searchIcon.svg')}
+                      />{' '}
                       {local.searchByUserRole}
                     </span>
                   }
@@ -248,25 +336,22 @@ class RoleCreation extends Component<Props, State> {
                   )}
                   name="mangerRole"
                   data-qc="managerRole"
-                  onChange={(e) => {
-                    formikProps.values.managerRole = e.value;
-                  }}
                   options={this.state.managerRolesList}
                 />
               </Form.Group>
-							<div className="d-flex justify-content-between py-4">
+              <div className="d-flex justify-content-between py-4">
                 <Button
-									variant="secondary"
-									className="w-25"
+                  variant="secondary"
+                  className="w-25"
                   onClick={() => {
-                    this.cancel();
+                    this.cancel()
                   }}
                 >
                   {local.cancel}
                 </Button>
                 <Button
-									variant="primary"
-									className="w-25"
+                  variant="primary"
+                  className="w-25"
                   type="submit"
                   data-qc="next"
                 >
@@ -277,30 +362,31 @@ class RoleCreation extends Component<Props, State> {
           </Form>
         )}
       </Formik>
-    );
+    )
   }
+
   renderStepTwo(): any {
     return (
-      <div style={{ backgroundColor: "#fafafa" }}>
+      <div style={{ backgroundColor: '#fafafa' }}>
         <>
           <RoleTable
             sections={this.state.sections}
             permissions={this.state.permissions}
             updatePerms={(perms) => {
-              this.setState({ permissions: perms });
+              this.setState({ permissions: perms })
             }}
           />
           <Row className="justify-content-around">
             <Button
-              style={{ width: "20%" }}
+              style={{ width: '20%' }}
               onClick={() => {
-                this.previousStep(2);
+                this.previousStep(2)
               }}
             >
               {local.previous}
             </Button>
             <Button
-              style={{ float: "left", width: "20%" }}
+              style={{ float: 'left', width: '20%' }}
               type="button"
               onClick={() => this.submit()}
               data-qc="next"
@@ -310,93 +396,31 @@ class RoleCreation extends Component<Props, State> {
           </Row>
         </>
       </div>
-    );
+    )
   }
-  async submit() {
-    const perms: Array<any> = [];
-    if (
-      this.state.permissions &&
-      Object.keys(this.state.permissions).length > 0
-    ) {
-      if (!this.props.edit) {
-        this.setState({ loading: true });
-        Object.keys(this.state.permissions).forEach((key) =>
-          perms.push({ key: key, value: this.state.permissions[key] })
-        );
-        const obj = {
-          roleName: this.state.step1.roleName,
-          hasBranch: !this.state.step1.hQpermission,
-          managerRole: this.state.step1.managerRole,
-          permissions: perms,
-        };
-        const res = await createRole(obj);
-        if (res.status === "success") {
-          this.setState({ loading: false });
-          Swal.fire("success", local.userRoleCreated).then(() => {
-            this.props.history.push("/manage-accounts");
-          });
-        } else {
-          this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
-        }
-      } else {
-        this.setState({ loading: true });
-        Object.keys(this.state.permissions).forEach((key) =>
-          perms.push({ key: key, value: this.state.permissions[key] })
-        );
-        const obj = {
-          id: this.props.history.location.state._id,
-          permissions: perms,
-        };
-        const res = await editRole(obj);
-        if (res.status === "success") {
-          this.setState({ loading: false });
-          Swal.fire("success", local.userRoleEdited).then(() => {
-            this.props.history.push("/manage-accounts");
-          });
-        } else {
-          this.setState({ loading: false }, () => Swal.fire('Error !', getErrorMessage(res.error.error), 'error'));
-        }
-      }
-    } else {
-      Swal.fire("warning", local.mustSelectPermissions, "warning");
+
+  renderSteps() {
+    switch (this.state.step) {
+      case 1:
+        return this.renderStepOne()
+      case 2:
+        return this.renderStepTwo()
+      default:
+        return null
     }
   }
-  submitToStep2 = (values: object) => {
-    this.setState(
-      {
-        [`step${this.state.step}`]: values,
-        step: this.state.step + 1,
-      } as any,
-      () => {
-        if (this.state.step === 2 && !this.props.edit) {
-          this.getPermissions();
-        }
-      }
-    );
-  };
-  previousStep(step: number): void {
-    this.setState({
-      step: step - 1,
-    } as State);
-  }
-  cancel(): void {
-    this.setState({
-      step: 1,
-      step1,
-    });
-    this.props.history.push("/manage-accounts");
-  }
+
   render() {
     return (
       <>
         <Loader type="fullscreen" open={this.state.loading} />
-        <Container style={{ height: "fit-content" }}>
+        <Container style={{ height: 'fit-content' }}>
           <Card>
             <div
               style={{
-                display: "flex",
-                flexDirection: "row",
-                textAlign: "right",
+                display: 'flex',
+                flexDirection: 'row',
+                textAlign: 'right',
               }}
             >
               <Wizard
@@ -408,7 +432,7 @@ class RoleCreation extends Component<Props, State> {
           </Card>
         </Container>
       </>
-    );
+    )
   }
 }
-export default withRouter(RoleCreation);
+export default withRouter(RoleCreation)
