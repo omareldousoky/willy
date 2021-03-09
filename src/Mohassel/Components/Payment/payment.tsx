@@ -429,10 +429,11 @@ class Payment extends Component<Props, State> {
           payerId: values.payerId,
           payerName: values.payerName,
           payerNationalId: values.payerNationalId.toString(),
-        }
-        if (values.installmentNumber !== -1) {
-          obj.installmentNumber = Number(values.installmentNumber)
-          obj.futurePayment = true
+          installmentNumber:
+            values.installmentNumber !== -1
+              ? Number(values.installmentNumber)
+              : undefined,
+          futurePayment: values.installmentNumber !== -1 || undefined,
         }
         const res = await manualPayment(obj)
         if (res.status === 'success') {
@@ -455,10 +456,11 @@ class Payment extends Component<Props, State> {
           payerId: values.payerId,
           payerName: values.payerName,
           payerNationalId: values.payerNationalId.toString(),
-        }
-        if (values.installmentNumber !== -1) {
-          obj.installmentNumber = Number(values.installmentNumber)
-          obj.futurePayment = true
+          installmentNumber:
+            values.installmentNumber !== -1
+              ? Number(values.installmentNumber)
+              : undefined,
+          futurePayment: values.installmentNumber !== -1 || undefined,
         }
         const res = await editManualPayment(obj)
         if (res.status === 'success') {

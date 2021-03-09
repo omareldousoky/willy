@@ -48,7 +48,7 @@ interface State {
   manageLoansTabs: any[]
 }
 
-class CIB extends Component<Props, State> {
+class CIB extends Component<{}, State> {
   mappers: {
     title: string | ReactNode
     key: string
@@ -56,7 +56,7 @@ class CIB extends Component<Props, State> {
     render: (data: any) => ReactNode
   }[]
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props)
     this.state = {
       size: 10,

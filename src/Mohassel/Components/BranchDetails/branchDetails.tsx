@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux'
 import Swal from 'sweetalert2'
@@ -24,8 +24,7 @@ import {
 import ManagerProfile from '../managerHierarchy/managersView'
 import SupervisionsProfile from '../managerHierarchy/supervisionsProfile'
 
-interface Props {
-  history: any
+interface Props extends RouteComponentProps<{}, {}, { details: string }> {
   getBranchById: typeof getBranchById
   loading: boolean
   step: number
@@ -148,7 +147,7 @@ class BranchDetails extends Component<Props, State> {
   }
 
   async getBranch() {
-    const _id = this.props.history.location.state.details
+    const _id = this.props.location.state.details
     const products = await this.getProductsByBranch(_id)
     await this.props.getBranchById(_id)
     if (this.props.branch.status === 'success') {

@@ -8,13 +8,14 @@ import local from '../../Assets/ar.json'
 interface Props {
   photoObject?: {
     photoURL: string
-    photoFile: File
+    photoFile?: File
   }
   view?: boolean
   handleImageChange?: any
   name: string
   handleBlur?: any
   handleChange?: any
+  edit?: boolean
 }
 interface State {
   dragging: boolean

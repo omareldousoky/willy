@@ -258,7 +258,7 @@ export const CreateClearanceForm = (props: Props) => {
               data-qc="receiptPhoto"
               name="receiptPhoto"
               photoObject={{
-                photoURL: props.values.receiptPhotoURL,
+                photoURL: props.values.receiptPhotoURL || '',
                 photoFile: props.values.receiptPhoto,
               }}
               edit={props.edit}
@@ -286,7 +286,7 @@ export const CreateClearanceForm = (props: Props) => {
               edit={props.edit}
               view={props.review}
               photoObject={{
-                photoURL: props.values.documentPhotoURL,
+                photoURL: props.values.documentPhotoURL || '',
                 photoFile: props.values.documentPhoto,
               }}
               handleImageChange={handleDocumentPhotoChange}
