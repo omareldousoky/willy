@@ -132,6 +132,7 @@ class PayInstallment extends Component<Props, State> {
 
   componentDidUpdate(prevProps) {
     if (prevProps.penaltyAction !== this.props.penaltyAction)
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ penaltyAction: prevProps.penaltyAction })
   }
 

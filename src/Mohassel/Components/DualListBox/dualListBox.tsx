@@ -77,6 +77,7 @@ class DualBox extends Component<Props, State> {
   // TODO:lint: check
   componentDidUpdate(prevProps) {
     if (this.props.filterKey !== prevProps.filterKey) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ filterKey: this.props.filterKey })
     }
   }

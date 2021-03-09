@@ -306,18 +306,18 @@ export interface MonthComparisonReportResponse
 }
 
 export enum LinkageStatusEnum {
-  Pending = "pending",
-  Linked = "linked",
-  Removed = "removed",
+  Pending = 'pending',
+  Linked = 'linked',
+  Removed = 'removed',
 }
 
 export interface CheckLinkageResponse {
-  status: LinkageStatusEnum;
-  phoneNumber: string;
+  status: LinkageStatusEnum
+  phoneNumber: string
 }
 
 export interface ConfirmLinkageRequest {
-  customerId: string;
-  phoneNumber: string;
-  customerKey: number;
+  customerId: string
+  phoneNumber: string
+  customerKey: number
 }

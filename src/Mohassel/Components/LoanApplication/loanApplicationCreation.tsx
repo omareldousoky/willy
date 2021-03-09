@@ -250,6 +250,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const results = await searchCustomer(obj)
     if (results.status === 'success') {
+      // eslint-disable-next-line react/no-access-state-in-setstate
       const defaultApp = { ...this.state.application }
       const defaultGuarantors = { ...defaultApp.guarantors }
       const defaultGuar = { ...defaultGuarantors[index] }
@@ -298,16 +299,12 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   async getOfficerName(id) {
     const res = await getLoanOfficer(id)
-    const defaultApplication = this.state.application
-    if (res.status === 'success') {
-      const { name } = res.body
-      defaultApplication.representativeName = name
-    } else {
-      defaultApplication.representativeName = id
-    }
-    this.setState({
-      application: defaultApplication,
-    })
+    this.setState((prevState) => ({
+      application: {
+        ...prevState.application,
+        representativeName: res.status === 'success' ? res.body.name : id,
+      },
+    }))
   }
 
   async getCustomerLimits(customers) {
@@ -340,10 +337,10 @@ class LoanApplicationCreation extends Component<Props, State> {
     const defaultApplication = this.state.application
     defaultApplication.beneficiaryType = type
     this.setState(
-      {
+      (prevState) => ({
         customerType: type,
-        application: defaultApplication,
-      },
+        application: { ...prevState.application, beneficiaryType: type },
+      }),
       () => {
         if (type === 'group') {
           this.getBusinessSectors()
@@ -448,6 +445,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     const application = await getApplication(id)
     if (application.status === 'success') {
       // TODO:lint: can't refactor
+      // eslint-disable-next-line react/no-access-state-in-setstate
       const formData = this.state.application
       if (application.body.product.beneficiaryType === 'group') {
         this.getBusinessSectors()
@@ -764,11 +762,15 @@ class LoanApplicationCreation extends Component<Props, State> {
       const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(
         element
       )
-      const defaultApplication = { ...this.state.application }
-      defaultApplication.guarantors = guarsArr
-      defaultApplication.productID = id
-      defaultApplication.guarantorIds = []
-      this.setState({ loading: false, application: defaultApplication })
+      this.setState((prevState) => ({
+        loading: false,
+        application: {
+          ...prevState.application,
+          guarantors: guarsArr,
+          productID: id,
+          guarantorIds: [],
+        },
+      }))
     } else {
       Swal.fire('error', getErrorMessage(selectedProduct.error.error), 'error')
       this.setState({ loading: false })
@@ -797,6 +799,7 @@ class LoanApplicationCreation extends Component<Props, State> {
           check.customers &&
           selectedCustomer.body.blocked.isBlocked !== true
         ) {
+          // eslint-disable-next-line react/no-access-state-in-setstate
           const defaultApplication = this.state.application
           defaultApplication.customerID = customer._id
           defaultApplication.customerTotalPrincipals = check.customers[0]
@@ -1011,103 +1014,89 @@ class LoanApplicationCreation extends Component<Props, State> {
       },
       guarantor: {},
     }
-    const defaultApplication = { ...this.state.application }
-    defaultApplication.guarantors.push(element)
-    this.setState({
-      application: defaultApplication,
-    })
+    this.setState(
+      (prevState) =>
+        ({
+          application: {
+            ...prevState.application,
+            guarantors: [...prevState.application.guarantors, element],
+          },
+        } as any)
+    )
   }
 
   populateLoanProduct(selectedProductDetails) {
-    const defaultApplication = this.state.application
     const defaultValues = this.setInitState().application
-    defaultApplication.calculationFormulaId =
-      selectedProductDetails.calculationFormula._id
-    defaultApplication.currency = selectedProductDetails.currency
-    defaultApplication.interest = selectedProductDetails.interest
-      ? selectedProductDetails.interest
-      : defaultValues.interest
-    defaultApplication.interestPeriod = selectedProductDetails.interestPeriod
-    defaultApplication.allowInterestAdjustment =
-      selectedProductDetails.allowInterestAdjustment
-    defaultApplication.inAdvanceFees = selectedProductDetails.inAdvanceFees
-      ? selectedProductDetails.inAdvanceFees
-      : defaultValues.inAdvanceFees
-    defaultApplication.inAdvanceFrom = selectedProductDetails.inAdvanceFrom
-    defaultApplication.inAdvanceType = selectedProductDetails.inAdvanceType
-    defaultApplication.periodLength = selectedProductDetails.periodLength
-      ? selectedProductDetails.periodLength
-      : defaultValues.periodLength
-    defaultApplication.periodType = selectedProductDetails.periodType
-    defaultApplication.gracePeriod = selectedProductDetails.gracePeriod
-      ? selectedProductDetails.gracePeriod
-      : defaultValues.gracePeriod
-    defaultApplication.pushPayment = selectedProductDetails.pushPayment
-      ? selectedProductDetails.pushPayment
-      : defaultValues.pushPayment
-    defaultApplication.noOfInstallments = selectedProductDetails.noOfInstallments
-      ? selectedProductDetails.noOfInstallments
-      : defaultValues.noOfInstallments
-    defaultApplication.applicationFee = selectedProductDetails.applicationFee
-      ? selectedProductDetails.applicationFee
-      : defaultValues.applicationFee
-    defaultApplication.individualApplicationFee = selectedProductDetails.individualApplicationFee
-      ? selectedProductDetails.individualApplicationFee
-      : defaultValues.individualApplicationFee
-    defaultApplication.applicationFeePercent = selectedProductDetails.applicationFeePercent
-      ? selectedProductDetails.applicationFeePercent
-      : defaultValues.applicationFeePercent
-    defaultApplication.applicationFeeType =
-      selectedProductDetails.applicationFeeType
-    defaultApplication.applicationFeePercentPerPerson = selectedProductDetails.applicationFeePercentPerPerson
-      ? selectedProductDetails.applicationFeePercentPerPerson
-      : defaultValues.applicationFeePercentPerPerson
-    defaultApplication.applicationFeePercentPerPersonType =
-      selectedProductDetails.applicationFeePercentPerPersonType
-    defaultApplication.representativeFees = selectedProductDetails.representativeFees
-      ? selectedProductDetails.representativeFees
-      : defaultValues.representativeFees
-    defaultApplication.allowRepresentativeFeesAdjustment =
-      selectedProductDetails.allowRepresentativeFeesAdjustment
-    defaultApplication.stamps = selectedProductDetails.stamps
-      ? selectedProductDetails.stamps
-      : defaultValues.stamps
-    defaultApplication.allowStampsAdjustment =
-      selectedProductDetails.allowStampsAdjustment
-    defaultApplication.adminFees = selectedProductDetails.adminFees
-      ? selectedProductDetails.adminFees
-      : defaultValues.adminFees
-    defaultApplication.allowAdminFeesAdjustment =
-      selectedProductDetails.allowAdminFeesAdjustment
-    defaultApplication.minPrincipal = selectedProductDetails.minPrincipal
-      ? selectedProductDetails.minPrincipal
-      : defaultValues.minPrincipal
-    defaultApplication.maxPrincipal = selectedProductDetails.maxPrincipal
-      ? selectedProductDetails.maxPrincipal
-      : defaultValues.maxPrincipal
-    defaultApplication.minInstallment = selectedProductDetails.minInstallment
-      ? selectedProductDetails.minInstallment
-      : defaultValues.minInstallment
-    defaultApplication.maxInstallment = selectedProductDetails.maxInstallment
-      ? selectedProductDetails.maxInstallment
-      : defaultValues.maxInstallment
-    defaultApplication.noOfGuarantors = selectedProductDetails.noOfGuarantors
-      ? selectedProductDetails.noOfGuarantors
-      : defaultValues.noOfGuarantors
-    defaultApplication.allowApplicationFeeAdjustment =
-      selectedProductDetails.allowApplicationFeeAdjustment
-    defaultApplication.beneficiaryType = selectedProductDetails.beneficiaryType
-    defaultApplication.branchManagerAndDate =
-      selectedProductDetails.branchManagerAndDate
-    defaultApplication.branchManagerId = ''
-    defaultApplication.managerVisitDate = ''
     if (
       selectedProductDetails.beneficiaryType === 'group' &&
       this.state.step === 1
     ) {
       this.searchCustomers()
     }
-    this.setState({ application: defaultApplication })
+    this.setState((prevState) => ({
+      application: {
+        ...prevState.application,
+        calculationFormulaId: selectedProductDetails.calculationFormula._id,
+        currency: selectedProductDetails.currency,
+        interest: selectedProductDetails.interest || defaultValues.interest,
+        interestPeriod: selectedProductDetails.interestPeriod,
+        allowInterestAdjustment: selectedProductDetails.allowInterestAdjustment,
+        inAdvanceFees:
+          selectedProductDetails.inAdvanceFees || defaultValues.inAdvanceFees,
+        inAdvanceFrom: selectedProductDetails.inAdvanceFrom,
+        inAdvanceType: selectedProductDetails.inAdvanceType,
+        periodLength:
+          selectedProductDetails.periodLength || defaultValues.periodLength,
+        periodType: selectedProductDetails.periodType,
+        gracePeriod:
+          selectedProductDetails.gracePeriod || defaultValues.gracePeriod,
+        pushPayment:
+          selectedProductDetails.pushPayment || defaultValues.pushPayment,
+        noOfInstallments:
+          selectedProductDetails.noOfInstallments ||
+          defaultValues.noOfInstallments,
+        applicationFee:
+          selectedProductDetails.applicationFee || defaultValues.applicationFee,
+        individualApplicationFee:
+          selectedProductDetails.individualApplicationFee ||
+          defaultValues.individualApplicationFee,
+        applicationFeePercent:
+          selectedProductDetails.applicationFeePercent ||
+          defaultValues.applicationFeePercent,
+        applicationFeeType: selectedProductDetails.applicationFeeType,
+        applicationFeePercentPerPerson:
+          selectedProductDetails.applicationFeePercentPerPerson ||
+          defaultValues.applicationFeePercentPerPerson,
+        applicationFeePercentPerPersonType:
+          selectedProductDetails.applicationFeePercentPerPersonType,
+        representativeFees:
+          selectedProductDetails.representativeFees ||
+          defaultValues.representativeFees,
+        allowRepresentativeFeesAdjustment:
+          selectedProductDetails.allowRepresentativeFeesAdjustment,
+        stamps: selectedProductDetails.stamps || defaultValues.stamps,
+        allowStampsAdjustment: selectedProductDetails.allowStampsAdjustment,
+        adminFees: selectedProductDetails.adminFees || defaultValues.adminFees,
+        allowAdminFeesAdjustment:
+          selectedProductDetails.allowAdminFeesAdjustment,
+        minPrincipal:
+          selectedProductDetails.minPrincipal || defaultValues.minPrincipal,
+        maxPrincipal:
+          selectedProductDetails.maxPrincipal || defaultValues.maxPrincipal,
+        minInstallment:
+          selectedProductDetails.minInstallment || defaultValues.minInstallment,
+        maxInstallment:
+          selectedProductDetails.maxInstallment || defaultValues.maxInstallment,
+        noOfGuarantors:
+          selectedProductDetails.noOfGuarantors || defaultValues.noOfGuarantors,
+        allowApplicationFeeAdjustment:
+          selectedProductDetails.allowApplicationFeeAdjustment,
+        beneficiaryType: selectedProductDetails.beneficiaryType,
+        branchManagerAndDate: selectedProductDetails.branchManagerAndDate,
+        branchManagerId: '',
+        managerVisitDate: '',
+      },
+    }))
   }
 
   removeOptionalGuar(obj, index, values) {
@@ -1121,24 +1110,35 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   populateCustomer(response) {
-    const defaultApplication = this.state.application
-    this.getOfficerName(response.representative)
-    defaultApplication.customerName = response.customerName
-    defaultApplication.nationalId = response.nationalId
-    defaultApplication.birthDate = this.getDateString(response.birthDate)
-    defaultApplication.gender = getGenderFromNationalId(response.nationalId)
-    defaultApplication.nationalIdIssueDate = this.getDateString(
-      response.nationalIdIssueDate
-    )
-    defaultApplication.businessSector = response.businessSector
-    defaultApplication.businessActivity = response.businessActivity
-    defaultApplication.businessSpeciality = response.businessSpeciality
-    defaultApplication.permanentEmployeeCount = response.permanentEmployeeCount
-    defaultApplication.partTimeEmployeeCount = response.partTimeEmployeeCount
-    defaultApplication.representative = response.representative
-    this.setState({
-      application: defaultApplication,
-    })
+    const {
+      customerName,
+      nationalId,
+      birthDate,
+      nationalIdIssueDate,
+      businessSector,
+      businessActivity,
+      businessSpeciality,
+      permanentEmployeeCount,
+      partTimeEmployeeCount,
+      representative,
+    } = response
+    this.getOfficerName(representative)
+    this.setState((prevState) => ({
+      application: {
+        ...prevState.application,
+        customerName,
+        nationalId,
+        birthDate: this.getDateString(birthDate),
+        gender: getGenderFromNationalId(nationalId),
+        nationalIdIssueDate: this.getDateString(nationalIdIssueDate),
+        businessSector,
+        businessActivity,
+        businessSpeciality,
+        permanentEmployeeCount,
+        partTimeEmployeeCount,
+        representative,
+      },
+    }))
   }
 
   async searchCustomers(keyword?: string, key?: string) {

@@ -4,123 +4,110 @@ import React, {
   useCallback,
   useEffect,
   useState,
-} from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  InputGroup,
-  Modal,
-  Row,
-} from "react-bootstrap";
-import Swal from "sweetalert2";
-import * as local from "../../../Shared/Assets/ar.json";
-import { Loader } from "../../../Shared/Components/Loader";
-import { Customer } from "../../../Shared/Services/interfaces";
-import { getErrorMessage } from "../../../Shared/Services/utils";
+} from 'react'
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap'
+import Swal from 'sweetalert2'
+import * as local from '../../../Shared/Assets/ar.json'
+import { Loader } from '../../../Shared/Components/Loader'
+import { Customer } from '../../../Shared/Services/interfaces'
+import { getErrorMessage } from '../../../Shared/Services/utils'
 import {
   checkLinkage,
   confirmLinkage,
   removeLinkage,
-} from "../../Services/APIs/Leads/halanLinkage";
+} from '../../Services/APIs/Leads/halanLinkage'
 import {
   CheckLinkageResponse,
   LinkageStatusEnum,
-} from "../../Services/interfaces";
+} from '../../Services/interfaces'
 
 interface HalanLinkageModalProps {
-  show: boolean;
-  hideModal: Function;
-  customer?: Customer;
+  show: boolean
+  hideModal: Function
+  customer?: Customer
 }
 const HalanLinkageModal = (props: HalanLinkageModalProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [checkResponse, setCheckResponse] = useState<CheckLinkageResponse>();
+  const [isLoading, setIsLoading] = useState(true)
+  const [checkResponse, setCheckResponse] = useState<CheckLinkageResponse>()
   // confirmation code
-  const [confirmationCode, setConfirmationCode] = useState<number>();
-  const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [confirmationCode, setConfirmationCode] = useState<number>()
+  const [phoneNumber, setPhoneNumber] = useState<string>()
 
-  const [phoneNumberError, setPhoneNumberError] = useState<string>();
-  const [generalError, setGeneralError] = useState<string>();
+  const [phoneNumberError, setPhoneNumberError] = useState<string>()
+  const [generalError, setGeneralError] = useState<string>()
 
-  const { customer, hideModal, show } = props;
+  const { customer, hideModal, show } = props
 
   const checkHalanLinkage = useCallback(async () => {
     if (!customer?._id) {
-      hideModal();
-      Swal.fire("Error !", getErrorMessage(""));
-      return;
+      hideModal()
+      Swal.fire('Error !', getErrorMessage(''))
+      return
     }
-    const res = await checkLinkage(customer._id);
-    if (res.status === "success") {
-      setIsLoading(false);
-      const response = res.body as CheckLinkageResponse;
-      setCheckResponse(response);
+    const res = await checkLinkage(customer._id)
+    if (res.status === 'success') {
+      setIsLoading(false)
+      const response = res.body as CheckLinkageResponse
+      setCheckResponse(response)
     } else {
-      hideModal();
+      hideModal()
       Swal.fire(
-        "Error !",
+        'Error !',
         getErrorMessage((res.error as Record<string, string>).error),
-        "error"
-      );
-      return;
+        'error'
+      )
     }
-  }, [customer, hideModal]);
+  }, [customer, hideModal])
 
   const handleChange = (
-    key: "phoneNumber" | "confirmationCode",
+    key: 'phoneNumber' | 'confirmationCode',
     e: ChangeEvent<HTMLInputElement>
   ) => {
-    const trimmedValue = e.target.value.trim();
-    if (key === "confirmationCode")
-      setConfirmationCode(Number(trimmedValue) || undefined);
+    const trimmedValue = e.target.value.trim()
+    if (key === 'confirmationCode')
+      setConfirmationCode(Number(trimmedValue) || undefined)
     else {
-      setPhoneNumber(trimmedValue);
+      setPhoneNumber(trimmedValue)
       if (trimmedValue !== checkResponse?.phoneNumber)
         !phoneNumberError
           ? setPhoneNumberError(local.invalidMobilePhoneNumber)
-          : null;
-      else {
-        if (phoneNumberError) setPhoneNumberError(undefined);
-      }
+          : null
+      else if (phoneNumberError) setPhoneNumberError(undefined)
     }
-  };
+  }
 
   const handleConfirmLinkageSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    if (generalError) setGeneralError(undefined);
+    e.preventDefault()
+    if (generalError) setGeneralError(undefined)
     const res = await confirmLinkage({
-      customerId: customer?._id || "",
-      phoneNumber: checkResponse?.phoneNumber || "",
+      customerId: customer?._id || '',
+      phoneNumber: checkResponse?.phoneNumber || '',
       customerKey: confirmationCode || 0,
-    });
-    if (res.status === "success") {
-      hideModal();
-      Swal.fire("success", local.userLinkedSuccessfully);
+    })
+    if (res.status === 'success') {
+      hideModal()
+      Swal.fire('success', local.userLinkedSuccessfully)
     } else {
       setGeneralError(
         getErrorMessage((res.error as Record<string, string>).error)
-      );
-      return;
+      )
     }
-  };
+  }
 
   const removeHalanUserLinkage = async () => {
-    const res = await removeLinkage(customer?._id || "");
-    if (res.status === "success") {
-      hideModal();
-      Swal.fire("success", local.userUnlinkedSuccessfully);
+    const res = await removeLinkage(customer?._id || '')
+    if (res.status === 'success') {
+      hideModal()
+      Swal.fire('success', local.userUnlinkedSuccessfully)
     } else {
       setGeneralError(
         getErrorMessage((res.error as Record<string, string>).error)
-      );
-      return;
+      )
     }
-  };
+  }
   useEffect(() => {
-    checkHalanLinkage();
-  }, [checkHalanLinkage]);
+    checkHalanLinkage()
+  }, [checkHalanLinkage])
 
   return (
     <Modal size="lg" show={show} onHide={hideModal}>
@@ -169,7 +156,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
                         data-qc="phoneNumber"
                         value={phoneNumber}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          handleChange("phoneNumber", e)
+                          handleChange('phoneNumber', e)
                         }
                         isInvalid={!!phoneNumberError}
                       />
@@ -194,7 +181,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
                         data-qc="confirmationCode"
                         value={confirmationCode}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          handleChange("confirmationCode", e)
+                          handleChange('confirmationCode', e)
                         }
                       />
                     </Form.Group>
@@ -245,7 +232,7 @@ const HalanLinkageModal = (props: HalanLinkageModalProps) => {
         </>
       </Modal.Body>
     </Modal>
-  );
-};
+  )
+}
 
-export default HalanLinkageModal;
+export default HalanLinkageModal

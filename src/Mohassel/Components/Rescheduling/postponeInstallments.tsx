@@ -94,6 +94,7 @@ class PostponeInstallments extends Component<Props, State> {
   // TODO:lint: convert to getDerivedStateFromProps
   componentDidUpdate(prevProps: Props) {
     if (prevProps.test !== this.props.test) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         installmentsAfterRescheduling: [],
         noOfInstallments: 0,
