@@ -3,17 +3,17 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import FormCheck from 'react-bootstrap/FormCheck'
 import Form from 'react-bootstrap/Form'
-import { Formik } from 'formik';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import { BranchesDropDown } from '../dropDowns/allDropDowns';
-import { cibReport } from '../../Services/APIs/loanApplication/cibReport';
-import Table from 'react-bootstrap/Table';
-import { downloadTxtFile } from './textFiles';
-import Swal from 'sweetalert2';
-import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund';
+import { Formik } from 'formik'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
+import Table from 'react-bootstrap/Table'
+import Swal from 'sweetalert2'
+import { BranchesDropDown } from '../dropDowns/allDropDowns'
+import { cibReport } from '../../Services/APIs/loanApplication/cibReport'
+import { downloadTxtFile } from './textFiles'
+import { changeSourceFund } from '../../Services/APIs/loanApplication/changeSourceFund'
 import * as local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { manageLoansArray } from '../LoanList/manageLoansInitials'

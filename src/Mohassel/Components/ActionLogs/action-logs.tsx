@@ -131,4 +131,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, addSearchToProps)(ActionLogs);
+export default connect(mapStateToProps, addSearchToProps)(ActionLogs)

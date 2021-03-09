@@ -281,24 +281,24 @@ class SupervisionGroupsList extends Component<Props, State> {
         (groupItem) => groupItem.id === group.id
       ) > -1
     ) {
-      this.setState((previousState) => ({
-        selectedGroups: previousState.selectedGroups.filter(
+      this.setState((prevState) => ({
+        selectedGroups: prevState.selectedGroups.filter(
           (el) => el.id !== group.id
         ),
       }))
     } else {
-      this.setState((previousState) => ({
-        selectedGroups: [...previousState.selectedGroups, group],
+      this.setState((prevState) => ({
+        selectedGroups: [...prevState.selectedGroups, group],
       }))
     }
   }
 
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState((previousState) => ({
+      this.setState((prevState) => ({
         checkAll: true,
         selectedGroups: this.props.data.filter(
-          (group) => group.status === previousState.chosenStatus
+          (group) => group.status === prevState.chosenStatus
         ),
       }))
     } else this.setState({ checkAll: false, selectedGroups: [] })
@@ -309,7 +309,7 @@ class SupervisionGroupsList extends Component<Props, State> {
     const res = await approveOfficersGroups({ branchesGroupIds })
     if (res.status === 'success') {
       this.props.setLoading(false)
-      Swal.fire('Success', '', 'success').then(() => location.reload())
+      Swal.fire('Success', '', 'success').then(() => window.location.reload())
     } else {
       this.props.setLoading(false)
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')

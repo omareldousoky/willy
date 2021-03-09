@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
-import { connect } from "react-redux";
-import DynamicTable from "../../../Shared/Components/DynamicTable/dynamicTable";
-import Can from "../../config/Can";
-import Search from "../../../Shared/Components/Search/search";
+import { connect } from 'react-redux'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
+import Can from '../../config/Can'
+import Search from '../../../Shared/Components/Search/search'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import { getDateAndTime } from '../../Services/getRenderDate'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { blockCustomer } from '../../Services/APIs/blockCustomer/blockCustomer'
 import ability from '../../config/ability'
 import { manageCustomersArray } from './manageCustomersInitial'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
-import Swal from 'sweetalert2'
 import {
   getErrorMessage,
   getFullCustomerKey,

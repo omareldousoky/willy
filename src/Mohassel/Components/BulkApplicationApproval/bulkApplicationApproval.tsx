@@ -19,7 +19,6 @@ import { bulkApproval } from '../../Services/APIs/loanApplication/bulkApproval'
 import { bulkApplicationApprovalValidation } from './bulkApplicationApprovalValidation'
 import {
   timeToDateyyymmdd,
-  beneficiaryType,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import local from '../../../Shared/Assets/ar.json'

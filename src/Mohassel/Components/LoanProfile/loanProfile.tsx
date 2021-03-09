@@ -462,9 +462,9 @@ class LoanProfile extends Component<Props, State> {
     if (randomPendingActionId !== '') {
       const res = await rejectManualOtherPayment(randomPendingActionId)
       if (res.status === 'success') {
-        this.setState((previousState) => ({
+        this.setState((prevState) => ({
           loading: false,
-          randomPendingActions: previousState.randomPendingActions.filter(
+          randomPendingActions: prevState.randomPendingActions.filter(
             (el) => el._id !== randomPendingActionId
           ),
         }))
@@ -573,8 +573,8 @@ class LoanProfile extends Component<Props, State> {
     this.props.changePaymentState(3)
     window.scrollTo(0, document.body.scrollHeight)
     if (randomPendingActionId !== '') {
-      this.setState((previousState) => {
-        const pendingAction = previousState.randomPendingActions.find(
+      this.setState((prevState) => {
+        const pendingAction = prevState.randomPendingActions.find(
           (el) => el._id === randomPendingActionId
         )
         const tab =
@@ -587,9 +587,9 @@ class LoanProfile extends Component<Props, State> {
         }
       })
     } else {
-      this.setState((previousState) => ({
+      this.setState((prevState) => ({
         activeTab: 'loanPayments',
-        manualPaymentEditId: previousState.pendingActions?._id || '',
+        manualPaymentEditId: prevState.pendingActions?._id || '',
       }))
     }
   }
@@ -842,10 +842,10 @@ class LoanProfile extends Component<Props, State> {
           <Payment
             print={(data) =>
               this.setState(
-                (previousState) => ({
+                (prevState) => ({
                   print: data.print,
                   earlyPaymentData: {
-                    ...previousState.earlyPaymentData,
+                    ...prevState.earlyPaymentData,
                     ...data,
                   },
                 }),

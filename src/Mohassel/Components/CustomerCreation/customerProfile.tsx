@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
+import Swal from 'sweetalert2'
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces'
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer'
 import {

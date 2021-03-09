@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
 import StepOneForm from './stepOneForm'
 import { BasicValues } from './branchCreationInterfaces'
 import {

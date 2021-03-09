@@ -238,9 +238,9 @@ class CustomersForUser extends Component<Props, State> {
 
   checkAll(e: React.FormEvent<HTMLInputElement>) {
     if (e.currentTarget.checked) {
-      this.setState((previousState) => ({
+      this.setState((prevState) => ({
         checkAll: true,
-        selectedCustomers: previousState.customers.filter(
+        selectedCustomers: prevState.customers.filter(
           (customer) => customer.blocked?.isBlocked !== true
         ),
       }))
@@ -253,14 +253,14 @@ class CustomersForUser extends Component<Props, State> {
         (selectedCustomer) => selectedCustomer._id === customer._id
       ) > -1
     ) {
-      this.setState((previousState) => ({
-        selectedCustomers: previousState.selectedCustomers.filter(
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.selectedCustomers.filter(
           (el) => el._id !== customer._id
         ),
       }))
     } else {
-      this.setState((previousState) => ({
-        selectedCustomers: [...previousState.selectedCustomers, customer],
+      this.setState((prevState) => ({
+        selectedCustomers: [...prevState.selectedCustomers, customer],
       }))
     }
   }

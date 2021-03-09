@@ -197,8 +197,8 @@ class SupervisionLevelsCreation extends Component<Props, State> {
                   <span
                     className="add-member"
                     onClick={() => {
-                      this.setState((previousState) => {
-                        const newGroup = previousState.groups
+                      this.setState((prevState) => {
+                        const newGroup = prevState.groups
                         newGroup.push({
                           leader: { id: '', name: '' },
                           officers: [],
