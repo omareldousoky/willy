@@ -129,7 +129,7 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getManualOtherPayments(appId) {
-        if(ability.can("pendingAction", "application")){
+        if (ability.can("pendingAction", "application")) {
             this.setState({ loading: true })
             const res = await getManualOtherPayments(appId);
             if (res.status === "success") {
@@ -155,7 +155,7 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
-             this.getMembersShare();
+            this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -505,7 +505,11 @@ class LoanProfile extends Component<Props, State>{
         if (res.status === "success") {
             this.setState({ loading: false })
             const options = {}
-            res.body.reasons.map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            if (this.state.application.group.individualsInGroup !== null && this.state.application.group.individualsInGroup.length > 1) {
+                res.body.reasons.filter(reason => reason.name !== 'Deceased').map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            } else {
+                res.body.reasons.map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            }
             return options
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
@@ -706,7 +710,7 @@ class LoanProfile extends Component<Props, State>{
                 }
                 {this.state.print === 'all' &&
                     <>
-                        <CashReceiptPDF data={this.state.application}  remainingTotal = {this.state.remainingTotal}/>
+                        <CashReceiptPDF data={this.state.application} remainingTotal={this.state.remainingTotal} />
                         <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />
