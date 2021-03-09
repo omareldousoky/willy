@@ -626,7 +626,7 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                                 {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
-                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan} - {local[this.state.application.writeOffReason.replace(/\s/g, '')]}</p>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}{this.state.application.writeOffReason ? `- ${local[this.state.application.writeOffReason.replace(/\s/g, '')]}` : null}</p>
                                 </span>}
                                 {this.state.application.isDoubtful && !this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
                                     <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
