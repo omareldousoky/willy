@@ -153,24 +153,24 @@ class DualBox extends Component<Props, State> {
         checkAll: false,
       })
     } else {
-      this.setState({
+      this.setState((prevState) => ({
         selectionArray: this.props.disabled
-          ? this.state.options.filter(
+          ? prevState.options.filter(
               (option) =>
                 this.props.disabled && this.props.disabled(option) === false
             )
-          : [...this.state.options],
+          : [...prevState.options],
         checkAll: true,
-      })
+      }))
     }
   }
 
   removeAllFromList() {
     this.props.onChange([])
-    this.setState({
-      options: [...this.state.options, ...this.state.selectedOptions],
+    this.setState((prevState) => ({
+      options: [...prevState.options, ...prevState.selectedOptions],
       selectedOptions: [],
-    })
+    }))
   }
 
   viewSelected(id) {
@@ -179,23 +179,24 @@ class DualBox extends Component<Props, State> {
     }
   }
 
+  // TODO:lint: check very well
   addToSelectedList() {
-    let options = [...this.state.options]
-    this.state.selectionArray.forEach((el) => {
-      options = options.filter(
-        (item) => item[this.props.labelKey] !== el[this.props.labelKey]
-      )
-    })
-    const newList = [
-      ...this.state.selectedOptions,
-      ...this.state.selectionArray,
-    ]
-    this.props.onChange(newList)
-    this.setState({
-      options,
-      selectedOptions: newList,
-      selectionArray: [],
-    })
+    this.setState(
+      (prevState) =>
+        ({
+          options: prevState.selectionArray.forEach((el) => {
+            prevState.options.filter(
+              (item) => item[this.props.labelKey] !== el[this.props.labelKey]
+            )
+          }),
+          selectedOptions: [
+            ...prevState.selectedOptions,
+            ...prevState.selectionArray,
+          ],
+          selectionArray: [],
+        } as any),
+      () => this.props.onChange(this.state.selectedOptions)
+    )
   }
 
   render() {
@@ -427,6 +428,7 @@ class DualBox extends Component<Props, State> {
                       <div onClick={() => this.removeAllFromList()}>
                         <span>
                           <img
+                            alt="delete"
                             src={require('../../../Shared/Assets/deleteIcon.svg')}
                           />
                         </span>
@@ -450,6 +452,7 @@ class DualBox extends Component<Props, State> {
                               onClick={() => this.removeItemFromList(option)}
                             >
                               <img
+                                alt="close"
                                 style={{ width: '15px', height: '15px' }}
                                 src={require('../../Assets/closeIcon.svg')}
                               />

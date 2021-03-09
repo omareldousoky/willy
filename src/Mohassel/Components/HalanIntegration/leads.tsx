@@ -188,10 +188,10 @@ class Leads extends Component<Props, State> {
             <p
               className="clickable-action"
               onClick={() =>
-                this.setState({
+                this.setState((prevState) => ({
                   openActionsId:
-                    this.state.openActionsId === data.uuid ? '' : data.uuid,
-                })
+                    prevState.openActionsId === data.uuid ? '' : data.uuid,
+                }))
               }
             >
               {local.actions}
@@ -341,6 +341,36 @@ class Leads extends Component<Props, State> {
     }
   }
 
+  getLoanOfficers = async (input: string) => {
+    const res = await searchLoanOfficer({ from: 0, size: 1000, name: input })
+    if (res.status === 'success') {
+      this.setState({ loanOfficers: res.body.data })
+      return res.body.data
+        .filter((loanOfficer) =>
+          loanOfficer.branches?.includes(this.state.selectedLead.branchId)
+        )
+        .filter((loanOfficer) => loanOfficer.status === 'active')
+        .filter(
+          (loanOfficer) =>
+            loanOfficer._id !== this.state.selectedLead.loanOfficerId
+        )
+    }
+    this.setState({ loanOfficers: [] })
+    return []
+  }
+
+  getBranches = async (input: string) => {
+    const res = await searchBranches({ from: 0, size: 1000, name: input })
+    if (res.status === 'success') {
+      this.setState({ branches: res.body.data })
+      return res.body.data.filter(
+        (branch) => branch._id !== this.state.selectedLead.branchId
+      )
+    }
+    this.setState({ branches: [] })
+    return []
+  }
+
   async changeLeadState(
     phoneNumber: string,
     oldState: string,
@@ -420,36 +450,6 @@ class Leads extends Component<Props, State> {
         Swal.fire('', local.userRoleEditError, 'error')
       }
     }
-  }
-
-  getLoanOfficers = async (input: string) => {
-    const res = await searchLoanOfficer({ from: 0, size: 1000, name: input })
-    if (res.status === 'success') {
-      this.setState({ loanOfficers: res.body.data })
-      return res.body.data
-        .filter((loanOfficer) =>
-          loanOfficer.branches?.includes(this.state.selectedLead.branchId)
-        )
-        .filter((loanOfficer) => loanOfficer.status === 'active')
-        .filter(
-          (loanOfficer) =>
-            loanOfficer._id !== this.state.selectedLead.loanOfficerId
-        )
-    }
-    this.setState({ loanOfficers: [] })
-    return []
-  }
-
-  getBranches = async (input: string) => {
-    const res = await searchBranches({ from: 0, size: 1000, name: input })
-    if (res.status === 'success') {
-      this.setState({ branches: res.body.data })
-      return res.body.data.filter(
-        (branch) => branch._id !== this.state.selectedLead.branchId
-      )
-    }
-    this.setState({ branches: [] })
-    return []
   }
 
   async submitLOChange() {

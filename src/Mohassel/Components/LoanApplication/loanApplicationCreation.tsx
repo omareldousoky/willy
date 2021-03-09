@@ -318,7 +318,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     if (res.status === 'success') {
       this.setState({ loading: false })
       const merged: Array<any> = []
-      for (let i = 0; i < customers.length; i++) {
+      for (let i = 0; i < customers.length; i += 1) {
         const obj = {
           ...customers[i],
           ...(res.body.data
@@ -447,6 +447,7 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const application = await getApplication(id)
     if (application.status === 'success') {
+      // TODO:lint: can't refactor
       const formData = this.state.application
       if (application.body.product.beneficiaryType === 'group') {
         this.getBusinessSectors()
@@ -456,12 +457,16 @@ class LoanApplicationCreation extends Component<Props, State> {
         const customers = await this.getCustomerLimits(selectedCustomers)
         application.body.group.individualsInGroup.forEach((customer) => {
           if (customer.type === 'leader') {
-            this.setState({
-              selectedGroupLeader: customer.customer._id,
-              selectedLoanOfficer: this.state.loanOfficers.filter(
-                (officer) => officer._id === customer.customer.representative
-              )[0],
-            })
+            this.setState(
+              (prevState) =>
+                ({
+                  selectedGroupLeader: customer.customer._id,
+                  selectedLoanOfficer: prevState.loanOfficers.filter(
+                    (officer) =>
+                      officer._id === customer.customer.representative
+                  )[0],
+                } as any)
+            )
           }
           ;[customer.customer] = customers.filter(
             (member) => member._id === customer.customer._id
@@ -490,7 +495,7 @@ class LoanApplicationCreation extends Component<Props, State> {
           ? application.body.guarantors.length
           : application.body.product.noOfGuarantors
       const guarsArr: Array<any> = []
-      for (let i = 0; i < value; i++) {
+      for (let i = 0; i < value; i += 1) {
         if (application.body.guarantors[i]) {
           guarsArr.push({
             searchResults: {
@@ -900,14 +905,14 @@ class LoanApplicationCreation extends Component<Props, State> {
       }[] = []
       let principalToSend = 0
       obj.individualDetails &&
-        obj.individualDetails.forEach((customer) => {
-          const obj = {
-            id: customer.customer._id,
-            amount: customer.amount,
-            type: customer.type,
+        obj.individualDetails.forEach((item) => {
+          const customer = {
+            id: item.customer._id,
+            amount: item.amount,
+            type: item.type,
           }
-          principalToSend += customer.amount
-          individualsToSend.push(obj)
+          principalToSend += item.amount
+          individualsToSend.push(customer)
         })
       if (obj.beneficiaryType !== 'group') {
         principalToSend = obj.principal
@@ -1190,7 +1195,7 @@ class LoanApplicationCreation extends Component<Props, State> {
       this.setState({ loading: false })
       const merged: Array<any> = []
       const validationObject: any = {}
-      for (let i = 0; i < customers.length; i++) {
+      for (let i = 0; i < customers.length; i += 1) {
         const obj = {
           ...customers[i],
           ...(res.body.data
@@ -1328,14 +1333,14 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   step(key) {
-    let currentStep = this.state.step
-    if (this.state.step < 3 && key === 'forward') {
-      currentStep++
-    } else if (this.state.step >= 1 && key === 'backward') {
-      currentStep--
-    }
-    this.setState({
-      step: currentStep,
+    this.setState((prevState) => {
+      let currentStep
+      if (prevState.step < 3 && key === 'forward') {
+        currentStep = prevState.step + 1
+      } else if (prevState.step >= 1 && key === 'backward') {
+        currentStep = prevState.step - 1
+      }
+      return { step: currentStep }
     })
   }
 
@@ -1573,6 +1578,7 @@ class LoanApplicationCreation extends Component<Props, State> {
                 style={{ margin: '20px 60px' }}
               >
                 <img
+                  alt="individual"
                   style={{ width: 75, margin: '40px 20px' }}
                   src={require('../../Assets/individual.svg')}
                 />
@@ -1585,6 +1591,7 @@ class LoanApplicationCreation extends Component<Props, State> {
                 style={{ margin: '20px 60px' }}
               >
                 <img
+                  alt="group"
                   style={{ width: 75, margin: '40px 20px' }}
                   src={require('../../Assets/group.svg')}
                 />

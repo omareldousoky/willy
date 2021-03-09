@@ -30,7 +30,6 @@ interface State {
   selectValues: Array<any>
   decisionValues: Array<any>
   rejectionReasonValues: Array<any>
-  loading: boolean
   reviewState: {
     reviewStatus: string
     reviewDate: any

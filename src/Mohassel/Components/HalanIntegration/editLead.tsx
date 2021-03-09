@@ -114,6 +114,32 @@ class EditLead extends Component<Props, State> {
     }
   }
 
+  submit = async (values) => {
+    if (this.state.step === 1) {
+      this.setState({
+        stepOne: { ...values },
+        step: 2,
+      })
+    } else {
+      this.setState({ loading: true })
+      const obj = { ...this.state.stepOne, ...values, uuid: this.state.uuid }
+      obj.minAge = Number(obj.maxMinAge.split('-')[0])
+      obj.maxAge = Number(obj.maxMinAge.split('-')[1])
+      obj.nationalIdIssueDate = new Date(obj.nationalIdIssueDate).valueOf()
+      const res = await editLead(obj)
+      if (res.status === 'success') {
+        this.setState({ loading: false })
+        Swal.fire('', local.leadEditSuccess, 'success').then(() =>
+          this.props.history.push('/halan-integration/leads')
+        )
+      } else {
+        this.setState({ loading: false }, () =>
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        )
+      }
+    }
+  }
+
   renderStepOne() {
     return (
       <Formik
@@ -657,32 +683,6 @@ class EditLead extends Component<Props, State> {
         return this.renderStepTwo()
       default:
         return null
-    }
-  }
-
-  submit = async (values) => {
-    if (this.state.step === 1) {
-      this.setState({
-        stepOne: { ...values },
-        step: 2,
-      })
-    } else {
-      this.setState({ loading: true })
-      const obj = { ...this.state.stepOne, ...values, uuid: this.state.uuid }
-      obj.minAge = Number(obj.maxMinAge.split('-')[0])
-      obj.maxAge = Number(obj.maxMinAge.split('-')[1])
-      obj.nationalIdIssueDate = new Date(obj.nationalIdIssueDate).valueOf()
-      const res = await editLead(obj)
-      if (res.status === 'success') {
-        this.setState({ loading: false })
-        Swal.fire('', local.leadEditSuccess, 'success').then(() =>
-          this.props.history.push('/halan-integration/leads')
-        )
-      } else {
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-      }
     }
   }
 

@@ -193,30 +193,6 @@ class AssignLoanOfficer extends Component<Props, State> {
       })
   }
 
-  checkAll(e: React.FormEvent<HTMLInputElement>) {
-    if (e.currentTarget.checked) {
-      this.setState({ checkAll: true, selectedCustomers: this.props.data })
-    } else this.setState({ checkAll: false, selectedCustomers: [] })
-  }
-
-  addRemoveItemFromChecked(selectedCustomer: any) {
-    if (
-      this.state.selectedCustomers.findIndex(
-        (customer) => customer._id === selectedCustomer._id
-      ) > -1
-    ) {
-      this.setState({
-        selectedCustomers: this.state.selectedCustomers.filter(
-          (customer) => customer._id !== selectedCustomer._id
-        ),
-      })
-    } else {
-      this.setState({
-        selectedCustomers: [...this.state.selectedCustomers, selectedCustomer],
-      })
-    }
-  }
-
   getLoanOfficers = async (input: string) => {
     const res = await searchLoanOfficer({ from: 0, size: 1000, name: input })
     if (res.status === 'success') {
@@ -229,6 +205,30 @@ class AssignLoanOfficer extends Component<Props, State> {
       Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
     )
     return []
+  }
+
+  addRemoveItemFromChecked(selectedCustomer: any) {
+    if (
+      this.state.selectedCustomers.findIndex(
+        (customer) => customer._id === selectedCustomer._id
+      ) > -1
+    ) {
+      this.setState((prevState) => ({
+        selectedCustomers: prevState.selectedCustomers.filter(
+          (customer) => customer._id !== selectedCustomer._id
+        ),
+      }))
+    } else {
+      this.setState((prevState) => ({
+        selectedCustomers: [...prevState.selectedCustomers, selectedCustomer],
+      }))
+    }
+  }
+
+  checkAll(e: React.FormEvent<HTMLInputElement>) {
+    if (e.currentTarget.checked) {
+      this.setState({ checkAll: true, selectedCustomers: this.props.data })
+    } else this.setState({ checkAll: false, selectedCustomers: [] })
   }
 
   async submit() {

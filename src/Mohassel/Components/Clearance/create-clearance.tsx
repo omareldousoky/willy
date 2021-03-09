@@ -173,9 +173,6 @@ class CreateClearance extends Component<Props, State> {
     if (!clearance.customerId) {
       clearance.customerId = this.props.location.state.id
     }
-    if (clearance.transactionKey) {
-      clearance.transactionKey = Number(clearance.transactionKey)
-    }
     if (clearance.receiptDate) {
       clearance.receiptDate = new Date(clearance.receiptDate).valueOf()
     }
@@ -184,9 +181,9 @@ class CreateClearance extends Component<Props, State> {
     delete clearance.status
     clearance.registrationDate = new Date(clearance.registrationDate).valueOf()
     const formData = new FormData()
-    for (const key in clearance) {
-      formData.append(key, clearance[key])
-    }
+    Object.entries(clearance).map(([key, value]) => {
+      formData.append(key, value)
+    })
     return formData
   }
 

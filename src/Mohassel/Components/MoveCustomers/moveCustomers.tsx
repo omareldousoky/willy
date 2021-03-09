@@ -153,9 +153,12 @@ class MoveCustomers extends Component<{}, State> {
         ),
       }))
     } else {
-      this.setState((prevState) => ({
-        selectedCustomers: [prevState.selectedCustomers, customer],
-      }))
+      this.setState(
+        (prevState) =>
+          ({
+            selectedCustomers: [prevState.selectedCustomers, customer],
+          } as any)
+      )
     }
   }
 
