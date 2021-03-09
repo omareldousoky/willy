@@ -5,6 +5,7 @@ type Props = {
   open: boolean
   type: 'fullscreen' | 'fullsection' | 'inline'
 }
+
 export const Loader = (props: Props) => {
   function renderFullScreen() {
     return (

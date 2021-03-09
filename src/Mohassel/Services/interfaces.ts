@@ -304,3 +304,20 @@ export interface MonthComparisonReportResponse
   extends MonthComparisonReportCommon {
   response?: MonthComparisonReportSingleResponse[]
 }
+
+export enum LinkageStatusEnum {
+  Pending = "pending",
+  Linked = "linked",
+  Removed = "removed",
+}
+
+export interface CheckLinkageResponse {
+  status: LinkageStatusEnum;
+  phoneNumber: string;
+}
+
+export interface ConfirmLinkageRequest {
+  customerId: string;
+  phoneNumber: string;
+  customerKey: number;
+}
