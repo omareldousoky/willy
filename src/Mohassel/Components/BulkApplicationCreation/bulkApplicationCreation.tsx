@@ -206,7 +206,7 @@ class BulkApplicationCreation extends Component<Props, State>{
       Swal.fire('', local.bulkLoanCreated, 'success').then(() => this.getApplications());
     } else {
       this.props.setLoading(false);
-      Swal.fire('', local.bulkLoanError, 'error');
+      Swal.fire('', getErrorMessage(res.error.error), 'error');
     }
   }
   dateSlice(date) {
