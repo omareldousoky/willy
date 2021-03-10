@@ -83,14 +83,12 @@ interface State {
         this.setState({ loading: false });
     }
     prepareManagers() {
-        const managers = {
-            operationsManager: this.state.values?.operationsManager?.id,
-            areaManager: this.state.values?.areaManager?.id,
-            areaSupervisor: this.state.values?.areaSupervisor?.id,
-            centerManager: this.state.values?.centerManager?.id,
-            branchManager: this.state.values?.branchManager?.id
-        }
-    
+        let managers = {}
+        if(this.state.values?.operationsManager?.id) managers={...managers, ...{operationsManager: this.state.values.operationsManager.id}}
+        if(this.state.values?.areaManager?.id) managers= {...managers, ...{areaManager: this.state.values.areaManager.id}}
+        if(this.state.values?.areaSupervisor?.id) managers= {...managers, ...{areaSupervisor: this.state.values.areaSupervisor.id}}
+        if(this.state.values?.centerManager?.id) managers = {...managers, ...{centerManager: this.state.values.centerManager.id}}
+        if(this.state.values?.branchManager?.id) managers= {...managers, ...{branchManager: this.state.values.branchManager.id}}
         return managers;
     }
     render() {
