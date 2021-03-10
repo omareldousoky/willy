@@ -6,14 +6,13 @@ export const authReducer = (
   state: Auth = { loading: true, validBranches: [] },
   action
 ) => {
-  const clientPermissions = JSON.parse(action.payload.clientPermissions)
   const token = getCookie('token')
   const tokenData = parseJwt(token)
   switch (action.type) {
     case 'ADD_AUTH_DATA':
       return {
         ...state,
-        clientPermissions,
+        clientPermissions: JSON.parse(action.payload.clientPermissions),
         roles: action.payload.roles,
         validBranches: action.payload.validBranches,
         name: action.payload.name,
