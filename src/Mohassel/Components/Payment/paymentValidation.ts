@@ -68,13 +68,6 @@ export const earlyPaymentValidation = Yup.object().shape({
     otherwise: Yup.string()
   }),
   payerNationalId: Yup.string(),
-  truthDate: Yup.string()
-    .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
-    })
-    .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
-      return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
-    }),
 })
 
 export const manualPaymentValidation = Yup.object().shape({

@@ -132,16 +132,10 @@ class EarlyPayment extends Component<Props, State> {
                 type="date"
                 name="truthDate"
                 data-qc="truthDate"
-                min="2021-02-01"
                 value={this.props.formikProps.values.truthDate}
-                onBlur={this.props.formikProps.handleBlur}
-                onChange={this.props.formikProps.handleChange}
-                isInvalid={Boolean(this.props.formikProps.errors.truthDate) && Boolean(this.props.formikProps.touched.truthDate)}
+                disabled
               >
               </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                {this.props.formikProps.errors.truthDate}
-              </Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md={6} controlId="whoPaid">
             <Form.Label className="pr-0" column>{`${local.whoMadeThePayment}`}</Form.Label>
