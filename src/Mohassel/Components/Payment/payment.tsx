@@ -398,7 +398,7 @@ class Payment extends Component<Props, State> {
     } else if (this.props.paymentState === 2) {
       const obj = {
         id: this.props.applicationId,
-        payAmount: values.payAmount,
+        payAmount: values.requiredAmount,
         payerType: values.payerType,
         payerId: values.payerId,
         payerName: values.payerName,

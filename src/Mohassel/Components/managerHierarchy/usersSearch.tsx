@@ -24,6 +24,7 @@ interface Props {
   isLoanOfficer?: boolean
   branchId?: string
   usersInitial: Array<LoanOfficer>
+  isClearable?: boolean
 }
 class UsersSearch extends Component<Props, State> {
   constructor(props: Props) {
@@ -102,15 +103,22 @@ class UsersSearch extends Component<Props, State> {
   }
 
   selectUser(event) {
-    this.props.item[this.props.objectKey] = { id: event._id, name: event.name }
-    const index = this.state.users.findIndex((user) => user._id === event._id)
+    if (event) {
+      this.props.item[this.props.objectKey] = {
+        id: event._id,
+        name: event.name,
+      }
+      const index = this.state.users.findIndex((user) => user._id === event._id)
 
-    this.setState((prevState) => {
-      const newUsers = prevState.users
-      newUsers.splice(index, 1)
-      return { users: newUsers }
-    })
-    this.checkError()
+      this.setState((prevState) => {
+        const newUsers = prevState.users
+        newUsers.splice(index, 1)
+        return { users: newUsers }
+      })
+      this.checkError()
+    } else {
+      this.props.item[this.props.objectKey] = {}
+    }
   }
 
   render() {
@@ -172,6 +180,7 @@ class UsersSearch extends Component<Props, State> {
               }
               cacheOptions
               defaultOptions
+              isClearable={this.props.isClearable}
             />
           </div>
           {this.state.showError && (

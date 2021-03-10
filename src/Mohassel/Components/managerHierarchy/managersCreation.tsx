@@ -87,14 +87,32 @@ class ManagersCreation extends Component<Props, State> {
   }
 
   prepareManagers() {
-    const managers = {
-      operationsManager: this.state.values?.operationsManager?.id,
-      areaManager: this.state.values?.areaManager?.id,
-      areaSupervisor: this.state.values?.areaSupervisor?.id,
-      centerManager: this.state.values?.centerManager?.id,
-      branchManager: this.state.values?.branchManager?.id,
-    }
-
+    let managers = {}
+    if (this.state.values?.operationsManager?.id)
+      managers = {
+        ...managers,
+        ...{ operationsManager: this.state.values.operationsManager.id },
+      }
+    if (this.state.values?.areaManager?.id)
+      managers = {
+        ...managers,
+        ...{ areaManager: this.state.values.areaManager.id },
+      }
+    if (this.state.values?.areaSupervisor?.id)
+      managers = {
+        ...managers,
+        ...{ areaSupervisor: this.state.values.areaSupervisor.id },
+      }
+    if (this.state.values?.centerManager?.id)
+      managers = {
+        ...managers,
+        ...{ centerManager: this.state.values.centerManager.id },
+      }
+    if (this.state.values?.branchManager?.id)
+      managers = {
+        ...managers,
+        ...{ branchManager: this.state.values.branchManager.id },
+      }
     return managers
   }
 
@@ -117,6 +135,7 @@ class ManagersCreation extends Component<Props, State> {
                 objectKey="operationsManager"
                 item={this.state.values}
                 disabled={this.state.disabled}
+                isClearable
               />{' '}
             </Row>
           </Form.Group>
@@ -134,6 +153,7 @@ class ManagersCreation extends Component<Props, State> {
                 objectKey="areaManager"
                 item={this.state.values}
                 disabled={this.state.disabled}
+                isClearable
               />{' '}
             </Row>
           </Form.Group>
@@ -151,6 +171,7 @@ class ManagersCreation extends Component<Props, State> {
                 objectKey="areaSupervisor"
                 item={this.state.values}
                 disabled={this.state.disabled}
+                isClearable
               />{' '}
             </Row>
           </Form.Group>
@@ -168,6 +189,7 @@ class ManagersCreation extends Component<Props, State> {
                 objectKey="centerManager"
                 item={this.state.values}
                 disabled={this.state.disabled}
+                isClearable
               />{' '}
             </Row>
           </Form.Group>
@@ -185,6 +207,7 @@ class ManagersCreation extends Component<Props, State> {
                 objectKey="branchManager"
                 item={this.state.values}
                 disabled={this.state.disabled}
+                isClearable
               />{' '}
             </Row>
           </Form.Group>
