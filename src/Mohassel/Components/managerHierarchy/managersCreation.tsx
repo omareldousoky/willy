@@ -100,23 +100,23 @@ interface State {
                 <Form className="managers-form">
                     <Form.Group className={'managers-form-group'} as={Col} id="operationsManager">
                         <Form.Label className={"managers-label"} >{local.operationsManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'operationsManager'} item={this.state.values}  disabled = {this.state.disabled}/> </Row>
+                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'operationsManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable/> </Row>
                     </Form.Group>
                     <Form.Group className={'managers-form-group'} as={Col} id="districtManager">
                         <Form.Label className={"managers-label"} >{local.districtManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'areaManager'} item={this.state.values}  disabled = {this.state.disabled}/> </Row>
+                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'areaManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable/> </Row>
                     </Form.Group>
                     <Form.Group className={'managers-form-group'} as={Col} id="districtSupervisor">
                         <Form.Label className={"managers-label"} >{local.districtSupervisor}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'areaSupervisor'} item={this.state.values}  disabled = {this.state.disabled}/> </Row>
+                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'areaSupervisor'} item={this.state.values}  disabled = {this.state.disabled} isClearable /> </Row>
                     </Form.Group>
                     <Form.Group className={'managers-form-group'} as={Col} id="centerManager">
                         <Form.Label className={"managers-label"} >{local.centerManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'centerManager'} item={this.state.values}  disabled = {this.state.disabled}/> </Row>
+                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'centerManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable /> </Row>
                     </Form.Group>
                     <Form.Group className={'managers-form-group'} as={Col} id="branchManager">
                         <Form.Label className={"managers-label"} >{local.branchManager}</Form.Label>
-                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'branchManager'} item={this.state.values}  disabled = {this.state.disabled}/> </Row>
+                        <Row><UsersSearch  usersInitial={this.state.users}  objectKey={'branchManager'} item={this.state.values}  disabled = {this.state.disabled} isClearable /> </Row>
                     </Form.Group>
                 </Form>
                 <Can I="updateBranchManagersHierarchy" a="branch">
