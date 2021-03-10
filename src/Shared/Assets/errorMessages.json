@@ -113,5 +113,8 @@
     "activity_not_found":{"en": "activity not found ","ar": "نوع النشاط غير موجود"},
     "invalid_close_date_in_future":{"en":"The financial closing date is in the future","ar":"تاريخ الإقفال المالي في المستقبل"},
     "invalid_close_date_pending_actions":{"en":"There are pending actions before that date, please close them first","ar":"يوجد حركات معلقة قبل هذا التاريخ، برجاء إغلاقها أولاً"},
-    "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"}
+    "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"},
+    "cannot_split_rescheduled_loan": {"en":"Can't split a loan that has been rescheduled" ,"ar":"لا يمكن فصل قرض مجدول"},
+    "cannot_split_partially_paid": {"en":"Can't split a loan that has partial payments" ,"ar":"لا يمكن فصل قرض لديه سداد جزئي"},
+    "insufficient-early-payment-amount":{"en":"Must pay full early payment required amount", "ar":"يجب دفع مبلغ السداد المعجل كامل"}
 }
