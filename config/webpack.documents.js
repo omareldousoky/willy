@@ -37,7 +37,7 @@ module.exports = (env) => {
 						// disable type checker - we will use it in fork plugin
 						transpileOnly: true
 					},
-					exclude: /dist/,
+					exclude: /node_modules/,
 				},
 				{
 					test: /\.(sc|c)ss$/,
@@ -70,11 +70,11 @@ module.exports = (env) => {
 			]
 		},
 		optimization: {
-			minimize: true,
-			minimizer: [new TerserPlugin({
+			minimize: isProd,
+			minimizer: [isProd ? new TerserPlugin({
 				parallel: true,
 				extractComments: true
-			})],
+			}) : false].filter(Boolean),
 			splitChunks: {
 				cacheGroups: {
 					vendor: {
@@ -89,8 +89,11 @@ module.exports = (env) => {
 		devServer: {
 			historyApiFallback: true,
 		},
-		// to get lines in code exactly
-		devtool: !isProd ? 'inline-source-map' : '',
+		// "eval" values omit styles source map
+		// reason: https://github.com/webpack-contrib/sass-loader/releases/tag/v8.0.0
+		// "inline-source-map" not working with ts(x) files
+		// reason: ¯\_(ツ)_/¯, just experiment
+		devtool: !isProd ? 'source-map' : '',
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: './src/Documents/index.html',
