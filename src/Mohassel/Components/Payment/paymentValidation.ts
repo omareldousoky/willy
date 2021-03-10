@@ -56,19 +56,6 @@ export const paymentValidation = Yup.object().shape({
 });
 
 export const earlyPaymentValidation = Yup.object().shape({
-  payAmount: Yup.number()
-    .moreThan(0, local.minPayment)
-    .test("Should not be less than Required Amount", local.amountShouldNotbeLessThanReqAmount,
-      function (this: any, value: number) {
-        return value >= this.parent.remainingPrincipal
-      }
-    )
-    .test("Should not exceed Required Amount", local.amountShouldNotExceedReqAmount,
-      function (this: any, value: number) {
-        return value <= this.parent.requiredAmount
-      }
-    )
-    .required(local.required),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
     is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
