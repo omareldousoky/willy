@@ -224,7 +224,7 @@ class CustomerCardPDF extends Component<Props, State> {
                                 : this.props.data.product.beneficiaryType === "group" ?
                                     this.props.data.group.individualsInGroup.map((individualInGroup, index) => {
                                         const area = this.props.getGeoArea(individualInGroup.customer.geoAreaId);
-                                        const share = this.props.members.customerTable?.filter(member => member.customer._id, individualInGroup.customer._id)[0].amount;
+                                        const share = this.props.members.customerTable?.filter(member => member.customer._id, individualInGroup.customer._id)[0].installmentAmount;
                                         return (
                                             <tr key={index}>
                                                 <td>{numbersToArabic(individualInGroup.customer.key)}</td>
