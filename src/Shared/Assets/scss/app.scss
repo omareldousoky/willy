@@ -1,8 +1,41 @@
-// bootstrap selected imports
-@import "bootstrap-rtl";
-
 // lts icon font
 @import "lts-icons";
+
+$green: #7dc356;
+
+@media print {
+	.rtl th,
+	[dir="rtl"] th {
+		text-align: center;
+	}
+}
+
+.rtl .form-check-input,
+[dir="rtl"] .form-check-input {
+	margin-right: 0;
+}
+
+select.form-control {
+	padding-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	margin-bottom: 0.5rem;
+	font-weight: 500;
+	line-height: 1.2;
+	color: inherit
+}
 
 .form-check>.form-check-input,
 input[type=checkbox],
