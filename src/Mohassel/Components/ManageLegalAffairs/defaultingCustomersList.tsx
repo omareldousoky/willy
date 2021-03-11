@@ -87,7 +87,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                 render: data => <FormCheck
                     type='checkbox'
                     checked={Boolean(this.state.selectedEntries.find(application => application._id === data._id))}
-                    onChange={() => this.addRemoveItemFromChecked(data)} 
+                    onChange={() => this.addRemoveItemFromChecked(data)}
                     disabled={!Object.keys(this.props.searchFilters).includes('status')}
                 ></FormCheck>
             },
@@ -188,6 +188,10 @@ class DefaultingCustomersList extends Component<Props, State> {
     }
     async getDefaultingCustomers() {
         this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'defaultingCustomers', branchId: this.props.branchId }).then(() => {
+            this.setState({
+                selectedEntries: [],
+                checkAll: false
+            })
             if (this.props.error)
                 Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
         }
@@ -227,8 +231,10 @@ class DefaultingCustomersList extends Component<Props, State> {
             this.setState({ modalLoader: true })
             const results = await addCustomerToDefaultingList({ customerId: this.state.selectedCustomer._id, loanId: loanId })
             if (results.status === 'success') {
-                this.setState({ modalLoader: false, showModal: false, selectedCustomer: {}, customerSearchResults: { results: [], empty: false },
-                    loanSearchResults: [] }, () => { this.getDefaultingCustomers() });
+                this.setState({
+                    modalLoader: false, showModal: false, selectedCustomer: {}, customerSearchResults: { results: [], empty: false },
+                    loanSearchResults: []
+                }, () => { this.getDefaultingCustomers() });
                 Swal.fire('', local.customerAddedToDefaultiingListSuccess, 'success')
             } else {
                 this.setState({ modalLoader: false })
@@ -300,7 +306,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                         </div>
                         <hr className='dashed-line' />
                         <Search
-                            searchKeys={['keyword', 'dateFromTo', 'defaultingCustomerStatus']}
+                            searchKeys={['keyword', 'defaultingCustomerStatus']}
                             dropDownKeys={['name', 'nationalId', 'key']}
                             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                             setFrom={(from) => this.setState({ from: from })}
