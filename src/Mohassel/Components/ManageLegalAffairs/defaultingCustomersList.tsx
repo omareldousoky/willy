@@ -44,7 +44,7 @@ interface State {
     manageLegalAffairsTabs: Tab[];
     selectedEntries: DefaultedCustomer[];
     customerSearchResults: { results: Array<Customer>; empty: boolean };
-    loanSearchResults: { applications: { application: Application; id: string }[]; totalCount: number };
+    loanSearchResults: { application: Application; id: string }[];
     selectedCustomer: Customer;
     modalLoader: boolean;
     loading: boolean;
@@ -75,21 +75,22 @@ class DefaultingCustomersList extends Component<Props, State> {
             manageLegalAffairsTabs: [],
             selectedEntries: [],
             customerSearchResults: { results: [], empty: false },
-            loanSearchResults: { applications: [], totalCount: 0 },
+            loanSearchResults: [],
             selectedCustomer: {},
             modalLoader: false,
             loading: false
         }
         this.mappers = [
-            // {
-            //     title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll}></FormCheck>,
-            //     key: 'selected',
-            //     render: data => <FormCheck
-            //         type='checkbox'
-            //         checked={Boolean(this.state.selectedEntries.find(application => application._id === data._id))}
-            //         onChange={() => this.addRemoveItemFromChecked(data)}
-            //     ></FormCheck>
-            // },
+            {
+                title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll} disabled={!Object.keys(this.props.searchFilters).includes('status')}></FormCheck>,
+                key: 'selected',
+                render: data => <FormCheck
+                    type='checkbox'
+                    checked={Boolean(this.state.selectedEntries.find(application => application._id === data._id))}
+                    onChange={() => this.addRemoveItemFromChecked(data)} 
+                    disabled={!Object.keys(this.props.searchFilters).includes('status')}
+                ></FormCheck>
+            },
             {
                 title: local.code,
                 key: 'customerKey',
@@ -110,11 +111,6 @@ class DefaultingCustomersList extends Component<Props, State> {
                 key: 'loanId',
                 render: data => data.loanId
             },
-            // {
-            //     title: local.hrCode,
-            //     key: 'hrCode',
-            //     render: data => data.hrCode
-            // },
             {
                 title: local.date,
                 key: 'employment',
@@ -183,10 +179,10 @@ class DefaultingCustomersList extends Component<Props, State> {
         const daysSince = this.getRecordAgeInDays(data.created.at)
         return (
             <>
-                {daysSince < 3 && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'branchManagerReview') }} ></img></Can>}
-                {daysSince >= 3 && daysSince < 6 && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaSupervisorReview') }} ></img></Can>}
-                {daysSince >= 6 && daysSince < 9 && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaManagerReview') }} ></img></Can>}
-                {daysSince >= 9 && daysSince < 15 && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'financialManagerReview') }} ></img></Can>}
+                {daysSince < 3 && data.status !== 'branchManagerReview' && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'branchManagerReview') }} ></img></Can>}
+                {daysSince >= 3 && daysSince < 6 && data.status !== 'areaSupervisorReview' && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaSupervisorReview') }} ></img></Can>}
+                {daysSince >= 6 && daysSince < 9 && data.status !== 'areaManagerReview' && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaManagerReview') }} ></img></Can>}
+                {daysSince >= 9 && daysSince < 15 && data.status !== 'financialManagerReview' && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'financialManagerReview') }} ></img></Can>}
             </>
         );
     }
@@ -218,9 +214,9 @@ class DefaultingCustomersList extends Component<Props, State> {
     }
     async findLoans(customer: Customer) {
         this.setState({ modalLoader: true, selectedCustomer: customer })
-        const results = await searchLoan({ from: 0, size: 1000, nationalId: customer.nationalId, status: 'issued' })
+        const results = await searchLoan({ from: 0, size: 1000, nationalId: customer.nationalId })
         if (results.status === 'success') {
-            this.setState({ modalLoader: false, loanSearchResults: results.body });
+            this.setState({ modalLoader: false, loanSearchResults: results.body.applications.filter(loan => loan.application.status && ['pending', 'issued'].includes(loan.application.status)) });
         } else {
             this.setState({ modalLoader: false })
             Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
@@ -231,7 +227,8 @@ class DefaultingCustomersList extends Component<Props, State> {
             this.setState({ modalLoader: true })
             const results = await addCustomerToDefaultingList({ customerId: this.state.selectedCustomer._id, loanId: loanId })
             if (results.status === 'success') {
-                this.setState({ modalLoader: false, showModal: false }, () => { this.getDefaultingCustomers() });
+                this.setState({ modalLoader: false, showModal: false, selectedCustomer: {}, customerSearchResults: { results: [], empty: false },
+                    loanSearchResults: [] }, () => { this.getDefaultingCustomers() });
                 Swal.fire('', local.customerAddedToDefaultiingListSuccess, 'success')
             } else {
                 this.setState({ modalLoader: false })
@@ -267,7 +264,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             }).then(async (result) => {
                 if (result.value) {
                     this.setState({ loading: true });
-                    const res = await reviewCustomerDefaultedLoan({ id: id, notes: text, type: type });
+                    const res = await reviewCustomerDefaultedLoan({ ids: [id], notes: text, type: type });
                     if (res.status === "success") {
                         this.setState({ loading: false })
                         Swal.fire('', local.defaultingReviewSuccess, 'success').then(() => this.getDefaultingCustomers());
@@ -336,13 +333,13 @@ class DefaultingCustomersList extends Component<Props, State> {
                             searchResults={this.state.customerSearchResults}
                             selectCustomer={(customer) => this.findLoans(customer)}
                         />
-                            : <DynamicTable totalCount={0} pagination={false} data={this.state.loanSearchResults.applications} mappers={this.loanMappers} />
+                            : <DynamicTable totalCount={0} pagination={false} data={this.state.loanSearchResults} mappers={this.loanMappers} />
                         }
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => this.setState({
                             showModal: false, selectedCustomer: {}, customerSearchResults: { results: [], empty: false },
-                            loanSearchResults: { applications: [], totalCount: 0 }
+                            loanSearchResults: []
                         })}>{local.cancel}</Button>
                     </Modal.Footer>
                 </Modal>

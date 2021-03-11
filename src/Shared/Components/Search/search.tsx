@@ -60,7 +60,7 @@ interface Props {
   searchFilters: (data) => void;
   setIssuedLoansSearchFilters: (data) => void;
   setLoading: (data) => void;
-	submitClassName?: string;
+  submitClassName?: string;
 }
 interface State {
   governorates: Array<any>;
@@ -252,7 +252,7 @@ class Search extends Component<Props, State> {
     };
     return arDropDownValue[key];
   }
-  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: {value: string; text: string}[]){
+  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], searchkey?: string) {
     return (
       <Col key={index} sm={6} style={{ marginTop: 20 }}>
         <div className="dropdown-container">
@@ -263,19 +263,51 @@ class Search extends Component<Props, State> {
             data-qc="status"
             value={formikProps.values.status}
             onChange={(e) => {
-              formikProps.setFieldValue(
-                "status",
-                e.currentTarget.value
-              );
+              if (searchkey === "defaultingCustomerStatus") {
+                formikProps.setFieldValue(
+                  "status",
+                  e.currentTarget.value
+                );
+                ['branchManagerReview', 'areaSupervisorReview', 'areaManagerReview', 'financialManagerReview'].includes(e.currentTarget.value) && this.setDefaultingCustomersDate(formikProps, e.currentTarget.value)
+              } else {
+                formikProps.setFieldValue(
+                  "status",
+                  e.currentTarget.value
+                );
+              }
             }}
           >
-            {array.map(option =>
-              <option key={option.value} value={option.value} data-qc={option.text}>{option.text}</option>
-            )}
+            {array.map(option => {
+              {
+                if(option.permission && option.key) {
+                  return <Can I={option.permission} a={option.key}>
+                  <option key={option.value} value={option.value} data-qc={option.text}>{option.text}</option>
+                </Can>
+                } else {
+                  return <option key={option.value} value={option.value} data-qc={option.text}>{option.text}</option>
+                }
+              }
+            })}
           </Form.Control>
         </div>
       </Col>
     )
+  }
+  setDefaultingCustomersDate(formikProps: FormikProps<FormikValues>, role: string) {
+    const now = new Date().valueOf()
+    const threeDays = 259200000
+    const sixDays = 518400000
+    const nineDays = 777600000
+    const fifteenDays = 1296000000
+    const fromDate = now - (role === 'branchManagerReview' ? threeDays : role === 'areaManagerReview' ? sixDays : role === 'areaSupervisorReview' ? nineDays : fifteenDays )
+    formikProps.setFieldValue(
+      "fromDate",
+      fromDate
+    );
+    formikProps.setFieldValue(
+      "toDate",
+      now
+    );
   }
   render() {
     return (
@@ -283,7 +315,6 @@ class Search extends Component<Props, State> {
         enableReinitialize
         initialValues={this.getInitialState()}
         onSubmit={this.submit}
-        // validationSchema={}
         validateOnBlur
         validateOnChange
       >
@@ -299,29 +330,29 @@ class Search extends Component<Props, State> {
                     <Col key={index} sm={6}>
                       <InputGroup>
                         {this.props.dropDownKeys &&
-                        this.props.dropDownKeys.length ? (
-                          <DropdownButton
-                            as={InputGroup.Append}
-                            variant="outline-secondary"
-                            color="black"
-                            title={this.getArValue(this.state.dropDownValue)}
-                            id="input-group-dropdown-2"
-                            data-qc="search-dropdown"
-                          >
-                            {this.props.dropDownKeys.map((key, index) => (
-                              <Dropdown.Item
-                                key={index}
-                                data-qc={key}
-                                onClick={() => {
-                                  this.setState({ dropDownValue: key });
-                                  formikProps.setFieldValue("keyword", "");
-                                }}
-                              >
-                                {this.getArValue(key)}
-                              </Dropdown.Item>
-                            ))}
-                          </DropdownButton>
-                        ) : null}
+                          this.props.dropDownKeys.length ? (
+                            <DropdownButton
+                              as={InputGroup.Append}
+                              variant="outline-secondary"
+                              color="black"
+                              title={this.getArValue(this.state.dropDownValue)}
+                              id="input-group-dropdown-2"
+                              data-qc="search-dropdown"
+                            >
+                              {this.props.dropDownKeys.map((key, index) => (
+                                <Dropdown.Item
+                                  key={index}
+                                  data-qc={key}
+                                  onClick={() => {
+                                    this.setState({ dropDownValue: key });
+                                    formikProps.setFieldValue("keyword", "");
+                                  }}
+                                >
+                                  {this.getArValue(key)}
+                                </Dropdown.Item>
+                              ))}
+                            </DropdownButton>
+                          ) : null}
                         <FormControl
                           type="text"
                           name="keyword"
@@ -435,23 +466,23 @@ class Search extends Component<Props, State> {
                 }
                 if (searchKey === "status") {
                   return this.statusDropdown(formikProps, index, [
-                    {value: "", text: local.all},
-                    {value: "paid", text: local.paid},
-                    {value: "issued", text: local.issued},
-                    {value: "pending", text: local.pending}
+                    { value: "", text: local.all },
+                    { value: "paid", text: local.paid },
+                    { value: "issued", text: local.issued },
+                    { value: "pending", text: local.pending }
                   ])
                 }
                 if (searchKey === "status-application") {
                   return this.statusDropdown(formikProps, index, [
-                    {value: "", text: local.all},
-                    {value: "underReview", text: local.underReview},
-                    {value: "reviewed", text: local.reviewed},
-                    {value: "secondReview", text: local.secondReviewed},
-                    {value: "thirdReview", text: local.thirdReviewed},
-                    {value: "approved", text: local.approved},
-                    {value: "created", text: local.created},
-                    {value: "rejected", text: local.rejected},
-                    {value: "canceled", text: local.cancelled}
+                    { value: "", text: local.all },
+                    { value: "underReview", text: local.underReview },
+                    { value: "reviewed", text: local.reviewed },
+                    { value: "secondReview", text: local.secondReviewed },
+                    { value: "thirdReview", text: local.thirdReviewed },
+                    { value: "approved", text: local.approved },
+                    { value: "created", text: local.created },
+                    { value: "rejected", text: local.rejected },
+                    { value: "canceled", text: local.cancelled }
                   ])
                 }
                 if (searchKey === "review-application") {
@@ -493,21 +524,21 @@ class Search extends Component<Props, State> {
                 }
                 if (searchKey === "clearance-status") {
                   return this.statusDropdown(formikProps, index, [
-                    {value: "", text: local.all},
-                    {value: "underReview", text: local.underReview},
-                    {value: "approved", text: local.approved},
-                    {value: "rejected", text: local.rejected}
+                    { value: "", text: local.all },
+                    { value: "underReview", text: local.underReview },
+                    { value: "approved", text: local.approved },
+                    { value: "rejected", text: local.rejected }
                   ])
                 }
                 if (searchKey === "defaultingCustomerStatus") {
                   return this.statusDropdown(formikProps, index, [
-                    {value: "", text: local.all},
-                    {value: "underReview", text: local.underReview},
-                    {value: "branchManagerReview", text: local.branchManagerReview},
-                    {value: "areaManagerReview", text: local.areaManagerReview},
-                    {value: "areaSupervisorReview", text: local.areaSupervisorReview},
-                    {value: "financialManagerReview", text: local.financialManagerReview},
-                  ])
+                    { value: "", text: local.all },
+                    { value: "underReview", text: local.underReview },
+                    { value: "branchManagerReview", text: local.branchManagerReview, permission: 'branchManagerReview', key: 'legal' },
+                    { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
+                    { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },
+                    { value: "financialManagerReview", text: local.financialManagerReview, permission: 'financialManagerReview', key: 'legal' },
+                  ], 'defaultingCustomerStatus')
                 }
                 if (searchKey === "branch" && this.viewBranchDropdown()) {
                   return (
@@ -631,9 +662,9 @@ class Search extends Component<Props, State> {
                   disabled={
                     formikProps.values.fromDate
                       ? !Boolean(
-                          formikProps.values.fromDate &&
-                            formikProps.values.toDate
-                        )
+                        formikProps.values.fromDate &&
+                        formikProps.values.toDate
+                      )
                       : false
                   }
                 >

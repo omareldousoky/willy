@@ -21,7 +21,7 @@ export const addCustomerToDefaultingList =  async (data: {customerId: string; lo
         return { status: "error", error: error.response.data }
     }
 }
-export const reviewCustomerDefaultedLoan =  async (data: {id: string; notes: string; type: string}) => {
+export const reviewCustomerDefaultedLoan =  async (data: {ids: string[]; notes: string; type: string}) => {
     const url = process.env.REACT_APP_BASE_URL + '/legal/review-customer';
     try {
         const res = await axios.put(url, data);
