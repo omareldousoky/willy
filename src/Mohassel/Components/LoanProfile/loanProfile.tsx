@@ -62,19 +62,17 @@ interface EarlyPayment {
 }
 
 export interface IndividualWithInstallments {
-    individualInGroup: {
+    installmentTable: {
+        id: number;
+        installmentResponse: number;
+        dateOfPayment: number;
+    }[];
+    customerTable?: {
         amount: number;
+        installmentAmount: number;
         customer: Customer;
         type: string;
-    };
-    installmentsObject: {
-        output: Installment[];
-        sum: {
-            feesSum: number;
-            installmentSum: number;
-            principal: number;
-        };
-    };
+    }[];
 }
 interface State {
     prevId: string;
@@ -93,7 +91,7 @@ interface State {
     randomPendingActions: Array<any>;
     geoAreas: Array<any>;
     remainingTotal: number;
-    individualsWithInstallments: Array<IndividualWithInstallments>;
+    individualsWithInstallments: IndividualWithInstallments;
 }
 
 interface Props {
@@ -121,7 +119,9 @@ class LoanProfile extends Component<Props, State>{
             randomPendingActions: [],
             geoAreas: [],
             remainingTotal: 0,
-            individualsWithInstallments: []
+            individualsWithInstallments: {
+                installmentTable: []
+            }
         };
     }
     componentDidMount() {
@@ -609,7 +609,7 @@ class LoanProfile extends Component<Props, State>{
         this.setState({ loading: true })
         const res = await getGroupMemberShares(this.props.history.location.state.id);
         if (res.status === "success") {
-            this.setState({ loading: false, individualsWithInstallments: res.body.individualsWithInstallments })
+            this.setState({ loading: false, individualsWithInstallments: res.body })
         }
         else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
