@@ -115,7 +115,7 @@ class TerrorismList extends Component<Props, State> {
 				<HeaderWithCards
 					header={local.antiTerrorism}
 					array={this.state.tabsToRender}
-					active={this.state.tabsToRender.map(item => { return item.stringKey }).indexOf("antiTerrorism")}
+					active={this.state.tabsToRender.map(item => { return item.icon }).indexOf('users')}
 				/>
 				<Card className="main-card">
 					<Loader type="fullscreen" open={this.props.loading} />
