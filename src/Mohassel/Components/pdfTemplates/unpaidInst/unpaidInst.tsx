@@ -22,7 +22,7 @@ const UnpaidInst = (props) => {
                   </th>
                   <th />
                   <th rowSpan={2}>
-                    <div className="logo-print" />
+                    <div className="logo-print-tb" />
                   </th>
                 </tr>
                 <tr>

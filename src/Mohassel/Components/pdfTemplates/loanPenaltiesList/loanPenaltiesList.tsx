@@ -163,7 +163,7 @@ const LoanPenaltiesList = (props) => {
           }}
         >
           <th colSpan={6} style={{ backgroundColor: 'red' }}>
-            <div className="logo-print" />
+            <div className="logo-print-tb" />
           </th>
           <th colSpan={6} style={{ backgroundColor: 'blue' }}>
             ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015

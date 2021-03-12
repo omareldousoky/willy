@@ -46,7 +46,7 @@ const CustomerStatusDetails = (props) => {
           }}
         >
           <th colSpan={6} style={{ backgroundColor: 'white' }}>
-            <div className="logo-print" />{' '}
+            <div className="logo-print-tb" />{' '}
           </th>
           <th style={{ backgroundColor: 'white' }} colSpan={6}>
             ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
