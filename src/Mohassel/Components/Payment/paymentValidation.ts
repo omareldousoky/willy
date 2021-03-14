@@ -56,19 +56,6 @@ export const paymentValidation = Yup.object().shape({
 });
 
 export const earlyPaymentValidation = Yup.object().shape({
-  payAmount: Yup.number()
-    .moreThan(0, local.minPayment)
-    .test("Should not be less than Required Amount", local.amountShouldNotbeLessThanReqAmount,
-      function (this: any, value: number) {
-        return value >= this.parent.remainingPrincipal
-      }
-    )
-    .test("Should not exceed Required Amount", local.amountShouldNotExceedReqAmount,
-      function (this: any, value: number) {
-        return value <= this.parent.requiredAmount
-      }
-    )
-    .required(local.required),
   payerType: Yup.string().required(local.required),
   payerId: Yup.string().when(["payerType", "beneficiaryType"], {
     is: (payerType, beneficiaryType) => ((payerType === "beneficiary" && beneficiaryType === "group") || payerType === "employee"),
@@ -81,13 +68,6 @@ export const earlyPaymentValidation = Yup.object().shape({
     otherwise: Yup.string()
   }),
   payerNationalId: Yup.string(),
-  truthDate: Yup.string()
-    .test("Max Date", local.dateShouldBeBeforeToday, (value: any) => {
-      return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true;
-    })
-    .test("not before 1-2-2021", local.dateCantBeBeforeFeb2021, (value: any) => {
-      return value ? new Date(value).valueOf() >= beforeFeb2021 : true;
-    }),
 })
 
 export const manualPaymentValidation = Yup.object().shape({

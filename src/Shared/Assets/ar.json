@@ -904,6 +904,13 @@
     "manageLoanDetails":"اعدادت القروض",
     "customerCategorization": "مستوي المخاطر",
 		"typeRepresentativeName": "اكتب اسم المندوب",
+		"halanLinkage": "ربط مع حالا",
+		"linkUserWithHalan": "ربط العميل مع حالاً",
+		"linkUser": "ربط العميل",
+		"userLinkedSuccessfully": "تم ربط العميل بتطبيق حالاً بنجاح",
+		"invalidMobilePhoneNumber": "رقم المحمول غير صحيح",
+		"unlinkUser": "إلغاء الربط",
+		"userUnlinkedSuccessfully": "تم إلغاء ربط العميل بتطبيق حالاً بنجاح",
     "chooseBranchGeoArea": "اختر التقسيم الجغرافي للفرع",
     "cibReports": "تقارير الCIB",
     "businessActivities":"أنواع نشاط العمل",
@@ -921,6 +928,7 @@
 		"nationality": "الجنسية",
 		"customerMaySuspect": "هذا العميل مشكوك فيه قد يكون إرهابي",
 		"uploadSuspectsList": "رفع قوائم الإرهابين",
-		"uploadedSuccessfully": "تم رفع المستند بنجاح"
-
+		"uploadedSuccessfully": "تم رفع المستند بنجاح",
+    "Deceased":"توفي العميل",
+    "Defaultingonpayment":"تخلف عن السداد"
 }
