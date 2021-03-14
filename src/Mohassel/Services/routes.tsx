@@ -57,6 +57,7 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
+import loanOfficersList from '../Components/ManageAccounts/loanOfficersList';
 
 const appRoutes = [
   {
@@ -342,6 +343,12 @@ const appRoutes = [
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
               },
             ]
+          },
+          {
+            path: "/loan-officers",
+            label: local.loanOfficers,
+            render: (props) => <Can I="updateLoanOfficer" a="user"><loanOfficersList {...props} /></Can>
+
           }
         ]
       },

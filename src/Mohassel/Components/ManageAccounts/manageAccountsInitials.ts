@@ -38,8 +38,15 @@ if(ability.can('getBranch','branch')){
     desc: local.branchesDesc,
     path: '/manage-accounts/branches'
   },
-
   )
+}
+if(ability.can("updateLoanOfficer","user")) {
+  mangeAccountArr.push({
+    icon:'users',
+    header: local.loanOfficers,
+    desc: ""
+    path: "/manage-accounts/loan-officers",
+  })
 }
 return mangeAccountArr;
 }
