@@ -21,7 +21,7 @@ export const ActionsDropdown = ({ currentCustomerId,openCustomerId, title, actio
                 <button
                   key={index}
                   className="btn item rounded-0"
-                  onClick={(event)=>action.actionOnClick(event,currentCustomerId, blocked)}
+                  onClick={(event)=>action.actionOnClick(currentCustomerId, blocked,event)}
                 >
                   {action.actionTitle(blocked)}
                 </button>

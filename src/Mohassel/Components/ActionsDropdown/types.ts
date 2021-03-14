@@ -9,5 +9,9 @@ export interface ActionsDropdownProps {
 export interface Actions {
   actionTitle(blocked?: any): string;
   actionPermission: boolean;
-  actionOnClick(event: React.MouseEvent<HTMLButtonElement>, currentCustomerId: string, blocked?: any): void;
+  actionOnClick(
+    currentCustomerId: string,
+    blocked?: any,
+    event?: React.MouseEvent<HTMLButtonElement>
+  ): void;
 }
