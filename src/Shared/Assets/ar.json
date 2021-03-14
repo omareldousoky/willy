@@ -921,5 +921,13 @@
     "dateCantBeInFuture":"التاريخ لايمكن أن يكون في المستقبل",
     "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا",
     "Deceased":"توفي العميل",
-    "Defaultingonpayment":"تخلف عن السداد"
+    "Defaultingonpayment":"تخلف عن السداد",
+    "companies": "شركات",
+    "newCompany": "شركة جديدة",
+    "editCompany": "تعديل الشركة",
+    "viewCompany": "تفاصيل الشركة",
+    "companyCode": "كود الشركة",
+    "companyName": "اسم الشركة",
+    "noOfCompanies": "عدد الشركات",
+    "persons": "اشخاص"
 }
