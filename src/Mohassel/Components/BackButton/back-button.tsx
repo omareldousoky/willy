@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react'
 import { useHistory } from 'react-router-dom'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface Props {
   title: string

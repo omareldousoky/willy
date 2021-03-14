@@ -9,7 +9,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 import Select from 'react-select'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 import {
   getRoles,
   getPermissions,

@@ -17,7 +17,7 @@ import './styles.scss'
 import { Employee } from './payment'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import Can from '../../config/Can'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface FormValues {
   requiredAmount: number

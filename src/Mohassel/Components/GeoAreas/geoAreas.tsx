@@ -16,7 +16,7 @@ import { manageToolsArray } from '../Tools/manageToolsInitials'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { CRUDList } from '../CRUDList/crudList'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface GeoArea {
   name: string

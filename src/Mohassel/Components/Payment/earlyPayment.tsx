@@ -12,7 +12,7 @@ import { payment } from '../../../Shared/redux/payment/actions'
 import { Employee } from './payment'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface Member {
   customer: {

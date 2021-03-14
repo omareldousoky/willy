@@ -6,7 +6,7 @@ import './userCreation.scss'
 import Button from 'react-bootstrap/Button'
 import Swal from 'sweetalert2'
 import * as local from '../../../Shared/Assets/ar.json'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 import {
   customFilterOption,
   getErrorMessage,

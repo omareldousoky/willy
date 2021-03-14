@@ -7,7 +7,7 @@ import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Can from '../../config/Can'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import BranchBasicsCard, { Managers } from './branchBasicsCard'

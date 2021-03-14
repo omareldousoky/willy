@@ -18,7 +18,7 @@ import {
   getErrorMessage,
 } from '../../../Shared/Services/utils'
 import DualBox from '../DualListBox/dualListBox'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 import { getBranchesByProducts } from '../../Services/APIs/Branch/getBranches'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLoansArray } from '../ManageLoans/manageLoansInitials'

@@ -13,7 +13,7 @@ import { getCookie } from '../../../Shared/Services/getCookie'
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import ability from '../../config/ability'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface GeoDivision {
   majorGeoDivisionName: { ar: string }

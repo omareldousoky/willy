@@ -21,7 +21,7 @@ import { search } from '../../../Shared/redux/search/actions'
 import { loading } from '../../../Shared/redux/loading/actions'
 import local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface Props extends RouteComponentProps {
   data: any

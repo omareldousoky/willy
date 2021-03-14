@@ -8,7 +8,7 @@ import {
   ClearanceTouched,
 } from './clearanceFormIntialState'
 import DocumentPhoto from '../../../Shared/Components/documentPhoto/documentPhoto'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 import './clearance.scss'
 
 interface Props {

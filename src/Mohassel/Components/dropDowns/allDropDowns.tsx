@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useStore } from 'react-redux'
 import Select, { ValueType, Props } from 'react-select'
@@ -7,7 +7,7 @@ import { searchBranches } from '../../Services/APIs/Branch/searchBranches'
 import * as local from '../../../Shared/Assets/ar.json'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 export interface DropDownOption {
   name: string
@@ -80,16 +80,10 @@ export const AsyncLoanOfficersDropDown = ({
   const [value, setValue] = useState<ValueType<DropDownOption> | null>()
   const [searchKeyword, setSearchKeyword] = useState<string>('')
 
-  // to avoid memory leak for in progress api call
-  let stillMounted = true
-  useEffect(() => {
-    return () => {
-      stillMounted = false
-    }
-  }, [])
+  const mounted = useRef(false)
 
   const handleLoadOptions = async () => {
-    if (!stillMounted) return
+    if (!mounted.current) return
     const newOptions: DropDownOption[] = []
     const res = await searchLoanOfficer({
       name: searchKeyword,
@@ -98,30 +92,33 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     })
 
-    if (stillMounted && res.status === 'success') {
-      const { data } = res.body
-      if (Array.isArray(data) && data.length && stillMounted)
-        res.body.data.map((loanOfficer: DropDownOption) =>
-          newOptions.push({
-            _id: loanOfficer._id,
-            name: loanOfficer.name,
-          })
-        )
-      setOptions({
-        options: newOptions,
-        isLoading: false,
-        optionsLoaded: true,
-      })
-    } else {
-      setOptions({ options: [], isLoading: false, optionsLoaded: true })
+    if (mounted.current) {
+      if (res.status === 'success') {
+        const { data } = res.body
+        if (Array.isArray(data) && data.length)
+          res.body.data.map((loanOfficer: DropDownOption) =>
+            newOptions.push({
+              _id: loanOfficer._id,
+              name: loanOfficer.name,
+            })
+          )
+        setOptions({
+          options: newOptions,
+          isLoading: false,
+          optionsLoaded: true,
+        })
+      } else {
+        setOptions({ options: [], isLoading: false, optionsLoaded: true })
+      }
     }
   }
-  const maybeLoadOptions = () => {
-    if (!options.optionsLoaded) {
+  const maybeLoadOptions = useCallback(() => {
+    if (!options.optionsLoaded && mounted.current) {
       setOptions({ ...options, isLoading: true })
       handleLoadOptions()
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     setOptions(initialState)
@@ -131,6 +128,15 @@ export const AsyncLoanOfficersDropDown = ({
   useEffect(() => {
     if (isDisabled) setValue(null)
   }, [isDisabled])
+
+  // to avoid memory leak for in progress api call
+  useEffect(() => {
+    maybeLoadOptions()
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [maybeLoadOptions])
 
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>

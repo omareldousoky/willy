@@ -50,7 +50,7 @@ import CustomerSearch from '../CustomerSearch/customerSearchTable'
 import Wizard from '../wizard/Wizard'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface LoanApplicationCreationRouteState {
   id: string

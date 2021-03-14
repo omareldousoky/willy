@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import Table from 'react-bootstrap/Table'
 import * as local from '../../../Shared/Assets/ar.json'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 import { UserDateValues } from './userDetailsInterfaces'
 import { timeToDate, timeToDateyyymmdd } from '../../../Shared/Services/utils'
 import Labels from '../Labels/labels'

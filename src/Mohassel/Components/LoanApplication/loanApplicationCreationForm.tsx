@@ -13,7 +13,7 @@ import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/se
 import { getCookie } from '../../../Shared/Services/getCookie'
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils'
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 export const LoanApplicationCreationForm = (props: any) => {
   const {

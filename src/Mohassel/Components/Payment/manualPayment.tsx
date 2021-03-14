@@ -15,7 +15,7 @@ import './styles.scss'
 import { PendingActions } from '../../../Shared/Services/interfaces'
 import { Installment } from './payInstallment'
 import Can from '../../config/Can'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface SelectObject {
   label: string

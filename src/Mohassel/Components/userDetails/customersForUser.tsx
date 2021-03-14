@@ -22,7 +22,7 @@ import { UserDateValues } from './userDetailsInterfaces'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { LoanOfficer } from '../../../Shared/Services/interfaces'
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 
 interface Props {
   id: string

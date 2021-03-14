@@ -16,7 +16,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { getErrorMessage } from '../../../Shared/Services/utils'
 import { getCookie } from '../../../Shared/Services/getCookie'
 
-import { theme } from '../../../theme'
+import { theme } from '../../../Shared/theme'
 import ability from '../../config/ability'
 import { GroupsByBranch } from '../../../Shared/Services/interfaces'
 import { approveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/approveOfficersGroups'
