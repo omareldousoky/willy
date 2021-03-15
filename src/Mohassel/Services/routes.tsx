@@ -317,7 +317,7 @@ const appRoutes = [
               {
                 path: "/user-details",
                 label: local.userDetails,
-                render: (props) => <Can I='getUser' a='user'><UserDetails {...props} /></Can>,
+                render: (props) =><UserDetails {...props} />,
               }
             ]
           },
