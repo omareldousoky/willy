@@ -5,7 +5,7 @@ export const editLoanOfficerValidation = Yup.object().shape({
   password: Yup.string().matches(
     /^(?=.*[A-Z])(?!.*[\u0621-\u064A\u0660-\u0669 ])(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,}$/,
     local.passwordValidationError
-  ),
+  ).required(local.required),
   confirmPassword: Yup.string().when('password', {
     is: (val) => val !== undefined,
     then: Yup.string()

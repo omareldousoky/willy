@@ -316,6 +316,7 @@ class LoanOfficersList extends Component<Props, State> {
                             name="username"
                             data-qc="username"
                             value={formikProps.values.username}
+                            disabled
                             onChange={async (
                               event: React.ChangeEvent<HTMLInputElement>
                             ) => {
