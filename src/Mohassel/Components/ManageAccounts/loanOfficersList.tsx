@@ -102,7 +102,7 @@ class LoanOfficersList extends Component<Props, State> {
       {
         title: '',
         key: 'iocns',
-        render: (data) => this.renderIcon(data)
+        render: (data) => this.renderIcon(data),
       },
     ]
   }
@@ -122,46 +122,6 @@ class LoanOfficersList extends Component<Props, State> {
     this.setState({
       manageAccountTabs: manageAccountsArray(),
     })
-  }
-  renderIcon(data) {
-    return (
-      <>
-        <span>
-          <img
-            style={{ cursor: 'pointer', marginLeft: 20 }}
-            alt={'view'}
-            src={require('../../Assets/view.svg')}
-            onClick={() => {
-              this.props.history.push({
-                pathname: '/manage-accounts/users/user-details',
-                state: { details: data._id },
-              })
-            }}
-          />
-        </span>
-        <Can I="updateLoanOfficer" a="user">
-          <span
-            onClick={() => {
-              this.setState({
-                showModal: true,
-                loanOfficer: {
-                  id: data._id,
-                  name: data.name,
-                  username: data.username,
-                },
-              })
-            }}
-          >
-            <img
-              key={data._id}
-              style={{ cursor: 'pointer', marginLeft: 20 }}
-              alt="edit"
-              src={require('../../Assets/editIcon.svg')}
-            />
-          </span>
-        </Can>
-      </>
-    )
   }
 
   componentWillUnmount() {
@@ -202,6 +162,48 @@ class LoanOfficersList extends Component<Props, State> {
         if (this.props.error)
           Swal.fire('Error !', getErrorMessage(this.props.error), 'error')
       })
+  }
+
+  renderIcon(data) {
+    return (
+      <>
+        <span
+          onClick={() => {
+            this.props.history.push({
+              pathname: '/manage-accounts/users/user-details',
+              state: { details: data._id },
+            })
+          }}
+        >
+          <img
+            style={{ cursor: 'pointer', marginLeft: 20 }}
+            alt="view"
+            src={require('../../Assets/view.svg')}
+          />
+        </span>
+        <Can I="updateLoanOfficer" a="user">
+          <span
+            onClick={() => {
+              this.setState({
+                showModal: true,
+                loanOfficer: {
+                  id: data._id,
+                  name: data.name,
+                  username: data.username,
+                },
+              })
+            }}
+          >
+            <img
+              key={data._id}
+              style={{ cursor: 'pointer', marginLeft: 20 }}
+              alt="edit"
+              src={require('../../Assets/editIcon.svg')}
+            />
+          </span>
+        </Can>
+      </>
+    )
   }
 
   render() {
