@@ -1,0 +1,88 @@
+// lts icon font
+@import "lts-icons";
+
+$green: #7dc356;
+
+@media print {
+	.rtl th,
+	[dir="rtl"] th {
+		text-align: center;
+	}
+}
+
+.rtl .form-check-input,
+[dir="rtl"] .form-check-input {
+	margin-right: 0;
+}
+
+select.form-control {
+	padding-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	margin-bottom: 0.5rem;
+	font-weight: 500;
+	line-height: 1.2;
+	color: inherit
+}
+
+.form-check>.form-check-input,
+input[type=checkbox],
+input[type=radio] {
+	appearance: none;
+	vertical-align: text-top;
+	font-size: 1rem;
+	cursor: pointer;
+	outline: none !important;
+	padding: 0;
+	margin: 0;
+
+	&[type=checkbox]::after,
+	input[type=checkbox]::after {
+		font-family: "lts-icons" !important;
+		content: "\e901";
+		color: #495057;
+	}
+
+	&[type=checkbox]:checked::after,
+	input[type=checkbox]:checked::after {
+		content: "\e900";
+		color: $green;
+	}
+
+	&[type=checkbox]:disabled::after,
+	input[type=checkbox]:disabled::after {
+		cursor: default;
+		color: #ced4da;
+	}
+
+	&[type=radio]::after,
+	input[type=radio]::after {
+		font-family: "lts-icons" !important;
+		content: "\e903";
+		color: #495057;
+	}
+
+	&[type=radio]:checked::after,
+	input[type=radio]:checked::after {
+		content: "\e902";
+		color: $green;
+	}
+
+	&[type=radio]:disabled::after,
+	input[type=radio]:disabled::after {
+		cursor: default;
+		color: #ced4da;
+	}
+}

@@ -152,6 +152,9 @@ class Search extends Component<Props, State> {
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
+    // if (url === "defaultingCustomers") {
+    //   delete obj.status;
+    // }
     this.props.search({
       ...obj,
       from: 0,
@@ -254,7 +257,7 @@ class Search extends Component<Props, State> {
   }
   statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], searchkey?: string) {
     return (
-      <Col key={index} sm={6} style={{ marginTop: 20 }}>
+      <Col key={index} sm={6} style={{ marginTop: (index < 2 ? 0 : 20) }}>
         <div className="dropdown-container">
           <p className="dropdown-label">{local.status}</p>
           <Form.Control
@@ -263,18 +266,18 @@ class Search extends Component<Props, State> {
             data-qc="status"
             value={formikProps.values.status}
             onChange={(e) => {
-              if (searchkey === "defaultingCustomerStatus") {
+              // if (searchkey === "defaultingCustomerStatus") {
+              //   formikProps.setFieldValue(
+              //     "status",
+              //     e.currentTarget.value
+              //   );
+              //   // ['branchManagerReview', 'areaSupervisorReview', 'areaManagerReview', 'financialManagerReview'].includes(e.currentTarget.value) && this.setDefaultingCustomersDate(formikProps, e.currentTarget.value)
+              // } else {
                 formikProps.setFieldValue(
                   "status",
                   e.currentTarget.value
                 );
-                ['branchManagerReview', 'areaSupervisorReview', 'areaManagerReview', 'financialManagerReview'].includes(e.currentTarget.value) && this.setDefaultingCustomersDate(formikProps, e.currentTarget.value)
-              } else {
-                formikProps.setFieldValue(
-                  "status",
-                  e.currentTarget.value
-                );
-              }
+              // }
             }}
           >
             {array.map(option => {
@@ -292,22 +295,6 @@ class Search extends Component<Props, State> {
         </div>
       </Col>
     )
-  }
-  setDefaultingCustomersDate(formikProps: FormikProps<FormikValues>, role: string) {
-    const now = new Date().valueOf()
-    const threeDays = 259200000
-    const sixDays = 518400000
-    const nineDays = 777600000
-    const fifteenDays = 1296000000
-    const fromDate = now - (role === 'branchManagerReview' ? threeDays : role === 'areaManagerReview' ? sixDays : role === 'areaSupervisorReview' ? nineDays : fifteenDays )
-    formikProps.setFieldValue(
-      "fromDate",
-      fromDate
-    );
-    formikProps.setFieldValue(
-      "toDate",
-      now
-    );
   }
   render() {
     return (

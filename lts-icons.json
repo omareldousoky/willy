@@ -1,0 +1,158 @@
+	{
+  "metadata": {
+    "name": "lts-icons",
+    "lastOpened": 0,
+    "created": 1614502008229
+  },
+  "iconSets": [
+    {
+      "selection": [
+        {
+          "order": 2,
+          "id": 3,
+          "name": "checkbox-checked",
+          "prevSize": 32,
+          "code": 59648,
+          "tempChar": ""
+        },
+        {
+          "order": 3,
+          "id": 2,
+          "name": "checkbox-unchecked",
+          "prevSize": 32,
+          "code": 59649,
+          "tempChar": ""
+        },
+        {
+          "order": 4,
+          "id": 1,
+          "name": "radio-checked",
+          "prevSize": 32,
+          "code": 59650,
+          "tempChar": ""
+        },
+        {
+          "order": 5,
+          "id": 0,
+          "name": "radio-unchecked",
+          "prevSize": 32,
+          "code": 59651,
+          "tempChar": ""
+        }
+      ],
+      "id": 0,
+      "metadata": {
+        "name": "lts",
+        "importSize": {
+          "width": 16,
+          "height": 16
+        }
+      },
+      "height": 1024,
+      "prevSize": 32,
+      "icons": [
+        {
+          "id": 3,
+          "paths": [
+            "M896 0h-768c-70.4 0-128 57.6-128 128v768c0 70.4 57.6 128 128 128h768c70.4 0 128-57.6 128-128v-768c0-70.4-57.6-128-128-128zM448 794.496l-237.248-237.248 90.496-90.496 146.752 146.752 306.752-306.752 90.496 90.496-397.248 397.248z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "checkbox-checked"
+          ]
+        },
+        {
+          "id": 2,
+          "paths": [
+            "M896 0h-768c-70.4 0-128 57.6-128 128v768c0 70.4 57.6 128 128 128h768c70.4 0 128-57.6 128-128v-768c0-70.4-57.6-128-128-128zM896 896h-768v-768h768v768z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "checkbox-unchecked"
+          ]
+        },
+        {
+          "id": 1,
+          "paths": [
+            "M512 0c-282.77 0-512 229.23-512 512s229.23 512 512 512v0c282.77 0 512-229.23 512-512s-229.23-512-512-512v0zM512 896c-212.077 0-384-171.923-384-384s171.923-384 384-384v0c212.077 0 384 171.923 384 384s-171.923 384-384 384v0zM320 512c0-106.039 85.961-192 192-192s192 85.961 192 192v0c0 106.039-85.961 192-192 192s-192-85.961-192-192v0z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "radio-checked"
+          ]
+        },
+        {
+          "id": 0,
+          "paths": [
+            "M512 0c-282.77 0-512 229.23-512 512s229.23 512 512 512v0c282.77 0 512-229.23 512-512s-229.23-512-512-512v0zM512 896c-212.077 0-384-171.923-384-384s171.923-384 384-384v0c212.077 0 384 171.923 384 384s-171.923 384-384 384v0z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "radio-unchecked"
+          ]
+        }
+      ],
+      "invisible": false,
+      "colorThemes": []
+    }
+  ],
+  "uid": -1,
+  "preferences": {
+    "showGlyphs": true,
+    "showCodes": true,
+    "showQuickUse": true,
+    "showQuickUse2": true,
+    "showSVGs": true,
+    "fontPref": {
+      "prefix": "lts-",
+      "metadata": {
+        "fontFamily": "lts-icons",
+        "majorVersion": 1,
+        "minorVersion": 0
+      },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
+      "embed": false,
+      "cssVars": true,
+      "cssVarsFormat": "scss",
+      "showSelector": true,
+      "selector": "class",
+      "classSelector": ".lts",
+      "showMetrics": false,
+      "showMetadata": false,
+      "showVersion": false
+    },
+    "imagePref": {
+      "prefix": "icon-",
+      "png": true,
+      "useClassSelector": true,
+      "color": 0,
+      "bgColor": 16777215
+    },
+    "historySize": 50,
+    "gridSize": 16
+  }
+}

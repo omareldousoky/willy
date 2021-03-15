@@ -29,7 +29,9 @@ interface Props {
     error: string;
     totalCount: number;
     loading: boolean;
-    searchFilters: object;
+    searchFilters: {
+        status?: string;
+    };
     search: (data) => Promise<void>;
     setLoading: (data) => void;
     setSearchFilters: (data) => void;
@@ -82,13 +84,13 @@ class DefaultingCustomersList extends Component<Props, State> {
         }
         this.mappers = [
             {
-                title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll} disabled={!Object.keys(this.props.searchFilters).includes('status')}></FormCheck>,
+                title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll} disabled={!this.props.searchFilters.status || this.props.searchFilters.status === 'underReview'}></FormCheck>,
                 key: 'selected',
                 render: data => <FormCheck
                     type='checkbox'
                     checked={Boolean(this.state.selectedEntries.find(application => application._id === data._id))}
                     onChange={() => this.addRemoveItemFromChecked(data)}
-                    disabled={!Object.keys(this.props.searchFilters).includes('status')}
+                    disabled={!this.props.searchFilters.status || this.props.searchFilters.status === 'underReview'}
                 ></FormCheck>
             },
             {
@@ -179,10 +181,10 @@ class DefaultingCustomersList extends Component<Props, State> {
         const daysSince = this.getRecordAgeInDays(data.created.at)
         return (
             <>
-                {daysSince < 3 && data.status !== 'branchManagerReview' && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'branchManagerReview') }} ></img></Can>}
-                {daysSince >= 3 && daysSince < 6 && data.status !== 'areaSupervisorReview' && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaSupervisorReview') }} ></img></Can>}
-                {daysSince >= 6 && daysSince < 9 && data.status !== 'areaManagerReview' && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaManagerReview') }} ></img></Can>}
-                {daysSince >= 9 && daysSince < 15 && data.status !== 'financialManagerReview' && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'financialManagerReview') }} ></img></Can>}
+                {daysSince < 3 && data.status !== 'branchManagerReview' && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'branchManagerReview') }} ></img><span>branchManagerReview</span></Can>}
+                {daysSince >= 3 && daysSince < 6 && data.status !== 'areaSupervisorReview' && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaSupervisorReview') }} ></img><span>areaSupervisorReview</span></Can>}
+                {daysSince >= 6 && daysSince < 9 && data.status !== 'areaManagerReview' && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaManagerReview') }} ></img><span>areaManagerReview</span></Can>}
+                {daysSince >= 9 && daysSince < 15 && data.status !== 'financialManagerReview' && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'financialManagerReview') }} ></img><span>financialManagerReview</span></Can>}
             </>
         );
     }
@@ -281,6 +283,31 @@ class DefaultingCustomersList extends Component<Props, State> {
             })
         }
     }
+    // filterStatus(data, status?: string){
+    //     console.log(data, status)
+    //     if (!status) {
+    //         return data
+    //     } else if (status === 'underReview') {
+    //         return data.filter(defaulted => defaulted.status === 'underReview')
+    //     }
+    //     return []
+    // }
+    // setDefaultingCustomersDate(formikProps: FormikProps<FormikValues>, role: string) {
+  //   const now = new Date().valueOf()
+  //   const threeDays = 259200000
+  //   const sixDays = 518400000
+  //   const nineDays = 777600000
+  //   const fifteenDays = 1296000000
+  //   const fromDate = now - (role === 'branchManagerReview' ? threeDays : role === 'areaManagerReview' ? sixDays : role === 'areaSupervisorReview' ? nineDays : fifteenDays )
+  //   formikProps.setFieldValue(
+  //     "fromDate",
+  //     fromDate
+  //   );
+  //   formikProps.setFieldValue(
+  //     "toDate",
+  //     now
+  //   );
+  // }
     render() {
         return (
             <div>

@@ -398,50 +398,6 @@ code {
 	margin-bottom: 1rem;
 }
 
-.form-check>.form-check-input {
-	appearance: none;
-	vertical-align: text-top;
-	font-size: 1rem;
-	cursor: pointer;
-	outline: none !important;
-	padding: 0;
-	margin: 0;
-
-	&[type=checkbox]::after {
-		font-family: 'Font Awesome 5 Free' !important;
-		content: '\f0c8';
-		color: #495057;
-	}
-
-	&[type=checkbox]:checked::after {
-		content: '\f14a';
-		font-weight: 900;
-		color: #7dc356;
-	}
-
-	&[type=checkbox]:disabled::after {
-		cursor: default;
-		color: #ced4da;
-	}
-
-	&[type=radio]::after {
-		font-family: 'Font Awesome 5 Free' !important;
-		content: '\f111';
-		color: #495057;
-	}
-
-	&[type=radio]:checked::after {
-		content: '\f192';
-		font-weight: 900;
-		color: #7dc356;
-	}
-
-	&[type=radio]:disabled::after {
-		cursor: default;
-		color: #ced4da;
-	}
-}
-
 .big-btn {
 	padding: .75rem 2.72rem;
 }
@@ -450,6 +406,26 @@ code {
 	margin: 2rem !important; // class used with <Card /> so we need to override style with !important
 }
 
+.info-box {
+	background-color: #f7fff2;
+	border-radius: 0;
+	border: 1px solid lightgrey;
+	& .row {
+		justify-content: space-around;
+		padding: 1.2rem 0 .2rem;
+	}
+	& .item {
+		display: flex;
+		flex-direction: column;
+		text-align: right;
+		& .label {
+			font-size: .82rem;
+			color: #6e6e6e;
+			margin-bottom: .35rem;
+		}
+	}
+
+}
 @media print {
 	* {
 		font-size: 14px;

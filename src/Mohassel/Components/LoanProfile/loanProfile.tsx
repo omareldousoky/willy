@@ -6,7 +6,7 @@ import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch';
 import InfoBox from '../userInfoBox';
 import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
-import * as local from '../../../Shared/Assets/ar.json';
+import local from '../../../Shared/Assets/ar.json';
 import { Loader } from '../../../Shared/Components/Loader';
 import Container from 'react-bootstrap/Container';
 import Swal from 'sweetalert2';
@@ -54,6 +54,7 @@ import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares';
 import { Customer } from '../LoanApplication/loanApplicationCreation';
 import { Installment } from '../Payment/payInstallment';
+import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -128,7 +129,7 @@ class LoanProfile extends Component<Props, State>{
         this.getAppByID(appId)
     }
     async getManualOtherPayments(appId) {
-        if(ability.can("pendingAction", "application")){
+        if (ability.can("pendingAction", "application")) {
             this.setState({ loading: true })
             const res = await getManualOtherPayments(appId);
             if (res.status === "success") {
@@ -154,7 +155,7 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
-             this.getMembersShare();
+            this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -498,10 +499,29 @@ class LoanProfile extends Component<Props, State>{
             }
         })
     }
+    async getWriteOffReasons() {
+        this.setState({ loading: true });
+        const res = await getWriteOffReasons();
+        if (res.status === "success") {
+            this.setState({ loading: false })
+            const options = {}
+            if (this.state.application.group.individualsInGroup !== null && this.state.application.group.individualsInGroup.length > 1) {
+                res.body.reasons.filter(reason => reason.name !== 'Deceased').map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            } else {
+                res.body.reasons.map(option => options[option.name] = local[option.name.replace(/\s/g, '')])
+            }
+            return options
+        } else {
+            this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+            return {}
+        }
+    }
     async writeOffApplication() {
+        const options = await this.getWriteOffReasons()
         const { value: text } = await Swal.fire({
             title: local.writeOffReason,
-            input: 'text',
+            input: 'select',
+            inputOptions: options,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -606,7 +626,7 @@ class LoanProfile extends Component<Props, State>{
                                     <p style={{ margin: 0, color: `${englishToArabic(this.state.application.status).color}` }}>{englishToArabic(this.state.application.status).text}</p>
                                 </span>
                                 {this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
-                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}</p>
+                                    <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.writtenOffLoan}{this.state.application.writeOffReason ? `- ${local[this.state.application.writeOffReason.replace(/\s/g, '')]}` : null}</p>
                                 </span>}
                                 {this.state.application.isDoubtful && !this.state.application.writeOff && <span style={{ display: 'flex', padding: 10, marginRight: 10, borderRadius: 30, border: `1px solid red` }}>
                                     <p style={{ margin: 0, fontSize: 11, color: 'red' }}>{local.doubtedLoan}</p>
@@ -690,7 +710,7 @@ class LoanProfile extends Component<Props, State>{
                 }
                 {this.state.print === 'all' &&
                     <>
-                        <CashReceiptPDF data={this.state.application}  remainingTotal = {this.state.remainingTotal}/>
+                        <CashReceiptPDF data={this.state.application} remainingTotal={this.state.remainingTotal} />
                         <CustomerCardPDF data={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} branchDetails={this.state.branchDetails} remainingTotal={this.state.remainingTotal} members={this.state.individualsWithInstallments} />
                         <CustomerCardAttachments data={this.state.application} branchDetails={this.state.branchDetails} />
                         <FollowUpStatementPDF data={this.state.application} branchDetails={this.state.branchDetails} members={this.state.individualsWithInstallments} />
