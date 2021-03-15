@@ -81,7 +81,6 @@ class ReportsHome extends Component<{}, State> {
             <Card>
                 <div className="print-none">
                     <CardNavBar
-                        header={"here"}
                         array={this.state.tabsArray}
                         active={this.state.activeTab}
                         selectTab={(index: string) =>

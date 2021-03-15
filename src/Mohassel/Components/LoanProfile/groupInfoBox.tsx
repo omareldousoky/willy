@@ -59,7 +59,6 @@ class GroupInfoBox extends Component<Props, State>{
             <div style={{ textAlign: 'right', backgroundColor: '#f7fff2', padding: 15, border: '1px solid #e5e5e5', width: '100%' }}>
                 <h5>{local.mainGroupInfo}</h5>
                 <CardNavBar
-                    header={'here'}
                     array={this.state.tabsArray}
                     active={this.state.activeTab}
                     selectTab={(index: number) => this.setState({ activeCustomer: this.state.group[index], activeTab: index.toString() })}

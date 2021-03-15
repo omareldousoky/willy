@@ -104,7 +104,6 @@ class Rescheduling extends Component<Props, State>{
         return (
             <>
                  <CardNavBar
-                                header={'here'}
                                 array={this.state.tabsArray}
                                 active={this.state.activeTab}
                                 selectTab={(index: string) => this.setState({ activeTab: index })}

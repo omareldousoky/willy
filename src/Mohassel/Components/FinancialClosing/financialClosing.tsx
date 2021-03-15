@@ -40,7 +40,6 @@ class FinancialClosing extends Component<{}, State> {
         return (
             <Card>
                     <CardNavBar 
-                    header= {"here"}
                     array= {this.state.tabsArray}
                     active = {this.state.activeTab}
                     selectTab={(index: string) => this.setState({activeTab: index})}
