@@ -37,7 +37,7 @@ export const manageAccountsArray = (): Card[] => {
   }
   if (ability.can('updateLoanOfficer', 'user')) {
     mangeAccountArr.push({
-      icon: 'users',
+      icon: 'customers',
       header: local.loanOfficers,
       desc: local.officersDesc,
       path: '/manage-accounts/loan-officers',

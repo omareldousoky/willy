@@ -347,7 +347,7 @@ const appRoutes = [
           {
             path: "/loan-officers",
             label: local.loanOfficers,
-            render: (props) => <Can I="updateLoanOfficer" a="user"><LoanOfficersList {...props} /></Can>
+            render: (props) => <Can I="updateLoanOfficer" a="user"><LoanOfficersList {...props}  withHeader={true} /></Can>
 
           }
         ]

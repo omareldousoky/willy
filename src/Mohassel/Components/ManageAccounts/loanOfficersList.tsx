@@ -19,6 +19,7 @@ import { getCookie } from '../../../Shared/Services/getCookie'
 import { editLoanOfficerValidation } from './loanOfficersValidation'
 import { checkUsernameDuplicates } from '../../Services/APIs/User-Creation/checkUsernameDup'
 import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOfficer'
+import { getDateAndTime } from '../../Services/getRenderDate'
 
 interface Props extends RouteComponentProps {
   data: any
@@ -91,6 +92,11 @@ class LoanOfficersList extends Component<Props, State> {
         title: local.username,
         key: 'username',
         render: (data) => data.username,
+      },
+      {
+        title: local.creationDate,
+        key: 'createdAt',
+        render: (data) => data?.created?.at ? getDateAndTime(data.created.at): '',
       },
       {
         title: '',
@@ -190,7 +196,7 @@ class LoanOfficersList extends Component<Props, State> {
               .map((item) => {
                 return item.icon
               })
-              .indexOf('users')}
+              .indexOf('customers')}
           />
         )}
         <Card className="main-card">
