@@ -1,6 +1,6 @@
-import * as local from "../../../Shared/Assets/ar.json";
+import * as local from '../../../Shared/Assets/ar.json';
 
-import ability from "../../config/ability";
+import ability from '../../config/ability';
 
 export interface Card {
   icon: string;
@@ -10,37 +10,37 @@ export interface Card {
 }
 export const manageAccountsArray = (): Card[] => {
   const mangeAccountArr: Card[] = [];
-  if (ability.can("getRoles", "user")) {
+  if (ability.can('getRoles', 'user')) {
     mangeAccountArr.push({
-      icon: "roles",
+      icon: 'roles',
       header: local.roles,
       desc: local.rolesDesc,
-      path: "/manage-accounts/roles",
+      path: '/manage-accounts/roles',
     });
   }
-  if (ability.can("getUser", "user")) {
+  if (ability.can('getUser', 'user')) {
     mangeAccountArr.push({
-      icon: "users",
+      icon: 'users',
       header: local.users,
       desc: local.usersDesc,
-      path: "/manage-accounts/users",
+      path: '/manage-accounts/users',
     });
   }
 
-  if (ability.can("getBranch", "branch")) {
+  if (ability.can('getBranch', 'branch')) {
     mangeAccountArr.push({
-      icon: "branches",
+      icon: 'branches',
       header: local.branches,
       desc: local.branchesDesc,
-      path: "/manage-accounts/branches",
+      path: '/manage-accounts/branches',
     });
   }
-  if (ability.can("updateLoanOfficer", "user")) {
+  if (ability.can('updateLoanOfficer', 'user')) {
     mangeAccountArr.push({
-      icon: "users",
+      icon: 'users',
       header: local.loanOfficers,
       desc: local.officersDesc,
-      path: "/manage-accounts/loan-officers",
+      path: '/manage-accounts/loan-officers',
     });
   }
   return mangeAccountArr;
