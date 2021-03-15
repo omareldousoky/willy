@@ -212,7 +212,8 @@ class NavBar extends Component<Props, State> {
                : !this.props.hide && ability.can('viewBusinessSectorConfig', 'config') ? <Nav.Link onClick={() => this.props.history.push('/manage-loan-details/business-activities')}>{local.manageLoanDetails}</Nav.Link> : null}
               {!this.props.hide && ability.can('getRoles', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/roles')}>{local.manageAccounts}</Nav.Link>
                 : !this.props.hide && ability.can('getUser', 'user') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/users')}>{local.manageAccounts}</Nav.Link>
-                  : !this.props.hide && ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : null}
+                  : !this.props.hide && ability.can('getBranch', 'branch') ? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/branches')}>{local.manageAccounts}</Nav.Link> : 
+                  !this.props.hide && ability.can('updateLoanOfficer', 'user')? <Nav.Link onClick={() => this.props.history.push('/manage-accounts/loan-officers')}>{local.manageAccounts}</Nav.Link> : null}
               {!this.props.hide && ability.can('documentTypes', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/encoding-files')}>{local.tools}</Nav.Link>
                 : !this.props.hide && ability.can('geoArea', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/geo-areas')}>{local.tools}</Nav.Link>
                  : !this.props.hide && ability.can('createMaxPrincipal', 'config') ? <Nav.Link onClick={() => this.props.history.push('/tools/principalRange')}>{local.tools}</Nav.Link> : null}
