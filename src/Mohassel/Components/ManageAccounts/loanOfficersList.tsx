@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux'
-import { Modal, Form, Col, Button } from 'react-bootstrap'
+import { Modal, Form, Col, Button, Row } from 'react-bootstrap'
 import { Formik } from 'formik'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import { Loader } from '../../../Shared/Components/Loader'
@@ -96,34 +96,13 @@ class LoanOfficersList extends Component<Props, State> {
       {
         title: local.creationDate,
         key: 'createdAt',
-        render: (data) => data?.created?.at ? getDateAndTime(data.created.at): '',
+        render: (data) =>
+          data?.created?.at ? getDateAndTime(data.created.at) : '',
       },
       {
         title: '',
-        key: 'updateLoanOfficer',
-        render: (data) => (
-          <Can I="updateLoanOfficer" a="user">
-            <span
-              onClick={() => {
-                this.setState({
-                  showModal: true,
-                  loanOfficer: {
-                    id: data._id,
-                    name: data.name,
-                    username: data.username,
-                  },
-                })
-              }}
-            >
-              <img
-                key={data._id}
-                style={{ cursor: 'pointer', marginLeft: 20 }}
-                alt="edit"
-                src={require('../../Assets/editIcon.svg')}
-              />
-            </span>
-          </Can>
-        ),
+        key: 'iocns',
+        render: (data) => this.renderIcon(data)
       },
     ]
   }
@@ -143,6 +122,46 @@ class LoanOfficersList extends Component<Props, State> {
     this.setState({
       manageAccountTabs: manageAccountsArray(),
     })
+  }
+  renderIcon(data) {
+    return (
+      <>
+        <span>
+          <img
+            style={{ cursor: 'pointer', marginLeft: 20 }}
+            alt={'view'}
+            src={require('../../Assets/view.svg')}
+            onClick={() => {
+              this.props.history.push({
+                pathname: '/manage-accounts/users/user-details',
+                state: { details: data._id },
+              })
+            }}
+          />
+        </span>
+        <Can I="updateLoanOfficer" a="user">
+          <span
+            onClick={() => {
+              this.setState({
+                showModal: true,
+                loanOfficer: {
+                  id: data._id,
+                  name: data.name,
+                  username: data.username,
+                },
+              })
+            }}
+          >
+            <img
+              key={data._id}
+              style={{ cursor: 'pointer', marginLeft: 20 }}
+              alt="edit"
+              src={require('../../Assets/editIcon.svg')}
+            />
+          </span>
+        </Can>
+      </>
+    )
   }
 
   componentWillUnmount() {
@@ -272,117 +291,125 @@ class LoanOfficersList extends Component<Props, State> {
                     </Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <Form.Group className="row-nowrap" controlId="name">
-                      <Form.Label column sm={3}>
-                        {local.name}
-                      </Form.Label>
-                      <Col sm={7}>
-                        <Form.Control
-                          name="name"
-                          value={formikProps.values.name}
-                          disabled
-                        />
-                      </Col>
-                    </Form.Group>
-                    <Form.Group controlId="username">
-                      <Form.Label className="user-data-label">
-                        {local.username}
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="username"
-                        data-qc="username"
-                        value={formikProps.values.username}
-                        onChange={async (
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                          formikProps.setFieldValue(
-                            'username',
-                            event.currentTarget.value
-                          )
-                          this.setState({ loadingInline: true })
-                          const res = await checkUsernameDuplicates(
-                            event.currentTarget.value?.trim()
-                          )
-
-                          if (res.status === 'success') {
-                            this.setState({ loadingInline: false })
-                            formikProps.setFieldValue(
-                              'usernameChecker',
-                              res.body.data.exists
-                            )
-                          } else {
-                            this.setState({ loadingInline: false })
-                            Swal.fire(
-                              'Error !',
-                              getErrorMessage(res.error.error),
-                              'error'
-                            )
-                          }
-                        }}
-                        onBlur={formikProps.handleBlur}
-                        isInvalid={
-                          (formikProps.errors.username &&
-                            formikProps.touched.username) as boolean
-                        }
-                      />
-
-                      <Form.Control.Feedback type="invalid">
-                        {formikProps.errors.username}
-                      </Form.Control.Feedback>
-                      <Col sm={1}>
-                        <Col sm={1}>
-                          <Loader
-                            type="inline"
-                            open={this.state.loadingInline}
+                    <Row>
+                      <Col>
+                        <Form.Group controlId="name">
+                          <Form.Label className="user-data-label">
+                            {local.name}
+                          </Form.Label>
+                          <Form.Control
+                            name="name"
+                            value={formikProps.values.name}
+                            disabled
                           />
-                        </Col>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group className="row-nowrap">
-                      <Col>
-                        <Form.Label className="user-data-label">
-                          {local.password}
-                        </Form.Label>
-                        <Form.Control
-                          type="password"
-                          name="password"
-                          data-qc="password"
-                          value={formikProps.values.password}
-                          placeholder={local.password}
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={
-                            (formikProps.errors.password &&
-                              formikProps.touched.password) as boolean
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.password}
-                        </Form.Control.Feedback>
+                        </Form.Group>
                       </Col>
                       <Col>
-                        <Form.Label className="user-data-label">
-                          {local.confirmPassword}
-                        </Form.Label>
-                        <Form.Control
-                          type="password"
-                          name="confirmPassword"
-                          data-qc="confirmPassword"
-                          value={formikProps.values.confirmPassword}
-                          placeholder={local.confirmPassword}
-                          onChange={formikProps.handleChange}
-                          onBlur={formikProps.handleBlur}
-                          isInvalid={
-                            (formikProps.errors.confirmPassword &&
-                              formikProps.touched.confirmPassword) as boolean
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {formikProps.errors.confirmPassword}
-                        </Form.Control.Feedback>
+                        <Form.Group controlId="username">
+                          <Form.Label className="user-data-label">
+                            {local.username}
+                          </Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="username"
+                            data-qc="username"
+                            value={formikProps.values.username}
+                            onChange={async (
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              formikProps.setFieldValue(
+                                'username',
+                                event.currentTarget.value
+                              )
+                              this.setState({ loadingInline: true })
+                              const res = await checkUsernameDuplicates(
+                                event.currentTarget.value?.trim()
+                              )
+
+                              if (res.status === 'success') {
+                                this.setState({ loadingInline: false })
+                                formikProps.setFieldValue(
+                                  'usernameChecker',
+                                  res.body.data.exists
+                                )
+                              } else {
+                                this.setState({ loadingInline: false })
+                                Swal.fire(
+                                  'Error !',
+                                  getErrorMessage(res.error.error),
+                                  'error'
+                                )
+                              }
+                            }}
+                            onBlur={formikProps.handleBlur}
+                            isInvalid={
+                              (formikProps.errors.username &&
+                                formikProps.touched.username) as boolean
+                            }
+                          />
+
+                          <Form.Control.Feedback type="invalid">
+                            {formikProps.errors.username}
+                          </Form.Control.Feedback>
+                          <Col sm={1}>
+                            <Col sm={1}>
+                              <Loader
+                                type="inline"
+                                open={this.state.loadingInline}
+                              />
+                            </Col>
+                          </Col>
+                        </Form.Group>
                       </Col>
-                    </Form.Group>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Form.Group controlId="password">
+                          <Form.Label className="user-data-label">
+                            {local.password}
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            name="password"
+                            data-qc="password"
+                            value={formikProps.values.password}
+                            placeholder={local.password}
+                            onChange={formikProps.handleChange}
+                            onBlur={formikProps.handleBlur}
+                            isInvalid={
+                              (formikProps.errors.password &&
+                                formikProps.touched.password) as boolean
+                            }
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {formikProps.errors.password}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group controlId="confirmPassword">
+                          <Form.Label className="user-data-label">
+                            {local.confirmPassword}
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            name="confirmPassword"
+                            data-qc="confirmPassword"
+                            value={formikProps.values.confirmPassword}
+                            placeholder={local.confirmPassword}
+                            onChange={formikProps.handleChange}
+                            onBlur={formikProps.handleBlur}
+                            isInvalid={
+                              (formikProps.errors.confirmPassword &&
+                                formikProps.touched.confirmPassword) as boolean
+                            }
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {formikProps.errors.confirmPassword}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                    </Row>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button
