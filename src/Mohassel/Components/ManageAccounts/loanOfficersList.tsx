@@ -22,6 +22,7 @@ import { updateLoanOfficer } from '../../Services/APIs/LoanOfficers/updateLoanOf
 import { getDateAndTime } from '../../Services/getRenderDate'
 
 interface Props extends RouteComponentProps {
+  history: any;
   data: any;
   error: string;
   totalCount: number;
