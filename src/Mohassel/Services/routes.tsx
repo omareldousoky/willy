@@ -351,6 +351,13 @@ const appRoutes = [
                 <LoanOfficersList {...props} withHeader />
               </Can>
             ),
+            routes: [
+                {
+                  path: "/loanOfficer-details",
+                  label: local.loanOfficer,
+                  render: (props) => <UserDetails {...props} />
+                },
+            ]
           },
         ]
       },

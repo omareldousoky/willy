@@ -171,7 +171,7 @@ class LoanOfficersList extends Component<Props, State> {
         <span
           onClick={() => {
             this.props.history.push({
-              pathname: '/manage-accounts/users/user-details',
+              pathname: '/manage-accounts/loan-officers/loanOfficer-details',
               state: { details: data._id },
             })
           }}

@@ -193,14 +193,22 @@ class UserDetails extends Component<Props, State> {
   render() {
     return (
       <>
-        <div className={"rowContainer"}>
-          <BackButton title={local.userDetails} />
+        <div className={'rowContainer'}>
+          <BackButton
+            title={
+              this.props.history.location?.pathname?.includes(
+                'loanOfficer-details'
+              )
+                ? local.loanOfficerDetails
+                : local.userDetails
+            }
+          />
           {this.renderICons()}
         </div>
         <Card className="card">
           <Loader type="fullsection" open={this.state.isLoading} />
           <CardNavBar
-            header={"here"}
+            header={'here'}
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(index: string) => this.setState({ activeTab: index })}
@@ -208,7 +216,7 @@ class UserDetails extends Component<Props, State> {
           <Card.Body>{this.renderTabs()}</Card.Body>
         </Card>
       </>
-    );
+    )
   }
 }
 
