@@ -927,5 +927,6 @@
     "noOfLoanOfficers": "عدد المندوبين",
     "updateLoanOfficer":"تعديل المندوب",
     "updateLoanOfficerSuccess":"تم تعديل بيانات المندوب بنجاح",
-    "noDataAvaliable": "لا توجد بيانات"
+    "noDataAvaliable": "لا توجد بيانات",
+    "loanOfficerDetails": "تفاصيل المندوب"
 }
