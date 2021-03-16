@@ -922,5 +922,10 @@
     "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا",
     "Deceased":"توفي العميل",
     "Defaultingonpayment":"تخلف عن السداد",
+    "loanOfficers":"المندوبين",
+    "officersDesc":"تعديل المندوبين و إدارتهم",
+    "noOfLoanOfficers": "عدد المندوبين",
+    "updateLoanOfficer":"تعديل المندوب",
+    "updateLoanOfficerSuccess":"تم تعديل بيانات المندوب بنجاح",
     "noDataAvaliable": "لا توجد بيانات"
 }
