@@ -255,7 +255,7 @@ class Search extends Component<Props, State> {
     };
     return arDropDownValue[key];
   }
-  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], searchkey?: string) {
+  statusDropdown(formikProps: FormikProps<FormikValues>, index: number, array: { value: string; text: string; permission?: string; key?: string }[], field?: string) {
     return (
       <Col key={index} sm={6} style={{ marginTop: (index < 2 ? 0 : 20) }}>
         <div className="dropdown-container">
@@ -264,7 +264,7 @@ class Search extends Component<Props, State> {
             as="select"
             className="dropdown-select"
             data-qc="status"
-            value={formikProps.values.status}
+            value={field ? formikProps.values[field] : formikProps.values.status}
             onChange={(e) => {
               // if (searchkey === "defaultingCustomerStatus") {
               //   formikProps.setFieldValue(
@@ -274,7 +274,7 @@ class Search extends Component<Props, State> {
               //   // ['branchManagerReview', 'areaSupervisorReview', 'areaManagerReview', 'financialManagerReview'].includes(e.currentTarget.value) && this.setDefaultingCustomersDate(formikProps, e.currentTarget.value)
               // } else {
                 formikProps.setFieldValue(
-                  "status",
+                  (field ? field : "status"),
                   e.currentTarget.value
                 );
               // }
@@ -525,7 +525,7 @@ class Search extends Component<Props, State> {
                     { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
                     { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },
                     { value: "financialManagerReview", text: local.financialManagerReview, permission: 'financialManagerReview', key: 'legal' },
-                  ], 'defaultingCustomerStatus')
+                  ], 'reviewer')
                 }
                 if (searchKey === "branch" && this.viewBranchDropdown()) {
                   return (

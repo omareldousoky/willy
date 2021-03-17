@@ -30,7 +30,7 @@ interface Props {
     totalCount: number;
     loading: boolean;
     searchFilters: {
-        status?: string;
+        reviewer?: string;
     };
     search: (data) => Promise<void>;
     setLoading: (data) => void;
@@ -84,13 +84,13 @@ class DefaultingCustomersList extends Component<Props, State> {
         }
         this.mappers = [
             {
-                title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll} disabled={!this.props.searchFilters.status || this.props.searchFilters.status === 'underReview'}></FormCheck>,
+                title: () => <FormCheck type='checkbox' onChange={(e) => this.checkAll(e)} checked={this.state.checkAll} disabled={!this.props.searchFilters.reviewer || this.props.searchFilters.reviewer === 'underReview'}></FormCheck>,
                 key: 'selected',
                 render: data => <FormCheck
                     type='checkbox'
                     checked={Boolean(this.state.selectedEntries.find(application => application._id === data._id))}
                     onChange={() => this.addRemoveItemFromChecked(data)}
-                    disabled={!this.props.searchFilters.status || this.props.searchFilters.status === 'underReview'}
+                    disabled={!this.props.searchFilters.reviewer || this.props.searchFilters.reviewer === 'underReview'}
                 ></FormCheck>
             },
             {
