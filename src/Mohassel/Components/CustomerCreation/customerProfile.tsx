@@ -184,7 +184,7 @@ const CustomerProfile = (props: Props) => {
             <tbody>
               <tr>
                 <td>{local.customerName}</td>
-                <td className={"row-nowrap"}>{customerDetails?.customerName} {customerDetails?.suspectId && <div className="status-chip rejected ml-2">{local.customerMaySuspect}</div>} </td>
+                <td className={"row-nowrap"}>{customerDetails?.customerName} {customerDetails?.suspect?.suspectId && <div className="status-chip rejected ml-2">{local.customerMayTerrorist}</div>} </td>
               </tr>
               <tr>
                 <td>{local.branchName}</td>

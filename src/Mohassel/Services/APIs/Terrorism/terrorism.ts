@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios"
-import { SuspectResponse } from "../../../../Shared/Services/interfaces"
+import { TerroristResponse } from "../../../../Shared/Services/interfaces"
 import { ApiResponse } from "../../interfaces"
 import axios from "../axios-instance"
 
 const { REACT_APP_BASE_URL } = process.env
-const fetchSearchSuspectUrl = `${REACT_APP_BASE_URL}/search/suspect`
-interface SearchSuspectsRequest {
+const fetchSearchLocalTerroristUrl = `${REACT_APP_BASE_URL}/search/local-terrorist`
+interface SearchTerroristRequest {
   size: number;
  	from: number;
   order: string;
@@ -14,12 +14,12 @@ interface SearchSuspectsRequest {
   name: number;
 }
 
-export const searchSuspects =  async (
-	request: SearchSuspectsRequest
-): Promise<ApiResponse<SuspectResponse[]>> => {
+export const searchTerrorists =  async (
+	request: SearchTerroristRequest
+): Promise<ApiResponse<TerroristResponse[]>> => {
 	try {
-	 const res: AxiosResponse<SuspectResponse[]> = await axios.post(
-	 	fetchSearchSuspectUrl,
+	 const res: AxiosResponse<TerroristResponse[]> = await axios.post(
+        fetchSearchLocalTerroristUrl,
 		request
 	);
 		return {status: "success", body: res.data};
@@ -28,8 +28,8 @@ export const searchSuspects =  async (
 	}
 }
 
-export const uploadSuspectDocument =  async (data: FormData) => {
-    const url =  `${REACT_APP_BASE_URL}/customer/suspect-document`;
+export const uploadTerroristDocument =  async (data: FormData) => {
+    const url =  `${REACT_APP_BASE_URL}/customer/local-terrorists-document`;
     try{
         const res = await axios.post(url,data);
         return { status: "success", body: res.data }

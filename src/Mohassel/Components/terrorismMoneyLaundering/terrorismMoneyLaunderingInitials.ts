@@ -3,7 +3,7 @@ import * as local from "../../../Shared/Assets/ar.json"
 import { Tab } from "../HeaderWithCards/headerWithCards";
 export const antiTerrorismMoneyLaunderingArray = (): Tab[] => {
   const antiTerrorismMoneyLaunderingArr: Tab[] = [];
-  if (ability.can("getSuspect", "customer")) {
+  if (ability.can("getTerrorist", "customer")) {
     	antiTerrorismMoneyLaunderingArr.push({
       header: local.antiTerrorism,
       icon: 'users',

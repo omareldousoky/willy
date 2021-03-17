@@ -926,8 +926,8 @@
 		"terroristsList": "قوائم الإرهابين المحلية",
 		"noOfTerrorists": "عدد الإرهابين",
 		"nationality": "الجنسية",
-		"customerMaySuspect": "هذا العميل مشكوك فيه قد يكون إرهابي",
-		"uploadSuspectsList": "رفع قوائم الإرهابين",
+		"customerMayTerrorist": "هذا العميل مشكوك فيه قد يكون إرهابي",
+		"uploadTerroristsList": "رفع قوائم الإرهابين",
 		"uploadedSuccessfully": "تم رفع المستند بنجاح",
     "Deceased":"توفي العميل",
     "Defaultingonpayment":"تخلف عن السداد"

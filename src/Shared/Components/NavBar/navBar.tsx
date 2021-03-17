@@ -226,7 +226,7 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             {!this.props.hide && <Can I='getOfficersGroups' a ='branch'><Nav.Link onClick={()=>this.props.history.push('/supervisions-levels')}>{local.levelsOfSupervision}</Nav.Link></Can>}
             {!this.props.hide &&  <Can I = "financialClosing" a="application"><Nav.Link onClick={()=>this.props.history.push('/financial-closing')}>{local.financialClosing}</Nav.Link></Can>}
-            {!this.props.hide && ability.can('getSuspect', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/anti-terrorism-money-laundering/anti-terrorism')}>{local.antiTerrorismMoneyLaundering}</Nav.Link >
+            {!this.props.hide && ability.can('getTerrorist', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/anti-terrorism-money-laundering/anti-terrorism')}>{local.antiTerrorismMoneyLaundering}</Nav.Link >
 								: !this.props.hide && ability.can('getBroker', 'customer') ? <Nav.Link>{local.antiTerrorismMoneyLaundering}</Nav.Link> : null}
             </Nav>
           </Navbar.Collapse>

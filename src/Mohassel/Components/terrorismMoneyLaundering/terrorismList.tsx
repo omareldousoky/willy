@@ -11,14 +11,14 @@ import Search from "../../../Shared/Components/Search/search"
 import { loading } from "../../../Shared/redux/loading/actions"
 import HeaderWithCards, { Tab } from "../HeaderWithCards/headerWithCards"
 import { antiTerrorismMoneyLaunderingArray } from "./terrorismMoneyLaunderingInitials"
-import { Button, Card, Form, Row, Col } from "react-bootstrap"
+import { Button, Card, Form, Row } from "react-bootstrap"
 import { getErrorMessage } from "../../../Shared/Services/utils"
 import { Formik } from "formik"
-import { uploadSuspectDocument } from "../../Services/APIs/Terrorism/terrorism"
+import { uploadTerroristDocument } from "../../Services/APIs/Terrorism/terrorism"
 import * as Yup from "yup"
-import { SuspectResponse } from "../../../Shared/Services/interfaces"
+import { TerroristResponse } from "../../../Shared/Services/interfaces"
 interface Props {
-	data: SuspectResponse[];
+	data: TerroristResponse[];
 	error: string;
 	totalCount: number;
 	loading: boolean;
@@ -42,7 +42,7 @@ interface Errors {
 interface Touched {
 	terrorismLListFile?: boolean;
 }
-const uploadSuspectDocumentValidation = Yup.object().shape({
+const uploadTerroristDocumentValidation = Yup.object().shape({
 	terrorismLListFile: Yup.mixed(),
 })
 class TerrorismList extends Component<Props, State> {
@@ -84,13 +84,13 @@ class TerrorismList extends Component<Props, State> {
 		]
 	}
 	componentDidMount() {
-		this.getSuspects();
+		this.getTerrorists();
 		this.setState({
 			tabsToRender: antiTerrorismMoneyLaunderingArray()
 		})
 	}
-	async getSuspects() {
-		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'suspect' })
+	async getTerrorists() {
+		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist' })
 		if (this.props.error) {
 			Swal.fire('', getErrorMessage(this.props.error), "error")
 		}
@@ -100,9 +100,10 @@ class TerrorismList extends Component<Props, State> {
 		this.setState({ showModal: false })
 		const formData = new FormData()
 		formData.append("data", values.terrorismLListFile);
-		const res = await uploadSuspectDocument(formData);
+		const res = await uploadTerroristDocument(formData);
 		if (res.status === "success") {
-			Swal.fire('', local.uploadedSuccessfully, "success")
+			Swal.fire('', local.uploadedSuccessfully, 'success').then(
+             ()=> window.location.reload())
 		} else {
 			Swal.fire('', getErrorMessage(res.error.error), "error")
 		}
@@ -124,11 +125,11 @@ class TerrorismList extends Component<Props, State> {
 							<Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.terroristsList}</Card.Title>
 							<span className="text-muted">{local.noOfTerrorists + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
 						</div>
-						<Can I="createSuspect" a="customer">
+						<Can I="createTerrorist" a="customer">
 							<Button
 								className="big-button"
 								onClick={() => { this.setState({ showModal: true }) }}
-							>{local.uploadSuspectsList}
+							>{local.uploadTerroristsList}
 							</Button></Can>
 					</div>
 					<hr className="dashed-line" />
@@ -141,20 +142,20 @@ class TerrorismList extends Component<Props, State> {
 							dropDownKeys={[
 								"name",
 							]}
-							url="suspect"
+							url="terrorist"
 							from={this.state.from}
 							size={this.state.size}
 						/>
 						<DynamicTable
 							from={this.state.from}
 							size={this.state.size}
-							url="suspect"
+							url="terrorist"
 							totalCount={this.props.totalCount}
 							pagination={true}
 							data={this.props.data}
 							mappers={this.mappers}
 							changeNumber={(key: string, number: number) => {
-								this.setState({ [key]: number } as any, () => this.getSuspects());
+								this.setState({ [key]: number } as unknown as Pick<State, keyof State>, () => this.getTerrorists());
 							}}
 						/>
 					</Card.Body>
@@ -163,7 +164,7 @@ class TerrorismList extends Component<Props, State> {
 					<Formik
 						initialValues={{ terrorismLListFile: new File([''], '') }}
 						onSubmit={this.handleSubmit}
-						validationSchema={uploadSuspectDocumentValidation}
+						validationSchema={uploadTerroristDocumentValidation}
 						validateOnBlur
 						validateOnChange
 
@@ -171,7 +172,7 @@ class TerrorismList extends Component<Props, State> {
 						{(formikProps) =>
 							<Form onSubmit={formikProps.handleSubmit}>
 								<Modal.Header>
-									<Modal.Title className={"m-auto"}>{local.uploadSuspectsList}</Modal.Title>
+									<Modal.Title className={"m-auto"}>{local.uploadTerroristsList}</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
 									<Form.Group className="d-flex justify-content-center" as={Row} controlId="terrorismListFile">

@@ -462,7 +462,7 @@ const appRoutes = [
 				routes: [{
 					path: '/anti-terrorism',
 					label: local.antiTerrorism,
-					render: (props) => <Can I="getSuspect" a="customer"><TerrorismList {...props} /></Can>
+					render: (props) => <Can I="getTerrorist" a="customer"><TerrorismList {...props} /></Can>
 				},
 				]
 			}
