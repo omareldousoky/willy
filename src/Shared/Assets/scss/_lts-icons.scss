@@ -10,6 +10,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.lts {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'lts-icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .lts-checkbox-checked:before {
   content: '\e900';
 }
@@ -21,4 +35,24 @@
 }
 .lts-radio-unchecked:before {
   content: '\e903';
+}
+.lts-editIcon {
+  &:before {
+    content: "\e904"; 
+  }
+}
+.lts-view {
+  &:before {
+    content: "\e905"w; 
+  }
+}
+.lts-changeOfficer-inactive {
+  &:before {
+    content: "\e906";
+  }
+}
+.lts-customers-inactive {
+  &:before {
+    content: "\e907";
+  }
 }
