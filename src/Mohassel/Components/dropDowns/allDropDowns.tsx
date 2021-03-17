@@ -8,6 +8,7 @@ import * as local from '../../../Shared/Assets/ar.json'
 import { searchLoanOfficer } from '../../Services/APIs/LoanOfficers/searchLoanOfficer'
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { theme } from '../../../Shared/theme'
+import useIsMounted from '../Common/Hooks/useIsMounted'
 
 export interface DropDownOption {
   name: string
@@ -80,10 +81,10 @@ export const AsyncLoanOfficersDropDown = ({
   const [value, setValue] = useState<ValueType<DropDownOption> | null>()
   const [searchKeyword, setSearchKeyword] = useState<string>('')
 
-  const mounted = useRef(false)
+  const isMounted = useIsMounted()
 
   const handleLoadOptions = async () => {
-    if (!mounted.current) return
+    if (!isMounted.current) return
     const newOptions: DropDownOption[] = []
     const res = await searchLoanOfficer({
       name: searchKeyword,
@@ -92,7 +93,7 @@ export const AsyncLoanOfficersDropDown = ({
       branchId,
     })
 
-    if (mounted.current) {
+    if (isMounted.current) {
       if (res.status === 'success') {
         const { data } = res.body
         if (Array.isArray(data) && data.length)
@@ -113,7 +114,7 @@ export const AsyncLoanOfficersDropDown = ({
     }
   }
   const maybeLoadOptions = useCallback(() => {
-    if (!options.optionsLoaded && mounted.current) {
+    if (!options.optionsLoaded && isMounted.current) {
       setOptions({ ...options, isLoading: true })
       handleLoadOptions()
     }
@@ -122,21 +123,13 @@ export const AsyncLoanOfficersDropDown = ({
 
   useEffect(() => {
     setOptions(initialState)
+    handleLoadOptions()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branchId])
 
   useEffect(() => {
     if (isDisabled) setValue(null)
   }, [isDisabled])
-
-  // to avoid memory leak for in progress api call
-  useEffect(() => {
-    maybeLoadOptions()
-    mounted.current = true
-    return () => {
-      mounted.current = false
-    }
-  }, [maybeLoadOptions])
 
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>
@@ -159,8 +152,9 @@ export const AsyncLoanOfficersDropDown = ({
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option._id}
         isDisabled={isDisabled}
-        onFocus={maybeLoadOptions}
+        // onFocus={maybeLoadOptions}
         onInputChange={(keyword) => {
+          if (!keyword) return // avoid unnecessary api calls
           setSearchKeyword(keyword)
           setOptions({ ...options, isLoading: true, optionsLoaded: false })
           maybeLoadOptions()
