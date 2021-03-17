@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Form from 'react-bootstrap/Form'
@@ -27,226 +27,281 @@ interface Props {
   className?: string
 }
 
-interface State {
-  options: Array<any>
-  selectedOptions: Array<any>
-  selectionArray: Array<any>
-  filterKey: string
-  dropDownValue: string
-  checkAll: boolean
-  searchKeyword: string
-  searchSelectedKeyWord: string
-}
+const DualBox = (props: Props) => {
+  const [options, setOptions] = useState<Array<any>>(props.options)
+  const [selectedOptions, setSelectedOptions] = useState<Array<any>>(
+    props.selected
+  )
+  const [selectionArray, setSelectionArray] = useState<Array<any>>([])
+  const [dropDownValue, setDropDownValue] = useState<string>('name')
+  const [searchKeyword, setSearchKeyword] = useState<string>('')
+  const [searchSelectedKeyWord, setSearchSelectedKeyWord] = useState<string>('')
+  const [checkAll, setCheckAll] = useState<boolean>(false)
 
-class DualBox extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      options: [],
-      selectedOptions: [],
-      selectionArray: [],
-      filterKey: '',
-      dropDownValue: 'name',
-      checkAll: false,
-      searchKeyword: '',
-      searchSelectedKeyWord: '',
+  useEffect(() => {
+    const selectedIds = props.selected.map((item) => item._id)
+    setOptions(props.options.filter((item) => !selectedIds.includes(item._id)))
+    setSelectedOptions(props.selected)
+  }, [props.options, props.selected])
+
+  const selectItem = (option) => {
+    setSelectionArray(
+      !selectionArray.find((element) => option._id === element._id)
+        ? selectionArray.concat(option)
+        : selectionArray.filter((item) => item._id !== option._id)
+    )
+  }
+  const addToSelectedList = () => {
+    setCheckAll(false)
+    const selectedIds = selectionArray.map((el) => el._id)
+    const newSelectedOptions = [...selectedOptions, ...selectionArray]
+    setOptions(options.filter((item) => !selectedIds.includes(item._id)))
+    setSelectedOptions(newSelectedOptions)
+    setSelectionArray([])
+    props.onChange(newSelectedOptions)
+  }
+
+  const removeItemFromList = (option) => {
+    const newList = selectedOptions.filter((item) => item._id !== option._id)
+    props.onChange(newList)
+    setSelectedOptions(newList)
+    setOptions([...options, option])
+  }
+
+  const selectAllOptions = () => {
+    if (checkAll) {
+      setSelectionArray([])
+      setCheckAll(false)
+    } else {
+      setSelectionArray(
+        props.disabled
+          ? options.filter(
+              (option) => props.disabled && props.disabled(option) === false
+            )
+          : [...options]
+      )
+      setCheckAll(true)
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
+  const removeAllFromList = () => {
+    props.onChange([])
+    setOptions([...options, ...selectedOptions])
+    setSelectedOptions([])
+  }
+
+  const handleSearch = (e) => {
     if (
-      props.filterKey !== state.filterKey ||
-      props.options !== state.options
-    ) {
-      const selectedIds = props.selected.map((item) => item._id)
-      return {
-        filterKey: props.filterKey,
-        options: props.options.filter(
-          (item) => !selectedIds.includes(item._id)
-        ),
-        selectedOptions: props.selected,
-      }
-    }
-
-    return {
-      filterKey: props.filterKey,
-      options: props.options,
-    }
-  }
-
-  // TODO:lint: check
-  componentDidUpdate(prevProps) {
-    if (this.props.filterKey !== prevProps.filterKey) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ filterKey: this.props.filterKey })
-    }
-  }
-
-  handleSearch(e) {
-    if (
-      this.props.search &&
-      this.props.dropDownKeys &&
-      this.props.dropDownKeys.length > 0 &&
+      props.search &&
+      props.dropDownKeys &&
+      props.dropDownKeys.length > 0 &&
       e &&
-      ['code', 'key', 'nationalId'].includes(this.state.dropDownValue) &&
+      ['code', 'key', 'nationalId'].includes(dropDownValue) &&
       Number.isNaN(Number(e))
     ) {
       Swal.fire('warning', local.onlyNumbers, 'warning')
     } else {
-      this.setState({ searchKeyword: e }, () => {
-        if (
-          this.props.search &&
-          this.props.dropDownKeys &&
-          this.props.dropDownKeys.length > 0
-        ) {
-          this.props.search(this.state.searchKeyword, this.state.dropDownValue)
-        }
-      })
-    }
-  }
-
-  getArValue(key: string) {
-    switch (key) {
-      case 'name':
-        return local.name
-      case 'nationalId':
-        return local.nationalId
-      case 'key':
-        return local.code
-      case 'code':
-        return local.partialCode
-      case 'customerShortenedCode':
-        return local.customerShortenedCode
-      default:
-        return ''
-    }
-  }
-
-  selectItem = (option) => {
-    this.setState((prevState) => {
-      const arr = prevState.selectionArray
-      if (!arr.find((element) => option._id === element._id)) {
-        arr.push(option)
-      } else {
-        const index = arr.indexOf(option)
-        if (index !== -1) arr.splice(index, 1)
+      setSearchKeyword(e)
+      if (props.search && props.dropDownKeys && props.dropDownKeys.length > 0) {
+        props.search(searchKeyword, dropDownValue)
       }
-      return { selectionArray: arr }
-    })
-  }
-
-  removeItemFromList(option) {
-    this.setState(
-      (prevState) => ({
-        selectedOptions: prevState.selectedOptions.filter(
-          (item) => item._id !== option._id
-        ),
-        options: [...prevState.options, option],
-      }),
-      () => this.props.onChange(this.state.selectedOptions)
-    )
-  }
-
-  selectAllOptions() {
-    if (this.state.checkAll) {
-      this.setState({
-        selectionArray: [],
-        checkAll: false,
-      })
-    } else {
-      this.setState((prevState) => ({
-        selectionArray: this.props.disabled
-          ? prevState.options.filter(
-              (option) =>
-                this.props.disabled && this.props.disabled(option) === false
-            )
-          : [...prevState.options],
-        checkAll: true,
-      }))
     }
   }
 
-  removeAllFromList() {
-    this.props.onChange([])
-    this.setState((prevState) => ({
-      options: [...prevState.options, ...prevState.selectedOptions],
-      selectedOptions: [],
-    }))
-  }
-
-  viewSelected(id) {
-    if (this.props.viewSelected) {
-      this.props.viewSelected(id)
+  const viewSelected = (id) => {
+    if (props.viewSelected) {
+      props.viewSelected(id)
     }
   }
 
-  // TODO:lint: check very well
-  addToSelectedList() {
-    this.setState(
-      (prevState) =>
-        ({
-          options: prevState.selectionArray.forEach((el) => {
-            prevState.options.filter(
-              (item) => item[this.props.labelKey] !== el[this.props.labelKey]
-            )
-          }),
-          selectedOptions: [
-            ...prevState.selectedOptions,
-            ...prevState.selectionArray,
-          ],
-          selectionArray: [],
-        } as any),
-      () => this.props.onChange(this.state.selectedOptions)
-    )
+  const getArValue = {
+    name: local.name,
+    nationalId: local.nationalId,
+    key: local.code,
+    code: local.partialCode,
+    customerShortenedCode: local.customerShortenedCode,
+    default: '',
   }
 
-  render() {
-    return (
-      <Container
-        className={this.props.className || ''}
-        style={{ marginTop: 20 }}
+  return (
+    <Container className={props.className || ''} style={{ marginTop: 20 }}>
+      <div
+        className={
+          !props.vertical
+            ? 'row-nowrap'
+            : 'd-flex flex-column justify-content-center'
+        }
       >
         <div
           className={
-            !this.props.vertical
-              ? 'row-nowrap'
-              : 'd-flex flex-column justify-content-center'
+            !props.vertical
+              ? 'dual-list list-left col-md-5'
+              : 'dual-list list-left'
           }
         >
+          <div className="well">
+            <h6>{props.rightHeader}</h6>
+            <ul className="list-group">
+              <InputGroup>
+                {props.dropDownKeys && props.dropDownKeys.length ? (
+                  <DropdownButton
+                    as={InputGroup.Append}
+                    variant="outline-secondary"
+                    title={getArValue[dropDownValue || 'default']}
+                    id="input-group-dropdown-2"
+                    data-qc="search-dropdown"
+                  >
+                    {props.dropDownKeys.map((key, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        data-qc={key}
+                        onClick={() => {
+                          setDropDownValue(key)
+                          handleSearch(searchKeyword)
+                        }}
+                      >
+                        {getArValue[key || 'default']}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                ) : null}
+                <InputGroup.Append>
+                  <InputGroup.Text className="bg-white rounded-0 border-bottom-0">
+                    <span className="fa fa-search fa-rotate-90" />
+                  </InputGroup.Text>
+                </InputGroup.Append>
+                <Form.Control
+                  type="text"
+                  name="searchKeyWord"
+                  data-qc="searchKeyWord"
+                  onChange={(e) => handleSearch(e.currentTarget.value)}
+                  style={{ padding: 22 }}
+                  className="border-bottom-0 rounded-0"
+                  placeholder={local.search}
+                />
+              </InputGroup>
+              {(options.length > 0 || selectedOptions.length > 0) && (
+                <>
+                  <div
+                    className="list-group-item"
+                    style={{ background: '#FAFAFA' }}
+                    onClick={() => selectAllOptions()}
+                  >
+                    <Form.Check
+                      type="checkbox"
+                      readOnly
+                      id="check-all"
+                      label={local.checkAll}
+                      checked={checkAll}
+                    />
+                  </div>
+                  <div className="scrollable-list">
+                    {!props.search && !props.dropDownKeys
+                      ? options
+                          .filter((option) =>
+                            option[props.labelKey]
+                              .toLocaleLowerCase()
+                              .includes(searchKeyword.toLocaleLowerCase())
+                          )
+                          .map((option) => {
+                            return (
+                              <div
+                                key={option._id}
+                                className={`list-group-item d-flex ${
+                                  selectionArray.find(
+                                    (item) => item._id === option._id
+                                  )
+                                    ? 'selected'
+                                    : ''
+                                }`}
+                              >
+                                <Form.Check
+                                  type="checkbox"
+                                  id={option._id}
+                                  onChange={() => selectItem(option)}
+                                  label={option[props.labelKey]}
+                                  checked={selectionArray.find(
+                                    (item) => item._id === option._id
+                                  )}
+                                  disabled={
+                                    props.disabled && props.disabled(option)
+                                  }
+                                />
+                                {props.disabled &&
+                                  props.disabledMessage &&
+                                  props.disabled(option) && (
+                                    <span>{props.disabledMessage(option)}</span>
+                                  )}
+                              </div>
+                            )
+                          })
+                      : options.map((option) => {
+                          return (
+                            <div
+                              key={option._id}
+                              className={`list-group-item d-flex ${
+                                selectionArray.find(
+                                  (item) => item._id === option._id
+                                )
+                                  ? 'selected'
+                                  : ''
+                              }`}
+                            >
+                              <Form.Check
+                                type="checkbox"
+                                id={option._id}
+                                onChange={() => selectItem(option)}
+                                label={option[props.labelKey]}
+                                checked={selectionArray.find(
+                                  (item) => item._id === option._id
+                                )}
+                                disabled={
+                                  props.disabled && props.disabled(option)
+                                }
+                              />
+                              {props.disabled &&
+                                props.disabledMessage &&
+                                props.disabled(option) && (
+                                  <span>{props.disabledMessage(option)}</span>
+                                )}
+                            </div>
+                          )
+                        })}
+                  </div>
+                </>
+              )}
+            </ul>
+          </div>
+        </div>
+        {(options.length > 0 || selectedOptions.length > 0) && (
+          <div className="list-button">
+            <Button
+              className="btn btn-default btn-md"
+              style={{ height: 45, width: 95, margin: '20px 0px' }}
+              disabled={selectionArray.length < 1}
+              onClick={() => addToSelectedList()}
+            >
+              {local.add}
+              <span
+                className={
+                  !props.vertical ? 'fa fa-arrow-left' : 'fa fa-arrow-down'
+                }
+              />
+            </Button>
+          </div>
+        )}
+        {(options.length > 0 || selectedOptions.length > 0) && (
           <div
             className={
-              !this.props.vertical
-                ? 'dual-list list-left col-md-5'
-                : 'dual-list list-left'
+              !props.vertical
+                ? 'dual-list list-right col-md-5'
+                : 'dual-list list-right'
             }
           >
             <div className="well">
-              <h6>{this.props.rightHeader}</h6>
+              <h6 className="text-muted">{props.leftHeader}</h6>
               <ul className="list-group">
                 <InputGroup>
-                  {this.props.dropDownKeys && this.props.dropDownKeys.length ? (
-                    <DropdownButton
-                      as={InputGroup.Append}
-                      variant="outline-secondary"
-                      title={this.getArValue(this.state.dropDownValue)}
-                      id="input-group-dropdown-2"
-                      data-qc="search-dropdown"
-                    >
-                      {this.props.dropDownKeys.map((key, index) => (
-                        <Dropdown.Item
-                          key={index}
-                          data-qc={key}
-                          onClick={() =>
-                            this.setState({ dropDownValue: key }, () =>
-                              this.handleSearch(this.state.searchKeyword)
-                            )
-                          }
-                        >
-                          {this.getArValue(key)}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-                  ) : null}
                   <InputGroup.Append>
                     <InputGroup.Text className="bg-white rounded-0 border-bottom-0">
                       <span className="fa fa-search fa-rotate-90" />
@@ -254,229 +309,71 @@ class DualBox extends Component<Props, State> {
                   </InputGroup.Append>
                   <Form.Control
                     type="text"
-                    name="searchKeyWord"
-                    data-qc="searchKeyWord"
-                    onChange={(e) => this.handleSearch(e.currentTarget.value)}
+                    name="searchSelectedKeyWord"
+                    data-qc="searchSelectedKeyWord"
+                    onChange={(e) =>
+                      setSearchSelectedKeyWord(e.currentTarget.value)
+                    }
                     style={{ padding: 22 }}
                     className="border-bottom-0 rounded-0"
                     placeholder={local.search}
                   />
                 </InputGroup>
-                {(this.state.options.length > 0 ||
-                  this.state.selectedOptions.length > 0) && (
-                  <>
-                    <div
-                      className="list-group-item"
-                      style={{ background: '#FAFAFA' }}
-                      onClick={() => this.selectAllOptions()}
-                    >
-                      <Form.Check
-                        type="checkbox"
-                        readOnly
-                        id="check-all"
-                        label={local.checkAll}
-                        checked={this.state.checkAll}
-                      />
+                <div
+                  className="list-group-item delete-all-row"
+                  style={{ background: '#FAFAFA' }}
+                >
+                  <span className="text-muted">
+                    {local.count}({selectedOptions.length})
+                  </span>
+                  {!props.oneWay && (
+                    <div onClick={() => removeAllFromList()}>
+                      <span>
+                        <img
+                          alt="delete"
+                          src={require('../../../Shared/Assets/deleteIcon.svg')}
+                        />
+                      </span>
+                      <span>{local.deleteAll}</span>
                     </div>
-                    <div className="scrollable-list">
-                      {!this.props.search && !this.props.dropDownKeys
-                        ? this.state.options
-                            .filter((option) =>
-                              option[this.props.labelKey]
-                                .toLocaleLowerCase()
-                                .includes(
-                                  this.state.searchKeyword.toLocaleLowerCase()
-                                )
-                            )
-                            .map((option) => {
-                              return (
-                                <div
-                                  key={option._id}
-                                  className={
-                                    this.state.selectionArray.find(
-                                      (item) => item._id === option._id
-                                    )
-                                      ? 'list-group-item selected d-flex'
-                                      : 'list-group-item d-flex'
-                                  }
-                                >
-                                  <Form.Check
-                                    type="checkbox"
-                                    // readOnly
-                                    id={option._id}
-                                    onChange={() => this.selectItem(option)}
-                                    label={option[this.props.labelKey]}
-                                    checked={this.state.selectionArray.find(
-                                      (item) => item._id === option._id
-                                    )}
-                                    disabled={
-                                      this.props.disabled &&
-                                      this.props.disabled(option)
-                                    }
-                                  />
-                                  {this.props.disabled &&
-                                    this.props.disabledMessage &&
-                                    this.props.disabled(option) && (
-                                      <span>
-                                        {this.props.disabledMessage(option)}
-                                      </span>
-                                    )}
-                                </div>
-                              )
-                            })
-                        : this.state.options.map((option) => {
-                            return (
-                              <div
-                                key={option._id}
-                                className={
-                                  this.state.selectionArray.find(
-                                    (item) => item._id === option._id
-                                  )
-                                    ? 'list-group-item selected d-flex'
-                                    : 'list-group-item d-flex'
-                                }
-                              >
-                                <Form.Check
-                                  type="checkbox"
-                                  // readOnly
-                                  id={option._id}
-                                  onChange={() => this.selectItem(option)}
-                                  label={option[this.props.labelKey]}
-                                  checked={this.state.selectionArray.find(
-                                    (item) => item._id === option._id
-                                  )}
-                                  disabled={
-                                    this.props.disabled &&
-                                    this.props.disabled(option)
-                                  }
-                                />
-                                {this.props.disabled &&
-                                  this.props.disabledMessage &&
-                                  this.props.disabled(option) && (
-                                    <span>
-                                      {this.props.disabledMessage(option)}
-                                    </span>
-                                  )}
-                              </div>
-                            )
-                          })}
-                    </div>
-                  </>
-                )}
+                  )}
+                </div>
+                <div className="scrollable-list">
+                  {selectedOptions
+                    .filter((option) =>
+                      option[props.labelKey]
+                        .toLocaleLowerCase()
+                        .includes(searchSelectedKeyWord.toLocaleLowerCase())
+                    )
+                    .map((option) => (
+                      <li key={option._id} className="list-group-item">
+                        {!props.oneWay && (
+                          <span onClick={() => removeItemFromList(option)}>
+                            <img
+                              alt="close"
+                              style={{ width: '15px', height: '15px' }}
+                              src={require('../../Assets/closeIcon.svg')}
+                            />
+                          </span>
+                        )}
+                        <span>{option[props.labelKey]}</span>
+                        {props.viewSelected && (
+                          <span
+                            onClick={() => viewSelected(option._id)}
+                            className="fa fa-eye icon"
+                            style={{ float: 'left' }}
+                          />
+                        )}
+                      </li>
+                    ))}
+                </div>
               </ul>
             </div>
           </div>
-          {(this.state.options.length > 0 ||
-            this.state.selectedOptions.length > 0) && (
-            <div className="list-button">
-              <Button
-                className="btn btn-default btn-md"
-                style={{ height: 45, width: 95, margin: '20px 0px' }}
-                disabled={this.state.selectionArray.length < 1}
-                onClick={() => this.addToSelectedList()}
-              >
-                {local.add}
-                <span
-                  className={
-                    !this.props.vertical
-                      ? 'fa fa-arrow-left'
-                      : 'fa fa-arrow-down'
-                  }
-                />
-              </Button>
-            </div>
-          )}
-          {(this.state.options.length > 0 ||
-            this.state.selectedOptions.length > 0) && (
-            <div
-              className={
-                !this.props.vertical
-                  ? 'dual-list list-right col-md-5'
-                  : 'dual-list list-right'
-              }
-            >
-              <div className="well">
-                <h6 className="text-muted">{this.props.leftHeader}</h6>
-                <ul className="list-group">
-                  <InputGroup>
-                    <InputGroup.Append>
-                      <InputGroup.Text className="bg-white rounded-0 border-bottom-0">
-                        <span className="fa fa-search fa-rotate-90" />
-                      </InputGroup.Text>
-                    </InputGroup.Append>
-                    <Form.Control
-                      type="text"
-                      name="searchSelectedKeyWord"
-                      data-qc="searchSelectedKeyWord"
-                      onChange={(e) =>
-                        this.setState({
-                          searchSelectedKeyWord: e.currentTarget.value,
-                        })
-                      }
-                      style={{ padding: 22 }}
-                      className="border-bottom-0 rounded-0"
-                      placeholder={local.search}
-                    />
-                  </InputGroup>
-                  <div
-                    className="list-group-item delete-all-row"
-                    style={{ background: '#FAFAFA' }}
-                  >
-                    <span className="text-muted">
-                      {local.count}({this.state.selectedOptions.length})
-                    </span>
-                    {!this.props.oneWay && (
-                      <div onClick={() => this.removeAllFromList()}>
-                        <span>
-                          <img
-                            alt="delete"
-                            src={require('../../../Shared/Assets/deleteIcon.svg')}
-                          />
-                        </span>
-                        <span>{local.deleteAll}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="scrollable-list">
-                    {this.state.selectedOptions
-                      .filter((option) =>
-                        option[this.props.labelKey]
-                          .toLocaleLowerCase()
-                          .includes(
-                            this.state.searchSelectedKeyWord.toLocaleLowerCase()
-                          )
-                      )
-                      .map((option) => (
-                        <li key={option._id} className="list-group-item">
-                          {!this.props.oneWay && (
-                            <span
-                              onClick={() => this.removeItemFromList(option)}
-                            >
-                              <img
-                                alt="close"
-                                style={{ width: '15px', height: '15px' }}
-                                src={require('../../Assets/closeIcon.svg')}
-                              />
-                            </span>
-                          )}
-                          <span>{option[this.props.labelKey]}</span>
-                          {this.props.viewSelected && (
-                            <span
-                              onClick={() => this.viewSelected(option._id)}
-                              className="fa fa-eye icon"
-                              style={{ float: 'left' }}
-                            />
-                          )}
-                        </li>
-                      ))}
-                  </div>
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
-      </Container>
-    )
-  }
+        )}
+      </div>
+    </Container>
+  )
 }
+
 export default DualBox
