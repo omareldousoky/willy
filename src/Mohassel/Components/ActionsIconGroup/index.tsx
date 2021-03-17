@@ -19,9 +19,8 @@ export const ActionsIconGroup = ({
         {actions.map(
           (action, index) =>
             action.actionPermission && (
-              <Col>
+              <Col key={index}>
                 <Button
-                  key={index}
                   variant="outline-primary"
                   onClick={() => action.actionOnClick(currentCustomerId)}
                 >
