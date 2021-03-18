@@ -275,7 +275,6 @@ class AssignProductsToBranches extends Component<Props, State> {
                   options={this.state.branches}
                   selected={this.state.selectedBranches}
                   onChange={(list) => this.handleChange(list)}
-                  filterKey="noKey"
                   rightHeader={local.availableBranches}
                   leftHeader={local.selectedBranches}
                 />

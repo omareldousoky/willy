@@ -1408,7 +1408,6 @@ class LoanApplicationCreation extends Component<Props, State> {
                   options={this.state.branchCustomers}
                   selected={this.state.selectedCustomers}
                   onChange={(list) => this.handleGroupChange(list)}
-                  filterKey={this.state.searchGroupCustomerKey}
                   rightHeader={local.allCustomers}
                   leftHeader={local.selectedCustomers}
                   viewSelected={(id) => this.viewCustomer(id)}

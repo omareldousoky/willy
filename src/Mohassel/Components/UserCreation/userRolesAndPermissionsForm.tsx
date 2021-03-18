@@ -144,7 +144,6 @@ class UserRolesAndPermissionsFrom extends Component<Props, State> {
             )}
             <DualBox
               labelKey="branchName"
-              filterKey="noKey"
               selected={this.props.values.branches}
               onChange={(list) => {
                 this.handleChange(list)
