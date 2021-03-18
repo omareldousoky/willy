@@ -16,39 +16,45 @@ export const CustomerCategorization = (props: Props) => {
   }
 
   return (
-    <Table
-      striped
-      bordered
-      style={{ textAlign: 'right' }}
-      className="horizontal-table"
-    >
-      <thead>
-        <tr>
-          <th>{local.loanCode}</th>
-          <th>{local.customerCategorization}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {ratings.map((rating, index) => {
-          return (
-            <tr key={index}>
-              <td>{rating.loanApplicationKey}</td>
-              <td>
-                <span
-                  style={{
-                    background: getColor(rating.customerScore),
-                    padding: '0px 20px',
-                    color: '#fff',
-                    borderRadius: 20,
-                  }}
-                >
-                  {rating.customerScore}
-                </span>
-              </td>
+    <>
+      {ratings.length > 0 ? (
+        <Table
+          striped
+          bordered
+          style={{ textAlign: 'right' }}
+          className="horizontal-table"
+        >
+          <thead>
+            <tr>
+              <th>{local.loanCode}</th>
+              <th>{local.customerCategorization}</th>
             </tr>
-          )
-        })}
-      </tbody>
-    </Table>
+          </thead>
+          <tbody>
+            {ratings.map((rating, index) => {
+              return (
+                <tr key={index}>
+                  <td>{rating.loanApplicationKey}</td>
+                  <td>
+                    <span
+                      style={{
+                        background: getColor(rating.customerScore),
+                        padding: '0px 20px',
+                        color: '#fff',
+                        borderRadius: 20,
+                      }}
+                    >
+                      {rating.customerScore}
+                    </span>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      ) : (
+        <p>{local.noDataAvaliable}</p>
+      )}
+    </>
   )
 }
