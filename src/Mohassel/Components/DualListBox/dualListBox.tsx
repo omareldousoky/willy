@@ -15,7 +15,6 @@ interface Props {
   selected: any
   labelKey: string
   onChange: any
-  filterKey: string
   rightHeader?: string
   leftHeader?: string
   search?: Function
