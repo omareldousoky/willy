@@ -152,9 +152,6 @@ class Search extends Component<Props, State> {
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
-    // if (url === "defaultingCustomers") {
-    //   delete obj.status;
-    // }
     this.props.search({
       ...obj,
       from: 0,
@@ -266,18 +263,10 @@ class Search extends Component<Props, State> {
             data-qc="status"
             value={field ? formikProps.values[field] : formikProps.values.status}
             onChange={(e) => {
-              // if (searchkey === "defaultingCustomerStatus") {
-              //   formikProps.setFieldValue(
-              //     "status",
-              //     e.currentTarget.value
-              //   );
-              //   // ['branchManagerReview', 'areaSupervisorReview', 'areaManagerReview', 'financialManagerReview'].includes(e.currentTarget.value) && this.setDefaultingCustomersDate(formikProps, e.currentTarget.value)
-              // } else {
                 formikProps.setFieldValue(
                   (field ? field : "status"),
                   e.currentTarget.value
                 );
-              // }
             }}
           >
             {array.map(option => {
@@ -520,7 +509,6 @@ class Search extends Component<Props, State> {
                 if (searchKey === "defaultingCustomerStatus") {
                   return this.statusDropdown(formikProps, index, [
                     { value: "", text: local.all },
-                    { value: "underReview", text: local.underReview },
                     { value: "branchManagerReview", text: local.branchManagerReview, permission: 'branchManagerReview', key: 'legal' },
                     { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
                     { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },

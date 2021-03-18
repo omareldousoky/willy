@@ -31,3 +31,13 @@ export const reviewCustomerDefaultedLoan =  async (data: {ids: string[]; notes: 
         return { status: "error", error: error.response.data }
     }
 }
+export const deleteCustomerDefaultedLoan =  async (data: {ids: string[]}) => {
+    const url = process.env.REACT_APP_BASE_URL + '/legal/delete-customer';
+    try {
+        const res = await axios.post(url, data);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}

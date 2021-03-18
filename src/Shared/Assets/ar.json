@@ -934,5 +934,6 @@
     "writeNotes":"برجاء إدخال الملاحظات",
     "review":"مراجعة",
     "defaultingReviewSuccess":"تم مراجعة القرض بنجاح",
-    "choose":"اختر"
+    "choose":"اختر",
+    "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح "
 }

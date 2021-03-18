@@ -21,7 +21,7 @@ import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCust
 import { Customer } from '../../../Shared/Services/interfaces';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { Application } from '../LoanApplication/loanApplicationStates';
-import { addCustomerToDefaultingList, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
+import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
 
 interface Props {
     history: any;
@@ -181,10 +181,11 @@ class DefaultingCustomersList extends Component<Props, State> {
         const daysSince = this.getRecordAgeInDays(data.created.at)
         return (
             <>
-                {daysSince < 3 && data.status !== 'branchManagerReview' && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'edit'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'branchManagerReview') }} ></img><span>branchManagerReview</span></Can>}
-                {daysSince >= 3 && daysSince < 6 && data.status !== 'areaSupervisorReview' && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaSupervisorReview') }} ></img><span>areaSupervisorReview</span></Can>}
-                {daysSince >= 6 && daysSince < 9 && data.status !== 'areaManagerReview' && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'areaManagerReview') }} ></img><span>areaManagerReview</span></Can>}
-                {daysSince >= 9 && daysSince < 15 && data.status !== 'financialManagerReview' && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} alt={'view'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan(data._id, 'financialManagerReview') }} ></img><span>financialManagerReview</span></Can>}
+                {(daysSince < 3 && data.status === 'underReview') && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'branchManagerReview') }} ></img></Can>}
+                {((daysSince >= 3 && daysSince < 6 && data.status === 'underReview') || data.status === 'branchManagerReview') && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'areaSupervisorReview'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaSupervisorReview') }} ></img></Can>}
+                {((daysSince >= 6 && daysSince < 9 && data.status === 'underReview') || data.status === 'areaManagerReview' || data.status === 'branchManagerReview') && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'areaManagerReview'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaManagerReview') }} ></img></Can>}
+                {((daysSince >= 9 && daysSince < 15 && data.status === 'underReview') || data.status === 'areaSupervisorReview' || data.status === 'branchManagerReview' || data.status === 'areaManagerReview') && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'financialManagerReview'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'financialManagerReview') }} ></img></Can>}
+                <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>
             </>
         );
     }
@@ -244,9 +245,9 @@ class DefaultingCustomersList extends Component<Props, State> {
             }
         }
     }
-    async reviewDefaultedLoan(id, type) {
+    async reviewDefaultedLoan(ids: string[], type: string) {
         const { value: text } = await Swal.fire({
-            title: local[type],
+            title: `${local[type]}${ids.length > 1 ? ids.length + ' ' + local.loans : ''}`,
             input: 'textarea',
             inputPlaceholder: local.writeNotes,
             showCancelButton: true,
@@ -272,7 +273,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             }).then(async (result) => {
                 if (result.value) {
                     this.setState({ loading: true });
-                    const res = await reviewCustomerDefaultedLoan({ ids: [id], notes: text, type: type });
+                    const res = await reviewCustomerDefaultedLoan({ ids: ids, notes: text, type: type });
                     if (res.status === "success") {
                         this.setState({ loading: false })
                         Swal.fire('', local.defaultingReviewSuccess, 'success').then(() => this.getDefaultingCustomers());
@@ -283,31 +284,33 @@ class DefaultingCustomersList extends Component<Props, State> {
             })
         }
     }
-    // filterStatus(data, status?: string){
-    //     console.log(data, status)
-    //     if (!status) {
-    //         return data
-    //     } else if (status === 'underReview') {
-    //         return data.filter(defaulted => defaulted.status === 'underReview')
-    //     }
-    //     return []
-    // }
-    // setDefaultingCustomersDate(formikProps: FormikProps<FormikValues>, role: string) {
-  //   const now = new Date().valueOf()
-  //   const threeDays = 259200000
-  //   const sixDays = 518400000
-  //   const nineDays = 777600000
-  //   const fifteenDays = 1296000000
-  //   const fromDate = now - (role === 'branchManagerReview' ? threeDays : role === 'areaManagerReview' ? sixDays : role === 'areaSupervisorReview' ? nineDays : fifteenDays )
-  //   formikProps.setFieldValue(
-  //     "fromDate",
-  //     fromDate
-  //   );
-  //   formikProps.setFieldValue(
-  //     "toDate",
-  //     now
-  //   );
-  // }
+    bulkAction(action: string){
+        const ids = this.state.selectedEntries.map(entry => entry._id)
+        action === 'review' && this.props.searchFilters.reviewer && this.reviewDefaultedLoan(ids, this.props.searchFilters.reviewer)
+        action === 'delete' && this.deleteDefaultedLoanEntry(ids)
+    }
+    deleteDefaultedLoanEntry(ids: string[]){
+        Swal.fire({
+            title: local.areYouSure,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: local.delete,
+            cancelButtonText: local.cancel
+        }).then(async (result) => {
+            if (result.value) {
+                this.setState({ loading: true });
+                const res = await deleteCustomerDefaultedLoan({ ids: ids });
+                if (res.status === "success") {
+                    this.setState({ loading: false })
+                    Swal.fire('', local.defaultedLoanDeleteSuccess, 'success').then(() => this.getDefaultingCustomers());
+                } else {
+                    this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
+                }
+            }
+        })
+    }
     render() {
         return (
             <div>
@@ -328,13 +331,14 @@ class DefaultingCustomersList extends Component<Props, State> {
                                 <Can I='createUser' a='user'><Button className='big-button' onClick={() => this.setState({
                                     showModal: true
                                 })}>{local.addCustomerToLateCustomers}</Button></Can>
-                                {/* <Button variant='outline-primary' className='big-button'>download pdf</Button> */}
+                                <Button className='big-button' disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('review')}>{local.review}</Button>
+                                <Button className='big-button' disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('delete')}>{local.delete}</Button>
                             </div>
                         </div>
                         <hr className='dashed-line' />
                         <Search
                             searchKeys={['keyword', 'defaultingCustomerStatus']}
-                            dropDownKeys={['name', 'nationalId', 'key']}
+                            dropDownKeys={['name', 'customerKey']}
                             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                             setFrom={(from) => this.setState({ from: from })}
                             url='defaultingCustomers' from={this.state.from} size={this.state.size}
