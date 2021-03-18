@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import Swal from 'sweetalert2'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Spinner from 'react-bootstrap/Spinner'
 import { connect } from 'react-redux'
-import Row from 'react-bootstrap/Row'
-import { Card, Form } from 'react-bootstrap'
+import { Card, Row, Form } from 'react-bootstrap'
 import { download, getErrorMessage } from '../../Services/utils'
 import {
   addToDocuments,
@@ -20,7 +18,7 @@ import { Image } from '../../redux/document/types'
 import * as local from '../../Assets/ar.json'
 import { DocumentType } from '../../Services/interfaces'
 
-interface Props extends RouteComponentProps {
+interface Props {
   documentType: DocumentType
   keyName: string
   keyId: string
@@ -41,18 +39,10 @@ interface Props extends RouteComponentProps {
   selectionArray: Image[]
 }
 
-interface InProps {
-  documentType: DocumentType
-  keyName: string
-  keyId: string
-  edit: boolean
-  view?: boolean
-  onChange?: any
-}
-
 interface State {
   dragging: boolean
 }
+
 class DocumentUploader extends Component<Props, State> {
   private fileInput: React.RefObject<HTMLInputElement>
 
@@ -63,6 +53,53 @@ class DocumentUploader extends Component<Props, State> {
     this.fileInput = React.createRef()
     this.state = {
       dragging: false,
+    }
+  }
+
+  getImageFilesLength(): number {
+    const len: number = this.props.documents.find(
+      (doc) => doc.docName === this.props.documentType.name
+    )?.imagesFiles?.length
+    if (len > 0) return len
+    return 0
+  }
+
+  dragleaveListener = (event: React.DragEvent<HTMLDivElement>) => {
+    this.overrideEventDefaults(event)
+    this.dragEventCounter -= 1
+    if (this.dragEventCounter === 0) {
+      this.setState({ dragging: false })
+    }
+  }
+
+  dragenterListener = (event: React.DragEvent<HTMLDivElement>) => {
+    this.overrideEventDefaults(event)
+    this.dragEventCounter += 1
+    if (event.dataTransfer.items && event.dataTransfer.items[0]) {
+      this.setState({ dragging: true })
+    } else if (
+      event.dataTransfer.types &&
+      event.dataTransfer.types[0] === 'Files'
+    ) {
+      this.setState({ dragging: true })
+    }
+  }
+
+  overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
+    this.overrideEventDefaults(event)
+    this.dragEventCounter = 0
+    this.setState({ dragging: false })
+    if (
+      event.dataTransfer.files &&
+      event.dataTransfer.files[0] &&
+      !this.props.view
+    ) {
+      this.readFiles(event.dataTransfer.files, name)
     }
   }
 
@@ -86,51 +123,14 @@ class DocumentUploader extends Component<Props, State> {
     }
   }
 
-  getImageFilesLength(): number {
-    const len: number = this.props.documents.find(
-      (doc) => doc.docName === this.props.documentType.name
-    )?.imagesFiles?.length
-    if (len > 0) return len
+  calculateNumOfValidDocuments(name: string): number {
+    const numOfValidDocs: number = this.props.documents
+      .find((doc) => doc.docName === name)
+      ?.imagesFiles.filter((doc) => {
+        return !doc.valid
+      }).length
+    if (numOfValidDocs > 0) return numOfValidDocs
     return 0
-  }
-
-  dropListener = (event: React.DragEvent<HTMLDivElement>, name: string) => {
-    this.overrideEventDefaults(event)
-    this.dragEventCounter = 0
-    this.setState({ dragging: false })
-    if (
-      event.dataTransfer.files &&
-      event.dataTransfer.files[0] &&
-      !this.props.view
-    ) {
-      this.readFiles(event.dataTransfer.files, name)
-    }
-  }
-
-  dragleaveListener = (event: React.DragEvent<HTMLDivElement>) => {
-    this.overrideEventDefaults(event)
-    this.dragEventCounter = -1
-    if (this.dragEventCounter === 0) {
-      this.setState({ dragging: false })
-    }
-  }
-
-  dragenterListener = (event: React.DragEvent<HTMLDivElement>) => {
-    this.overrideEventDefaults(event)
-    this.dragEventCounter = +1
-    if (event.dataTransfer.items && event.dataTransfer.items[0]) {
-      this.setState({ dragging: true })
-    } else if (
-      event.dataTransfer.types &&
-      event.dataTransfer.types[0] === 'Files'
-    ) {
-      this.setState({ dragging: true })
-    }
-  }
-
-  overrideEventDefaults = (event: Event | React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
   }
 
   async deleteDocument(event, name: string, key: number) {
@@ -172,7 +172,7 @@ class DocumentUploader extends Component<Props, State> {
       files.length <= imagesLimit &&
       this.getImageFilesLength() < imagesLimit
     ) {
-      for (let index = 0; index < files.length; index = +1) {
+      for (let index = 0; index < files.length; index += 1) {
         const formData = new FormData()
         formData.append('docName', name)
         formData.append(this.props.keyName, this.props.keyId)
@@ -209,10 +209,22 @@ class DocumentUploader extends Component<Props, State> {
     }
   }
 
+  constructArr(name: string) {
+    const len = this.props.documentType.active
+      ? this.props.documentType.pages + this.calculateNumOfValidDocuments(name)
+      : this.props.documents.find((doc) => doc.docName === name).imagesFiles
+          .length
+    const arr: number[] = []
+    for (let i = 0; i < len; i += 1) {
+      arr.push(i)
+    }
+    return arr
+  }
+
   checkFileType(files: Array<File> | FileList) {
     const { length } = files
     let flag = false
-    for (let index = 0; index < length; index = +1) {
+    for (let index = 0; index < length; index += 1) {
       if (
         files[index].type === 'image/png' ||
         files[index].type === 'image/jpeg' ||
@@ -224,16 +236,8 @@ class DocumentUploader extends Component<Props, State> {
     return flag
   }
 
-  constructArr(name: string) {
-    const len = this.props.documentType.active
-      ? this.props.documentType.pages + this.calculateNumOfValidDocuments(name)
-      : this.props.documents.find((doc) => doc.docName === name).imagesFiles
-          .length
-    const arr: number[] = []
-    for (let i = 0; i < len; i = +1) {
-      arr.push(i)
-    }
-    return arr
+  triggerInputFile() {
+    this.fileInput.current?.click()
   }
 
   calculateLimit() {
@@ -241,20 +245,6 @@ class DocumentUploader extends Component<Props, State> {
       this.getImageFilesLength() -
       this.calculateNumOfValidDocuments(this.props.documentType.name)
     )
-  }
-
-  calculateNumOfValidDocuments(name: string): number {
-    const numOfValidDocs: number = this.props.documents
-      .find((doc) => doc.docName === name)
-      ?.imagesFiles.filter((doc) => {
-        return !doc.valid
-      }).length
-    if (numOfValidDocs > 0) return numOfValidDocs
-    return 0
-  }
-
-  triggerInputFile() {
-    this.fileInput.current?.click()
   }
 
   downloadPhoto(document) {
@@ -275,36 +265,6 @@ class DocumentUploader extends Component<Props, State> {
     } else {
       this.props.RemoveFromSelectionArray(document.key)
     }
-  }
-
-  renderLoading() {
-    return (
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '20px',
-          flex: 1,
-          backgroundColor: '#ffffff',
-          textAlign: 'center',
-          width: '100%',
-          height: '200px',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Spinner animation="border" variant="primary" />
-      </div>
-    )
-  }
-
-  renderDropHere(key: number) {
-    return (
-      <div key={key} className="document-upload-container">
-        <h5>Drop here</h5>
-      </div>
-    )
   }
 
   renderPhotoByName(key: number, name: string) {
@@ -421,6 +381,36 @@ class DocumentUploader extends Component<Props, State> {
           {!this.props.view && <div>{local.documentUploadBrowseFileText}</div>}
         </div>
       </Card.Body>
+    )
+  }
+
+  renderDropHere(key: number) {
+    return (
+      <div key={key} className="document-upload-container">
+        <h5>Drop here</h5>
+      </div>
+    )
+  }
+
+  renderLoading() {
+    return (
+      <div
+        style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '20px',
+          flex: 1,
+          backgroundColor: '#ffffff',
+          textAlign: 'center',
+          width: '100%',
+          height: '200px',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Spinner animation="border" variant="primary" />
+      </div>
     )
   }
 
@@ -605,7 +595,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  addDocumentToProps
-)(withRouter(DocumentUploader))
+export default connect(mapStateToProps, addDocumentToProps)(DocumentUploader)

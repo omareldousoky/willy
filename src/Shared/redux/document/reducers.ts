@@ -54,13 +54,11 @@ export const DocumentsReducer = produce(
         break
       }
       case REMOVE_FROM_DOCUMENTS: {
-        let index = -1
         draft.forEach((doc) => {
           if (doc.docName === action.name) {
-            index = doc.imagesFiles.findIndex((item) => item.key === action.key)
-          }
-          if (index !== -1) {
-            doc.imagesFiles.splice(index, 1)
+            doc.imagesFiles = doc.imagesFiles.filter(
+              (item) => item.key !== action.key
+            )
           }
         })
         break
@@ -91,16 +89,7 @@ export const selectionArrayReducer = produce((draft: Image[] = [], action) => {
       draft.push(action.payload)
       break
     case REMOVE_FROM_SELECTION_ARRAY:
-      {
-        let index = -1
-        index = draft.findIndex(
-          (element) => element.fileName === action.payload
-        )
-        if (index !== -1) {
-          draft.splice(index, 1)
-        }
-      }
-      break
+      return draft.filter((element) => element.fileName !== action.payload)
     case CLEAR_SELECTION_ARRAY:
       return []
     default:
