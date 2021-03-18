@@ -94,7 +94,6 @@ class DocumentsUpload extends Component<Props, State> {
         <Row style={{ justifyContent: 'space-between' }}>
           <div
             style={{
-              textAlign: 'right',
               padding: '0.75rem 1.25rem',
               marginRight: '1rem',
             }}
@@ -109,7 +108,6 @@ class DocumentsUpload extends Component<Props, State> {
           </div>
           <div
             style={{
-              textAlign: 'right',
               padding: '0.75rem 1.25rem',
               marginRight: '1rem',
             }}
@@ -117,7 +115,7 @@ class DocumentsUpload extends Component<Props, State> {
             <Button
               style={{ width: '150px' }}
               variant="primary"
-              disabled={this.props.selectionArray.length <= 0}
+              disabled={!this.props.selectionArray.length}
               onClick={async () => {
                 this.setState({ loading: true })
                 await downloadAsZip(
