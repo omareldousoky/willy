@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable';
-import { getDateAndTime } from '../../Services/getRenderDate';
 import { Loader } from '../../../Shared/Components/Loader';
 import local from '../../../Shared/Assets/ar.json';
 import Can from '../../config/Can';
@@ -14,8 +13,8 @@ import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { loading } from '../../../Shared/redux/loading/actions';
 import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards';
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials';
-import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/utils';
-import { Col, FormCheck, Modal } from 'react-bootstrap';
+import { getErrorMessage, timeToArabicDate } from '../../../Shared/Services/utils';
+import { FormCheck, Modal, Table } from 'react-bootstrap';
 import CustomerSearch from '../CustomerSearch/customerSearchTable';
 import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { Customer } from '../../../Shared/Services/interfaces';
@@ -23,6 +22,28 @@ import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { Application } from '../LoanApplication/loanApplicationStates';
 import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
 
+interface Review {
+    at: number;
+    by: string;
+    notes: string;
+    userName: string;
+}
+interface DefaultedCustomer {
+    _id: string;
+    updated: { at: number; by: string };
+    created: { at: number; by: string };
+    status: string;
+    nationalId: string;
+    loanId: string;
+    customerType: string;
+    customerName: string;
+    customerId: string;
+    customerKey: number;
+    branchManagerReview?: Review;
+    areaManagerReview?: Review;
+    areaSupervisorReview?: Review;
+    financialManagerReview?: Review;
+}
 interface Props {
     history: any;
     data: DefaultedCustomer[];
@@ -43,6 +64,7 @@ interface State {
     from: number;
     checkAll: boolean;
     showModal: boolean;
+    showLogs: boolean;
     manageLegalAffairsTabs: Tab[];
     selectedEntries: DefaultedCustomer[];
     customerSearchResults: { results: Array<Customer>; empty: boolean };
@@ -50,20 +72,21 @@ interface State {
     selectedCustomer: Customer;
     modalLoader: boolean;
     loading: boolean;
+    rowToView: DefaultedCustomer;
 }
-interface DefaultedCustomer {
-    _id: string;
-    updated: { at: number; by: string };
-    created: { at: number; by: string };
-    status: string;
-    nationalId: string;
-    loanId: string;
-    customerType: string;
-    customerName: string;
-    customerId: string;
-    customerKey: number;
+const rowToViewInit = {
+    _id: '',
+    updated: { at: 0, by: '' },
+    created: { at: 0, by: '' },
+    status: '',
+    nationalId: '',
+    loanId: '',
+    customerType: '',
+    customerName: '',
+    customerId: '',
+    customerKey: 0
+}
 
-}
 class DefaultingCustomersList extends Component<Props, State> {
     mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: DefaultedCustomer) => void }[]
     loanMappers: { title: string; key: string; sortable?: boolean; render: (data: { id: string; application: Application }) => void }[]
@@ -74,13 +97,15 @@ class DefaultingCustomersList extends Component<Props, State> {
             from: 0,
             checkAll: false,
             showModal: false,
+            showLogs: false,
             manageLegalAffairsTabs: [],
             selectedEntries: [],
             customerSearchResults: { results: [], empty: false },
             loanSearchResults: [],
             selectedCustomer: {},
             modalLoader: false,
-            loading: false
+            loading: false,
+            rowToView: rowToViewInit
         }
         this.mappers = [
             {
@@ -96,7 +121,11 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.code,
                 key: 'customerKey',
-                render: data => data.customerKey
+                render: data => <span style={{ cursor: 'pointer'}} onClick={ () =>
+                    this.props.history.push("/customers/view-customer", {
+                        id: data.customerId
+                      })
+                }>{data.customerKey}</span>
             },
             {
                 title: local.customerName,
@@ -111,7 +140,11 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.loanDetails,
                 key: 'loanId',
-                render: data => data.loanId
+                render: data => <span style={{ cursor: 'pointer'}} onClick={ () =>
+                    this.props.history.push('/loans/loan-profile', { 
+                        id: data.loanId 
+                    })
+                }>{data.loanId}</span>
             },
             {
                 title: local.date,
@@ -121,7 +154,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.status,
                 key: 'status',
-                render: data => data.status
+                render: data => local[data.status]
             },
             {
                 title: '',
@@ -181,10 +214,11 @@ class DefaultingCustomersList extends Component<Props, State> {
         const daysSince = this.getRecordAgeInDays(data.created.at)
         return (
             <>
-                {(daysSince < 3 && data.status === 'underReview') && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../Assets/editIcon.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'branchManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {(daysSince < 6 && (data.status === 'branchManagerReview' || ( daysSince >= 3 && data.status === 'underReview'))) && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'areaManagerReview'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {(daysSince < 9 && (data.status === 'areaManagerReview' || ( daysSince >= 6 && (data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'areaSupervisorReview'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaSupervisorReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {(daysSince <15 && (data.status === 'areaSupervisorReview' || ( daysSince >= 9 && (data.status === 'areaManagerReview' || data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'financialManagerReview'} src={require('../../Assets/view.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'financialManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(data.branchManagerReview || data.areaManagerReview || data.areaSupervisorReview || data.financialManagerReview) && <img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.logs} src={require('../../Assets/view.svg')} onClick={() => { this.showLogs(data) }} ></img>}
+                {(daysSince < 3 && data.status === 'underReview') && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.branchManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'branchManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(daysSince < 6 && (data.status === 'branchManagerReview' || ( daysSince >= 3 && data.status === 'underReview'))) && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(daysSince < 9 && (data.status === 'areaManagerReview' || ( daysSince >= 6 && (data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaSupervisorReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaSupervisorReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(daysSince <15 && (data.status === 'areaSupervisorReview' || ( daysSince >= 9 && (data.status === 'areaManagerReview' || data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.financialManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'financialManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
                 {/* <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can> */}
             </>
         );
@@ -311,6 +345,22 @@ class DefaultingCustomersList extends Component<Props, State> {
             }
         })
     }
+    showLogs(row: DefaultedCustomer){
+        this.setState({
+            showLogs: true,
+            rowToView: row
+        })
+    }
+    renderLogRow(key: string){
+        return (
+            <tr>
+                <td>{timeToArabicDate(this.state.rowToView[key].at, true)}</td>
+                <td>{local[key]}</td>
+                <td>{this.state.rowToView[key].userName}</td>
+                <td>{this.state.rowToView[key].notes}</td>
+            </tr>
+        )
+    }
     render() {
         return (
             <div>
@@ -327,7 +377,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.lateCustomers}</Card.Title>
                                 <span className='text-muted'>{local.noOfUsers + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                             </div>
-                            <div>
+                            <div className='d-flex w-50 justify-content-around'>
                                 <Can I='createUser' a='user'><Button className='big-button' onClick={() => this.setState({
                                     showModal: true
                                 })}>{local.addCustomerToLateCustomers}</Button></Can>
@@ -378,6 +428,35 @@ class DefaultingCustomersList extends Component<Props, State> {
                             showModal: false, selectedCustomer: {}, customerSearchResults: { results: [], empty: false },
                             loanSearchResults: []
                         })}>{local.cancel}</Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={this.state.showLogs} size='lg'>
+                    <Modal.Header>
+                        <Modal.Title>{local.logs}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th>{local.reviewDate}</th>
+                                    <th>{local.reviewStatus}</th>
+                                    <th>{local.doneBy}</th>
+                                    <th>{local.comments}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.rowToView.branchManagerReview && this.renderLogRow('branchManagerReview')}
+                                {this.state.rowToView.areaManagerReview && this.renderLogRow('areaManagerReview')}
+                                {this.state.rowToView.areaSupervisorReview && this.renderLogRow('areaSupervisorReview')}
+                                {this.state.rowToView.financialManagerReview && this.renderLogRow('financialManagerReview')}
+                            </tbody>
+                        </Table>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.setState({
+                            showLogs: false,
+                            rowToView: rowToViewInit
+                            })}>{local.cancel}</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

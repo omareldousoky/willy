@@ -935,5 +935,6 @@
     "review":"مراجعة",
     "defaultingReviewSuccess":"تم مراجعة القرض بنجاح",
     "choose":"اختر",
-    "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح "
+    "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح ",
+    "doneBy":"تمت بواسطة"
 }
