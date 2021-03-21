@@ -44,7 +44,7 @@ class HeaderWithCards extends React.Component <Props> {
               return (
                 <div className="card__wrapper" key={index}>
                   {item.path ? ( // TODO: Add reliable key to check on instead of checking path
-                    <NavLink style={{width: '100%'}} to={item.path}>
+                    <NavLink style={{width: '100%', textDecoration: 'none'}} to={item.path}>
                       {renderCard('lg')}
                     </NavLink>
                   ) : (
