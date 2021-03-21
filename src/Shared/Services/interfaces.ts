@@ -392,3 +392,31 @@ export interface TerroristResponse {
 		userName: string;
 	};
 }
+export interface TerroristUnResponse {
+    id: string;
+    name: string;
+    firstName: string;
+    secondName: string;
+    thirdName: string;
+    fourthName: string;
+    otherConfirmedNames: string;
+    otherNonConfirmedNames: string;
+    nationality: string;
+    nationalId: string;
+    passportId: string;
+    birthDate: string;
+    placeOfBirth: string;
+    serial: string;
+    additionalInfo: string;
+    insertionDate: string;
+    created: {
+        by: string;
+        at: number;
+        userName: string;
+    };
+    updated: {
+        by: string;
+        at: number;
+        userName: string;
+    };
+}

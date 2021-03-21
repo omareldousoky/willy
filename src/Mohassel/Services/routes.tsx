@@ -59,6 +59,7 @@ import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecia
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import TerrorismList from '../Components/terrorismMoneyLaundering/terrorismList';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import TerrorismUnList from '../Components/terrorismMoneyLaundering/terrorismUnList'
 
 const appRoutes = [
   {
@@ -480,7 +481,11 @@ const appRoutes = [
 					path: '/anti-terrorism',
 					label: local.antiTerrorism,
 					render: (props) => <Can I="getTerrorist" a="customer"><TerrorismList {...props} /></Can>
-				},
+				},{
+          path: '/anti-union-terrorism',
+          label: local.antiTerrorism,
+          render: (props) => <Can I="getTerrorist" a="customer"><TerrorismUnList {...props} /></Can>
+        },
 				]
 			}
     ]

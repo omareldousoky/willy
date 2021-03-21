@@ -14,7 +14,7 @@ import { antiTerrorismMoneyLaunderingArray } from "./terrorismMoneyLaunderingIni
 import { Button, Card, Form, Row } from "react-bootstrap"
 import { getErrorMessage } from "../../../Shared/Services/utils"
 import { Formik } from "formik"
-import { uploadTerroristDocument } from "../../Services/APIs/Terrorism/terrorism"
+import { uploadTerroristUnDocument } from "../../Services/APIs/Terrorism/terrorism"
 import * as Yup from "yup"
 import { TerroristResponse } from "../../../Shared/Services/interfaces"
 interface Props {
@@ -45,7 +45,7 @@ interface Touched {
 const uploadTerroristDocumentValidation = Yup.object().shape({
 	terrorismLListFile: Yup.mixed(),
 })
-class TerrorismList extends Component<Props, State> {
+class TerrorismUnList extends Component<Props, State> {
 	mappers: {
 		title: (() => void) | string;
 		key: string;
@@ -90,7 +90,7 @@ class TerrorismList extends Component<Props, State> {
 		})
 	}
 	async getTerrorists() {
-		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist' })
+		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terroristUn' })
 		if (this.props.error) {
 			Swal.fire('', getErrorMessage(this.props.error), "error")
 		}
@@ -100,7 +100,7 @@ class TerrorismList extends Component<Props, State> {
 		this.setState({ showModal: false })
 		const formData = new FormData()
 		formData.append("data", values.terrorismLListFile);
-		const res = await uploadTerroristDocument(formData);
+		const res = await uploadTerroristUnDocument(formData);
 		if (res.status === "success") {
 			Swal.fire('', local.uploadedSuccessfully, 'success').then(
              ()=> window.location.reload())
@@ -116,7 +116,7 @@ class TerrorismList extends Component<Props, State> {
 				<HeaderWithCards
 					header={local.antiTerrorism}
 					array={this.state.tabsToRender}
-					active={this.state.tabsToRender.map(item => { return item.stringKey }).indexOf('antiTerrorism')}
+					active={this.state.tabsToRender.map(item => { return item.stringKey }).indexOf('antiTerrorismUn')}
 				/>
 				<Card className="main-card">
 					<Loader type="fullscreen" open={this.props.loading} />
@@ -142,14 +142,14 @@ class TerrorismList extends Component<Props, State> {
 							dropDownKeys={[
 								"name",
 							]}
-							url="terrorist"
+							url="terroristUn"
 							from={this.state.from}
 							size={this.state.size}
 						/>
 						<DynamicTable
 							from={this.state.from}
 							size={this.state.size}
-							url="terrorist"
+							url="terroristUn"
 							totalCount={this.props.totalCount}
 							pagination={true}
 							data={this.props.data}
@@ -175,9 +175,9 @@ class TerrorismList extends Component<Props, State> {
 									<Modal.Title className={"m-auto"}>{local.uploadTerroristsList}</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-									<Form.Group className="d-flex justify-content-center" as={Row} controlId="terrorismListFile">
+									<Form.Group className="d-flex justify-content-center" as={Row} controlId="terrorismUnListFile">
 										<Form.File
-											name="terrorismListFile"
+											name="terrorismUnListFile"
 											type="file"
 											onChange={(e) => formikProps.setFieldValue('terrorismLListFile', e.target.files[0])}
 											isInvalid={Boolean(formikProps.errors.terrorismLListFile) && Boolean(formikProps.touched.terrorismLListFile)}
@@ -220,4 +220,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps, addSearchToProps)(TerrorismList)
+export default connect(mapStateToProps, addSearchToProps)(TerrorismUnList)

@@ -5,12 +5,19 @@ export const antiTerrorismMoneyLaunderingArray = (): Tab[] => {
   const antiTerrorismMoneyLaunderingArr: Tab[] = [];
   if (ability.can("getTerrorist", "customer")) {
     	antiTerrorismMoneyLaunderingArr.push({
-      header: local.antiTerrorism,
-      icon: 'users',
+      header: local.terroristsList,
+      icon: 'terrorists',
       desc: local.terroristsList,
 			stringKey: "antiTerrorism",
       path: "/anti-terrorism-money-laundering/anti-terrorism",
-    })
+    },{
+      header: local.terroristsListUn,
+      icon: 'terrorists',
+      desc: local.terroristsListUn,
+			stringKey: "antiTerrorismUn",
+      path: "/anti-terrorism-money-laundering/anti-union-terrorism",
+    }
+    )
   }
   return antiTerrorismMoneyLaunderingArr;
 }
