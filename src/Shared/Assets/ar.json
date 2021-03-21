@@ -929,5 +929,6 @@
     "companyCode": "كود الشركة",
     "companyName": "اسم الشركة",
     "noOfCompanies": "عدد الشركات",
-    "persons": "اشخاص"
+    "persons": "اشخاص",
+    "searchCompanyList": "البحث بإسم الفرع او برقم البطاقة الضريبية او السجل التجاري"
 }
