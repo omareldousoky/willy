@@ -930,5 +930,12 @@
 		"uploadTerroristsList": "رفع قوائم الإرهابين",
 		"uploadedSuccessfully": "تم رفع المستند بنجاح",
     "Deceased":"توفي العميل",
-    "Defaultingonpayment":"تخلف عن السداد"
+    "Defaultingonpayment":"تخلف عن السداد",
+    "loanOfficers":"المندوبين",
+    "officersDesc":"تعديل المندوبين و إدارتهم",
+    "noOfLoanOfficers": "عدد المندوبين",
+    "updateLoanOfficer":"تعديل المندوب",
+    "updateLoanOfficerSuccess":"تم تعديل بيانات المندوب بنجاح",
+    "noDataAvaliable": "لا توجد بيانات",
+    "loanOfficerDetails": "تفاصيل المندوب"
 }

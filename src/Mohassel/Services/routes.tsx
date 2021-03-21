@@ -58,6 +58,7 @@ import BusinessActivities from '../Components/ManageLoanDetails/businessActiviti
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import TerrorismList from '../Components/terrorismMoneyLaundering/terrorismList';
+import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 
 const appRoutes = [
   {
@@ -343,7 +344,23 @@ const appRoutes = [
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
               },
             ]
-          }
+          },
+          {
+            path: '/loan-officers',
+            label: local.loanOfficers,
+            render: (props) => (
+              <Can I="updateLoanOfficer" a="user">
+                <LoanOfficersList {...props} withHeader />
+              </Can>
+            ),
+            routes: [
+                {
+                  path: "/loanOfficer-details",
+                  label: local.loanOfficer,
+                  render: (props) => <UserDetails {...props} />
+                },
+            ]
+          },
         ]
       },
       // {
