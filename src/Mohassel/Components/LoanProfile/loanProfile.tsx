@@ -3,7 +3,6 @@ import { getApplication } from '../../Services/APIs/loanApplication/getApplicati
 import { getPendingActions } from '../../Services/APIs/Loan/getPendingActions';
 import { approveManualPayment } from '../../Services/APIs/Loan/approveManualPayment';
 import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch';
-import InfoBox from '../userInfoBox';
 import Payment from '../Payment/payment';
 import { englishToArabic } from '../../Services/statusLanguage';
 import local from '../../../Shared/Assets/ar.json';
@@ -26,7 +25,6 @@ import LoanContract from '../pdfTemplates/loanContract/loanContract';
 import LoanContractForGroup from '../pdfTemplates/loanContractForGroup/loanContractForGroup';
 import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymentReceipt';
 import { withRouter } from 'react-router-dom';
-import GroupInfoBox from './groupInfoBox';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
 import { PendingActions } from '../../../Shared/Services/interfaces';
@@ -55,6 +53,11 @@ import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares
 import { Customer } from '../LoanApplication/loanApplicationCreation';
 import { Installment } from '../Payment/payInstallment';
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
+
+import {InfoBox } from '../../Components'; 
+import { Col, Form } from 'react-bootstrap';
+import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
+
 interface EarlyPayment {
     remainingPrincipal?: number;
     requiredAmount?: number;
@@ -94,6 +97,7 @@ interface State {
     geoAreas: Array<any>;
     remainingTotal: number;
     individualsWithInstallments: Array<IndividualWithInstallments>;
+    // mainInfo: FieldProps[][];
 }
 
 interface Props {
@@ -613,6 +617,198 @@ class LoanProfile extends Component<Props, State>{
         }
         else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
+    getInfo = () => {
+        if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer) {
+            const {
+                customerName,
+                key,
+                nationalId,
+                birthDate,
+                gender,
+                nationalIdIssueDate,
+                businessSector,
+                businessActivity,
+                businessSpeciality,
+                permanentEmployeeCount,
+                partTimeEmployeeCount,
+            } = this.state.application.customer;
+            const customerScore = this.state.iscores.filter(score => score.nationalId === nationalId)[0]
+            return [
+                [
+                    {
+                        fieldTitle: local.name,
+                        fieldData: customerName,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.customerCode,
+                        fieldData: key,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: "iScore",
+                        fieldData: <>
+                            <Form.Label style={{ color: iscoreStatusColor(customerScore?.iscore).color }}>{customerScore?.iscore} </Form.Label>
+                            <Form.Label>{iscoreStatusColor(customerScore?.iscore).status} </Form.Label>
+                            {customerScore?.bankCodes && customerScore?.bankCodes.map(code => <Form.Label key={code}>{iscoreBank(code)}</Form.Label>)}
+                            {customerScore?.url && <Col>
+                                <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(customerScore?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
+                            </Col>}
+                            {this.state.application.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status) && <Col>
+                                <Can I='getIscore' a='customer'>
+                                    <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.state.application.customer)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span>
+                                </Can>
+                            </Col>}
+                        </>,
+                        showFieldCondition: customerScore,
+                    },
+                    {
+                        fieldTitle: local.nationalId,
+                        fieldData: nationalId,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.birthDate,
+                        fieldData: timeToArabicDate(birthDate, false),
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.gender,
+                        fieldData: arabicGender(gender),
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.nationalIdIssueDate,
+                        fieldData: timeToArabicDate(nationalIdIssueDate, false),
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.businessSector,
+                        fieldData: businessSector,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.businessActivity,
+                        fieldData: businessActivity,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.businessSpeciality,
+                        fieldData: businessSpeciality,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.permanentEmployeeCount,
+                        fieldData: permanentEmployeeCount || 0,
+                        showFieldCondition: true,
+                    },
+                    {
+                        fieldTitle: local.partTimeEmployeeCount,
+                        fieldData: partTimeEmployeeCount || 0,
+                        showFieldCondition: true,
+                    },
+                ],
+            ];
+        }
+        else {
+            if (this.state.application.group) {
+                const groupMainInfo = this.state.application.group.individualsInGroup.map((individual) => {
+                    const {
+                        customerName,
+                        key,
+                        nationalId,
+                        birthDate,
+                        gender,
+                        nationalIdIssueDate,
+                        businessSector,
+                        businessActivity,
+                        businessSpeciality,
+                        permanentEmployeeCount,
+                        partTimeEmployeeCount,
+                    } = individual.customer;
+
+                    const customerScore = this.state.iscores.filter(score => score.nationalId === nationalId)[0]
+
+                    return ([
+                        {
+                            fieldTitle: individual.type === 'leader' ? local.groupLeaderName : local.name,
+                            fieldData: customerName,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.customerCode,
+                            fieldData: key,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: "iScore",
+                            fieldData: <>
+                                <Form.Label style={{ color: iscoreStatusColor(customerScore?.iscore).color }}>{customerScore?.iscore} </Form.Label>
+                                <Form.Label>{iscoreStatusColor(customerScore?.iscore).status} </Form.Label>
+                                {customerScore?.bankCodes && customerScore?.bankCodes.map(code => <Form.Label key={code}>{iscoreBank(code)}</Form.Label>)}
+                                {customerScore?.url && <Col>
+                                    <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(customerScore?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
+                                </Col>}
+                                {this.state.application.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status) && <Col>
+                                    <Can I='getIscore' a='customer'>
+                                        <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(individual.customer)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span>
+                                    </Can>
+                                </Col>}
+                            </>,
+                            showFieldCondition: customerScore,
+                        },
+                        {
+                            fieldTitle: local.nationalId,
+                            fieldData: nationalId,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.birthDate,
+                            fieldData: timeToArabicDate(birthDate, false),
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.gender,
+                            fieldData: arabicGender(gender),
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.nationalIdIssueDate,
+                            fieldData: timeToArabicDate(nationalIdIssueDate, false),
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.businessSector,
+                            fieldData: businessSector,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.businessActivity,
+                            fieldData: businessActivity,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.businessSpeciality,
+                            fieldData: businessSpeciality,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.permanentEmployeeCount,
+                            fieldData: permanentEmployeeCount || 0,
+                            showFieldCondition: true,
+                        },
+                        {
+                            fieldTitle: local.partTimeEmployeeCount,
+                            fieldData: partTimeEmployeeCount || 0,
+                            showFieldCondition: true,
+                        },
+                    ])
+                })
+                return groupMainInfo
+            }
+        }
+
+    }
     render() {
         return (
             <Container>
@@ -688,9 +884,7 @@ class LoanProfile extends Component<Props, State>{
                             editManualPayment={(randomPaymentId: string) => this.editManualPayment(randomPaymentId)}
                         />}
                         <div style={{ marginTop: 15 }}>
-                            {this.state.application.product.beneficiaryType === 'individual' ? <InfoBox values={this.state.application.customer} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} /> :
-                                <GroupInfoBox group={this.state.application.group} getIscore={(data) => this.getIscore(data)} iScores={this.state.iscores} status={this.state.application.status} />
-                            }
+                            <InfoBox info={this.getInfo()} title={this.state.application.product.beneficiaryType === 'individual' ?local.mainInfo : local.mainGroupInfo} />
                         </div>
                         <Card style={{ marginTop: 15 }}>
                             <CardNavBar
