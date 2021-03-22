@@ -10,7 +10,6 @@ import { getDateAndTime } from "../../Services/getRenderDate";
 import { Loader } from "../../../Shared/Components/Loader";
 import * as local from "../../../Shared/Assets/ar.json";
 import { withRouter } from "react-router-dom";
-import { blockCustomer } from "../../Services/APIs/blockCustomer/blockCustomer";
 import ability from "../../config/ability";
 import { manageCustomersArray } from "./manageCustomersInitial";
 import HeaderWithCards from "../HeaderWithCards/headerWithCards";
@@ -19,9 +18,8 @@ import {
   getErrorMessage,
   getFullCustomerKey,
 } from "../../../Shared/Services/utils";
-import HalanLinkageModal from "./halanLinkageModal";
-import { ActionsDropdown } from "../../Components";
-import { Actions } from "../../Components/ActionsDropdown/types";
+import { ActionsIconGroup } from "../../../Shared/Components";
+import { Actions } from "../../../Shared/Components/ActionsIconGroup/types";
 
 interface State {
   size: number;
@@ -71,7 +69,9 @@ class CustomersList extends Component<Props, State> {
     };
     this.customerActions = [
       {
-        actionTitle: () => local.editCustomer,
+        actionTitle: local.editCustomer,
+        actionIcon: 'editIcon',
+
         actionPermission:
           ability.can("updateCustomer", "customer") ||
           ability.can("updateNationalId", "customer"),
@@ -79,29 +79,12 @@ class CustomersList extends Component<Props, State> {
           this.props.history.push("/customers/edit-customer", { id }),
       },
       {
-        actionTitle: () => local.viewCustomer,
+        actionTitle: local.viewCustomer,
+        actionIcon: 'view',
+
         actionPermission: ability.can("getCustomer", "customer"),
         actionOnClick: (id) =>
           this.props.history.push("/customers/view-customer", { id }),
-      },
-      {
-        actionTitle: () => local.createClearance,
-        actionPermission: ability.can("newClearance", "application"),
-        actionOnClick: (id) =>
-          this.props.history.push("/customers/create-clearance", { id }),
-      },
-      {
-        actionTitle: (blocked) =>
-          blocked?.isBlocked ? local.unblockCustomer : local.blockCustomer,
-        actionPermission: ability.can("blockAndUnblockCustomer", "customer"),
-        actionOnClick: (id, blocked) =>
-          this.handleActivationClick({ id, blocked }),
-      },
-      {
-        actionTitle: () => local.halanLinkage,
-        actionPermission: true,
-        actionOnClick: () =>
-          this.setState({ showHalanLinkageModal: true }),
       },
     ];
 
@@ -136,21 +119,12 @@ class CustomersList extends Component<Props, State> {
           data.created?.at ? getDateAndTime(data.created?.at) : "",
       },
       {
-        title: "",
+        title: local.actions,
         key: "actions",
         render: (data) => (
-          <ActionsDropdown
+          <ActionsIconGroup
             currentCustomerId={data._id}
-            openCustomerId={this.state.openActionsId}
-            blocked={data.blocked}
-            title={local.actions}
             actions={this.customerActions}
-            onDropDownClick={() =>
-              this.setState({
-                openActionsId:
-                  this.state.openActionsId === data._id ? "" : data._id,
-              })
-            }
           />
         ),
       },
@@ -171,67 +145,7 @@ class CustomersList extends Component<Props, State> {
       });
     this.setState({ manageCustomersTabs: manageCustomersArray() });
   }
-  async handleActivationClick({id, blocked}) {
-    const { value: text } = await Swal.fire({
-      title:
-        blocked?.isBlocked === true
-          ? local.unblockReason
-          : local.blockReason,
-      input: "text",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText:
-      blocked?.isBlocked === true
-          ? local.unblockCustomer
-          : local.blockCustomer,
-      cancelButtonText: local.cancel,
-      inputValidator: (value) => {
-        if (!value) {
-          return local.required;
-        } else return "";
-      },
-    });
-    if (text) {
-      Swal.fire({
-        title: local.areYouSure,
-        text:
-          blocked?.isBlocked === true
-            ? local.customerWillBeUnblocked
-            : local.customerWillBeBlocked,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText:
-          blocked?.isBlocked === true
-            ? local.unblockCustomer
-            : local.blockCustomer,
-        cancelButtonText: local.cancel,
-      }).then(async (result) => {
-        if (result.value) {
-          this.setState({ loading: true });
-          const res = await blockCustomer(id, {
-            toBeBlocked: blocked?.isBlocked === true ? false : true,
-            reason: text,
-          });
-          if (res.status === "success") {
-            this.setState({ loading: false });
-            Swal.fire(
-              "",
-              blocked?.isBlocked === true
-                ? local.customerUnblockedSuccessfully
-                : local.customerBlockedSuccessfully,
-              "success"
-            ).then(() => window.location.reload());
-          } else {
-            this.setState({ loading: false });
-            Swal.fire("", local.searchError, "error");
-          }
-        }
-      });
-    }
-  }
+
   getCustomers() {
     const { searchFilters, search, error, branchId } = this.props;
     const { customerShortenedCode, key } = searchFilters;
@@ -326,17 +240,6 @@ class CustomersList extends Component<Props, State> {
             )}
           </Card.Body>
         </Card>
-        {this.state.showHalanLinkageModal && this.state.openActionsId && (
-          <HalanLinkageModal
-            show={this.state.showHalanLinkageModal}
-            hideModal={() => this.setState({ showHalanLinkageModal: false })}
-            customer={
-              this.props.data.filter(
-                (customer) => customer._id === this.state.openActionsId
-              )[0]
-            }
-          />
-        )}
       </>
     );
   }
