@@ -128,7 +128,7 @@ class Search extends Component<Props, State> {
         obj.key = Number(
           getFullCustomerKey(obj.customerShortenedCode) || undefined
         );
-      if (url === "application" || url === "loan")
+      if (url === "application" || url === "loan" || url === "defaultingCustomers")
         obj.customerKey = Number(
           getFullCustomerKey(obj.customerShortenedCode) || undefined
         );
@@ -510,8 +510,8 @@ class Search extends Component<Props, State> {
                   return this.statusDropdown(formikProps, index, [
                     { value: "", text: local.all },
                     { value: "branchManagerReview", text: local.branchManagerReview, permission: 'branchManagerReview', key: 'legal' },
-                    { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
                     { value: "areaSupervisorReview", text: local.areaSupervisorReview, permission: 'areaSupervisorReview', key: 'legal' },
+                    { value: "areaManagerReview", text: local.areaManagerReview, permission: 'areaManagerReview', key: 'legal' },
                     { value: "financialManagerReview", text: local.financialManagerReview, permission: 'financialManagerReview', key: 'legal' },
                   ], 'reviewer')
                 }

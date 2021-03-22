@@ -90,6 +90,7 @@ export interface Application {
     branchManagerId: string;
     managerVisitDate: string;
     status?: string;
+    customer?: Customer;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),

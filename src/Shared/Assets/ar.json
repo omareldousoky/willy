@@ -940,8 +940,9 @@
     "financialManagerReview":"مراجعة المدير المالي",
     "writeNotes":"برجاء إدخال الملاحظات",
     "review":"مراجعة",
-    "defaultingReviewSuccess":"تم مراجعة القرض بنجاح",
+    "defaultingReviewSuccess":"تم مراجعة الحالة بنجاح",
     "choose":"اختر",
     "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح ",
-    "doneBy":"تمت بواسطة"
+    "doneBy":"تمت بواسطة",
+    "maxLength200":"لا يمكن ان يكون اكثر من 200"
 }

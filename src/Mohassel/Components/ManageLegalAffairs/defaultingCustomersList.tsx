@@ -35,6 +35,7 @@ interface DefaultedCustomer {
     status: string;
     nationalId: string;
     loanId: string;
+    loanKey: string;
     customerType: string;
     customerName: string;
     customerId: string;
@@ -81,6 +82,7 @@ const rowToViewInit = {
     status: '',
     nationalId: '',
     loanId: '',
+    loanKey: '',
     customerType: '',
     customerName: '',
     customerId: '',
@@ -135,21 +137,21 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.customerType,
                 key: 'customerType',
-                render: data => data.customerType
+                render: data => local[data.customerType]
             },
             {
-                title: local.loanDetails,
+                title: local.loanCode,
                 key: 'loanId',
                 render: data => <span style={{ cursor: 'pointer'}} onClick={ () =>
                     this.props.history.push('/loans/loan-profile', { 
                         id: data.loanId 
                     })
-                }>{data.loanId}</span>
+                }>{data.loanKey}</span>
             },
             {
                 title: local.date,
-                key: 'employment',
-                render: data => data.created.at ? this.getRecordAgeInDays(data.created.at) : ''
+                key: 'creationDate',
+                render: data => data.created.at ? timeToArabicDate(data.created.at, true) : ''
             },
             {
                 title: local.status,
@@ -164,11 +166,11 @@ class DefaultingCustomersList extends Component<Props, State> {
         ]
         this.loanMappers = [
             {
-                title: local.code,
-                key: 'LoanKey',
-                render: data => data.id || ''
+                title: local.customerCode,
+                key: 'customerCode',
+                render: data => this.state.selectedCustomer.key || ''
             }, {
-                title: local.code,
+                title: local.loanCode,
                 key: 'LoanKey',
                 render: data => data.application.loanApplicationKey || ''
             },
@@ -216,9 +218,9 @@ class DefaultingCustomersList extends Component<Props, State> {
             <>
                 {(data.branchManagerReview || data.areaManagerReview || data.areaSupervisorReview || data.financialManagerReview) && <img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.logs} src={require('../../Assets/view.svg')} onClick={() => { this.showLogs(data) }} ></img>}
                 {(daysSince < 3 && data.status === 'underReview') && <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.branchManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'branchManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {(daysSince < 6 && (data.status === 'branchManagerReview' || ( daysSince >= 3 && data.status === 'underReview'))) && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {(daysSince < 9 && (data.status === 'areaManagerReview' || ( daysSince >= 6 && (data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaSupervisorReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaSupervisorReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
-                {(daysSince <15 && (data.status === 'areaSupervisorReview' || ( daysSince >= 9 && (data.status === 'areaManagerReview' || data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.financialManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'financialManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(daysSince < 6 && (data.status === 'branchManagerReview' || ( daysSince >= 3 && data.status === 'underReview'))) && <Can I='areaSupervisorReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaSupervisorReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaSupervisorReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(daysSince < 9 && (data.status === 'areaSupervisorReview' || ( daysSince >= 6 && (data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='areaManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.areaManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'areaManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
+                {(daysSince <15 && (data.status === 'areaManagerReview' || ( daysSince >= 9 && (data.status === 'areaSupervisorReview' || data.status === 'branchManagerReview' || data.status === 'underReview')))) && <Can I='financialManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.financialManagerReview} src={require('../../Assets/check-circle.svg')} onClick={() => { this.reviewDefaultedLoan([data._id], 'financialManagerReview') }} ></img><img style={{ cursor: 'pointer', marginLeft: 20 }} title={local.deactivate} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can>}
                 {/* <Can I='branchManagerReview' a='legal'><img style={{ cursor: 'pointer', marginLeft: 20 }} title={'branchManagerReview'} src={require('../../../Shared/Assets/deleteIcon.svg')} onClick={() => { this.deleteDefaultedLoanEntry([data._id]) }} ></img></Can> */}
             </>
         );
@@ -292,7 +294,10 @@ class DefaultingCustomersList extends Component<Props, State> {
             inputValidator: (value) => {
                 if (!value) {
                     return local.required
-                } else return ''
+                } else if(value.length > 200){
+                    return local.maxLength200
+                }
+                 else return ''
             }
         })
         if (text) {
@@ -388,7 +393,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                         <hr className='dashed-line' />
                         <Search
                             searchKeys={['keyword', 'defaultingCustomerStatus']}
-                            dropDownKeys={['name', 'customerKey']}
+                            dropDownKeys={['name', 'key','customerKey', 'customerShortenedCode']}
                             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
                             setFrom={(from) => this.setState({ from: from })}
                             url='defaultingCustomers' from={this.state.from} size={this.state.size}

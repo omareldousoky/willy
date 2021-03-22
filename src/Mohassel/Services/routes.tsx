@@ -476,11 +476,12 @@ const appRoutes = [
       },{
         path: '/legal-affairs',
         label: local.legalAffairs,
+        render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>,
         routes: [
           {
             path: '/late-list',
             label: local.lateList,
-            render: (props) => <Can I='geoArea' a='config'><DefaultingCustomersList {...props} /></Can>
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
           }
         ]
       }

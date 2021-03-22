@@ -4,12 +4,12 @@ import ability from '../../config/ability'
 
 export const  manageLegalAffairsArray =  (): Card[] => {
   const mangeLegalAffairsArr: Card[]= [];
-if(ability.can('loanUsage','config')){
+if(ability.can('getDefaultingCustomer','legal')){
   mangeLegalAffairsArr.push({
     icon: 'loanUses',
     header: local.lateList,
     desc: local.lateList,
-    path: '/manage-loan-details/loan-uses',
+    path: '/legal-affairs/late-list',
   })
 }
 return mangeLegalAffairsArr;
