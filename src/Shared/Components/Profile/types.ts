@@ -1,5 +1,5 @@
 
-import { CustomerScore } from "../../Services/APIs/Customer-Creation/customerCategorization";
+import { CustomerScore } from "../../../Mohassel/Services/APIs/Customer-Creation/customerCategorization";
 
 export interface FieldProps {
     fieldTitle: string;
@@ -26,9 +26,9 @@ export interface FieldProps {
     setActiveTab(activeTab: string): void;
     loading: boolean;
     setLoading?(loading: boolean): void;
-    backButtonText: string;
-    editText: string;
-    editPermission: boolean;
-    editOnClick(): void;
+    backButtonText?: string;
+    editText?: string;
+    editPermission?: boolean;
+    editOnClick?(): void;
     tabsData: TabDataProps;
   }

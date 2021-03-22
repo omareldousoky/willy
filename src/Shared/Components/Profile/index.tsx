@@ -1,12 +1,12 @@
 import React from "react";
 
 //Components
-import { Loader } from "../../../Shared/Components/Loader";
-import BackButton from "../BackButton/back-button";
-import { CardNavBar } from "../HeaderWithCards/cardNavbar";
-import DocumentsUpload from "../CustomerCreation/documentsUpload";
-import DeathCertificate from '../CustomerCreation/deathCertificate';
-import { CustomerCategorization } from '../../Components';
+import { Loader } from "../Loader";
+import BackButton from "../../../Mohassel/Components/BackButton/back-button";
+import { CardNavBar } from "../../../Mohassel/Components/HeaderWithCards/cardNavbar";
+import DocumentsUpload from "../../../Mohassel/Components/CustomerCreation/documentsUpload";
+import DeathCertificate from '../../../Mohassel/Components/CustomerCreation/deathCertificate';
+import { CustomerCategorization } from "../../../Mohassel/Components/CustomerCreation/customerCategorization";
 
 //Bootstrap Components
 import Card from "react-bootstrap/Card";
@@ -29,8 +29,8 @@ export const Profile = ({
     <>
       <Loader open={loading} type="fullscreen" />
       <div className="rowContainer print-none" style={{ paddingLeft: 30 }}>
-        <BackButton title={backButtonText} className="print-none" />
-        {editPermission && (
+       {backButtonText &&  <BackButton title={backButtonText} className="print-none" />}
+        {editPermission && editText && (
           <div
             className="print-none"
             style={{ cursor: "pointer" }}
