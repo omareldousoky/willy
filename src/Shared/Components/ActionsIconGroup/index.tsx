@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { LtsIcon } from "../../../Shared/Components";
+import { LtsIcon } from "../../Components";
 
 import { ActionsIconGroupProps } from "./types";
 
