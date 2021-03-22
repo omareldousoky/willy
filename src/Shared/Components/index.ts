@@ -5,3 +5,4 @@ export * from './Profile'
 export * from './ProfileActions'
 
 export * from './Company/CompanyList'
+export * from './Company/CompanyProfile'
