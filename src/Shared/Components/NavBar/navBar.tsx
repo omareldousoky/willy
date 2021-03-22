@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
@@ -195,13 +196,23 @@ class NavBar extends Component<Props, State> {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        {<Navbar style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg">
+        {<Navbar  className='text-white bold'  style={{ backgroundColor: '#2a3390', height: 75, marginBottom: 20 }} expand="lg" variant="dark">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', fontSize:'.9em' }}>
               <Nav.Link><img alt="home-icon" src={require('../../Assets/homeIcon.svg')} /></Nav.Link>
-              {ability.can('getCustomer', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/customers')}>{local.customers}</Nav.Link> 
-                : !this.props.hide && ability.can('changeOfficer', 'customer') ? <Nav.Link onClick={() => this.props.history.push('/customers/move-customers')}>{local.customers}</Nav.Link> : null}
+              {/* //TODO come back to after we figure permissions */}
+              {ability.can('getCustomer', 'customer') ? <NavDropdown title={local.customers} id="basic-nav-dropdown" >
+                <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/customers')}>{local.persons}</NavDropdown.Item>
+                <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company')}>{local.companies}</NavDropdown.Item>
+              </NavDropdown> :
+                !this.props.hide && ability.can('changeOfficer', 'customer') ?
+                  <NavDropdown title={local.customers} id="basic-nav-dropdown" >
+                    <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/customers/move-customers')}>{local.persons}</NavDropdown.Item>
+                    <NavDropdown.Item className="primary" onClick={() => this.props.history.push('/company//move-company')}>{local.companies}</NavDropdown.Item>
+            </NavDropdown> 
+              : null
+              }
               {!this.props.hide && ability.can('getLoanProduct', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/loan-products')}>{local.loans}</Nav.Link>
                : !this.props.hide && ability.can('getCalculationFormula' ,'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/calculation-formulas')}>{local.loans}</Nav.Link>
                 : !this.props.hide && ability.can('assignProductToBranch', 'product') ? <Nav.Link onClick={() => this.props.history.push('/manage-loans/assign-products-branches')}>{local.assignProductToBranch}</Nav.Link> : null}
