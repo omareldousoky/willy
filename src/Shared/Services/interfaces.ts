@@ -76,10 +76,10 @@ export interface Customer {
 		isBlocked?: boolean;
 		reason?: string;
     };
-    suspect: { 
-        suspectId?: string;
+    suspects?: { 
+       id?: string;
         type?: string;
-    };
+    }[];
 }
 
 export interface Action {

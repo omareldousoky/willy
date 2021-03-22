@@ -10,7 +10,7 @@ import { search, searchFilters } from "../../../Shared/redux/search/actions"
 import Search from "../../../Shared/Components/Search/search"
 import { loading } from "../../../Shared/redux/loading/actions"
 import HeaderWithCards, { Tab } from "../HeaderWithCards/headerWithCards"
-import { antiTerrorismMoneyLaunderingArray } from "./terrorismMoneyLaunderingInitials"
+import { antiTerrorismMoneyLaunderingArray, fullEnglishDate } from "./terrorismMoneyLaunderingInitials"
 import { Button, Card, Form, Row } from "react-bootstrap"
 import { getErrorMessage } from "../../../Shared/Services/utils"
 import { Formik } from "formik"
@@ -81,6 +81,12 @@ class TerrorismList extends Component<Props, State> {
 				key: 'birthDate',
 				render: data => data.birthDate
 			},
+			{
+				title: local.creationDate,
+				key: 'createAt',
+			   render: data => data?.created?.at ? fullEnglishDate (data.created.at): null,
+
+			},
 		]
 	}
 	componentDidMount() {
@@ -90,7 +96,7 @@ class TerrorismList extends Component<Props, State> {
 		})
 	}
 	async getTerrorists() {
-		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist' })
+		this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'terrorist',name:'',fromDate: 0 , toDate: 0  })
 		if (this.props.error) {
 			Swal.fire('', getErrorMessage(this.props.error), "error")
 		}
@@ -201,6 +207,7 @@ class TerrorismList extends Component<Props, State> {
 	}
 	componentWillUnmount() {
 		this.props.setSearchFilters({})
+		this.props.search({url:'clearData'})
 	}
 }
 const addSearchToProps = dispatch => {

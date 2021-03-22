@@ -21,3 +21,10 @@ export const antiTerrorismMoneyLaunderingArray = (): Tab[] => {
   }
   return antiTerrorismMoneyLaunderingArr;
 }
+export const fullEnglishDate = (timeStamp: number) => {
+  return new Date(timeStamp).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).replace(/,/g, '')
+}

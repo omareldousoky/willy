@@ -477,6 +477,7 @@ const appRoutes = [
       },{
 				path: "/anti-terrorism-money-laundering",
 				label: local.antiTerrorismMoneyLaundering,
+        render: (props) => <Can I="getTerrorist" a="customer"><TerrorismList {...props} /></Can>,
 				routes: [{
 					path: '/anti-terrorism',
 					label: local.antiTerrorism,
