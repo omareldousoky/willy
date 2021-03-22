@@ -15,13 +15,14 @@ export const ProfileActions = ({ actions }: ProfileActionsProps) => {
               key={index}
               style={{
                 cursor: "pointer",
-                borderRight: "2px solid #e5e5e5",
-                padding: 10,
+                borderRight: "2px solid #2b3390",
+                padding: '0px 8px',
+                margin: '10px 0'
               }}
               onClick={onActionClick}
             >
               {action.icon && <LtsIcon name={action.icon} />}
-              <span style={{ margin: "auto 2px" }}>{title}</span>
+              <span style={{ margin: "auto 8px" }}>{title}</span>
             </span>
           )
         );

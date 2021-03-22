@@ -18,6 +18,7 @@ import { FieldProps, TabDataProps } from '../../../Shared/Components/Profile/typ
 import { CustomerReportsTab } from './customerReportsTab';
 import HalanLinkageModal from "./halanLinkageModal";
 import { blockCustomer } from "../../Services/APIs/blockCustomer/blockCustomer";
+import { Container } from 'react-bootstrap';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -608,9 +609,9 @@ const CustomerProfile = (props: Props) => {
     ];
   };
   return (
-    <>
+    <Container>
       <div style={{ margin: 15 }}>
-        <div className={"d-flex flex-row justify-content-between"}>
+        <div className="d-flex flex-row justify-content-between" >
           <h3> {local.viewCustomer}</h3>
 
           <ProfileActions actions={getProfileActions()} />
@@ -636,7 +637,7 @@ const CustomerProfile = (props: Props) => {
       {print === "ClientGuaranteedLoans" && dataToBePrinted && (
         <ClientGuaranteedLoans data={dataToBePrinted} />
       )}
-    </>
+    </Container>
   );
 }
 
