@@ -56,3 +56,46 @@
     content: "\e907";
   }
 }
+.lts-minus {
+  &:before {
+    content: "\e908"; 
+  }
+}
+.lts-closeIcon {
+  &:before {
+    content: "\e909"; 
+  }
+}
+.lts-deactivate-user {
+  &:before {
+    content: "\e90a"; 
+  }
+}
+.lts-removeIcon .path1 {
+  &:before {
+    content: "\e90b";  
+    color: rgb(47, 47, 47);
+  }
+}
+.lts-removeIcon .path2 {
+  &:before {
+    content: "\e90c";  
+    margin-left: -1em;  
+  }
+}
+.lts-removeIcon .path3 {
+  &:before {
+    content: "\e90d";  
+    margin-left: -1em;  
+  }
+}
+.lts-reschedule {
+  &:before {
+    content: "\e90e"; 
+  }
+}
+.lts-green-download {
+  &:before {
+    content:"\e90f";     
+  }
+}
