@@ -58,6 +58,8 @@ import BusinessActivities from '../Components/ManageLoanDetails/businessActiviti
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import { CompanyList, CompanyProfile } from "../../Shared/Components";
+
 const appRoutes = [
   {
     path: "/",
@@ -99,6 +101,34 @@ const appRoutes = [
                </Can>
             
           },
+        ]
+      },
+      {
+        path: "/company",
+        label: local.companies,
+        render: (props) => <Can I='getCustomer' a='customer'><CompanyList {...props} /></Can>,
+        routes: [
+          // {
+          //   path: "/new-company",
+          //   label: local.newCustomer,
+          //   render: (props) => <Can I='createCustomer' a='customer'><CompanyCreation {...props} edit={false} /></Can>,
+          // },
+          // {
+          //   path: "/edit-company",
+          //   label: local.editCustomer,
+          //   render: (props) => <CompanyCreation {...props} edit={true} />,
+          // }
+          // ,
+          {
+            path: "/view-company",
+            label: local.viewCompany,
+            render: (props) => <CompanyProfile {...props} />,
+          },
+          // {
+          //   path: "/move-company",
+          //   label: local.moveCustomers,
+          //   render: (props) => <Can I="changeOfficer" a="customer"><MoveCustomers {...props} /></Can>
+          // },
         ]
       },
       {
