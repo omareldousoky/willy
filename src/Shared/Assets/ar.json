@@ -930,5 +930,12 @@
     "companyName": "اسم الشركة",
     "noOfCompanies": "عدد الشركات",
     "persons": "اشخاص",
-    "searchCompanyList": "البحث بإسم الفرع او برقم البطاقة الضريبية او السجل التجاري"
+    "searchCompanyList": "البحث بإسم الفرع او برقم البطاقة الضريبية او السجل التجاري",
+    "loanOfficers":"المندوبين",
+    "officersDesc":"تعديل المندوبين و إدارتهم",
+    "noOfLoanOfficers": "عدد المندوبين",
+    "updateLoanOfficer":"تعديل المندوب",
+    "updateLoanOfficerSuccess":"تم تعديل بيانات المندوب بنجاح",
+    "noDataAvaliable": "لا توجد بيانات",
+    "loanOfficerDetails": "تفاصيل المندوب"
 }
