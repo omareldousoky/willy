@@ -818,7 +818,7 @@ class LoanProfile extends Component<Props, State>{
                 onActionClick: () => this.props.history.push('/track-loan-applications/remove-member', { id: this.props.history.location.state.id })
             },
             {
-                icon: 'green-download"',
+                icon: 'green-download',
                 title: local.downloadPDF,
                 permission: this.state.application.status === "created",
                 onActionClick: () => { this.setState({ print: 'all' }, () => window.print()) }
