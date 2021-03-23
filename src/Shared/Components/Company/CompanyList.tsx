@@ -224,8 +224,9 @@ const List = ({
               data={data}
               url="customer"
               changeNumber={(key: string, number: number) => {
-                setOpenActionsId("");
-                getCompanies();
+                if (key === 'size') setSize(number)
+                if (key === 'from') setFrom(number)
+                getCompanies()
               }}
             />
           )}
