@@ -21,6 +21,7 @@ import { Customer } from '../../../Shared/Services/interfaces';
 import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { Application } from '../LoanApplication/loanApplicationStates';
 import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
+import ability from '../../config/ability';
 
 interface Review {
     at: number;
@@ -123,11 +124,11 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.code,
                 key: 'customerKey',
-                render: data => <span style={{ cursor: 'pointer'}} onClick={ () =>
+                render: data => ability.can('getCustomer', 'customer') ? <span style={{ cursor: 'pointer'}} onClick={ () =>
                     this.props.history.push("/customers/view-customer", {
                         id: data.customerId
                       })
-                }>{data.customerKey}</span>
+                }>{data.customerKey}</span> : data.customerKey
             },
             {
                 title: local.customerName,
@@ -142,11 +143,11 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.loanCode,
                 key: 'loanId',
-                render: data => <span style={{ cursor: 'pointer'}} onClick={ () =>
+                render: data => (ability.can('getIssuedLoan', 'application') || ability.can('getBranchIssuedLoan', 'application')) ? <span style={{ cursor: 'pointer'}} onClick={ () =>
                     this.props.history.push('/loans/loan-profile', { 
                         id: data.loanId 
                     })
-                }>{data.loanKey}</span>
+                }>{data.loanKey}</span> : data.loanKey
             },
             {
                 title: local.date,
@@ -362,7 +363,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                 <td>{timeToArabicDate(this.state.rowToView[key].at, true)}</td>
                 <td>{local[key]}</td>
                 <td>{this.state.rowToView[key].userName}</td>
-                <td>{this.state.rowToView[key].notes}</td>
+                <td style={{ wordBreak: 'break-word' }}>{this.state.rowToView[key].notes}</td>
             </tr>
         )
     }
@@ -382,12 +383,17 @@ class DefaultingCustomersList extends Component<Props, State> {
                                 <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.lateCustomers}</Card.Title>
                                 <span className='text-muted'>{local.noOfUsers + ` (${this.props.totalCount ? this.props.totalCount : 0})`}</span>
                             </div>
-                            <div className='d-flex w-50 justify-content-around'>
-                                <Can I='createUser' a='user'><Button className='big-button' onClick={() => this.setState({
+                            <div className='d-flex w-50 justify-content-end'>
+                                <Can I='addDefaultingCustomer' a='legal'><Button className='big-button' style={{ marginLeft: 10 }} onClick={() => this.setState({
                                     showModal: true
                                 })}>{local.addCustomerToLateCustomers}</Button></Can>
-                                <Button className='big-button' disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('review')}>{local.review}</Button>
+                                {(ability.can('branchManagerReview','legal') || 
+                                ability.can('areaSupervisorReview','legal') || 
+                                ability.can('areaManagerReview','legal') || 
+                                ability.can('financialManagerReview','legal')) && <>
+                                <Button className='big-button' style={{ marginLeft: 10 }} disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('review')}>{local.review}</Button>
                                 <Button className='big-button' disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('delete')}>{local.delete}</Button>
+                                </>}
                             </div>
                         </div>
                         <hr className='dashed-line' />
