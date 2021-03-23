@@ -98,11 +98,13 @@ class UserDetails extends Component<Props, State> {
         header: local.userBasicData,
         stringKey: "userDetails"
       },
-      {
+    ];
+    if(ability.can('getRoles','user')){
+      tabsToRender.push({
         header: local.userRoles,
         stringKey: "userRoles"
-      }
-    ];
+      })
+    }
     if (ability.can("moveOfficerCustomers", "user")) {
       tabsToRender.push({
         header: local.customers,
@@ -168,7 +170,12 @@ class UserDetails extends Component<Props, State> {
       case "userDetails":
         return <UserDetailsView data={this.state.data} />;
       case "userRoles":
-        return <UserRolesView roles={this.state.data.roles} />;
+        return (
+          <Can I="getRoles" a="user">
+            {' '}
+            <UserRolesView roles={this.state.data.roles} />
+          </Can>
+        )
       case "customersForUser":
         return (
           <Can I="moveOfficerCustomers" a="user">
@@ -186,14 +193,22 @@ class UserDetails extends Component<Props, State> {
   render() {
     return (
       <>
-        <div className={"rowContainer"}>
-          <BackButton title={local.userDetails} />
+        <div className={'rowContainer'}>
+          <BackButton
+            title={
+              this.props.history.location?.pathname?.includes(
+                'loanOfficer-details'
+              )
+                ? local.loanOfficerDetails
+                : local.userDetails
+            }
+          />
           {this.renderICons()}
         </div>
         <Card className="card">
           <Loader type="fullsection" open={this.state.isLoading} />
           <CardNavBar
-            header={"here"}
+            header={'here'}
             array={this.state.tabsArray}
             active={this.state.activeTab}
             selectTab={(index: string) => this.setState({ activeTab: index })}
@@ -201,7 +216,7 @@ class UserDetails extends Component<Props, State> {
           <Card.Body>{this.renderTabs()}</Card.Body>
         </Card>
       </>
-    );
+    )
   }
 }
 
