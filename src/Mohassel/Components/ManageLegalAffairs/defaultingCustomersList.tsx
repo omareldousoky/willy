@@ -274,7 +274,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                 this.setState({
                     modalLoader: false, showModal: false, selectedCustomer: {}, customerSearchResults: { results: [], empty: false },
                     loanSearchResults: []
-                }, () => { this.getDefaultingCustomers() });
+                }, () => { this.wait(2000); this.getDefaultingCustomers() });
                 Swal.fire('', local.customerAddedToDefaultiingListSuccess, 'success')
             } else {
                 this.setState({ modalLoader: false })
@@ -316,7 +316,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                     const res = await reviewCustomerDefaultedLoan({ ids: ids, notes: text, type: type });
                     if (res.status === "success") {
                         this.setState({ loading: false })
-                        Swal.fire('', local.defaultingReviewSuccess, 'success').then(() => this.getDefaultingCustomers());
+                        Swal.fire('', local.defaultingReviewSuccess, 'success').then(() => { this.wait(2000); this.getDefaultingCustomers() });
                     } else {
                         this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                     }
@@ -344,7 +344,7 @@ class DefaultingCustomersList extends Component<Props, State> {
                 const res = await deleteCustomerDefaultedLoan({ ids: ids });
                 if (res.status === "success") {
                     this.setState({ loading: false })
-                    Swal.fire('', local.defaultedLoanDeleteSuccess, 'success').then(() => this.getDefaultingCustomers());
+                    Swal.fire('', local.defaultedLoanDeleteSuccess, 'success').then(() => { this.wait(2000); this.getDefaultingCustomers() });
                 } else {
                     this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
                 }
@@ -367,6 +367,13 @@ class DefaultingCustomersList extends Component<Props, State> {
             </tr>
         )
     }
+    wait(ms){
+        const start = new Date().getTime();
+        let end = start;
+        while(end < start + ms) {
+          end = new Date().getTime();
+       }
+     }
     render() {
         return (
             <div>
