@@ -4,10 +4,10 @@ import { Tab } from './headerWithCards'
 export type CardSize = 'lg' | 'sm'
 
 type CardItemProps = {
-  item: Tab
-  onClick?: () => void
-  size?: CardSize
-  isActive: boolean
+  item: Tab;
+  onClick?: () => void;
+  size?: CardSize;
+  isActive: boolean;
 }
 
 const getSizeClassName = (size: CardSize) => {

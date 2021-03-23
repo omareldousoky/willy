@@ -18,7 +18,7 @@ interface State {
 }
 
 interface Mapper {
-     title: string; key: string; render: (data: any) => any 
+     title: string; key: string; render: (data: any) => any; 
 }
 
 const tabsArray = [{
