@@ -113,23 +113,15 @@ export const AsyncLoanOfficersDropDown = ({
       }
     }
   }
-  const maybeLoadOptions = useCallback(() => {
-    if (!options.optionsLoaded && isMounted.current) {
-      setOptions({ ...options, isLoading: true })
+
+  useEffect(() => {
+    if (!isDisabled) {
+      setOptions(initialState)
       handleLoadOptions()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    setOptions(initialState)
-    handleLoadOptions()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branchId])
-
-  useEffect(() => {
     if (isDisabled) setValue(null)
-  }, [isDisabled])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branchId, isDisabled])
 
   return (
     <div className="dropdown-container" style={{ flex: 2 }}>
@@ -152,12 +144,11 @@ export const AsyncLoanOfficersDropDown = ({
         getOptionLabel={(option) => option.name}
         getOptionValue={(option) => option._id}
         isDisabled={isDisabled}
-        // onFocus={maybeLoadOptions}
         onInputChange={(keyword) => {
           if (!keyword) return // avoid unnecessary api calls
           setSearchKeyword(keyword)
           setOptions({ ...options, isLoading: true, optionsLoaded: false })
-          maybeLoadOptions()
+          handleLoadOptions()
         }}
         {...restProps}
       />
