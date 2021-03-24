@@ -143,7 +143,7 @@ class DefaultingCustomersList extends Component<Props, State> {
             {
                 title: local.loanCode,
                 key: 'loanId',
-                render: data => (ability.can('getIssuedLoan', 'application') || ability.can('getBranchIssuedLoan', 'application')) ? <span style={{ cursor: 'pointer'}} onClick={ () =>
+                render: data => (ability.can('getIssuedLoan', 'application') || ability.can('branchIssuedLoan', 'application')) ? <span style={{ cursor: 'pointer'}} onClick={ () =>
                     this.props.history.push('/loans/loan-profile', { 
                         id: data.loanId 
                     })
