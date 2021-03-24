@@ -13,8 +13,8 @@ import { withRouter } from 'react-router-dom';
 import Can from '../../../config/Can';
 
 
-interface Props {
-    history: Array<string>;
+interface Props extends RouteComponentProps {
+  history: any;
 }
 interface State {
     loading: boolean;
@@ -37,7 +37,7 @@ class BulkClosing extends Component<Props, State>{
     async Close(closeDate: number) {
         this.setState({ loading: true })
         const res = await financialClosing({ closeDate })
-        if (res.status == "success") {
+        if (res.status === "success") {
             this.setState({ loading: false })
             Swal.fire('Success', '', 'success').then(()=> this.props.history.push('/'));
         } else {
@@ -115,7 +115,7 @@ class BulkClosing extends Component<Props, State>{
                                                         "closeDate",
                                                         e.currentTarget.value
                                                     );
-                                                    if (e.currentTarget.value === "")
+                                                    if (e.currentTarget.value ==== "")
                                                         formikProps.setFieldValue(
                                                             "closeDate",
                                                             ""

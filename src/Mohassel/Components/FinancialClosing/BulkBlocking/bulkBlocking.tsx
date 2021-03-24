@@ -37,7 +37,7 @@ class BulkBlocking extends Component<Props, State>{
     async Block(blockDate: number) {
         this.setState({ loading: true })
         const res = await financialBlocking({ blockDate })
-        if (res.status == "success") {
+        if (res.status === "success") {
             this.setState({ loading: false })
             Swal.fire('Success', '', 'success').then(()=> this.props.history.push('/'));
         } else {
@@ -115,7 +115,7 @@ class BulkBlocking extends Component<Props, State>{
                                                         "blockDate",
                                                         e.currentTarget.value
                                                     );
-                                                    if (e.currentTarget.value === "")
+                                                    if (e.currentTarget.value ==== "")
                                                         formikProps.setFieldValue(
                                                             "blockDate",
                                                             ""
