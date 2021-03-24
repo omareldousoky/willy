@@ -940,6 +940,7 @@
     "financialManagerReview":"مراجعة المدير المالي",
     "writeNotes":"برجاء إدخال الملاحظات",
     "review":"مراجعة",
+    "reviewAll":"مراجعة الجميع",
     "defaultingReviewSuccess":"تم مراجعة الحالة بنجاح",
     "choose":"اختر",
     "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح ",
