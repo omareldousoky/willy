@@ -187,7 +187,7 @@ const List = ({
               <Can I="createCustomer" a="customer">
                 <Button
                   onClick={() => {
-                    history.push("/companies/new-company");
+                    history.push("/company/new-company");
                   }}
                   className="big-button"
                 >
