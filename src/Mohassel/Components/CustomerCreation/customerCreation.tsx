@@ -8,7 +8,8 @@ import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
-import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree, customerCreationValidationStepThreeEdit, } from './customerFormIntialState';
+import { step1, step2, step3, customerCreationValidationStepOne, customerCreationValidationStepTwo, customerCreationValidationStepThree, customerCreationValidationStepThreeEdit } from './customerFormIntialState';
+import { companyCreationValidationStepOne, } from './companyFormIntialState';
 import { StepOneForm } from './StepOneForm';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
@@ -64,6 +65,7 @@ interface Props {
     };
   };
   edit: boolean;
+  isCompany?: boolean;
 };
 interface State {
   step: number;
@@ -76,6 +78,7 @@ interface State {
       lat: number;
       lng: number;
     };
+    customerType: 'individual' | 'company';
   };
   step2: {
     businessAddressLatLong: string;
@@ -134,6 +137,9 @@ interface State {
 }
 
 class CustomerCreation extends Component<Props, State>{
+  static defaultProps = {
+    isCompany: false
+ };
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -280,6 +286,7 @@ class CustomerCreation extends Component<Props, State>{
   }
   async createEditCustomer() {
     const objToSubmit = { ...this.state.step1, ...this.state.step2, ...this.state.step3 };
+    objToSubmit.customerType = this.props.isCompany? 'company': 'individual';
     objToSubmit.birthDate = new Date(objToSubmit.birthDate).valueOf();
     objToSubmit.nationalIdIssueDate = new Date(objToSubmit.nationalIdIssueDate).valueOf();
     objToSubmit.customerAddressLatLongNumber?.lat === 0 && objToSubmit.customerAddressLatLongNumber?.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber?.lat},${objToSubmit.customerAddressLatLongNumber?.lng}`;
@@ -344,7 +351,7 @@ class CustomerCreation extends Component<Props, State>{
         enableReinitialize
         initialValues={this.state.step1}
         onSubmit={this.submit}
-        validationSchema={customerCreationValidationStepOne}
+        validationSchema={this.props.isCompany? companyCreationValidationStepOne : customerCreationValidationStepOne}
         validateOnBlur
         validateOnChange
       >
@@ -354,7 +361,7 @@ class CustomerCreation extends Component<Props, State>{
           }
 
           return (
-            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} />);
+            <StepOneForm {...formikProps} edit={this.props.edit} hasLoan={this.state.hasLoan} isGuarantor={this.state.isGuarantor} isCompany={this.props.isCompany} />);
         }
         }
       </Formik>
