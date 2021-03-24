@@ -108,17 +108,17 @@ const appRoutes = [
         label: local.companies,
         render: (props) => <Can I='getCustomer' a='customer'><CompanyList {...props} /></Can>,
         routes: [
-          // {
-          //   path: "/new-company",
-          //   label: local.newCustomer,
-          //   render: (props) => <Can I='createCustomer' a='customer'><CompanyCreation {...props} edit={false} /></Can>,
-          // },
-          // {
-          //   path: "/edit-company",
-          //   label: local.editCustomer,
-          //   render: (props) => <CompanyCreation {...props} edit={true} />,
-          // }
-          // ,
+          {
+            path: "/new-company",
+            label: local.newCompany,
+            render: (props) => <Can I='createCustomer' a='customer'><CustomerCreation {...props} edit={false} isCompany/></Can>,
+          },
+          {
+            path: "/edit-company",
+            label: local.editCompany,
+            render: (props) => <CustomerCreation {...props} edit={true} isCompany/>,
+          }
+          ,
           {
             path: "/view-company",
             label: local.viewCompany,
