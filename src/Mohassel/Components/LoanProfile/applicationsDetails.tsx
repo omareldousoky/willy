@@ -52,7 +52,7 @@ export const LoanDetailsTableView = ({ application, branchName }: LoanDetailsPro
                 </tr>
                 <tr>
                     <td>{local.customerType}</td>
-                    <td>{beneficiaryType(application.product.beneficiaryType)}</td>
+                    <td>{beneficiaryType(application.product.beneficiaryType)} - {application.product.type || ''}</td>
                 </tr>
                 <tr>
                     <td>{local.currency}</td>

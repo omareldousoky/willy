@@ -76,5 +76,6 @@ export const LoanProductValidation = Yup.object().shape({
     pushPayment:Yup.number().integer().min(0, "Can't be less than 0").required(local.required),
     pushDays: Yup.array().of(
         Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required)
-    )
+    ),
+    type: Yup.string().required(local.required)
 })
