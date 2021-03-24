@@ -12,7 +12,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
+import { searchCompany, searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
@@ -448,7 +448,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
+        const body = { from: 0, size: 1000, [key]: query }
+        const results = this.state.customerType === 'sme' ? await searchCompany(body) : await searchCustomer(body)
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -1007,7 +1008,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     renderStepOne() {
         return (
             <div className="d-flex flex-column justify-content-center" style={{ textAlign: 'right', width: '90%', padding: 20 }}>
-                {(this.state.customerType === 'individual') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
+                {(this.state.customerType !== 'group') ? <div style={{ justifyContent: 'center', display: 'flex' }}>
             <CustomerSearch
               source="loanApplication"
               style={{ width: "100%" }}
@@ -1015,6 +1016,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
               selectedCustomer={this.state.selectedCustomer}
               searchResults={this.state.searchResults}
               selectCustomer={(customer) => this.selectCustomer(customer)}
+              sme={this.state.customerType === 'sme'}
 						/>
                 </div> :
                     <div>
@@ -1089,7 +1091,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
 									className="w-25"
 									disabled={(this.state.customerType === 'group' 
 											&& (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) 
-											|| (this.state.customerType === 'individual' && (Object.keys(this.state.selectedCustomer).length === 0)
+											|| (this.state.customerType !== 'individual' && (Object.keys(this.state.selectedCustomer).length === 0)
 										)}
 									onClick={() => this.step('forward')}
 									>
@@ -1117,7 +1119,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         loanOfficers={this.state.loanOfficers}
                         step={(key) => this.step(key)}
                         getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
-                        customer={(this.state.customerType === 'individual') ? this.state.selectedCustomer : this.state.selectedCustomers}
+                        customer={(this.state.customerType === 'group') ? this.state.selectedCustomers : this.state.selectedCustomer}
                     />
                 }
             </Formik>
@@ -1171,6 +1173,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
                             <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
                             <Button onClick={() => this.setCustomerType('group')}>{local.group}</Button>
+                        </div>
+                        <div className="d-flex flex-column" style={{ margin: '20px 60px' }}>
+                            <img style={{ width: 75, margin: '40px 20px' }} src={require('../../Assets/group.svg')} />
+                            <Button onClick={() => this.setCustomerType('sme')}>sme</Button>
                         </div>
                     </div> :
                         <div style={{ display: "flex", flexDirection: "row" }} >
