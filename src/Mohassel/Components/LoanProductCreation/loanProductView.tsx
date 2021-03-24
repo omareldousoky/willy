@@ -60,7 +60,7 @@ class ViewProduct extends Component<Props, State>{
                                 </tr>
                                 <tr>
                                     <td>{local.customerType}</td>
-                                    <td>{beneficiaryType(this.state.product.beneficiaryType)}</td>
+                                    <td>{beneficiaryType(this.state.product.beneficiaryType)} - {this.state.product.type || ''}</td>
                                 </tr>
                                 <tr>
                                     <td>{local.calculationFormulaId}</td>
