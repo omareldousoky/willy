@@ -7,7 +7,7 @@ export const reportsModalValidation: ObjectSchema<
 > = object().shape({
   fromDate: string(),
   toDate: string(),
-  branches: array().nullable(),
+  branches: array().nullable().min(1, local.mustBeOneOrMore),
   key: string(),
   quarterYear: string().test(
     'Min Date',
