@@ -33,7 +33,7 @@ interface State {
   checkAll: boolean
 }
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps<{}, {}, { clearanceId: string }> {
   data: any
   totalCount: number
   loading: boolean
@@ -152,7 +152,7 @@ class ClearancesList extends Component<Props, State> {
                   src={require('../../Assets/view.svg')}
                   onClick={() =>
                     this.props.history.push('/clearances/clearance-profile', {
-                      id: data._id,
+                      clearanceId: data._id,
                     })
                   }
                 />
@@ -167,7 +167,7 @@ class ClearancesList extends Component<Props, State> {
                     src={require('../../Assets/editIcon.svg')}
                     onClick={() =>
                       this.props.history.push('/clearances/edit-clearance', {
-                        clearance: { id: data._id },
+                        clearanceId: data._id,
                       })
                     }
                   />
@@ -186,7 +186,7 @@ class ClearancesList extends Component<Props, State> {
                     }}
                     onClick={() =>
                       this.props.history.push('/clearances/review-clearance', {
-                        clearance: { id: data._id },
+                        clearanceId: data._id,
                       })
                     }
                   >

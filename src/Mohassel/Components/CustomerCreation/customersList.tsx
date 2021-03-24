@@ -147,7 +147,7 @@ class CustomersList extends Component<Props, State> {
                     type="button"
                     onClick={() => {
                       this.props.history.push('/customers/create-clearance', {
-                        id: data._id,
+                        customerId: data._id,
                       })
                     }}
                   >

@@ -77,7 +77,7 @@ class CreateClearance extends Component<Props, State> {
   async getClearanceById() {
     if (this.props.location.state?.clearanceId) {
       this.setState({ loading: true })
-      const res = await getClearance(this.props.location.state?.clearanceId)
+      const res = await getClearance(this.props.location.state.clearanceId)
       if (res.status === 'success') {
         const clearance: ClearanceValues = {
           customerId: res.body.data.customerId,
