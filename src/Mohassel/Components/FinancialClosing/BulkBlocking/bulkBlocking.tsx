@@ -114,7 +114,7 @@ class BulkBlocking extends Component<Props, State>{
                                                         "blockDate",
                                                         e.currentTarget.value
                                                     );
-                                                    if (e.currentTarget.value ==== "")
+                                                    if (e.currentTarget.value ==="")
                                                         formikProps.setFieldValue(
                                                             "blockDate",
                                                             ""
