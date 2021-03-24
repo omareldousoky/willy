@@ -3,9 +3,9 @@ import Card from 'react-bootstrap/Card';
 import * as local from '../../../../Shared/Assets/ar.json';
 import Button from 'react-bootstrap/Button';
 import { Loader } from '../../../../Shared/Components/Loader';
-import { financialClosing } from '../../../Services/APIs/loanApplication/financialClosing';
+import { financialBlocking } from '../../../Services/APIs/loanApplication/financialClosing';
 import Swal from 'sweetalert2';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { getErrorMessage } from '../../../../Shared/Services/utils';
@@ -22,21 +22,21 @@ interface State {
 
 const today: Date = new Date();
 
-const monthClosingValidation = Yup.object().shape({
-    closeDate: Yup.string().test('close date cant be in the future', local.dateCantBeInFuture, (value: string) => {
+const bulkBlockingValidation = Yup.object().shape({
+    blockDate: Yup.string().test('block date cant be in the future', local.dateCantBeInFuture, (value: string) => {
         return value ? new Date(value).valueOf() <= today.valueOf() : true;
     })
 })
-class MonthlyClosing extends Component<Props, State>{
+class BulkBlocking extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
             loading: false,
         }
     }
-    async Close(closeDate: number) {
+    async Block(blockDate: number) {
         this.setState({ loading: true })
-        const res = await financialClosing({ closeDate })
+        const res = await financialBlocking({ blockDate })
         if (res.status == "success") {
             this.setState({ loading: false })
             Swal.fire('Success', '', 'success').then(()=> this.props.history.push('/'));
@@ -46,20 +46,20 @@ class MonthlyClosing extends Component<Props, State>{
         }
     }
     handleSubmit = async (values) => {
-        const closeDate = values.closeDate;
-        const endOfCloseDate = new Date(closeDate).setHours(23, 59, 59,999).valueOf();
+        const blockDate = values.blockDate;
+        const endOfBlockDate = new Date(blockDate).setHours(23, 59, 59,999).valueOf();
         Swal.fire({
             title: local.areYouSure,
-            text: `${local.monthlyClosing}`,
+            text: `${local.bulkBlocking}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.monthlyClosing,
+            confirmButtonText: local.bulkBlocking,
             cancelButtonText: local.cancel
         }).then(async (isConfirm) => {
             if (isConfirm.value) {
-                await this.Close(endOfCloseDate);
+                await this.Block(endOfBlockDate);
             }
         });
     }
@@ -69,21 +69,21 @@ class MonthlyClosing extends Component<Props, State>{
                 <Loader type="fullscreen" open={this.state.loading} />
                 <div className="custom-card-header">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.monthlyClosing}</Card.Title>
+                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.bulkBlocking}</Card.Title>
                     </div>
                 </div>
                 <Card.Body className="w-100 d-flex justify-content-center">
                     <Formik
-                        initialValues={{ closeDate: 0 }}
+                        initialValues={{ blockDate: 0 }}
                         onSubmit={this.handleSubmit}
-                        validationSchema={monthClosingValidation}
+                        validationSchema={bulkBlockingValidation}
                         validateOnBlur
                         validateOnChange
                     >
                         {(formikProps) =>
                             <Form onSubmit={formikProps.handleSubmit} className="w-50 p-3">
                                 <Col sm={12} key={"colseDate"}>
-                                    <Form.Group controlId="closeDate">
+                                    <Form.Group controlId="blockDate">
                                         <div
                                             className="dropdown-container"
                                             style={{ flex: 1, alignItems: "center" }}
@@ -97,33 +97,33 @@ class MonthlyClosing extends Component<Props, State>{
                                                     textAlign: "center",
                                                 }}
                                             >
-                                                {local.closeDate}
+                                                {local.blockDate}
                                             </p>
                                             <Form.Control
                                                 style={{ marginLeft: 20, border: "none" }}
                                                 type="date"
-                                                name="closeDate"
-                                                data-qc="closeDate"
-                                                value={formikProps.values.closeDate}
+                                                name="blockDate"
+                                                data-qc="blockDate"
+                                                value={formikProps.values.blockDate}
                                                 isInvalid={Boolean(
-                                                    formikProps.errors.closeDate &&
-                                                    formikProps.touched.closeDate
+                                                    formikProps.errors.blockDate &&
+                                                    formikProps.touched.blockDate
                                                 )}
                                                 onBlur={formikProps.handleBlur}
                                                 onChange={(e) => {
                                                     formikProps.setFieldValue(
-                                                        "closeDate",
+                                                        "blockDate",
                                                         e.currentTarget.value
                                                     );
                                                     if (e.currentTarget.value === "")
                                                         formikProps.setFieldValue(
-                                                            "closeDate",
+                                                            "blockDate",
                                                             ""
                                                         );
                                                 }}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {formikProps.errors.closeDate}
+                                                {formikProps.errors.blockDate}
                                             </Form.Control.Feedback>
                                         </div>
                                     </Form.Group>
@@ -138,21 +138,17 @@ class MonthlyClosing extends Component<Props, State>{
                                 >
                                     {local.cancel}
                                 </Button>
-                                <Can I="financialClosing" a="application"><Button  className="w-25"  type="submit" variant="primary">
+                                {/* TODO : ADD <Can I="" a =""></Can> */}
+                                <Button  className="w-25"  type="submit" variant="primary"> 
                                     {local.submit}
-                                </Button></Can>
+                                </Button>
                                 </div>
                             </Form>
                         }
                     </Formik>
                 </Card.Body>
-                <Card.Footer>
-                    <div className="d-flex">
-                        <p className="clickable-action" onClick={() => this.props.history.push('/reports')}>{local.reviewFinancialState}</p>
-                    </div>
-                </Card.Footer>
             </Card>
         )
     }
 }
-export default withRouter(MonthlyClosing);
+export default withRouter(BulkBlocking);
