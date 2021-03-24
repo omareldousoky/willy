@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+		"sourceMap": true,
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,7 +21,7 @@
     "noImplicitAny": false,
     "jsx": "react"
   },
-  "include": [
-    "src", "index.tsx"
-  ]
+	"outDir": "./build/",
+  "include": ["src"],
+	"exclude": ["node_modules"]
 }
