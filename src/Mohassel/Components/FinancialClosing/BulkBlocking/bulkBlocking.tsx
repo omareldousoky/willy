@@ -9,12 +9,11 @@ import { Col, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { getErrorMessage } from '../../../../Shared/Services/utils';
-import { withRouter } from 'react-router-dom';
-import Can from '../../../config/Can';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 
-interface Props {
-    history: Array<string>;
+interface Props extends RouteComponentProps {
+    history: any;
 }
 interface State {
     loading: boolean;
