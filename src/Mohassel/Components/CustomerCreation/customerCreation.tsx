@@ -79,6 +79,7 @@ interface State {
       lng: number;
     };
     customerType: 'individual' | 'company';
+    nationalId: number;
   };
   step2: {
     businessAddressLatLong: string;
@@ -138,7 +139,8 @@ interface State {
 
 class CustomerCreation extends Component<Props, State>{
   static defaultProps = {
-    isCompany: false
+    isCompany: false,
+    nationalId:0
  };
   constructor(props: Props) {
     super(props);
@@ -287,6 +289,7 @@ class CustomerCreation extends Component<Props, State>{
   async createEditCustomer() {
     const objToSubmit = { ...this.state.step1, ...this.state.step2, ...this.state.step3 };
     objToSubmit.customerType = this.props.isCompany? 'company': 'individual';
+    objToSubmit.nationalId = this.props.isCompany? 0:  objToSubmit.nationalId;
     objToSubmit.birthDate = new Date(objToSubmit.birthDate).valueOf();
     objToSubmit.nationalIdIssueDate = new Date(objToSubmit.nationalIdIssueDate).valueOf();
     objToSubmit.customerAddressLatLongNumber?.lat === 0 && objToSubmit.customerAddressLatLongNumber?.lng === 0 ? objToSubmit.customerAddressLatLong = '' : objToSubmit.customerAddressLatLong = `${objToSubmit.customerAddressLatLongNumber?.lat},${objToSubmit.customerAddressLatLongNumber?.lng}`;
