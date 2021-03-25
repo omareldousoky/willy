@@ -51,12 +51,12 @@ interface Props {
     selectedCustomer: Customer;
     style?: object;
     header?: string;
-		className?: string;
+    className?: string;
+    sme?: boolean;
 };
 
 interface State {
     searchKey: string;
-    dropDownArray: Array<string>;
     dropDownValue: string;
 }
 class CustomerSearch extends Component<Props, State>{
@@ -64,8 +64,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownArray: ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'],
-            dropDownValue: 'name'
+            dropDownValue: 'code'
         }
     }
     handleSearchChange(event) {
@@ -86,6 +85,9 @@ class CustomerSearch extends Component<Props, State>{
             case 'key': return local.code;
             case 'code': return local.partialCode;
             case 'customerShortenedCode': return local.customerShortenedCode;
+            case 'businessName': return local.businessName;
+            case 'businessLicenseNumber': return local.businessLicenseNumber;
+            case 'commercialRegisterNumber': return local.commercialRegisterNumber;
             default: return '';
         }
     }
@@ -97,7 +99,7 @@ class CustomerSearch extends Component<Props, State>{
 		const isCode = dropDownValue === "code";
 
     if (
-      (dropDownValue === "nationalId" || isKey || isCode) &&
+      (['nationalId', 'businessLicenseNumber', 'commercialRegisterNumber'].includes(dropDownValue) || isKey || isCode) &&
       isNaN(Number(searchKey))
     ) {
       Swal.fire("", local.SearchOnlyNumbers, "error");
@@ -113,6 +115,7 @@ class CustomerSearch extends Component<Props, State>{
     }
   };
     render() {
+        const dropDownArray: string[] = this.props.sme ? ['key', 'code','businessName', 'businessLicenseNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
         return (
             <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
 
@@ -127,7 +130,7 @@ class CustomerSearch extends Component<Props, State>{
                                 id="input-group-dropdown-2"
                                 data-qc="search-dropdown"
                             >
-															{this.state.dropDownArray.map((key, index) =>
+															{dropDownArray.map((key, index) =>
 																	<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
 															)}
                             </DropdownButton>
