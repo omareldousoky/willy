@@ -1182,7 +1182,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         <div style={{ display: "flex", flexDirection: "row" }} >
                             <Wizard
                                 currentStepNumber={this.state.step - 1}
-                                stepsDescription={(this.state.customerType === 'individual') ? [local.customersDetails, local.loanInfo, local.guarantorInfo] : [local.customersDetails, local.loanInfo]}
+                                stepsDescription={(this.state.customerType !== 'group') ? [local.customersDetails, local.loanInfo, local.guarantorInfo] : [local.customersDetails, local.loanInfo]}
                             />
                             {this.renderSteps()}
                         </div>
