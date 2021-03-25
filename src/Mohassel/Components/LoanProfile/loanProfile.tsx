@@ -11,7 +11,7 @@ import { BranchDetails, getBranch } from '../../Services/APIs/Branch/getBranch'
 import InfoBox from '../userInfoBox'
 import Payment from '../Payment/payment'
 import { englishToArabic } from '../../Services/statusLanguage'
-import * as local from '../../../Shared/Assets/ar.json'
+import local from '../../../Shared/Assets/ar.json'
 import { Loader } from '../../../Shared/Components/Loader'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
 import Logs from './applicationLogs'
@@ -58,6 +58,7 @@ import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
 import { Customer } from '../LoanApplication/loanApplicationCreation'
 import { Installment } from '../Payment/payInstallment'
+import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
 
 interface EarlyPayment {
   remainingPrincipal?: number
@@ -389,7 +390,7 @@ class LoanProfile extends Component<Props, State> {
 
   async getPendingActions() {
     this.setState({ loading: true })
-    const res = await getPendingActions(this.props.history.location.state.id)
+    const res = await getPendingActions(this.props.location.state.id)
     if (res.status === 'success') {
       this.setState({ loading: false, pendingActions: res.body })
     } else
@@ -445,7 +446,7 @@ class LoanProfile extends Component<Props, State> {
 
   async getMembersShare() {
     this.setState({ loading: true })
-    const res = await getGroupMemberShares(this.props.history.location.state.id)
+    const res = await getGroupMemberShares(this.props.location.state.id)
     if (res.status === 'success') {
       this.setState({
         loading: false,
@@ -457,52 +458,134 @@ class LoanProfile extends Component<Props, State> {
       )
   }
 
-  async rejectManualPayment(randomPendingActionId: string) {
+  async getWriteOffReasons() {
     this.setState({ loading: true })
-    if (randomPendingActionId !== '') {
-      const res = await rejectManualOtherPayment(randomPendingActionId)
-      if (res.status === 'success') {
-        this.setState((prevState) => ({
-          loading: false,
-          randomPendingActions: prevState.randomPendingActions.filter(
-            (el) => el._id !== randomPendingActionId
-          ),
-        }))
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getManualOtherPayments(this.props.history.location.state.id)
-        )
-      } else
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
-    } else {
-      const res = await rejectManualPayment(
-        this.props.history.location.state.id
-      )
-      if (res.status === 'success') {
-        this.setState({ loading: false, pendingActions: {} })
-        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
-          this.getAppByID(this.props.history.location.state.id)
-        )
-      } else
-        this.setState({ loading: false }, () =>
-          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-        )
+    const res = await getWriteOffReasons()
+    if (res.status === 'success') {
+      this.setState({ loading: false })
+      const options = {}
+      if (
+        this.state.application.group.individualsInGroup !== null &&
+        this.state.application.group.individualsInGroup.length > 1
+      ) {
+        res.body.reasons
+          .filter((reason) => reason.name !== 'Deceased')
+          .map((option) => {
+            options[option.name] = local[option.name.replace(/\s/g, '')]
+          })
+      } else {
+        res.body.reasons.map((option) => {
+          options[option.name] = local[option.name.replace(/\s/g, '')]
+        })
+      }
+      return options
+    }
+    this.setState({ loading: false }, () =>
+      Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+    )
+    return {}
+  }
+
+  async writeOffApplication() {
+    const options = await this.getWriteOffReasons()
+    const { value: text } = await Swal.fire({
+      title: local.writeOffReason,
+      input: 'select',
+      inputOptions: options,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.writeOffLoan,
+      cancelButtonText: local.cancel,
+      inputValidator: (value) => {
+        if (!value) {
+          return local.required
+        }
+        return ''
+      },
+    })
+    if (text) {
+      Swal.fire({
+        title: local.areYouSure,
+        text: `${local.loanWillBeWrittenOff}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: local.writeOffLoan,
+        cancelButtonText: local.cancel,
+      }).then(async (result) => {
+        if (result.value) {
+          this.setState({ loading: true })
+          const res = await writeOffLoan(this.props.history.location.state.id, {
+            writeOffReason: text,
+          })
+          if (res.status === 'success') {
+            this.setState({ loading: false })
+            Swal.fire('', local.loanWriteOffSuccess, 'success').then(() =>
+              window.location.reload()
+            )
+          } else {
+            this.setState({ loading: false }, () =>
+              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+            )
+          }
+        }
+      })
     }
   }
 
-  async calculatePenalties() {
-    this.setState({ loading: true })
-    const res = await calculatePenalties({
-      id: this.state.application._id,
-      truthDate: new Date().getTime(),
+  cancelApplication() {
+    Swal.fire({
+      title: local.areYouSure,
+      text: `${local.applicationWillBeCancelled}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: local.cancelApplication,
+      cancelButtonText: local.cancel,
+    }).then(async (result) => {
+      if (result.value) {
+        this.setState({ loading: true })
+        const res = await cancelApplication(this.props.location.state.id)
+        if (res.status === 'success') {
+          this.setState({ loading: false })
+          Swal.fire('', local.applicationCancelSuccess, 'success').then(() =>
+            window.location.reload()
+          )
+        } else {
+          this.setState({ loading: false }, () =>
+            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+          )
+        }
+      }
     })
-    if (res.body) {
-      this.setState({ penalty: res.body.penalty, loading: false })
-    } else
-      this.setState({ loading: false }, () =>
-        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-      )
+  }
+
+  editManualPayment(randomPendingActionId: string) {
+    this.props.changePaymentState(3)
+    window.scrollTo(0, document.body.scrollHeight)
+    if (randomPendingActionId !== '') {
+      this.setState((prevState) => {
+        const pendingAction = prevState.randomPendingActions.find(
+          (el) => el._id === randomPendingActionId
+        )
+        const tab =
+          pendingAction.transactions[0].action === 'penalty'
+            ? 'penalties'
+            : 'financialTransactions'
+        return {
+          activeTab: tab,
+          manualPaymentEditId: pendingAction._id,
+        }
+      })
+    } else {
+      this.setState((prevState) => ({
+        activeTab: 'loanPayments',
+        manualPaymentEditId: prevState.pendingActions?._id || '',
+      }))
+    }
   }
 
   async approveManualPayment(randomPendingActionId: string) {
@@ -554,11 +637,11 @@ class LoanProfile extends Component<Props, State> {
         const res =
           randomPendingActionId !== ''
             ? await approveManualOtherPayment(randomPendingActionId)
-            : await approveManualPayment(this.props.history.location.state.id)
+            : await approveManualPayment(this.props.location.state.id)
         if (res.status === 'success') {
           this.setState({ loading: false })
           Swal.fire('', local.manualPaymentApproveSuccess, 'success').then(() =>
-            this.getAppByID(this.props.history.location.state.id)
+            this.getAppByID(this.props.location.state.id)
           )
         } else {
           this.setState({ loading: false }, () =>
@@ -569,105 +652,49 @@ class LoanProfile extends Component<Props, State> {
     })
   }
 
-  editManualPayment(randomPendingActionId: string) {
-    this.props.changePaymentState(3)
-    window.scrollTo(0, document.body.scrollHeight)
+  async calculatePenalties() {
+    this.setState({ loading: true })
+    const res = await calculatePenalties({
+      id: this.state.application._id,
+      truthDate: new Date().getTime(),
+    })
+    if (res.body) {
+      this.setState({ penalty: res.body.penalty, loading: false })
+    } else
+      this.setState({ loading: false }, () =>
+        Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+      )
+  }
+
+  async rejectManualPayment(randomPendingActionId: string) {
+    this.setState({ loading: true })
     if (randomPendingActionId !== '') {
-      this.setState((prevState) => {
-        const pendingAction = prevState.randomPendingActions.find(
-          (el) => el._id === randomPendingActionId
+      const res = await rejectManualOtherPayment(randomPendingActionId)
+      if (res.status === 'success') {
+        this.setState((prevState) => ({
+          loading: false,
+          randomPendingActions: prevState.randomPendingActions.filter(
+            (el) => el._id !== randomPendingActionId
+          ),
+        }))
+        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
+          this.getManualOtherPayments(this.props.location.state.id)
         )
-        const tab =
-          pendingAction.transactions[0].action === 'penalty'
-            ? 'penalties'
-            : 'financialTransactions'
-        return {
-          activeTab: tab,
-          manualPaymentEditId: pendingAction._id,
-        }
-      })
+      } else
+        this.setState({ loading: false }, () =>
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        )
     } else {
-      this.setState((prevState) => ({
-        activeTab: 'loanPayments',
-        manualPaymentEditId: prevState.pendingActions?._id || '',
-      }))
-    }
-  }
-
-  cancelApplication() {
-    Swal.fire({
-      title: local.areYouSure,
-      text: `${local.applicationWillBeCancelled}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: local.cancelApplication,
-      cancelButtonText: local.cancel,
-    }).then(async (result) => {
-      if (result.value) {
-        this.setState({ loading: true })
-        const res = await cancelApplication(
-          this.props.history.location.state.id
+      const res = await rejectManualPayment(this.props.location.state.id)
+      if (res.status === 'success') {
+        this.setState({ loading: false, pendingActions: {} })
+        Swal.fire('', local.rejectManualPaymentSuccess, 'success').then(() =>
+          this.getAppByID(this.props.location.state.id)
         )
-        if (res.status === 'success') {
-          this.setState({ loading: false })
-          Swal.fire('', local.applicationCancelSuccess, 'success').then(() =>
-            window.location.reload()
-          )
-        } else {
-          this.setState({ loading: false }, () =>
-            Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-          )
-        }
-      }
-    })
-  }
-
-  async writeOffApplication() {
-    const { value: text } = await Swal.fire({
-      title: local.writeOffReason,
-      input: 'text',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: local.writeOffLoan,
-      cancelButtonText: local.cancel,
-      inputValidator: (value) => {
-        if (!value) {
-          return local.required
-        }
-        return ''
-      },
-    })
-    if (text) {
-      Swal.fire({
-        title: local.areYouSure,
-        text: `${local.loanWillBeWrittenOff}`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: local.writeOffLoan,
-        cancelButtonText: local.cancel,
-      }).then(async (result) => {
-        if (result.value) {
-          this.setState({ loading: true })
-          const res = await writeOffLoan(this.props.history.location.state.id, {
-            writeOffReason: text,
-          })
-          if (res.status === 'success') {
-            this.setState({ loading: false })
-            Swal.fire('', local.loanWriteOffSuccess, 'success').then(() =>
-              window.location.reload()
-            )
-          } else {
-            this.setState({ loading: false }, () =>
-              Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
-            )
-          }
-        }
-      })
+      } else
+        this.setState({ loading: false }, () =>
+          Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
+        )
     }
   }
 
@@ -700,7 +727,7 @@ class LoanProfile extends Component<Props, State> {
       }).then(async (result) => {
         if (result.value) {
           this.setState({ loading: true })
-          const res = await doubtLoan(this.props.history.location.state.id, {
+          const res = await doubtLoan(this.props.location.state.id, {
             doubtReason: text,
           })
           if (res.status === 'success') {
@@ -740,7 +767,7 @@ class LoanProfile extends Component<Props, State> {
           />
         )
       case 'loanLogs':
-        return <Logs id={this.props.history.location.state.id} />
+        return <Logs id={this.props.location.state.id} />
       case 'loanPayments':
         // TODO:lint: check if working fine
         return (
@@ -1003,7 +1030,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/edit-loan-application',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             action: 'edit',
                           }
                         )
@@ -1030,7 +1057,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/loan-status-change',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             action: 'review',
                           }
                         )
@@ -1057,7 +1084,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/loan-status-change',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             action: 'unreview',
                           }
                         )
@@ -1084,7 +1111,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/loan-status-change',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             action: 'reject',
                           }
                         )
@@ -1111,7 +1138,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/create-loan',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             type: 'issue',
                           }
                         )
@@ -1138,7 +1165,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/create-loan',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             type: 'create',
                           }
                         )
@@ -1187,7 +1214,7 @@ class LoanProfile extends Component<Props, State> {
                         this.props.history.push(
                           '/track-loan-applications/loan-roll-back',
                           {
-                            id: this.props.history.location.state.id,
+                            id: this.props.location.state.id,
                             status: this.state.application.status,
                           }
                         )
