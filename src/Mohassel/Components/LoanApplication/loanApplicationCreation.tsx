@@ -1091,7 +1091,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
 									className="w-25"
 									disabled={(this.state.customerType === 'group' 
 											&& (this.state.selectedGroupLeader.length === 0 || this.state.selectedCustomers.length < 3)) 
-											|| (this.state.customerType !== 'individual' && (Object.keys(this.state.selectedCustomer).length === 0)
+											|| (['individual', 'sme'].includes(this.state.customerType) && (Object.keys(this.state.selectedCustomer).length === 0)
 										)}
 									onClick={() => this.step('forward')}
 									>

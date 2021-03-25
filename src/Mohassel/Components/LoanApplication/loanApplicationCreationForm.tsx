@@ -14,16 +14,29 @@ import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 import Swal from 'sweetalert2';
 import { theme } from '../../../theme';
+import { searchResearcher } from '../../Services/APIs/Researchers/searchResearcher';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
     const [options, setOptions] = useState<Array<any>>([]);
+    const [researcherOptions, setResearcherOptions] = useState<Array<any>>([]);
     const [employees, setEmployees] = useState<Array<any>>([]);
     const branchId = JSON.parse(getCookie('ltsbranch'))._id;
     const getOptions = async (inputValue: string) => {
         const res = await searchLoanOfficerAndManager({ from: 0, size: 100, name: inputValue, branchId: branchId });
         if (res.status === "success") {
             setOptions(res.body.data);
+            return res.body.data;
+        } else {
+            setOptions([]);
+            Swal.fire("error", getErrorMessage(res.error.error),"error");
+            return [];
+        }
+    }
+    const getResearcherOptions = async (inputValue: string) => {
+        const res = await searchResearcher({ from: 0, size: 100, name: inputValue, branchId: branchId });
+        if (res.status === "success") {
+            setResearcherOptions(res.body.data);
             return res.body.data;
         } else {
             setOptions([]);
@@ -644,6 +657,31 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                         </Form.Group>}
                         <Row>
+                            {props.customer.type === 'company' ? 
+                                <Col sm={6}>
+                                <Form.Group controlId="enquirorId">
+                                    <Form.Label>{local.enquiror}</Form.Label>
+                                    <AsyncSelect
+                                        name="enquirorId"
+                                        data-qc="enquirorId"
+                                        value={researcherOptions.filter((researcher) => researcher._id === values.enquirorId)}
+                                        onChange={(event: any) => { setFieldValue('enquirorId', event._id) }}
+                                        type='text'
+                                        styles={theme.selectStyleWithBorder}
+                                        theme={theme.selectTheme}
+                                        getOptionLabel={(option) => option.name}
+                                        getOptionValue={(option) => option._id}
+                                        loadOptions={getResearcherOptions}
+                                        cacheOptions defaultOptions
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.enquirorId}
+                                    </Form.Control.Feedback>
+                                    <div style={{ color: '#d51b1b', fontSize: '80%', margin: '10px' }}>
+                                        {errors.enquirorId}
+                                    </div>
+                                </Form.Group>
+                            </Col> : 
                             <Col sm={6}>
                                 <Form.Group controlId="enquirorId">
                                     <Form.Label>{local.enquiror}</Form.Label>
@@ -668,6 +706,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                     </div>
                                 </Form.Group>
                             </Col>
+                            }
                             <Col sm={6}>
                                 <Form.Group controlId="visitationDate">
                                     <Form.Label>{local.visitationDate}</Form.Label>
