@@ -12,20 +12,32 @@ import {
   timeToArabicDateNow,
   guarantorOrderLocal,
 } from '../../../../Shared/Services/utils'
+import { CustomerIsBlocked, CustomerStatusLocal } from './types'
 
 const CustomerStatusDetails = (props) => {
-  function getCustomerStatus(status: string) {
-    switch (status) {
-      case 'no commitment':
-        return 'ليس عليه إلتزامات'
-      case 'open loan':
-        return 'قرض مفتوح'
-      case 'open application':
-        return 'طلب مفتوح'
-      default:
-        return ''
-    }
+  const {
+    BusinessPhoneNumber,
+    Comments,
+    HomePhoneNumber,
+    Loans,
+    MobilePhoneNumber,
+    accountBranch,
+    birthDate,
+    customerLegalStatus,
+    customerName,
+    customerStatus,
+    gender,
+    nationalId,
+    nationalIdIssueDate,
+    officerName,
+  } = props.data
+
+  const checkLoanLegalStatus = (loan) => {
+    const { isWrittenOff, isDoubtful } = loan
+
+    return isWrittenOff ? '- معدوم' : isDoubtful ? '- مشكوك فيه' : ''
   }
+
   return (
     <div className="customer-status-details" lang="ar">
       <table
@@ -36,23 +48,25 @@ const CustomerStatusDetails = (props) => {
           width: '100%',
         }}
       >
-        <tr style={{ height: '10px' }} />
-        <tr
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <th colSpan={6} style={{ backgroundColor: 'white' }}>
-            <div className="logo-print-tb" />{' '}
-          </th>
-          <th style={{ backgroundColor: 'white' }} colSpan={6}>
-            ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
-          </th>
-        </tr>
-        <tr style={{ height: '10px' }} />
+        <thead>
+          <tr style={{ height: '10px' }} />
+          <tr
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <th colSpan={6} style={{ backgroundColor: 'white' }}>
+              <div className="logo-print" />{' '}
+            </th>
+            <th style={{ backgroundColor: 'white' }} colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </thead>
       </table>
       <table>
         <thead className="report-header">
@@ -73,14 +87,18 @@ const CustomerStatusDetails = (props) => {
           </tr>
           <tr>
             <th className="gray frame">الأسم</th>
-            <td className="frame">{props.data.customerName}</td>
+            <td className="frame">{customerName}</td>
             <th className="gray frame">الكود</th>
             <td className="frame">{numbersToArabic(props.customerKey)}</td>
             <th className="gray frame">الحاله</th>
             <td className="frame">
-              {getCustomerStatus(props.data.customerStatus)}
+              {CustomerStatusLocal[customerStatus || 'default']}
             </td>
             <th className="gray frame">حالة التعامل مع العميل</th>
+            <td className="frame">
+              {CustomerIsBlocked[customerLegalStatus] ||
+                CustomerIsBlocked.false}
+            </td>
             <td className="frame" />
           </tr>
           <tr>
@@ -90,8 +108,8 @@ const CustomerStatusDetails = (props) => {
         <tbody>
           <tr>
             <td className="borderless" colSpan={100}>
-              {props.data.Loans && props.data.Loans.length > 0 ? (
-                props.data.Loans.map((loan, index) => {
+              {Loans && Loans.length > 0 ? (
+                Loans.map((loan, index) => {
                   return (
                     <div key={index} style={{ pageBreakAfter: 'always' }}>
                       <table>
@@ -103,56 +121,43 @@ const CustomerStatusDetails = (props) => {
                           </tr>
                           <tr>
                             <th>الفرع الحالي</th>
-                            <td>{props.data.accountBranch}</td>
+                            <td>{accountBranch}</td>
                             <th>نوع الاقتراض</th>
                             <td>{beneficiaryType(loan.beneficiaryType)}</td>
                             <th>المندوب الحالي</th>
-                            <td>{props.data.officerName}</td>
+                            <td>{officerName}</td>
                           </tr>
                           <tr>
                             <th>الرقم القومي</th>
-                            <td>{numbersToArabic(props.data.nationalId)}</td>
+                            <td>{numbersToArabic(nationalId)}</td>
                             <th>بتاريخ</th>
                             <td>
-                              {timeToArabicDate(
-                                props.data.nationalIdIssueDate,
-                                false
-                              )}
+                              {timeToArabicDate(nationalIdIssueDate, false)}
                             </td>
                             <th>النوع</th>
-                            <td>{arabicGender(props.data.gender)}</td>
+                            <td>{arabicGender(gender)}</td>
                           </tr>
                           <tr>
                             <th>تاريخ الميلاد</th>
-                            <td>
-                              {timeToArabicDate(props.data.birthDate, false)}
-                            </td>
+                            <td>{timeToArabicDate(birthDate, false)}</td>
                             <th>البطاقه</th>
-                            <td>{numbersToArabic(props.data.nationalId)}</td>
+                            <td>{numbersToArabic(nationalId)}</td>
                             <th>صادره من</th>
                             <td />
                           </tr>
                           <tr>
                             <th>الموبيل</th>
-                            <td>
-                              {numbersToArabic(props.data.MobilePhoneNumber) ||
-                                ''}
-                            </td>
+                            <td>{numbersToArabic(MobilePhoneNumber) || ''}</td>
                             <th>تليفون المنزل</th>
-                            <td>
-                              {numbersToArabic(props.data.HomePhoneNumber) ||
-                                ''}
-                            </td>
+                            <td>{numbersToArabic(HomePhoneNumber) || ''}</td>
                             <th>تليفون العمل</th>
                             <td>
-                              {numbersToArabic(
-                                props.data.BusinessPhoneNumber
-                              ) || ''}
+                              {numbersToArabic(BusinessPhoneNumber) || ''}
                             </td>
                           </tr>
                           <tr>
                             <th>ملاحظات</th>
-                            <td colSpan={3}>{props.data.Comments || ''}</td>
+                            <td colSpan={3}>{Comments || ''}</td>
                           </tr>
                           <tr>
                             <td colSpan={100} className="horizontal-line" />
@@ -214,7 +219,9 @@ const CustomerStatusDetails = (props) => {
                           </tr>
                           <tr>
                             <th>حالة القرض</th>
-                            <td>{getLoanStatus(loan.status)}</td>
+                            <td>{`${getLoanStatus(
+                              loan.status
+                            )} ${checkLoanLegalStatus(loan)}`}</td>
                             <th>غرامات مسدده</th>
                             <td>
                               {loan.penaltiesPaid === 'None'
@@ -487,48 +494,37 @@ const CustomerStatusDetails = (props) => {
                     </tr>
                     <tr>
                       <th>الفرع الحالي</th>
-                      <td>{props.data.accountBranch}</td>
+                      <td>{accountBranch}</td>
                       <th>المندوب الحالي</th>
-                      <td>{props.data.officerName}</td>
+                      <td>{officerName}</td>
                     </tr>
                     <tr>
                       <th>الرقم القومي</th>
-                      <td>{numbersToArabic(props.data.nationalId)}</td>
+                      <td>{numbersToArabic(nationalId)}</td>
                       <th>بتاريخ</th>
-                      <td>
-                        {timeToArabicDate(
-                          props.data.nationalIdIssueDate,
-                          false
-                        )}
-                      </td>
+                      <td>{timeToArabicDate(nationalIdIssueDate, false)}</td>
                       <th>النوع</th>
-                      <td>{arabicGender(props.data.gender)}</td>
+                      <td>{arabicGender(gender)}</td>
                     </tr>
                     <tr>
                       <th>تاريخ الميلاد</th>
-                      <td>{timeToArabicDate(props.data.birthDate, false)}</td>
+                      <td>{timeToArabicDate(birthDate, false)}</td>
                       <th>البطاقه</th>
-                      <td>{numbersToArabic(props.data.nationalId)}</td>
+                      <td>{numbersToArabic(nationalId)}</td>
                       <th>صادره من</th>
                       <td />
                     </tr>
                     <tr>
                       <th>الموبيل</th>
-                      <td>
-                        {numbersToArabic(props.data.MobilePhoneNumber) || ''}
-                      </td>
+                      <td>{numbersToArabic(MobilePhoneNumber) || ''}</td>
                       <th>تليفون المنزل</th>
-                      <td>
-                        {numbersToArabic(props.data.HomePhoneNumber) || ''}
-                      </td>
+                      <td>{numbersToArabic(HomePhoneNumber) || ''}</td>
                       <th>تليفون العمل</th>
-                      <td>
-                        {numbersToArabic(props.data.BusinessPhoneNumber) || ''}
-                      </td>
+                      <td>{numbersToArabic(BusinessPhoneNumber) || ''}</td>
                     </tr>
                     <tr>
                       <th>ملاحظات</th>
-                      <td colSpan={3}>{props.data.Comments || ''}</td>
+                      <td colSpan={3}>{Comments || ''}</td>
                     </tr>
                   </tbody>
                 </table>

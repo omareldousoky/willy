@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import './styles.scss'
 import { NavLink } from 'react-router-dom'
 import Nav from 'react-bootstrap/Nav'
+import CardItem, { CardSize } from './HeaderWithCardsItem'
 
 export interface Tab {
   icon?: string
@@ -10,47 +11,47 @@ export interface Tab {
   stringKey?: string
   path?: string
 }
-interface Props {
+
+interface HeaderWithCardsProps {
   header: string
   array: Array<Tab>
   active: number | string
+  selectTab?: (index: string) => void
 }
-const HeaderWithCards = (props: Props) => {
+
+const HeaderWithCards: FunctionComponent<HeaderWithCardsProps> = ({
+  header,
+  array,
+  active,
+  selectTab,
+}) => {
   return (
     <div className="header-cards-parent">
-      <h4>{props.header}</h4>
+      <h4>{header}</h4>
       <div className="cards-container">
-        <Nav style={{ overflow: 'auto', flexWrap: 'nowrap' }}>
-          {props.array.map((item, index) => {
+        <Nav>
+          {array.map((item, index) => {
+            const renderCard = (size: CardSize) => (
+              <CardItem
+                item={item}
+                isActive={index === active}
+                size={size}
+                onClick={() => selectTab?.(item.stringKey || '')}
+              />
+            )
+
             return (
-              <div
-                key={index}
-                className={
-                  index === props.active ? 'card-item active' : 'card-item'
-                }
-              >
-                <NavLink
-                  key={index}
-                  to={item.path || '#!'}
-                  style={{
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <img
-                    alt="icon"
-                    src={
-                      index === props.active
-                        ? require(`../../Assets/${item.icon}-active.svg`)
-                        : require(`../../Assets/${item.icon}-inactive.svg`)
-                    }
-                  />
-                  <div style={{ margin: 'auto 0px' }}>
-                    <h5>{item.header}</h5>
-                    <p>{item.desc}</p>
-                  </div>
-                </NavLink>
+              <div className="card__wrapper" key={index}>
+                {item.path ? ( // TODO: Add reliable key to check on instead of checking path
+                  <NavLink
+                    style={{ width: '100%', textDecoration: 'none' }}
+                    to={item.path}
+                  >
+                    {renderCard('lg')}
+                  </NavLink>
+                ) : (
+                  renderCard('sm')
+                )}
               </div>
             )
           })}
