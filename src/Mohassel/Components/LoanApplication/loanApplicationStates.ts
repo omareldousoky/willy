@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
-import { Customer, Results } from './loanApplicationCreation';
+import { Results } from './loanApplicationCreation';
 import * as local from './../../../Shared/Assets/ar.json';
+import { Customer } from '../../../Shared/Services/interfaces';
 export interface Vice {
     name: string;
     phoneNumber: string;

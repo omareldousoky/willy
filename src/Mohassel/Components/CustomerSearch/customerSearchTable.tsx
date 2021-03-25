@@ -3,41 +3,14 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Swal from 'sweetalert2';
-import InfoBox from '../userInfoBox';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getFullCustomerKey } from '../../../Shared/Services/utils';
-interface Customer {
-    birthDate?: any;
-    customerName?: string;
-    nationalIdIssueDate?: any;
-    homePostalCode?: number;
-    nationalId?: string;
-    customerHomeAddress?: string;
-    customerAddressLatLong?: string;
-    customerAddressLatLongNumber?: {
-        lat: number;
-        lng: number;
-    };
-    businessAddressLatLong?: string;
-    businessAddressLatLongNumber?: {
-        lat: number;
-        lng: number;
-    };
-    businessPostalCode?: any;
-    businessLicenseIssueDate?: any;
-    applicationDate?: any;
-    permanentEmployeeCount?: any;
-    partTimeEmployeeCount?: any;
-    customerID?: string;
-    customerCode?: string;
-    gender?: string;
-    businessSector?: string;
-    businessActivity?: string;
-    businessSpeciality?: string;
-}
+import {InfoBox} from '../../../Shared/Components'
+import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
+import { Customer } from '../../../Shared/Services/interfaces';
 interface Results {
     results: Array<object>;
     empty: boolean;
@@ -176,11 +149,11 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.birthDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.birthDate)}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.birthDate && getRenderDate(this.props.selectedCustomer.birthDate)}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.nationalIdIssueDate}</p>
-                        <p style={{ margin: '0 10px 0 0' }}>{getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
+                        <p style={{ margin: '0 10px 0 0' }}>{this.props.selectedCustomer.nationalIdIssueDate && getRenderDate(this.props.selectedCustomer.nationalIdIssueDate)}</p>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.customerHomeAddress}</p>
@@ -188,7 +161,7 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                 </div>
                 }
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox values={this.props.selectedCustomer} />}
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={[getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}
             </div>
         )
     }

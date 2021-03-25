@@ -937,5 +937,6 @@
     "updateLoanOfficer":"تعديل المندوب",
     "updateLoanOfficerSuccess":"تم تعديل بيانات المندوب بنجاح",
     "noDataAvaliable": "لا توجد بيانات",
-    "loanOfficerDetails": "تفاصيل المندوب"
+    "loanOfficerDetails": "تفاصيل المندوب",
+    "companyWebsite": "الموقع الإلكترونى للشركة"
 }

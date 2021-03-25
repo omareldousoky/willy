@@ -19,6 +19,7 @@ import { CustomerReportsTab } from './customerReportsTab';
 import HalanLinkageModal from "./halanLinkageModal";
 import { blockCustomer } from "../../Services/APIs/blockCustomer/blockCustomer";
 import { Container } from 'react-bootstrap';
+import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -214,106 +215,8 @@ const CustomerProfile = (props: Props) => {
       });
     }
   };
-  const mainInfo: FieldProps[][] = [
-    [
-      {
-        fieldTitle: local.customerName,
-        fieldData: customerDetails?.customerName || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.branchName,
-        fieldData: customerDetails?.branchName || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: "iScore",
-        fieldData: (
-          <>
-            <span
-              style={{ color: iscoreStatusColor(iScoreDetails?.iscore).color }}
-            >
-              {iScoreDetails?.iscore}
-            </span>
-            <span style={{ margin: "0px 10px" }}>
-              {iscoreStatusColor(iScoreDetails?.iscore).status}
-            </span>
-            {iScoreDetails?.bankCodes &&
-              iScoreDetails.bankCodes.map((code) => `${iscoreBank(code)} `)}
-            {iScoreDetails?.url && (
-              <span
-                style={{ cursor: "pointer", padding: 10 }}
-                onClick={() => downloadFile(iScoreDetails?.url)}
-              >
-                {" "}
-                <span
-                  className="fa fa-file-pdf-o"
-                  style={{ margin: "0px 0px 0px 5px" }}
-                ></span>
-                iScore
-              </span>
-            )}
-          </>
-        ),
-        showFieldCondition: ability.can("viewIscore", "customer"),
-      },
-      {
-        fieldTitle: local.customerCode,
-        fieldData: customerDetails?.code || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.creationDate,
-        fieldData: customerDetails?.created?.at
-          ? timeToDateyyymmdd(customerDetails.created.at)
-          : "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.nationalId,
-        fieldData: customerDetails?.nationalId || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.birthDate,
-        fieldData:
-          customerDetails?.birthDate !== undefined
-            ? timeToDateyyymmdd(customerDetails.birthDate)
-            : "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.gender,
-        fieldData: getArGender(customerDetails?.gender) || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.customerHomeAddress,
-        fieldData: customerDetails?.customerHomeAddress || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.postalCode,
-        fieldData: customerDetails?.homePostalCode || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.homePhoneNumber,
-        fieldData: customerDetails?.homePhoneNumber || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.faxNumber,
-        fieldData: customerDetails?.faxNumber || "",
-        showFieldCondition: true,
-      },
-      {
-        fieldTitle: local.mobilePhoneNumber,
-        fieldData: customerDetails?.mobilePhoneNumber || "",
-        showFieldCondition: true,
-      },
-    ],
-  ];
+  const mainInfo = customerDetails && [getCustomerInfo({customerDetails,score:iScoreDetails, isLeader: false })]
+
   const tabsData: TabDataProps = {
     workInfo: [
       {
@@ -617,7 +520,7 @@ const CustomerProfile = (props: Props) => {
           <ProfileActions actions={getProfileActions()} />
         </div>
 
-        <InfoBox info={mainInfo} />
+       {mainInfo && <InfoBox info={mainInfo} />}
       </div>
       <Profile
         loading={loading}

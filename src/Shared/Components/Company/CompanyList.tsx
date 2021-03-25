@@ -57,12 +57,11 @@ const List = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //TODO will need to replace url with company
     dispatch(
       search({
         size,
         from,
-        url: "customer",
+        url: "company",
         branchId,
       })
     );
@@ -148,7 +147,6 @@ const List = ({
 
   const getCompanies = async () => {
     const { customerShortenedCode, key } = currentSearchFilters;
-    //TODO will need to replace url with company
     dispatch(
       search({
         ...currentSearchFilters,
@@ -187,7 +185,7 @@ const List = ({
               <Can I="createCustomer" a="customer">
                 <Button
                   onClick={() => {
-                    history.push("/companies/new-company");
+                    history.push("/company/new-company");
                   }}
                   className="big-button"
                 >
@@ -201,7 +199,7 @@ const List = ({
             searchKeys={["keyword", "dateFromTo", "governorate"]}
             dropDownKeys={[
               "name",
-              "TaxCardNumber",
+              // "TaxCardNumber",
               'CommercialRegisterNumber',
               "key",
               "code",

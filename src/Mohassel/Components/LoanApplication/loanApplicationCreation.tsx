@@ -36,6 +36,7 @@ import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/cust
 import Select from 'react-select';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 import { theme } from '../../../theme';
+import { Customer } from '../../../Shared/Services/interfaces';
 
 interface Props {
     history: any;
@@ -52,21 +53,6 @@ interface LoanOfficer {
     _id: string;
     username: string;
     name: string;
-}
-export interface Customer {
-    _id?: string;
-    customerID?: string;
-    customerName?: string;
-    customerCode?: string;
-    nationalId?: string;
-    birthDate?: string;
-    gender?: string;
-    nationalIdIssueDate?: string;
-    businessSector?: string;
-    businessActivity?: string;
-    businessSpeciality?: string;
-    permanentEmployeeCount?: string;
-    partTimeEmployeeCount?: string;
 }
 export interface Results {
     results: Array<object>;

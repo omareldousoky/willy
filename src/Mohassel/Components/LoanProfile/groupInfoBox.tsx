@@ -5,8 +5,8 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { getRenderDate } from '../../Services/getRenderDate';
 import Row from 'react-bootstrap/Row';
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar';
-import { Customer } from '../LoanApplication/loanApplicationCreation';
 import InfoBox from '../userInfoBox';
+import { Customer } from '../../../Shared/Services/interfaces';
 
 interface Props {
     group: any;

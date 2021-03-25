@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 import { useHistory, useLocation } from "react-router";
-import { useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 
 import { Container } from "react-bootstrap";
 
@@ -12,14 +12,14 @@ import { InfoBox, Profile } from "../../Components";
 import local from "../../Assets/ar.json";
 import ability from "../../../Mohassel/config/ability";
 import { getCustomerByID } from "../../../Mohassel/Services/APIs/Customer-Creation/getCustomer";
-import { getIscoreCached } from "../../../Mohassel/Services/APIs/iScore/iScore";
+import { getIscoreSME } from "../../../Mohassel/Services/APIs/iScore/iScore";
 import { getErrorMessage } from "../../Services/utils";
-import { getDateAndTime } from "../../../Mohassel/Services/getRenderDate";
 
 import { FieldProps, TabDataProps } from "../Profile/types";
 import { Tab } from "../../../Mohassel/Components/HeaderWithCards/cardNavbar";
 import { Customer } from "../../Services/interfaces";
 import { Score } from "../../../Mohassel/Components/CustomerCreation/customerProfile";
+import { getCompanyInfo } from "../../Services/formatCustomersInfo";
 
 export interface CompanyProfileProps {
   data: any;
@@ -36,21 +36,18 @@ export const Company = () => {
   const {
     viewCompany,
     edit,
-    documents,
-    companyName,
-    companyCode,
-    taxCardNumber,
-    commercialRegisterNumber,
-    creationDate,
-    governorate,
-    businessActivity,
-    businessSpeciality,
+    documents
   } = local;
-  const getCachediScores = async (id) => {
+  const getiScores = async (id) => {
     setIsLoading(true);
-    const iScores = await getIscoreCached({ nationalIds: [id] });
+    const iScores = await getIscoreSME({
+      idValue: id,
+      name: company?.customerName,
+      productId: "002",
+      idSource: "901",
+    });
     if (iScores.status === "success") {
-      setScore(iScores.body.data[0]);
+      setScore(iScores?.body?.data[0]);
       setIsLoading(false);
     } else {
       setIsLoading(false);
@@ -65,69 +62,21 @@ export const Company = () => {
       await setCompany(res.body);
       setIsLoading(false);
       if (ability.can("viewIscore", "customer"))
-        await getCachediScores(res.body.nationalId);
-        // await getGuaranteeedLoans(res.body);
-        // await getGeoArea(res.body.geoAreaId, res.body.branchId);
+        await getiScores(res.body.taxCardNumber);
+      // await getGuaranteeedLoans(res.body);
+      // await getGeoArea(res.body.geoAreaId, res.body.branchId);
     } else {
       setIsLoading(false);
       Swal.fire("Error !", getErrorMessage(res.error.error), "error");
     }
   };
-  const setCompanyFields = () => {
-    if (company) {
-      setMainInfo([
-        [
-          {
-            fieldTitle: companyName,
-            fieldData: company.customerName || "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: companyCode,
-            fieldData: company.code || "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: taxCardNumber,
-            fieldData: company.taxCardNumber || "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: commercialRegisterNumber,
-            fieldData: company.commercialRegisterNumber || "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: governorate,
-            fieldData: company.governorate || "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: creationDate,
-            fieldData:
-              (company.created?.at && getDateAndTime(company.created?.at)) ||
-              "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: businessActivity,
-            fieldData: company.businessActivity || "",
-            showFieldCondition: true,
-          },
-          {
-            fieldTitle: local.businessSpeciality,
-            fieldData: company?.businessSpeciality || "",
-            showFieldCondition: true,
-          },
-        ],
-      ]);
-    }
-  };
+  const setCompanyFields = () => company && setMainInfo(getCompanyInfo(company, score));
   useEffect(() => {
     getCompanyDetails();
   }, []);
   useEffect(() => {
     company && setCompanyFields();
+    company && getiScores(company.taxCardNumber);
   }, [company]);
 
   const tabsData: TabDataProps = {

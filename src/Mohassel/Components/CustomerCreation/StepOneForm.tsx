@@ -23,7 +23,7 @@ function calculateAge(dateOfBirth: number) {
 }
 
 export const StepOneForm = (props: any) => {
-  const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
+  const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError, isCompany } = props;
   const [mapState, openCloseMap] = useState(false);
   const [loading, setLoading] = useState(false);
   return (
@@ -32,12 +32,12 @@ export const StepOneForm = (props: any) => {
         handleClose={() => openCloseMap(false)}
         save={(customerAddressLatLong: { lat: number; lng: number }) => { setFieldValue('customerAddressLatLongNumber', customerAddressLatLong); openCloseMap(false) }}
         location={props.values.customerAddressLatLongNumber}
-        header={local.customerHomeAddressLocationTitle}
+        header={isCompany? local.customerWorkAddressLocationTitle :local.customerHomeAddressLocationTitle}
       />}
       <Row>
         <Col sm={12}>
           <Form.Group controlId="customerName">
-            <Form.Label className="customer-form-label" column>{`${local.name}*`}</Form.Label>
+            <Form.Label className="customer-form-label" column>{`${isCompany? local.companyName : local.name}*`}</Form.Label>
             <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
                 type="text"
@@ -55,10 +55,11 @@ export const StepOneForm = (props: any) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-      </Row>
-      <Row>
-        <Col sm={5}>
-          <Form.Group controlId="nationalId">
+      </Row> 
+         {!isCompany &&( <> 
+          <Row>
+         <Col sm={5}>
+         <Form.Group controlId="nationalId">
             <Form.Label className="customer-form-label">{`${local.nationalId}*`}</Form.Label>
             <Can I="updateCustomerHasLoan" a="customer" passThrough>
               {allowed => <Form.Control
@@ -103,7 +104,8 @@ export const StepOneForm = (props: any) => {
         <Col sm={1} style={{ marginTop: 35 }}>
           <Loader type="inline" open={loading} />
         </Col>
-        <Col sm={3}>
+       
+       <Col sm={3}>
           <Form.Group controlId="birthDate">
             <Form.Label className="customer-form-label">{`${local.birthDate}*`}</Form.Label>
             <Form.Control
@@ -134,6 +136,7 @@ export const StepOneForm = (props: any) => {
             </Form.Control>
           </Form.Group>
         </Col>
+       
       </Row>
       <Row>
         <Col sm={5}>
@@ -156,7 +159,9 @@ export const StepOneForm = (props: any) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-      </Row>
+      </Row> 
+      </>
+         )}
       <Row>
         <Col>
           <Form.Group controlId="customerHomeAddress">
@@ -178,7 +183,7 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Row>
       <Row>
-        <Col sm={6}>
+        { !isCompany &&<Col sm={6}>
           <Form.Group controlId="customerHomeAddressLocation">
             <Form.Label className="customer-form-label">{local.customerHomeAddressLocationTitle}</Form.Label>
             <Form.Control
@@ -191,7 +196,7 @@ export const StepOneForm = (props: any) => {
               onClick={() => openCloseMap(true)}
             />
           </Form.Group>
-        </Col>
+        </Col>}
         <Col sm={6}>
           <Form.Group controlId="homePostalCode">
             <Form.Label className="customer-form-label">{local.homePostalCode}</Form.Label>
@@ -304,7 +309,7 @@ export const StepOneForm = (props: any) => {
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group controlId="customerWebsite">
-        <Form.Label className="customer-form-label">{local.customerWebsite}</Form.Label>
+        <Form.Label className="customer-form-label">{local.companyWebsite}</Form.Label>
           <Form.Control
           type="text"
           name="customerWebsite"

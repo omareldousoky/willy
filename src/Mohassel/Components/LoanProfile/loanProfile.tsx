@@ -27,7 +27,7 @@ import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymen
 import { withRouter } from 'react-router-dom';
 import Can from '../../config/Can';
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment';
-import { PendingActions } from '../../../Shared/Services/interfaces';
+import { Customer, PendingActions } from '../../../Shared/Services/interfaces';
 import { timeToDateyyymmdd, iscoreDate, getErrorMessage } from '../../../Shared/Services/utils';
 import { payment } from '../../../Shared/redux/payment/actions';
 import { connect } from 'react-redux';
@@ -50,13 +50,14 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import { FollowUpStatementView } from './followupStatementView';
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan';
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares';
-import { Customer } from '../LoanApplication/loanApplicationCreation';
 import { Installment } from '../Payment/payInstallment';
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
 
 import {InfoBox , ProfileActions } from '../../../Shared/Components'; 
 import { Col, Form } from 'react-bootstrap';
 import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
+import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
+import { FieldProps } from '../../../Shared/Components/Profile/types';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -97,7 +98,6 @@ interface State {
     geoAreas: Array<any>;
     remainingTotal: number;
     individualsWithInstallments: Array<IndividualWithInstallments>;
-    // mainInfo: FieldProps[][];
 }
 
 interface Props {
@@ -617,198 +617,36 @@ class LoanProfile extends Component<Props, State>{
         }
         else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
-    getInfo = () => {
+    getInfo = (): FieldProps[][] => {
         if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer) {
-            const {
-                customerName,
-                key,
-                nationalId,
-                birthDate,
-                gender,
-                nationalIdIssueDate,
-                businessSector,
-                businessActivity,
-                businessSpeciality,
-                permanentEmployeeCount,
-                partTimeEmployeeCount,
-            } = this.state.application.customer;
-            const customerScore = this.state.iscores.filter(score => score.nationalId === nationalId)[0]
-            return [
-                [
-                    {
-                        fieldTitle: local.name,
-                        fieldData: customerName,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.customerCode,
-                        fieldData: key,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: "iScore",
-                        fieldData: <>
-                            <Form.Label style={{ color: iscoreStatusColor(customerScore?.iscore).color }}>{customerScore?.iscore} </Form.Label>
-                            <Form.Label>{iscoreStatusColor(customerScore?.iscore).status} </Form.Label>
-                            {customerScore?.bankCodes && customerScore?.bankCodes.map(code => <Form.Label key={code}>{iscoreBank(code)}</Form.Label>)}
-                            {customerScore?.url && <Col>
-                                <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(customerScore?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
-                            </Col>}
-                            {this.state.application.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status) && <Col>
-                                <Can I='getIscore' a='customer'>
-                                    <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(this.state.application.customer)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span>
-                                </Can>
-                            </Col>}
-                        </>,
-                        showFieldCondition: customerScore,
-                    },
-                    {
-                        fieldTitle: local.nationalId,
-                        fieldData: nationalId,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.birthDate,
-                        fieldData: timeToArabicDate(birthDate, false),
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.gender,
-                        fieldData: arabicGender(gender),
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.nationalIdIssueDate,
-                        fieldData: timeToArabicDate(nationalIdIssueDate, false),
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.businessSector,
-                        fieldData: businessSector,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.businessActivity,
-                        fieldData: businessActivity,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.businessSpeciality,
-                        fieldData: businessSpeciality,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.permanentEmployeeCount,
-                        fieldData: permanentEmployeeCount || 0,
-                        showFieldCondition: true,
-                    },
-                    {
-                        fieldTitle: local.partTimeEmployeeCount,
-                        fieldData: partTimeEmployeeCount || 0,
-                        showFieldCondition: true,
-                    },
-                ],
-            ];
+            const customerScore = this.state.iscores.filter(score => score.nationalId === this.state.application.customer.nationalId)[0]
+            const info: FieldProps[] =  getCustomerInfo({
+              customerDetails: this.state.application.customer,
+              score: customerScore,
+              isLeader: false,
+              getIscore: this.getIscore,
+              applicationStatus: this.state.application.status,
+            });
+            return [info]
         }
         else {
             if (this.state.application.group) {
                 const groupMainInfo = this.state.application.group.individualsInGroup.map((individual) => {
-                    const {
-                        customerName,
-                        key,
-                        nationalId,
-                        birthDate,
-                        gender,
-                        nationalIdIssueDate,
-                        businessSector,
-                        businessActivity,
-                        businessSpeciality,
-                        permanentEmployeeCount,
-                        partTimeEmployeeCount,
-                    } = individual.customer;
-
-                    const customerScore = this.state.iscores.filter(score => score.nationalId === nationalId)[0]
-
-                    return ([
-                        {
-                            fieldTitle: individual.type === 'leader' ? local.groupLeaderName : local.name,
-                            fieldData: customerName,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.customerCode,
-                            fieldData: key,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: "iScore",
-                            fieldData: <>
-                                <Form.Label style={{ color: iscoreStatusColor(customerScore?.iscore).color }}>{customerScore?.iscore} </Form.Label>
-                                <Form.Label>{iscoreStatusColor(customerScore?.iscore).status} </Form.Label>
-                                {customerScore?.bankCodes && customerScore?.bankCodes.map(code => <Form.Label key={code}>{iscoreBank(code)}</Form.Label>)}
-                                {customerScore?.url && <Col>
-                                    <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => downloadFile(customerScore?.url)}> <span className="fa fa-file-pdf-o" style={{ margin: "0px 0px 0px 5px" }}></span>iScore</span>
-                                </Col>}
-                                {this.state.application.status && !["approved", "created", "issued", "rejected", "paid", "pending", "canceled"].includes(this.state.application.status) && <Col>
-                                    <Can I='getIscore' a='customer'>
-                                        <span style={{ cursor: 'pointer', padding: 10 }} onClick={() => this.getIscore(individual.customer)}> <span className="fa fa-refresh" style={{ margin: "0px 0px 0px 5px" }}></span>iscore</span>
-                                    </Can>
-                                </Col>}
-                            </>,
-                            showFieldCondition: customerScore,
-                        },
-                        {
-                            fieldTitle: local.nationalId,
-                            fieldData: nationalId,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.birthDate,
-                            fieldData: timeToArabicDate(birthDate, false),
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.gender,
-                            fieldData: arabicGender(gender),
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.nationalIdIssueDate,
-                            fieldData: timeToArabicDate(nationalIdIssueDate, false),
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.businessSector,
-                            fieldData: businessSector,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.businessActivity,
-                            fieldData: businessActivity,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.businessSpeciality,
-                            fieldData: businessSpeciality,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.permanentEmployeeCount,
-                            fieldData: permanentEmployeeCount || 0,
-                            showFieldCondition: true,
-                        },
-                        {
-                            fieldTitle: local.partTimeEmployeeCount,
-                            fieldData: partTimeEmployeeCount || 0,
-                            showFieldCondition: true,
-                        },
-                    ])
+                    const customerScore = this.state.iscores.filter(score => score.nationalId === individual.nationalId)[0]
+                    return  getCustomerInfo({
+                            customerDetails:individual.customer,
+                            score: customerScore,
+                            isLeader: individual.type === 'leader' ,
+                            getIscore: this.getIscore,
+                            applicationStatus: this.state.application.status,
+                        })
                 })
                 return groupMainInfo
             }
+            return []
         }
-
     }
+    
     getProfileActions = ()=>{
         return [
             {
