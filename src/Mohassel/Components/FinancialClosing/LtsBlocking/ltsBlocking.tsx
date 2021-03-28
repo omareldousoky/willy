@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import Card from 'react-bootstrap/Card';
-import * as local from '../../../../Shared/Assets/ar.json';
-import Button from 'react-bootstrap/Button';
-import { Loader } from '../../../../Shared/Components/Loader';
-import { financialBlocking } from '../../../Services/APIs/loanApplication/financialClosing';
-import Swal from 'sweetalert2';
-import { Col, Form } from 'react-bootstrap';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { getErrorMessage } from '../../../../Shared/Services/utils';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import React, { Component } from 'react'
+import Card from 'react-bootstrap/Card'
+import * as local from '../../../../Shared/Assets/ar.json'
+import Button from 'react-bootstrap/Button'
+import { Loader } from '../../../../Shared/Components/Loader'
+import { financialBlocking } from '../../../Services/APIs/loanApplication/financialClosing'
+import Swal from 'sweetalert2'
+import { Col, Form } from 'react-bootstrap'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { getErrorMessage } from '../../../../Shared/Services/utils'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Can from '../../../config/Can'
 
 
 interface Props extends RouteComponentProps {
@@ -137,10 +138,11 @@ class LtsBlocking extends Component<Props, State>{
                                 >
                                     {local.cancel}
                                 </Button>
-                                {/* TODO : ADD <Can I="" a =""></Can> */}
+                                 <Can I="financialBlocking" a ="application">
                                 <Button  className="w-25"  type="submit" variant="primary"> 
                                     {local.submit}
                                 </Button>
+                                </Can>
                                 </div>
                             </Form>
                         }

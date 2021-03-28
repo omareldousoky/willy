@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import * as local from '../../../../Shared/Assets/ar.json'
 import Button from 'react-bootstrap/Button'
