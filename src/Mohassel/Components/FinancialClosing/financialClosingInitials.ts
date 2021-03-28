@@ -7,15 +7,15 @@ export const financialClosingArray = (): Tab[] => {
     financialClosingArr.push({
       icon: 'roles',
       header: local.financialClosing,
-      desc: local.companyClosing,
-      path: '/financial-closing/company-closing',
+      desc: local.ltsClosing,
+      path: '/financial-closing/lts-closing',
     })
   }
   if (ability.can('financialBlocking', 'application')) {
     financialClosingArr.push({
       icon: 'assignProductToBranch',
       header: local.financialBlocking,
-      desc: local.companyBlocking,
+      desc: local.ltsBlocking,
       path: '/financial-closing/financial-blocking',
     })
   }  
@@ -23,7 +23,7 @@ export const financialClosingArray = (): Tab[] => {
     financialClosingArr.push({
       icon: 'issuedLoans',
       header: local.financialUnblocking,
-      desc: local.companyUnblocking,
+      desc: local.ltsUnblocking,
       path: '/financial-closing/financial-unblocking',
     })
   }

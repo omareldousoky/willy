@@ -13,7 +13,7 @@ import Can from '../../../config/Can'
 interface Props extends RouteComponentProps {
     history: any;
 }
-function CompanyUnblocking(props: Props){
+function LtsUnblocking(props: Props){
    const [loading, setLoading] =  useState(false);
    const unBlock =  async() => {
        setLoading(true)
@@ -28,12 +28,12 @@ function CompanyUnblocking(props: Props){
    const handleSubmit = async () => {
         Swal.fire({
             title: local.areYouSure,
-            text: `${local.companyUnblocking}`,
+            text: `${local.ltsUnblocking}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.companyUnblocking,
+            confirmButtonText: local.ltsUnblocking,
             cancelButtonText: local.cancel
         }).then(async (isConfirm) => {
             if (isConfirm.value) {
@@ -46,14 +46,14 @@ function CompanyUnblocking(props: Props){
                 <Loader open={loading}  type="fullscreen"/>
                 <div className="custom-card-header">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.companyUnblocking}</Card.Title>
+                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.ltsUnblocking}</Card.Title>
                     </div>
                 </div>
                 <Card.Body className="w-100 d-flex justify-content-center">
-                    <Can I='financialUnBlocking' a='application'><Button type='button' variant='primary' onClick={() => handleSubmit()}>{local.companyUnblocking}</Button></Can>
+                    <Can I='financialUnBlocking' a='application'><Button type='button' variant='primary' onClick={() => handleSubmit()}>{local.ltsUnblocking}</Button></Can>
                 </Card.Body>
             </Card>
         )
 
 }
-export default withRouter(CompanyUnblocking)
+export default withRouter(LtsUnblocking)

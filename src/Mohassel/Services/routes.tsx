@@ -474,8 +474,8 @@ const appRoutes = [
         label: local.financialClosing,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>,
          routes:[{
-          path: '/company-closing',
-          label: local.companyClosing,
+          path: '/lts-closing',
+          label: local.ltsClosing,
           render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>
         },{
             path: '/financial-blocking',

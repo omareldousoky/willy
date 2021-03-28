@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
-import CompanyClosing from './CompanyClosing/companyClosing'
+import LtsClosing from './LtsClosing/ltsClosing'
 import HeaderWithCards,{Tab} from '../HeaderWithCards/headerWithCards'
 import { financialClosingArray } from './financialClosingInitials'
 
@@ -27,7 +27,7 @@ class FinancialClosing extends Component<Props, State> {
       <>
         {this.props.withHeader && (
           <HeaderWithCards
-            header={local.companyClosing}
+            header={local.ltsClosing}
             array={this.state.tabsArray}
             active={this.state.tabsArray
               .map((item) => {
@@ -37,7 +37,7 @@ class FinancialClosing extends Component<Props, State> {
           />
         )}
 
-        <CompanyClosing />
+        <LtsClosing />
       </>
     )
   }

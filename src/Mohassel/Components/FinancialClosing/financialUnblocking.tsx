@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
 import { financialClosingArray } from './financialClosingInitials'
-import CompanyUnblocking from './CompanyUnblocking/companyUnblocking'
+import LtsUnblocking from './LtsUnblocking/ltsUnblocking'
 interface State {
     tabsArray: Array<Tab>;
   }
@@ -35,7 +35,7 @@ interface State {
                   .indexOf('issuedLoans')}
               />
             )}
-           <CompanyUnblocking />
+           <LtsUnblocking />
           </>
         )
       }

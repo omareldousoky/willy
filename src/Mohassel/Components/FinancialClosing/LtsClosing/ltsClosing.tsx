@@ -22,12 +22,12 @@ interface State {
 
 const today: Date = new Date();
 
-const companyClosingValidation = Yup.object().shape({
+const ltsClosingValidation = Yup.object().shape({
     closeDate: Yup.string().test('close date cant be in the future', local.dateCantBeInFuture, (value: string) => {
         return value ? new Date(value).valueOf() <= today.valueOf() : true;
     })
 })
-class CompanyClosing extends Component<Props, State>{
+class LtsClosing extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -50,12 +50,12 @@ class CompanyClosing extends Component<Props, State>{
         const endOfCloseDate = new Date(closeDate).setHours(23, 59, 59,999).valueOf();
         Swal.fire({
             title: local.areYouSure,
-            text: `${local.companyClosing}`,
+            text: `${local.ltsClosing}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.companyClosing,
+            confirmButtonText: local.ltsClosing,
             cancelButtonText: local.cancel
         }).then(async (isConfirm) => {
             if (isConfirm.value) {
@@ -69,14 +69,14 @@ class CompanyClosing extends Component<Props, State>{
                 <Loader type="fullscreen" open={this.state.loading} />
                 <div className="custom-card-header">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.companyClosing}</Card.Title>
+                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.ltsClosing}</Card.Title>
                     </div>
                 </div>
                 <Card.Body className="w-100 d-flex justify-content-center">
                     <Formik
                         initialValues={{ closeDate: 0 }}
                         onSubmit={this.handleSubmit}
-                        validationSchema={companyClosingValidation}
+                        validationSchema={ltsClosingValidation}
                         validateOnBlur
                         validateOnChange
                     >
@@ -155,4 +155,4 @@ class CompanyClosing extends Component<Props, State>{
         )
     }
 }
-export default withRouter(CompanyClosing);
+export default withRouter(LtsClosing);
