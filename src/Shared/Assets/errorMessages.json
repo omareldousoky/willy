@@ -116,5 +116,6 @@
     "invalid_system_is_financially_closed":{"en":"The system is financially closed at this date","ar":"النظام مغلق ماليا في هذا التاريخ"},
     "cannot_split_rescheduled_loan": {"en":"Can't split a loan that has been rescheduled" ,"ar":"لا يمكن فصل قرض مجدول"},
     "cannot_split_partially_paid": {"en":"Can't split a loan that has partial payments" ,"ar":"لا يمكن فصل قرض لديه سداد جزئي"},
-    "insufficient-early-payment-amount":{"en":"Must pay full early payment required amount", "ar":"يجب دفع مبلغ السداد المعجل كامل"}
+    "insufficient-early-payment-amount":{"en":"Must pay full early payment required amount", "ar":"يجب دفع مبلغ السداد المعجل كامل"},
+    "customer_is_defaulting": {"en":"This customer is a defaulting customer", "ar": "هذا العميل موجود في قائمة الشئون القانونية"}
 }
