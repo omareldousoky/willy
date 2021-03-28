@@ -59,6 +59,7 @@ import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecia
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import FinancialBlocking from '../Components/FinancialClosing/financialBlocking'
+import FinancialUnblocking from '../Components/FinancialClosing/financialUnblocking'
 const appRoutes = [
   {
     path: "/",
@@ -473,14 +474,18 @@ const appRoutes = [
         label: local.financialClosing,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>,
          routes:[{
-          path: '/bulk-closing',
-          label: local.bulkClosing,
+          path: '/company-closing',
+          label: local.companyClosing,
           render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>
         },{
             path: '/financial-blocking',
             label: local.financialBlocking,
-            render:(props) => <FinancialBlocking {...props} withHeader />
-         }  
+            render:(props) => <Can I= "financialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
+         },{
+          path: '/financial-unblocking',
+          label: local.financialBlocking,
+          render:(props) => <Can I= "financialUnBlocking" a="application"><FinancialUnblocking {...props} withHeader /> </Can>
+         } 
       ]
       }
     ]

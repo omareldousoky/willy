@@ -22,12 +22,12 @@ interface State {
 
 const today: Date = new Date();
 
-const bulkClosingValidation = Yup.object().shape({
+const companyClosingValidation = Yup.object().shape({
     closeDate: Yup.string().test('close date cant be in the future', local.dateCantBeInFuture, (value: string) => {
         return value ? new Date(value).valueOf() <= today.valueOf() : true;
     })
 })
-class BulkClosing extends Component<Props, State>{
+class CompanyClosing extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -50,12 +50,12 @@ class BulkClosing extends Component<Props, State>{
         const endOfCloseDate = new Date(closeDate).setHours(23, 59, 59,999).valueOf();
         Swal.fire({
             title: local.areYouSure,
-            text: `${local.bulkClosing}`,
+            text: `${local.companyClosing}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.bulkClosing,
+            confirmButtonText: local.companyClosing,
             cancelButtonText: local.cancel
         }).then(async (isConfirm) => {
             if (isConfirm.value) {
@@ -69,14 +69,14 @@ class BulkClosing extends Component<Props, State>{
                 <Loader type="fullscreen" open={this.state.loading} />
                 <div className="custom-card-header">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.bulkClosing}</Card.Title>
+                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.companyClosing}</Card.Title>
                     </div>
                 </div>
                 <Card.Body className="w-100 d-flex justify-content-center">
                     <Formik
                         initialValues={{ closeDate: 0 }}
                         onSubmit={this.handleSubmit}
-                        validationSchema={bulkClosingValidation}
+                        validationSchema={companyClosingValidation}
                         validateOnBlur
                         validateOnChange
                     >
@@ -115,7 +115,7 @@ class BulkClosing extends Component<Props, State>{
                                                         "closeDate",
                                                         e.currentTarget.value
                                                     );
-                                                    if (e.currentTarget.value ==== "")
+                                                    if (e.currentTarget.value === "")
                                                         formikProps.setFieldValue(
                                                             "closeDate",
                                                             ""
@@ -155,4 +155,4 @@ class BulkClosing extends Component<Props, State>{
         )
     }
 }
-export default withRouter(BulkClosing);
+export default withRouter(CompanyClosing);

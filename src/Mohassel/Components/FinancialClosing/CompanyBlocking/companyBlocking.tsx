@@ -21,12 +21,12 @@ interface State {
 
 const today: Date = new Date();
 
-const bulkBlockingValidation = Yup.object().shape({
+const companyBlockingValidation = Yup.object().shape({
     blockDate: Yup.string().test('block date cant be in the future', local.dateCantBeInFuture, (value: string) => {
         return value ? new Date(value).valueOf() <= today.valueOf() : true;
     })
 })
-class BulkBlocking extends Component<Props, State>{
+class CompanyBlocking extends Component<Props, State>{
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -49,12 +49,12 @@ class BulkBlocking extends Component<Props, State>{
         const endOfBlockDate = new Date(blockDate).setHours(23, 59, 59,999).valueOf();
         Swal.fire({
             title: local.areYouSure,
-            text: `${local.bulkBlocking}`,
+            text: `${local.companyBlocking}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: local.bulkBlocking,
+            confirmButtonText: local.companyBlocking,
             cancelButtonText: local.cancel
         }).then(async (isConfirm) => {
             if (isConfirm.value) {
@@ -68,14 +68,14 @@ class BulkBlocking extends Component<Props, State>{
                 <Loader type="fullscreen" open={this.state.loading} />
                 <div className="custom-card-header">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.bulkBlocking}</Card.Title>
+                        <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.companyBlocking}</Card.Title>
                     </div>
                 </div>
                 <Card.Body className="w-100 d-flex justify-content-center">
                     <Formik
                         initialValues={{ blockDate: 0 }}
                         onSubmit={this.handleSubmit}
-                        validationSchema={bulkBlockingValidation}
+                        validationSchema={companyBlockingValidation}
                         validateOnBlur
                         validateOnChange
                     >
@@ -150,4 +150,4 @@ class BulkBlocking extends Component<Props, State>{
         )
     }
 }
-export default withRouter(BulkBlocking);
+export default withRouter(CompanyBlocking);

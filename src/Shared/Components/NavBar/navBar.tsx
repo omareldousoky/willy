@@ -226,7 +226,10 @@ class NavBar extends Component<Props, State> {
             {!this.props.hide && <Can I='getLead' a='halanuser'><Nav.Link onClick={() => this.props.history.push('/halan-integration/leads')}>{local.halan}</Nav.Link></Can>}
             {!this.props.hide && <Can I="getClearance" a='application'><Nav.Link onClick={()=> this.props.history.push('/clearances')}>{local.clearances}</Nav.Link> </Can>}
             {!this.props.hide && <Can I='getOfficersGroups' a ='branch'><Nav.Link onClick={()=>this.props.history.push('/supervisions-levels')}>{local.levelsOfSupervision}</Nav.Link></Can>}
-            {!this.props.hide &&  <Can I = "financialClosing" a="application"><Nav.Link onClick={()=>this.props.history.push('/financial-closing/bulk-closing')}>{local.financialClosing}</Nav.Link></Can>}
+            {!this.props.hide  && ability.can("financialClosing","application") ? <Nav.Link onClick={()=>this.props.history.push('/financial-closing/company-closing')}>{local.financialClosing}</Nav.Link> :
+             !this.props.hide && ability.can("financialBlocking","application")
+            ? <Nav.Link onClick={()=>this.props.history.push('/financial-closing/financial-blocking')}>{local.financialBlocking}</Nav.Link>: 
+            !this.props.hide && ability.can("financialUnBlocking","application")?<Nav.Link onClick={()=> this.props.history.push("/financial-closing/financial-unblocking")}>{local.financialUnblocking}</Nav.Link>  : null }
             </Nav>
           </Navbar.Collapse>
         </Navbar>}

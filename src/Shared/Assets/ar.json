@@ -916,7 +916,7 @@
     "businessActivities":"أنواع نشاط العمل",
     "businessSpecialities":"تخصصات العمل",
     "financialClosing":"الإغلاق المالي",
-    "bulkClosing": "إغلاق جميع الفروع",
+    "companyClosing": "إغلاق جميع الفروع",
     "closeDate": "تاريخ الإغلاق",
     "dateCantBeInFuture":"التاريخ لايمكن أن يكون في المستقبل",
     "reviewFinancialState":"لمراجعة كشف التحصيل قبل الإغلاق المالي إضغط هنا",
@@ -930,6 +930,8 @@
     "noDataAvaliable": "لا توجد بيانات",
     "loanOfficerDetails": "تفاصيل المندوب",
     "financialBlocking": "الإقفال المالي",
-    "bulkBlocking":"إيقاف الحركات المالية",
-    "blockDate": "تاريخ الإقفال"
+    "companyBlocking":"إيقاف الحركات المالية",
+    "blockDate": "تاريخ الإقفال",
+    "financialUnblocking":"إلغاء الإقفال المالي",
+    "companyUnblocking":"السماح بإدخال الحركات المالية"
 }

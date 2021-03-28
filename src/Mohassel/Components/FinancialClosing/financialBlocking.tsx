@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
 import HeaderWithCards, { Tab } from '../HeaderWithCards/headerWithCards'
 import { financialClosingArray } from './financialClosingInitials'
-import BulkBlocking from './BulkBlocking/bulkBlocking'
+import CompanyBlocking from './CompanyBlocking/companyBlocking'
 
 interface State {
   tabsArray: Array<Tab>;
@@ -36,7 +36,7 @@ class FinancialBlocking extends Component<Props, State> {
               .indexOf('assignProductToBranch')}
           />
         )}
-        <BulkBlocking/>
+        <CompanyBlocking/>
       </>
     )
   }
