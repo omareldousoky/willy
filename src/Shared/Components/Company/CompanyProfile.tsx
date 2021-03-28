@@ -111,7 +111,7 @@ export const Company = () => {
                 ability.can("updateNationalId", "customer")
               }
               editOnClick={() =>
-                history.push("/companies/edit-company", {
+                history.push("/company/edit-company", {
                   id: location.state.id,
                 })
               }
