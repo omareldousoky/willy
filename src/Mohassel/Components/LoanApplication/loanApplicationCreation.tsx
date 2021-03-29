@@ -67,6 +67,7 @@ export interface Customer {
     businessSpeciality?: string;
     permanentEmployeeCount?: string;
     partTimeEmployeeCount?: string;
+    key?: number;
 }
 export interface Results {
     results: Array<object>;

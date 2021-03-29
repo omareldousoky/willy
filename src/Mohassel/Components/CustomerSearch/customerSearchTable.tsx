@@ -13,7 +13,7 @@ interface Customer {
     birthDate?: any;
     customerName?: string;
     nationalIdIssueDate?: any;
-    homePostalCode?: number;
+    homePostalCode?: string;
     nationalId?: string;
     customerHomeAddress?: string;
     customerAddressLatLong?: string;
