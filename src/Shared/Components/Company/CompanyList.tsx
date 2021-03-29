@@ -107,17 +107,17 @@ const List = ({
       title: companyName,
       sortable: true,
       key: "name",
-      render: (data) => data.customerName,
+      render: (data) => data.businessName,
     },
     {
       title: taxCardNumber,
       key: "TaxCardNumber",
-      render: (data) => data.TaxCardNumber,
+      render: (data) => data.taxCardNumber,
     },
     {
       title: commercialRegisterNumber,
       key: "CommercialRegisterNumber",
-      render: (data) => data.CommercialRegisterNumber,
+      render: (data) => data.commercialRegisterNumber,
     },
     {
       title: governorate,

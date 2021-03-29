@@ -5,6 +5,9 @@ import { Customer } from '../../../Shared/Services/interfaces';
 export interface Vice {
     name: string;
     phoneNumber: string;
+    nationalId?: string;
+    nationalIdIssueDate?: string | any;
+    jobTitle?: string;
 }
 interface Guarantor {
     searchResults: Results;
@@ -66,6 +69,7 @@ export interface Application {
     representative: string;
     representativeName: string;
     enquirorId: any;
+    researcherId?: string;
     visitationDate: string;
     guarantorIds: Array<string>;
     viceCustomers: Array<Vice>;
@@ -191,6 +195,87 @@ export const LoanApplicationValidation = Yup.object().shape({
         otherwise: Yup.string()
     })
 });
+export const SMELoanApplicationValidation = Yup.object().shape({
+    productID: Yup.string().required(local.required),
+    calculationFormulaId: Yup.string().required(local.required),
+    interest: Yup.number().min(0, "Can't be 0 or less").max(100, "Can't be more than 100").required(local.required),
+    interestPeriod: Yup.string().required(local.required),
+    inAdvanceFees: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),
+    inAdvanceFrom: Yup.string().required(local.required),
+    inAdvanceType: Yup.string().required(local.required),
+    minPrincipal: Yup.number(),
+    maxPrincipal: Yup.number(),
+    minInstallment: Yup.number(),
+    maxInstallment: Yup.number(),
+    periodLength: Yup.number().integer('Must be int').min(1, "Can't be less than 1").required(local.required),
+    periodType: Yup.string().required(local.required),
+    gracePeriod: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
+    pushPayment: Yup.number().integer('Must be int').min(0, "Can't be less than 0").required(local.required),
+    noOfInstallments: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("noOfInstallments", `outOfRange`,
+        function (this: any, value: any) {
+            const { minInstallment, maxInstallment } = this.parent
+            if (minInstallment === 0 && maxInstallment === 0) {
+                return true
+            } else {
+                return (value >= minInstallment && value <= maxInstallment)
+            }
+        }).required(local.required),
+    principal: Yup.number().integer('Must be int').min(0, "Can't be less than 0").test("principal", `outOfRange`,
+        function (this: any, value: any) {
+            const { minPrincipal, maxPrincipal } = this.parent
+            if (minPrincipal === 0 && maxPrincipal === 0) {
+                return true
+            } else {
+                return (value >= minPrincipal && value <= maxPrincipal)
+            }
+        }).test("principal", local.customerMaxPrincipalError,
+            function (this: any, value: any) {
+                const { customerTotalPrincipals, customerMaxPrincipal, principals, beneficiaryType } = this.parent
+                if (customerMaxPrincipal && customerMaxPrincipal > 0 && value <= customerMaxPrincipal) {
+                    return true
+                } else if (customerMaxPrincipal === 0 && value <= (beneficiaryType === "group" ? principals.maxGroupPrincipal : principals.maxIndividualPrincipal)) {
+                    return true
+                } else {
+                    return false
+                }
+            }).required('required!'),
+    applicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
+    individualApplicationFee: Yup.number().min(0, "Can't be less than 0").required(local.required),
+    applicationFeePercent: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),
+    applicationFeeType: Yup.string().required(local.required),
+    applicationFeePercentPerPerson: Yup.number().min(0, "Can't be less than 0").max(100, "Can't be more than 100").required(local.required),
+    applicationFeePercentPerPersonType: Yup.string().required(local.required),
+    representativeFees: Yup.number().min(0, "Can't be less than 0").required(local.required),
+    stamps: Yup.number().min(0, "Can't be less than 0").required(local.required),
+    adminFees: Yup.number().min(0, "Can't be less than 0").required(local.required),
+    entryDate: Yup.date().required(local.required),
+    usage: Yup.string().required(local.required),
+    researcherId: Yup.string().required(local.required),
+    visitationDate: Yup.date().required(local.required),
+    branchManagerAndDate:Yup.boolean(),
+    branchManagerId: Yup.string().when('branchManagerAndDate', {
+        is: true,
+        then: Yup.string().required(local.required),
+        otherwise: Yup.string()
+    }),
+    managerVisitDate: Yup.string().when('branchManagerAndDate', {
+        is: true,
+        then: Yup.string().required(local.required),
+        otherwise: Yup.string()
+    })
+});
+export const SMELoanApplicationStep2Validation = Yup.object().shape({
+    viceCustomers: Yup.array().of(
+        Yup.object().shape({
+            name: Yup.string().required(local.required),
+            phoneNumber: Yup.string().min(10,local.minLength10).max(11,local.maxLength11).required(local.required),
+            nationalId: Yup.string().required(local.required),
+            nationalIdIssueDate: Yup.string().required(local.required),
+            address: Yup.string().required(local.required),
+            jobTitle: Yup.string().required(local.required)
+        })
+    ).min(1, local.mustBeOneOrMore)
+})
 export const ReviewLoanValidation = Yup.object().shape({
     reviewStatus: Yup.string().required(local.required),
     reviewDate: Yup.date().test(

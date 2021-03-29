@@ -48,7 +48,7 @@ export const getCompanyInfo = (company: Customer, score?: Score) => {
     [
       {
         fieldTitle: companyName,
-        fieldData: company.customerName || "",
+        fieldData: company.businessName || "",
         showFieldCondition: true,
       },
       {

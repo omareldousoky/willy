@@ -9,7 +9,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getFullCustomerKey } from '../../../Shared/Services/utils';
 import {InfoBox} from '../../../Shared/Components'
-import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { Customer } from '../../../Shared/Services/interfaces';
 interface Results {
     results: Array<object>;
@@ -128,7 +128,7 @@ class CustomerSearch extends Component<Props, State>{
                     style={{ width: '50%', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'right', overflow: 'scroll', padding: 10 }}>
                     {this.props.searchResults.results.map((element: any) =>
                         <div style={{ width: '100%', borderBottom: '0.5px solid black', cursor: 'all-scroll' }} key={element._id} onClick={() => this.props.selectCustomer(element)}>
-                            <p>{element.customerName}</p>
+                            <p>{(this.props.sme) ? element.businessName : element.customerName}</p>
                         </div>
                     )}
                 </div>
@@ -161,7 +161,7 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                 </div>
                 }
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={[getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={this.props.sme ? getCompanyInfo(this.props.selectedCustomer) : [getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}
             </div>
         )
     }

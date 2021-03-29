@@ -47,7 +47,33 @@ export const step2 = {
     industryRegisterNumber: '',
     taxCardNumber: '',
 };
-
+export const step1Company = {
+    businessName: '',
+    businessAddressLatLong: '',
+    businessAddressLatLongNumber: {
+        lat: 0,
+        lng: 0
+    },
+    businessAddress: '',
+    governorate: '',
+    district: '',
+    village: '',
+    ruralUrban: '',
+    businessPostalCode: '',
+    businessPhoneNumber: '',
+    businessSector: '',
+    businessActivity: '',
+    businessSpeciality: '',
+    businessLicenseNumber: '',
+    businessLicenseIssuePlace: '',
+    businessLicenseIssueDate: '',
+    commercialRegisterNumber: '',
+    industryRegisterNumber: '',
+    taxCardNumber: '',
+    legalStructure: '',
+    commercialRegisterExpiryDate: '',
+    customerType: 'company',
+};
 export const step3 = {
     geographicalDistribution: '',
     geoAreaId: '',
@@ -67,6 +93,10 @@ export const step3 = {
         maxGroupPrincipal: 0,
     }
 };
+export const step2Company = {
+    ...step3,
+    // researcher: ''
+}
 
 const endOfDay: Date = new Date();
 endOfDay.setHours(23, 59, 59, 59);

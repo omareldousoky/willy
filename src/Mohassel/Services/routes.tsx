@@ -59,6 +59,7 @@ import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecia
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import { CompanyList, CompanyProfile } from "../../Shared/Components";
+import CompanyCreation from '../Components/CustomerCreation/companyCreation';
 
 const appRoutes = [
   {
@@ -111,12 +112,12 @@ const appRoutes = [
           {
             path: "/new-company",
             label: local.newCompany,
-            render: (props) => <Can I='createCustomer' a='customer'><CustomerCreation {...props} edit={false} isCompany/></Can>,
+            render: (props) => <Can I='createCustomer' a='customer'><CompanyCreation {...props} edit={false} /></Can>,
           },
           {
             path: "/edit-company",
             label: local.editCompany,
-            render: (props) => <CustomerCreation {...props} edit={true} isCompany/>,
+            render: (props) => <CompanyCreation {...props} edit={true} />,
           }
           ,
           {

@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import * as local from '../../../Shared/Assets/ar.json'
 import InputGroup from 'react-bootstrap/InputGroup';
 import GroupInfoBox from '../LoanProfile/groupInfoBox';
-import InfoBox from '../userInfoBox';
 import AsyncSelect from 'react-select/async';
 import { searchLoanOfficerAndManager } from '../../Services/APIs/LoanOfficers/searchLoanOfficer';
 import { getCookie } from '../../../Shared/Services/getCookie';
@@ -15,6 +14,8 @@ import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserB
 import Swal from 'sweetalert2';
 import { theme } from '../../../theme';
 import { searchResearcher } from '../../Services/APIs/Researchers/searchResearcher';
+import { InfoBox } from '../../../Shared/Components';
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -71,7 +72,7 @@ export const LoanApplicationCreationForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox values={props.customer} /> :
+                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox info={props.customer.customerType === 'company' ? getCompanyInfo(props.customer) : [getCustomerInfo({customerDetails: props.customer})]} /> :
                         <GroupInfoBox group={{ individualsInGroup: values.individualDetails }} />
                     }
                     <div style={{ width: '100%', margin: '20px 0' }}>
@@ -94,7 +95,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         isInvalid={errors.productID && touched.productID}
                                     >
                                         <option value="" disabled></option>
-                                        {props.products.map((product, i) =>
+                                        {props.products.filter((product) => props.customer.customerType === 'company' ?  product.type === 'sme' : product.type !== 'sme').map((product, i) =>
                                             <option key={i} value={product._id}>{product.productName}</option>
                                         )}
                                     </Form.Control>
@@ -657,15 +658,15 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                         </Form.Group>}
                         <Row>
-                            {props.customer.type === 'company' ? 
+                            {props.customer.customerType === 'company' ? 
                                 <Col sm={6}>
-                                <Form.Group controlId="enquirorId">
+                                <Form.Group controlId="researcherId">
                                     <Form.Label>{local.enquiror}</Form.Label>
                                     <AsyncSelect
-                                        name="enquirorId"
-                                        data-qc="enquirorId"
-                                        value={researcherOptions.filter((researcher) => researcher._id === values.enquirorId)}
-                                        onChange={(event: any) => { setFieldValue('enquirorId', event._id) }}
+                                        name="researcherId"
+                                        data-qc="researcherId"
+                                        value={researcherOptions.filter((researcher) => researcher._id === values.researcherId)}
+                                        onChange={(event: any) => { setFieldValue('researcherId', event._id) }}
                                         type='text'
                                         styles={theme.selectStyleWithBorder}
                                         theme={theme.selectTheme}
@@ -675,10 +676,10 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         cacheOptions defaultOptions
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.enquirorId}
+                                        {errors.researcherId}
                                     </Form.Control.Feedback>
                                     <div style={{ color: '#d51b1b', fontSize: '80%', margin: '10px' }}>
-                                        {errors.enquirorId}
+                                        {errors.researcherId}
                                     </div>
                                 </Form.Group>
                             </Col> : 

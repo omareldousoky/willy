@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import * as local from '../../../Shared/Assets/ar.json';
-import { Application, Vice, LoanApplicationValidation } from './loanApplicationStates';
+import { Application, Vice, LoanApplicationValidation, SMELoanApplicationValidation, SMELoanApplicationStep2Validation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { searchCompany, searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
@@ -78,7 +78,6 @@ interface State {
     businessSectors: Array<BusinessSector>;
     guarantor1: any;
     guarantor2: any;
-    viceCustomers: Array<Vice>;
     prevId: string;
     searchGroupCustomerKey: string;
     showModal: boolean;
@@ -210,10 +209,6 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             },
             guarantor1: {},
             guarantor2: {},
-            viceCustomers: [{
-                name: '',
-                phoneNumber: ''
-            }],
             prevId: '',
             showModal: false,
             customerToView: {}
@@ -694,7 +689,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
         })
     }
     submit = async (values: Application) => {
-        if (this.state.step === 2 && this.state.customerType === 'individual') {
+        if (this.state.step === 2 && ['individual', 'sme'].includes(this.state.customerType)) {
             this.step('forward');
         } else {
             const obj = { ...values }
@@ -711,6 +706,12 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             })
             if (obj.beneficiaryType !== 'group') {
                 principalToSend = obj.principal
+            }
+            const viceCustomers = obj.viceCustomers.filter(item => item !== undefined);
+            if(this.state.customerType === 'sme') {
+            viceCustomers.forEach(vice => { 
+                    vice.nationalIdIssueDate = new Date(vice.nationalIdIssueDate).valueOf();
+                })
             }
             const objToSubmit = {
                 customerId: obj.customerID,
@@ -735,9 +736,10 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                 usage: obj.usage,
                 representativeId: obj.representative,
                 enquirorId: obj.enquirorId,
+                researcherId: obj.researcherId,
                 visitationDate: new Date(obj.visitationDate).valueOf(),
                 individualDetails: individualsToSend,
-                viceCustomers: obj.viceCustomers.filter(item => item !== undefined),
+                viceCustomers: viceCustomers,
                 branchManagerId: values.branchManagerId,
                 managerVisitDate: values.managerVisitDate ? new Date(values.managerVisitDate).valueOf() : 0,
             }
@@ -1092,7 +1094,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             <Formik
                 initialValues={this.state.application}
                 onSubmit={this.submit}
-                validationSchema={LoanApplicationValidation}
+                validationSchema={(this.state.customerType === 'sme') ? SMELoanApplicationValidation : LoanApplicationValidation}
                 validateOnBlur
                 validateOnChange
                 enableReinitialize
@@ -1101,7 +1103,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                     <LoanApplicationCreationForm {...formikProps}
                         formulas={this.state.formulas}
                         loanUsage={this.state.loanUsage}
-                        products={this.state.products.filter(product => product.beneficiaryType === this.state.customerType)}
+                        products={this.state.products.filter(product => (['individual', 'sme'].includes(this.state.customerType)) ? product.beneficiaryType === 'individual' : product.beneficiaryType === 'group')}
                         loanOfficers={this.state.loanOfficers}
                         step={(key) => this.step(key)}
                         getSelectedLoanProduct={(id) => this.getSelectedLoanProduct(id)}
@@ -1116,7 +1118,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             <Formik
                 initialValues={this.state.application}
                 onSubmit={this.submit}
-                validationSchema={LoanApplicationValidation}
+                validationSchema={ this.state.customerType === 'sme' ? SMELoanApplicationStep2Validation : LoanApplicationValidation}
                 validateOnBlur
                 validateOnChange
                 enableReinitialize
@@ -1129,7 +1131,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
                         handleSearch={(key, query, guarantor) => { this.handleSearchGuarantors(key, query, guarantor) }}
                         selectGuarantor={(query, guarantor, values) => { this.selectGuarantor(query, guarantor, values) }}
                         removeGuarantor={(query, guarantor, values) => { this.removeGuarantor(query, guarantor, values) }}
-                        customer={(this.state.customerType === 'individual') ? this.state.selectedCustomer : this.state.selectedCustomers}
+                        customer={(this.state.customerType === 'group') ? this.state.selectedCustomers : this.state.selectedCustomer}
                     />
                 }
             </Formik>

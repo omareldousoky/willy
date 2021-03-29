@@ -938,5 +938,8 @@
     "updateLoanOfficerSuccess":"تم تعديل بيانات المندوب بنجاح",
     "noDataAvaliable": "لا توجد بيانات",
     "loanOfficerDetails": "تفاصيل المندوب",
-    "companyWebsite": "الموقع الإلكترونى للشركة"
+    "companyWebsite": "الموقع الإلكترونى للشركة",
+    "legalStructure":"الشكل القانوني",
+    "commercialRegisterExpiryDate":"تاريخ نهاية السجل التجاري",
+    "jobTitle":"الوظيفة"
 }

@@ -89,6 +89,72 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                                                     </Form.Control.Feedback>}
                                                 </Col>
                                             </Form.Group>
+                                            {props.customer.customerType === 'company' && <>
+                                            <Form.Group as={Row} controlId="nationalId">
+                                                <Form.Label column sm={4}>{local.nationalId}</Form.Label>
+                                                <Col sm={6}>
+                                                    <Form.Control
+                                                        type="text"
+                                                        name={`viceCustomers.${index}.nationalId`}
+                                                        data-qc="nationalId"
+                                                        value={values.viceCustomers[index].nationalId}
+                                                        onBlur={handleBlur}
+                                                        onChange={handleChange}
+                                                    />
+                                                    {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].nationalId && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                        {errors.viceCustomers[index].nationalId}
+                                                    </Form.Control.Feedback>}
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} controlId="nationalIdIssueDate">
+                                            <Form.Label column sm={4}>{local.nationalIdIssueDate}</Form.Label>
+                                            <Col sm={6}>
+                                                <Form.Control
+                                                    type="date"
+                                                    name={`viceCustomers.${index}.nationalIdIssueDate`}
+                                                    data-qc="nationalIdIssueDate"
+                                                    value={values.viceCustomers[index].nationalIdIssueDate}
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].nationalIdIssueDate && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                    {errors.viceCustomers[index].nationalIdIssueDate}
+                                                </Form.Control.Feedback>}
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="jobTitle">
+                                            <Form.Label column sm={4}>{local.jobTitle}</Form.Label>
+                                            <Col sm={6}>
+                                                <Form.Control
+                                                    type="text"
+                                                    name={`viceCustomers.${index}.jobTitle`}
+                                                    data-qc="jobTitle"
+                                                    value={values.viceCustomers[index].jobTitle}
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].jobTitle && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                    {errors.viceCustomers[index].jobTitle}
+                                                </Form.Control.Feedback>}
+                                            </Col>
+                                        </Form.Group>
+                                        <Form.Group as={Row} controlId="address">
+                                            <Form.Label column sm={4}>{local.address}</Form.Label>
+                                            <Col sm={6}>
+                                                <Form.Control
+                                                    type="text"
+                                                    name={`viceCustomers.${index}.address`}
+                                                    data-qc="address"
+                                                    value={values.viceCustomers[index].address}
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.viceCustomers && errors.viceCustomers[index] && errors.viceCustomers[index].address && <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
+                                                    {errors.viceCustomers[index].address}
+                                                </Form.Control.Feedback>}
+                                            </Col>
+                                        </Form.Group>
+                                        </>}
                                             {index !== 0 && <Button type="button" className="mb-2" onClick={() => arrayHelpers.remove(index)}> - </Button>}
                                         </div>
                                     ))}
