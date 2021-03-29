@@ -946,5 +946,8 @@
     "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح ",
     "doneBy":"تمت بواسطة",
     "maxLength200":"لا يمكن ان يكون اكثر من 200",
-    "detailedAddress": "العنوان المفصل"
+    "detailedAddress": "العنوان المفصل",
+    "rejectionDetails": "تفاصيل الإبلاغ عن العميل",
+    "done": "تم",
+    "viewRejectionReason": "عرض سبب الرفض"
 }
