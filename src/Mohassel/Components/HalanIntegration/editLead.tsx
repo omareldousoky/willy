@@ -230,7 +230,7 @@ class EditLead extends Component<Props, State> {
               </Row>
               <Form.Group as={Row} className='branch-data-group'>
                 <Col >
-                  <Button className={'btn-cancel-prev'} style={{ width: '60%' }}
+                  <Button variant="secondary" style={{ width: '60%' }}
                     onClick={() => { this.props.history.goBack() }}
                   >{local.cancel}</Button>
                 </Col>

@@ -178,7 +178,7 @@ class ClearancesList extends Component<Props, State> {
     return (
       <>
         <div className="print-none">
-          <Card style={{ margin: '20px 50px' }}>
+          <Card className="main-card">
             <Loader type="fullsection" open={this.props.loading} />
             <Card.Body style={{ padding: 0 }}>
               <div className="custom-card-header">
@@ -189,7 +189,7 @@ class ClearancesList extends Component<Props, State> {
                   <Button onClick={() => { this.print() }}
                   disabled={(this.state.selectedClearances.length > 0 ? false: true) as boolean}
                   className="big-button"
-                  style={{ marginLeft: 20, height: 70 }}
+                  style={{ height: 70 }}
                 > {local.downloadPDF}
                 </Button>
               </div>

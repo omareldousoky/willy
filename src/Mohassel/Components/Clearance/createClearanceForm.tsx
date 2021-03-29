@@ -44,7 +44,8 @@ export const CreateClearanceForm = (props: Props) => {
                         <Select
                             name="application"
                             data-qc="application"
-                            styles={theme.selectStyle}
+                            styles={theme.selectStyleWithBorder}
+														theme={theme.selectTheme}
                             value={selectedApplication}
                             onChange={(event) => {
                                 props.setFieldValue('loanId', event.id)
@@ -272,7 +273,7 @@ export const CreateClearanceForm = (props: Props) => {
                         >
                             <Col >
                                 <Button
-                                    className={'btn-cancel-prev'} style={{ width: '60%' }}
+                                    variant="secondary" style={{ width: '60%' }}
                                     onClick={() => { props.cancel() }}
                                 >{local.cancel}</Button>
                             </Col>

@@ -13,7 +13,7 @@ interface Customer {
     birthDate?: any;
     customerName?: string;
     nationalIdIssueDate?: any;
-    homePostalCode?: number;
+    homePostalCode?: string;
     nationalId?: string;
     customerHomeAddress?: string;
     customerAddressLatLong?: string;
@@ -51,6 +51,7 @@ interface Props {
     selectedCustomer: Customer;
     style?: object;
     header?: string;
+		className?: string;
 };
 
 interface State {
@@ -113,12 +114,26 @@ class CustomerSearch extends Component<Props, State>{
   };
     render() {
         return (
-            <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column', ...this.props.style }}>
+            <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
 
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>
-                        <InputGroup style={{ direction: 'ltr' }}>
+                        <InputGroup>
+														<DropdownButton
+                                as={InputGroup.Append}
+                                variant="outline-secondary"
+                                title={this.getArValue(this.state.dropDownValue)}
+                                id="input-group-dropdown-2"
+                                data-qc="search-dropdown"
+                            >
+															{this.state.dropDownArray.map((key, index) =>
+																	<Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
+															)}
+                            </DropdownButton>
+														<InputGroup.Append>
+                                <InputGroup.Text className="bg-white rounded-0"><span className="fa fa-search fa-rotate-90" /></InputGroup.Text>
+                            </InputGroup.Append>
                             <FormControl
                                 type="text"
                                 name="searchKey"
@@ -127,22 +142,8 @@ class CustomerSearch extends Component<Props, State>{
                                 placeholder={local.search}
                                 onChange={(e) => this.handleSearchChange(e)}
                                 onKeyDown={this._handleKeyDown}
-                                style={{ width: '50%', direction: 'rtl' }}
+                                style={{ width: '50%' }}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text style={{ background: '#fff' }}><span className="fa fa-search fa-rotate-90"></span></InputGroup.Text>
-                            </InputGroup.Append>
-                            <DropdownButton
-                                as={InputGroup.Append}
-                                variant="outline-secondary"
-                                title={this.getArValue(this.state.dropDownValue)}
-                                id="input-group-dropdown-2"
-                                data-qc="search-dropdown"
-                            >
-                                {this.state.dropDownArray.map((key, index) =>
-                                    <Dropdown.Item key={index} data-qc={key} onClick={() => this.setState({ dropDownValue: key, searchKey: '' })}>{this.getArValue(key)}</Dropdown.Item>
-                                )}
-                            </DropdownButton>
                         </InputGroup>
                         <Button type="button" disabled={this.state.searchKey.trim().length === 0} onClick={this.handleSubmit} style={{ margin: 10 }}>{local.search}</Button>
                     </div>
@@ -160,7 +161,7 @@ class CustomerSearch extends Component<Props, State>{
                 {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source !== 'loanApplication' && <div style={{ textAlign: 'right', width: '100%' }}>
                     <div className="d-flex flex-row justify-content-between">
                         <h5>{this.props.source}</h5>
-                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>x</Button>
+                        <Button onClick={() => this.props.removeCustomer && this.props.removeCustomer(this.props.selectedCustomer)}>×</Button>
                     </div>
                     <div className="d-flex flex-row">
                         <p>{local.name}</p>

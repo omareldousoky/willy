@@ -143,7 +143,7 @@ class ChangePasswordModal extends PureComponent<
           <Modal.Body>
             <Row>
               <Col sm={12}>
-                <Form.Group controlId="currentPassword" className="text-right">
+                <Form.Group controlId="currentPassword">
                   <Form.Label column sm={6} className="mr-0 pr-0">
                     {local.currentPassword}
                   </Form.Label>
@@ -165,7 +165,7 @@ class ChangePasswordModal extends PureComponent<
             </Row>
             <Row>
               <Col sm={12}>
-                <Form.Group controlId="newPassword" className="text-right">
+                <Form.Group controlId="newPassword">
                   <Form.Label column sm={6} className="mr-0 pr-0">
                     {local.newPassword}
                   </Form.Label>
@@ -194,7 +194,7 @@ class ChangePasswordModal extends PureComponent<
               <Col sm={12}>
                 <Form.Group
                   controlId="confirmNewPassword"
-                  className="text-right"
+                
                 >
                   <Form.Label column sm={6} className="mr-0 pr-0">
                     {local.confirmNewPassword}
@@ -228,13 +228,13 @@ class ChangePasswordModal extends PureComponent<
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="outline-secondary"
+              variant="secondary"
               onClick={() => this.handleCloseModal()}
             >
               {local.cancel}
             </Button>
             <Button
-              variant="outline-primary"
+              variant="primary"
               type="submit"
               disabled={disableSubmit}
             >

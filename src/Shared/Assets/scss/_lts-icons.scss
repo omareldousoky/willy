@@ -1,0 +1,24 @@
+@font-face {
+  font-family: "lts-icons";
+  src: url("../fonts/lts-icons/lts-icons.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+
+	/* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.lts-checkbox-checked:before {
+  content: '\e900';
+}
+.lts-checkbox-unchecked:before {
+  content: '\e901';
+}
+.lts-radio-checked:before {
+  content: '\e902';
+}
+.lts-radio-unchecked:before {
+  content: '\e903';
+}

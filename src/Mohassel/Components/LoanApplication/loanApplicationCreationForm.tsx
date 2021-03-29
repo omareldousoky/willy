@@ -13,6 +13,7 @@ import { getCookie } from '../../../Shared/Services/getCookie';
 import { getErrorMessage, parseJwt } from '../../../Shared/Services/utils';
 import { searchUserByAction } from '../../Services/APIs/UserByAction/searchUserByAction';
 import Swal from 'sweetalert2';
+import { theme } from '../../../theme';
 
 export const LoanApplicationCreationForm = (props: any) => {
     const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setValues } = props;
@@ -64,7 +65,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={7}>
                                 <Form.Group controlId="productID">
-                                    <Form.Label column sm={4}>{local.productName}</Form.Label>
+                                    <Form.Label>{local.productName}</Form.Label>
                                     <Form.Control as="select"
                                         name="productID"
                                         data-qc="productID"
@@ -91,7 +92,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                             <Col sm={5}>
                                 <Form.Group controlId="currency">
-                                    <Form.Label column sm={4}>{local.currency}</Form.Label>
+                                    <Form.Label>{local.currency}</Form.Label>
                                     <Form.Control as="select"
                                         name="currency"
                                         data-qc="currency"
@@ -113,7 +114,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={12}>
                                 <Form.Group controlId="calculationFormulaId">
-                                    <Form.Label column sm={4}>{local.calculationFormulaId}</Form.Label>
+                                    <Form.Label>{local.calculationFormulaId}</Form.Label>
                                     <Form.Control as="select"
                                         name="calculationFormulaId"
                                         data-qc="calculationFormulaId"
@@ -137,7 +138,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="interest">
-                                    <Form.Label column sm={6}>{local.interest}</Form.Label>
+                                    <Form.Label>{local.interest}</Form.Label>
                                     <InputGroup>
                                         <Form.Control
                                             type="number"
@@ -170,8 +171,8 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         disabled={!values.allowInterestAdjustment}
                                     >
                                         <option value="" disabled></option>
-                                        <option value='yearly'>{local.yearlyInnterestPeriod}</option>
-                                        <option value='monthly'>{local.monthlyInnterestPeriod}</option>
+                                        <option value='yearly'>{local.yearlyInterestPeriod}</option>
+                                        <option value='monthly'>{local.monthlyInterestPeriod}</option>
                                     </Form.Control>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.interestPeriod}
@@ -182,7 +183,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="inAdvanceFees">
-                                    <Form.Label column sm={6}>{local.inAdvanceFees}</Form.Label>
+                                    <Form.Label>{local.inAdvanceFees}</Form.Label>
                                     <InputGroup>
                                         <Form.Control
                                             type="number"
@@ -248,7 +249,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="periodLength">
-                                    <Form.Label column sm={6}>{local.periodLengthEvery}</Form.Label>
+                                    <Form.Label>{local.periodLengthEvery}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="periodLength"
@@ -288,7 +289,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="gracePeriod">
-                                    <Form.Label column sm={6}>{local.gracePeriod}</Form.Label>
+                                    <Form.Label>{local.gracePeriod}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="gracePeriod"
@@ -297,6 +298,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         isInvalid={errors.gracePeriod && touched.gracePeriod}
+                                        disabled
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.gracePeriod}
@@ -305,7 +307,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group controlId="pushPayment">
-                                    <Form.Label column sm={6}>{local.pushPayment}</Form.Label>
+                                    <Form.Label>{local.pushPayment}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="pushPayment"
@@ -359,7 +361,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         {(values.beneficiaryType === "individual") && <Row>
                             <Col sm={12}>
                                 <Form.Group controlId="principal">
-                                    <Form.Label column sm={6}>{local.principal}</Form.Label>
+                                    <Form.Label>{local.principal}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="principal"
@@ -378,7 +380,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="noOfInstallments">
-                                    <Form.Label column sm={6}>{local.noOfInstallments}</Form.Label>
+                                    <Form.Label>{local.noOfInstallments}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="noOfInstallments"
@@ -396,7 +398,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             {(values.beneficiaryType === "individual") &&
                                 <Col sm={6}>
                                     <Form.Group controlId="applicationFee">
-                                        <Form.Label column sm={10}>{local.applicationFee}</Form.Label>
+                                        <Form.Label>{local.applicationFee}</Form.Label>
                                         <Form.Control
                                             type="number"
                                             name="applicationFee"
@@ -416,7 +418,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             {(values.beneficiaryType === "group") &&
                                 <Col sm={6}>
                                     <Form.Group controlId="individualApplicationFee">
-                                        <Form.Label column sm={10}>{local.individualApplicationFee}</Form.Label>
+                                        <Form.Label>{local.individualApplicationFee}</Form.Label>
                                         <Form.Control
                                             type="number"
                                             name="individualApplicationFee"
@@ -438,7 +440,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             <Row>
                                 <Col sm={6}>
                                     <Form.Group controlId="applicationFeePercent">
-                                        <Form.Label column sm={10}>{local.applicationFeePercent}</Form.Label>
+                                        <Form.Label>{local.applicationFeePercent}</Form.Label>
                                         <InputGroup>
                                             <Form.Control
                                                 type="number"
@@ -486,7 +488,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             <Row>
                                 <Col sm={6}>
                                     <Form.Group controlId="applicationFeePercentPerPerson">
-                                        <Form.Label column sm={10}>{local.applicationFeePercentPerPerson}</Form.Label>
+                                        <Form.Label>{local.applicationFeePercentPerPerson}</Form.Label>
                                         <InputGroup>
                                             <Form.Control
                                                 type="number"
@@ -533,7 +535,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="representativeFees">
-                                    <Form.Label column sm={6}>{local.representativeFees}</Form.Label>
+                                    <Form.Label>{local.representativeFees}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="representativeFees"
@@ -551,7 +553,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group controlId="stamps">
-                                    <Form.Label column sm={6}>{local.stamps}</Form.Label>
+                                    <Form.Label>{local.stamps}</Form.Label>
                                     <InputGroup>
                                         <Form.Control
                                             type="number"
@@ -576,7 +578,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="adminFees">
-                                    <Form.Label column sm={10}>{local.adminFees}</Form.Label>
+                                    <Form.Label>{local.adminFees}</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="adminFees"
@@ -594,7 +596,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group controlId="entryDate">
-                                    <Form.Label column sm={6}>{local.entryDate}</Form.Label>
+                                    <Form.Label>{local.entryDate}</Form.Label>
                                     <Form.Control
                                         type="date"
                                         name="entryDate"
@@ -612,7 +614,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Row>
                         <Form.Group as={Row} controlId="usage">
                             <Col sm={12}>
-                                <Form.Label column sm={6}>{local.usage}</Form.Label>
+                                <Form.Label>{local.usage}</Form.Label>
                                 <Form.Control as="select"
                                     type="select"
                                     name="usage"
@@ -632,7 +634,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Form.Group>
                         {(values.beneficiaryType !== "group") && <Form.Group as={Row} controlId="representative">
                             <Col sm={12}>
-                                <Form.Label column sm={6}>{local.representative}</Form.Label>
+                                <Form.Label>{local.representative}</Form.Label>
                                 <Form.Control
                                     type="string"
                                     name="representative"
@@ -645,13 +647,15 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="enquirorId">
-                                    <Form.Label column sm={6}>{local.enquiror}</Form.Label>
+                                    <Form.Label>{local.enquiror}</Form.Label>
                                     <AsyncSelect
                                         name="enquirorId"
                                         data-qc="enquirorId"
                                         value={options.filter((lo) => lo._id === values.enquirorId)}
                                         onChange={(event: any) => { setFieldValue('enquirorId', event._id) }}
                                         type='text'
+																				styles={theme.selectStyleWithBorder}
+																				theme={theme.selectTheme}
                                         getOptionLabel={(option) => option.name}
                                         getOptionValue={(option) => option._id}
                                         loadOptions={getOptions}
@@ -667,7 +671,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group controlId="visitationDate">
-                                    <Form.Label column sm={6}>{local.visitationDate}</Form.Label>
+                                    <Form.Label>{local.visitationDate}</Form.Label>
                                     <Form.Control
                                         type="date"
                                         name="visitationDate"
@@ -686,7 +690,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                         <Row>
                             <Col sm={6}>
                                 <Form.Group controlId="branchManagerId">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{`${local.branchManager}`}</Form.Label>
+                                    <Form.Label>{`${local.branchManager}`}</Form.Label>
                                     <Form.Control
                                         as="select"
                                         name="branchManagerId"
@@ -710,7 +714,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             </Col>
                             <Col sm={6}>
                                 <Form.Group controlId="managerVisitDate">
-                                    <Form.Label style={{ textAlign: 'right' }} column sm={6}>{`${local.branchManagerVisitation}`}</Form.Label>
+                                    <Form.Label>{`${local.branchManagerVisitation}`}</Form.Label>
                                     <Form.Control
                                         type="date"
                                         name="managerVisitDate"
@@ -728,9 +732,12 @@ export const LoanApplicationCreationForm = (props: any) => {
                         </Row>
                     </div>
                 </fieldset>
-                <div className="d-flex" style={{ justifyContent: 'space-evenly', margin: '10px 0px' }}>
-                    <Button type='button' className='btn-cancel-prev' style={{ width: '20%' }} onClick={() => { props.step('backward') }}>{local.previous}</Button>
-                    <Button type="button" className='btn-submit-next' style={{ float: 'left', width: '20%' }} onClick={handleSubmit}>{values.beneficiaryType === "group" ? local.submit : local.next}</Button>
+                <div className="d-flex justify-content-between py-4">
+                    <Button
+                        className="btn-cancel-prev w-25"
+                        onClick={() => { props.step('backward') }}
+                    >{local.previous}</Button>
+                    <Button variant="primary" className="w-25" type="button" data-qc="submit" onClick={handleSubmit}>{values.beneficiaryType === "group" ? local.submit : local.next}</Button>
                 </div>
             </Form >
         </>

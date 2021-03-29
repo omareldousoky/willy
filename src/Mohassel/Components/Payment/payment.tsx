@@ -314,7 +314,7 @@ class Payment extends Component<Props, State>{
             this.props.print({print: 'randomPayment'});
             this.setState({ loadingFullScreen: false }, () => this.props.refreshPayment());
           } else {
-            this.setState({ loadingFullScreen: false }), () => Swal.fire("Error !",getErrorMessage(res.error.error),'error');
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("",getErrorMessage(res.error.error),'error'));
           }
       }
       else if(this.props.paymentType === "penalties") {
@@ -357,11 +357,12 @@ class Payment extends Component<Props, State>{
     } else if (this.props.paymentState === 2) {
       const obj = {
         id: this.props.applicationId,
-        payAmount: values.payAmount,
+        payAmount: values.requiredAmount,
         payerType: values.payerType,
         payerId: values.payerId,
         payerName: values.payerName,
         payerNationalId: values.payerNationalId.toString(),
+        truthDate: new Date(values.truthDate).valueOf(),
       }
       const res = await earlyPayment(obj);
       this.setState({ payAmount: values.payAmount });
@@ -416,7 +417,7 @@ class Payment extends Component<Props, State>{
           this.setState({ loadingFullScreen: false });
           Swal.fire("", local.editManualPaymentSuccess, "success").then(() => this.props.refreshPayment())
         } else {
-          this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !",getErrorMessage(res.error.error),'error'));
+          this.setState({ loadingFullScreen: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'));
         }
       }
       } else {
@@ -438,7 +439,7 @@ class Payment extends Component<Props, State>{
             this.setState({ loadingFullScreen: false });
             Swal.fire("", local.manualPaymentSuccess, "success").then(() => this.props.refreshPayment())
           } else {
-            this.setState({ loadingFullScreen: false });
+            this.setState({ loadingFullScreen: false }, () => Swal.fire("",getErrorMessage(res.error.error),'error'));
           }
         } else {
           const res = await editManualOtherPayment(obj);
@@ -498,8 +499,11 @@ class Payment extends Component<Props, State>{
         <Card className="payment-menu">
           <Loader type="fullsection" open={this.state.loading} />
           <div className="payment-info" style={{ textAlign: 'center' }}>
-            <img alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
-            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.earlyPayment}</span></h6>
+            <img height="90" alt="early-payment" src={require('../../Assets/earlyPayment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}>
+							<span className="fa fa-long-arrow-alt-right" />              
+            	<span className="font-weight-bolder">&nbsp;{local.earlyPayment}</span>
+						</h6>
           </div>
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>
@@ -533,8 +537,11 @@ class Payment extends Component<Props, State>{
       case 3: return (
         <Card className="payment-menu">
           <div className="payment-info" style={{ textAlign: 'center' }}>
-            <img alt="early-payment" src={require('../../Assets/payInstallment.svg')} />
-            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}> <span className="fa fa-long-arrow-alt-right"> {local.manualPayment}</span></h6>
+            <img height="90" alt="pay-installment" src={require('../../Assets/payInstallment.svg')} />
+            <h6 style={{ cursor: 'pointer' }} onClick={() => this.props.changePaymentState(0)}>
+							<span className="fa fa-long-arrow-alt-right" />              
+            	<span className="font-weight-bolder">&nbsp;{local.manualPayment}</span>
+						</h6>
           </div>
           <div className="verticalLine"></div>
           <div style={{ width: '100%', padding: 20 }}>

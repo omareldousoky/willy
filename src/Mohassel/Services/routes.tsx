@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
 
 import * as React from 'react';
-import CustomerCreation from '../Components/CustomerCreation/customer-creation';
-import UserCreation from '../Components/UserCreation/user-creation';
+import CustomerCreation from '../Components/CustomerCreation/customerCreation';
+import UserCreation from '../Components/UserCreation/userCreation';
 import FormulaCreation from '../Components/LoanFormulaCreation/loanFormulaCreation';
 import FormulaTest from '../Components/LoanFormulaCreation/loanFormulaTest';
 import LoanProductCreation from '../Components/LoanProductCreation/loanProductCreation';
@@ -22,7 +22,7 @@ import RolesList from '../Components/ManageAccounts/rolesList';
 import { Landing } from '../Components/Landing/landing';
 import Can from '../config/Can';
 import UserDetails from '../Components/userDetails/user-details';
-import CreateBranch from '../Components/BranchCreation/create-branch';
+import CreateBranch from '../Components/BranchCreation/createBranch';
 import CustomersList from '../Components/CustomerCreation/customersList';
 import LoanProducts from '../Components/ManageLoans/productsList';
 import FormulaList from '../Components/ManageLoans/calculationFormulaList';
@@ -54,6 +54,11 @@ import CreateClearance from '../Components/Clearance/create-clearance';
 import ClearancesList from '../Components/Clearance/clearancesList';
 import ClearanceProfile from '../Components/Clearance/clearanceProfile';
 import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
+import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
+import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
+import FinancialClosing from '../Components/FinancialClosing/financialClosing';
+import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
 
 const appRoutes = [
   {
@@ -198,7 +203,17 @@ const appRoutes = [
             path: "/loan-uses",
             label: local.loanUses,
             render: (props) => <Can I='loanUsage' a='config'><LoanUses /></Can>
-          }
+          },
+          {
+            path: "/business-activities",
+            label: local.businessActivities,
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessActivities /></Can>
+          },
+          {
+            path: "/business-specialities",
+            label: local.businessSpecialities,
+            render: (props) => <Can I='viewBusinessSectorConfig' a='config'><BusinessSpecialities /></Can>
+          },
         ]
       },
       {
@@ -329,7 +344,23 @@ const appRoutes = [
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
               },
             ]
-          }
+          },
+          {
+            path: '/loan-officers',
+            label: local.loanOfficers,
+            render: (props) => (
+              <Can I="updateLoanOfficer" a="user">
+                <LoanOfficersList {...props} withHeader />
+              </Can>
+            ),
+            routes: [
+                {
+                  path: "/loanOfficer-details",
+                  label: local.loanOfficer,
+                  render: (props) => <UserDetails {...props} />
+                },
+            ]
+          },
         ]
       },
       // {
@@ -438,6 +469,21 @@ const appRoutes = [
         path: '/supervisions-levels',
         label: local.levelsOfSupervision,
         render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
+      },{
+        path: '/financial-closing',
+        label: local.financialClosing,
+        render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
+      },{
+        path: '/legal-affairs',
+        label: local.legalAffairs,
+        render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>,
+        routes: [
+          {
+            path: '/late-list',
+            label: local.lateList,
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
+          }
+        ]
       }
     ]
   },

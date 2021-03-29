@@ -3,8 +3,9 @@ import './followUpStatment.scss';
 import * as local from '../../../../Shared/Assets/ar.json';
 import { timeToArabicDate, numbersToArabic, dayToArabic, timeToArabicDateNow } from "../../../../Shared/Services/utils";
 import store from '../../../../Shared/redux/store';
-import { shareInGroup, shareInGroupFallBack } from '../customerCard/customerCard';
+import { roundTo2, shareInGroup, shareInGroupFallBack } from '../customerCard/customerCard';
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile';
+import { getOriginalTableData } from '../../LoanProfile/followupStatementView';
 interface Props {
     data: any;
     branchDetails: any;
@@ -82,9 +83,9 @@ const FollowUpStatementPDF = (props: Props) => {
                         <td>{store.getState().auth.name}</td>
                     </tr>
                     <tr>
-                        <td>{timeToArabicDateNow(true)}</td>
+                        <td>{timeToArabicDate(props.data.creationDate,false)}</td>
                         <td></td>
-                        <td>{dayToArabic(new Date().getDay())}</td>
+                        <td>{dayToArabic(new Date(props.data.creationDate).getDay())}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -115,13 +116,13 @@ const FollowUpStatementPDF = (props: Props) => {
                         <th>القيمه</th>
                         <th style={{ width: "40%" }}>ملاحظات</th>
                     </tr>
-                    {props.data.installmentsObject.installments.map((installment, index) => {
+                    {getOriginalTableData(props.members, props.data.product.beneficiaryType).map((installment, index) => {
                         return (
                             <tr key={index}>
                                 <td>{numbersToArabic(props.data.applicationKey) + "/" + numbersToArabic(installment.id)}</td>
                                 <td>{timeToArabicDate(props.data.product.beneficiaryType !== "individual" ? (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(props.data.creationDate, index) : (props.data.product.periodLength === 14 && props.data.product.periodType === 'days') ? twoWeekGroupShift(installment.dateOfPayment) : (installment.dateOfPayment - (5 * 24 * 60 * 60 * 1000))
                                     : (props.data.product.periodLength === 1 && props.data.product.periodType === 'months') ? dateShift(props.data.creationDate, index) : shiftDaysBackAvoidingWeeekend(installment.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)), false)}</td>
-                                <td>{numbersToArabic(installment.installmentResponse)}</td>
+                                <td>{numbersToArabic(roundTo2(installment.installmentResponse))}</td>
                                 <td></td>
                             </tr>
                         )

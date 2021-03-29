@@ -338,8 +338,10 @@ export const StepOneForm = (props: any) => {
           {errors.customerWebsite}
         </Form.Control.Feedback>
       </Form.Group>
-      <Button style={{ float: 'right' }} disabled>{local.previous}</Button>
-      <Button type="submit" data-qc="next">{local.next}</Button>
+			<div className="d-flex justify-content-end">
+				<Button disabled className="mr-3">{local.previous}</Button>
+      	<Button type="submit" data-qc="next">{local.next}</Button>
+			</div>
     </Form>
   )
 }

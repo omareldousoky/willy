@@ -245,9 +245,9 @@ class DocumentUploader extends Component<Props, State> {
       <Card.Body key={key} className="document-upload-container" >
         <Row data-qc="document-actions" className="document-actions" >
 
-          {(this.props.documentType.active && this.props.documents.find(doc => doc.docName === name).imagesFiles[key]?.valid) && !this.props.view && <span className="fa icon" onClick={(e) => this.deleteDocument(e, name, key)}><img className={this.props.documentType.updatable ? "" : "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
-          {<span className="fa icon" onClick={() => { this.downloadPhoto(this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
-          {<span className="fa icon">
+          {(this.props.documentType.active && this.props.documents.find(doc => doc.docName === name).imagesFiles[key]?.valid) && !this.props.view && <span className="icon" onClick={(e) => this.deleteDocument(e, name, key)}><img className={this.props.documentType.updatable ? "" : "document-action-icon"} alt="delete" src={this.props.documentType.updatable ? require('../../Assets/deleteIcon.svg') : require('../../Assets/deactivateDoc.svg')} /></span>}
+          {<span className="icon" onClick={() => { this.downloadPhoto(this.props.documents.find(doc => doc.docName === name)?.imagesFiles[key]) }}><img alt="download" src={require('../../Assets/downloadIcon.svg')} /></span>}
+          {<span className="icon">
 
             <Form.Check
               type='checkbox'

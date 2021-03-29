@@ -19,6 +19,8 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import DeathCertificate from './deathCertificate';
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
+import { CustomerCategorization } from './customerCategorization';
+import { CustomerScore, getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
 
 interface Props {
   history: Array<string | { id: string }>;
@@ -50,15 +52,30 @@ const tabs: Array<Tab> = [
     stringKey: 'differentInfo'
   },
   {
+    header: local.customerCategorization,
+    stringKey: 'customerScore'
+  },
+  {
     header: local.documents,
     stringKey: 'documents'
   },
 ]
+
+const getCustomerCategorizationRating = async (id: string, setRating: (rating: Array<CustomerScore>) => void) => {
+  const res = await getCustomerCategorization({ customerId: id })
+  if (res.status === "success" && res.body?.customerScores !== undefined) {
+    setRating(res.body?.customerScores)
+  } else {
+    setRating([])
+  }
+}
+
 const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [iScoreDetails, changeiScoreDetails] = useState<Score>();
   const [activeTab, changeActiveTab] = useState('mainInfo');
+  const [ratings, setRatings] = useState<Array<CustomerScore>>([]);
 
   async function getCachediScores(id) {
     changeLoading(true);
@@ -135,7 +152,7 @@ const CustomerProfile = (props: Props) => {
         })
       }
     }
-
+    getCustomerCategorizationRating(props.location.state.id, setRatings);
   }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
@@ -356,6 +373,9 @@ const CustomerProfile = (props: Props) => {
             )}
             </tbody>
           </Table>}
+          {activeTab === 'customerScore' && <Can I="customerCategorization" a="customer">
+            <CustomerCategorization ratings={ratings} />
+          </Can>}
           {activeTab === 'documents' &&
             <DocumentsUpload
               customerId={props.location.state.id}

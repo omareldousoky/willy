@@ -80,7 +80,7 @@ const LoanContract = (props) => {
 
                   <div className="headtitle textcenter">عقد تمويل متناهي الصغر (فردي)</div>
                   <div className="headtitle textcenter"><u>وفقا لاحكام القانون رقم ١٤١ لسنه ٢٠١٤</u></div>
-                  <div>انه في يوم {dayToArabic(new Date().getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
+                  <div>انه في يوم {dayToArabic(new Date(props.data.creationDate).getDay())} الموافق {timeToArabicDate(props.data.creationDate, false)}</div>
                   <div>حرر هذا العقد في فرع {props.branchDetails.name} الكائن في:{props.branchDetails.address} بين كلا من:-</div>
                   <table className="stakeholders">
                     <tbody>
@@ -191,7 +191,7 @@ const LoanContract = (props) => {
 								متناهي الصغر ..</div>
                     <div>
                       وقد تقدم الطرف الثاني صاحب نشاط {props.data.customer.businessSector} - {props.data.customer.businessActivity} بطلب للحصول علي قرض من فرع
-                    {props.branchDetails.name} - {props.data.customer.governorate} الكائن
+                    {props.branchDetails.name} الكائن
                     {props.branchDetails.address} لحاجته للسيوله النقديه يخصص
                     استخدامه في
                     تمويل رأس المال

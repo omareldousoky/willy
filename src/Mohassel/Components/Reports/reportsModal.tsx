@@ -1,33 +1,41 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { Field, Formik, FormikProps } from "formik";
+import { Field, Formik, FormikProps, FormikTouched, setNestedObjectValues } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
+  AsyncBranchGeoAreasDropDown,
   AsyncLoanOfficersDropDown,
   BranchesDropDown,
 } from "../dropDowns/allDropDowns";
 import * as local from "../../../Shared/Assets/ar.json";
 import { Branch } from "../../../Shared/Services/interfaces";
-import { DateField } from "../Common/FormikFields/dateField";
+import DateField from "../Common/FormikFields/dateField";
 import { required } from "../../../Shared/validations";
+import { DateFromToField } from "./Fields/dateFromTo";
+import TextField from "../Common/FormikFields/textField";
+import { Dropdown, DropdownButton, InputGroup } from "react-bootstrap";
+import { getFullCustomerKey } from "../../../Shared/Services/utils";
 
 interface InitialFormikState {
   fromDate?: string;
   toDate?: string;
   quarterYear?: string;
-  branches: Array<Branch>;
+  branches?: Array<Branch>;
   quarterNumber?: string;
-  key?: string;
+  customerKeyword?: string;
   loanOfficers?: Array<string>;
   date?: string;
   loanOfficerIds?: Array<string>;
   representatives?: Array<string>;
   gracePeriod?: number;
+  geoAreas?: Array<string>;
+  creationDateFrom?: string;
+  creationDateTo?: string;
   loanApplicationKey?: string;
 }
 
@@ -40,19 +48,31 @@ interface Props {
 }
 
 const ReportsModal = (props: Props) => {
+  const [customerDropDownValue, setCustomerDropDownValue] = useState(
+    props.pdf.inputs?.includes("customerKey") ? "customerKey" : undefined
+  );
   const getIds = (list: Record<string, string>[]): string[] =>
     list?.length ? list.map((item) => item._id) : [];
+  const getCustomerKey = (key?: string): string | undefined => {
+    console.log(key);
+    if (!customerDropDownValue || key === undefined) return undefined;
+    return customerDropDownValue === "customerKey"
+      ? key
+      : getFullCustomerKey(key)?.toString();
+  };
   function handleSubmit(values) {
     props.submit({
       ...values,
-      loanOfficers: getIds(values.loanOfficers),
       representatives: getIds(values.representatives),
+      loanOfficers: getIds(values.representatives),
+      loanOfficerIds: getIds(values.representatives),
       geoAreas: getIds(values.geoAreas),
-      loanOfficerIds: getIds(values.loanOfficerIds),
+      key: getCustomerKey(values.customerKeyword),
     });
   }
   function getInitialValues() {
-    const initValues: InitialFormikState = { branches: [] };
+    const initValues: InitialFormikState = { };
+
     props.pdf.inputs?.forEach((input) => {
       switch (input) {
         case "dateFromTo":
@@ -61,26 +81,53 @@ const ReportsModal = (props: Props) => {
         case "branches":
           initValues.branches = [];
         case "customerKey":
-          initValues.key = "";
+          initValues.customerKeyword = "";
         case "quarterYear":
           initValues.quarterYear = "";
         case "quarterNumber":
           initValues.quarterNumber = "01";
         case "date":
           initValues.date = "";
-        case "loanOfficers":
-          initValues.loanOfficers = [];
-          initValues.loanOfficerIds = [];
         case "representatives":
           initValues.representatives = [];
+          initValues.loanOfficers = [];
+          initValues.loanOfficerIds = [];
         case "gracePeriod":
           initValues.gracePeriod = 0;
+        case "geoAreas":
+          initValues.geoAreas = [];
+        case "creationDateFromTo":
+          initValues.creationDateFrom = "";
+          initValues.creationDateTo = "";
         case "applicationKey":
           initValues.loanApplicationKey = "";
       }
     });
     return initValues;
   }
+
+  const getMaxToMonthComparison = (from?: string): string => {
+    if (!from) return "0";
+    const fromDate = new Date(from);
+    // last day of month extracted from `fromDate`
+    const lastDayOfMonth = new Date(
+      fromDate.getFullYear(),
+      fromDate.getMonth() + 1,
+      0
+    ).getDate();
+    const month =
+      fromDate.getMonth() > 8
+        ? fromDate.getMonth() + 1
+        : `0${fromDate.getMonth() + 1}`;
+    return `${fromDate.getFullYear()}-${month}-${lastDayOfMonth}`;
+  };
+  // TODO: refactor out
+  const arDropDownValue = {
+    customerKey: local.customerCode,
+    customerShortenedCode: local.customerShortenedCode,
+    default: "",
+  };
+
   return (
     <Modal
       size="lg"
@@ -93,104 +140,77 @@ const ReportsModal = (props: Props) => {
         initialValues={getInitialValues()}
         onSubmit={handleSubmit}
         validationSchema={reportsModalValidation}
-        validateOnBlur
-        validateOnChange
       >
         {(formikProps: FormikProps<InitialFormikState>) => {
-          const hasLoanOfficers = props.pdf.inputs?.includes("loanOfficers");
-          const hasRepresentatives = props.pdf.inputs?.includes(
-            "representatives"
-          );
-
           return (
             <Form onSubmit={formikProps.handleSubmit}>
               <Modal.Header>
                 <Modal.Title>{props.pdf.local}</Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+              <Modal.Body className="report-modal">
                 <Row>
                   {props.pdf.inputs?.map((input) => {
                     if (input === "dateFromTo") {
                       return (
-                        <Col sm={12} key={input}>
-                          <Form.Group controlId="fromToDate">
-                            <div
-                              className="dropdown-container"
-                              style={{ flex: 1, alignItems: "center" }}
-                            >
-                              <p
-                                className="dropdown-label"
-                                style={{
-                                  alignSelf: "normal",
-                                  marginLeft: 20,
-                                  width: 300,
-                                  textAlign: "center",
-                                }}
-                              >
-                                {local.date}
-                              </p>
-                              <span>{local.from}</span>
-                              <Form.Control
-                                style={{ marginLeft: 20, border: "none" }}
-                                type="date"
-                                name="fromDate"
-                                data-qc="fromDate"
-                                value={formikProps.values.fromDate}
-                                isInvalid={Boolean(
-                                  formikProps.errors.fromDate &&
-                                  formikProps.touched.fromDate
-                                )}
-                                onChange={(e) => {
-                                  formikProps.setFieldValue(
-                                    "fromDate",
-                                    e.currentTarget.value
-                                  );
-                                  if (e.currentTarget.value === "")
-                                    formikProps.setFieldValue("toDate", "");
-                                }}
-                              ></Form.Control>
-                              <span>{local.to}</span>
-                              <Form.Control
-                                style={{ marginRight: 20, border: "none" }}
-                                type="date"
-                                name="toDate"
-                                data-qc="toDate"
-                                value={formikProps.values.toDate}
-                                min={formikProps.values.fromDate}
-                                onChange={formikProps.handleChange}
-                                isInvalid={Boolean(
-                                  formikProps.errors.toDate &&
-                                  formikProps.touched.toDate
-                                )}
-                                disabled={!Boolean(formikProps.values.fromDate)}
-                              ></Form.Control>
-                            </div>
-                            <span style={{ color: "red" }}>
-                              {formikProps.errors.toDate}
-                            </span>
-                          </Form.Group>
-                        </Col>
+                        <DateFromToField
+                          key={input}
+                          id={input}
+                          name={local.date}
+                          from={{
+                            name: "fromDate",
+                            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                              formikProps.setFieldValue(
+                                "fromDate",
+                                e.currentTarget.value
+                              );
+                              if (e.currentTarget.value === "")
+                                formikProps.setFieldValue("toDate", "");
+                            },
+                            value: formikProps.values.fromDate,
+                            error: formikProps.errors.fromDate,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.fromDate ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.fromDate &&
+                              formikProps.touched.fromDate
+                            ),
+													validate: required
+                          }}
+                          to={{
+                            name: "toDate",
+                            min: formikProps.values.fromDate,
+                            onChange: formikProps.handleChange,
+                            value: formikProps.values.toDate,
+                            error: formikProps.errors.toDate,
+														touched: formikProps.touched.toDate ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.toDate &&
+                              formikProps.touched.toDate
+                            ),
+                            disabled: !formikProps.values.fromDate,
+														validate: required
+                          }}
+                        />
                       );
                     }
                     if (input === "branches") {
                       return (
                         <Col key={input} sm={12}>
                           <BranchesDropDown
-                            multiselect={true}
-                            onlyValidBranches={true}
-                            onSelectBranch={(branches) => {
-                              formikProps.setFieldValue("branches", branches);
-                              if (hasLoanOfficers)
-                                formikProps.setFieldValue("loanOfficers", []);
-                              if (hasRepresentatives)
-                                formikProps.setFieldValue(
-                                  "representatives",
-                                  []
-                                );
+                            isMulti
+                            onlyValidBranches
+                            onSelectBranch={ (branches) => {
+                              if (branches === null) {
+                                 formikProps.setFieldValue('branches', [])
+                              } else {
+                                 formikProps.setFieldValue('branches', branches)
+                              }
+
+                               formikProps.setFieldValue('representatives', []);
                             }}
                           />
-                          <span style={{ color: "red" }}>
-                            {formikProps.errors.branches}
+                          <span className="text-danger">
+                            {formikProps.touched.branches && formikProps.errors.branches}
                           </span>
                         </Col>
                       );
@@ -198,35 +218,43 @@ const ReportsModal = (props: Props) => {
                     if (input === "customerKey") {
                       return (
                         <Col sm={12} key={input} style={{ marginTop: 10 }}>
-                          <Form.Group controlId="key">
-                            <div className="dropdown-container">
-                              <p
-                                className="dropdown-label"
-                                style={{ width: 150 }}
-                              >
-                                {local.customerCode}
-                              </p>
-                              <Form.Control
-                                className="dropdown-select"
-                                name="key"
-                                data-qc="key"
-                                value={formikProps.values.key}
-                                isInvalid={Boolean(
-                                  formikProps.errors.key &&
-                                  formikProps.touched.key
-                                )}
-                                onChange={formikProps.handleChange}
-                              />
-                            </div>
-                            <span style={{ color: "red" }}>
-                              {Boolean(
-                                formikProps.errors.key &&
-                                formikProps.touched.key
-                              )
-                                ? formikProps.errors.key
-                                : ""}
-                            </span>
-                          </Form.Group>
+                          <InputGroup>
+														<DropdownButton
+                              as={InputGroup.Append}
+                              variant="outline-secondary"
+                              title={
+                                arDropDownValue[customerDropDownValue || ""]
+                              }
+                              id="input-group-dropdown-2"
+                              data-qc="input-group-dropdown-customer"
+                            >
+                              {["customerKey", "customerShortenedCode"].map(
+                                (key) => (
+                                  <Dropdown.Item
+                                    key={key}
+                                    data-qc={key}
+                                    onClick={() => {
+                                      setCustomerDropDownValue(key);
+                                      formikProps.setFieldValue(key, "");
+                                    }}
+                                  >
+                                    {arDropDownValue[key]}
+                                  </Dropdown.Item>
+                                )
+                              )}
+                            </DropdownButton>
+                            <Form.Control
+                              type="text"
+                              name="customerKeyword"
+                              data-qc="customerKeyword"
+                              onChange={formikProps.handleChange}
+                              style={{
+                                borderRight: 0,
+                                padding: 22,
+                              }}
+                              value={formikProps.values.customerKeyword}
+                            />
+                          </InputGroup>
                         </Col>
                       );
                     }
@@ -258,7 +286,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.quarterYear}
                                 isInvalid={Boolean(
                                   formikProps.errors.quarterYear &&
-                                  formikProps.touched.quarterYear
+                                    formikProps.touched.quarterYear
                                 )}
                                 onBlur={formikProps.handleBlur}
                                 onChange={(e) => {
@@ -283,7 +311,7 @@ const ReportsModal = (props: Props) => {
                     }
                     if (input === "quarterNumber") {
                       return (
-                        <Col key={input} sm={6} style={{ marginTop: 10 }}>
+                        <Col key={input} sm={6}>
                           <div
                             className="dropdown-container"
                             style={{ flex: 1, alignItems: "center" }}
@@ -332,7 +360,6 @@ const ReportsModal = (props: Props) => {
                     if (input === "date") {
                       return (
                         <Field
-                          style={{ marginRight: 20 }}
                           type="date"
                           name="date"
                           id="date"
@@ -350,73 +377,132 @@ const ReportsModal = (props: Props) => {
                         />
                       );
                     }
-                    if (
-                      input === "loanOfficers" ||
-                      input === "representatives"
-                    ) {
+                    if (input === "representatives") {
                       return (
-                        <Col key={input} sm={12} style={{ marginTop: 10 }}>
+                        <Col key={input} sm={12}>
                           <AsyncLoanOfficersDropDown
                             isMulti
-                            onSelectLoanOfficer={(loanOfficers) => {
+                            onSelectOption={(loanOfficers) => {
                               formikProps.setFieldValue(
-                                hasLoanOfficers
-                                  ? "loanOfficers"
-                                  : "representatives",
+                                "representatives",
                                 Array.isArray(loanOfficers)
                                   ? loanOfficers
                                   : [loanOfficers]
                               );
                             }}
-                            // branchId={formikProps.values.branches && formikProps.values.branches.length === 1 && formikProps.values.branches[0]._id || undefined}
+                            branchId={
+                              (formikProps.values.branches &&
+                                formikProps.values.branches.length === 1 &&
+                                formikProps.values.branches[0]._id) ||
+                              undefined
+                            }
                             isDisabled={
                               !formikProps.values.branches ||
                               (formikProps.values.branches &&
-                                (!formikProps.values.branches.length ||
-                                  formikProps.values.branches.length > 1))
+                                ((!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1)))
                             }
                           />
-                          <span style={{ color: "red" }}>
-                            {hasLoanOfficers
-                              ? formikProps.errors.loanOfficers
-                              : formikProps.errors.representatives}
+                          <span className="text-danger">
+                            {formikProps.errors.representatives}
                           </span>
                         </Col>
                       );
                     }
                     if (input === "gracePeriod") {
                       return (
-                        <Col sm={12} key={input} style={{ marginTop: 10 }}>
-                          <Form.Group controlId="gracePeriod">
-                            <div className="dropdown-container">
-                              <p
-                                className="dropdown-label"
-                                style={{ width: 150 }}
-                              >
-                                {local.gracePeriod}
-                              </p>
-                              <Form.Control
-                                className="dropdown-select"
-                                name="gracePeriod"
-                                data-qc="gracePeriod"
-                                type="number"
-                                value={formikProps.values.gracePeriod}
-                                min="0"
-                                isInvalid={
-                                  !!(
-                                    formikProps.errors.gracePeriod &&
-                                    formikProps.touched.gracePeriod
-                                  )
-                                }
-                                onChange={formikProps.handleChange}
-                              />
-                            </div>
-                            <span className="text-danger">
-                              {formikProps.errors.gracePeriod}
-                            </span>
-                          </Form.Group>
+                        <Field
+                          name="gracePeriod"
+                          id="gracePeriod"
+                          type="number"
+                          min={0}
+                          displayName={local.gracePeriod}
+                          value={formikProps.values.gracePeriod}
+                          onChange={formikProps.handleChange}
+                          isInvalid={
+                            !!(
+                              formikProps.errors.gracePeriod &&
+                              formikProps.touched.gracePeriod
+                            )
+                          }
+                          component={TextField}
+                          key={input}
+                        />
+                      );
+                    }
+                    if (input === "geoAreas") {
+                      return (
+                        <Col key={input} sm={12}>
+                          <AsyncBranchGeoAreasDropDown
+                            isMulti
+                            onSelectOption={(geoAreas) => {
+                              formikProps.setFieldValue(
+                                "geoAreas",
+                                Array.isArray(geoAreas) ? geoAreas : [geoAreas]
+                              );
+                            }}
+                            branchId={
+                              (formikProps.values.branches &&
+                                formikProps.values.branches.length === 1 &&
+                                formikProps.values.branches[0]?._id) ||
+                              undefined
+                            }
+                            // disable for non-selected branch, all branches, multi selected branches
+                            isDisabled={
+                              !formikProps.values.branches ||
+                              (formikProps.values.branches &&
+                                (!formikProps.values.branches.length ||
+                                  formikProps.values.branches.length > 1 ||
+                                  (!!formikProps.values.branches.length &&
+                                    !formikProps.values.branches[0]?._id)))
+                            }
+                          />
+                          <span className="text-danger">
+                            {formikProps.errors.geoAreas}
+                          </span>
                         </Col>
                       );
+                    }
+                    if (input === "creationDateFromTo") {
+                      return (
+                        <DateFromToField
+                          key={input}
+                          id={input}
+                          name={local.creationDate}
+                          from={{
+                            name: "creationDateFrom",
+                            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                              formikProps.setFieldValue(
+                                "creationDateFrom",
+                                e.currentTarget.value
+                              );
+                              if (e.currentTarget.value === "")
+                                formikProps.setFieldValue("creationDateTo", "");
+                            },
+                            value: formikProps.values.creationDateFrom,
+                            error: formikProps.errors.creationDateFrom,
+														// to avoid Warning: Received `false` for a non-boolean attribute
+														touched: formikProps.touched.creationDateFrom ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.creationDateFrom &&
+                              formikProps.touched.creationDateFrom
+                            ),
+                          }}
+                          to={{
+                            name: "creationDateTo",
+                            min: formikProps.values.creationDateFrom,
+                            onChange: formikProps.handleChange,
+                            value: formikProps.values.creationDateTo,
+                            error: formikProps.errors.creationDateTo,
+														touched: formikProps.touched.creationDateTo ? 1 : 0,
+                            isInvalid: !!(
+                              formikProps.errors.creationDateTo &&
+                              formikProps.touched.creationDateTo
+                            ),
+                            disabled: !formikProps.values.creationDateFrom,
+                          }}
+                        />
+											);
                     }
                     if (input === "applicationKey") {
                       return (
@@ -425,7 +511,7 @@ const ReportsModal = (props: Props) => {
                             <div className="dropdown-container">
                               <p
                                 className="dropdown-label"
-                                style={{ width: 150, whiteSpace: 'nowrap' }}
+                                style={{ width: 150, whiteSpace: "nowrap" }}
                               >
                                 {local.applicationCode}
                               </p>
@@ -436,7 +522,7 @@ const ReportsModal = (props: Props) => {
                                 value={formikProps.values.loanApplicationKey}
                                 isInvalid={Boolean(
                                   formikProps.errors.loanApplicationKey &&
-                                  formikProps.touched.loanApplicationKey
+                                    formikProps.touched.loanApplicationKey
                                 )}
                                 onChange={formikProps.handleChange}
                               />
@@ -444,10 +530,79 @@ const ReportsModal = (props: Props) => {
                             <span style={{ color: "red" }}>
                               {Boolean(
                                 formikProps.errors.loanApplicationKey &&
-                                formikProps.touched.loanApplicationKey
+                                  formikProps.touched.loanApplicationKey
                               )
                                 ? formikProps.errors.loanApplicationKey
                                 : ""}
+                            </span>
+                          </Form.Group>
+                        </Col>
+                      );
+                    }
+                    if (input === "monthComparisonDateFromTo") {
+                      return (
+                        <Col sm={12} key={input}>
+                          <Form.Group controlId="monthComparisonFromToDate">
+                            <div
+                              className="dropdown-container"
+                              style={{ flex: 1, alignItems: "center" }}
+                            >
+                              <p
+                                className="dropdown-label"
+                                style={{
+                                  alignSelf: "normal",
+                                  marginLeft: 20,
+                                  width: 300,
+                                  textAlign: "center",
+                                }}
+                              >
+                                {local.date}
+                              </p>
+                              <span>{local.from}</span>
+                              <Form.Control
+                                style={{ marginLeft: 20, border: "none" }}
+                                type="date"
+                                name="fromDate"
+                                data-qc="fromDate"
+                                value={formikProps.values.fromDate}
+                                isInvalid={Boolean(
+                                  formikProps.errors.fromDate &&
+                                    formikProps.touched.fromDate
+                                )}
+                                onChange={(e) => {
+                                  formikProps.setFieldValue(
+                                    "fromDate",
+                                    e.currentTarget.value
+                                  );
+                                  if (e.currentTarget.value === "")
+                                    formikProps.setFieldValue("toDate", "");
+                                }}
+                                min="2021-02-01"
+                                required
+                              />
+                              <span>{local.to}</span>
+                              <Form.Control
+                                style={{ marginRight: 20, border: "none" }}
+                                type="date"
+                                name="toDate"
+                                data-qc="toDate"
+                                value={formikProps.values.toDate}
+                                min={formikProps.values.fromDate}
+                                max={getMaxToMonthComparison(
+                                  formikProps.values.fromDate
+                                )}
+                                onChange={formikProps.handleChange}
+                                isInvalid={Boolean(
+                                  formikProps.errors.toDate &&
+                                    formikProps.touched.toDate
+                                )}
+                                disabled={!Boolean(formikProps.values.fromDate)}
+                                required
+                              />
+                            </div>
+                            <span className="text-danger">
+                              {formikProps.errors.fromDate ||
+                                formikProps.errors.toDate}
                             </span>
                           </Form.Group>
                         </Col>
@@ -471,14 +626,20 @@ const ReportsModal = (props: Props) => {
                     "customerDetails",
                     "loanDetails",
                     "cibPaymentReport",
-                    "customerTransactionReport"
+                    "customerTransactionReport",
                   ].includes(props.pdf.key) &&
                   props.getExcel && (
                     <Button
                       disabled={!!formikProps.errors.quarterYear}
                       variant="primary"
-                      onClick={() => {
-                        props.getExcel && props.getExcel(formikProps.values);
+                      onClick={async () => {
+                        // Manual revalidate formik: https://github.com/formium/formik/issues/2734                        
+                        const errors = await formikProps.validateForm() 
+                        if (Object.keys(errors).length === 0) {
+                          props.getExcel && props.getExcel(formikProps.values)
+                        } else {
+                          formikProps.setTouched(setNestedObjectValues<FormikTouched<InitialFormikState>>(errors, true))
+                        }
                       }}
                     >
                       {local.downloadExcel}

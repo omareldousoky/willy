@@ -341,6 +341,7 @@ class UserCreation extends Component<Props, State> {
     return (
       <>
         <Loader type="fullscreen" open={this.state.loading} />
+				<div className="container">
         <Card>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Wizard
@@ -352,11 +353,12 @@ class UserCreation extends Component<Props, State> {
               ]}
             />
 
-            <Card.Body className={"formsContainer"}>
+            <Card.Body>
               {this.renderSteps()}
             </Card.Body>
           </div>
         </Card>
+				</div>
       </>
     );
   }

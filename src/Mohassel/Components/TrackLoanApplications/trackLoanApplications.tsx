@@ -279,7 +279,7 @@ class TrackLoanApplications extends Component<Props, State>{
             array={this.state.manageApplicationsTabs}
             active={this.state.manageApplicationsTabs.map(item => { return item.icon }).indexOf('applications')}
           />
-          <Card style={{ margin: '20px 50px' }}>
+          <Card className="main-card">
             <Loader type="fullsection" open={this.props.loading || this.state.loading} />
             <Card.Body style={{ padding: 0 }}>
               <div className="custom-card-header">
