@@ -59,6 +59,7 @@ import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecia
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
+import LegalAffairsActions from '../Components/ManageLegalAffairs/LegalAffairsActions';
 
 const appRoutes = [
   {
@@ -482,6 +483,11 @@ const appRoutes = [
             path: '/late-list',
             label: local.lateList,
             render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
+          },
+          {
+            path: '/legal-actions',
+            label: local.legalAffairs,
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><LegalAffairsActions {...props} /></Can>
           }
         ]
       }

@@ -29,7 +29,7 @@ interface Review {
     notes: string;
     userName: string;
 }
-interface DefaultedCustomer {
+export interface DefaultedCustomer {
     _id: string;
     updated: { at: number; by: string };
     created: { at: number; by: string };
