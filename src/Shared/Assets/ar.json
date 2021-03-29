@@ -10,7 +10,7 @@
     "nationalId": "الرقم القومي",
     "nationalIdIssueDate": "تاريخ اصدار البطاقة",
     "birthDate": "تاريخ الميلاد",
-    "customerHomeAddress": "عنوان المنزل",
+    "customerHomeAddress": "عنوان المنزل بالبطاقة",
     "homePostalCode": "الرقم البريدي للمنزل",
     "homePhoneNumber": "تليفون المنزل",
     "phoneNumber": "تليفون",
@@ -945,5 +945,6 @@
     "choose":"اختر",
     "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح ",
     "doneBy":"تمت بواسطة",
-    "maxLength200":"لا يمكن ان يكون اكثر من 200"
+    "maxLength200":"لا يمكن ان يكون اكثر من 200",
+    "detailedAddress": "العنوان المفصل"
 }
