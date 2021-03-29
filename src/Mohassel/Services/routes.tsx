@@ -57,6 +57,8 @@ import SupervisionsList from '../Components/managerHierarchy/supervisionsList';
 import BusinessActivities from '../Components/ManageLoanDetails/businessActivities';
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
+import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
 
 const appRoutes = [
   {
@@ -342,7 +344,23 @@ const appRoutes = [
                 render: (props) => <Can I='getBranch' a='branch'><BranchDetails {...props} /> </Can>
               },
             ]
-          }
+          },
+          {
+            path: '/loan-officers',
+            label: local.loanOfficers,
+            render: (props) => (
+              <Can I="updateLoanOfficer" a="user">
+                <LoanOfficersList {...props} withHeader />
+              </Can>
+            ),
+            routes: [
+                {
+                  path: "/loanOfficer-details",
+                  label: local.loanOfficer,
+                  render: (props) => <UserDetails {...props} />
+                },
+            ]
+          },
         ]
       },
       // {
@@ -455,6 +473,17 @@ const appRoutes = [
         path: '/financial-closing',
         label: local.financialClosing,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
+      },{
+        path: '/legal-affairs',
+        label: local.legalAffairs,
+        render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>,
+        routes: [
+          {
+            path: '/late-list',
+            label: local.lateList,
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
+          }
+        ]
       }
     ]
   },

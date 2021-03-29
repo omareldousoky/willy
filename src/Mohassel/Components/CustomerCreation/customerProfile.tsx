@@ -66,7 +66,7 @@ const getCustomerCategorizationRating = async (id: string, setRating: (rating: A
   if (res.status === "success" && res.body?.customerScores !== undefined) {
     setRating(res.body?.customerScores)
   } else {
-    Swal.fire('Error !', getErrorMessage(res.error ? res.error.error : ""), 'error');
+    setRating([])
   }
 }
 
@@ -224,6 +224,10 @@ const CustomerProfile = (props: Props) => {
                 <td>{customerDetails?.customerHomeAddress}</td>
               </tr>
               <tr>
+                <td>{local.detailedAddress}</td>
+                <td>{customerDetails?.currentHomeAddress}</td>
+              </tr>
+              <tr>
                 <td>{local.postalCode}</td>
                 <td>{customerDetails?.homePostalCode}</td>
               </tr>
@@ -369,7 +373,7 @@ const CustomerProfile = (props: Props) => {
             )}
             </tbody>
           </Table>}
-          {activeTab === 'customerScore' && customerDetails?.hasLoan && <Can I="customerCategorization" a="customer">
+          {activeTab === 'customerScore' && <Can I="customerCategorization" a="customer">
             <CustomerCategorization ratings={ratings} />
           </Can>}
           {activeTab === 'documents' &&

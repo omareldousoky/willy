@@ -169,7 +169,7 @@ code {
 
 	& .big-button {
 		width: 200px;
-		height: 50px;
+		// height: 50px;
 	}
 }
 
@@ -406,6 +406,26 @@ code {
 	margin: 2rem !important; // class used with <Card /> so we need to override style with !important
 }
 
+.info-box {
+	background-color: #f7fff2;
+	border-radius: 0;
+	border: 1px solid lightgrey;
+	& .row {
+		justify-content: space-around;
+		padding: 1.2rem 0 .2rem;
+	}
+	& .item {
+		display: flex;
+		flex-direction: column;
+		text-align: right;
+		& .label {
+			font-size: .82rem;
+			color: #6e6e6e;
+			margin-bottom: .35rem;
+		}
+	}
+
+}
 @media print {
 	* {
 		font-size: 14px;

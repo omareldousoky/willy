@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { Field, Formik, FormikProps } from "formik";
+import { Field, Formik, FormikProps, FormikTouched, setNestedObjectValues } from "formik";
 import { reportsModalValidation } from "./reportsModalValidation";
 import { PDF } from "./reports";
 import {
@@ -25,7 +25,7 @@ interface InitialFormikState {
   fromDate?: string;
   toDate?: string;
   quarterYear?: string;
-  branches: Array<Branch>;
+  branches?: Array<Branch>;
   quarterNumber?: string;
   customerKeyword?: string;
   loanOfficers?: Array<string>;
@@ -71,7 +71,8 @@ const ReportsModal = (props: Props) => {
     });
   }
   function getInitialValues() {
-    const initValues: InitialFormikState = { branches: [] };
+    const initValues: InitialFormikState = { };
+
     props.pdf.inputs?.forEach((input) => {
       switch (input) {
         case "dateFromTo":
@@ -198,13 +199,18 @@ const ReportsModal = (props: Props) => {
                           <BranchesDropDown
                             isMulti
                             onlyValidBranches
-                            onSelectBranch={(branches) => {
-                              formikProps.setFieldValue("branches", branches);
-                              formikProps.setFieldValue("representatives", []);
+                            onSelectBranch={ (branches) => {
+                              if (branches === null) {
+                                 formikProps.setFieldValue('branches', [])
+                              } else {
+                                 formikProps.setFieldValue('branches', branches)
+                              }
+
+                               formikProps.setFieldValue('representatives', []);
                             }}
                           />
                           <span className="text-danger">
-                            {formikProps.errors.branches}
+                            {formikProps.touched.branches && formikProps.errors.branches}
                           </span>
                         </Col>
                       );
@@ -626,8 +632,14 @@ const ReportsModal = (props: Props) => {
                     <Button
                       disabled={!!formikProps.errors.quarterYear}
                       variant="primary"
-                      onClick={() => {
-                        props.getExcel && props.getExcel(formikProps.values);
+                      onClick={async () => {
+                        // Manual revalidate formik: https://github.com/formium/formik/issues/2734                        
+                        const errors = await formikProps.validateForm() 
+                        if (Object.keys(errors).length === 0) {
+                          props.getExcel && props.getExcel(formikProps.values)
+                        } else {
+                          formikProps.setTouched(setNestedObjectValues<FormikTouched<InitialFormikState>>(errors, true))
+                        }
                       }}
                     >
                       {local.downloadExcel}
