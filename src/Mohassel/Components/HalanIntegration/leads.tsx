@@ -485,6 +485,7 @@ class Leads extends Component<Props, State>{
                         name="rejectionDetails"
                         data-qc="rejectionDetails"
                         onChange={formikProps.handleChange}
+                        maxLength={200}
                       />
                     </Form.Group>
                   </Col>
