@@ -21,6 +21,7 @@ import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from '../../../Sh
 import local from '../../../Shared/Assets/ar.json';
 import { manageApplicationsArray } from '../TrackLoanApplications/manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
+import ability from '../../config/ability';
 
 interface Product {
   productName: string;
@@ -195,6 +196,7 @@ class BulkApplicationApproval extends Component<Props, State>{
     }
   }
   render() {
+    const searchKey = ability.can('getSMEApplication','application') ? ['keyword', 'dateFromTo', 'branch', 'sme'] : ['keyword', 'dateFromTo', 'branch']
     return (
       <>
         <HeaderWithCards
@@ -220,7 +222,7 @@ class BulkApplicationApproval extends Component<Props, State>{
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={['keyword', 'dateFromTo', 'branch']}
+              searchKeys={searchKey}
               dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
               url="application"
               from={this.state.from}

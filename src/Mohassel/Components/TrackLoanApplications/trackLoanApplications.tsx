@@ -180,7 +180,7 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId }).then(() => {
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId, type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }).then(() => {
       if (this.props.error)
         Swal.fire("", getErrorMessage(this.props.error), "error")
     }

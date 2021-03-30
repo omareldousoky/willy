@@ -150,7 +150,7 @@ class Search extends Component<Props, State> {
     if (url === "supervisionsGroups") {
       obj.status = this.props.chosenStatus;
     }
-    if (!['application', 'loan'].includes(url)) delete obj.type
+    if(!['application', 'loan'].includes(url)) { delete obj.type } else { obj.type = obj.type ?  obj.type : 'micro' }
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -225,7 +225,7 @@ class Search extends Component<Props, State> {
         case "printed":
           initialState.printed = false;
         case "sme":
-          initialState.type = 'micro';
+          initialState.type = 'sme';
       }
     });
     return initialState;

@@ -67,7 +67,6 @@ interface State {
   manageApplicationsTabs: any[];
   checkPermission: boolean;
   branchId: string;
-  searchKey: string[];
 }
 interface Props {
   history: Array<any>;
@@ -92,7 +91,6 @@ class BulkApplicationReview extends Component<Props, State>{
       size: 10,
       manageApplicationsTabs: [],
       checkPermission: false,
-      searchKey: ['keyword', 'dateFromTo', 'review-application'],
       branchId: JSON.parse(getCookie('ltsbranch'))._id,
     }
     this.mappers = [
@@ -167,15 +165,12 @@ class BulkApplicationReview extends Component<Props, State>{
   componentDidMount() {
     if (ability.can('secondReview', 'application') || ability.can('thirdReview', 'application')) {
       this.setState({ checkPermission: true });
-      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''}).then(()=>{
+      this.props.search({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : '', type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro'}).then(()=>{
         if(this.props.error)
         Swal.fire("Error !",getErrorMessage(this.props.error),"error")
       }
       );
       this.props.setSearchFilters({ size: this.state.size, from: this.state.from, url: 'application', status: "reviewed" , branchId : this.state.branchId !== 'hq' ? this.state.branchId : ''});
-      if(this.state.branchId==='hq'){
-        this.setState({searchKey:['keyword', 'dateFromTo', 'branch', 'review-application']});
-      }
       this.setState({ manageApplicationsTabs: manageApplicationsArray() })
     }
   }
@@ -207,7 +202,7 @@ class BulkApplicationReview extends Component<Props, State>{
     }
   }
   getApplications() {
-    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application' }).then(()=>{
+    this.props.search( { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
@@ -288,6 +283,8 @@ class BulkApplicationReview extends Component<Props, State>{
     this.props.setSearchFilters({})
   }
   render() {
+    const searchKey = ability.can('getSMEApplication','application') ? ['keyword', 'dateFromTo', 'review-application', 'sme'] : ['keyword', 'dateFromTo', 'review-application']
+    this.state.branchId === 'hq' && searchKey.push('branch')
     return (
       this.state.checkPermission &&
       <>
@@ -316,7 +313,7 @@ class BulkApplicationReview extends Component<Props, State>{
         
         { this.state.branchId == 'hq'?
             <Search
-              searchKeys ={this.state.searchKey}
+              searchKeys ={searchKey}
               dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
               url="application"
               from={this.state.from}
@@ -325,7 +322,7 @@ class BulkApplicationReview extends Component<Props, State>{
                />
                :
                <Search
-               searchKeys ={this.state.searchKey}
+               searchKeys ={searchKey}
                dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
                url="application"
                from={this.state.from}

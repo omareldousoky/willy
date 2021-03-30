@@ -689,13 +689,13 @@ class LoanProfile extends Component<Props, State>{
                 icon: 'editIcon',
                 title: local.issueLoan,
                 permission: this.state.application.status === "created" && ability.can('issueLoan','application' ),
-                onActionClick: () => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, action: 'issue' })
+                onActionClick: () => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'issue' })
             },
             {
                 icon: 'editIcon',
                 title: local.createLoan,
                 permission: this.state.application.status === "approved" && ability.can('createLoan','application' ),
-                onActionClick: () => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, action: 'create' })
+                onActionClick: () => this.props.history.push('/track-loan-applications/create-loan', { id: this.props.history.location.state.id, type: 'create' })
             },
             {
                 icon: 'closeIcon',

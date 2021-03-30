@@ -11,6 +11,7 @@ import { timeToDateyyymmdd, beneficiaryType, iscoreDate, getErrorMessage, getFul
 import { manageLoansArray } from './manageLoansInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import Swal from 'sweetalert2';
+import ability from '../../config/ability';
 interface Props {
   history: Array<any>;
   data: any;
@@ -28,7 +29,6 @@ interface State {
   size: number;
   from: number;
   loading: boolean;
-  searchKeys: any;
   manageLoansTabs: any[];
 }
 
@@ -40,7 +40,6 @@ class LoanList extends Component<Props, State> {
       size: 10,
       from: 0,
       loading: false,
-      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff'],
       manageLoansTabs: []
     }
     this.mappers = [
@@ -102,7 +101,7 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate" }).then(()=>{
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
@@ -164,6 +163,7 @@ class LoanList extends Component<Props, State> {
   }
   render() {
     const array = manageLoansArray();
+    const searchKeys = ability.can('getIssuedSMELoan','application') ? ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff', 'sme'] : ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff']
     return (
       <>
         <HeaderWithCards
@@ -182,7 +182,7 @@ class LoanList extends Component<Props, State> {
             </div>
             <hr className="dashed-line" />
             <Search
-              searchKeys={this.state.searchKeys}
+              searchKeys={searchKeys}
 							dropDownKeys={[
 								"name",
 								"nationalId",
