@@ -22,6 +22,7 @@ import { getReviewedApplications } from '../../Services/APIs/Reports/reviewedApp
 import { manageApplicationsArray } from './manageApplicationInitials';
 import HeaderWithCards from '../HeaderWithCards/headerWithCards';
 import { LoanApplicationReportRequest } from '../../Services/interfaces';
+import ability from '../../config/ability';
 
 interface Product {
   productName: string;
@@ -271,6 +272,18 @@ class TrackLoanApplications extends Component<Props, State>{
     return true
   }
   render() {
+    const searchKeys = ability.can('getSMEApplication','application') ? [
+      "keyword",
+      "dateFromTo",
+      "branch",
+      "status-application",
+      "sme"
+    ] : [
+      "keyword",
+      "dateFromTo",
+      "branch",
+      "status-application",
+    ]
     return (
       <>
         <div className="print-none">
@@ -294,12 +307,7 @@ class TrackLoanApplications extends Component<Props, State>{
               </div>
               <hr className="dashed-line" />
               <Search
-                searchKeys={[
-                  "keyword",
-                  "dateFromTo",
-                  "branch",
-                  "status-application",
-                ]}
+                searchKeys={searchKeys}
                 dropDownKeys={[
                   "name",
                   "nationalId",

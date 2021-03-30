@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { search, searchFilters } from '../../../Shared/redux/search/actions';
 import { timeToDateyyymmdd, beneficiaryType, getErrorMessage } from "../../../Shared/Services/utils";
 import Swal from 'sweetalert2';
+import ability from '../../../Mohassel/config/ability';
 
 interface Props {
   history: Array<any>;
@@ -30,7 +31,6 @@ interface State {
   iScoreModal: boolean;
   iScoreCustomers: any;
   loading: boolean;
-  searchKeys: any;
 }
 
 class LoanList extends Component<Props, State> {
@@ -42,8 +42,7 @@ class LoanList extends Component<Props, State> {
       from: 0,
       iScoreModal: false,
       iScoreCustomers: [],
-      loading: false,
-      searchKeys: ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff']
+      loading: false
     }
     this.mappers = [
       {
@@ -149,6 +148,7 @@ class LoanList extends Component<Props, State> {
     this.props.setSearchFilters({})
   }
   render() {
+    const searchKeys = ability.can('getIssuedSMELoan','application') ? ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff', 'sme'] : ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff']
     return (
       <Card style={{ margin: '20px 50px' }}>
         <Loader type="fullsection" open={this.props.loading} />
@@ -161,7 +161,7 @@ class LoanList extends Component<Props, State> {
           </div>
           <hr className="dashed-line" />
           <Search
-            searchKeys={this.state.searchKeys}
+            searchKeys={searchKeys}
             dropDownKeys={['name', 'nationalId', 'key', 'customerKey', 'customerCode']}
             searchPlaceholder={local.searchByBranchNameOrNationalIdOrCode}
             setFrom={(from) => this.setState({ from: from })}

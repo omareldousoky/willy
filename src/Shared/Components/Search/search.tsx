@@ -40,6 +40,7 @@ interface InitialFormikState {
   isDoubtful?: boolean;
   isWrittenOff?: boolean;
   printed?: boolean;
+  type?: string;
 }
 interface Props {
   size: number;
@@ -149,6 +150,7 @@ class Search extends Component<Props, State> {
     if (url === "supervisionsGroups") {
       obj.status = this.props.chosenStatus;
     }
+    if (!['application', 'loan'].includes(url)) delete obj.type
     obj = this.removeEmptyArg(obj);
     this.props.setFrom ? this.props.setFrom(0) : null;
     this.props.searchFilters(obj);
@@ -222,6 +224,8 @@ class Search extends Component<Props, State> {
               : false;
         case "printed":
           initialState.printed = false;
+        case "sme":
+          initialState.type = 'micro';
       }
     });
     return initialState;
@@ -669,6 +673,27 @@ class Search extends Component<Props, State> {
                             )
                           }
                           label={local.printed}
+                        />
+                      </Form.Group>
+                    </Col>
+                  );
+                }
+                if (searchKey === "sme") {
+                  return (
+                    <Col key={index} sm={3} style={{ marginTop: 20 }}>
+                      <Form.Group className="row-nowrap" controlId="sme">
+                        <Form.Check
+                          type="checkbox"
+                          name="sme"
+                          data-qc="sme"
+                          checked={formikProps.values.type === 'sme'}
+                          onChange={(e) =>
+                            formikProps.setFieldValue(
+                              "type",
+                              e.currentTarget.checked ? 'sme' : 'micro'
+                            )
+                          }
+                          label='sme'
                         />
                       </Form.Group>
                     </Col>
