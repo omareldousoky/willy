@@ -73,6 +73,7 @@ export interface IndividualWithInstallments {
         customer: Customer;
         type: string;
     }[];
+    rescheduled?: boolean;
 }
 interface State {
     prevId: string;
@@ -144,6 +145,7 @@ class LoanProfile extends Component<Props, State>{
     }
 
     async getAppByID(id) {
+        await this.getMembersShare(id);
         this.setState({ loading: true, activeTab: 'loanDetails', manualPaymentEditId: '' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
@@ -155,7 +157,6 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
-            this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -285,7 +286,7 @@ class LoanProfile extends Component<Props, State>{
         this.getGeoAreas(application.body.branchId);
         this.setState({
             application: application.body,
-            tabsArray: tabsToRender,
+            tabsArray: this.state.individualsWithInstallments.rescheduled ? tabsToRender.filter(tab => tab.stringKey !== 'followUpStatement') : tabsToRender,
             loading: false
         })
     }
@@ -346,7 +347,7 @@ class LoanProfile extends Component<Props, State>{
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)}
                     paymentType={"normal"} randomPendingActions={this.state.randomPendingActions} />
             case 'customerCard':
-                return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
+                return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} rescheduled={this.state.individualsWithInstallments.rescheduled || false} />
             case 'followUpStatement':
                 return <FollowUpStatementView application={this.state.application} print={() => this.setState({ print: 'followUpStatement' }, () => window.print())} members={this.state.individualsWithInstallments} />
             case 'loanRescheduling':
@@ -605,9 +606,9 @@ class LoanProfile extends Component<Props, State>{
         })
         return numTo2Decimal(sum);
     }
-    async getMembersShare() {
+    async getMembersShare(id: string) {
         this.setState({ loading: true })
-        const res = await getGroupMemberShares(this.props.history.location.state.id);
+        const res = await getGroupMemberShares(id);
         if (res.status === "success") {
             this.setState({ loading: false, individualsWithInstallments: res.body })
         }
