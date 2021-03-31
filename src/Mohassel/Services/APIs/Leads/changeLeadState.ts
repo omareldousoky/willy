@@ -1,9 +1,13 @@
 import axios from '../axios-instance';
 
-export const changeLeadState = async (phoneNumber: string, newState: string) => {
+export const changeLeadState = async (phoneNumber: string, newState: string, rejectionReason?: string, rejectionDetails?: string) => {
     const url = process.env.REACT_APP_BASE_URL + `/lead/review/${phoneNumber}`;
     try {
-        const res = await axios.put(url, { newStatus: newState });
+        const res = await axios.put(url, { 
+            newStatus: newState,
+            rejectionReason: rejectionReason,
+            rejectionDetails: rejectionDetails
+         });
         return { status: "success", body: res.data }
     }
     catch (error) {

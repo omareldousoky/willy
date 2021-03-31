@@ -15,6 +15,9 @@ interface GroupMember {
     type: string;
 }
 export interface Application {
+    _id?: string;
+    loanApplicationKey?: string;
+    applicationCode?: string;
     beneficiaryType: string;
     individualDetails: Array<GroupMember>;
     customerID: string;
@@ -70,7 +73,6 @@ export interface Application {
     viceCustomers: Array<Vice>;
     applicationFeePercentPerPersonType: string;
     state?: string;
-    id?: string;
     reviewedDate: any;
     undoReviewDate: any;
     rejectionDate: any;
@@ -87,6 +89,8 @@ export interface Application {
     branchManagerAndDate: boolean;
     branchManagerId: string;
     managerVisitDate: string;
+    status?: string;
+    customer?: Customer;
 }
 export const LoanApplicationValidation = Yup.object().shape({
     productID: Yup.string().required(local.required),
