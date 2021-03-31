@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Button, FormCheck } from 'react-bootstrap'
+import React, { FunctionComponent, useEffect, useState } from 'react'
+
+import { Card } from 'react-bootstrap'
 import { connect, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import Swal from 'sweetalert2'
+
 import { Loader } from '../../../Shared/Components/Loader'
 import { search, searchFilters } from '../../../Shared/redux/search/actions'
 import {
@@ -11,28 +13,18 @@ import {
   timeToArabicDate,
 } from '../../../Shared/Services/utils'
 import ability from '../../config/ability'
-import { getDateAndTime } from '../../Services/getRenderDate'
-import { manageCustomersArray } from '../CustomerCreation/manageCustomersInitial'
 import Can from '../../config/Can'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-
 import local from '../../../Shared/Assets/ar.json'
-import { Card as CardType } from '../../../Mohassel/Components/ManageAccounts/manageAccountsInitials'
-
+import { Card as CardType } from '../ManageAccounts/manageAccountsInitials'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
 
-export interface ActionsIconGroupProps {
-  currentCustomerId: string
-  actions: Actions[]
-}
-export interface Actions {
-  actionTitle: string
-  actionPermission: boolean
-  actionIcon: string
-  actionOnClick(currentCustomerId: string): void
-}
+// TODO:
+// - change permissions
+// - change url
+// - extract interfaces and types to new files
 
 interface SearchFilters {
   governorate?: string
@@ -43,8 +35,7 @@ interface SearchFilters {
   customerShortenedCode?: string // For FE only
 }
 
-interface CompanyListProps {
-  branchId: string
+type CustomerListProps = {
   currentSearchFilters: SearchFilters
   data: any
   error: string
@@ -60,14 +51,13 @@ export interface TableMapperItem {
   render: (data: any) => void
 }
 
-const LegalAffairsActions = ({
-  branchId,
+const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
   currentSearchFilters,
   data,
   error,
   loading,
   totalCount,
-}: CompanyListProps) => {
+}) => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
 
@@ -75,27 +65,14 @@ const LegalAffairsActions = ({
   const dispatch = useDispatch()
 
   const {
-    actions,
-    commercialRegisterNumber,
-    creationDate,
-    governorate,
     noOfUsers,
-    taxCardNumber,
     legalAffairs,
+    searchByBranchNameOrNationalIdOrCode,
+    lateCustomers,
   } = local
 
   const tabs = manageLegalAffairsArray()
-  // TODO will need to replace url with blocked customers
-  const url = 'defaultingCustomers'
-
-  console.log({
-    branchId,
-    currentSearchFilters,
-    data,
-    error,
-    loading,
-    totalCount,
-  })
+  const url = 'legal-affairs'
 
   useEffect(() => {
     dispatch(
@@ -103,36 +80,17 @@ const LegalAffairsActions = ({
         size,
         from,
         url,
-        branchId,
       })
     )
 
     if (error) Swal.fire('error', getErrorMessage(error), 'error')
-  }, [branchId, dispatch, error, from, size])
+  }, [dispatch, error, from, size])
 
   useEffect(() => {
     return () => {
       dispatch(searchFilters({}))
     }
   }, [])
-
-  const companyActions: Actions[] = [
-    {
-      actionTitle: 'Edit',
-      actionIcon: 'editIcon',
-      actionPermission:
-        ability.can('updateCustomer', 'customer') ||
-        ability.can('updateNationalId', 'customer'),
-      actionOnClick: (id) => history.push('/company/edit-company', { id }),
-    },
-    {
-      actionTitle: 'view',
-      actionIcon: 'view',
-
-      actionPermission: ability.can('getCustomer', 'customer'),
-      actionOnClick: (id) => history.push('/company/view-company', { id }),
-    },
-  ]
 
   const tableMapper: TableMapperItem[] = [
     {
@@ -198,11 +156,26 @@ const LegalAffairsActions = ({
     {
       title: '',
       key: 'actions',
-      render: (data) => <>Actions</>,
+      render: (data) => (
+        <Can I="createBranch" a="branch">
+          {console.log({ data })}
+          <img
+            style={{ cursor: 'pointer' }}
+            alt="edit"
+            src={require('../../Assets/editIcon.svg')}
+            onClick={() => {
+              history.push({
+                pathname: '/legal-affairs/customer-actions' + '/' + data._id,
+                state: { customer: data },
+              })
+            }}
+          />
+        </Can>
+      ),
     },
   ]
 
-  const getCompanies = async () => {
+  const getCustomers = async () => {
     const { customerShortenedCode, key } = currentSearchFilters
 
     dispatch(
@@ -214,7 +187,6 @@ const LegalAffairsActions = ({
         size,
         from,
         url,
-        branchId,
       })
     )
 
@@ -234,32 +206,27 @@ const LegalAffairsActions = ({
           <div className="custom-card-header">
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                Title
+                {lateCustomers}
               </Card.Title>
               <span className="text-muted">
                 {noOfUsers + ` (${totalCount || 0})`}
               </span>
             </div>
           </div>
-
           <hr className="dashed-line" />
-
           <Search
-            searchKeys={['keyword', 'dateFromTo', 'governorate']}
+            searchKeys={['keyword', 'defaultingCustomerStatus']}
             dropDownKeys={[
               'name',
-              'TaxCardNumber',
-              'CommercialRegisterNumber',
               'key',
-              'code',
+              'customerKey',
               'customerShortenedCode',
             ]}
-            searchPlaceholder="searchPlaceholder"
+            searchPlaceholder={searchByBranchNameOrNationalIdOrCode}
             url={url}
             from={from}
             size={size}
             setFrom={(newFrom) => setFrom(newFrom)}
-            hqBranchIdRequest={branchId}
           />
 
           {data && (
@@ -274,7 +241,7 @@ const LegalAffairsActions = ({
               changeNumber={(key: string, number: number) => {
                 if (key === 'size') setSize(number)
                 if (key === 'from') setFrom(number)
-                getCompanies()
+                getCustomers()
               }}
             />
           )}

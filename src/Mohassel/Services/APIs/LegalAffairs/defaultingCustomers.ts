@@ -11,6 +11,17 @@ export const searchDefaultingCustomers = async (data: object) => {
     }
 }
 
+export const searchLegalAffairsCustomers = async (data: object) => {
+    const url = process.env.REACT_APP_BASE_URL + '/search/legal-affairs';
+    try {
+        const res = await axios.post(url, data);
+        return { status: "success", body: res.data }
+    }
+    catch (error) {
+        return { status: "error", error: error.response.data }
+    }
+}
+
 export const addCustomerToDefaultingList =  async (data: {customerId: string; loanId: string}) => {
     const url = process.env.REACT_APP_BASE_URL + '/legal/add-customer';
     try {
