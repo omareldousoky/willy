@@ -104,7 +104,6 @@ export const StepOneForm = (props: any) => {
         <Col sm={1} style={{ marginTop: 35 }}>
           <Loader type="inline" open={loading} />
         </Col>
-       
        <Col sm={3}>
           <Form.Group controlId="birthDate">
             <Form.Label className="customer-form-label">{`${local.birthDate}*`}</Form.Label>
@@ -136,7 +135,6 @@ export const StepOneForm = (props: any) => {
             </Form.Control>
           </Form.Group>
         </Col>
-       
       </Row>
       <Row>
         <Col sm={5}>
