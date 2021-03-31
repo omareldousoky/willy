@@ -55,6 +55,7 @@ interface LoanOfficer {
 }
 export interface Customer {
     _id?: string;
+    key?: string;
     customerID?: string;
     customerName?: string;
     customerCode?: string;
@@ -67,7 +68,7 @@ export interface Customer {
     businessSpeciality?: string;
     permanentEmployeeCount?: string;
     partTimeEmployeeCount?: string;
-    key?: number;
+    district?: string;
 }
 export interface Results {
     results: Array<object>;
