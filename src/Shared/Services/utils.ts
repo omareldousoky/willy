@@ -4,6 +4,9 @@ import JsZip from "jszip";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { default as errorMessages } from "../../Shared/Assets/errorMessages.json";
+import * as Yup from 'yup'
+import { IFormField, IGroupField, IField } from "../../Mohassel/Components/ManageLegalAffairs/types";
+
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
     const date = new Date(timeStampe).toLocaleDateString();
@@ -698,3 +701,56 @@ export const iscoreBank = (bankId: string) => {
       return "not  found";
   }
 };
+
+export const createValidationSchema = (formFields: IFormField[]) => {
+  const validationFields = formFields.reduce((acc, formField) => {
+    if (isGroupField(formField)) {
+      const groupFormField = {
+        [formField.name]: createValidationSchema(
+          (formField as IGroupField).fields
+        ),
+      }
+
+      return { ...acc, ...groupFormField }
+    }
+
+    const { name, validation } = formField as IField
+    return { ...acc, [name]: validation }
+  }, {})
+
+  return Yup.object().shape(validationFields)
+}
+
+export const arrayToPairs = <T extends unknown>(array: any[]): T[][] =>
+  array.reduce(
+    (result, value, index, sourceArray) =>
+      index % 2 === 0
+        ? [...result, sourceArray.slice(index, index + 2)]
+        : result,
+    []
+  )
+
+export const getNestedByStringKey = (obj: {}, key: string) =>
+  key.split('.').reduce((p, c) => (p && p[c]) || undefined, obj)
+
+ export const isGroupField = (formField: IFormField) => formField?.type === 'group'
+ 
+ export const createFormFieldsInitValue = <T extends {}>(
+  formFields: IFormField[]
+): T => {
+  return formFields.reduce((acc, formField) => {
+    const { name } = formField
+
+    if (isGroupField(formField)) {
+      const fields = createFormFieldsInitValue(
+        (formField as IGroupField).fields
+      )
+
+      return { ...acc, [name]: fields }
+    }
+
+    return { ...acc, [name]: undefined }
+  }, {} as T)
+}
+
+

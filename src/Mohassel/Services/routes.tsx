@@ -59,8 +59,8 @@ import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecia
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
-import LegalAffairsActions from '../Components/ManageLegalAffairs/LegalActionsCustomersList';
-import LegalCustomerActions from '../Components/ManageLegalAffairs/LegalCustomerActions';
+import LegalAffairsActions from '../Components/ManageLegalAffairs/LegalCustomersList';
+import LegalCustomerActions from '../Components/ManageLegalAffairs/LegalCustomerActionsForm';
 
 const appRoutes = [
   {

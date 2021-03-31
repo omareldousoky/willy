@@ -20,36 +20,11 @@ import { Card as CardType } from '../ManageAccounts/manageAccountsInitials'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
+import { CustomerListProps, TableMapperItem } from './types'
 
 // TODO:
 // - change permissions
-// - change url
-// - extract interfaces and types to new files
-
-interface SearchFilters {
-  governorate?: string
-  name?: string
-  nationalId?: string
-  key?: number
-  code?: number
-  customerShortenedCode?: string // For FE only
-}
-
-type CustomerListProps = {
-  currentSearchFilters: SearchFilters
-  data: any
-  error: string
-  history: any
-  loading: boolean
-  totalCount: number
-}
-
-export interface TableMapperItem {
-  title: string | (() => JSX.Element)
-  key: string
-  sortable?: boolean
-  render: (data: any) => void
-}
+// - change 
 
 const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
   currentSearchFilters,
@@ -158,7 +133,6 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
       key: 'actions',
       render: (data) => (
         <Can I="createBranch" a="branch">
-          {console.log({ data })}
           <img
             style={{ cursor: 'pointer' }}
             alt="edit"
