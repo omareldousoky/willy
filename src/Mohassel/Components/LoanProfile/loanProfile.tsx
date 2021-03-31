@@ -266,9 +266,11 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "paid") tabsToRender.push(customerCardTab)
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
-            tabsToRender.push(followUpStatementTab)
             tabsToRender.push(reschedulingTab)
             tabsToRender.push(paymentTab)
+        }
+        if ((application.body.status === "issued" || application.body.status === "pending") && !this.state.individualsWithInstallments.rescheduled) {
+            tabsToRender.push(followUpStatementTab)
         }
         if (application.body.status === "issued" || application.body.status === "paid" || application.body.status === "pending") {
             tabsToRender.push(financialTransactionsTab)
@@ -286,7 +288,7 @@ class LoanProfile extends Component<Props, State>{
         this.getGeoAreas(application.body.branchId);
         this.setState({
             application: application.body,
-            tabsArray: this.state.individualsWithInstallments.rescheduled ? tabsToRender.filter(tab => tab.stringKey !== 'followUpStatement') : tabsToRender,
+            tabsArray: tabsToRender,
             loading: false
         })
     }
