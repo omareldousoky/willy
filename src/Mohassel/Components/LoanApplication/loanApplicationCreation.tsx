@@ -69,6 +69,7 @@ export interface Customer {
     permanentEmployeeCount?: string;
     partTimeEmployeeCount?: string;
     district?: string;
+    key?: number;
 }
 export interface Results {
     results: Array<object>;
