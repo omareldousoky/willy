@@ -3,14 +3,6 @@ import ability from '../../config/ability'
 import { Tab } from '../HeaderWithCards/headerWithCards'
 export const financialClosingArray = (): Tab[] => {
   const financialClosingArr: Tab[] = []
-  if (ability.can('financialClosing', 'application')) {
-    financialClosingArr.push({
-      icon: 'roles',
-      header: local.financialClosing,
-      desc: local.ltsClosing,
-      path: '/financial-closing/lts-closing',
-    })
-  }
   if (ability.can('financialBlocking', 'application')) {
     financialClosingArr.push({
       icon: 'assignProductToBranch',
@@ -25,6 +17,14 @@ export const financialClosingArray = (): Tab[] => {
       header: local.financialUnblocking,
       desc: local.ltsUnblocking,
       path: '/financial-closing/financial-unblocking',
+    })
+  }
+  if (ability.can('financialClosing', 'application')) {
+    financialClosingArr.push({
+      icon: 'roles',
+      header: local.financialClosing,
+      desc: local.ltsClosing,
+      path: '/financial-closing/lts-closing',
     })
   }
   return financialClosingArr
