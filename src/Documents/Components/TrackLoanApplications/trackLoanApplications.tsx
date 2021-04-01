@@ -144,7 +144,7 @@ class TrackLoanApplications extends Component<Props, State>{
     );
   }
   getApplications() {
-    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId? this.props.branchId : this.props.searchFilters.branchId }).then(()=>{
+    this.props.search({ ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId || this.props.searchFilters.branchId }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }

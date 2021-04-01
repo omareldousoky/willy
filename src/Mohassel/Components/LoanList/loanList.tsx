@@ -146,16 +146,15 @@ class LoanList extends Component<Props, State> {
         ? getFullCustomerKey(customerShortenedCode)
         : customerKey || undefined,
     };
-    let query = {
+    const query = {
       ...modifiedSearchFilters,
       ...issuedLoansSearchFilters,
+      branchId: fromBranch ? branchId : searchFilters.branchId,
       size,
       from,
 			url: "loan",
 			sort: "issueDate",
 		};
-    if(fromBranch) 
-     query = {...query, ... {branchId: branchId} }
     search(query).then(() => {
       if (error) Swal.fire("Error !", getErrorMessage(error), "error");
     });
