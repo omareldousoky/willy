@@ -55,9 +55,9 @@ export const StepOneForm = (props: any) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-      </Row> 
+      </Row>
       <Row>
-         <Col sm={5}>
+        <Col sm={5}>
           <Form.Group controlId="nationalId">
             <Form.Label className="customer-form-label">{`${local.nationalId}*`}</Form.Label>
             <Can I="updateCustomerHasLoan" a="customer" passThrough>
@@ -171,6 +171,26 @@ export const StepOneForm = (props: any) => {
             />
             <Form.Control.Feedback type="invalid">
               {errors.customerHomeAddress}
+            </Form.Control.Feedback>
+            <Col sm={3}>
+            </Col>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group controlId="currentHomeAddress">
+            <Form.Label className="customer-form-label">{local.detailedAddress}</Form.Label>
+            <Form.Control
+              type="text"
+              name="currentHomeAddress"
+              data-qc="currentHomeAddress"
+              value={values.currentHomeAddress}
+              onChange={handleChange}
+              isInvalid={errors.currentHomeAddress && touched.currentHomeAddress}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.currentHomeAddress}
             </Form.Control.Feedback>
             <Col sm={3}>
             </Col>
