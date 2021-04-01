@@ -56,9 +56,8 @@ import { getWriteOffReasons } from '../../Services/APIs/configApis/config';
 import {InfoBox , ProfileActions } from '../../../Shared/Components'; 
 import { Col, Form } from 'react-bootstrap';
 import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
-import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
+import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { FieldProps } from '../../../Shared/Components/Profile/types';
-import { getCompanyInfo } from '../../../Shared/Services/formatCustomersInfo';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -639,7 +638,7 @@ class LoanProfile extends Component<Props, State>{
         }
         if (this.state.application.product?.beneficiaryType === 'group') {
                 const groupMainInfo = this.state.application.group.individualsInGroup.map((individual) => {
-                    const customerScore = this.state.iscores.filter(score => score.nationalId === individual.nationalId)[0]
+                    const customerScore = this.state.iscores.filter(score => score.nationalId === individual.customer.nationalId)[0]
                     return  getCustomerInfo({
                             customerDetails:individual.customer,
                             score: customerScore,

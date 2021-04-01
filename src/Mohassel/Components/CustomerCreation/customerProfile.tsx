@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { getErrorMessage } from '../../../Shared/Services/utils';
@@ -71,6 +71,7 @@ export const CustomerProfile = (props: Props) => {
   const [activeTab, changeActiveTab] = useState('workInfo');
   const [ratings, setRatings] = useState<Array<CustomerScore>>([]);
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(false)
+  const location = useLocation();
   async function getCachediScores(id) {
     changeLoading(true);
     const iScores = await getIscoreCached({ nationalIds: [id] });
@@ -113,7 +114,7 @@ export const CustomerProfile = (props: Props) => {
   }
   async function getCustomerDetails() {
     changeLoading(true);
-    const res = await getCustomerByID(props.location.state.id)
+    const res = await getCustomerByID(location.state.id)
     if (res.status === 'success') {
       await changeCustomerDetails(res.body);
       if (ability.can('viewIscore', 'customer')) await getCachediScores(res.body.nationalId);
@@ -145,7 +146,7 @@ export const CustomerProfile = (props: Props) => {
         })
       }
     }
-    getCustomerCategorizationRating(props.location.state.id, setRatings);
+    getCustomerCategorizationRating(location.state.id, setRatings);
   }, []);
   function getArGender(gender: string | undefined) {
     if (gender === 'male') return local.male;
@@ -433,7 +434,7 @@ export const CustomerProfile = (props: Props) => {
     documents: [
       {
         fieldTitle: "customer id",
-        fieldData: props.location.state.id,
+        fieldData: location.state.id,
         showFieldCondition: true,
       },
     ],
@@ -464,7 +465,7 @@ export const CustomerProfile = (props: Props) => {
     deathCertificate: [
       {
         fieldTitle: "deathCertificate",
-        fieldData: props.location.state.id,
+        fieldData: location.state.id,
         showFieldCondition: ability.can("deathCertificate", "customer"),
       },
     ],
@@ -479,7 +480,7 @@ export const CustomerProfile = (props: Props) => {
           ability.can("updateNationalId", "customer"),
         onActionClick: () =>
           props.history.push("/customers/edit-customer", {
-            id: props.location.state.id,
+            id: location.state.id,
           }),
       },
       {
@@ -487,7 +488,7 @@ export const CustomerProfile = (props: Props) => {
         permission: ability.can("newClearance", "application"),
         onActionClick: () =>
           props.history.push("/customers/create-clearance", {
-            id: props.location.state.id,
+            id: location.state.id,
           }),
       },
       {
@@ -499,7 +500,7 @@ export const CustomerProfile = (props: Props) => {
           customerDetails?.blocked && customerDetails?.blocked?.isBlocked),
         onActionClick: () =>
           handleActivationClick({
-            id: props.location.state.id,
+            id: location.state.id,
             blocked: customerDetails?.blocked,
           }),
       },
@@ -542,5 +543,3 @@ export const CustomerProfile = (props: Props) => {
     </Container>
   );
 }
-
-// export default withRouter(CustomerProfile);
