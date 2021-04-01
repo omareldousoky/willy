@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { timeToDateyyymmdd, downloadFile, iscoreStatusColor, getErrorMessage, iscoreBank } from '../../../Shared/Services/utils';
+import { getErrorMessage } from '../../../Shared/Services/utils';
 import { Tab } from '../HeaderWithCards/cardNavbar'
 import * as local from '../../../Shared/Assets/ar.json';
 import { getIscoreCached } from '../../Services/APIs/iScore/iScore';
@@ -12,9 +12,8 @@ import ability from '../../config/ability';
 import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas';
 import Swal from 'sweetalert2';
 import { CustomerScore, getCustomerCategorization } from '../../Services/APIs/Customer-Creation/customerCategorization';
-
 import { Profile ,InfoBox, ProfileActions} from "../../../Shared/Components";
-import { FieldProps, TabDataProps } from '../../../Shared/Components/Profile/types';
+import { TabDataProps } from '../../../Shared/Components/Profile/types';
 import { CustomerReportsTab } from './customerReportsTab';
 import HalanLinkageModal from "./halanLinkageModal";
 import { blockCustomer } from "../../Services/APIs/blockCustomer/blockCustomer";
@@ -65,7 +64,7 @@ const getCustomerCategorizationRating = async (id: string, setRating: (rating: A
   }
 }
 
-const CustomerProfile = (props: Props) => {
+export const CustomerProfile = (props: Props) => {
   const [loading, changeLoading] = useState(false);
   const [customerDetails, changeCustomerDetails] = useState<Customer>();
   const [iScoreDetails, changeiScoreDetails] = useState<Score>();
@@ -544,4 +543,4 @@ const CustomerProfile = (props: Props) => {
   );
 }
 
-export default withRouter(CustomerProfile);
+// export default withRouter(CustomerProfile);

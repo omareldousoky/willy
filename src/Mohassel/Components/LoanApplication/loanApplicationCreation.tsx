@@ -319,7 +319,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.branchManagerId = application.body.branchManagerId;
             this.setState({
                 selectedCustomer: application.body.customer,
-                customerType: application.body.product.beneficiaryType,
+                customerType: (application.body.product.beneficiaryType === 'individual' && application.body.product.type === 'sme') ? 'sme' : application.body.product.beneficiaryType,
                 application: formData,
                 loading: false
             })

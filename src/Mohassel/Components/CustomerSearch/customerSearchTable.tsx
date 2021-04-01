@@ -8,7 +8,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getFullCustomerKey } from '../../../Shared/Services/utils';
-import {InfoBox} from '../../../Shared/Components'
+import { InfoBox } from '../../../Shared/Components'
 import { getCompanyInfo, getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { Customer } from '../../../Shared/Services/interfaces';
 interface Results {
@@ -91,7 +91,6 @@ class CustomerSearch extends Component<Props, State>{
         const dropDownArray: string[] = this.props.sme ? ['key', 'code','businessName', 'businessLicenseNumber', 'commercialRegisterNumber'] : ['name', 'key', 'nationalId', 'code', 'customerShortenedCode'];
         return (
             <div style={{ display: 'flex', flexDirection: 'column', ...this.props.style }} className={this.props.className || ""}>
-
                 {(!this.props.selectedCustomer || Object.keys(this.props.selectedCustomer).length === 0) && <div style={{ width: '100%' }}>
                     <div style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <p style={{ margin: 'auto 20px' }}>{this.props.header ? this.props.header : local.search}</p>

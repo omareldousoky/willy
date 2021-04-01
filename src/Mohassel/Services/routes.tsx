@@ -35,7 +35,7 @@ import ViewProduct from '../Components/LoanProductCreation/loanProductView';
 import LoanRollBack from '../Components/LoanProfile/loanRollBack';
 import EncodingFiles from '../Components/Tools/encodingFiles';
 import DocumentTypeCreation from '../Components/documentTypeCreation/documentTypeCreation';
-import CustomerProfile from '../Components/CustomerCreation/customerProfile';
+import { CustomerProfile } from '../Components/CustomerCreation/customerProfile';
 import ActionLogs from '../Components/ActionLogs/action-logs';
 import SourceOfFund from '../Components/SourceOfFund/sourceOfFund';
 import CIB from '../Components/CIB/cib';
@@ -58,6 +58,7 @@ import BusinessActivities from '../Components/ManageLoanDetails/businessActiviti
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities';
 import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
 import { CompanyList, CompanyProfile } from "../../Shared/Components";
 import CompanyCreation from '../Components/CustomerCreation/companyCreation';
 
@@ -502,6 +503,17 @@ const appRoutes = [
         path: '/financial-closing',
         label: local.financialClosing,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} /></Can>
+      },{
+        path: '/legal-affairs',
+        label: local.legalAffairs,
+        render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>,
+        routes: [
+          {
+            path: '/late-list',
+            label: local.lateList,
+            render: (props) => <Can I='getDefaultingCustomer' a='legal'><DefaultingCustomersList {...props} /></Can>
+          }
+        ]
       }
     ]
   },

@@ -58,6 +58,7 @@ import { Col, Form } from 'react-bootstrap';
 import { arabicGender, timeToArabicDate, downloadFile, iscoreStatusColor, iscoreBank } from '../../../Shared/Services/utils';
 import { getCustomerInfo } from '../../../Shared/Services/formatCustomersInfo';
 import { FieldProps } from '../../../Shared/Components/Profile/types';
+import { getCompanyInfo } from '../../../Shared/Services/formatCustomersInfo';
 
 interface EarlyPayment {
     remainingPrincipal?: number;
@@ -66,19 +67,18 @@ interface EarlyPayment {
 }
 
 export interface IndividualWithInstallments {
-    individualInGroup: {
+    installmentTable: {
+        id: number;
+        installmentResponse: number;
+        dateOfPayment: number;
+    }[];
+    customerTable?: {
         amount: number;
+        installmentAmount: number;
         customer: Customer;
         type: string;
-    };
-    installmentsObject: {
-        output: Installment[];
-        sum: {
-            feesSum: number;
-            installmentSum: number;
-            principal: number;
-        };
-    };
+    }[];
+    rescheduled?: boolean;
 }
 interface State {
     prevId: string;
@@ -97,7 +97,7 @@ interface State {
     randomPendingActions: Array<any>;
     geoAreas: Array<any>;
     remainingTotal: number;
-    individualsWithInstallments: Array<IndividualWithInstallments>;
+    individualsWithInstallments: IndividualWithInstallments;
 }
 
 interface Props {
@@ -125,7 +125,9 @@ class LoanProfile extends Component<Props, State>{
             randomPendingActions: [],
             geoAreas: [],
             remainingTotal: 0,
-            individualsWithInstallments: []
+            individualsWithInstallments: {
+                installmentTable: []
+            }
         };
     }
     componentDidMount() {
@@ -148,6 +150,7 @@ class LoanProfile extends Component<Props, State>{
     }
 
     async getAppByID(id) {
+        await this.getMembersShare(id);
         this.setState({ loading: true, activeTab: 'loanDetails', manualPaymentEditId: '' });
         const application = await getApplication(id);
         this.getBranchData(application.body.branchId);
@@ -159,7 +162,6 @@ class LoanProfile extends Component<Props, State>{
                 })
             } else this.setTabsToRender(application)
             if (ability.can('viewIscore', 'customer')) this.getCachediScores(application.body)
-            this.getMembersShare();
         } else {
             this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(application.error.error), 'error'))
         }
@@ -269,9 +271,11 @@ class LoanProfile extends Component<Props, State>{
         if (application.body.status === "paid") tabsToRender.push(customerCardTab)
         if (application.body.status === "issued" || application.body.status === "pending") {
             tabsToRender.push(customerCardTab)
-            tabsToRender.push(followUpStatementTab)
             tabsToRender.push(reschedulingTab)
             tabsToRender.push(paymentTab)
+        }
+        if ((application.body.status === "issued" || application.body.status === "pending") && !this.state.individualsWithInstallments.rescheduled) {
+            tabsToRender.push(followUpStatementTab)
         }
         if (application.body.status === "issued" || application.body.status === "paid" || application.body.status === "pending") {
             tabsToRender.push(financialTransactionsTab)
@@ -350,7 +354,7 @@ class LoanProfile extends Component<Props, State>{
                     manualPaymentEditId={this.state.manualPaymentEditId} refreshPayment={() => this.getAppByID(this.state.application._id)}
                     paymentType={"normal"} randomPendingActions={this.state.randomPendingActions} />
             case 'customerCard':
-                return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} />
+                return <CustomerCardView application={this.state.application} getGeoArea={(area) => this.getCustomerGeoArea(area)} penalty={this.state.penalty} print={() => this.setState({ print: 'customerCard' }, () => window.print())} rescheduled={this.state.individualsWithInstallments.rescheduled || false} />
             case 'followUpStatement':
                 return <FollowUpStatementView application={this.state.application} print={() => this.setState({ print: 'followUpStatement' }, () => window.print())} members={this.state.individualsWithInstallments} />
             case 'loanRescheduling':
@@ -609,16 +613,20 @@ class LoanProfile extends Component<Props, State>{
         })
         return numTo2Decimal(sum);
     }
-    async getMembersShare() {
+    async getMembersShare(id: string) {
         this.setState({ loading: true })
-        const res = await getGroupMemberShares(this.props.history.location.state.id);
+        const res = await getGroupMemberShares(id);
         if (res.status === "success") {
-            this.setState({ loading: false, individualsWithInstallments: res.body.individualsWithInstallments })
+            this.setState({ loading: false, individualsWithInstallments: res.body })
         }
         else this.setState({ loading: false }, () => Swal.fire("Error !", getErrorMessage(res.error.error), 'error'))
     }
     getInfo = (): FieldProps[][] => {
-        if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer) {
+        if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer ) {
+            if (this.state.application.product?.type === 'sme') {
+                const info: FieldProps[][] =  getCompanyInfo( this.state.application.customer );
+                return info
+            }
             const customerScore = this.state.iscores.filter(score => score.nationalId === this.state.application.customer.nationalId)[0]
             const info: FieldProps[] =  getCustomerInfo({
               customerDetails: this.state.application.customer,
@@ -629,8 +637,7 @@ class LoanProfile extends Component<Props, State>{
             });
             return [info]
         }
-        else {
-            if (this.state.application.group) {
+        if (this.state.application.product?.beneficiaryType === 'group') {
                 const groupMainInfo = this.state.application.group.individualsInGroup.map((individual) => {
                     const customerScore = this.state.iscores.filter(score => score.nationalId === individual.nationalId)[0]
                     return  getCustomerInfo({
@@ -645,7 +652,6 @@ class LoanProfile extends Component<Props, State>{
             }
             return []
         }
-    }
     
     getProfileActions = ()=>{
         return [
