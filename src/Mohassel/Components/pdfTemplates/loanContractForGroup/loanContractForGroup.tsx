@@ -383,8 +383,8 @@ const LoanContractForGroup = (props) => {
                 <div className="main">
                   <div>
                     <div className="title_last">
-                      <Barcode value={props.data.applicationKey} />
-                      <div>{props.data.applicationKey}</div>
+                      <Barcode value={props.data.loanApplicationKey} />
+                      <div>{props.data.loanApplicationKey}</div>
                       <div>{timeToArabicDate(props.data.creationDate, false)}</div>
                       <div>{leaderName}</div>
 
