@@ -15,6 +15,7 @@ export const step1: any = {
         lng: 0
     },
     customerHomeAddress: '',
+    currentHomeAddress:'',
     homePostalCode: '',
     homePhoneNumber: '',
     mobilePhoneNumber: '',
