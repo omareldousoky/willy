@@ -3,7 +3,7 @@ import React from "react"
 import { FormikProps } from "formik"
 import { Form, FormControlProps } from "react-bootstrap"
 
-import { getNestedByStringKey } from "../../../Shared/Services/utils"
+import { getNestedByStringKey } from "../../Services/utils"
 import { IField } from "./types"
 
 

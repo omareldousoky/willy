@@ -945,5 +945,17 @@
     "choose":"اختر",
     "defaultedLoanDeleteSuccess":"تم حذف العميل من قائمة المتاخرون عن السداد بنجاح ",
     "doneBy":"تمت بواسطة",
-    "maxLength200":"لا يمكن ان يكون اكثر من 200"
+    "maxLength200":"لا يمكن ان يكون اكثر من 200",
+    "statusNumber": "رقم الاحوال",
+    "caseNumber": "رقم الجنحه / الدعوي",
+    "court": "المحكمه",
+    "statementOfClaim": "بيان الدعوي / مبلغ الايصال",
+    "confinementNumber": "رقم الحصر",
+    "firstCourtSession": "اول جلسه",
+    "oppositionSession": "جلسة معارضة",
+    "oppositionAppealSession": "جلسه معارضه استئنافيه",
+    "misdemeanorAppealSession": "جلسة استئناف جنح",
+    "misdemeanorAppealNumber":"رقم الجنحه الاستئنافي",
+    "caseStatus" : "حاله الدعوي",
+    "caseStatusSummary": "حاله الدعوي ملخص"
 }

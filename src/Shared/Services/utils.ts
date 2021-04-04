@@ -5,7 +5,7 @@ import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { default as errorMessages } from "../../Shared/Assets/errorMessages.json";
 import * as Yup from 'yup'
-import { IFormField, IGroupField, IField } from "../../Mohassel/Components/ManageLegalAffairs/types";
+import { IFormField, IGroupField, IField } from "../Components/Form/types";
 
 export const timeToDate = (timeStampe: number): any => {
   if (timeStampe > 0) {
@@ -735,9 +735,9 @@ export const getNestedByStringKey = (obj: {}, key: string) =>
 
  export const isGroupField = (formField: IFormField) => formField?.type === 'group'
  
- export const createFormFieldsInitValue = <T extends {}>(
+ export const createFormFieldsInitValue = (
   formFields: IFormField[]
-): T => {
+) => {
   return formFields.reduce((acc, formField) => {
     const { name } = formField
 
@@ -750,7 +750,7 @@ export const getNestedByStringKey = (obj: {}, key: string) =>
     }
 
     return { ...acc, [name]: undefined }
-  }, {} as T)
+  }, {})
 }
 
 

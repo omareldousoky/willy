@@ -1,26 +1,6 @@
 import { FormikProps } from 'formik'
 import * as Yup from 'yup'
 
-export interface IField {
-  name: string
-  type: 'text' | 'date'
-  label: string
-  validation: Yup.Schema<any>
-}
-export interface IGroupField {
-  name: string
-  type: 'group'
-  fields: IField[]
-}
-
-export type IFormField = IGroupField | IField
-
-export interface IFormFieldsProps {
-  formFields: IFormField[]
-  formikProps: FormikProps<any>
-}
-
-export type LegalCustomerActionsProps = {}
 
 export interface ICortSession {
   date: string
@@ -36,6 +16,12 @@ export interface ILegalActionsForm {
 
   firstCourtSession: ICortSession
   oppositionSession: ICortSession
+  oppositionAppealSession: ICortSession
+  misdemeanorAppealSession: ICortSession
+
+  misdemeanorAppealNumber: string
+  caseStatus: string
+  caseStatusSummary: string
 }
 
 export interface SearchFilters {
@@ -62,4 +48,3 @@ export interface TableMapperItem {
   sortable?: boolean
   render: (data: any) => void
 }
-

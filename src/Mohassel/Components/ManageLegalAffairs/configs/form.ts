@@ -1,7 +1,6 @@
 import * as Yup from 'yup'
-
-import { IField, IFormField } from "../types"
 import local from '../../../../Shared/Assets/ar.json'
+import { IField } from '../../../../Shared/Components/Form/types'
 
 
 // TODO: Remove defaultValidationSchema then add the Schema for each field
@@ -16,24 +15,24 @@ const numbersAsStringSchema = defaultValidationSchema.matches(
   'The field should have digits only'
 )
 
-// TODO: Add localization labels an validations
-const createCourtFields = (courtPrefix: string): IField[] => [
+// TODO: Add validations
+const createCourtFields = (courtLabel: string): IField[] => [
   {
     name: 'date',
     type: 'date',
-    label: `${courtPrefix} Date`,
+    label: `${local.createdAt} ${courtLabel}`,
     validation: defaultValidationSchema,
   },
   {
     name: 'decision',
     type: 'text',
-    label: `${courtPrefix} Decision`,
+    label: `${local.theDecision} - ${courtLabel}`,
     validation: defaultValidationSchema,
   },
   {
     name: 'confinementNumber',
     type: 'text',
-    label: `${courtPrefix} Confinement Number`,
+    label: `${local.confinementNumber} - ${courtLabel}`,
     validation: numbersAsStringSchema,
   },
 ]
@@ -42,64 +41,63 @@ const customerActionsFields: IFormField[] = [
   {
     name: 'statusNumber',
     type: 'text',
-    label: 'Status Number',
+    label: local.statusNumber,
     validation: numbersAsStringSchema,
   },
   {
     name: 'caseNumber',
     type: 'text',
-    label: 'Case Number',
+    label: local.caseNumber,
     validation: numbersAsStringSchema,
   },
   {
     name: 'court',
     type: 'text',
-    label: 'Court',
+    label: local.court,
     validation: defaultValidationSchema,
   },
   {
     name: 'statementOfClaim',
     type: 'text',
-    label: 'Statement Of Claim',
+    label: local.statementOfClaim,
     validation: defaultValidationSchema,
   },
   {
     name: 'firstCourtSession',
     type: 'group',
-    fields: createCourtFields('First Court Session'),
-  },
-  {
-    name: 'misdemeanorAppealSession',
-    type: 'group',
-    fields: createCourtFields('Misdemeanor Appeal Session'),
-  },
-  {
-    name: 'oppositionAppealSession',
-    type: 'group',
-    fields: createCourtFields('Opposition Appeal Session'),
+    fields: createCourtFields(local.firstCourtSession),
   },
   {
     name: 'oppositionSession',
     type: 'group',
-    fields: createCourtFields('Opposition Session'),
+    fields: createCourtFields(local.oppositionSession),
   },
-
+  {
+    name: 'oppositionAppealSession',
+    type: 'group',
+    fields: createCourtFields(local.oppositionAppealSession),
+  },
+  {
+    name: 'misdemeanorAppealSession',
+    type: 'group',
+    fields: createCourtFields(local.misdemeanorAppealSession),
+  },
   {
     name: 'misdemeanorAppealNumber',
     type: 'text',
-    label: 'Statement Of Claim',
+    label: local.misdemeanorAppealNumber,
     validation: defaultValidationSchema,
   },
   {
     name: 'caseStatus',
     type: 'text',
-    label: 'Case Status',
+    label: local.caseStatus,
     validation: defaultValidationSchema,
   },
   {
     name: 'caseStatusSummary',
     type: 'text',
-    label: 'Case Status Summary',
+    label: local.caseStatusSummary,
     validation: defaultValidationSchema,
   },
 ]

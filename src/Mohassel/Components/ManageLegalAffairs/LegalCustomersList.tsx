@@ -189,7 +189,7 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
           </div>
           <hr className="dashed-line" />
           <Search
-            searchKeys={['keyword', 'defaultingCustomerStatus']}
+            searchKeys={['keyword', 'status-application']}
             dropDownKeys={[
               'name',
               'key',
