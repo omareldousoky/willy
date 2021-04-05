@@ -157,7 +157,6 @@ class LoanOfficersList extends Component<Props, State> {
         size: this.state.size,
         from: this.state.from,
         url: 'loanOfficer',
-        branchId: this.state.branchId !== 'hq' ? this.state.branchId : '',
       })
       .then(() => {
         if (this.props.error)
