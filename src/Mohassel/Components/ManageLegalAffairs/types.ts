@@ -14,10 +14,10 @@ export interface ILegalActionsForm {
   court: string
   statementOfClaim: string
 
-  firstCourtSession: ICourtSession
-  oppositionSession: ICourtSession
-  oppositionAppealSession: ICourtSession
-  misdemeanorAppealSession: ICourtSession
+  firstCourtSession?: ICourtSession
+  oppositionSession?: ICourtSession
+  oppositionAppealSession?: ICourtSession
+  misdemeanorAppealSession?: ICourtSession
 
   misdemeanorAppealNumber: string
   caseStatus: string

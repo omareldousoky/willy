@@ -947,7 +947,7 @@
     "doneBy":"تمت بواسطة",
     "maxLength200":"لا يمكن ان يكون اكثر من 200",
     "statusNumber": "رقم الاحوال",
-    "caseNumber": "رقم الجنحه / الدعوي",
+    "caseNumber": "رقم الجنحه/الدعوي",
     "court": "المحكمه",
     "statementOfClaim": "بيان الدعوي / مبلغ الايصال",
     "confinementNumber": "رقم الحصر",
@@ -957,5 +957,7 @@
     "misdemeanorAppealSession": "جلسة استئناف جنح",
     "misdemeanorAppealNumber":"رقم الجنحه الاستئنافي",
     "caseStatus" : "حاله الدعوي",
-    "caseStatusSummary": "حاله الدعوي ملخص"
+    "caseStatusSummary": "ملخص حالة الدعوى",
+    "courtSessionType": "نوع الجلسة",
+    "courtSessionDate": "تاريخ الجلسة"
 }

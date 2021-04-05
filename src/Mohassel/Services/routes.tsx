@@ -60,7 +60,7 @@ import FinancialClosing from '../Components/FinancialClosing/financialClosing';
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
 import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList';
 import LegalAffairsActions from '../Components/ManageLegalAffairs/LegalCustomersList';
-import LegalCustomerActions from '../Components/ManageLegalAffairs/LegalCustomerActionsForm';
+import LegalActionsForm from '../Components/ManageLegalAffairs/LegalCustomerActionsForm';
 
 const appRoutes = [
   {
@@ -493,7 +493,7 @@ const appRoutes = [
           {
             path: '/customer-actions',
             label: local.legalAffairs,
-            render: (props) => <Can I='updateDefaultingCustomer' a='legal'><LegalCustomerActions {...props} /></Can>
+            render: (props) => <Can I='updateDefaultingCustomer' a='legal'><LegalActionsForm {...props} /></Can>
           }
         ]
       }

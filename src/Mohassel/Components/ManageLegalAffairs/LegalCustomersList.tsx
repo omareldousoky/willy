@@ -20,6 +20,8 @@ import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
 import { CustomerListProps, TableMapperItem } from './types'
+import { DefaultedCustomer } from './defaultingCustomersList'
+import LegalPrintActionsCell from './LegalPrintActionsCell'
 
 const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
   currentSearchFilters,
@@ -30,6 +32,15 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
 }) => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
+  const [showActionsCustomerId, setShowActionsCustomerId] = useState<
+    string | null
+  >(null)
+
+  const toggleActions = (id: string) => {
+    setShowActionsCustomerId((previousValue) =>
+      previousValue === id ? null : id
+    )
+  }
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -62,9 +73,20 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
     }
   }, [])
 
+  const hasCourtSession = (data: DefaultedCustomer) =>
+    data.status !== 'financialManagerReview' && data[data.status]
+
+  const renderCourtField = (customer: DefaultedCustomer, name: string) => {
+    if (!hasCourtSession(customer)) {
+      return ''
+    }
+
+    return customer[customer.status][name]
+  }
+
   const tableMapper: TableMapperItem[] = [
     {
-      title: local.code,
+      title: local.customerId,
       key: 'customerKey',
       render: (data) =>
         ability.can('getCustomer', 'customer') ? (
@@ -88,40 +110,53 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
       render: (data) => data.customerName,
     },
     {
-      title: local.customerType,
-      key: 'customerType',
-      render: (data) => local[data.customerType],
+      title: local.caseNumber,
+      key: 'caseNumber',
+      render: (data) => data.caseNumber,
     },
     {
-      title: local.loanCode,
-      key: 'loanId',
+      title: local.court,
+      key: 'court',
+      render: (data) => data.court,
+    },
+    {
+      title: local.confinementNumber,
+      key: 'confinementNumber',
+      render: (data) => renderCourtField(data, 'confinementNumber'),
+    },
+    {
+      title: local.courtSessionType,
+      key: '',
+      render: (data) => (hasCourtSession(data) ? local[data.status] : ''),
+    },
+    {
+      title: local.courtSessionDate,
+      key: '',
       render: (data) =>
-        ability.can('getIssuedLoan', 'application') ||
-        ability.can('branchIssuedLoan', 'application') ? (
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={() =>
-              history.push('/loans/loan-profile', {
-                id: data.loanId,
-              })
-            }
-          >
-            {data.loanKey}
-          </span>
-        ) : (
-          data.loanKey
-        ),
+        hasCourtSession(data)
+          ? timeToArabicDate(data[data.status].date, true)
+          : '',
     },
     {
-      title: local.date,
-      key: 'creationDate',
-      render: (data) =>
-        data.created.at ? timeToArabicDate(data.created.at, true) : '',
+      title: local.theDecision,
+      key: '',
+      render: (data) => renderCourtField(data, 'decision'),
     },
     {
-      title: local.status,
-      key: 'status',
-      render: (data) => local[data.status],
+      title: local.caseStatusSummary,
+      key: 'caseStatusSummary',
+      render: (data) => data.caseStatusSummary,
+    },
+    {
+      title: '',
+      key: 'printActions',
+      render: (data) => (
+        <LegalPrintActionsCell
+          isOpen={showActionsCustomerId === data._id}
+          onClick={() => toggleActions(data._id)}
+          data={data}
+        />
+      ),
     },
     {
       title: '',
@@ -184,7 +219,7 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
           </div>
           <hr className="dashed-line" />
           <Search
-            searchKeys={['keyword', 'status-application']}
+            searchKeys={['keyword', 'legal-status', 'dateFromTo']}
             dropDownKeys={[
               'name',
               'key',

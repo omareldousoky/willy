@@ -10,15 +10,20 @@ import customerActionsFields from './configs/form'
 import AppForm from '../../../Shared/Components/Form'
 import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 
-const LegalCustomerActions: FunctionComponent = () => {
+const LegalActionsForm: FunctionComponent = () => {
   const location = useLocation<{ customer: DefaultedCustomer }>()
   const customer = location.state.customer
   console.log({ customer })
 
-  const formatCourt = (court: ICourtSession): ICourtSession => ({
-    ...court,
-    date: new Date(court.date).valueOf(),
-  })
+  const formatCourt = (
+    court: ICourtSession | undefined
+  ): ICourtSession | undefined =>
+    court?.date
+      ? {
+          ...court,
+          date: new Date(court.date).valueOf(),
+        }
+      : undefined
 
   const formValuesToActionReq = (values: ILegalActionsForm) => ({
     ...customer,
@@ -35,7 +40,6 @@ const LegalCustomerActions: FunctionComponent = () => {
     console.log({ submit: actionReqBody })
 
     const response = await updateLegalAffairsCustomers(actionReqBody)
-
     console.log({ response })
   }
 
@@ -52,4 +56,4 @@ const LegalCustomerActions: FunctionComponent = () => {
   )
 }
 
-export default LegalCustomerActions
+export default LegalActionsForm

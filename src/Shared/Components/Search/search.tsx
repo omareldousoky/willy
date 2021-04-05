@@ -627,6 +627,31 @@ class Search extends Component<Props, State> {
                     </Col>
                   );
                 }
+                if (searchKey === 'legal-status') {
+                  return this.statusDropdown(formikProps, index, [
+                    { value: '', text: local.all },
+                    {
+                      value: 'firstCourtSession',
+                      text: local.firstCourtSession,
+                    },
+                    {
+                      value: 'oppositionSession',
+                      text: local.oppositionSession,
+                    },
+                    {
+                      value: 'misdemeanorAppealSession',
+                      text: local.misdemeanorAppealSession,
+                    },
+                    {
+                      value: 'oppositionAppealSession',
+                      text: local.oppositionAppealSession,
+                    },
+                    {
+                      value: 'financialManagerReview',
+                      text: local.financialManagerReview,
+                    },
+                  ])
+                }
               })}
 
               <Col className="d-flex">
