@@ -67,11 +67,12 @@ class LtsClosing extends Component<Props, State>{
         return (
             <Card className="main-card">
                 <Loader type="fullscreen" open={this.state.loading} />
-                <div className="custom-card-header">
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Header className="custom-card-header" style={{ background:'white',border: 'none'}}>
+                    <div style={{ display: 'flex', alignItems: 'center'}}>
                         <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.ltsClosing}</Card.Title>
                     </div>
-                </div>
+                    <Button className="btn-cancel-prev" onClick={() => this.props.history.push('/reports')}>{local.reviewFinancialState}</Button>
+                </Card.Header>
                 <Card.Body className="w-100 d-flex justify-content-center">
                     <Formik
                         initialValues={{ closeDate: 0 }}
@@ -81,26 +82,15 @@ class LtsClosing extends Component<Props, State>{
                         validateOnChange
                     >
                         {(formikProps) =>
-                            <Form onSubmit={formikProps.handleSubmit} className="w-50 p-3">
-                                <Col sm={12} key={"colseDate"}>
+                            <Form onSubmit={formikProps.handleSubmit} className="w-100 p-2 my-1">
                                     <Form.Group controlId="closeDate">
-                                        <div
-                                            className="dropdown-container"
-                                            style={{ flex: 1, alignItems: "center" }}
-                                        >
-                                            <p
-                                                className="dropdown-label"
-                                                style={{
-                                                    alignSelf: "normal",
-                                                    marginLeft: 20,
-                                                    width: 300,
-                                                    textAlign: "center",
-                                                }}
+                                            <Form.Label
+                                              column sm={6} className='data-label'
                                             >
-                                                {local.closeDate}
-                                            </p>
+                                                {local.chooseCloseDate}
+                                            </Form.Label>
                                             <Form.Control
-                                                style={{ marginLeft: 20, border: "none" }}
+                                                style={{ marginLeft: 20}}
                                                 type="date"
                                                 name="closeDate"
                                                 data-qc="closeDate"
@@ -125,32 +115,16 @@ class LtsClosing extends Component<Props, State>{
                                             <Form.Control.Feedback type="invalid">
                                                 {formikProps.errors.closeDate}
                                             </Form.Control.Feedback>
-                                        </div>
                                     </Form.Group>
-                                </Col>
-                                <div className="d-flex justify-content-between py-4">
-                                <Button
-                                    className="w-25"            
-                                    variant="secondary"
-                                    onClick={() => {
-                                        window.location.reload();
-                                    }}
-                                >
-                                    {local.cancel}
-                                </Button>
-                                <Can I="financialClosing" a="application"><Button  className="w-25"  type="submit" variant="primary">
-                                    {local.submit}
+                                <div className="d-flex justify-content-end py-4 my-4">
+                                <Can I="financialClosing" a="application"><Button  style={{width:'10%'}} type="submit" variant="primary">
+                                    {local.closing}
                                 </Button></Can>
                                 </div>
                             </Form>
                         }
                     </Formik>
                 </Card.Body>
-                <Card.Footer>
-                    <div className="d-flex">
-                        <p className="clickable-action" onClick={() => this.props.history.push('/reports')}>{local.reviewFinancialState}</p>
-                    </div>
-                </Card.Footer>
             </Card>
         )
     }

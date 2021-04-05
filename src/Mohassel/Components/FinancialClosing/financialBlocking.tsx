@@ -33,7 +33,7 @@ class FinancialBlocking extends Component<Props, State> {
               .map((item) => {
                 return item.icon
               })
-              .indexOf('assignProductToBranch')}
+              .indexOf('blocking')}
           />
         )}
         <LtsBlocking/>

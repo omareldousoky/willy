@@ -33,7 +33,7 @@ class FinancialClosing extends Component<Props, State> {
               .map((item) => {
                 return item.icon
               })
-              .indexOf('roles')}
+              .indexOf('assignProductToBranch')}
           />
         )}
 
