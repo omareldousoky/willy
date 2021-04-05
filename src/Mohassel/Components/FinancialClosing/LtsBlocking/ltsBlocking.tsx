@@ -67,86 +67,12 @@ class LtsBlocking extends Component<Props, State>{
         return (
             <Card className="main-card">
                 <Loader type="fullscreen" open={this.state.loading} />
-                <div className="custom-card-header">
+                <Card.Header className="custom-card-header" style={{background:'white', border:'none'}}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>{local.ltsBlocking}</Card.Title>
                     </div>
-                </div>
+                </Card.Header>
                 <Card.Body className="w-100 d-flex justify-content-center">
-                    <Formik
-                        initialValues={{ blockDate: 0 }}
-                        onSubmit={this.handleSubmit}
-                        validationSchema={ltsBlockingValidation}
-                        validateOnBlur
-                        validateOnChange
-                    >
-                        {(formikProps) =>
-                            <Form onSubmit={formikProps.handleSubmit} className="w-50 p-3">
-                                <Col sm={12} key={"colseDate"}>
-                                    <Form.Group controlId="blockDate">
-                                        <div
-                                            className="dropdown-container"
-                                            style={{ flex: 1, alignItems: "center" }}
-                                        >
-                                            <p
-                                                className="dropdown-label"
-                                                style={{
-                                                    alignSelf: "normal",
-                                                    marginLeft: 20,
-                                                    width: 300,
-                                                    textAlign: "center",
-                                                }}
-                                            >
-                                                {local.blockDate}
-                                            </p>
-                                            <Form.Control
-                                                style={{ marginLeft: 20, border: "none" }}
-                                                type="date"
-                                                name="blockDate"
-                                                data-qc="blockDate"
-                                                value={formikProps.values.blockDate}
-                                                isInvalid={Boolean(
-                                                    formikProps.errors.blockDate &&
-                                                    formikProps.touched.blockDate
-                                                )}
-                                                onBlur={formikProps.handleBlur}
-                                                onChange={(e) => {
-                                                    formikProps.setFieldValue(
-                                                        "blockDate",
-                                                        e.currentTarget.value
-                                                    );
-                                                    if (e.currentTarget.value ==="")
-                                                        formikProps.setFieldValue(
-                                                            "blockDate",
-                                                            ""
-                                                        );
-                                                }}
-                                            />
-                                            <Form.Control.Feedback type="invalid">
-                                                {formikProps.errors.blockDate}
-                                            </Form.Control.Feedback>
-                                        </div>
-                                    </Form.Group>
-                                </Col>
-                                <div className="d-flex justify-content-between py-4">
-                                <Button
-                                    className="w-25"            
-                                    variant="secondary"
-                                    onClick={() => {
-                                        window.location.reload();
-                                    }}
-                                >
-                                    {local.cancel}
-                                </Button>
-                                 <Can I="financialBlocking" a ="application">
-                                <Button  className="w-25"  type="submit" variant="primary"> 
-                                    {local.submit}
-                                </Button>
-                                </Can>
-                                </div>
-                            </Form>
-                        }
-                    </Formik>
                 </Card.Body>
             </Card>
         )
