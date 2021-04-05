@@ -491,10 +491,9 @@ const appRoutes = [
             render: (props) => <Can I='getDefaultingCustomer' a='legal'><LegalAffairsActions {...props} /></Can>
           },
           {
-            path: '/customer-actions/:id',
+            path: '/customer-actions',
             label: local.legalAffairs,
-            render: (props) => <Can I='getDefaultingCustomer' a='legal'><LegalCustomerActions {...props} /></Can>
-            // updateDefaultingCustomer
+            render: (props) => <Can I='updateDefaultingCustomer' a='legal'><LegalCustomerActions {...props} /></Can>
           }
         ]
       }

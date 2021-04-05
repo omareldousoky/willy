@@ -1,27 +1,42 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 
-import {  Card } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 import { useLocation } from 'react-router'
 
 import local from '../../../Shared/Assets/ar.json'
 import { DefaultedCustomer } from './defaultingCustomersList'
-import { useParams } from 'react-router-dom'
-import {
-  ILegalActionsForm as ILegalActionsFormFields,
-} from './types'
+import { ICourtSession, ILegalActionsForm } from './types'
 import customerActionsFields from './configs/form'
 import AppForm from '../../../Shared/Components/Form'
-
-// TODO:
-// - Add permissions
+import { updateLegalAffairsCustomers } from '../../Services/APIs/LegalAffairs/defaultingCustomers'
 
 const LegalCustomerActions: FunctionComponent = () => {
-  const location = useLocation<DefaultedCustomer>()
-  const { id: customerId } = useParams<{ id: string }>()
-  console.log({ customerId, location })
+  const location = useLocation<{ customer: DefaultedCustomer }>()
+  const customer = location.state.customer
+  console.log({ customer })
 
-  const handleSubmit = (values: ILegalActionsFormFields) => {
-    console.log({ submit: values })
+  const formatCourt = (court: ICourtSession): ICourtSession => ({
+    ...court,
+    date: new Date(court.date).valueOf(),
+  })
+
+  const formValuesToActionReq = (values: ILegalActionsForm) => ({
+    ...customer,
+    ...values,
+    firstCourtSession: formatCourt(values.firstCourtSession),
+    oppositionSession: formatCourt(values.oppositionSession),
+    oppositionAppealSession: formatCourt(values.oppositionAppealSession),
+    misdemeanorAppealSession: formatCourt(values.misdemeanorAppealSession),
+  })
+
+  const handleSubmit = async (values: ILegalActionsForm) => {
+    const actionReqBody: ILegalActionsForm &
+      DefaultedCustomer = formValuesToActionReq(values)
+    console.log({ submit: actionReqBody })
+
+    const response = await updateLegalAffairsCustomers(actionReqBody)
+
+    console.log({ response })
   }
 
   return (

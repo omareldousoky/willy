@@ -1,18 +1,14 @@
-import React from "react"
+import React, { FunctionComponent } from "react"
 
-import { FormikProps } from "formik"
 import { Form, FormControlProps } from "react-bootstrap"
 
 import { getNestedByStringKey } from "../../Services/utils"
-import { IField } from "./types"
+import { FormFieldProps } from "./types"
 
 
-const FormField = ({
+const FormField: FunctionComponent<FormFieldProps> = ({
   field,
   formikProps: { values, handleChange, handleBlur, touched, errors },
-}: {
-  field: IField
-  formikProps: FormikProps<any>
 }) => {
   const fieldErrors = getNestedByStringKey(errors, field.name)
   const isToucehd = !!getNestedByStringKey(touched, field.name)

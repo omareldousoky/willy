@@ -21,11 +21,15 @@ export type GroupFieldProps = {
 
 export type IFormField = IGroupField | IField
 
+export type FormFieldProps = {
+  field: IField
+  formikProps: FormikProps<any>
+}
+
 export type FormFieldsProps = {
   formFields: IFormField[]
   formikProps: FormikProps<any>
 }
-
 
 export type AppFormProps = {
   formFields: IFormField[]

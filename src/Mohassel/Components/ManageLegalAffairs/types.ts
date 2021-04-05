@@ -2,8 +2,8 @@ import { FormikProps } from 'formik'
 import * as Yup from 'yup'
 
 
-export interface ICortSession {
-  date: string
+export interface ICourtSession {
+  date: number
   decision: string
   confinementNumber: string
 }
@@ -14,10 +14,10 @@ export interface ILegalActionsForm {
   court: string
   statementOfClaim: string
 
-  firstCourtSession: ICortSession
-  oppositionSession: ICortSession
-  oppositionAppealSession: ICortSession
-  misdemeanorAppealSession: ICortSession
+  firstCourtSession: ICourtSession
+  oppositionSession: ICourtSession
+  oppositionAppealSession: ICourtSession
+  misdemeanorAppealSession: ICourtSession
 
   misdemeanorAppealNumber: string
   caseStatus: string

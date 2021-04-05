@@ -16,15 +16,10 @@ import ability from '../../config/ability'
 import Can from '../../config/Can'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import local from '../../../Shared/Assets/ar.json'
-import { Card as CardType } from '../ManageAccounts/manageAccountsInitials'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
 import { CustomerListProps, TableMapperItem } from './types'
-
-// TODO:
-// - change permissions
-// - change 
 
 const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
   currentSearchFilters,
@@ -132,14 +127,14 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
       title: '',
       key: 'actions',
       render: (data) => (
-        <Can I="createBranch" a="branch">
+        <Can I="updateDefaultingCustomer" a="legal">
           <img
             style={{ cursor: 'pointer' }}
             alt="edit"
             src={require('../../Assets/editIcon.svg')}
             onClick={() => {
               history.push({
-                pathname: '/legal-affairs/customer-actions' + '/' + data._id,
+                pathname: '/legal-affairs/customer-actions',
                 state: { customer: data },
               })
             }}
@@ -149,7 +144,7 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
     },
   ]
 
-  const getCustomers = async () => {
+  const getCustomers = () => {
     const { customerShortenedCode, key } = currentSearchFilters
 
     dispatch(
