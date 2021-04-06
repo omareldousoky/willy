@@ -8,7 +8,8 @@ import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Select from 'react-select'
-import * as local from '../../../Shared/Assets/ar.json'
+import produce from 'immer'
+import local from '../../../Shared/Assets/ar.json'
 import {
   Application,
   Vice,
@@ -39,10 +40,7 @@ import {
   getFullCustomerKey,
   getErrorMessage,
 } from '../../../Shared/Services/utils'
-import {
-  getBusinessSectors,
-  getMaxPrinciples,
-} from '../../Services/APIs/configApis/config'
+import { getMaxPrinciples } from '../../Services/APIs/configApis/config'
 import { LoanApplicationCreationGuarantorForm } from './loanApplicationCreationGuarantorForm'
 import DualBox from '../DualListBox/dualListBox'
 import InfoBox from '../userInfoBox'
@@ -107,6 +105,7 @@ interface State {
   loanOfficers: Array<LoanOfficer>
   branchCustomers: Array<object>
   selectedCustomers: Array<Customer>
+  // businessSectors: Array<BusinessSector>
   guarantor1: any
   guarantor2: any
   viceCustomers: Array<Vice>
@@ -130,13 +129,13 @@ class LoanApplicationCreation extends Component<Props, State> {
   static getDerivedStateFromProps(props, state) {
     const application = { ...state.application }
     if (
-      props.history.location.state.id !== state.prevId &&
-      props.history.location.state.action !== state.application.state
+      props.location.state.id !== state.prevId &&
+      props.location.state.action !== state.application.state
     ) {
-      application.state = props.history.location.state.action
-      application.id = props.history.location.state.id
+      application.state = props.location.state.action
+      application.id = props.location.state.id
       return {
-        prevId: props.history.location.state.id,
+        prevId: props.location.state.id,
         application,
       }
     }
@@ -223,17 +222,13 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const results = await searchCustomer({ from: 0, size: 1000, [key]: query })
     if (results.status === 'success') {
-      if (results.body.data.length > 0) {
-        this.setState({
-          loading: false,
-          searchResults: { results: results.body.data, empty: false },
-        })
-      } else {
-        this.setState({
-          loading: false,
-          searchResults: { results: results.body.data, empty: true },
-        })
-      }
+      this.setState({
+        loading: false,
+        searchResults: {
+          results: results.body.data,
+          empty: !results.body.data.length,
+        },
+      })
     } else {
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
       this.setState({ loading: false })
@@ -253,23 +248,18 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const results = await searchCustomer(obj)
     if (results.status === 'success') {
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      const defaultApp = { ...this.state.application }
-      const defaultGuarantors = { ...defaultApp.guarantors }
-      const defaultGuar = { ...defaultGuarantors[index] }
-      if (results.body.data.length > 0) {
-        defaultGuar.searchResults = { results: results.body.data, empty: false }
-      } else {
-        defaultGuar.searchResults = { results: results.body.data, empty: true }
-      }
-      defaultApp.guarantors[index] = defaultGuar
       this.setState(
-        {
-          application: defaultApp,
-        },
-        () => {
-          this.setState({ loading: false })
-        }
+        produce<State>((draftState) => {
+          const app = draftState.application
+          const defaultGuarantors = { ...app.guarantors }
+          const defaultGuar = { ...defaultGuarantors[index] }
+          defaultGuar.searchResults = {
+            results: results.body.data,
+            empty: !results.body.data.length,
+          }
+          app.guarantors[index] = defaultGuar
+        }),
+        () => this.setState({ loading: false })
       )
     } else {
       Swal.fire('Error !', getErrorMessage(results.error.error), 'error')
@@ -302,12 +292,20 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   async getOfficerName(id) {
     const res = await getLoanOfficer(id)
-    this.setState((prevState) => ({
-      application: {
-        ...prevState.application,
-        representativeName: res.status === 'success' ? res.body.name : id,
-      },
-    }))
+    if (res.status === 'success') {
+      const { name } = res.body
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.application.representativeName = name
+        })
+      )
+    } else {
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.application.representativeName = id
+        })
+      )
+    }
   }
 
   async getCustomerLimits(customers) {
@@ -337,22 +335,16 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   setCustomerType(type) {
-    const defaultApplication = this.state.application
-    defaultApplication.beneficiaryType = type
     this.setState(
-      (prevState) => ({
-        customerType: type,
-        application: { ...prevState.application, beneficiaryType: type },
-      }),
-      () => {
-        if (type === 'group') {
-          this.getBusinessSectors()
-        }
-      }
+      produce<State>((draftState) => {
+        draftState.customerType = type
+        draftState.application.beneficiaryType = type
+      })
     )
   }
 
-  getDateString(targetDate) {
+  getDateString(targetDate?: string | number): string {
+    if (!targetDate) return ''
     return new Date(
       new Date(targetDate).getTime() -
         new Date(targetDate).getTimezoneOffset() * 60000
@@ -361,24 +353,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       .split('T')[0]
   }
 
-  async getBusinessSectors() {
-    this.setState({ loading: true })
-    const sectors = await getBusinessSectors()
-    if (sectors.status === 'success') {
-      this.setState({
-        loading: false,
-      })
-    } else {
-      Swal.fire('Error !', getErrorMessage(sectors.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
   async getLoanOfficers() {
     this.setState({ loanOfficers: [], loading: true })
     const res = await searchLoanOfficer({
       from: 0,
-      size: 100,
+      size: 1000,
       branchId: this.tokenData.branch,
       status: 'active',
     })
@@ -447,33 +426,34 @@ class LoanApplicationCreation extends Component<Props, State> {
     this.setState({ loading: true })
     const application = await getApplication(id)
     if (application.status === 'success') {
-      // TODO:lint: can't refactor
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      const formData = this.state.application
       if (application.body.product.beneficiaryType === 'group') {
-        this.getBusinessSectors()
         const selectedCustomers: Customer[] = application.body.group.individualsInGroup.map(
-          (x) => x.customer
+          (item) => item.customer
         )
         const customers = await this.getCustomerLimits(selectedCustomers)
         application.body.group.individualsInGroup.forEach((customer) => {
           if (customer.type === 'leader') {
             this.setState(
-              (prevState) =>
-                ({
-                  selectedGroupLeader: customer.customer._id,
-                  selectedLoanOfficer: prevState.loanOfficers.filter(
-                    (officer) =>
-                      officer._id === customer.customer.representative
-                  )[0],
-                } as any)
+              produce<State>((draftState) => {
+                draftState.selectedGroupLeader = customer.customer._id
+                draftState.selectedLoanOfficer = draftState.loanOfficers.filter(
+                  (officer) => officer._id === customer.customer.representative
+                )[0]
+              })
             )
           }
-          ;[customer.customer] = customers.filter(
+          customer.customer = customers.filter(
             (member) => member._id === customer.customer._id
-          )
+          )[0]
         })
-        formData.individualDetails = application.body.group.individualsInGroup
+
+        this.setState(
+          produce<State>((draftState) => {
+            draftState.application.individualDetails =
+              application.body.group.individualsInGroup
+          })
+        )
+
         this.setState({
           selectedCustomers,
         })
@@ -482,13 +462,15 @@ class LoanApplicationCreation extends Component<Props, State> {
           application.body.customer,
         ])
         this.populateCustomer(customers[0])
-        formData.customerTotalPrincipals = customers[0].totalPrincipals
-          ? customers[0].totalPrincipals
-          : 0
-        formData.customerMaxPrincipal = customers[0].maxPrincipal
-          ? customers[0].maxPrincipal
-          : 0
-        formData.individualDetails = application.body.group.individualsInGroup
+
+        this.setState(
+          produce<State>((draftState) => {
+            const app = draftState.application
+            app.customerTotalPrincipals = customers[0].totalPrincipals || 0
+            app.customerMaxPrincipal = customers[0].maxPrincipal || 0
+            app.individualDetails = application.body.group.individualsInGroup
+          })
+        )
       }
       this.populateLoanProduct(application.body.product)
       const value =
@@ -505,7 +487,13 @@ class LoanApplicationCreation extends Component<Props, State> {
             },
             guarantor: application.body.guarantors[i],
           })
-          formData.guarantorIds.push(application.body.guarantors[i]._id)
+          this.setState(
+            produce<State>((draftState) => {
+              draftState.application.guarantorIds.push(
+                application.body.guarantors[i]._id
+              )
+            })
+          )
         } else {
           guarsArr.push({
             searchResults: {
@@ -516,39 +504,44 @@ class LoanApplicationCreation extends Component<Props, State> {
           })
         }
       }
-      formData.entryDate = application.body.entryDate
-        ? this.getDateString(application.body.entryDate)
-        : ''
-      formData.visitationDate = application.body.visitationDate
-        ? this.getDateString(application.body.visitationDate)
-        : ''
-      formData.usage = application.body.usage ? application.body.usage : ''
-      formData.enquirorId = application.body.enquirorId
-        ? application.body.enquirorId
-        : ''
-      formData.viceCustomers = application.body.viceCustomers
-      formData.principal = application.body.principal
-        ? application.body.principal
-        : 0
-      formData.customerID = application.body.customer._id
-      formData.productID = application.body.product._id
-      formData.reviewedDate = application.body.reviewedDate
-      formData.undoReviewDate = application.body.undoReviewDate
-      formData.rejectionDate = application.body.reviewedDate
-      formData.guarantors = guarsArr
-      // formData.individualDetails = application.body.group.individualsInGroups
-      formData.managerVisitDate =
-        !application.body.managerVisitDate ||
-        application.body.managerVisitDate === 0
-          ? ''
-          : this.getDateString(application.body.managerVisitDate)
-      formData.branchManagerId = application.body.branchManagerId
-      this.setState({
-        selectedCustomer: application.body.customer,
-        customerType: application.body.product.beneficiaryType,
-        application: formData,
-        loading: false,
-      })
+
+      this.setState(
+        produce<State>((draftState) => {
+          const app = draftState.application
+          const {
+            entryDate,
+            visitationDate,
+            usage,
+            enquirorId,
+            viceCustomers,
+            principal,
+            customer,
+            product,
+            undoReviewDate,
+            reviewedDate,
+            managerVisitDate,
+            branchManagerId,
+          } = application.body
+          app.entryDate = this.getDateString(entryDate)
+          app.visitationDate = this.getDateString(visitationDate)
+          app.usage = usage || ''
+          app.enquirorId = enquirorId || ''
+          app.viceCustomers = viceCustomers || ''
+          app.principal = principal || 0
+          app.customerID = customer._id
+          app.productID = product._id
+          app.reviewedDate = reviewedDate
+          app.undoReviewDate = undoReviewDate
+          app.rejectionDate = reviewedDate
+          app.guarantors = guarsArr
+          // app.individualDetails = application.body.group.individualsInGroups
+          app.managerVisitDate = this.getDateString(managerVisitDate)
+          app.branchManagerId = branchManagerId
+          draftState.selectedCustomer = application.body.customer
+          draftState.customerType = application.body.product.beneficiaryType
+          draftState.loading = false
+        })
+      )
     } else {
       Swal.fire('Error!', getErrorMessage(application.error.error), 'error')
       this.setState({ loading: false })
@@ -703,50 +696,52 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   setGroupLeader(id) {
-    this.setState((prevState) => {
-      const newApp = prevState.application.individualDetails.forEach(
-        (member) => {
-          if (member.customer._id === id) member.type = 'leader'
-          else member.type = 'member'
-        }
-      )
-      return {
-        application: newApp,
-        selectedGroupLeader: id,
-      } as any
+    const { application } = this.state
+    const app = produce(application, (draftApplication) => {
+      draftApplication.individualDetails.map((member) => {
+        member.type = member.customer._id === id ? 'leader' : 'member'
+      })
+    })
+    this.setState({
+      application: app,
+      selectedGroupLeader: id,
     })
   }
 
   getGroupErrorMessage(customer) {
-    let errorMessage1 = ''
-    let errorMessage = ''
+    let customerIsBlockerError = ''
+    let groupAgeError = ''
     if (customer.blocked?.isBlocked === true) {
-      errorMessage1 = `${local.theCustomerIsBlocked}`
+      customerIsBlockerError = `${local.theCustomerIsBlocked}`
     }
     const age = getAge(customer.birthDate)
     if (age > 67 || age < 18) {
-      errorMessage = `${local.groupAgeError}`
+      groupAgeError = `${local.groupAgeError}`
     }
     return (
       <span>
-        {errorMessage1} {errorMessage1 ? <br /> : null} {errorMessage}
+        {customerIsBlockerError} {customerIsBlockerError ? <br /> : null}{' '}
+        {groupAgeError}
       </span>
     )
   }
 
   removeGuarantor = (obj, index, values) => {
     this.setState({ loading: true })
-    const defaultApplication = { ...values }
-    const defaultGuarantors = { ...defaultApplication.guarantors }
-    const defaultGuar = { ...defaultGuarantors[index] }
-    defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(
-      (id) => obj._id !== id
-    )
-    defaultGuar.guarantor = {}
-    defaultGuar.searchResults.results = []
-    defaultGuar.searchResults.empty = false
-    defaultApplication.guarantors[index] = defaultGuar
-    this.setState({ application: defaultApplication, loading: false })
+
+    const application = produce(values as Application, (draftApp) => {
+      const defaultGuarantors = { ...draftApp.guarantors }
+      const defaultGuar = { ...defaultGuarantors[index] }
+      draftApp.guarantorIds = draftApp.guarantorIds.filter(
+        (id) => obj._id !== id
+      )
+      defaultGuar.guarantor = {}
+      defaultGuar.searchResults.results = []
+      defaultGuar.searchResults.empty = false
+      draftApp.guarantors[index] = defaultGuar
+    })
+
+    this.setState({ application, loading: false })
   }
 
   getSelectedLoanProduct = async (id) => {
@@ -765,15 +760,14 @@ class LoanApplicationCreation extends Component<Props, State> {
       const guarsArr = Array(selectedProductDetails.noOfGuarantors).fill(
         element
       )
-      this.setState((prevState) => ({
-        loading: false,
-        application: {
-          ...prevState.application,
-          guarantors: guarsArr,
-          productID: id,
-          guarantorIds: [],
-        },
-      }))
+      this.setState(
+        produce((draftState) => {
+          draftState.loading = false
+          draftState.application.guarantors = guarsArr
+          draftState.application.productID = id
+          draftState.application.guarantorIds = []
+        })
+      )
     } else {
       Swal.fire('error', getErrorMessage(selectedProduct.error.error), 'error')
       this.setState({ loading: false })
@@ -781,13 +775,13 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   selectCustomer = async (customer) => {
-    let errorMessage1 = ''
-    let errorMessage2 = ''
+    let customerIsBlockerError = ''
+    let customerLoanOrAgeError = ''
     this.setState({ loading: true })
     const selectedCustomer = await getCustomerByID(customer._id)
     if (selectedCustomer.status === 'success') {
       if (selectedCustomer.body.blocked.isBlocked === true) {
-        errorMessage1 = local.theCustomerIsBlocked
+        customerIsBlockerError = local.theCustomerIsBlocked
       }
       if (
         getAge(selectedCustomer.body.birthDate) >= 21 &&
@@ -802,43 +796,39 @@ class LoanApplicationCreation extends Component<Props, State> {
           check.customers &&
           selectedCustomer.body.blocked.isBlocked !== true
         ) {
-          // eslint-disable-next-line react/no-access-state-in-setstate
-          const defaultApplication = this.state.application
-          defaultApplication.customerID = customer._id
-          defaultApplication.customerTotalPrincipals = check.customers[0]
-            .totalPrincipals
-            ? check.customers[0].totalPrincipals
-            : 0
-          defaultApplication.customerMaxPrincipal = check.customers[0]
-            .maxPrincipal
-            ? check.customers[0].maxPrincipal
-            : 0
           this.populateCustomer(check.customers[0])
-          this.setState({
-            loading: false,
-            selectedCustomer: check.customers[0],
-            application: defaultApplication,
-          })
+
+          this.setState(
+            produce<State>((draftState) => {
+              const app = draftState.application
+              app.customerID = customer._id
+              app.customerTotalPrincipals =
+                check.customers[0].totalPrincipals || 0
+              app.customerMaxPrincipal = check.customers[0].maxPrincipal || 0
+              draftState.loading = false
+              draftState.selectedCustomer = check.customers[0]
+            })
+          )
         } else if (
           check.flag === false &&
           Object.keys(check.validationObject).length > 0
         ) {
           if (check.validationObject[customer._id].totalPrincipals) {
-            errorMessage2 = local.customerMaxLoanPrincipalError
+            customerLoanOrAgeError = local.customerMaxLoanPrincipalError
           } else {
-            errorMessage2 = local.customerInvolvedInAnotherLoan
+            customerLoanOrAgeError = local.customerInvolvedInAnotherLoan
           }
         }
       } else {
         this.setState({ loading: false })
-        errorMessage2 = local.individualAgeError
+        customerLoanOrAgeError = local.individualAgeError
       }
-      if (errorMessage1 || errorMessage2)
+      if (customerIsBlockerError || customerLoanOrAgeError)
         Swal.fire(
           'error',
-          `<span>${errorMessage1}  ${
-            errorMessage1 ? `<br/>` : ''
-          } ${errorMessage2}</span>`,
+          `<span>${customerIsBlockerError}  ${
+            customerIsBlockerError ? `<br/>` : ''
+          } ${customerLoanOrAgeError}</span>`,
           'error'
         )
     } else {
@@ -855,12 +845,11 @@ class LoanApplicationCreation extends Component<Props, State> {
   selectGuarantor = async (obj, index, values) => {
     this.setState({ loading: true })
     const selectedGuarantor = await getCustomerByID(obj._id)
-
     if (selectedGuarantor.status === 'success') {
-      let errorMessage1 = ''
-      let errorMessage2 = ''
+      let customerIsBlockedError = ''
+      let customerInvolvedInAnotherLoanError = ''
       if (selectedGuarantor.body.blocked.isBlocked === true) {
-        errorMessage1 = local.theCustomerIsBlocked
+        customerIsBlockedError = local.theCustomerIsBlocked
       }
       const check = await this.checkCustomersLimits(
         [selectedGuarantor.body],
@@ -871,22 +860,24 @@ class LoanApplicationCreation extends Component<Props, State> {
         check.customers &&
         selectedGuarantor.body.blocked.isBlocked !== true
       ) {
-        const defaultApplication = { ...values }
-        const defaultGuarantors = { ...defaultApplication.guarantors }
-        const defaultGuar = { ...defaultGuarantors[index] }
-        defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id }
-        defaultApplication.guarantorIds.push(obj._id)
-        defaultApplication.guarantors[index] = defaultGuar
-        this.setState({ application: defaultApplication, loading: false })
+        const application = produce(values as Application, (draftApp) => {
+          const defaultGuarantors = { ...draftApp.guarantors }
+          const defaultGuar = { ...defaultGuarantors[index] }
+          defaultGuar.guarantor = { ...selectedGuarantor.body, id: obj._id }
+          draftApp.guarantorIds.push(obj._id)
+          draftApp.guarantors[index] = defaultGuar
+        })
+
+        this.setState({ application, loading: false })
       } else if (check.flag === false && check.validationObject) {
-        errorMessage2 = local.customerInvolvedInAnotherLoan
+        customerInvolvedInAnotherLoanError = local.customerInvolvedInAnotherLoan
       }
-      if (errorMessage1 || errorMessage2)
+      if (customerIsBlockedError || customerInvolvedInAnotherLoanError)
         Swal.fire(
           'error',
-          `<span>${errorMessage1}  ${
-            errorMessage1 ? `<br/>` : null
-          } ${errorMessage2}</span>`,
+          `<span>${customerIsBlockedError} ${
+            customerIsBlockedError ? `<br/>` : ''
+          } ${customerInvolvedInAnotherLoanError}</span>`,
           'error'
         )
     } else {
@@ -901,7 +892,7 @@ class LoanApplicationCreation extends Component<Props, State> {
 
   submit = async (values: Application) => {
     if (this.state.step === 2 && this.state.customerType === 'individual') {
-      this.step('forward')
+      this.setState({ application: { ...values } }, () => this.step('forward'))
     } else {
       const obj = { ...values }
       const individualsToSend: {
@@ -917,7 +908,7 @@ class LoanApplicationCreation extends Component<Props, State> {
             amount: item.amount,
             type: item.type,
           }
-          principalToSend += item.amount
+          principalToSend += customer.amount
           individualsToSend.push(customer)
         })
       if (obj.beneficiaryType !== 'group') {
@@ -1017,14 +1008,11 @@ class LoanApplicationCreation extends Component<Props, State> {
       },
       guarantor: {},
     }
+
     this.setState(
-      (prevState) =>
-        ({
-          application: {
-            ...prevState.application,
-            guarantors: [...prevState.application.guarantors, element],
-          },
-        } as any)
+      produce<State>((draftState) => {
+        draftState.application.guarantors.push(element)
+      })
     )
   }
 
@@ -1036,112 +1024,107 @@ class LoanApplicationCreation extends Component<Props, State> {
     ) {
       this.searchCustomers()
     }
-    this.setState((prevState) => ({
-      application: {
-        ...prevState.application,
-        calculationFormulaId: selectedProductDetails.calculationFormula._id,
-        currency: selectedProductDetails.currency,
-        interest: selectedProductDetails.interest || defaultValues.interest,
-        interestPeriod: selectedProductDetails.interestPeriod,
-        allowInterestAdjustment: selectedProductDetails.allowInterestAdjustment,
-        inAdvanceFees:
-          selectedProductDetails.inAdvanceFees || defaultValues.inAdvanceFees,
-        inAdvanceFrom: selectedProductDetails.inAdvanceFrom,
-        inAdvanceType: selectedProductDetails.inAdvanceType,
-        periodLength:
-          selectedProductDetails.periodLength || defaultValues.periodLength,
-        periodType: selectedProductDetails.periodType,
-        gracePeriod:
-          selectedProductDetails.gracePeriod || defaultValues.gracePeriod,
-        pushPayment:
-          selectedProductDetails.pushPayment || defaultValues.pushPayment,
-        noOfInstallments:
+
+    this.setState(
+      produce<State>((draftState) => {
+        const app = draftState.application
+        app.calculationFormulaId = selectedProductDetails.calculationFormula._id
+        app.currency = selectedProductDetails.currency
+        app.interest = selectedProductDetails.interest || defaultValues.interest
+        app.interestPeriod = selectedProductDetails.interestPeriod
+        app.allowInterestAdjustment =
+          selectedProductDetails.allowInterestAdjustment
+        app.inAdvanceFees =
+          selectedProductDetails.inAdvanceFees || defaultValues.inAdvanceFees
+        app.inAdvanceFrom = selectedProductDetails.inAdvanceFrom
+        app.inAdvanceType = selectedProductDetails.inAdvanceType
+        app.periodLength =
+          selectedProductDetails.periodLength || defaultValues.periodLength
+        app.periodType = selectedProductDetails.periodType
+        app.gracePeriod =
+          selectedProductDetails.gracePeriod || defaultValues.gracePeriod
+        app.pushPayment =
+          selectedProductDetails.pushPayment || defaultValues.pushPayment
+        app.noOfInstallments =
           selectedProductDetails.noOfInstallments ||
-          defaultValues.noOfInstallments,
-        applicationFee:
-          selectedProductDetails.applicationFee || defaultValues.applicationFee,
-        individualApplicationFee:
+          defaultValues.noOfInstallments
+        app.applicationFee =
+          selectedProductDetails.applicationFee || defaultValues.applicationFee
+        app.individualApplicationFee =
           selectedProductDetails.individualApplicationFee ||
-          defaultValues.individualApplicationFee,
-        applicationFeePercent:
+          defaultValues.individualApplicationFee
+        app.applicationFeePercent =
           selectedProductDetails.applicationFeePercent ||
-          defaultValues.applicationFeePercent,
-        applicationFeeType: selectedProductDetails.applicationFeeType,
-        applicationFeePercentPerPerson:
+          defaultValues.applicationFeePercent
+        app.applicationFeeType = selectedProductDetails.applicationFeeType
+        app.applicationFeePercentPerPerson =
           selectedProductDetails.applicationFeePercentPerPerson ||
-          defaultValues.applicationFeePercentPerPerson,
-        applicationFeePercentPerPersonType:
-          selectedProductDetails.applicationFeePercentPerPersonType,
-        representativeFees:
+          defaultValues.applicationFeePercentPerPerson
+        app.applicationFeePercentPerPersonType =
+          selectedProductDetails.applicationFeePercentPerPersonType
+        app.representativeFees =
           selectedProductDetails.representativeFees ||
-          defaultValues.representativeFees,
-        allowRepresentativeFeesAdjustment:
-          selectedProductDetails.allowRepresentativeFeesAdjustment,
-        stamps: selectedProductDetails.stamps || defaultValues.stamps,
-        allowStampsAdjustment: selectedProductDetails.allowStampsAdjustment,
-        adminFees: selectedProductDetails.adminFees || defaultValues.adminFees,
-        allowAdminFeesAdjustment:
-          selectedProductDetails.allowAdminFeesAdjustment,
-        minPrincipal:
-          selectedProductDetails.minPrincipal || defaultValues.minPrincipal,
-        maxPrincipal:
-          selectedProductDetails.maxPrincipal || defaultValues.maxPrincipal,
-        minInstallment:
-          selectedProductDetails.minInstallment || defaultValues.minInstallment,
-        maxInstallment:
-          selectedProductDetails.maxInstallment || defaultValues.maxInstallment,
-        noOfGuarantors:
-          selectedProductDetails.noOfGuarantors || defaultValues.noOfGuarantors,
-        allowApplicationFeeAdjustment:
-          selectedProductDetails.allowApplicationFeeAdjustment,
-        beneficiaryType: selectedProductDetails.beneficiaryType,
-        branchManagerAndDate: selectedProductDetails.branchManagerAndDate,
-        branchManagerId: '',
-        managerVisitDate: '',
-      },
-    }))
+          defaultValues.representativeFees
+        app.allowRepresentativeFeesAdjustment =
+          selectedProductDetails.allowRepresentativeFeesAdjustment
+        app.stamps = selectedProductDetails.stamps || defaultValues.stamps
+        app.allowStampsAdjustment = selectedProductDetails.allowStampsAdjustment
+        app.adminFees =
+          selectedProductDetails.adminFees || defaultValues.adminFees
+        app.allowAdminFeesAdjustment =
+          selectedProductDetails.allowAdminFeesAdjustment
+        app.minPrincipal =
+          selectedProductDetails.minPrincipal || defaultValues.minPrincipal
+        app.maxPrincipal =
+          selectedProductDetails.maxPrincipal || defaultValues.maxPrincipal
+        app.minInstallment =
+          selectedProductDetails.minInstallment || defaultValues.minInstallment
+        app.maxInstallment =
+          selectedProductDetails.maxInstallment || defaultValues.maxInstallment
+        app.noOfGuarantors =
+          selectedProductDetails.noOfGuarantors || defaultValues.noOfGuarantors
+        app.allowApplicationFeeAdjustment =
+          selectedProductDetails.allowApplicationFeeAdjustment
+        app.beneficiaryType = selectedProductDetails.beneficiaryType
+        app.branchManagerAndDate = selectedProductDetails.branchManagerAndDate
+        app.branchManagerId = ''
+        app.managerVisitDate = ''
+      })
+    )
   }
 
   removeOptionalGuar(obj, index, values) {
     this.setState({ loading: true })
-    const defaultApplication = { ...values }
-    defaultApplication.guarantorIds = defaultApplication.guarantorIds.filter(
-      (id) => obj.guarantor._id !== id
-    )
-    defaultApplication.guarantors.splice(index, 1)
-    this.setState({ application: defaultApplication, loading: false })
+    const application = produce(values as Application, (draftApp) => {
+      draftApp.guarantorIds = draftApp.guarantorIds.filter(
+        (id) => obj.guarantor._id !== id
+      )
+      draftApp.guarantors.splice(index, 1)
+    })
+
+    this.setState({ application, loading: false })
   }
 
   populateCustomer(response) {
-    const {
-      customerName,
-      nationalId,
-      birthDate,
-      nationalIdIssueDate,
-      businessSector,
-      businessActivity,
-      businessSpeciality,
-      permanentEmployeeCount,
-      partTimeEmployeeCount,
-      representative,
-    } = response
-    this.getOfficerName(representative)
-    this.setState((prevState) => ({
-      application: {
-        ...prevState.application,
-        customerName,
-        nationalId,
-        birthDate: this.getDateString(birthDate),
-        gender: getGenderFromNationalId(nationalId),
-        nationalIdIssueDate: this.getDateString(nationalIdIssueDate),
-        businessSector,
-        businessActivity,
-        businessSpeciality,
-        permanentEmployeeCount,
-        partTimeEmployeeCount,
-        representative,
-      },
-    }))
+    this.getOfficerName(response.representative)
+    this.setState(
+      produce<State>((draftState) => {
+        const app = draftState.application
+        app.customerName = response.customerName
+        app.nationalId = response.nationalId
+        app.birthDate = this.getDateString(response.birthDate)
+        app.gender = getGenderFromNationalId(response.nationalId)
+        app.nationalIdIssueDate = this.getDateString(
+          response.nationalIdIssueDate
+        )
+        app.businessSector = response.businessSector
+        app.businessActivity = response.businessActivity
+        app.businessSpeciality = response.businessSpeciality
+        app.permanentEmployeeCount = response.permanentEmployeeCount
+        app.partTimeEmployeeCount = response.partTimeEmployeeCount
+        app.representative = response.representative
+      })
+    )
   }
 
   async searchCustomers(keyword?: string, key?: string) {
@@ -1336,15 +1319,19 @@ class LoanApplicationCreation extends Component<Props, State> {
   }
 
   step(key) {
-    this.setState((prevState) => {
-      let currentStep
-      if (prevState.step < 3 && key === 'forward') {
-        currentStep = prevState.step + 1
-      } else if (prevState.step >= 1 && key === 'backward') {
-        currentStep = prevState.step - 1
-      }
-      return { step: currentStep }
-    })
+    if (this.state.step < 3 && key === 'forward') {
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.step += 1
+        })
+      )
+    } else if (this.state.step >= 1 && key === 'backward') {
+      this.setState(
+        produce<State>((draftState) => {
+          draftState.step -= 1
+        })
+      )
+    }
   }
 
   renderStepOne() {
