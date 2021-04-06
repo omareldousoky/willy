@@ -1,6 +1,7 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import { Button } from 'react-bootstrap'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getRenderDate } from '../../Services/getRenderDate'
@@ -12,6 +13,7 @@ interface Props {
   penalty?: number
   print: () => void
   getGeoArea?: Function
+  rescheduled: boolean
 }
 export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
@@ -107,23 +109,18 @@ export const CustomerCardView = (props: Props) => {
   ]
   return (
     <div style={{ textAlign: 'right' }}>
-      <span
-        style={{
-          cursor: 'pointer',
-          float: 'left',
-          background: '#E5E5E5',
-          padding: 10,
-          borderRadius: 15,
-        }}
+      <Button
+        variant="primary"
+        disabled={props.rescheduled}
+        style={{ float: 'left' }}
         onClick={() => props.print()}
       >
-        {' '}
         <span
           className="fa fa-download"
           style={{ margin: '0px 0px 0px 5px' }}
-        />{' '}
+        />
         {local.downloadPDF}
-      </span>
+      </Button>
       <CustomerLoanDetailsBoxView
         application={props.application}
         getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)}

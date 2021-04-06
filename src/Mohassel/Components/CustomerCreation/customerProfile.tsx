@@ -291,6 +291,10 @@ const CustomerProfile = (
                   <td>{customerDetails?.customerHomeAddress}</td>
                 </tr>
                 <tr>
+                  <td>{local.detailedAddress}</td>
+                  <td>{customerDetails?.currentHomeAddress}</td>
+                </tr>
+                <tr>
                   <td>{local.postalCode}</td>
                   <td>{customerDetails?.homePostalCode}</td>
                 </tr>

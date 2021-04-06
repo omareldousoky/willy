@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container'
 import Swal from 'sweetalert2'
@@ -30,7 +31,7 @@ import EarlyPaymentReceipt from '../pdfTemplates/earlyPaymentReceipt/earlyPaymen
 import GroupInfoBox from './groupInfoBox'
 import Can from '../../config/Can'
 import EarlyPaymentPDF from '../pdfTemplates/earlyPayment/earlyPayment'
-import { PendingActions } from '../../../Shared/Services/interfaces'
+import { Customer, PendingActions } from '../../../Shared/Services/interfaces'
 import {
   timeToDateyyymmdd,
   iscoreDate,
@@ -56,8 +57,6 @@ import { getGeoAreasByBranch } from '../../Services/APIs/GeoAreas/getGeoAreas'
 import { FollowUpStatementView } from './followupStatementView'
 import { remainingLoan } from '../../Services/APIs/Loan/remainingLoan'
 import { getGroupMemberShares } from '../../Services/APIs/Loan/groupMemberShares'
-import { Customer } from '../LoanApplication/loanApplicationCreation'
-import { Installment } from '../Payment/payInstallment'
 import { getWriteOffReasons } from '../../Services/APIs/configApis/config'
 
 interface EarlyPayment {
@@ -67,20 +66,20 @@ interface EarlyPayment {
 }
 
 export interface IndividualWithInstallments {
-  individualInGroup: {
+  installmentTable: {
+    id: number
+    installmentResponse: number
+    dateOfPayment: number
+  }[]
+  customerTable?: {
     amount: number
+    installmentAmount: number
     customer: Customer
     type: string
-  }
-  installmentsObject: {
-    output: Installment[]
-    sum: {
-      feesSum: number
-      installmentSum: number
-      principal: number
-    }
-  }
+  }[]
+  rescheduled?: boolean
 }
+
 interface State {
   application: any
   activeTab: string
@@ -97,7 +96,7 @@ interface State {
   randomPendingActions: Array<any>
   geoAreas: Array<any>
   remainingTotal: number
-  individualsWithInstallments: Array<IndividualWithInstallments>
+  individualsWithInstallments: IndividualWithInstallments
 }
 
 interface LoanProfileRouteState {
@@ -129,7 +128,9 @@ class LoanProfile extends Component<Props, State> {
       randomPendingActions: [],
       geoAreas: [],
       remainingTotal: 0,
-      individualsWithInstallments: [],
+      individualsWithInstallments: {
+        installmentTable: [],
+      },
     }
   }
 
@@ -158,6 +159,7 @@ class LoanProfile extends Component<Props, State> {
   }
 
   async getAppByID(id) {
+    await this.getMembersShare(id)
     this.setState({
       loading: true,
       activeTab: 'loanDetails',
@@ -180,7 +182,6 @@ class LoanProfile extends Component<Props, State> {
       } else this.setTabsToRender(application)
       if (ability.can('viewIscore', 'customer'))
         this.getCachediScores(application.body)
-      this.getMembersShare()
     } else {
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(application.error.error), 'error')
@@ -217,7 +218,6 @@ class LoanProfile extends Component<Props, State> {
       }
       return 0
     }
-    return 0
   }
 
   async getCachediScores(application) {
@@ -338,9 +338,15 @@ class LoanProfile extends Component<Props, State> {
       application.body.status === 'pending'
     ) {
       tabsToRender.push(customerCardTab)
-      tabsToRender.push(followUpStatementTab)
       tabsToRender.push(reschedulingTab)
       tabsToRender.push(paymentTab)
+    }
+    if (
+      (application.body.status === 'issued' ||
+        application.body.status === 'pending') &&
+      !this.state.individualsWithInstallments.rescheduled
+    ) {
+      tabsToRender.push(followUpStatementTab)
     }
     if (
       application.body.status === 'issued' ||
@@ -444,14 +450,11 @@ class LoanProfile extends Component<Props, State> {
     return numTo2Decimal(sum)
   }
 
-  async getMembersShare() {
+  async getMembersShare(id: string) {
     this.setState({ loading: true })
-    const res = await getGroupMemberShares(this.props.location.state.id)
+    const res = await getGroupMemberShares(id)
     if (res.status === 'success') {
-      this.setState({
-        loading: false,
-        individualsWithInstallments: res.body.individualsWithInstallments,
-      })
+      this.setState({ loading: false, individualsWithInstallments: res.body })
     } else
       this.setState({ loading: false }, () =>
         Swal.fire('Error !', getErrorMessage(res.error.error), 'error')
@@ -517,7 +520,7 @@ class LoanProfile extends Component<Props, State> {
       }).then(async (result) => {
         if (result.value) {
           this.setState({ loading: true })
-          const res = await writeOffLoan(this.props.history.location.state.id, {
+          const res = await writeOffLoan(this.props.location.state.id, {
             writeOffReason: text,
           })
           if (res.status === 'success') {
@@ -769,17 +772,13 @@ class LoanProfile extends Component<Props, State> {
       case 'loanLogs':
         return <Logs id={this.props.location.state.id} />
       case 'loanPayments':
-        // TODO:lint: check if working fine
         return (
           <Payment
             print={(data) =>
               this.setState(
                 (prevState) => ({
                   print: data.print,
-                  earlyPaymentData: {
-                    ...prevState.earlyPaymentData,
-                    ...data,
-                  },
+                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
                 }),
                 () => window.print()
               )
@@ -810,6 +809,9 @@ class LoanProfile extends Component<Props, State> {
             print={() =>
               this.setState({ print: 'customerCard' }, () => window.print())
             }
+            rescheduled={
+              this.state.individualsWithInstallments.rescheduled || false
+            }
           />
         )
       case 'followUpStatement':
@@ -839,10 +841,7 @@ class LoanProfile extends Component<Props, State> {
               this.setState(
                 (prevState) => ({
                   print: data.print,
-                  earlyPaymentData: {
-                    ...prevState.earlyPaymentData,
-                    ...data,
-                  },
+                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
                 }),
                 () => window.print()
               )
@@ -871,10 +870,7 @@ class LoanProfile extends Component<Props, State> {
               this.setState(
                 (prevState) => ({
                   print: data.print,
-                  earlyPaymentData: {
-                    ...prevState.earlyPaymentData,
-                    ...data,
-                  },
+                  earlyPaymentData: { ...prevState.earlyPaymentData, ...data },
                 }),
                 () => window.print()
               )
@@ -947,6 +943,16 @@ class LoanProfile extends Component<Props, State> {
                   >
                     <p style={{ margin: 0, fontSize: 11, color: 'red' }}>
                       {local.writtenOffLoan}
+                      {this.state.application.writeOffReason
+                        ? `- ${
+                            local[
+                              this.state.application.writeOffReason.replace(
+                                /\s/g,
+                                ''
+                              )
+                            ]
+                          }`
+                        : null}
                     </p>
                   </span>
                 )}

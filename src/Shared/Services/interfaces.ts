@@ -43,6 +43,7 @@ export interface Customer {
   }
   customerAddressLatLong?: string
   customerHomeAddress?: string
+  currentHomeAddress?: string
   customerName?: string
   customerWebsite?: string
   district?: string

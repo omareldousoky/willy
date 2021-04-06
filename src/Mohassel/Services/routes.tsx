@@ -58,6 +58,7 @@ import BusinessActivities from '../Components/ManageLoanDetails/businessActiviti
 import BusinessSpecialities from '../Components/ManageLoanDetails/businessSpecialities'
 import FinancialClosing from '../Components/FinancialClosing/financialClosing'
 import LoanOfficersList from '../Components/ManageAccounts/loanOfficersList'
+import DefaultingCustomersList from '../Components/ManageLegalAffairs/defaultingCustomersList'
 
 const appRoutes = [
   {
@@ -664,6 +665,26 @@ const appRoutes = [
             <FinancialClosing {...props} />
           </Can>
         ),
+      },
+      {
+        path: '/legal-affairs',
+        label: local.legalAffairs,
+        render: (props) => (
+          <Can I="getDefaultingCustomer" a="legal">
+            <DefaultingCustomersList {...props} />
+          </Can>
+        ),
+        routes: [
+          {
+            path: '/late-list',
+            label: local.lateList,
+            render: (props) => (
+              <Can I="getDefaultingCustomer" a="legal">
+                <DefaultingCustomersList {...props} />
+              </Can>
+            ),
+          },
+        ],
       },
     ],
   },

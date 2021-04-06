@@ -187,6 +187,7 @@ class CustomerCreation extends Component<Props, State> {
         nationalIdIssueDate: timeToDateyyymmdd(res.body.nationalIdIssueDate),
         homePostalCode: res.body.homePostalCode,
         customerHomeAddress: res.body.customerHomeAddress,
+        currentHomeAddress: res.body.currentHomeAddress,
         customerAddressLatLong: res.body.customerAddressLatLong,
         customerAddressLatLongNumber: {
           lat: res.body.customerAddressLatLong

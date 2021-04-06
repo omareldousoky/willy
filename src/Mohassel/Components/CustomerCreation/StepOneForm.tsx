@@ -255,6 +255,29 @@ export const StepOneForm = (props: any) => {
         </Col>
       </Row>
       <Row>
+        <Col>
+          <Form.Group controlId="currentHomeAddress">
+            <Form.Label className="customer-form-label">
+              {local.detailedAddress}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              name="currentHomeAddress"
+              data-qc="currentHomeAddress"
+              value={values.currentHomeAddress}
+              onChange={handleChange}
+              isInvalid={
+                errors.currentHomeAddress && touched.currentHomeAddress
+              }
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.currentHomeAddress}
+            </Form.Control.Feedback>
+            <Col sm={3} />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
         <Col sm={6}>
           <Form.Group controlId="customerHomeAddressLocation">
             <Form.Label className="customer-form-label">

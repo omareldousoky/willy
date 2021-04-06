@@ -9,36 +9,8 @@ import InfoBox from '../userInfoBox'
 import { getRenderDate } from '../../Services/getRenderDate'
 import * as local from '../../../Shared/Assets/ar.json'
 import { getFullCustomerKey } from '../../../Shared/Services/utils'
+import { Customer } from '../../../Shared/Services/interfaces'
 
-interface Customer {
-  birthDate?: any
-  customerName?: string
-  nationalIdIssueDate?: any
-  homePostalCode?: number
-  nationalId?: string
-  customerHomeAddress?: string
-  customerAddressLatLong?: string
-  customerAddressLatLongNumber?: {
-    lat: number
-    lng: number
-  }
-  businessAddressLatLong?: string
-  businessAddressLatLongNumber?: {
-    lat: number
-    lng: number
-  }
-  businessPostalCode?: any
-  businessLicenseIssueDate?: any
-  applicationDate?: any
-  permanentEmployeeCount?: any
-  partTimeEmployeeCount?: any
-  customerID?: string
-  customerCode?: string
-  gender?: string
-  businessSector?: string
-  businessActivity?: string
-  businessSpeciality?: string
-}
 interface Results {
   results: Array<object>
   empty: boolean
@@ -274,15 +246,17 @@ class CustomerSearch extends Component<Props, State> {
               <div className="d-flex flex-row">
                 <p>{local.birthDate}</p>
                 <p style={{ margin: '0 10px 0 0' }}>
-                  {getRenderDate(this.props.selectedCustomer.birthDate)}
+                  {this.props.selectedCustomer.birthDate &&
+                    getRenderDate(this.props.selectedCustomer.birthDate)}
                 </p>
               </div>
               <div className="d-flex flex-row">
                 <p>{local.nationalIdIssueDate}</p>
                 <p style={{ margin: '0 10px 0 0' }}>
-                  {getRenderDate(
-                    this.props.selectedCustomer.nationalIdIssueDate
-                  )}
+                  {this.props.selectedCustomer.nationalIdIssueDate &&
+                    getRenderDate(
+                      this.props.selectedCustomer.nationalIdIssueDate
+                    )}
                 </p>
               </div>
               <div className="d-flex flex-row">

@@ -2,55 +2,15 @@ import React from 'react'
 import { Branch } from '../../../Shared/Services/interfaces'
 import local from '../../../Shared/Assets/ar.json'
 import DynamicTable from '../../../Shared/Components/DynamicTable/dynamicTable'
-import {
-  roundTo2,
-  shareInGroup,
-  shareInGroupFallBack,
-} from '../pdfTemplates/customerCard/customerCard'
+import { roundTo2 } from '../pdfTemplates/customerCard/customerCard'
 import { timeToArabicDate } from '../../../Shared/Services/utils'
-import {
-  dateShift,
-  shiftDaysBackAvoidingWeekend,
-  twoWeekGroupShift,
-} from '../pdfTemplates/followUpStatment/followUpStatement'
 import { IndividualWithInstallments } from './loanProfile'
 
 interface FollowUpStatementProps {
   application: any
   branch?: Branch
   print: Function
-  members: IndividualWithInstallments[]
-}
-
-export function getOriginalTableData(groupMembers, type) {
-  let installments: Array<{
-    dateOfPayment: number
-    id: number
-    installmentResponse: number
-  }> = []
-  if (type !== 'individual') {
-    const arrays = groupMembers.map(
-      (member) => member.installmentsObject.output
-    )
-    const additionResult = arrays
-      .map((arr) => arr.map((row) => row.installmentResponse))
-      .reduce(function (result, array) {
-        array.forEach(function (value, i) {
-          result[i] = (result[i] || 0) + value
-        })
-        return result
-      }, [])
-    installments = additionResult.map((row, i) => {
-      return {
-        installmentResponse: row,
-        id: arrays[0][i].id,
-        dateOfPayment: arrays[0][i].dateOfPayment,
-      }
-    })
-  } else {
-    installments = groupMembers[0].installmentsObject.output
-  }
-  return installments
+  members: IndividualWithInstallments
 }
 
 export const FollowUpStatementView = ({
@@ -67,24 +27,7 @@ export const FollowUpStatementView = ({
     {
       title: local.dateOfPayment,
       key: 'dateOfPayment',
-      render: (data) =>
-        timeToArabicDate(
-          application.product.beneficiaryType !== 'individual'
-            ? application.product.periodLength === 1 &&
-              application.product.periodType === 'months'
-              ? dateShift(application.creationDate, data.id - 1)
-              : application.product.periodLength === 14 &&
-                application.product.periodType === 'days'
-              ? twoWeekGroupShift(data.dateOfPayment)
-              : data.dateOfPayment - 5 * 24 * 60 * 60 * 1000
-            : application.product.periodLength === 1 &&
-              application.product.periodType === 'months'
-            ? dateShift(application.creationDate, data.id - 1)
-            : shiftDaysBackAvoidingWeekend(
-                data.dateOfPayment - 3 * (5 * 24 * 60 * 60 * 1000)
-              ),
-          false
-        ),
+      render: (data) => timeToArabicDate(data.dateOfPayment, false),
     },
     {
       title: local.installmentResponse,
@@ -92,17 +35,6 @@ export const FollowUpStatementView = ({
       render: (data) => roundTo2(data.installmentResponse),
     },
   ]
-  function getShare(data) {
-    const share = shareInGroup(members, data.customer._id)
-    if (share === 0) {
-      return shareInGroupFallBack(
-        data.amount,
-        application.principal,
-        application.installmentsObject.installments[0].installmentResponse
-      )
-    }
-    return share
-  }
   const membersMappers = [
     {
       title: local.customerId,
@@ -122,17 +54,17 @@ export const FollowUpStatementView = ({
     {
       title: local.installmentType,
       key: 'amount',
-      render: (data) => getShare(data),
+      render: (data) => data.installmentAmount,
     },
     {
       title: local.businessActivity,
       key: 'businessActivity',
       render: (data) =>
-        data.customer.businessSector +
-        '-' +
-        data.customer.businessActivity +
-        '-' +
-        data.customer.businessSpeciality,
+        (data.customer.businessSector || '') +
+        ' - ' +
+        (data.customer.businessActivity || '') +
+        ' - ' +
+        (data.customer.businessSpeciality || ''),
     },
     {
       title: local.area,
@@ -163,18 +95,16 @@ export const FollowUpStatementView = ({
         <DynamicTable
           totalCount={0}
           pagination={false}
-          data={getOriginalTableData(
-            members,
-            application.product.beneficiaryType
-          )}
+          data={members.installmentTable}
           mappers={mappers}
         />
       </div>
-      {application.product.beneficiaryType !== 'individual' ? (
+      {application.product.beneficiaryType !== 'individual' &&
+      members.customerTable ? (
         <DynamicTable
           totalCount={0}
           pagination={false}
-          data={application.group.individualsInGroup}
+          data={members.customerTable}
           mappers={membersMappers}
         />
       ) : null}

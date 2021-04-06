@@ -49,6 +49,7 @@ import Wizard from '../wizard/Wizard'
 import { getCustomersBalances } from '../../Services/APIs/Customer-Creation/customerLoans'
 
 import { theme } from '../../../Shared/theme'
+import { Customer } from '../../../Shared/Services/interfaces'
 
 interface LoanApplicationCreationRouteState {
   id: string
@@ -68,21 +69,6 @@ interface LoanOfficer {
   _id: string
   username: string
   name: string
-}
-export interface Customer {
-  _id?: string
-  customerID?: string
-  customerName?: string
-  customerCode?: string
-  nationalId?: string
-  birthDate?: string
-  gender?: string
-  nationalIdIssueDate?: string
-  businessSector?: string
-  businessActivity?: string
-  businessSpeciality?: string
-  permanentEmployeeCount?: string
-  partTimeEmployeeCount?: string
 }
 export interface Results {
   results: Array<object>
@@ -105,7 +91,6 @@ interface State {
   loanOfficers: Array<LoanOfficer>
   branchCustomers: Array<object>
   selectedCustomers: Array<Customer>
-  // businessSectors: Array<BusinessSector>
   guarantor1: any
   guarantor2: any
   viceCustomers: Array<Vice>

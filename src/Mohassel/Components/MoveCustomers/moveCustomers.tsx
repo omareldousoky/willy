@@ -411,7 +411,8 @@ class MoveCustomers extends Component<{}, State> {
                               else this.setState({ newSelectedLO: undefined })
                             }}
                             value={
-                              this.state.newSelectedLO as ValueType<DropDownOption>
+                              this.state
+                                .newSelectedLO as ValueType<DropDownOption>
                             }
                             loanOfficerSelectLoader={
                               this.state.LoanOfficerSelectLoader

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as local from '../../../Shared/Assets/ar.json'
+import { Customer } from '../../../Shared/Services/interfaces'
 import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
-import { Customer } from '../LoanApplication/loanApplicationCreation'
 import InfoBox from '../userInfoBox'
 
 interface Props {

@@ -8,11 +8,11 @@ import Button from 'react-bootstrap/Button'
 import { getApplication } from '../../Services/APIs/loanApplication/getApplication'
 import { Loader } from '../../../Shared/Components/Loader'
 import * as local from '../../../Shared/Assets/ar.json'
-import { Customer } from '../LoanApplication/loanApplicationCreation'
 import BackButton from '../BackButton/back-button'
 import { removeMemberFromGroup } from '../../Services/APIs/loanApplication/removeMemberFromGroup'
 import { getSeperationReasons } from '../../Services/APIs/configApis/config'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { Customer } from '../../../Shared/Services/interfaces'
 
 interface Member {
   type: string

@@ -433,6 +433,15 @@ class NavBar extends Component<Props, State> {
                 >
                   {local.manageAccounts}
                 </Nav.Link>
+              ) : !this.props.hide &&
+                ability.can('updateLoanOfficer', 'user') ? (
+                <Nav.Link
+                  onClick={() =>
+                    this.props.history.push('/manage-accounts/loan-officers')
+                  }
+                >
+                  {local.manageAccounts}
+                </Nav.Link>
               ) : null}
               {!this.props.hide && ability.can('documentTypes', 'config') ? (
                 <Nav.Link
@@ -538,6 +547,17 @@ class NavBar extends Component<Props, State> {
                     }
                   >
                     {local.financialClosing}
+                  </Nav.Link>
+                </Can>
+              )}
+              {!this.props.hide && (
+                <Can I="getDefaultingCustomer" a="legal">
+                  <Nav.Link
+                    onClick={() =>
+                      this.props.history.push('/legal-affairs/late-list')
+                    }
+                  >
+                    {local.legalAffairs}
                   </Nav.Link>
                 </Can>
               )}
