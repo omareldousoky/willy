@@ -198,7 +198,7 @@ class TrackLoanApplications extends Component<Props, State>{
       size,
       from,
       url: "application",
-      branchId,
+      branchId:  branchId || searchFilters.branchId,
     }).then(() => {
       if (error) Swal.fire("", getErrorMessage(error), "error");
     });

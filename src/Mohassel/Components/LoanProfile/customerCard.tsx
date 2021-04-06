@@ -7,11 +7,13 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { numbersToArabic } from "../../../Shared/Services/utils";
+import { Button } from 'react-bootstrap';
 interface Props {
   application: any;
   penalty?: number;
   print: () => void;
   getGeoArea?: Function;
+  rescheduled: boolean;
 }
 export function getStatus(data) {
   // const todaysDate = new Date("2020-06-30").valueOf();
@@ -97,8 +99,8 @@ export const CustomerCardView = (props: Props) => {
   ]
   return (
     <div style={{ textAlign: 'right' }}>
-      <span style={{ cursor: 'pointer', float: 'left', background: '#E5E5E5', padding: 10, borderRadius: 15 }}
-        onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</span>
+      <Button variant='primary' disabled={props.rescheduled} style={{ float: 'left' }}
+        onClick={() => props.print()}> <span className="fa fa-download" style={{ margin: "0px 0px 0px 5px" }}></span> {local.downloadPDF}</Button>
       <CustomerLoanDetailsBoxView application={props.application} getGeoArea={(area) => props.getGeoArea && props.getGeoArea(area)} />
       {props.penalty && <div>
         <h6>{local.penalties}</h6>

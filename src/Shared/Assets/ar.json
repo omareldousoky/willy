@@ -963,5 +963,9 @@
     "settleByCompanyLawyer": "تصالح عن طريق محامي الشركه",
     "settleByCustomerLawyer": "تصالح عن طريق محامي للعميل",
     "settleByGeneralLawyer": "تصالح محامي عام لحكم نهائي",
-    "stopLegalAffairs": "ايقاف اجراءات قانونية"
+    "stopLegalAffairs": "ايقاف اجراءات قانونية",
+    "detailedAddress": "العنوان الخاص بالشئون القانونيه",
+    "rejectionDetails": "تفاصيل الإبلاغ عن العميل",
+    "done": "تم",
+    "viewRejectionReason": "عرض سبب الرفض"
 }
