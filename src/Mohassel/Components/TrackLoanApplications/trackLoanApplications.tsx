@@ -359,9 +359,9 @@ class TrackLoanApplications extends Component<Props, State> {
   checkFilters() {
     if (
       this.props.searchFilters.fromDate &&
-      Number.isNaN(this.props.searchFilters.fromDate) &&
+      !Number.isNaN(this.props.searchFilters.fromDate) &&
       this.props.searchFilters.toDate &&
-      Number.isNaN(this.props.searchFilters.toDate)
+      !Number.isNaN(this.props.searchFilters.toDate)
     ) {
       if (
         this.props.searchFilters.status &&
