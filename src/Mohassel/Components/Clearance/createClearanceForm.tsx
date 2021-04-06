@@ -265,7 +265,6 @@ export const CreateClearanceForm = (props: Props) => {
               view={props.review}
               handleImageChange={handleReceiptPhotoChange}
               handleBlur={props.handleBlur}
-              handleChange={props.handleChange}
             />
           </Col>
           <Col>
@@ -291,7 +290,6 @@ export const CreateClearanceForm = (props: Props) => {
               }}
               handleImageChange={handleDocumentPhotoChange}
               handleBlur={props.handleBlur}
-              handleChange={props.handleChange}
             />
           </Col>
         </Row>

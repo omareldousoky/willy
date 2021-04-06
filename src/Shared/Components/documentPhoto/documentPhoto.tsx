@@ -14,7 +14,6 @@ interface Props {
   handleImageChange?: any
   name: string
   handleBlur?: any
-  handleChange?: any
   edit?: boolean
 }
 interface State {
@@ -238,7 +237,6 @@ class DocumentPhoto extends Component<Props, State> {
         onDragLeave={this.dragleaveListener}
         onDrop={(e) => this.dropListener(e)}
         onBlur={this.props.handleBlur}
-        onChange={this.props.handleChange}
       >
         <input
           disabled={this.props.view}
@@ -246,7 +244,7 @@ class DocumentPhoto extends Component<Props, State> {
           type="file"
           name="img"
           style={{ display: 'none' }}
-          accept="image/png,image/jpeg,image/jpg,image/jpeg"
+          accept="image/png,image/jpg,image/jpeg"
           ref={this.fileInput}
           onChange={this.handleOnChange}
           onClick={(event) => {
