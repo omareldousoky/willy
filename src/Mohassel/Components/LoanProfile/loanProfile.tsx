@@ -218,6 +218,7 @@ class LoanProfile extends Component<Props, State> {
       }
       return 0
     }
+    return 0
   }
 
   async getCachediScores(application) {
