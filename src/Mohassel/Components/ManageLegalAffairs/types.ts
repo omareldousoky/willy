@@ -33,6 +33,11 @@ export interface SearchFilters {
   customerShortenedCode?: string // For FE only
 }
 
+export interface IPrintAction {
+  name: string
+  label: string
+}
+
 export type CustomerListProps = {
   currentSearchFilters: SearchFilters
   data: any

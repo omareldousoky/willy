@@ -34,4 +34,6 @@ export type FormFieldsProps = {
 export type AppFormProps = {
   formFields: IFormField[]
   onSubmit: (values: any, formikHelpers: FormikHelpers<any>) => void
+  defaultValues: any,
+  disabled?: boolean
 }

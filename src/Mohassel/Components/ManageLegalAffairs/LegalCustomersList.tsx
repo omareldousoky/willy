@@ -19,11 +19,12 @@ import local from '../../../Shared/Assets/ar.json'
 import Search from '../../../Shared/Components/Search/search'
 import HeaderWithCards from '../HeaderWithCards/headerWithCards'
 import { manageLegalAffairsArray } from './manageLegalAffairsInitials'
-import { CustomerListProps, TableMapperItem } from './types'
+import { CustomerListProps, IPrintAction, TableMapperItem } from './types'
 import { DefaultedCustomer } from './defaultingCustomersList'
 import LegalPrintActionsCell from './LegalPrintActionsCell'
+import LegalSettlement from '../pdfTemplates/LegalSettlement'
 
-const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
+const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
   currentSearchFilters,
   data,
   error,
@@ -32,13 +33,18 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
 }) => {
   const [from, setFrom] = useState<number>(0)
   const [size, setSize] = useState<number>(10)
-  const [showActionsCustomerId, setShowActionsCustomerId] = useState<
-    string | null
-  >(null)
+  const [
+    showActionsCustomer,
+    setShowActionsCustomer,
+  ] = useState<DefaultedCustomer | null>(null)
 
-  const toggleActions = (id: string) => {
-    setShowActionsCustomerId((previousValue) =>
-      previousValue === id ? null : id
+  const [slectedPrintAction, setSlectedPrintAction] = useState<
+    IPrintAction | undefined
+  >(undefined)
+
+  const toggleShowActions = (customer: DefaultedCustomer) => {
+    setShowActionsCustomer((previousValue) =>
+      previousValue?._id === customer._id ? null : customer
     )
   }
 
@@ -55,6 +61,31 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
   const tabs = manageLegalAffairsArray()
   const url = 'legal-affairs'
 
+  const printActions: IPrintAction[] = [
+    {
+      name: 'settleByCompanyLawyer',
+      label: local.settleByCompanyLawyer,
+    },
+    {
+      name: 'settleByCustomerLawyer',
+      label: local.settleByCustomerLawyer,
+    },
+    {
+      name: 'settleByGeneralLawyer',
+      label: local.settleByGeneralLawyer,
+    },
+    {
+      name: 'stopLegalAffairs',
+      label: local.stopLegalAffairs,
+    },
+  ]
+
+  useEffect(() => {
+    return () => {
+      dispatch(searchFilters({}))
+    }
+  }, [])
+
   useEffect(() => {
     dispatch(
       search({
@@ -68,10 +99,10 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
   }, [dispatch, error, from, size])
 
   useEffect(() => {
-    return () => {
-      dispatch(searchFilters({}))
+    if (slectedPrintAction) {
+      window.print()
     }
-  }, [])
+  }, [slectedPrintAction])
 
   const hasCourtSession = (data: DefaultedCustomer) =>
     data.status !== 'financialManagerReview' && data[data.status]
@@ -82,6 +113,14 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
     }
 
     return customer[customer.status][name]
+  }
+
+  const handleActionClick = (actionName: string) => {
+    const action = printActions.find(
+      (printAction) => printAction.name === actionName
+    )
+
+    setSlectedPrintAction(action)
   }
 
   const tableMapper: TableMapperItem[] = [
@@ -152,9 +191,10 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
       key: 'printActions',
       render: (data) => (
         <LegalPrintActionsCell
-          isOpen={showActionsCustomerId === data._id}
-          onClick={() => toggleActions(data._id)}
-          data={data}
+          isOpen={showActionsCustomer?._id === data._id}
+          onClick={() => toggleShowActions(data)}
+          actions={printActions}
+          onActionClick={handleActionClick}
         />
       ),
     },
@@ -199,58 +239,66 @@ const LegalAffairsActions: FunctionComponent<CustomerListProps> = ({
 
   return (
     <>
-      <HeaderWithCards
-        header={legalAffairs}
-        array={tabs}
-        active={tabs.map((item) => item.icon).indexOf('legal-actions')}
-      />
-      <Card className="main-card">
-        <Loader type="fullsection" open={loading} />
-        <Card.Body style={{ padding: 0 }}>
-          <div className="custom-card-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
-                {lateCustomers}
-              </Card.Title>
-              <span className="text-muted">
-                {noOfUsers + ` (${totalCount || 0})`}
-              </span>
+      <div className="print-none">
+        <HeaderWithCards
+          header={legalAffairs}
+          array={tabs}
+          active={tabs.map((item) => item.icon).indexOf('legal-actions')}
+        />
+        <Card className="main-card">
+          <Loader type="fullsection" open={loading} />
+          <Card.Body style={{ padding: 0 }}>
+            <div className="custom-card-header">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Card.Title style={{ marginLeft: 20, marginBottom: 0 }}>
+                  {lateCustomers}
+                </Card.Title>
+                <span className="text-muted">
+                  {noOfUsers + ` (${totalCount || 0})`}
+                </span>
+              </div>
             </div>
-          </div>
-          <hr className="dashed-line" />
-          <Search
-            searchKeys={['keyword', 'legal-status', 'dateFromTo']}
-            dropDownKeys={[
-              'name',
-              'key',
-              'customerKey',
-              'customerShortenedCode',
-            ]}
-            searchPlaceholder={searchByBranchNameOrNationalIdOrCode}
-            url={url}
-            from={from}
-            size={size}
-            setFrom={(newFrom) => setFrom(newFrom)}
-          />
-
-          {data && (
-            <DynamicTable
+            <hr className="dashed-line" />
+            <Search
+              searchKeys={['keyword', 'legal-status', 'dateFromTo']}
+              dropDownKeys={[
+                'name',
+                'key',
+                'customerKey',
+                'customerShortenedCode',
+              ]}
+              searchPlaceholder={searchByBranchNameOrNationalIdOrCode}
+              url={url}
               from={from}
               size={size}
-              totalCount={totalCount}
-              mappers={tableMapper}
-              pagination
-              data={data}
-              url={url}
-              changeNumber={(key: string, number: number) => {
-                if (key === 'size') setSize(number)
-                if (key === 'from') setFrom(number)
-                getCustomers()
-              }}
+              setFrom={(newFrom) => setFrom(newFrom)}
             />
-          )}
-        </Card.Body>
-      </Card>
+
+            {data && (
+              <DynamicTable
+                from={from}
+                size={size}
+                totalCount={totalCount}
+                mappers={tableMapper}
+                pagination
+                data={data}
+                url={url}
+                changeNumber={(key: string, number: number) => {
+                  if (key === 'size') setSize(number)
+                  if (key === 'from') setFrom(number)
+                }}
+              />
+            )}
+          </Card.Body>
+        </Card>
+      </div>
+
+      {slectedPrintAction && showActionsCustomer && (
+        <LegalSettlement
+          action={slectedPrintAction}
+          customer={showActionsCustomer}
+        />
+      )}
     </>
   )
 }
@@ -263,4 +311,4 @@ const mapStateToProps = (state) => ({
   currentSearchFilters: state.searchFilters,
 })
 
-export default connect(mapStateToProps)(LegalAffairsActions)
+export default connect(mapStateToProps)(LegalCustomersList)

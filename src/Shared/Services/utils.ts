@@ -736,21 +736,30 @@ export const getNestedByStringKey = (obj: {}, key: string) =>
  export const isGroupField = (formField: IFormField) => formField?.type === 'group'
  
  export const createFormFieldsInitValue = (
-  formFields: IFormField[]
-) => {
-  return formFields.reduce((acc, formField) => {
-    const { name } = formField
+   formFields: IFormField[],
+   defaultValues: any
+ ) => {
+   return formFields.reduce((acc, formField) => {
+     const { name } = formField
+     const initValue = defaultValues ? defaultValues[name] : undefined
 
-    if (isGroupField(formField)) {
-      const fields = createFormFieldsInitValue(
-        (formField as IGroupField).fields
-      )
+     if (isGroupField(formField)) {
+       const fields = createFormFieldsInitValue(
+         (formField as IGroupField).fields,
+         initValue
+       )
 
-      return { ...acc, [name]: fields }
-    }
+       return { ...acc, [name]: fields }
+     }
 
-    return { ...acc, [name]: undefined }
-  }, {})
-}
+     return {
+       ...acc,
+       [name]:
+         name === 'date' && initValue ? getDateString(initValue) : initValue,
+     }
+   }, {})
+ }
 
+ export const extractLastChars = (str: string, numberOfChars: number) =>
+ str?.slice ? str.slice(str.length - numberOfChars, str.length) : str
 

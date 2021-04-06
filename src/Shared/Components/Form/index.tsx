@@ -1,16 +1,24 @@
-import React, { FunctionComponent } from "react"
+import React, { FunctionComponent } from 'react'
 
-import { Form, Formik, FormikProps } from "formik"
-import { Button } from "react-bootstrap"
+import { Form, Formik, FormikProps } from 'formik'
+import { Button } from 'react-bootstrap'
 
-import { createFormFieldsInitValue, createValidationSchema } from "../../Services/utils"
-import { FormFieldPairs } from "./FormFields"
-import { AppFormProps } from "./types"
+import {
+  createFormFieldsInitValue,
+  createValidationSchema,
+} from '../../Services/utils'
+import { FormFieldPairs } from './FormFields'
+import { AppFormProps } from './types'
 import local from '../../../Shared/Assets/ar.json'
 
-
-const AppForm: FunctionComponent<AppFormProps> = ({ formFields, onSubmit }) => {
-  const initialValues = createFormFieldsInitValue(formFields)
+// TODO: change naming
+const AppForm: FunctionComponent<AppFormProps> = ({
+  formFields,
+  onSubmit,
+  defaultValues,
+  disabled = false,
+}) => {
+  const initialValues = createFormFieldsInitValue(formFields, defaultValues)
   const validationSchema = createValidationSchema(formFields)
 
   return (
@@ -21,26 +29,18 @@ const AppForm: FunctionComponent<AppFormProps> = ({ formFields, onSubmit }) => {
       validateOnChange
     >
       {(formikProps: FormikProps<any>) => {
-        const {
-          handleSubmit: formikHandleSubmit,
-          errors,
-          touched,
-        } = formikProps
-        const isValid = !!Object.keys(errors).length
-        const isTouched = !!Object.keys(touched).length
+        const { handleSubmit: formikHandleSubmit, errors, dirty } = formikProps
+        const isValid = !Object.keys(errors).length
 
         return (
           <Form onSubmit={formikHandleSubmit}>
-            <FormFieldPairs
-              formFields={formFields}
-              formikProps={formikProps}
-            />
+            <FormFieldPairs formFields={formFields} formikProps={formikProps} />
 
             <div className="d-flex justify-content-end">
               <Button
                 type="submit"
                 data-qc="submit"
-                disabled={!isTouched || (isTouched && isValid)}
+                disabled={disabled || !dirty || !isValid}
               >
                 {local.submit}
               </Button>

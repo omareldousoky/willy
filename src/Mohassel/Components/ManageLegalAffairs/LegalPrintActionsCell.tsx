@@ -6,12 +6,11 @@ import local from '../../../Shared/Assets/ar.json'
 import Can from '../../config/Can'
 
 const LegalPrintActionsCell: FunctionComponent<{
-  data: any
+  actions: any
   isOpen: boolean
   onClick: () => void
-}> = ({ data, isOpen, onClick }) => {
-  const history = useHistory()
-
+  onActionClick: (actionName: string) => void
+}> = ({ actions, isOpen, onClick, onActionClick }) => {
   return (
     <div className="position-relative">
       <button className="btn clickable-action" onClick={onClick}>
@@ -19,44 +18,17 @@ const LegalPrintActionsCell: FunctionComponent<{
       </button>
       {isOpen && (
         <div className="actions-list">
-          {/* // TODO: Change on click */}
-          {(ability.can('updateCustomer', 'customer') ||
-            ability.can('updateNationalId', 'customer')) && (
+          {actions.map((action) => (
             <button
+              key={action.name}
               className="btn item rounded-0"
               onClick={() => {
-                history.push('/customers/edit-customer', {
-                  id: data._id,
-                })
+                onActionClick(action.name)
               }}
             >
-              {local.editCustomer}
+              {action.label}
             </button>
-          )}
-          <Can I="getCustomer" a="customer">
-            <button
-              className="btn item rounded-0"
-              onClick={() => {
-                history.push('/customers/view-customer', {
-                  id: data._id,
-                })
-              }}
-            >
-              {local.viewCustomer}
-            </button>
-          </Can>
-          <Can I="newClearance" a="application">
-            <button
-              className="btn item rounded-0"
-              onClick={() => {
-                history.push('/customers/create-clearance', {
-                  id: data._id,
-                })
-              }}
-            >
-              {local.createClearance}
-            </button>
-          </Can>
+          ))}
         </div>
       )}
     </div>

@@ -959,5 +959,9 @@
     "caseStatus" : "حاله الدعوي",
     "caseStatusSummary": "ملخص حالة الدعوى",
     "courtSessionType": "نوع الجلسة",
-    "courtSessionDate": "تاريخ الجلسة"
+    "courtSessionDate": "تاريخ الجلسة",
+    "settleByCompanyLawyer": "تصالح عن طريق محامي الشركه",
+    "settleByCustomerLawyer": "تصالح عن طريق محامي للعميل",
+    "settleByGeneralLawyer": "تصالح محامي عام لحكم نهائي",
+    "stopLegalAffairs": "ايقاف اجراءات قانونية"
 }

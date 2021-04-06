@@ -1,21 +1,10 @@
 import * as Yup from 'yup'
 import local from '../../../../Shared/Assets/ar.json'
-import { IField } from '../../../../Shared/Components/Form/types'
+import { IField, IFormField } from '../../../../Shared/Components/Form/types'
 
-// TODO: Remove defaultValidationSchema then add the Schema for each field
-const numbersAsStringRegEx = /^\d+$/
 
 const defaultValidationSchema = Yup.string().trim().max(100, local.maxLength100)
-const numbersAsStringSchema = defaultValidationSchema.matches(
-  numbersAsStringRegEx,
-  'The field should have digits only'
-)
 
-const createRequiredField = (
-  schema: Yup.StringSchema<string>
-): Yup.StringSchema<string> => schema.required(local.required)
-
-// TODO: Add validations
 const createCourtFields = (courtLabel: string): IField[] => [
   {
     name: 'date',
@@ -33,7 +22,7 @@ const createCourtFields = (courtLabel: string): IField[] => [
     name: 'confinementNumber',
     type: 'text',
     label: `${local.confinementNumber} - ${courtLabel}`,
-    validation: numbersAsStringSchema,
+    validation: defaultValidationSchema,
   },
 ]
 
@@ -42,13 +31,13 @@ const customerActionsFields: IFormField[] = [
     name: 'statusNumber',
     type: 'text',
     label: local.statusNumber,
-    validation: createRequiredField(numbersAsStringSchema),
+    validation: defaultValidationSchema,
   },
   {
     name: 'caseNumber',
     type: 'text',
     label: local.caseNumber,
-    validation: numbersAsStringSchema,
+    validation: defaultValidationSchema,
   },
   {
     name: 'court',
