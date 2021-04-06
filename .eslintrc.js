@@ -35,6 +35,7 @@ module.exports = {
 		'array-callback-return': 'off',
 		'no-bitwise': 'off',
 		'no-param-reassign': ['error', { 'props': false }],
+		'prefer-destructuring': ['error', {'object': true, 'array': false}],
 		'import/no-cycle': 'warn',
 		'import/no-dynamic-require': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
