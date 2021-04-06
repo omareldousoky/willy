@@ -253,24 +253,6 @@ class ClearanceProfile extends Component<
             </>
           )}
         </div>
-        <Card>
-          <CardNavBar
-            header="here"
-            array={this.state.tabsArray}
-            active={this.state.activeTab}
-            selectTab={(stringKey: string) => {
-              this.setState({ activeTab: stringKey })
-            }}
-          />
-          <Card.Title>
-            <CustomerBasicsCard
-              customerKey={this.state.data.customerKey}
-              branchName={this.state.data.bankName}
-              customerName={this.state.data.customerName}
-            />
-          </Card.Title>
-          <Card.Body>{this.renderContent()}</Card.Body>
-        </Card>
       </>
     )
   }
