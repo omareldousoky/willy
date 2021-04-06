@@ -412,52 +412,6 @@ class Leads extends Component<Props, State> {
     this.setState({ selectedLeadNumber: '' })
   }
 
-  async changeMainState(
-    phoneNumber: string,
-    newState: string,
-    action: string,
-    data,
-    rejectionReason?: string,
-    rejectionDetails?: string
-  ) {
-    this.props.setLoading(true)
-    if (action && data.status !== 'submitted') {
-      action === 'view'
-        ? this.props.history.push('/halan-integration/leads/view-lead', {
-            leadDetails: data,
-          })
-        : this.props.history.push('/halan-integration/leads/edit-lead', {
-            leadDetails: data,
-          })
-    } else {
-      const res = await changeLeadState(
-        phoneNumber,
-        newState,
-        rejectionReason,
-        rejectionDetails
-      )
-      if (res.status === 'success') {
-        this.props.setLoading(false)
-        this.setState({ openActionsId: '', rejectLeadModal: false })
-        if (action === 'view') {
-          this.props.history.push('/halan-integration/leads/view-lead', {
-            leadDetails: data,
-          })
-        } else if (action === 'edit') {
-          this.props.history.push('/halan-integration/leads/edit-lead', {
-            leadDetails: data,
-          })
-        } else
-          Swal.fire('', local.changeState, 'success').then(() =>
-            this.getLeadsCustomers()
-          )
-      } else {
-        this.props.setLoading(false)
-        Swal.fire('', local.userRoleEditError, 'error')
-      }
-    }
-  }
-
   async changeLeadState(
     phoneNumber: string,
     oldState: string,
@@ -501,6 +455,52 @@ class Leads extends Component<Props, State> {
           }
         }
       })
+    }
+  }
+
+  async changeMainState(
+    phoneNumber: string,
+    newState: string,
+    action: string,
+    data,
+    rejectionReason?: string,
+    rejectionDetails?: string
+  ) {
+    this.props.setLoading(true)
+    if (action && data.status !== 'submitted') {
+      action === 'view'
+        ? this.props.history.push('/halan-integration/leads/view-lead', {
+            leadDetails: data,
+          })
+        : this.props.history.push('/halan-integration/leads/edit-lead', {
+            leadDetails: data,
+          })
+    } else {
+      const res = await changeLeadState(
+        phoneNumber,
+        newState,
+        rejectionReason,
+        rejectionDetails
+      )
+      if (res.status === 'success') {
+        this.props.setLoading(false)
+        this.setState({ openActionsId: '', rejectLeadModal: false })
+        if (action === 'view') {
+          this.props.history.push('/halan-integration/leads/view-lead', {
+            leadDetails: data,
+          })
+        } else if (action === 'edit') {
+          this.props.history.push('/halan-integration/leads/edit-lead', {
+            leadDetails: data,
+          })
+        } else
+          Swal.fire('', local.changeState, 'success').then(() =>
+            this.getLeadsCustomers()
+          )
+      } else {
+        this.props.setLoading(false)
+        Swal.fire('', local.userRoleEditError, 'error')
+      }
     }
   }
 

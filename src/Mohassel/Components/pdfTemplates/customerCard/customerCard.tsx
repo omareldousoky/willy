@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import './customerCard.scss'
+import * as local from '../../../../Shared/Assets/ar.json'
 import {
   timeToArabicDate,
   numbersToArabic,
   getStatus,
+  timeToArabicDateNow,
 } from '../../../../Shared/Services/utils'
+import store from '../../../../Shared/redux/store'
 import { IndividualWithInstallments } from '../../LoanProfile/loanProfile'
 
 interface Props {
@@ -81,6 +84,155 @@ class CustomerCardPDF extends Component<Props, State> {
         style={{ direction: 'rtl' }}
         lang="ar"
       >
+        <table
+          style={{
+            fontSize: '12px',
+            margin: '10px 0px',
+            textAlign: 'center',
+            width: '100%',
+          }}
+        >
+          <tr style={{ height: '10px' }} />
+          <tr
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <th style={{ backgroundColor: 'white' }} colSpan={6}>
+              <div className="logo-print" />
+            </th>
+            <th style={{ backgroundColor: 'white' }} colSpan={6}>
+              ترخيص ممارسه نشاط التمويل متناهي الصغر رقم (2) لسنه 2015
+            </th>
+          </tr>
+          <tr style={{ height: '10px' }} />
+        </table>
+        <table>
+          <tbody>
+            <tr>
+              <td className="title bold titleborder titlebackground">
+                شركة تساهيل للتمويل متناهي الصغر
+              </td>
+              <td style={{ width: '30%' }} />
+              <td className="title bold">
+                {this.props.branchDetails.name} -{' '}
+                {this.props.branchDetails.governorate}
+              </td>
+            </tr>
+            <tr>
+              <td />
+              <td style={{ fontSize: '8px' }}>{store.getState().auth.name}</td>
+            </tr>
+            <tr>
+              <td>{timeToArabicDateNow(true)}</td>
+              <td className="title2 bold">
+                <u>كارت العميل</u>
+              </td>
+              <td />
+            </tr>
+          </tbody>
+        </table>
+        <div style={{ marginBottom: '2px' }} className="bold title">
+          {' '}
+          عميلنا العزيز، برجاء الالتزام بسداد الاقساط حسب الجدول المرفق
+        </div>
+
+        <table className="titleborder">
+          <tbody>
+            <tr>
+              <td>
+                {' '}
+                العميل
+                <div className="frame">{numbersToArabic(this.getCode())}</div>
+                <div className="frame">
+                  {this.props.data.product.beneficiaryType === 'individual'
+                    ? this.props.data.customer.customerName
+                    : this.props.data.group.individualsInGroup.find(
+                        (customer) => customer.type === 'leader'
+                      ).customer.customerName}
+                </div>
+              </td>
+              <td>
+                {' '}
+                التاريخ
+                <div className="frame">
+                  {timeToArabicDate(this.props.data.creationDate, false)}
+                </div>
+              </td>
+              <td>
+                {' '}
+                المندوب
+                <div className="frame">
+                  {this.props.data.product.beneficiaryType === 'group'
+                    ? this.props.data.group.individualsInGroup.find(
+                        (member) => member.type === 'leader'
+                      ).customer.representativeName
+                    : this.props.data.customer.representativeName}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                قيمة التمويل{' '}
+                <div className="frame">
+                  {numbersToArabic(this.props.data.principal)}
+                </div>
+              </td>
+              <td>
+                فترة السداد{' '}
+                <div className="frame">
+                  {this.props.data.product.periodType === 'days'
+                    ? local.daily
+                    : local.inAdvanceFromMonthly}
+                </div>
+              </td>
+              <td>
+                عدد الاقساط{' '}
+                <div className="frame">
+                  {numbersToArabic(
+                    this.props.data.installmentsObject.installments.length
+                  )}
+                </div>
+              </td>
+              <td>
+                فترة السماح
+                <div className="frame">
+                  {numbersToArabic(this.props.data.product.gracePeriod)}
+                </div>
+                <div className="frame">تمويل رأس المال</div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                غرامات مسددة{' '}
+                <div className="frame">
+                  {numbersToArabic(this.props.data.penaltiesPaid)}
+                </div>
+              </td>
+              <td>
+                غرامات مطلوبة{' '}
+                <div className="frame">
+                  {numbersToArabic(this.props.penalty)}
+                </div>
+              </td>
+              <td>
+                غرامات معفاة{' '}
+                <div className="frame">
+                  {numbersToArabic(this.props.data.penaltiesCanceled)}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
         <table className="tablestyle" style={{ border: '1px black solid' }}>
           <tbody>
             <tr>
