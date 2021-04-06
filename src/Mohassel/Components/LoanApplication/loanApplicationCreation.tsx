@@ -314,9 +314,9 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             formData.undoReviewDate = application.body.undoReviewDate;
             formData.rejectionDate = application.body.reviewedDate;
             formData.guarantors = guarsArr;
-            // formData.individualDetails = application.body.group.individualsInGroups
             formData.managerVisitDate = (!application.body.managerVisitDate || application.body.managerVisitDate === 0) ? '' : this.getDateString(application.body.managerVisitDate);
             formData.branchManagerId = application.body.branchManagerId;
+            formData.researcherId = application.body.researcherId
             this.setState({
                 selectedCustomer: application.body.customer,
                 customerType: (application.body.product.beneficiaryType === 'individual' && application.body.product.type === 'sme') ? 'sme' : application.body.product.beneficiaryType,

@@ -42,6 +42,8 @@ export function beneficiaryType(val: string) {
       return local.individual;
     case "group":
       return local.group;
+    case 'company':
+      return local.company
     default:
       return "";
   }

@@ -21,6 +21,7 @@ export interface FieldProps {
     permissionKey?: string;
   }
   export interface ProfileProps {
+    source: string;
     tabs: TabProps[];
     activeTab: string;
     setActiveTab(activeTab: string): void;

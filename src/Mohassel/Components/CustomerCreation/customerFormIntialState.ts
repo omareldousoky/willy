@@ -50,21 +50,8 @@ export const step2 = {
 };
 export const step1Company = {
     businessName: '',
-    businessAddressLatLong: '',
-    businessAddressLatLongNumber: {
-        lat: 0,
-        lng: 0
-    },
     businessAddress: '',
-    governorate: '',
-    district: '',
-    village: '',
-    ruralUrban: '',
-    businessPostalCode: '',
-    businessPhoneNumber: '',
-    businessSector: '',
-    businessActivity: '',
-    businessSpeciality: '',
+    businessCharacteristic: '',
     businessLicenseNumber: '',
     businessLicenseIssuePlace: '',
     businessLicenseIssueDate: '',
@@ -95,8 +82,21 @@ export const step3 = {
     }
 };
 export const step2Company = {
-    ...step3,
-    // researcher: ''
+    representative: '',
+    newRepresentative: '',
+    representativeName: '',
+    applicationDate: timeToDateyyymmdd(-1),
+    permanentEmployeeCount: '',
+    partTimeEmployeeCount: '',
+    comments: '',
+    guarantorMaxLoans: 1,
+    maxLoansAllowed: 1,
+    maxPrincipal: 0,
+    principals: {
+        maxIndividualPrincipal: 0,
+        maxGroupIndividualPrincipal: 0,
+        maxGroupPrincipal: 0,
+    }
 }
 
 const endOfDay: Date = new Date();

@@ -106,6 +106,7 @@ export interface DocumentType {
     id?: string;
     pages: number;
     type: string;
+    customerType: string;
     paperType: string;
     name: string;
     active?: boolean;

@@ -662,7 +662,7 @@ export const LoanApplicationCreationForm = (props: any) => {
                             {props.customer.customerType === 'company' ? 
                                 <Col sm={6}>
                                 <Form.Group controlId="researcherId">
-                                    <Form.Label>{local.enquiror}</Form.Label>
+                                    <Form.Label>{local.researcher}</Form.Label>
                                     <AsyncSelect
                                         name="researcherId"
                                         data-qc="researcherId"

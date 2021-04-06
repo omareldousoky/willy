@@ -8,7 +8,7 @@ import Wizard from '../wizard/Wizard';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { editCustomer } from '../../Services/APIs/Customer-Creation/editCustomer';
-import { step3, step1Company } from './customerFormIntialState';
+import { step1Company, step2Company } from './customerFormIntialState';
 import { companyCreationValidationStepOne, companyCreationValidationStepTwo, companyCreationValidationStepTwoEdit, } from './companyFormIntialState';
 import { StepTwoForm } from './StepTwoForm';
 import { StepThreeForm } from './StepThreeForm';
@@ -69,22 +69,9 @@ interface Props {
 interface State {
   step: number;
   step1: {
-    businessAddressLatLong: string;
-    businessAddressLatLongNumber: {
-      lat: number;
-      lng: number;
-    };
     businessName: string;
     businessAddress: string;
-    governorate: string;
-    district: string;
-    village: string;
-    ruralUrban: string;
-    businessPostalCode: string;
-    businessPhoneNumber: string;
-    businessSector: string;
-    businessActivity: string;
-    businessSpeciality: string;
+    businessCharacteristic: string;
     legalStructure: string;
     businessLicenseNumber: string;
     businessLicenseIssuePlace: string;
@@ -96,8 +83,6 @@ interface State {
     customerType: string;
   };
   step2: {
-    geographicalDistribution: string;
-    geoAreaId: string;
     representative: any;
     newRepresentative: any;
     representativeName: string;
@@ -133,7 +118,7 @@ class CompanyCreation extends Component<Props, State>{
     this.state = {
       step: 1,
       step1: step1Company,
-      step2: step3,
+      step2: step2Company,
       customerId: '',
       loading: false,
       hasLoan: false,
@@ -160,7 +145,7 @@ class CompanyCreation extends Component<Props, State>{
   };
   formikStep2: any = {
     isValid: true,
-    values: step3,
+    values: step2Company,
     errors: {},
   };
   async getCustomerById() {
@@ -168,22 +153,9 @@ class CompanyCreation extends Component<Props, State>{
     const res = await getCustomerByID(this.props.location.state.id)
     if (res.status === 'success') {
       const customerBusiness = {
-        businessAddressLatLong: res.body.businessAddressLatLong,
-        businessAddressLatLongNumber: {
-          lat: res.body.businessAddressLatLong ? Number(res.body.businessAddressLatLong.split(',')[0]) : 0,
-          lng: res.body.businessAddressLatLong ? Number(res.body.businessAddressLatLong.split(',')[1]) : 0,
-        },
         businessName: res.body.businessName,
         businessAddress: res.body.businessAddress,
-        governorate: res.body.governorate,
-        district: res.body.district,
-        village: res.body.village,
-        ruralUrban: res.body.ruralUrban,
-        businessPostalCode: res.body.businessPostalCode,
-        businessPhoneNumber: res.body.businessPhoneNumber,
-        businessSector: res.body.businessSector,
-        businessActivity: res.body.businessActivity,
-        businessSpeciality: res.body.businessSpeciality,
+        businessCharacteristic: res.body.businessCharacteristic,
         legalStructure: res.body.legalStructure,
         businessLicenseNumber: res.body.businessLicenseNumber,
         businessLicenseIssuePlace: res.body.businessLicenseIssuePlace,
@@ -194,8 +166,6 @@ class CompanyCreation extends Component<Props, State>{
         taxCardNumber: res.body.taxCardNumber,
       };
       const customerExtraDetails = {
-        geographicalDistribution: res.body.geographicalDistribution,
-        geoAreaId: res.body.geoAreaId ? res.body.geoAreaId : '',
         representative: res.body.representative,
         representativeName: res.body.representativeName,
         applicationDate: timeToDateyyymmdd(res.body.applicationDate),
@@ -207,7 +177,6 @@ class CompanyCreation extends Component<Props, State>{
         guarantorMaxLoans: res.body.guarantorMaxLoans ? Number(res.body.guarantorMaxLoans) : 1,
         maxPrincipal: res.body.maxPrincipal ? Number(res.body.maxPrincipal) : 0,
       };
-      console.log(customerBusiness, this.state.step1, { ...this.state.step2, ...customerExtraDetails})
       this.formikStep1 = {
         values: { ...this.state.step1, ...customerBusiness },
         errors: {},
@@ -234,7 +203,6 @@ class CompanyCreation extends Component<Props, State>{
     }
   }
   submit = (values: object) => {
-    console.log(this.state.step)
     if (this.props.edit && this.state.step === 1) this.getGlobalPrinciple();
     if (this.state.step < 2) {
       this.setState({
@@ -247,7 +215,6 @@ class CompanyCreation extends Component<Props, State>{
   }
   async createEditCustomer() {
     const objToSubmit = { ...this.state.step1, ...this.state.step2 };
-    this.state.step1.businessAddressLatLongNumber?.lat === 0 && this.state.step1.businessAddressLatLongNumber?.lng === 0 ? objToSubmit.businessAddressLatLong = '' : objToSubmit.businessAddressLatLong = `${this.state.step1.businessAddressLatLongNumber?.lat},${this.state.step1.businessAddressLatLongNumber?.lng}`;
     objToSubmit.businessLicenseIssueDate = new Date(objToSubmit.businessLicenseIssueDate).valueOf();
     objToSubmit.applicationDate = new Date(objToSubmit.applicationDate).valueOf();
     objToSubmit.commercialRegisterExpiryDate = new Date(objToSubmit.commercialRegisterExpiryDate).valueOf();
@@ -356,9 +323,10 @@ class CompanyCreation extends Component<Props, State>{
     return (
       <DocumentsUpload
         customerId={this.props.edit ? this.state.selectedCustomer._id : this.state.customerId}
-        previousStep={() => this.setState({ step: 3 })}
+        previousStep={() => this.setState({ step: 2 })}
         edit={this.props.edit}
         view={false}
+        isCompany
       />
     )
   }

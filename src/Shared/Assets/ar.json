@@ -960,7 +960,13 @@
     "done": "تم",
     "viewRejectionReason": "عرض سبب الرفض",
     "companyWebsite": "الموقع الإلكترونى للشركة",
-    "legalStructure":"الشكل القانوني",
-    "commercialRegisterExpiryDate":"تاريخ نهاية السجل التجاري",
-    "jobTitle":"الوظيفة"
+    "legalStructure": "الشكل القانوني",
+    "commercialRegisterExpiryDate": "تاريخ نهاية السجل التجاري",
+    "jobTitle": "الوظيفة",
+    "companyAddress": "عنوان الشركة",
+    "researcher": "الباحث",
+    "company": "شركة",
+    "maxLength50": "لا يمكن ان يكون اكثر من 50",
+    "SMEviceCustomersInfo": "بيانات من لهم حق التوقيع",
+    "businessCharacteristic": "السمة التجارية"
 }

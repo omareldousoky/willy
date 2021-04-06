@@ -523,6 +523,7 @@ export const CustomerProfile = (props: Props) => {
        {mainInfo && <InfoBox info={mainInfo} />}
       </div>
       <Profile
+        source='individual'
         loading={loading}
         backButtonText={local.viewCustomer}
         tabs={tabs}

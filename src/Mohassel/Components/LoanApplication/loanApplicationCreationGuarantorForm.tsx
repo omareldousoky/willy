@@ -50,7 +50,7 @@ export const LoanApplicationCreationGuarantorForm = (props: any) => {
                         </Col>
                     </div>
                     <div style={{ width: '100%', margin: '20px 0' }}>
-                        <h5>{local.viceCustomersInfo}</h5>
+                        <h5>{props.customer.customerType === 'company' ? local.SMEviceCustomersInfo : local.viceCustomersInfo}</h5>
                         <FieldArray
                             name="viceCustomers"
                             render={arrayHelpers => (

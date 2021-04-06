@@ -46,7 +46,7 @@ class LoanList extends Component<Props, State> {
       {
         title: local.customerType,
         key: "customerType",
-        render: data => beneficiaryType(data.application.product.beneficiaryType)
+        render: data => beneficiaryType(data.application.customer.customerType === 'company' ? 'company' : data.application.product.beneficiaryType)
       },
       {
         title: local.loanCode,
@@ -58,7 +58,8 @@ class LoanList extends Component<Props, State> {
         key: "name",
         sortable: true,
         render: data => <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/loans/loan-profile', { id: data.application._id })}>
-          {(data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+          {(data.application.product.beneficiaryType === 'individual' && data.application.product.type === 'micro' ? data.application.customer.customerName :
+          (data.application.product.beneficiaryType === 'individual' && data.application.product.type === 'sme') ? data.application.customer.businessName :
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
             </div>)
@@ -101,7 +102,9 @@ class LoanList extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type: (ability.can('getIssuedSMELoan','application')) ? 'sme' : 'micro' }).then(()=>{
+    const type = (ability.can('getIssuedSMELoan','application')) ? 'sme' : 'micro'
+    this.props.setSearchFilters({ type })
+    this.props.search({ ...this.props.issuedLoansSearchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", type }).then(()=>{
       if(this.props.error)
       Swal.fire("Error !",getErrorMessage(this.props.error),"error")
     }
@@ -163,7 +166,15 @@ class LoanList extends Component<Props, State> {
   }
   render() {
     const array = manageLoansArray();
+    const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.searchFilters.type === 'sme' )
     const searchKeys = ability.can('getIssuedSMELoan','application') ? ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff', 'sme'] : ['keyword', 'dateFromTo', 'status', 'branch', 'doubtful', 'writtenOff']
+    const filteredMappers = ( smePermission ) ? this.mappers.filter(mapper => mapper.key !== 'nationalId') : this.mappers
+    if ( smePermission ) filteredMappers.splice(3, 0, {
+      title: local.commercialRegisterNumber,
+      key: "loanCode",
+      render: data => data.application.customer.commercialRegisterNumber
+    })
+    
     return (
       <>
         <HeaderWithCards
@@ -204,7 +215,7 @@ class LoanList extends Component<Props, State> {
               size={this.state.size}
               url="loan"
               totalCount={this.props.totalCount}
-              mappers={this.mappers}
+              mappers={filteredMappers}
               pagination={true}
               data={this.props.data}
               changeNumber={(key: string, number: number) => {

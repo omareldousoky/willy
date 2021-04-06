@@ -92,7 +92,7 @@ export const StepTwoForm = (props: any) => {
             <Row>
                 <Col sm={12}>
                     <Form.Group controlId="businessName">
-                        <Form.Label className="customer-form-label">{`${local.businessName}*`}</Form.Label>
+                        <Form.Label className="customer-form-label">{`${isCompany ? local.companyName : local.businessName}*`}</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="businessName"
@@ -111,7 +111,7 @@ export const StepTwoForm = (props: any) => {
             <Row>
                 <Col sm={12}>
                     <Form.Group controlId="businessAddress">
-                        <Form.Label className="customer-form-label">{`${local.businessAddress}*`}</Form.Label>
+                        <Form.Label className="customer-form-label">{`${isCompany ? local.companyAddress : local.businessAddress}*`}</Form.Label>
                         <Form.Control
                             type="text"
                             name="businessAddress"
@@ -127,6 +127,26 @@ export const StepTwoForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
+            {isCompany && <Row>
+                <Col sm={12}>
+                    <Form.Group controlId="businessCharacteristic">
+                        <Form.Label className="customer-form-label">{`${local.businessCharacteristic}*`}</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="businessCharacteristic"
+                            data-qc="businessCharacteristic"
+                            value={values.businessCharacteristic}
+                            onChange={handleChange}
+                            isInvalid={errors.businessCharacteristic && touched.businessCharacteristic}
+                            onBlur={handleBlur}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.businessCharacteristic}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                </Col>
+            </Row>}
+            {!isCompany && <>
             <Row>
                 <Col sm={12}>
                     <Form.Group controlId="customerWorkAddressLocation">
@@ -365,6 +385,7 @@ export const StepTwoForm = (props: any) => {
                     </Form.Group>
                 </Col>
             </Row>
+            </>}
             <Row>
             {isCompany && <Col sm={6}>
                     <Form.Group controlId="legalStructure">

@@ -103,6 +103,7 @@ export const Company = () => {
             <h3>{viewCompany}</h3>
             {mainInfo.length > 0 && <InfoBox info={mainInfo} />}
             <Profile
+              source='company'
               loading={isLoading}
               backButtonText={viewCompany}
               editText={edit}

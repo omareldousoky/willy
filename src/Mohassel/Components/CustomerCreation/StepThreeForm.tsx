@@ -32,7 +32,7 @@ export const StepThreeForm = (props: any) => {
         majorGeoDivisionName: { ar: '' },
         majorGeoDivisionLegacyCode: 0
     }])
-    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep, edit } = props;
+    const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, previousStep, edit, isCompany } = props;
     const getLoanOfficers = async (inputValue: string) => {
         const res = await searchLoanOfficer({ from: 0, size: 100, name: inputValue, status: "active",});
         if (res.status === "success") {
@@ -67,7 +67,7 @@ export const StepThreeForm = (props: any) => {
     return (
         <Form onSubmit={handleSubmit}>
             <Loader open={loading} type="fullscreen" />
-            <Row>
+            {!isCompany && <Row>
                 <Col sm={12}>
                     <Form.Group controlId="geoAreaId">
                         <Form.Label className="customer-form-label">{`${local.geographicalDistribution}*`}</Form.Label>
@@ -90,7 +90,7 @@ export const StepThreeForm = (props: any) => {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
-            </Row>
+            </Row>}
             <Row>
                 <Col sm={6}>
                     <Form.Group controlId="representative">

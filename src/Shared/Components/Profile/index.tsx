@@ -15,6 +15,7 @@ import { ProfileProps } from "./types";
 
 
 export const Profile = ({
+  source,
   loading,
   backButtonText,
   editText,
@@ -96,6 +97,7 @@ export const Profile = ({
                     customerId={fieldData}
                     edit={false}
                     view={true}
+                    isCompany={source === 'company'}
                   />
                 )
               );

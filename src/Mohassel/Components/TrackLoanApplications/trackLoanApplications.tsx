@@ -85,7 +85,7 @@ class TrackLoanApplications extends Component<Props, State>{
       {
         title: local.customerType,
         key: "customerType",
-        render: data => beneficiaryType(data.application.product.beneficiaryType)
+        render: data => beneficiaryType(data.application.customer.customerType === 'company' ? 'company' : data.application.product.beneficiaryType)
       },
       {
         title: local.applicationCode,
@@ -96,7 +96,8 @@ class TrackLoanApplications extends Component<Props, State>{
         title: local.customerName,
         key: "name",
         sortable: true,
-        render: data => data.application.product.beneficiaryType === 'individual' ? data.application.customer.customerName :
+        render: data => data.application.product.beneficiaryType === 'individual' && data.application.product.type === 'micro' ? data.application.customer.customerName :
+        (data.application.product.beneficiaryType === 'individual' && data.application.product.type === 'sme') ? data.application.customer.businessName :
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {data.application.group?.individualsInGroup.map(member => member.type === 'leader' ? <span key={member.customer._id}>{member.customer.customerName}</span> : null)}
           </div>
@@ -180,7 +181,9 @@ class TrackLoanApplications extends Component<Props, State>{
     }
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId, type: (ability.can('getSMEApplication','application')) ? 'sme' : 'micro' }).then(() => {
+    const type = (ability.can('getIssuedSMELoan','application')) ? 'sme' : 'micro'
+    this.props.setSearchFilters({ type })
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'application', branchId: this.props.branchId, type }).then(() => {
       if (this.props.error)
         Swal.fire("", getErrorMessage(this.props.error), "error")
     }
@@ -284,6 +287,13 @@ class TrackLoanApplications extends Component<Props, State>{
       "branch",
       "status-application",
     ]
+    const smePermission = ( ability.can('getIssuedSMELoan','application') && this.props.searchFilters.type === 'sme' )
+    const filteredMappers = ( smePermission ) ? this.mappers.filter(mapper => mapper.key !== 'nationalId') : this.mappers
+    if ( smePermission ) filteredMappers.splice(3, 0, {
+      title: local.commercialRegisterNumber,
+      key: "loanCode",
+      render: data => data.application.customer.commercialRegisterNumber
+    })
     return (
       <>
         <div className="print-none">
@@ -327,7 +337,7 @@ class TrackLoanApplications extends Component<Props, State>{
                 from={this.state.from}
                 size={this.state.size}
                 totalCount={this.props.totalCount}
-                mappers={this.mappers}
+                mappers={filteredMappers}
                 pagination={true}
                 data={this.props.data}
                 changeNumber={(key: string, number: number) => {
