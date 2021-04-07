@@ -10,7 +10,6 @@ import {
   getFullCustomerKey,
 } from "../../Services/utils";
 import { getDateAndTime } from "../../../Mohassel/Services/getRenderDate";
-//TODO will probably change this
 import { manageCustomersArray } from "../../../Mohassel/Components/CustomerCreation/manageCustomersInitial";
 import { Card as CardType } from "../../../Mohassel/Components/ManageAccounts/manageAccountsInitials";
 import HeaderWithCards from "../../../Mohassel/Components/HeaderWithCards/headerWithCards";
@@ -66,8 +65,6 @@ const List = ({
       })
     );
     if (error) Swal.fire("error", getErrorMessage(error), "error");
-        //TODO will change tabs
-
     const tabs = manageCustomersArray();
     setManageCompaniesTab(tabs);
   }, [branchId, dispatch, error, from, size]);

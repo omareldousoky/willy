@@ -10,7 +10,8 @@ const {
   mustBeGreaterThanZero,
   mustBeOneOrMore,
   maxGlobalLimitReachedError,
-  dateShouldBeBeforeToday
+  dateShouldBeBeforeToday,
+  maxLength500
 } = local;
 
 const endOfDay: Date = new Date();
@@ -18,7 +19,7 @@ endOfDay.setHours(23, 59, 59, 59);
 
 export const companyCreationValidationStepOne = Yup.object().shape({
     businessName: Yup.string().trim().max(100, maxLength100).required(required).matches(/^(?!.*?\s{2})([\u0621-\u064A\s]+){1,100}$/,onlyArabicLetters),
-    businessAddress: Yup.string().trim().max(500, "Can't be more than 500 characters").required(required),
+    businessAddress: Yup.string().trim().max(500, maxLength500).required(required),
     businessCharacteristic: Yup.string().trim().required(required),
     legalStructure: Yup.string().trim().required(required),
     businessLicenseNumber: Yup.number().max(50, maxLength50).required(required),

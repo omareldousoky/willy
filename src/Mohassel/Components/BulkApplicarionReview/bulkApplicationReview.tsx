@@ -283,8 +283,9 @@ class BulkApplicationReview extends Component<Props, State>{
     this.props.setSearchFilters({})
   }
   render() {
-    const searchKey = ability.can('getSMEApplication','application') ? ['keyword', 'dateFromTo', 'review-application', 'sme'] : ['keyword', 'dateFromTo', 'review-application']
+    const searchKey = ['keyword', 'dateFromTo', 'review-application']
     this.state.branchId === 'hq' && searchKey.push('branch')
+    ability.can('getSMEApplication','application') && searchKey.push('sme')
     return (
       this.state.checkPermission &&
       <>

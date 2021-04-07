@@ -126,11 +126,6 @@ const appRoutes = [
             label: local.viewCompany,
             render: (props) => <CompanyProfile {...props} />,
           },
-          // {
-          //   path: "/move-company",
-          //   label: local.moveCustomers,
-          //   render: (props) => <Can I="changeOfficer" a="customer"><MoveCustomers {...props} /></Can>
-          // },
         ]
       },
       {

@@ -19,43 +19,6 @@ import { getErrorMessage, timeToDateyyymmdd } from '../../../Shared/Services/uti
 import ability from '../../config/ability';
 import { getMaxPrinciples } from '../../Services/APIs/configApis/config';
 
-
-interface CustomerInfo {
-  birthDate: number;
-  customerName?: string;
-  nationalIdIssueDate: number;
-  homePostalCode: number;
-  nationalId?: string;
-  customerHomeAddress?: string;
-  customerAddressLatLong: string;
-  customerAddressLatLongNumber: {
-    lat: number;
-    lng: number;
-  };
-}
-interface CustomerBusiness {
-  businessAddressLatLong: string;
-  businessAddressLatLongNumber: {
-    lat: number;
-    lng: number;
-  };
-  businessPostalCode: any;
-  businessLicenseIssueDate: any;
-}
-interface CustomerExtraDetails {
-  applicationDate: any;
-  permanentEmployeeCount: any;
-  partTimeEmployeeCount: any;
-  representative: any;
-  maxLoansAllowed: number;
-  allowGuarantorLoan: boolean;
-  guarantorMaxLoans: number;
-}
-export interface Customer {
-  customerInfo: CustomerInfo;
-  customerBusiness: CustomerBusiness;
-  customerExtraDetails: CustomerExtraDetails;
-}
 interface Props {
   history: Array<string>;
   location: {
@@ -265,7 +228,6 @@ class CompanyCreation extends Component<Props, State>{
     }
   }
    previousStep(values, step: number): void {
-     console.log(values, this.props.edit)
     this.setState({
       step: step - 1,
       [`step${step}`]: values,
@@ -379,7 +341,7 @@ class CompanyCreation extends Component<Props, State>{
             </Card.Body>
           </div>
         </Card>
-      </Container >
+      </Container>
     )
   }
 }
