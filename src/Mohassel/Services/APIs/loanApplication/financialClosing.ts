@@ -3,7 +3,7 @@ import axios from '../axios-instance';
 interface FinancialClosingObj {
     closeDate: number;
 }
-interface FinancialBlockingObj {
+export interface FinancialBlockingObj {
     blockDate: number;
     branchesIds: string[];
 }

@@ -9,13 +9,15 @@ import { theme } from '../../../../theme'
 import DateField from '../../Common/FormikFields/dateField'
 import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
-import { getTimestamp } from '../../../../Shared/Services/utils'
+import { getErrorMessage, getTimestamp } from '../../../../Shared/Services/utils'
 import TextField from '../../Common/FormikFields/textField'
+import Swal from 'sweetalert2'
 
 interface Props {
     size: number;
     from: number;
-    search: (data) => void;
+    search: (data) => Promise<void>;
+    error: string;
     searchFilters: (data) => void;
     setLoading: (data) => void;
 }
@@ -23,7 +25,7 @@ interface Option {
     label: string;
     value: string;
 }
-interface BlockingObj {
+export interface BlockingObj {
     from: number;
     size: number;
     branchCode: number;
@@ -74,21 +76,24 @@ class SearchBlocking extends Component<Props, State> {
   }
   handleSubmit = async(values: BlockingObj) =>{
     const obj = {
-      status: !values.blockDateFilter ? values.status : '',
-      blockDate: getTimestamp(values.blockDate as string),
+      status: (!values.blockDateFilter && !values.blockDate) ? values.status : '',
+      blockDate:  values.blockDateFilter ? getTimestamp(values.blockDate as string) : 0,
       blockDateFilter: values.blockDateFilter,
       branchCode: values.branchCode,
       branchName: values.branchName,
     }
     if(obj){
     this.props.searchFilters(obj)
-    console.log(obj)
     this.props.search({
         ...obj,
         from: this.props.from,
         size: this.props.size,
         url: 'block'
-    })
+    }).then(()=>{
+      if(this.props.error)
+      Swal.fire("Error !",getErrorMessage(this.props.error),"error")
+    }
+    );
    }  
   }
 
@@ -126,6 +131,10 @@ class SearchBlocking extends Component<Props, State> {
                       if (event) {
                         const { value } = event as Option
                         formikProps.setFieldValue('status', value)
+                        formikProps.setFieldValue('blockDateFilter', '')
+                        formikProps.setFieldValue('blockDate',0)
+                      } else {
+                        formikProps.setFieldValue('status', '')
                       }
                     }}
                     options={[
@@ -133,7 +142,6 @@ class SearchBlocking extends Component<Props, State> {
                       { label: local.ltsBlocking, value: 'unblocked' },
                       { label: local.ltsUnblocking, value: 'blocked' },
                     ]}
-                    isDisabled={!!formikProps.values.blockDateFilter}
                   />
                 </div>
               </Col>
@@ -186,7 +194,8 @@ class SearchBlocking extends Component<Props, State> {
                   id="blockDate"
                 />
               </Col>
-              <Col sm={5} className="my-2">
+              {formikProps.values.blockDate 
+              !== 0 && <Col sm={5} className="my-2">
                 <p>{local.blockDateFilter}</p>
                 <div className="dropdown-container" style={{ flex: 2 }}>
                   <Select<Option>
@@ -199,6 +208,7 @@ class SearchBlocking extends Component<Props, State> {
                       if (event) {
                         const { value } = event as Option
                         formikProps.setFieldValue('blockDateFilter', value)
+                        formikProps.setFieldValue('status', '')
                       } else {
                         formikProps.setFieldValue('blockDateFilter', '')
                       }
@@ -210,13 +220,18 @@ class SearchBlocking extends Component<Props, State> {
                     ]}
                   />
                 </div>
-              </Col>
+              </Col>}
             </Row>
             <ValueChangeListener />
           </Form>
         )}
       </Formik>
     )
+  }
+}
+const mapStateToProps = (state) => {
+  return {
+    error: state.search.error,
   }
 }
 const addSearchToProps = (dispatch) => {
@@ -227,4 +242,4 @@ const addSearchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, addSearchToProps)(SearchBlocking)
+export default connect(mapStateToProps, addSearchToProps)(SearchBlocking)
