@@ -149,7 +149,6 @@ class LoanApplicationCreation extends Component<Props, State> {
       amount: number
       type: string
     }[] = []
-    const defaultApplication = this.state.application
     if (customers.length > 0) {
       const check = await this.checkCustomersLimits(customers, false)
       if (check.flag === true && check.customers) {
@@ -161,11 +160,12 @@ class LoanApplicationCreation extends Component<Props, State> {
           }
           customersTemp.push(obj)
         })
-        defaultApplication.individualDetails = customersTemp
-        this.setState({
-          selectedCustomers: check.customers,
-          application: defaultApplication,
-        })
+        this.setState(
+          produce<State>((draftState) => {
+            draftState.selectedCustomers = check.customers
+            draftState.application.individualDetails = customersTemp
+          })
+        )
       } else if (
         check.flag === false &&
         check.validationObject &&
@@ -183,6 +183,10 @@ class LoanApplicationCreation extends Component<Props, State> {
             i === 0
               ? (names += check.validationObject[id].customerName)
               : (names = names + ', ' + check.validationObject[id].customerName)
+        })
+        // to be reflected in `DualBox` we need to declare that selected options are clear `[]`
+        this.setState({
+          selectedCustomers: [],
         })
         Swal.fire(
           'error',
