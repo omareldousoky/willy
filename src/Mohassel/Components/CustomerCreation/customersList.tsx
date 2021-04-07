@@ -266,7 +266,7 @@ class CustomersList extends Component<Props, State> {
     const { size, from } = this.state
     this.props
       .search({
-        ...searchFilters,
+        ...this.props.searchFilters,
         key: customerShortenedCode
           ? getFullCustomerKey(customerShortenedCode)
           : key || undefined,
