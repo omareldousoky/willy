@@ -7,7 +7,6 @@ export const financialClosingArray = (): Tab[] => {
     financialClosingArr.push({
       icon: 'blocking',
       header: local.financialBlocking,
-      desc: local.ltsBlocking,
       path: '/financial-closing/financial-blocking',
     })
   }  
@@ -15,7 +14,6 @@ export const financialClosingArray = (): Tab[] => {
     financialClosingArr.push({
       icon: 'assignProductToBranch',
       header: local.financialClosing,
-      desc: local.ltsClosing,
       path: '/financial-closing/lts-closing',
     })
   }

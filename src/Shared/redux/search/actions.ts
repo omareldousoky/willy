@@ -9,6 +9,7 @@ import {searchClearance} from '../../../Mohassel/Services/APIs/clearance/searchC
 import { searchGroups } from '../../../Mohassel/Services/APIs/ManagerHierarchy/searchGroups';
 import { searchLoanOfficer } from '../../../Mohassel/Services/APIs/LoanOfficers/searchLoanOfficer';
 import { searchDefaultingCustomers } from '../../../Mohassel/Services/APIs/LegalAffairs/defaultingCustomers';
+import { searchFinancialBlocking } from '../../../Mohassel/Services/APIs/loanApplication/financialClosing'
 export const search = (obj) => {
     switch (obj.url) {
         case ('customer'):
@@ -153,7 +154,20 @@ export const search = (obj) => {
                         dispatch({ type: 'SET_LOADING', payload: false })
                         dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
                     }  
-             } 
+             }
+             case ('block'):
+                return async (dispatch)=>{
+                       delete obj.url;
+                       dispatch({ type: 'SET_LOADING', payload: true })
+                       const res = await searchFinancialBlocking(obj);
+                       if (res.status === 'success') {
+                           dispatch({ type: 'SET_LOADING', payload: false })
+                           dispatch({ type: 'SEARCH', payload: { ...res.body, status: res.status, error: undefined } })
+                       } else {
+                           dispatch({ type: 'SET_LOADING', payload: false })
+                           dispatch({ type: 'SEARCH', payload: { ...res.error, status: res.status } })
+                       }  
+                } 
         case ('clearData'):
             return (dispatch) => {
                 dispatch({ type: 'CLEAR_DATA', payload: {} })

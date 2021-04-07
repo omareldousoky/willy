@@ -10,6 +10,7 @@ interface DateFieldProps {
   className?: string;
   onlyField?: boolean;
   fieldClassName?: string;
+  label?: string;
 }
 
 const DateField = (props: DateFieldProps & FieldProps<string>) => {
@@ -23,6 +24,7 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
     className,
     fieldClassName,
     onlyField = false,
+    label,
     ...restProps
   } = props;
   const { touched, errors } = form;
@@ -37,7 +39,7 @@ const DateField = (props: DateFieldProps & FieldProps<string>) => {
           <InputGroup key={key}>
             <InputGroup.Append>
               <InputGroup.Text id={`${id || field.name}Text`}>
-                {local.date}
+                {label || local.date}
               </InputGroup.Text>
             </InputGroup.Append>
             <FormControl
