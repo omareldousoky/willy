@@ -38,9 +38,16 @@ const DualBox = (props: Props) => {
   const [checkAll, setCheckAll] = useState<boolean>(false)
 
   useEffect(() => {
-    const selectedIds = props.selected.map((item) => item._id)
-    setOptions(props.options.filter((item) => !selectedIds.includes(item._id)))
-    setSelectedOptions(props.selected)
+    if (props.selected && props.selected.length) {
+      const selectedIds = props.selected.map((item) => item._id)
+      setOptions(
+        props.options.filter((item) => !selectedIds.includes(item._id))
+      )
+      setSelectedOptions(props.selected)
+    } else {
+      setOptions(props.options)
+      setSelectedOptions([])
+    }
   }, [props.options, props.selected])
 
   const selectItem = (option) => {
@@ -52,10 +59,7 @@ const DualBox = (props: Props) => {
   }
   const addToSelectedList = () => {
     setCheckAll(false)
-    const selectedIds = selectionArray.map((el) => el._id)
     const newSelectedOptions = [...selectedOptions, ...selectionArray]
-    setOptions(options.filter((item) => !selectedIds.includes(item._id)))
-    setSelectedOptions(newSelectedOptions)
     setSelectionArray([])
     props.onChange(newSelectedOptions)
   }
@@ -63,8 +67,6 @@ const DualBox = (props: Props) => {
   const removeItemFromList = (option) => {
     const newList = selectedOptions.filter((item) => item._id !== option._id)
     props.onChange(newList)
-    setSelectedOptions(newList)
-    setOptions([...options, option])
   }
 
   const selectAllOptions = () => {
@@ -85,8 +87,6 @@ const DualBox = (props: Props) => {
 
   const removeAllFromList = () => {
     props.onChange([])
-    setOptions([...options, ...selectedOptions])
-    setSelectedOptions([])
   }
 
   const handleSearch = (e) => {
@@ -184,7 +184,7 @@ const DualBox = (props: Props) => {
                   <div
                     className="list-group-item"
                     style={{ background: '#FAFAFA' }}
-                    onClick={() => selectAllOptions()}
+                    onClick={selectAllOptions}
                   >
                     <Form.Check
                       type="checkbox"
@@ -278,7 +278,7 @@ const DualBox = (props: Props) => {
               className="btn btn-default btn-md"
               style={{ height: 45, width: 95, margin: '20px 0px' }}
               disabled={selectionArray.length < 1}
-              onClick={() => addToSelectedList()}
+              onClick={addToSelectedList}
             >
               {local.add}
               <span
@@ -326,7 +326,7 @@ const DualBox = (props: Props) => {
                     {local.count}({selectedOptions.length})
                   </span>
                   {!props.oneWay && (
-                    <div onClick={() => removeAllFromList()}>
+                    <div onClick={removeAllFromList}>
                       <span>
                         <img
                           alt="delete"

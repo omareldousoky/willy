@@ -171,6 +171,11 @@ class LoanApplicationCreation extends Component<Props, State> {
         check.validationObject &&
         Object.keys(check.validationObject).length > 0
       ) {
+        // to be reflected in `DualBox` we need to declare that selected options has been reset
+        // maintain existing customers in edit
+        this.setState((prevState) => ({
+          selectedCustomers: [...prevState.selectedCustomers],
+        }))
         let names = ''
         let financeNames = ''
         Object.keys(check.validationObject).forEach((id, i) => {
@@ -183,10 +188,6 @@ class LoanApplicationCreation extends Component<Props, State> {
             i === 0
               ? (names += check.validationObject[id].customerName)
               : (names = names + ', ' + check.validationObject[id].customerName)
-        })
-        // to be reflected in `DualBox` we need to declare that selected options are clear `[]`
-        this.setState({
-          selectedCustomers: [],
         })
         Swal.fire(
           'error',
@@ -201,6 +202,7 @@ class LoanApplicationCreation extends Component<Props, State> {
         )
       }
     } else {
+      // remove all
       this.setState({
         selectedCustomers: [],
       })
