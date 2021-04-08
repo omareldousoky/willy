@@ -25,7 +25,6 @@ interface State {
   loading: boolean
   formulas: Array<object>
 }
-
 class LoanProductCreation extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
@@ -34,6 +33,7 @@ class LoanProductCreation extends Component<Props, State> {
         productName: '',
         beneficiaryType: 'individual',
         calculationFormulaId: '',
+        type: 'micro',
         loanNature: 'cash',
         currency: 'egp',
         periodLength: 1,
@@ -113,20 +113,6 @@ class LoanProductCreation extends Component<Props, State> {
     this.getGlobalPrinciple()
   }
 
-  async getFormulas() {
-    this.setState({ loading: true })
-    const formulas = await getFormulas()
-    if (formulas.status === 'success') {
-      this.setState({
-        formulas: formulas.body.data,
-        loading: false,
-      })
-    } else {
-      Swal.fire('error', getErrorMessage(formulas.error.error), 'error')
-      this.setState({ loading: false })
-    }
-  }
-
   async getGlobalPrinciple() {
     this.setState({ loading: true })
     const princples = await getMaxPrinciples()
@@ -144,6 +130,20 @@ class LoanProductCreation extends Component<Props, State> {
       })
     } else {
       Swal.fire('error', getErrorMessage(princples.error.error), 'error')
+      this.setState({ loading: false })
+    }
+  }
+
+  async getFormulas() {
+    this.setState({ loading: true })
+    const formulas = await getFormulas()
+    if (formulas.status === 'success') {
+      this.setState({
+        formulas: formulas.body.data,
+        loading: false,
+      })
+    } else {
+      Swal.fire('error', getErrorMessage(formulas.error.error), 'error')
       this.setState({ loading: false })
     }
   }

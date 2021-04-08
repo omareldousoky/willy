@@ -1,9 +1,5 @@
 import React from 'react'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import InputGroup from 'react-bootstrap/InputGroup'
+import { Form, Row, Col, InputGroup, Button } from 'react-bootstrap'
 import * as local from '../../../Shared/Assets/ar.json'
 
 export const LoanProductCreationForm = (props: any) => {
@@ -47,7 +43,13 @@ export const LoanProductCreationForm = (props: any) => {
               data-qc="beneficiaryType"
               value={values.beneficiaryType}
               onBlur={handleBlur}
-              onChange={handleChange}
+              onChange={(e: any) => {
+                const val = e.currentTarget.value
+                if (val === 'group') {
+                  setFieldValue('type', 'micro')
+                }
+                setFieldValue('beneficiaryType', val)
+              }}
               isInvalid={errors.beneficiaryType && touched.beneficiaryType}
               disabled={edit}
             >
@@ -91,6 +93,51 @@ export const LoanProductCreationForm = (props: any) => {
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
+        {values.beneficiaryType === 'individual' && (
+          <Col>
+            <Form.Group controlId="type">
+              <Form.Label className="data-label">{local.actionType}</Form.Label>
+              <Form.Control
+                as="select"
+                name="type"
+                data-qc="type"
+                value={values.type}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                isInvalid={errors.type && touched.type}
+                disabled={edit}
+              >
+                <option value="micro">Micro</option>
+                <option value="sme">SME</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {errors.type}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        )}
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group controlId="currency">
+            <Form.Label className="data-label">{local.currency}</Form.Label>
+            <Form.Control
+              as="select"
+              name="currency"
+              data-qc="currency"
+              value={values.currency}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              isInvalid={errors.currency && touched.currency}
+              disabled={edit}
+            >
+              <option value="egp">{local.egp}</option>
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {errors.currency}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
         <Col>
           <Form.Group controlId="loanNature">
             <Form.Label className="data-label">{local.loanNature}</Form.Label>
@@ -114,22 +161,25 @@ export const LoanProductCreationForm = (props: any) => {
       </Row>
       <Row>
         <Col>
-          <Form.Group controlId="currency">
-            <Form.Label className="data-label">{local.currency}</Form.Label>
+          <Form.Group controlId="noOfInstallments">
+            <Form.Label className="data-label">
+              {local.noOfInstallments}
+            </Form.Label>
             <Form.Control
-              as="select"
-              name="currency"
-              data-qc="currency"
-              value={values.currency}
-              onBlur={handleBlur}
+              type="number"
+              name="noOfInstallments"
+              data-qc="noOfInstallments"
+              value={values.noOfInstallments}
               onChange={handleChange}
-              isInvalid={errors.currency && touched.currency}
+              onBlur={handleBlur}
+              isInvalid={errors.noOfInstallments && touched.noOfInstallments}
               disabled={edit}
-            >
-              <option value="egp">{local.egp}</option>
-            </Form.Control>
+            />
             <Form.Control.Feedback type="invalid">
-              {errors.currency}
+              {errors.noOfInstallments === 'outOfRange'
+                ? `${local.mustBeinRange} ` +
+                  `${values.minInstallment} ${local.and} ${values.maxInstallment}`
+                : errors.noOfInstallments}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
@@ -180,25 +230,20 @@ export const LoanProductCreationForm = (props: any) => {
       </Row>
       <Row>
         <Col>
-          <Form.Group controlId="noOfInstallments">
-            <Form.Label className="data-label">
-              {local.noOfInstallments}
-            </Form.Label>
+          <Form.Group controlId="gracePeriod">
+            <Form.Label className="data-label">{local.gracePeriod}</Form.Label>
             <Form.Control
               type="number"
-              name="noOfInstallments"
-              data-qc="noOfInstallments"
-              value={values.noOfInstallments}
+              name="gracePeriod"
+              data-qc="gracePeriod"
+              value={values.gracePeriod}
               onChange={handleChange}
               onBlur={handleBlur}
-              isInvalid={errors.noOfInstallments && touched.noOfInstallments}
+              isInvalid={errors.gracePeriod && touched.gracePeriod}
               disabled={edit}
             />
             <Form.Control.Feedback type="invalid">
-              {errors.noOfInstallments === 'outOfRange'
-                ? `${local.mustBeinRange} ` +
-                  `${values.minInstallment} ${local.and} ${values.maxInstallment}`
-                : errors.noOfInstallments}
+              {errors.gracePeriod}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
@@ -221,22 +266,6 @@ export const LoanProductCreationForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
-      <Form.Group controlId="gracePeriod">
-        <Form.Label className="data-label">{local.gracePeriod}</Form.Label>
-        <Form.Control
-          type="number"
-          name="gracePeriod"
-          data-qc="gracePeriod"
-          value={values.gracePeriod}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          isInvalid={errors.gracePeriod && touched.gracePeriod}
-          disabled={edit}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.gracePeriod}
-        </Form.Control.Feedback>
-      </Form.Group>
       <Row>
         <Col>
           <Form.Group controlId="interest">
@@ -1055,6 +1084,7 @@ export const LoanProductCreationForm = (props: any) => {
                     }}
                     type="button"
                     variant="danger"
+                    disabled={edit}
                   >
                     -
                   </Button>
@@ -1070,6 +1100,7 @@ export const LoanProductCreationForm = (props: any) => {
             setFieldValue('aging', agingValues)
           }}
           type="button"
+          disabled={edit}
         >
           +
         </Button>
