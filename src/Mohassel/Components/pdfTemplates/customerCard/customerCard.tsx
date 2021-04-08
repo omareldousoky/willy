@@ -11,7 +11,7 @@ interface Props {
     penalty: number;
     getGeoArea: Function;
     remainingTotal: number;
-    members: IndividualWithInstallments[];
+    members: IndividualWithInstallments;
 }
 interface State {
     totalDaysLate: number;
@@ -19,17 +19,6 @@ interface State {
 }
 export function roundTo2(value: number) {
     return Math.round((value) * 100) / 100
-}
-export function shareInGroup(array, customerId){
-    if(array.length > 0){
-        const amount = array.filter(el => el.individualInGroup.customer._id === customerId)[0].installmentsObject.output[0].installmentResponse;
-        return roundTo2(amount)
-    }
-    return 0
-}
-export function shareInGroupFallBack(value: number, total: number, installment: number) {
-    const share = roundTo2((value/total)*installment);
-    return share
 }
 class CustomerCardPDF extends Component<Props, State> {
     constructor(props) {
@@ -235,13 +224,13 @@ class CustomerCardPDF extends Component<Props, State> {
                                 : this.props.data.product.beneficiaryType === "group" ?
                                     this.props.data.group.individualsInGroup.map((individualInGroup, index) => {
                                         const area = this.props.getGeoArea(individualInGroup.customer.geoAreaId);
-                                        const share = shareInGroup(this.props.members, individualInGroup.customer._id);
+                                        const share = this.props.members.customerTable?.filter(member => member.customer._id === individualInGroup.customer._id)[0].installmentAmount;
                                         return (
                                             <tr key={index}>
                                                 <td>{numbersToArabic(individualInGroup.customer.key)}</td>
                                                 <td>{individualInGroup.customer.customerName}</td>
                                                 <td>{numbersToArabic(individualInGroup.amount)}</td>
-                                                <td>{numbersToArabic(share === 0 ? shareInGroupFallBack(individualInGroup.amount, this.props.data.principal, this.props.data.installmentsObject.installments[0].installmentResponse) : share)}</td>
+                                                <td>{numbersToArabic(share)}</td>
                                                 <td style={{ color: (!area.active && area.name !== '-') ? 'red' : 'black' }}>{area.name}</td>
                                                 <td>{individualInGroup.customer.customerHomeAddress}</td>
                                                 <td>{numbersToArabic(individualInGroup.customer.mobilePhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.businessPhoneNumber) + '-' + numbersToArabic(individualInGroup.customer.homePhoneNumber)}</td>
