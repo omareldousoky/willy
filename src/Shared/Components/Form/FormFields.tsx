@@ -4,8 +4,13 @@ import { Row, Col } from 'react-bootstrap'
 
 import { arrayToPairs, isGroupField } from '../../../Shared/Services/utils'
 import FormField from './FormField'
-import { IFormField, IGroupField, IField, FormFieldsProps, GroupFieldProps } from './types'
-
+import {
+  IFormField,
+  IGroupField,
+  IField,
+  FormFieldsProps,
+  GroupFieldProps,
+} from './types'
 
 const GroupField: FunctionComponent<GroupFieldProps> = ({
   field,
@@ -35,44 +40,28 @@ export const FormFieldPairs: FunctionComponent<FormFieldsProps> = ({
     <>
       {formFieldPairs.map((fieldPairs: IFormField[]) => {
         const isPair = !!fieldPairs[1]
-        const groupFields = fieldPairs.filter((field) =>
-          isGroupField(field)
-        ) as IGroupField[]
 
-        if (groupFields.length) {
-          return (
-            <div key={fieldPairs[0].name}>
-              {groupFields.map((groupField: IGroupField) => {
-                return (
-                  <GroupField
-                    key={groupField.name}
-                    field={groupField}
-                    formikProps={formikProps}
-                    pairs
-                  />
-                )
-              })}
-            </div>
+        const renderPairsField = (field: IFormField, index: number) =>
+          isGroupField(field) ? (
+            <Col>
+              <GroupField
+                key={field.name}
+                field={field as IGroupField}
+                formikProps={formikProps}
+                pairs
+              />
+            </Col>
+          ) : (
+            <Col sm={isPair || index === 1 ? 6 : 12}>
+              <FormField field={field as IField} formikProps={formikProps} />
+            </Col>
           )
-        }
 
         return (
           <Row key={fieldPairs[0].name}>
-            <Col sm={isPair ? 6 : 12}>
-              <FormField
-                field={fieldPairs[0] as IField}
-                formikProps={formikProps}
-              />
-            </Col>
+            {renderPairsField(fieldPairs[0], 0)}
 
-            {isPair && (
-              <Col sm={6}>
-                <FormField
-                  field={fieldPairs[1] as IField}
-                  formikProps={formikProps}
-                />
-              </Col>
-            )}
+            {isPair && renderPairsField(fieldPairs[1], 1)}
           </Row>
         )
       })}
@@ -93,6 +82,7 @@ const FormFields: FunctionComponent<FormFieldsProps> = ({
               key={field.name}
               field={field as IGroupField}
               formikProps={formikProps}
+              pairs
             />
           )
         }

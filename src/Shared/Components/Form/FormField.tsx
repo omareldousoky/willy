@@ -25,19 +25,56 @@ const FormField: FunctionComponent<FormFieldProps> = ({
 
   const label = `${field.label}${isRequired(field.validation) ? ' *' : ''}`
 
-  
+
+  const renderFormField = () => {
+    switch (field.type) {
+      case 'checkbox':
+        return <Form.Check type="checkbox" label={label} />
+
+      case 'select':
+        return (
+          <Form.Control
+            as="select"
+            name={field.name}
+            value={fieldValue}
+            data-qc={field.name}
+            isInvalid={!!fieldErrors && isToucehd}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="dropdown-select"
+            defaultValue=""
+          >
+            <option disabled value=""></option>
+            {field.options.map(({ label, value }) => (
+              <option key={value} value={value} data-qc={value}>
+                {label}
+              </option>
+            ))}
+          </Form.Control>
+        )
+
+      default:
+        return (
+          <Form.Control
+            type={field.type}
+            name={field.name}
+            value={fieldValue}
+            data-qc={field.name}
+            isInvalid={!!fieldErrors && isToucehd}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        )
+    }
+  }
+
   return (
     <Form.Group controlId={field.name}>
-      <Form.Label column>{label}</Form.Label>
-      <Form.Control
-        type={field.type}
-        name={field.name}
-        data-qc={field.name}
-        value={fieldValue}
-        isInvalid={!!fieldErrors && isToucehd}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+      <Form.Label column title={label}>
+        {label}
+      </Form.Label>
+
+      {renderFormField()}
 
       <Form.Control.Feedback type="invalid">
         {getNestedByStringKey(errors, field.name)}

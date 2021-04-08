@@ -23,6 +23,7 @@ import { CustomerListProps, IPrintAction, TableMapperItem } from './types'
 import { DefaultedCustomer } from './defaultingCustomersList'
 import LegalPrintActionsCell from './LegalPrintActionsCell'
 import LegalSettlement from '../pdfTemplates/LegalSettlement'
+import LegalSettlementForm from './LegalSettlementForm'
 
 const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
   currentSearchFilters,
@@ -245,6 +246,7 @@ const LegalCustomersList: FunctionComponent<CustomerListProps> = ({
           array={tabs}
           active={tabs.map((item) => item.icon).indexOf('legal-actions')}
         />
+        <LegalSettlementForm />
         <Card className="main-card">
           <Loader type="fullsection" open={loading} />
           <Card.Body style={{ padding: 0 }}>

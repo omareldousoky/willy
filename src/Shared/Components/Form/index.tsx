@@ -3,11 +3,12 @@ import React, { FunctionComponent } from 'react'
 import { Form, Formik, FormikProps } from 'formik'
 import { Button } from 'react-bootstrap'
 
+import './style.scss'
 import {
   createFormFieldsInitValue,
   createValidationSchema,
 } from '../../Services/utils'
-import { FormFieldPairs } from './FormFields'
+import FormFields, { FormFieldPairs } from './FormFields'
 import { AppFormProps } from './types'
 import local from '../../../Shared/Assets/ar.json'
 
@@ -17,6 +18,7 @@ const AppForm: FunctionComponent<AppFormProps> = ({
   onSubmit,
   defaultValues,
   disabled = false,
+  renderPairs = false,
 }) => {
   const initialValues = createFormFieldsInitValue(formFields, defaultValues)
   const validationSchema = createValidationSchema(formFields)
@@ -34,7 +36,14 @@ const AppForm: FunctionComponent<AppFormProps> = ({
 
         return (
           <Form onSubmit={formikHandleSubmit}>
-            <FormFieldPairs formFields={formFields} formikProps={formikProps} />
+            {renderPairs ? (
+              <FormFieldPairs
+                formFields={formFields}
+                formikProps={formikProps}
+              />
+            ) : (
+              <FormFields formFields={formFields} formikProps={formikProps} />
+            )}
 
             <div className="d-flex justify-content-end">
               <Button

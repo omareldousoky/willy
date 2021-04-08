@@ -1,9 +1,7 @@
-import * as Yup from 'yup'
 import local from '../../../../Shared/Assets/ar.json'
 import { IField, IFormField } from '../../../../Shared/Components/Form/types'
+import { defaultValidationSchema } from '../../../../Shared/validations'
 
-
-const defaultValidationSchema = Yup.string().trim().max(100, local.maxLength100)
 
 const createCourtFields = (courtLabel: string): IField[] => [
   {
