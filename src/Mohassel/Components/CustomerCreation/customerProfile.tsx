@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router';
+import {
+  useHistory, 
+  useLocation,
+ } from 'react-router';
 import { Customer, GuaranteedLoans } from '../../../Shared/Services/interfaces';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
 import { getErrorMessage } from '../../../Shared/Services/utils';
@@ -72,6 +75,8 @@ export const CustomerProfile = (props: Props) => {
   const [ratings, setRatings] = useState<Array<CustomerScore>>([]);
   const [showHalanLinkageModal, setShowHalanLinkageModal] = useState<boolean>(false)
   const location = useLocation();
+  const history = useHistory();
+
   async function getCachediScores(id) {
     changeLoading(true);
     const iScores = await getIscoreCached({ nationalIds: [id] });
@@ -479,7 +484,7 @@ export const CustomerProfile = (props: Props) => {
           ability.can("updateCustomer", "customer") ||
           ability.can("updateNationalId", "customer"),
         onActionClick: () =>
-          props.history.push("/customers/edit-customer", {
+          history.push("/customers/edit-customer", {
             id: location.state.id,
           }),
       },
@@ -487,7 +492,7 @@ export const CustomerProfile = (props: Props) => {
         title: local.createClearance,
         permission: ability.can("newClearance", "application"),
         onActionClick: () =>
-          props.history.push("/customers/create-clearance", {
+          history.push("/customers/create-clearance", {
             id: location.state.id,
           }),
       },

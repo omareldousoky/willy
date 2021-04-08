@@ -22,15 +22,15 @@ export const companyCreationValidationStepOne = Yup.object().shape({
     businessAddress: Yup.string().trim().max(500, maxLength500).required(required),
     businessCharacteristic: Yup.string().trim().required(required),
     legalStructure: Yup.string().trim().required(required),
-    businessLicenseNumber: Yup.number().max(50, maxLength50).required(required),
+    businessLicenseNumber: Yup.string().max(50, maxLength50).required(required),
     businessLicenseIssuePlace: Yup.string().trim().max(100, maxLength100),
     businessLicenseIssueDate: Yup.string().test(
         "Max Date", dateShouldBeBeforeToday,
         (value: any) => { return value ? new Date(value).valueOf() <= endOfDay.valueOf() : true }).required(required),
-    commercialRegisterNumber: Yup.number().max(50, maxLength50).required(required),
+    commercialRegisterNumber: Yup.string().max(50, maxLength50).required(required),
     commercialRegisterExpiryDate: Yup.date().required(required),
-    industryRegisterNumber: Yup.number().max(50, maxLength50).required(required),
-    taxCardNumber: Yup.number().max(50, maxLength50).required(required),
+    industryRegisterNumber: Yup.string().max(50, maxLength50).required(required),
+    taxCardNumber: Yup.string().max(50, maxLength50).required(required),
 })
 
 export const companyCreationValidationStepTwo = Yup.object().shape({

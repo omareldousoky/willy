@@ -22,6 +22,7 @@ export const step1: any = {
     faxNumber: '',
     emailAddress: '',
     customerWebsite: '',
+    customerType: 'individual',
 };
 
 export const step2 = {

@@ -723,7 +723,7 @@ class LoanProfile extends Component<Props, State>{
             {
                 icon: 'minus',
                 title: local.doubtLoan,
-                permission: this.state.application.status === 'issued' && this.state.application.isDoubtful && !this.state.application.writeOff && ability.can('setDoubtfulLoan','application'),
+                permission: this.state.application.status === 'issued' && !this.state.application.isDoubtful && !this.state.application.writeOff && ability.can('setDoubtfulLoan','application'),
                 onActionClick:() => this.doubtApplication()
             }
         ]
