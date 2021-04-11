@@ -965,5 +965,7 @@
     "beforeDateFilter":"حاله الفروع قبل تاريح الحظر",
     "afterDateFilter":"حاله الفروع بعد تاريخ الحظر",
     "blocked": "محظور",
-    "unblocked":"غير محظور"
+    "unblocked":"غير محظور",
+    "operationType":"نوع العملية",
+    "branchesStatus":"حاله الفروع"
 }

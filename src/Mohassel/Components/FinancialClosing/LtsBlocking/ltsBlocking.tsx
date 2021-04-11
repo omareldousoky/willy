@@ -218,12 +218,14 @@ class LtsBlocking extends Component<Props, State> {
     return (
       <Card className="main-card">
         <Loader type="fullscreen" open={this.props.loading} />
-        <Card.Header className="d-flex justify-content-between px-4 py-4 bg-white border-0">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Card.Header className="d-flex justify-content-between bg-white border-0">
+          <div className="d-flex align-items-center">
             <Card.Title className="mx-2 my-0">{local.ltsBlocking}</Card.Title>
           </div>
           <div>
-            {(this.props.searchFilters.status || this.props.searchFilters.blockDateFilter) &&<Button
+            {(this.props.searchFilters.status ||
+             this.props.searchFilters.blockDateFilter) 
+             &&<Button
               disabled={!this.state.selectedBranches}
               onClick={this.handleBlockClick}
             >
@@ -245,8 +247,8 @@ class LtsBlocking extends Component<Props, State> {
             </Button>
           </div>
         </Card.Header>
-        <Card.Body className="mx-2 my-0 p-0">
-          <div className="mx-2 my-0">
+        <Card.Body className="mx-2 my-0">
+          <div className="my-5">
             <SearchBlocking from={0} size={this.state.size} />
           </div>
           {this.props.data && (

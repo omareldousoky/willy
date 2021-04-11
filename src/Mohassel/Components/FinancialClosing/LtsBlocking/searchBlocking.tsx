@@ -9,7 +9,7 @@ import { theme } from '../../../../theme'
 import DateField from '../../Common/FormikFields/dateField'
 import { search, searchFilters } from '../../../../Shared/redux/search/actions'
 import { loading } from '../../../../Shared/redux/loading/actions'
-import { getErrorMessage, getTimestamp } from '../../../../Shared/Services/utils'
+import { getErrorMessage } from '../../../../Shared/Services/utils'
 import TextField from '../../Common/FormikFields/textField'
 import Swal from 'sweetalert2'
 
@@ -55,9 +55,12 @@ const blockingValidationSchema = Yup.object().shape({
     }),
     branchName: Yup.string().trim(),
     branchCode: Yup.number(),
-    blockDateFilter: Yup.string().trim(),
+    blockDateFilter: Yup.string().when('blockDate',{
+    is: (blockDate) =>  !!blockDate ,
+    then: Yup.string().required(local.required),
+    otherwise: Yup.string(),
+    }),
     status: Yup.string().trim()
-
 })
 class SearchBlocking extends Component<Props, State> {
   constructor(props: Props) {
@@ -77,7 +80,7 @@ class SearchBlocking extends Component<Props, State> {
   handleSubmit = async(values: BlockingObj) =>{
     const obj = {
       status: (!values.blockDateFilter && !values.blockDate) ? values.status : '',
-      blockDate:  values.blockDateFilter ? getTimestamp(values.blockDate as string) : 0,
+      blockDate:  values.blockDateFilter ? new Date (values.blockDate as string).setHours(23,59,59,999).valueOf() : 0,
       blockDateFilter: values.blockDateFilter,
       branchCode: values.branchCode,
       branchName: values.branchName,
@@ -100,7 +103,6 @@ class SearchBlocking extends Component<Props, State> {
   render() {
     return (
       <Formik
-       className="mx-2 my-0"
         enableReinitialize
         initialValues={
           {
@@ -116,11 +118,11 @@ class SearchBlocking extends Component<Props, State> {
         validateOnChange
       >
         {(formikProps) => (
-          <Form className="w-100 py-3 m-2">
-            <Row>
-              <Col sm={5} className="my-2">
-                <p>{local.chooseOperationType}</p>
-                <div className="dropdown-container" style={{ flex: 2 }}>
+          <Form className="w-100">
+            <div className="d-flex">
+              <Col sm={6} className="my-2">
+                <div className="dropdown-container">
+                <p className="dropdown-label">{local.operationType}</p>
                   <Select<Option>
                     isClearable
                     styles={theme.selectStyleWithoutBorder}
@@ -145,7 +147,7 @@ class SearchBlocking extends Component<Props, State> {
                   />
                 </div>
               </Col>
-              <Col sm={5} className="my-5">
+              <Col sm={6} className="my-2">
                 <InputGroup>
                   <DropdownButton
                     as={InputGroup.Append}
@@ -180,24 +182,24 @@ class SearchBlocking extends Component<Props, State> {
                         />
                 </InputGroup>
               </Col>
-            </Row>
-            <Row>
-              <Col sm={5} className="my-5 mx-0 p-0">
+            </div>
+            <div className="d-flex">
+              <Col sm={6} className="mx-0 p-0">
                 <Field
                   type="date"
                   name="blockDate"
                   key="blockDate"
                   value={formikProps.values.blockDate}
                   component={DateField}
-                  className="m-0"
+                  className="m-0 full-width"
                   label={local.blockDate}
                   id="blockDate"
                 />
               </Col>
               {formikProps.values.blockDate 
-              !== 0 && <Col sm={5} className="my-2">
-                <p>{local.blockDateFilter}</p>
-                <div className="dropdown-container" style={{ flex: 2 }}>
+              !== 0 && <Col sm={6}>
+                <div className="dropdown-container">
+                <p className="dropdown-label">{local.branchesStatus}</p> 
                   <Select<Option>
                     isClearable
                     styles={theme.selectStyleWithoutBorder}
@@ -220,8 +222,9 @@ class SearchBlocking extends Component<Props, State> {
                     ]}
                   />
                 </div>
+                {formikProps.errors.blockDateFilter && <div className="errorMsg">{formikProps.errors.blockDateFilter}</div>}
               </Col>}
-            </Row>
+            </div>
             <ValueChangeListener />
           </Form>
         )}
