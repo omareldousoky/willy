@@ -217,7 +217,7 @@ class CompanyCreation extends Component<Props, State>{
         maxGroupIndividualPrincipal: princples.body.maxGroupIndividualPrincipal,
         maxGroupPrincipal: princples.body.maxGroupPrincipal,
       }
-      const step2 = this.state.step2;
+      const step2 = { ...this.state.step2 };
       step2.principals = principals
       this.setState({
         loading: false,

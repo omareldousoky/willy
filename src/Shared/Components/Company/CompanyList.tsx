@@ -203,7 +203,7 @@ const List = ({
               "customerShortenedCode",
             ]}
             searchPlaceholder={searchCompanyList}
-            url="customer"
+            url="company"
             from={from}
             size={size}
             setFrom={(from) => setFrom(from)}
@@ -217,7 +217,7 @@ const List = ({
               mappers={tableMapper}
               pagination={true}
               data={data}
-              url="customer"
+              url="company"
               changeNumber={(key: string, number: number) => {
                 if (key === 'size') setSize(number)
                 if (key === 'from') setFrom(number)

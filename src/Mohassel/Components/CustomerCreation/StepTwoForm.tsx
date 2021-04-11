@@ -387,73 +387,73 @@ export const StepTwoForm = (props: any) => {
             </Row>
             </>}
             <Row>
-            {isCompany && <Col sm={6}>
-                    <Form.Group controlId="legalStructure">
-                        <Form.Label className="customer-form-label">{`${local.legalStructure} *`}</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="legalStructure"
-                                data-qc="legalStructure"
-                                value={values.legalStructure}
-                                onBlur={handleBlur}
-                                maxLength={100}
-                                onChange={handleChange}
-                                isInvalid={errors.legalStructure && touched.legalStructure}
-                            />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.legalStructure}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>}
                 <Col sm={6}>
-                    <Form.Group controlId="commercialRegisterNumber">
-                        <Form.Label className="customer-form-label">{local.commercialRegisterNumber + (isCompany ? '*' : '')}</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="commercialRegisterNumber"
-                                data-qc="commercialRegisterNumber"
-                                value={values.commercialRegisterNumber}
-                                onBlur={handleBlur}
-                                maxLength={100}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    const re = /^\d*$/;
-                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                        setFieldValue('commercialRegisterNumber', event.currentTarget.value)
-                                    }
-                                }}
-                                isInvalid={errors.commercialRegisterNumber && touched.commercialRegisterNumber}
-                            />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.commercialRegisterNumber}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
+                        <Form.Group controlId="businessLicenseNumber">
+                            <Form.Label className="customer-form-label">{local.businessLicenseNumber + (isCompany ? '*' : '')}</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="businessLicenseNumber"
+                                    data-qc="businessLicenseNumber"
+                                    value={values.businessLicenseNumber}
+                                    onBlur={handleBlur}
+                                    maxLength={100}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        const re = /^\d*$/;
+                                        if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                            setFieldValue('businessLicenseNumber', event.currentTarget.value)
+                                        }
+                                    }}
+                                    isInvalid={errors.businessLicenseNumber && touched.businessLicenseNumber}
+                                />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.businessLicenseNumber}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group controlId="commercialRegisterNumber">
+                            <Form.Label className="customer-form-label">{local.commercialRegisterNumber + (isCompany ? '*' : '')}</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="commercialRegisterNumber"
+                                    data-qc="commercialRegisterNumber"
+                                    value={values.commercialRegisterNumber}
+                                    onBlur={handleBlur}
+                                    maxLength={100}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        const re = /^\d*$/;
+                                        if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
+                                            setFieldValue('commercialRegisterNumber', event.currentTarget.value)
+                                        }
+                                    }}
+                                    isInvalid={errors.commercialRegisterNumber && touched.commercialRegisterNumber}
+                                />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.commercialRegisterNumber}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
                 </Row>
-            <Row>
+                {isCompany && <Row>
                 <Col sm={6}>
-                    <Form.Group controlId="businessLicenseNumber">
-                        <Form.Label className="customer-form-label">{local.businessLicenseNumber + (isCompany ? '*' : '')}</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="businessLicenseNumber"
-                                data-qc="businessLicenseNumber"
-                                value={values.businessLicenseNumber}
-                                onBlur={handleBlur}
-                                maxLength={100}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    const re = /^\d*$/;
-                                    if (event.currentTarget.value === '' || re.test(event.currentTarget.value)) {
-                                        setFieldValue('businessLicenseNumber', event.currentTarget.value)
-                                    }
-                                }}
-                                isInvalid={errors.businessLicenseNumber && touched.businessLicenseNumber}
-                            />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.businessLicenseNumber}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-                {isCompany && <Col sm={6}>
+                <Form.Group controlId="legalStructure">
+                    <Form.Label className="customer-form-label">{`${local.legalStructure} *`}</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="legalStructure"
+                            data-qc="legalStructure"
+                            value={values.legalStructure}
+                            onBlur={handleBlur}
+                            maxLength={100}
+                            onChange={handleChange}
+                            isInvalid={errors.legalStructure && touched.legalStructure}
+                        />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.legalStructure}
+                    </Form.Control.Feedback>
+                </Form.Group>
+            </Col>
+            <Col sm={6}>
                     <Form.Group controlId="commercialRegisterExpiryDate">
                         <Form.Label className="customer-form-label">{`${local.commercialRegisterExpiryDate} *`}</Form.Label>
                         <Form.Control
@@ -469,8 +469,8 @@ export const StepTwoForm = (props: any) => {
                             {errors.commercialRegisterExpiryDate}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Col>}
-            </Row>
+                </Col>
+            </Row>}
             <Row>
                 <Col sm={6}>
                     <Form.Group controlId="businessLicenseIssueDate">

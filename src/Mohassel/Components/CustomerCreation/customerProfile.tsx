@@ -501,8 +501,7 @@ export const CustomerProfile = (props: Props) => {
         title: customerDetails?.blocked?.isBlocked
           ? local.unblockCustomer
           : local.blockCustomer,
-        permission:Boolean(
-          customerDetails?.blocked && customerDetails?.blocked?.isBlocked),
+        permission: ability.can('blockAndUnblockCustomer', 'customer'),
         onActionClick: () =>
           handleActivationClick({
             id: location.state.id,

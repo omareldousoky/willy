@@ -114,7 +114,7 @@ class SourceOfFund extends Component<Props, State> {
     ]
   }
   componentDidMount() {
-    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib' });
+    this.props.search({ size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib', type: 'micro' });
     this.setState({ manageLoansTabs: manageLoansArray() })
   }
   getSourceOfFund(SourceOfFund: string) {
@@ -151,9 +151,9 @@ class SourceOfFund extends Component<Props, State> {
   async getLoans() {
     let query = {};
     if (this.props.fromBranch) {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", status: "issued", fundSource: 'cib' }
+      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', branchId: this.props.branchId, sort: "issueDate", status: "issued", fundSource: 'cib', type: 'micro' }
     } else {
-      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib' }
+      query = { ...this.props.searchFilters, size: this.state.size, from: this.state.from, url: 'loan', sort: "issueDate", status: "issued", fundSource: 'cib', type: 'micro' }
     }
     this.props.search(query);
   }

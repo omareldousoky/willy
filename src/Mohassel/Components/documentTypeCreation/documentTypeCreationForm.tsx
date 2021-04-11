@@ -91,7 +91,7 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                     </Col>
                     <Col>
                         <Form.Group controlId="customerType">
-                            <Form.Label className="data-label">{`${local.documentFor} *`}</Form.Label>
+                            <Form.Label className="data-label">{`${local.documentForCustomerOfType} *`}</Form.Label>
                             <Form.Control as="select"
                                 name="customerType"
                                 value={this.props.values.customerType}
@@ -102,7 +102,7 @@ class DocumentTypeCreationForm extends Component<Props, State> {
                             >
                                 <option value="" disabled></option>
                                 <option value="individual">{local.individual}</option>
-                                <option value="company">{local.companyName}</option>
+                                <option value="company">{local.company}</option>
                             </Form.Control>
                             <Form.Control.Feedback
                                 type="invalid">
