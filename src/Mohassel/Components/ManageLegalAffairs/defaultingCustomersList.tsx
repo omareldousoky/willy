@@ -22,6 +22,9 @@ import { searchLoan } from '../../Services/APIs/Loan/searchLoan';
 import { Application } from '../LoanApplication/loanApplicationStates';
 import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustomerDefaultedLoan } from '../../Services/APIs/LegalAffairs/defaultingCustomers';
 import ability from '../../config/ability';
+import ReportsModal from '../Reports/reportsModal';
+import { PDF } from '../Reports/reports';
+import DefaultingCustomersPdfTemplate from '../pdfTemplates/defaultingCustomers/DefaultingCustomers';
 
 interface Review {
     at: number;
@@ -75,6 +78,7 @@ interface State {
     modalLoader: boolean;
     loading: boolean;
     rowToView: DefaultedCustomer;
+    showReportsModal: boolean;
 }
 const rowToViewInit = {
     _id: '',
@@ -93,6 +97,13 @@ const rowToViewInit = {
 class DefaultingCustomersList extends Component<Props, State> {
     mappers: { title: (() => void) | string; key: string; sortable?: boolean; render: (data: DefaultedCustomer) => void }[]
     loanMappers: { title: string; key: string; sortable?: boolean; render: (data: { id: string; application: Application }) => void }[]
+    reportsPDF: PDF = {
+        key: 'defaultingCustomers',
+        local: 'تقرير العملاء المتأخرون',
+        inputs: ["defaultingCustomerStatus", "branches"],
+        permission: ''
+    }
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -108,7 +119,8 @@ class DefaultingCustomersList extends Component<Props, State> {
             selectedCustomer: {},
             modalLoader: false,
             loading: false,
-            rowToView: rowToViewInit
+            rowToView: rowToViewInit,
+            showReportsModal: false
         }
         this.mappers = [
             {
@@ -374,9 +386,16 @@ class DefaultingCustomersList extends Component<Props, State> {
           end = new Date().getTime();
        }
      }
+     handlePrintReport(values: any) {
+        const {defaultingCustomerStatus, branches} = values
+        // TODO: call API with values
+        // then save it in the state to send it to reports template
+        this.setState({ showReportsModal: false }, () => { window.print() })
+     }
     render() {
         return (
-            <div>
+            <>
+            <div className="print-none">
                 <HeaderWithCards
                     header={local.legalAffairs}
                     array={this.state.manageLegalAffairsTabs}
@@ -399,7 +418,8 @@ class DefaultingCustomersList extends Component<Props, State> {
                                 ability.can('areaManagerReview','legal') || 
                                 ability.can('financialManagerReview','legal')) && <>
                                 <Button className='big-button' style={{ marginLeft: 10 }} disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('review')}>{local.reviewAll}</Button>
-                                <Button className='big-button' disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('delete')}>{local.deleteAll}</Button>
+                                <Button className='big-button' style={{ marginLeft: 10 }} disabled={this.state.selectedEntries.length === 0} onClick={() => this.bulkAction('delete')}>{local.deleteAll}</Button>
+                                <Button className='big-button' onClick={() => this.setState({ showReportsModal: true })}>{local.downloadPDF}</Button>
                                 </>}
                             </div>
                         </div>
@@ -477,7 +497,17 @@ class DefaultingCustomersList extends Component<Props, State> {
                             })}>{local.cancel}</Button>
                     </Modal.Footer>
                 </Modal>
+                {this.state.showReportsModal && (
+                    <ReportsModal
+                        pdf={this.reportsPDF}
+                        show={this.state.showReportsModal}
+                        hideModal={() => this.setState({ showReportsModal: false })}
+                        submit={(values) => this.handlePrintReport(values)}
+                        />)
+                }
             </div>
+            <DefaultingCustomersPdfTemplate />
+            </>
         )
     }
 }
