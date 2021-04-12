@@ -472,14 +472,14 @@ const appRoutes = [
         render: (props) => <Can I='getOfficersGroups' a ='branch'> <SupervisionsList {...props}/> </Can>
       },{
         path: '/financial-closing',
-        label: local.financialClosing,
+        label: local.manageFinancialTransaction,
         render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>,
          routes:[{
           path: '/lts-closing',
           label: local.ltsClosing,
           render: (props) => <Can I= "financialClosing" a="application"><FinancialClosing {...props} withHeader /></Can>
         },{
-            path: '/financial-blocking',
+            path: '/lts-blocking',
             label: local.financialBlocking,
             render:(props) => <Can I= "financialBlocking" a="application"><FinancialBlocking {...props} withHeader /> </Can>
          }

@@ -7,9 +7,9 @@ export const financialClosingArray = (): Tab[] => {
     financialClosingArr.push({
       icon: 'blocking',
       header: local.financialBlocking,
-      path: '/financial-closing/financial-blocking',
+      path: '/financial-closing/lts-blocking',
     })
-  }  
+  }
   if (ability.can('financialClosing', 'application')) {
     financialClosingArr.push({
       icon: 'assignProductToBranch',

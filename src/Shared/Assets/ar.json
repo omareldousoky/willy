@@ -967,5 +967,6 @@
     "blocked": "محظور",
     "unblocked":"غير محظور",
     "operationType":"نوع العملية",
-    "branchesStatus":"حاله الفروع"
+    "branchesStatus":"حاله الفروع",
+    "manageFinancialTransaction":"إدارة المعاملات المالية"
 }

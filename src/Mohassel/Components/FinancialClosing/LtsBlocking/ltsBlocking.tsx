@@ -225,7 +225,8 @@ class LtsBlocking extends Component<Props, State> {
           <div>
             {(this.props.searchFilters.status ||
              this.props.searchFilters.blockDateFilter) 
-             &&<Button
+             &&(ability.can('financialBlocking', 'application') ||
+             ability.can('financialUnBlocking', 'application')) && <Button
               disabled={!this.state.selectedBranches}
               onClick={this.handleBlockClick}
             >
@@ -233,12 +234,6 @@ class LtsBlocking extends Component<Props, State> {
                 ? local.ltsUnblocking
                 : local.ltsBlocking}
             </Button>}
-            {(ability.can('financialBlocking', 'application') ||
-              ability.can('financialUnBlocking', 'application')) && (
-              <Button className="btn-cancel-prev mx-4">
-                {local.oracleReports}
-              </Button>
-            )}
             <Button
               className="btn-cancel-prev"
               onClick={() => this.props.history.push('/reports')}

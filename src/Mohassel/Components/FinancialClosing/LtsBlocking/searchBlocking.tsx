@@ -36,6 +36,7 @@ export interface BlockingObj {
 }
 interface State {
     dropDownValue: string;
+    blockDate: string;
 }
 const ValueChangeListener = () => {
     const { submitForm, values } = useFormikContext<FormikValues>()
@@ -67,6 +68,7 @@ class SearchBlocking extends Component<Props, State> {
     super(props)
     this.state = {
       dropDownValue: 'branchName',
+      blockDate: '',
     }
   }
   getArValue(key: string) {
@@ -79,7 +81,7 @@ class SearchBlocking extends Component<Props, State> {
   }
   handleSubmit = async(values: BlockingObj) =>{
     const obj = {
-      status: (!values.blockDateFilter && !values.blockDate) ? values.status : '',
+      status:  values.status ,
       blockDate:  values.blockDateFilter ? new Date (values.blockDate as string).setHours(23,59,59,999).valueOf() : 0,
       blockDateFilter: values.blockDateFilter,
       branchCode: values.branchCode,
@@ -129,6 +131,7 @@ class SearchBlocking extends Component<Props, State> {
                     theme={theme.selectTheme}
                     className="full-width"
                     placeholder={local.chooseOperationType}
+                    isDisabled={!!formikProps.values.blockDate}
                     onChange={(event: ValueType<Option> | Option) => {
                       if (event) {
                         const { value } = event as Option
@@ -193,11 +196,12 @@ class SearchBlocking extends Component<Props, State> {
                   component={DateField}
                   className="m-0 full-width"
                   label={local.blockDate}
+                  isClearable
                   id="blockDate"
+
                 />
               </Col>
-              {formikProps.values.blockDate 
-              !== 0 && <Col sm={6}>
+               <Col sm={6}>
                 <div className="dropdown-container">
                 <p className="dropdown-label">{local.branchesStatus}</p> 
                   <Select<Option>
@@ -206,6 +210,7 @@ class SearchBlocking extends Component<Props, State> {
                     theme={theme.selectTheme}
                     className="full-width"
                     placeholder={local.blockDateFilter}
+                    isDisabled={!!formikProps.values.blockDate }
                     onChange={(event: ValueType<Option> | Option) => {
                       if (event) {
                         const { value } = event as Option
@@ -223,7 +228,7 @@ class SearchBlocking extends Component<Props, State> {
                   />
                 </div>
                 {formikProps.errors.blockDateFilter && <div className="errorMsg">{formikProps.errors.blockDateFilter}</div>}
-              </Col>}
+              </Col>
             </div>
             <ValueChangeListener />
           </Form>
