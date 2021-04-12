@@ -197,6 +197,45 @@ export const StepOneForm = (props: any) => {
           </Form.Group>
         </Col>
       </Row>
+
+      <Row>
+        <Col sm={6}>
+          <Form.Group controlId="currHomeAddressGov">
+            <Form.Label className="customer-form-label">{local.currHomeAddressGov}</Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              name="currHomeAddressGov"
+              data-qc="currHomeAddressGov"
+              value={values.currHomeAddressGov}
+              defaultValue=""
+            >
+              <option value="" disabled></option>
+              <option value="governorate[1]Value">currHomeAddressGov 1 label</option>
+              <option value="governorate[2]Value">currHomeAddressGov 2 label</option>
+            </Form.Control>
+          </Form.Group>
+        </Col>
+
+        <Col sm={6}>
+          <Form.Group controlId="policeStation">
+            <Form.Label className="customer-form-label">{local.legalPoliceStation}</Form.Label>
+            <Form.Control
+              as="select"
+              type="select"
+              name="policeStation"
+              data-qc="policeStation"
+              value={values.policeStation}
+              defaultValue=""
+            >
+              <option value="" disabled></option>
+              <option value="policeStation[1]Value">policeStation 1 label</option>
+              <option value="policeStation[2]Value">policeStation 2 label</option>
+            </Form.Control>
+          </Form.Group>
+        </Col>
+      </Row>
+
       <Row>
         <Col sm={6}>
           <Form.Group controlId="customerHomeAddressLocation">
