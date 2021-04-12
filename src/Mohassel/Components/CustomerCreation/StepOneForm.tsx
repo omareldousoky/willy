@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEventHandler, SyntheticEvent, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,6 +12,8 @@ import { checkNationalIdDuplicates } from '../../Services/APIs/Customer-Creation
 import Can from '../../config/Can';
 import Swal from 'sweetalert2';
 import ability from '../../config/ability';
+import { getGovernorates } from '../../Services/APIs/configApis/config';
+import { Governorate, District } from './StepTwoForm';
 
 function calculateAge(dateOfBirth: number) {
   if (dateOfBirth) {
@@ -24,8 +26,37 @@ function calculateAge(dateOfBirth: number) {
 
 export const StepOneForm = (props: any) => {
   const { values, handleSubmit, handleBlur, handleChange, errors, touched, setFieldValue, setFieldError } = props;
+  
   const [mapState, openCloseMap] = useState(false);
   const [loading, setLoading] = useState(false);
+  
+  const [governorates, setGovernorates] = useState<Governorate[]>([])
+  const policeStations: District[] = governorates.find(
+    (governorate) =>
+      governorate.governorateName.ar === values.currHomeAddressGov
+  )?.districts || []
+
+  useEffect(() => {
+    fetchGovernorates()
+  }, [])
+
+  const fetchGovernorates = async () => {
+    setLoading(true)
+    const resGov = await getGovernorates()
+    setLoading(false)
+
+    if (resGov.status === 'success') {
+      setGovernorates(resGov.body.governorates)
+    } else {
+      Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
+    }
+  }
+
+  const handleGovernorateChange = (e: any) => {
+    setFieldValue('policeStation', '')
+    handleChange(e)
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       {mapState && <Map show={mapState}
@@ -207,12 +238,14 @@ export const StepOneForm = (props: any) => {
               type="select"
               name="currHomeAddressGov"
               data-qc="currHomeAddressGov"
-              value={values.currHomeAddressGov}
               defaultValue=""
+              value={values.currHomeAddressGov}
+              onChange={handleGovernorateChange}
             >
               <option value="" disabled></option>
-              <option value="governorate[1]Value">currHomeAddressGov 1 label</option>
-              <option value="governorate[2]Value">currHomeAddressGov 2 label</option>
+              {governorates.map(({ governorateName }) => (
+                <option value={governorateName.ar}>{governorateName.ar}</option>
+              ))}
             </Form.Control>
           </Form.Group>
         </Col>
@@ -225,12 +258,15 @@ export const StepOneForm = (props: any) => {
               type="select"
               name="policeStation"
               data-qc="policeStation"
-              value={values.policeStation}
               defaultValue=""
+              value={values.policeStation}
+              onChange={handleChange}
+              disabled={!policeStations.length}
             >
               <option value="" disabled></option>
-              <option value="policeStation[1]Value">policeStation 1 label</option>
-              <option value="policeStation[2]Value">policeStation 2 label</option>
+              {policeStations.map(({ districtName }) => (
+                <option value={districtName.ar}>{districtName.ar}</option>
+              ))}
             </Form.Control>
           </Form.Group>
         </Col>
