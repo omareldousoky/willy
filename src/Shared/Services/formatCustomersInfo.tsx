@@ -36,16 +36,81 @@ const {
   groupLeaderName,
 } = local;
 
-interface CustomerInfo {
-  customerDetails: Customer;
+interface IscoreInfo {
   score?: Score;
-  applicationStatus?: any;
-  isLeader?: boolean;
   getIscore?(customer: Customer): void;
+  applicationStatus?: any;
 }
-export const getCompanyInfo = (company: Customer, score?: Score) => {
+interface CustomerInfo extends IscoreInfo {
+  isLeader?: boolean;
+  customerDetails: Customer;
+}
+interface CompanyInfo extends IscoreInfo {
+  company: Customer;
+}
+const iscoreField = ({score, getIscore, applicationStatus, customerDetails}) => { 
+  return (
+    <>
+      <Form.Label style={{ color: iscoreStatusColor(score?.iscore).color }}>
+        {score?.iscore}{" "}
+      </Form.Label>
+      <Form.Label>{iscoreStatusColor(score?.iscore).status} </Form.Label>
+      {score?.bankCodes &&
+        score?.bankCodes.map((code, index) => (
+          <Form.Label key={index}>{iscoreBank(code)}</Form.Label>
+        ))}
+      {score?.url && (
+        <Col>
+          <span
+            style={{ cursor: "pointer", padding: 10 }}
+            onClick={() => downloadFile(score?.url)}
+          >
+            {" "}
+            <span
+              className="fa fa-file-pdf-o"
+              style={{ margin: "0px 0px 0px 5px" }}
+            ></span>
+            iScore
+          </span>
+        </Col>
+      )}
+      {applicationStatus &&
+        ability.can("viewIscore", "customer") &&
+        ![
+          "approved",
+          "created",
+          "issued",
+          "rejected",
+          "paid",
+          "pending",
+          "canceled",
+        ].includes(applicationStatus) &&
+        getIscore && (
+          <Col>
+            <Can I="getIscore" a="customer">
+              <span
+                style={{ cursor: "pointer", padding: 10 }}
+                onClick={() => getIscore(customerDetails)}
+              >
+                {" "}
+                <span
+                  className="fa fa-refresh"
+                  style={{ margin: "0px 0px 0px 5px" }}
+                ></span>
+                iscore
+              </span>
+            </Can>
+          </Col>
+        )} 
+    </>
+)}
+export const getCompanyInfo = ({
+  company,
+  score,
+  getIscore,
+  applicationStatus,
+}: CompanyInfo) => {
   return [
-    [
       {
         fieldTitle: companyName,
         fieldData: company.businessName || "",
@@ -58,31 +123,7 @@ export const getCompanyInfo = (company: Customer, score?: Score) => {
       },
       {
         fieldTitle: "iScore",
-        fieldData: (
-          <>
-            <span style={{ color: iscoreStatusColor(score?.iscore).color }}>
-              {score?.iscore}
-            </span>
-            <span style={{ margin: "0px 10px" }}>
-              {iscoreStatusColor(score?.iscore).status}
-            </span>
-            {score?.bankCodes &&
-              score.bankCodes.map((code) => `${iscoreBank(code)} `)}
-            {score?.url && (
-              <span
-                style={{ cursor: "pointer", padding: 10 }}
-                onClick={() => downloadFile(score?.url)}
-              >
-                {" "}
-                <span
-                  className="fa fa-file-pdf-o"
-                  style={{ margin: "0px 0px 0px 5px" }}
-                ></span>
-                iScore
-              </span>
-            )}
-          </>
-        ),
+        fieldData: iscoreField({score: score, customerDetails: company, applicationStatus: applicationStatus, getIscore: getIscore}),
         showFieldCondition: ability.can("viewIscore", "customer"),
       },
       {
@@ -116,7 +157,6 @@ export const getCompanyInfo = (company: Customer, score?: Score) => {
         fieldData: company?.businessSpeciality || "",
         showFieldCondition: true,
       },
-    ],
   ];
 };
 export const getCustomerInfo = ({
@@ -164,61 +204,7 @@ export const getCustomerInfo = ({
     },
     {
       fieldTitle: "iScore",
-      fieldData: (
-        <>
-          <Form.Label style={{ color: iscoreStatusColor(score?.iscore).color }}>
-            {score?.iscore}{" "}
-          </Form.Label>
-          <Form.Label>{iscoreStatusColor(score?.iscore).status} </Form.Label>
-          {score?.bankCodes &&
-            score?.bankCodes.map((code, index) => (
-              <Form.Label key={index}>{iscoreBank(code)}</Form.Label>
-            ))}
-          {score?.url && (
-            <Col>
-              <span
-                style={{ cursor: "pointer", padding: 10 }}
-                onClick={() => downloadFile(score?.url)}
-              >
-                {" "}
-                <span
-                  className="fa fa-file-pdf-o"
-                  style={{ margin: "0px 0px 0px 5px" }}
-                ></span>
-                iScore
-              </span>
-            </Col>
-          )}
-          {applicationStatus &&
-            ability.can("viewIscore", "customer") &&
-            ![
-              "approved",
-              "created",
-              "issued",
-              "rejected",
-              "paid",
-              "pending",
-              "canceled",
-            ].includes(applicationStatus) &&
-            getIscore && (
-              <Col>
-                <Can I="getIscore" a="customer">
-                  <span
-                    style={{ cursor: "pointer", padding: 10 }}
-                    onClick={() => getIscore(customerDetails)}
-                  >
-                    {" "}
-                    <span
-                      className="fa fa-refresh"
-                      style={{ margin: "0px 0px 0px 5px" }}
-                    ></span>
-                    iscore
-                  </span>
-                </Can>
-              </Col>
-            )}
-        </>
-      ),
+      fieldData: iscoreField({ score: score, customerDetails: customerDetails, applicationStatus: applicationStatus, getIscore: getIscore}),
       showFieldCondition: !!score,
     },
     {

@@ -464,7 +464,7 @@ export const CustomerProfile = (props: Props) => {
             ]}
           />
         ),
-        showFieldCondition: true,
+        showFieldCondition: ability.can('guaranteed', 'report'),
       },
     ],
     deathCertificate: [
@@ -516,35 +516,35 @@ export const CustomerProfile = (props: Props) => {
     ];
   };
   return (
-    <Container>
-      <div style={{ margin: 15 }}>
-        <div className="d-flex flex-row justify-content-between" >
-          <h3> {local.viewCustomer}</h3>
-
-          <ProfileActions actions={getProfileActions()} />
+    <>
+      <Container className="print-none">
+        <div style={{ margin: 15 }}>
+          <div className="d-flex flex-row justify-content-between" >
+            <h3> {local.viewCustomer}</h3>
+            <ProfileActions actions={getProfileActions()} />
+          </div>
+        {mainInfo && <InfoBox info={mainInfo} />}
         </div>
-
-       {mainInfo && <InfoBox info={mainInfo} />}
-      </div>
-      <Profile
-        source='individual'
-        loading={loading}
-        backButtonText={local.viewCustomer}
-        tabs={tabs}
-        activeTab={activeTab}
-        setActiveTab={(stringKey) => changeActiveTab(stringKey)}
-        tabsData={tabsData}
-      />
-      {showHalanLinkageModal && (
-        <HalanLinkageModal
-          show={showHalanLinkageModal}
-          hideModal={() => setShowHalanLinkageModal(false)}
-          customer={customerDetails}
+        <Profile
+          source='individual'
+          loading={loading}
+          // backButtonText={local.viewCustomer}
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={(stringKey) => changeActiveTab(stringKey)}
+          tabsData={tabsData}
         />
-      )}
+        {showHalanLinkageModal && (
+          <HalanLinkageModal
+            show={showHalanLinkageModal}
+            hideModal={() => setShowHalanLinkageModal(false)}
+            customer={customerDetails}
+          />
+        )}
+      </Container>
       {print === "ClientGuaranteedLoans" && dataToBePrinted && (
         <ClientGuaranteedLoans data={dataToBePrinted} />
       )}
-    </Container>
+    </>
   );
 }

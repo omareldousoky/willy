@@ -623,15 +623,20 @@ class LoanProfile extends Component<Props, State>{
     getInfo = (): FieldProps[][] => {
         if (this.state.application.product?.beneficiaryType === 'individual' && this.state.application.customer ) {
             if (this.state.application.product?.type === 'sme') {
-                const info: FieldProps[][] =  getCompanyInfo( this.state.application.customer );
-                return info
+                const info: FieldProps[] =  getCompanyInfo({
+                    company: this.state.application.customer,
+                    // score: customerScore,
+                    getIscore: (data) => this.getIscore(data),
+                    applicationStatus: this.state.application.status,
+                });
+                return [info]
             }
             const customerScore = this.state.iscores.filter(score => score.nationalId === this.state.application.customer.nationalId)[0]
             const info: FieldProps[] =  getCustomerInfo({
               customerDetails: this.state.application.customer,
               score: customerScore,
               isLeader: false,
-              getIscore: this.getIscore,
+              getIscore: (data) => this.getIscore(data),
               applicationStatus: this.state.application.status,
             });
             return [info]

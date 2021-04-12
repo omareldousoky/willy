@@ -37,7 +37,7 @@ class CustomerSearch extends Component<Props, State>{
         super(props);
         this.state = {
             searchKey: '',
-            dropDownValue: 'code'
+            dropDownValue: props.sme ? 'businessName' : 'name'
         }
     }
     handleSearchChange(event) {
@@ -58,7 +58,7 @@ class CustomerSearch extends Component<Props, State>{
             case 'key': return local.code;
             case 'code': return local.partialCode;
             case 'customerShortenedCode': return local.customerShortenedCode;
-            case 'businessName': return local.businessName;
+            case 'businessName': return local.companyName;
             case 'businessLicenseNumber': return local.businessLicenseNumber;
             case 'commercialRegisterNumber': return local.commercialRegisterNumber;
             default: return '';
@@ -160,7 +160,7 @@ class CustomerSearch extends Component<Props, State>{
                     </div>
                 </div>
                 }
-                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={this.props.sme ? getCompanyInfo(this.props.selectedCustomer) : [getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}
+                {this.props.selectedCustomer && Object.keys(this.props.selectedCustomer).length > 0 && this.props.source === 'loanApplication' && <InfoBox info={this.props.sme ? [getCompanyInfo({ company: this.props.selectedCustomer })] : [getCustomerInfo({customerDetails: this.props.selectedCustomer})]} />}
             </div>
         )
     }
