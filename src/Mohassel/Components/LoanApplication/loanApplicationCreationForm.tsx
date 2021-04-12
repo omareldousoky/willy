@@ -72,7 +72,7 @@ export const LoanApplicationCreationForm = (props: any) => {
         <>
             <Form style={{ textAlign: 'right', width: '90%', padding: 20 }} onSubmit={handleSubmit}>
                 <fieldset disabled={!(values.state === "edit" || values.state === "under_review")}>
-                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox info={props.customer.customerType === 'company' ? [getCompanyInfo(props.customer)] : [getCustomerInfo({customerDetails: props.customer})]} /> :
+                    {props.customer && Object.keys(props.customer).includes('_id') ? <InfoBox info={props.customer.customerType === 'company' ? [getCompanyInfo({ company: props.customer })] : [getCustomerInfo({customerDetails: props.customer})]} /> :
                         <GroupInfoBox group={{ individualsInGroup: values.individualDetails }} />
                     }
                     <div style={{ width: '100%', margin: '20px 0' }}>
