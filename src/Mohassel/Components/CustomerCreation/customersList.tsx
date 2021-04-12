@@ -137,6 +137,7 @@ class CustomersList extends Component<Props, State> {
         from: this.state.from,
         url: "customer",
         branchId: this.props.branchId,
+        customerType: 'individual'
       })
       .then(() => {
         if (this.props.error) {
@@ -159,6 +160,7 @@ class CustomersList extends Component<Props, State> {
       from,
       url: "customer",
       branchId,
+      customerType: 'individual'
     }).then(() => {
       if (error) {
         Swal.fire("error", getErrorMessage(error), "error");

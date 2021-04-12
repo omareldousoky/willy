@@ -12,7 +12,7 @@ import * as local from '../../../Shared/Assets/ar.json';
 import { Application, Vice, LoanApplicationValidation, SMELoanApplicationValidation, SMELoanApplicationStep2Validation } from './loanApplicationStates';
 import { LoanApplicationCreationForm } from './loanApplicationCreationForm';
 import { getCustomerByID } from '../../Services/APIs/Customer-Creation/getCustomer';
-import { searchCompany, searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
+import { searchCustomer } from '../../Services/APIs/Customer-Creation/searchCustomer';
 import { Loader } from '../../../Shared/Components/Loader';
 import { getFormulas } from '../../Services/APIs/LoanFormula/getFormulas';
 import { getProduct } from '../../Services/APIs/loanProduct/getProduct';
@@ -406,6 +406,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             size: 2000,
             branchId: this.tokenData.branch,
             representativeId: this.state.selectedLoanOfficer._id,
+            customerType: 'individual',
           }
         : {
             from: 0,
@@ -418,6 +419,7 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
               : ["key"].includes(key)
               ? Number(keyword)
               : undefined,
+            customerType: 'individual',
           };
     const results = await searchCustomer(query);
         if (results.status === 'success') {
@@ -429,8 +431,8 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
     }
     handleSearch = async (key, query) => {
         this.setState({ loading: true });
-        const body = { from: 0, size: 1000, [key]: query }
-        const results = this.state.customerType === 'sme' ? await searchCompany(body) : await searchCustomer(body)
+        const body = { from: 0, size: 1000, [key]: query, customerType: this.state.customerType === 'sme' ? 'company' : 'individual'}
+        const results = await searchCustomer(body)
         if (results.status === 'success') {
             if (results.body.data.length > 0) {
                 this.setState({ loading: false, searchResults: { results: results.body.data, empty: false } });
@@ -442,12 +444,13 @@ class LoanApplicationCreation extends Component<Props & RouteProps, State>{
             this.setState({ loading: false });
         }
     }
-    handleSearchGuarantors = async (key, query, index) => {
+    handleSearchGuarantors = async (key, query, index, companySearch?: boolean) => {
         const obj = {
             [key]: query,
             from: 0,
             size: 1000,
-            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds]
+            excludedIds: [this.state.application.customerID, ...this.state.application.guarantorIds],
+            customerType: companySearch ? 'company' : 'individual'
         }
         this.setState({ loading: true });
         const results = await searchCustomer(obj)

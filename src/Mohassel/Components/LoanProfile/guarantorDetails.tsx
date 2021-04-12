@@ -80,12 +80,13 @@ export const GuarantorTableView = (props: Props) => {
             props.getIscore(data)
         }
     }
-    async function handleSearch(key, query) {
+    async function handleSearch(key, query, companySearch?: boolean) {
         const obj = {
             [key]: query,
             from: 0,
             size: 1000,
-            excludedIds: [props.customerId, ...props.guarantors.map(guar => guar._id)]
+            excludedIds: [props.customerId, ...props.guarantors.map(guar => guar._id)],
+            customerType: companySearch ? 'company' : 'individual'
         }
         changeLoading(true);
         const results = await searchCustomer(obj)

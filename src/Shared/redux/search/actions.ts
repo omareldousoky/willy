@@ -1,4 +1,4 @@
-import { searchCustomer, searchCompany } from '../../../Mohassel/Services/APIs/Customer-Creation/searchCustomer';
+import { searchCustomer } from '../../../Mohassel/Services/APIs/Customer-Creation/searchCustomer';
 import { searchBranches } from '../../../Mohassel/Services/APIs/Branch/searchBranches';
 import { searchUsers } from '../../../Mohassel/Services/APIs/Users/searchUsers';
 import { searchLoan } from '../../../Mohassel/Services/APIs/Loan/searchLoan';
@@ -24,19 +24,6 @@ export const search = (obj) => {
                     dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
                 }
             }
-            case ('company'):
-                return async (dispatch) => {
-                    delete obj.url;
-                    dispatch({ type: 'SET_LOADING', payload: true })
-                    const res = await searchCompany(obj);
-                    if (res.status === "success") {
-                        dispatch({ type: 'SET_LOADING', payload: false })
-                        dispatch({ type: 'SEARCH', payload: {...res.body, status: res.status , error: undefined}})
-                    } else {
-                        dispatch({ type: 'SET_LOADING', payload: false })
-                        dispatch({ type: 'SEARCH', payload: {...res.error , status: res.status}})   
-                    }
-                }
         case ('branch'):
             return async (dispatch) => {
                 delete obj.url;

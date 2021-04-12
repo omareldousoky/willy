@@ -60,8 +60,9 @@ const List = ({
       search({
         size,
         from,
-        url: "company",
+        url: "customer",
         branchId,
+        customerType: 'company'
       })
     );
     if (error) Swal.fire("error", getErrorMessage(error), "error");
@@ -117,12 +118,6 @@ const List = ({
       render: (data) => data.commercialRegisterNumber,
     },
     {
-      title: governorate,
-      sortable: true,
-      key: "governorate",
-      render: (data) => data.governorate,
-    },
-    {
       title: creationDate,
       sortable: true,
       key: "createdAt",
@@ -152,8 +147,9 @@ const List = ({
           : key || undefined,
         size,
         from,
-        url: "company",
+        url: "customer",
         branchId,
+        customerType: 'company'
       })
     );
     if (error) Swal.fire("error", getErrorMessage(error), "error");
@@ -193,7 +189,7 @@ const List = ({
           </div>
           <hr className="dashed-line" />
           <Search
-            searchKeys={["keyword", "dateFromTo", "governorate"]}
+            searchKeys={["keyword", "dateFromTo"]}
             dropDownKeys={[
               "name",
               // "TaxCardNumber",
@@ -209,22 +205,19 @@ const List = ({
             setFrom={(from) => setFrom(from)}
             hqBranchIdRequest={branchId}
           />
-          {data && (
-            <DynamicTable
-              from={from}
-              size={size}
-              totalCount={totalCount}
-              mappers={tableMapper}
-              pagination={true}
-              data={data}
-              url="company"
-              changeNumber={(key: string, number: number) => {
-                if (key === 'size') setSize(number)
-                if (key === 'from') setFrom(number)
-                getCompanies()
-              }}
-            />
-          )}
+          <DynamicTable
+            from={from}
+            size={size}
+            totalCount={totalCount}
+            mappers={tableMapper}
+            pagination={true}
+            data={data}
+            url="company"
+            changeNumber={(key: string, number: number) => {
+              if (key === 'size') setSize(number)
+              if (key === 'from') {setFrom(number); getCompanies()}
+            }}
+          />
         </Card.Body>
       </Card>
     </>
