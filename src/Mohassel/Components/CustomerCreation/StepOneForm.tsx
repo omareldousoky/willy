@@ -36,10 +36,6 @@ export const StepOneForm = (props: any) => {
       governorate.governorateName.ar === values.currHomeAddressGov
   )?.districts || []
 
-  useEffect(() => {
-    fetchGovernorates()
-  }, [])
-
   const fetchGovernorates = async () => {
     setLoading(true)
     const resGov = await getGovernorates()
@@ -51,6 +47,10 @@ export const StepOneForm = (props: any) => {
       Swal.fire('Error !', getErrorMessage(resGov.error.error), 'error')
     }
   }
+
+  useEffect(() => {
+    fetchGovernorates()
+  }, [])
 
   const handleGovernorateChange = (e: any) => {
     setFieldValue('policeStation', '')
@@ -242,7 +242,7 @@ export const StepOneForm = (props: any) => {
               value={values.currHomeAddressGov}
               onChange={handleGovernorateChange}
             >
-              <option value="" disabled></option>
+              <option value="" disabled />
               {governorates.map(({ governorateName }) => (
                 <option value={governorateName.ar}>{governorateName.ar}</option>
               ))}
@@ -263,7 +263,7 @@ export const StepOneForm = (props: any) => {
               onChange={handleChange}
               disabled={!policeStations.length}
             >
-              <option value="" disabled></option>
+              <option value="" disabled />
               {policeStations.map(({ districtName }) => (
                 <option value={districtName.ar}>{districtName.ar}</option>
               ))}
