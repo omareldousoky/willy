@@ -24,7 +24,7 @@ import { addCustomerToDefaultingList, deleteCustomerDefaultedLoan, reviewCustome
 import ability from '../../config/ability';
 import ReportsModal from '../Reports/reportsModal';
 import { PDF } from '../Reports/reports';
-import DefaultingCustomersPdfTemplate from '../pdfTemplates/defaultingCustomers/DefaultingCustomers';
+import DefaultingCustomersPdfTemplate from '../pdfTemplates/DefaultingCustomers/DefaultingCustomers';
 
 interface Review {
     at: number;

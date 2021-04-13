@@ -18,7 +18,7 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
   const customerGroups = customers.reduce(
     (hash, { [groupByKey]: value, ...rest }) => ({
       ...hash,
-      [value]: (hash[value] || []).concat({ ...rest }),
+      [value]: (hash[value] || []).concat({ ...rest, [groupByKey]: value }),
     }),
     {}
   )
@@ -45,7 +45,7 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
       </p>
 
       {Object.keys(customerGroups).map((groupKey) => (
-        <table className="report-container">
+        <table className="report-container mt-3">
           <thead className="report-header">
             <tr>{groupKey}</tr>
             <tr className="header">
@@ -61,26 +61,28 @@ const DefaultingCustomers = ({ customers }: IDefaultingCustomersTempProps) => {
           </thead>
 
           <tbody>
-            {customerGroups[groupKey].map((customer, index) => (
-              <>
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{customer.customerKey}</td>
-                  <td>{customer.customerName}</td>
-                  <td>{local[customer.customerType]}</td>
-                  <td>{customer.loanKey}</td>
-                  <td>{timeToDate(+customer.loanIssueDate)}</td>
-                  <td>{customer.installmentAmount}</td>
-                  <td>{customer.overdueInstallmentCount}</td>
-                  <td>{customer.unpaidInstallmentCount}</td>
-                  <td>{customer.unpaidInstallmentAmount}</td>
-                </tr>
-                <tr>
-                  <td>العنوان</td>
-                  <td colSpan={100}>{customer.customerAddress} </td>
-                </tr>
-              </>
-            ))}
+            {customerGroups[groupKey].map(
+              (customer: IDefaultingCustomerReport, index: number) => (
+                <>
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{customer.customerKey}</td>
+                    <td>{customer.customerName}</td>
+                    <td>{local[customer.customerType]}</td>
+                    <td>{customer.loanKey}</td>
+                    <td>{timeToDate(+customer.loanIssueDate)}</td>
+                    <td>{customer.installmentAmount}</td>
+                    <td>{customer.overdueInstallmentCount}</td>
+                    <td>{customer.unpaidInstallmentCount}</td>
+                    <td>{customer.unpaidInstallmentAmount}</td>
+                  </tr>
+                  <tr>
+                    <td>العنوان</td>
+                    <td colSpan={100}>{customer.customerAddress} </td>
+                  </tr>
+                </>
+              )
+            )}
           </tbody>
         </table>
       ))}
