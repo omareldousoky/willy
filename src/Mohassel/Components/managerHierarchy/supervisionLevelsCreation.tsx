@@ -40,7 +40,7 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
 
   const getLoanOfficers = async () => {
     setLoading(true)
-    const query = { from: 0, size: 1000 }
+    const query = { from: 0, size: 500 }
     const officerQuery = { ...query, branchId }
     const res = await searchLoanOfficer(officerQuery)
     if (res.status === 'success' && res.body.data) {
@@ -69,7 +69,7 @@ export const SupervisionLevelsCreation: FunctionComponent<SupervisionLevelsCreat
     setLoading(true)
     const query = {
       from: 0,
-      size: 1000,
+      size: 500,
       status: 'active',
       branchId,
     }
