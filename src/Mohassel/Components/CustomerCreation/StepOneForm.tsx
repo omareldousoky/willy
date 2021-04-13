@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useEffect, useState } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -52,7 +52,7 @@ export const StepOneForm = (props: any) => {
     fetchGovernorates()
   }, [])
 
-  const handleGovernorateChange = (e: ChangeEventHandler<HTMLSelectElement> | undefined) => {
+  const handleGovernorateChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setFieldValue('policeStation', '')
     handleChange(e)
   }
@@ -240,7 +240,7 @@ export const StepOneForm = (props: any) => {
               data-qc="currHomeAddressGov"
               defaultValue=""
               value={values.currHomeAddressGov}
-              onChange={handleGovernorateChange}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => handleGovernorateChange(e)}
             >
               <option value="" disabled />
               {governorates.map(({ governorateName }) => (
