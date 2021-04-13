@@ -1,28 +1,16 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import * as local from '../../../Shared/Assets/ar.json'
 import './managerHierarchy.scss'
+import { BranchBasicsCardProps } from './types'
 
-interface Props {
-  name: string
-  branchCode: number
-  createdAt: string
-  status: string
-}
-export interface Managers {
-  branchId?: string
-  operationsManager: { id: string; name: string }
-  areaManager: { id: string; name: string }
-  areaSupervisor: { id: string; name: string }
-  centerManager: { id: string; name: string }
-  branchManager: { id: string; name: string }
-}
-export interface UserOfBranch {
-  name: string
-  _id: string
-}
-export default function BranchBasicsCard(props: Props) {
+export const BranchBasicsCard: FunctionComponent<BranchBasicsCardProps> = ({
+  name,
+  createdAt,
+  branchCode,
+  status,
+}) => {
   return (
     <div className="branch-basics-card">
       <div className="row-nowrap">
@@ -39,7 +27,7 @@ export default function BranchBasicsCard(props: Props) {
             </Form.Label>
           </Row>
           <Row>
-            <Form.Label className="basic-info-data">{props.name}</Form.Label>
+            <Form.Label className="basic-info-data">{name}</Form.Label>
           </Row>
         </Col>
         <Col>
@@ -49,9 +37,7 @@ export default function BranchBasicsCard(props: Props) {
             </Form.Label>
           </Row>
           <Row>
-            <Form.Label className="basic-info-data">
-              {props.branchCode}
-            </Form.Label>
+            <Form.Label className="basic-info-data">{branchCode}</Form.Label>
           </Row>
         </Col>
         <Col>
@@ -61,9 +47,7 @@ export default function BranchBasicsCard(props: Props) {
             </Form.Label>
           </Row>
           <Row>
-            <Form.Label className="basic-info-data">
-              {props.createdAt}
-            </Form.Label>
+            <Form.Label className="basic-info-data">{createdAt}</Form.Label>
           </Row>
         </Col>
         <Col>
@@ -72,9 +56,7 @@ export default function BranchBasicsCard(props: Props) {
           </Row>
           <Row>
             <Form.Label className="basic-info-data">
-              {props.status === 'active'
-                ? local.activeBranch
-                : local.inActiveBranch}
+              {status === 'active' ? local.activeBranch : local.inActiveBranch}
             </Form.Label>
           </Row>
         </Col>

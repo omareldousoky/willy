@@ -1,38 +1,23 @@
 import React, { Component } from 'react'
 import { Table, Card } from 'react-bootstrap'
 import Swal from 'sweetalert2'
-import { OfficersGroup } from '../../../Shared/Services/interfaces'
 import './managerHierarchy.scss'
-import { CardNavBar, Tab } from '../HeaderWithCards/cardNavbar'
+import { CardNavBar } from '../HeaderWithCards/cardNavbar'
 import local from '../../../Shared/Assets/ar.json'
-import SupervisionLevelsCreation from './supervisionLevelsCreation'
-import BranchBasicsCard from './branchBasicsCard'
+import { SupervisionLevelsCreation } from './supervisionLevelsCreation'
+import { BranchBasicsCard } from './branchBasicsCard'
 import { getOfficersGroups } from '../../Services/APIs/ManagerHierarchy/getOfficersGroups'
 import SupervisionLevelsActions from './supervisionLevelsActions'
 import ability from '../../config/ability'
 import { Loader } from '../../../Shared/Components/Loader'
 import { getErrorMessage } from '../../../Shared/Services/utils'
+import { SupervisionsProfileProps, SupervisionsProfileState } from './types'
 
-interface Props {
-  branchId: string
-  name: string
-  branchCode: number
-  createdAt: string
-  status: string
-}
-interface State {
-  data: {
-    id: string
-    branchId: string
-    startDate: number
-    groups: OfficersGroup[]
-  }
-  loading: boolean
-  tabsArray: Array<Tab>
-  activeTab: string
-}
-class SupervisionsProfile extends Component<Props, State> {
-  constructor(props: Props) {
+class SupervisionsProfile extends Component<
+  SupervisionsProfileProps,
+  SupervisionsProfileState
+> {
+  constructor(props: SupervisionsProfileProps) {
     super(props)
     this.state = {
       loading: false,

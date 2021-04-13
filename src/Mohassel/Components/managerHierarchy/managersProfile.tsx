@@ -1,5 +1,4 @@
 import React, { Component, CSSProperties } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
@@ -10,25 +9,13 @@ import Can from '../../config/Can'
 import { theme } from '../../../Shared/theme'
 
 import { getErrorMessage } from '../../../Shared/Services/utils'
-import BranchBasicsCard, { Managers } from './branchBasicsCard'
 import { getManagerHierarchy } from '../../Services/APIs/ManagerHierarchy/getManagerHierarchy'
 
 import ability from '../../config/ability'
 import ManagersCreation from './managersCreation'
+import { ManagerProfileProps, ManagerProfileState } from './types'
+import { BranchBasicsCard } from './branchBasicsCard'
 
-interface Props extends RouteComponentProps {
-  branchId: string
-  name: string
-  branchCode: number
-  createdAt: string
-  status: string
-}
-interface State {
-  loading: boolean
-  data: Managers
-  tabsArray: Array<Tab>
-  activeTab: string
-}
 const header: CSSProperties = {
   textAlign: 'right',
   fontSize: '14px',
@@ -42,8 +29,12 @@ const cell: CSSProperties = {
   fontWeight: 'bold',
   color: theme.colors.blackText,
 }
-class ManagerProfile extends Component<Props, State> {
-  constructor(props: Props) {
+
+class ManagerProfile extends Component<
+  ManagerProfileProps,
+  ManagerProfileState
+> {
+  constructor(props: ManagerProfileProps) {
     super(props)
     this.state = {
       activeTab: 'mainInfo',
@@ -186,4 +177,4 @@ class ManagerProfile extends Component<Props, State> {
   }
 }
 
-export default withRouter(ManagerProfile)
+export default ManagerProfile

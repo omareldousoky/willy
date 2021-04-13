@@ -18,35 +18,15 @@ import { getCookie } from '../../../Shared/Services/getCookie'
 
 import { theme } from '../../../Shared/theme'
 import ability from '../../config/ability'
-import { GroupsByBranch } from '../../../Shared/Services/interfaces'
 import { approveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/approveOfficersGroups'
 import { unApproveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/unApproveOfficersGroups'
 import { loading } from '../../../Shared/redux/loading/actions'
+import { SupervisionGroupsListProps, SupervisionGroupsListState } from './types'
 
-interface State {
-  size: number
-  from: number
-  branchId: string
-  searchKey: string[]
-  options: {
-    label: string
-    value: string
-  }[]
-  selectedGroups: GroupsByBranch[]
-  checkAll: boolean
-  chosenStatus: string
-}
-interface Props {
-  data: GroupsByBranch[]
-  totalCount: number
-  loading: boolean
-  searchFilters: object
-  error: string
-  search: (data) => Promise<void>
-  setSearchFilters: (data) => void
-  setLoading: (data) => void
-}
-class SupervisionGroupsList extends Component<Props, State> {
+class SupervisionGroupsList extends Component<
+  SupervisionGroupsListProps,
+  SupervisionGroupsListState
+> {
   mappers: {
     title: (() => void) | string
     key: string
@@ -54,7 +34,7 @@ class SupervisionGroupsList extends Component<Props, State> {
     render: (data: any) => void
   }[]
 
-  constructor(props) {
+  constructor(props: SupervisionGroupsListProps) {
     super(props)
     this.state = {
       size: 10,

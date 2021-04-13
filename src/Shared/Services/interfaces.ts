@@ -351,10 +351,13 @@ export interface MonthReport {
     total: number
   }
 }
+
+export type ManagerHierarchyUser = { id: string; name: string }
+
 export interface OfficersGroup {
   id?: string
-  leader: { id: string; name: string }
-  officers: { id: string; name: string }[]
+  leader: ManagerHierarchyUser
+  officers: ManagerHierarchyUser[]
   status?: string
 }
 export interface GroupsByBranch {

@@ -11,25 +11,16 @@ import { getErrorMessage } from '../../../Shared/Services/utils'
 import { approveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/approveOfficersGroups'
 import { unApproveOfficersGroups } from '../../Services/APIs/ManagerHierarchy/unApproveOfficersGroups'
 import { Loader } from '../../../Shared/Components/Loader'
+import {
+  SupervisionLevelsActionsProps,
+  SupervisionLevelsActionsState,
+} from './types'
 
-interface Props {
-  branchId: string
-  mode: string
-}
-
-interface State {
-  data: {
-    id: string
-    branchId: string
-    startDate: number
-    groups: OfficersGroup[]
-  }
-  loading: boolean
-  selectedGroups: OfficersGroup[]
-  chosenStatus: string
-}
-class SupervisionLevelsActions extends Component<Props, State> {
-  constructor(props: Props) {
+class SupervisionLevelsActions extends Component<
+  SupervisionLevelsActionsProps,
+  SupervisionLevelsActionsState
+> {
+  constructor(props: SupervisionLevelsActionsProps) {
     super(props)
     this.state = {
       loading: false,
@@ -197,7 +188,7 @@ class SupervisionLevelsActions extends Component<Props, State> {
 
   render() {
     return (
-      <div style={{ padding: '10px', textAlign: 'right' }}>
+      <div style={{ padding: '10px' }}>
         <Loader open={this.state.loading} type="fullscreen" />
         {this.state.data.groups.length ? (
           <>
@@ -235,7 +226,6 @@ class SupervisionLevelsActions extends Component<Props, State> {
                     <tbody
                       style={{
                         padding: '2rem 0',
-                        textAlign: 'right',
                         fontWeight: 'bold',
                       }}
                       key={index}

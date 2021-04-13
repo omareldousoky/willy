@@ -10,7 +10,7 @@ export interface BranchBasicsView {
   faxNumber: string
   branchCode: number
   governorate: string
-  status: string
+  status: 'active' | 'inactive' | ''
   licenseDate: number
   bankAccount: string
   costCenter: string
